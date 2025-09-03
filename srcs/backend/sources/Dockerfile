@@ -5,11 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/06/18 18:27:35 by agerbaud          #+#    #+#              #
-#    Updated: 2025/06/18 18:27:38 by agerbaud         ###   ########.fr        #
+#    Created: 2025/08/26 14:22:46 by agerbaud          #+#    #+#              #
+#    Updated: 2025/08/26 14:22:47 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FROM	debian:bullseye
-
-CMD		[cat]

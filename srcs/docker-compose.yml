@@ -1,0 +1,44 @@
+
+version: '3.8'
+
+services:
+  builder:
+    build:
+      context: frontend
+      dockerfile: Dockerfile.builder
+    volumes:
+      - "compiled_assets:/app/dist"
+    container_name: transcendence-builder
+    restart: on-failure
+
+  nginx:
+    container_name: nginx
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+    depends_on:
+      - builder
+    restart: on-failure
+    volumes:
+      - "compiled_assets:/usr/share/nginx/html"
+    env_file:
+      - .env
+    secrets:
+      - ssl_key
+      - ssl_crt
+    ports:
+      - "8080:443"
+
+volumes:
+  compiled_assets:
+    # driver: local
+    # driver_opts:
+    #   type: 'none'
+    #   o: 'bind'
+    #   device: '/home/agerbaud/data/wordpress'
+
+secrets:
+  ssl_key:
+    file: "../.SECRET/private_key.key"
+  ssl_crt:
+    file: "../.SECRET/certificate.crt"
