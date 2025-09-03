@@ -6,7 +6,7 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/03 11:40:36 by agerbaud          #+#    #+#              #
-#    Updated: 2025/09/03 11:48:26 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/09/03 11:56:35 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ COPY	tsconfig.json ./
 RUN		npm install
 
 # Copy source code
-COPY	src/ ./src/
+COPY	sources/ ./src/
 
 # Expose a volume to retrieve the compiled files
 VOLUME	["/app/dist"]
