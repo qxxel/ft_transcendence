@@ -1,26 +1,23 @@
-
-version: '3.8'
-
 services:
-  builder:
+  frontend:
+    container_name: frontend
     build:
       context: frontend
-      dockerfile: Dockerfile.builder
+      dockerfile: Dockerfile.front
+    restart: no
     volumes:
-      - "compiled_assets:/app/dist"
-    container_name: transcendence-builder
-    restart: on-failure
+      - "frontend_assets:/app/dist"
 
   nginx:
     container_name: nginx
     build:
       context: nginx
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.nginx
     depends_on:
-      - builder
+      - frontend
     restart: on-failure
     volumes:
-      - "compiled_assets:/usr/share/nginx/html"
+      - "frontend_assets:/usr/share/nginx/html"
     env_file:
       - .env
     secrets:
@@ -30,12 +27,8 @@ services:
       - "8080:443"
 
 volumes:
-  compiled_assets:
-    # driver: local
-    # driver_opts:
-    #   type: 'none'
-    #   o: 'bind'
-    #   device: '/home/agerbaud/data/wordpress'
+  frontend_assets:
+  backend_assets:
 
 secrets:
   ssl_key:
