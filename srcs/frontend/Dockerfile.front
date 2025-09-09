@@ -6,12 +6,13 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/03 11:40:36 by agerbaud          #+#    #+#              #
-#    Updated: 2025/09/09 16:50:07 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/09/09 18:22:52 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM	node:18-bookworm
 
+# Change working directory
 WORKDIR	/app
 
 # Copy config files
@@ -23,13 +24,9 @@ RUN		npm install
 
 # Copy source code
 COPY	srcs/ ./srcs/
-
-# Expose a volume to retrieve the compiled files
-# VOLUME	["/app/dist"]
-
-RUN	npm run build
-
 COPY	html/index.html ./dist
 
-# Par défaut, juste compiler (on peut override avec docker run)
+# Lauch the compilation
+RUN	npm run build
 CMD	["tail", "-f"]
+# CMD	["npm", "run", "build"]
