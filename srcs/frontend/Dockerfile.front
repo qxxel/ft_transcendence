@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Dockerfile.builder                                 :+:      :+:    :+:    #
+#    Dockerfile.front                                   :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/03 11:40:36 by agerbaud          #+#    #+#              #
-#    Updated: 2025/09/08 23:49:41 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/09/09 16:50:07 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,8 @@ COPY	srcs/ ./srcs/
 # VOLUME	["/app/dist"]
 
 RUN	npm run build
+
+COPY	html/index.html ./dist
 
 # Par défaut, juste compiler (on peut override avec docker run)
 CMD	["tail", "-f"]

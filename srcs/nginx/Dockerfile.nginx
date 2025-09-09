@@ -1,17 +1,23 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Dockerfile.nginx                                   :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/09/09 15:54:17 by agerbaud          #+#    #+#              #
+#    Updated: 2025/09/09 16:51:21 by agerbaud         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-# Dockerfile pour le serveur nginx
+# Use the penultimate version stable of Debian
 FROM nginx:bookworm
 
-# Copier la configuration nginx personnalisée
+# Copy config and html of the website
 COPY	conf/nginx.conf /etc/nginx/nginx.conf
-COPY	html/index.html /etc/nginx/html/index.html
 
-
-# Le dossier des fichiers statiques sera monté via un volume
-# ou copié via docker-compose
-
-# Exposer le port 80
+# Expose 443
 EXPOSE 443
 
-# Démarrer nginx
+# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
