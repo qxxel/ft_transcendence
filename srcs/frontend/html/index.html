@@ -6,6 +6,29 @@
 	</head>
 
 	<body>
- 		<script src="index.js"></script>
+		<div class="container">
+
+        	<h1>🏓 Transcendence - Test TypeScript</h1>
+        
+        	<div class="status">
+        	    ✅ TypeScript compilé avec succès !<br>
+        	    ✅ Nginx fonctionne correctement !<br>
+        	    ✅ Docker container actif !
+        	</div>
+
+        	<div>
+            	<button onclick="testTypeScript()">Test TypeScript</button>
+        		<button onclick="testClasses()">Test Classes</button>
+        	    <button onclick="testAsync()">Test Async/Await</button>
+        	    <button onclick="clearOutput()">Clear</button>
+        	</div>
+
+        	<div id="output"></div>
+    	
+		</div>
+
+		<script src="index.js"></script>
+
 	</body>
+
 </html>
