@@ -6,7 +6,7 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/08/26 14:25:28 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/09/10 14:49:40 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,10 @@ run: $(SECRET_DIR)
 	$(DC) -f $(DC_FILE) up -d
 
 up: build run
+
+dev:
+	$(DC) -f $(DC_FILE) down -v
+	$(MAKE) up
 
 clean:
 	$(DC) -f $(DC_FILE) down

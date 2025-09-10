@@ -28,6 +28,11 @@ services:
 
 volumes:
   frontend_assets:
+    # driver: local
+    # driver_opts:
+    #   type: 'none'
+    #   o: 'bind'
+    #   device: './srcs/frontend/html'
   backend_assets:
 
 secrets:

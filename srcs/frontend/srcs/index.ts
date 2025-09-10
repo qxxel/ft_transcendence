@@ -59,8 +59,10 @@ class Router {
 const router = new Router();
 
 // 2. Définition des routes
-router.addRoute("/home", () => "<h1>Accueil</h1>");
-router.addRoute("/about", () => "<h1>À propos</h1>");
+router.addRoute("/home", () => "<h1>Accueil</h1><p>Bienvenue !</p>");
+router.addRoute("/about", () => "<h1>À propos</h1><p>Notre histoire...</p>");
+router.addRoute("/settings", () => "<h1>Parametres</h1><p>Name</p><p>Nickname</p>");
+router.addRoute("/rperrot", () => "<h1>Le triathlete</h1><p>Il est trop nul en nage !</p>");
 
 // 3. QUAND la page change ? Quand on clique sur un lien !
 document.addEventListener('click', (e) => {
