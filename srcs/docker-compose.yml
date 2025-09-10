@@ -4,7 +4,7 @@ services:
     build:
       context: frontend
       dockerfile: Dockerfile.front
-    restart: no
+    command: echo "Build done"
     volumes:
       - "frontend_assets:/app/dist"
 
