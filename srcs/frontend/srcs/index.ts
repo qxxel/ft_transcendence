@@ -37,7 +37,7 @@ class Router {
 		this.routes.push({path, component});
 	}
 
-	navigate(path: string | null) {
+	navigate(path: string) {
 		history.pushState({}, '', path);
     	this.render();
 	}
@@ -58,11 +58,16 @@ class Router {
 // 1. Création du router
 const router = new Router();
 
+// 1.bis Creer un menu
+const menu = `<nav><a href="/home">Accueil</a> | <a href="/about">À propos</a> | <a href="/settings">Paramètres</a></nav>`;
+
 // 2. Définition des routes
-router.addRoute("/home", () => "<h1>Accueil</h1><p>Bienvenue !</p>");
-router.addRoute("/about", () => "<h1>À propos</h1><p>Notre histoire...</p>");
-router.addRoute("/settings", () => "<h1>Parametres</h1><p>Name</p><p>Nickname</p>");
-router.addRoute("/rperrot", () => "<h1>Le triathlete</h1><p>Il est trop nul en nage !</p>");
+router.addRoute("/home", () => `${menu}<h1>Accueil</h1><p>Bienvenue !</p>`);
+router.addRoute("/about", () => `${menu}<h1>À propos</h1><p>Notre histoire...1</p><a href=\"/rperrot\">rperrot</a>`);
+router.addRoute("/settings", () => `${menu}<h1>Parametres</h1><p>Name</p><p>Nickname</p>`);
+router.addRoute("/rperrot", () => `${menu}<h1>Le triathlete</h1><p>Il est trop nul en nage !</p>`);
+router.addRoute("/", () => `${menu}<h1>Page d'accueil</h1><p>Choisissez une section</p>`);
+
 
 // 3. QUAND la page change ? Quand on clique sur un lien !
 document.addEventListener('click', (e) => {
