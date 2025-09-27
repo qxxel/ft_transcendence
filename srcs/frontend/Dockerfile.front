@@ -29,6 +29,8 @@ RUN		npm install
 COPY	srcs/ ./srcs/
 COPY	html/index.html ./dist
 COPY	html/stylesheet.css ./dist
+COPY	html/stars_background.gif ./dist
+# COPY	html/assets/ ./dist
 
 # Lauch the compilation
 RUN npm run build

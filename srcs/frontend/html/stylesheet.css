@@ -1,4 +1,9 @@
+body {
+    min-height: 100vh;
+    background-image: url('stars_background.gif');
+}
+
 h1 {
-    color:blue;
+    color:white;
     text-align: center;
 }

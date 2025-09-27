@@ -62,11 +62,11 @@ const router = new Router();
 const menu = `<nav><a href="/home">Accueil</a> | <a href="/about">À propos</a> | <a href="/settings">Paramètres</a></nav>`;
 
 // 2. Définition des routes
-router.addRoute("/home", () => `${menu}<h1>Accueil</h1><p>Bienvenue !</p>`);
-router.addRoute("/about", () => `${menu}<h1>À propos</h1><p>Notre histoire...1</p><a href=\"/rperrot\">rperrot</a>`);
-router.addRoute("/settings", () => `${menu}<h1>Parametres</h1><p>Name</p><p>Nickname</p>`);
-router.addRoute("/rperrot", () => `${menu}<h1>Le triathlete</h1><p>Il est trop nul en nage !</p>`);
-router.addRoute("/", () => `${menu}<h1>Page d'accueil</h1><p>Choisissez une section</p>`);
+router.addRoute("/home", () => `${menu}<h1>Home</h1><p>Welcome !</p>`);
+router.addRoute("/about", () => `${menu}<h1>About</h1><p>Project of 42 school</p><a href=\"/rperrot\">rperrot</a>`);
+router.addRoute("/settings", () => `${menu}<h1>Settings</h1><p>Name</p><p>Nickname</p>`);
+router.addRoute("/rperrot", () => `${menu}<h1>The triathlete</h1><p>He's so bad at swiming !</p>`);
+router.addRoute("/", () => `${menu}<h1>Home page</h1><p>Choose a section</p>`);
 
 
 // 3. QUAND la page change ? Quand on clique sur un lien !
