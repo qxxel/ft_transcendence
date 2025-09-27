@@ -1,9 +1,36 @@
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
 body {
+    background-image: url('back.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
     min-height: 100vh;
-    background-image: url('stars_background.gif');
+}
+
+nav {
+    color: yellow;
+}
+
+a {
+    color: yellow;
 }
 
 h1 {
-    color:white;
+    color: yellow;
+    text-align: center;
+    font-size: 50px;
+}
+
+p {
+    color: yellow;
     text-align: center;
 }
