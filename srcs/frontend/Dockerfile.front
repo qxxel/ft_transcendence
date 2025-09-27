@@ -28,7 +28,7 @@ RUN		npm install
 # Copy source code
 COPY	srcs/ ./srcs/
 COPY	html/index.html ./dist
-COPY	html/style.css ./dist
+COPY	html/stylesheet.css ./dist
 
 # Lauch the compilation
 RUN npm run build
