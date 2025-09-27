@@ -64,7 +64,7 @@ const menu = `<nav><a href="/home">Accueil</a> | <a href="/about">À propos</a> 
 // 2. Définition des routes
 router.addRoute("/home", () => `${menu}<h1>Home</h1><p>Welcome !</p>`);
 router.addRoute("/about", () => `${menu}<h1>About</h1><p>Project of 42 school</p><a href=\"/rperrot\">rperrot</a>`);
-router.addRoute("/settings", () => `${menu}<h1>Settings</h1><p>Name</p><p>Nickname</p>`);
+router.addRoute("/settings", () => `${menu}<h1>Settings</h1><p class="name">Name</p><p>Nickname</p>`);
 router.addRoute("/rperrot", () => `${menu}<h1>The triathlete</h1><p>He's so bad at swiming !</p>`);
 router.addRoute("/", () => `${menu}<h1>Home page</h1><p>Choose a section</p>`);
 

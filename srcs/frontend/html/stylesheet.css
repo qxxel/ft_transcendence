@@ -7,7 +7,7 @@ html, body {
 }
 
 body {
-    background-image: url('back.jpg');
+    background-image: url('back.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -33,4 +33,22 @@ h1 {
 p {
     color: yellow;
     text-align: center;
+}
+
+.tab {
+    padding-left: var(--sp-6);
+    padding-right: var(--sp-6);
+}
+
+.name {
+    margin-top: 40px;
+    margin-left: 10px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    background-color: #ffffff;
+    border: 1px solid #f7f7f7;
+    padding-top: 20px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 25px;
 }
