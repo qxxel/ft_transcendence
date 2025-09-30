@@ -59,14 +59,16 @@ class Router {
 const router = new Router();
 
 // 1.bis Creer un menu
-const menu = `<nav><a href="/home">Accueil</a> | <a href="/about">À propos</a> | <a href="/settings">Paramètres</a></nav>`;
+const menu = `<nav><a href="/">Accueil</a> | <a href="/about">À propos</a> | <a href="/settings">Paramètres</a></nav>`;
 
 // 2. Définition des routes
-router.addRoute("/home", () => `${menu}<h1>Home</h1><p>Welcome !</p>`);
-router.addRoute("/about", () => `${menu}<h1>About</h1><p>Project of 42 school</p><a href=\"/rperrot\">rperrot</a>`);
-router.addRoute("/settings", () => `${menu}<h1>Settings</h1><p class="name">Name</p><p>Nickname</p>`);
+router.addRoute("/about", () => `${menu}<h1>About</h1><p>Project of 42 school</p><a href=\"/rperrot\" class="txt">rperrot</a>`);
+router.addRoute("/settings", () => `${menu}<h1>Settings</h1><p class="name">Name</p><p class="name">Nickname</p>`);
 router.addRoute("/rperrot", () => `${menu}<h1>The triathlete</h1><p>He's so bad at swiming !</p>`);
-router.addRoute("/", () => `${menu}<h1>Home page</h1><p>Choose a section</p>`);
+router.addRoute("/play", () => `${menu}<h1>Play</h1><a href=\"/localsolo\" class="txt">local solo</a> | <a href=\"/localmulti\" class="txt">local multiplayer</a>`);
+router.addRoute("/localmulti", () => `${menu}<h1>Local Multiplayer</h1>`);
+router.addRoute("/localsolo", () => `${menu}<h1>Local Solo</h1>`);
+router.addRoute("/", () => `${menu}<h1>Home pge</h1><a href="/play" class="txt">Play</a>`);
 
 
 // 3. QUAND la page change ? Quand on clique sur un lien !
