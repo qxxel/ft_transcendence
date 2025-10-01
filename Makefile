@@ -35,28 +35,13 @@ up: build run
 
 # DEV : Rebuild frontend + supprime le volume + redémarre tout
 dev:
-	@echo "🔨 Arrêt des containers..."
-	$(DC) -f $(DC_FILE) down
-	@echo "🗑️  Suppression du volume frontend..."
-	@docker volume rm srcs_frontend_assets 2>/dev/null || true
-	@echo "🏗️  Rebuild du frontend (sans cache)..."
-	$(DC) -f $(DC_FILE) build --no-cache frontend
-	@echo "🚀 Démarrage des services..."
+	$(DC) -f $(DC_FILE) down -v
+# 	@docker volume rm srcs_frontend_assets 2>/dev/null || true
+	$(DC) -f $(DC_FILE) build 
+# 	--no-cache frontend
 	$(DC) -f $(DC_FILE) up -d
-	@echo "⏳ Attente de la copie des fichiers..."
-	@sleep 3
-	@echo "🔍 Vérification du contenu du volume..."
-	@docker exec nginx ls -lh /usr/share/nginx/html/ || true
-	@echo "✅ Dev ready ! Ouvre https://localhost:8080"
-	@echo "💡 Vide le cache du navigateur (Ctrl+Shift+R)"
-
-# Nouvelle règle : Debug pour voir ce qui est dans le volume
-debug:
-	@echo "📂 Contenu du volume nginx :"
-	@docker exec nginx ls -lha /usr/share/nginx/html/
-	@echo "\n📄 Contenu de index.js (20 premières lignes) :"
-	@docker exec nginx head -20 /usr/share/nginx/html/index.js 2>/dev/null || echo "❌ index.js introuvable !"
-
+# 	@sleep 3
+# 	@docker exec nginx ls -lh /usr/share/nginx/html/ || true
 
 # dev:
 # 	$(DC) -f $(DC_FILE) down frontend
