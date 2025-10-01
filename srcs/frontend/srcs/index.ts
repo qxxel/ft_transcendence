@@ -1,39 +1,12 @@
-// function greeter(person) {
-//   return "Hello, " + person;
-// }
- 
-// let user = "Jane User";
- 
-// document.body.textContent = greeter(user);
-
-// console.log("Le front tourne !");
-
-// const canvas = document.createElement("canvas");
-// canvas.width = 400;
-// canvas.height = 400;
-// document.body.appendChild(canvas);
-
-// const ctx = canvas.getContext("2d");
-// if (ctx) {
-//   ctx.fillStyle = "blue";
-//   ctx.fillRect(50, 50, 100, 100);
-
-//   ctx.fillStyle = "red";
-//   ctx.beginPath();
-//   ctx.arc(200, 200, 50, 0, Math.PI * 2);
-//   ctx.fill();
-// }
-
-
 interface	Route {
 	path: string;
-	component: () => string;
+	component: () => string | Promise<string>;
 }
 
 class Router {
 	private routes: Route [] = [];
 
-	addRoute(path: string, component: () => string) {
+	addRoute(path: string, component: () => string | Promise<string>) {
 		this.routes.push({path, component});
 	}
 
@@ -42,14 +15,15 @@ class Router {
     	this.render();
 	}
 
-	render() {
+	async render() {
 		const currentPath = window.location.pathname;
 		const route = this.routes.find(r => r.path === currentPath);
 
 		if (route) {
 			const contentDiv = document.getElementById('app');
       		if (contentDiv) {
-        		contentDiv.innerHTML = route.component();
+				const html = await route.component();
+        		contentDiv.innerHTML = html;
 			}
 		}
 	}
@@ -59,16 +33,59 @@ class Router {
 const router = new Router();
 
 // 1.bis Creer un menu
-const menu = `<nav><a href="/">Accueil</a> | <a href="/about">À propos</a> | <a href="/settings">Paramètres</a></nav>`;
+const menu = `<nav>
+	<a href="/">Accueil</a> | 
+	<a href="/about">À propos</a> | 
+	<a href="/settings">Paramètres</a>
+	</nav>`;
 
-// 2. Définition des routes
-router.addRoute("/about", () => `${menu}<h1>About</h1><p>Project of 42 school</p><a href=\"/rperrot\" class="txt">rperrot</a>`);
-router.addRoute("/settings", () => `${menu}<h1>Settings</h1><p class="name">Name</p><p class="name">Nickname</p>`);
-router.addRoute("/rperrot", () => `${menu}<h1>The triathlete</h1><p>He's so bad at swiming !</p>`);
-router.addRoute("/play", () => `${menu}<h1>Play</h1><a href=\"/localsolo\" class="txt">local solo</a> | <a href=\"/localmulti\" class="txt">local multiplayer</a>`);
-router.addRoute("/localmulti", () => `${menu}<h1>Local Multiplayer</h1>`);
-router.addRoute("/localsolo", () => `${menu}<h1>Local Solo</h1>`);
-router.addRoute("/", () => `${menu}<h1>Home pge</h1><a href="/play" class="txt">Play</a>`);
+
+async function loadHtml(path: string) {
+  const response = await fetch(path);
+  if (!response.ok) {
+	return `<h1>Erreur ${response.status}</h1><p>Impossible de charger ${path}</p>`;
+  }
+  return await response.text();
+}
+
+
+	// 2. Définition des routes
+	// router.addRoute("/about", () => `${menu}`);
+router.addRoute("/about", async () => {
+  const html = await loadHtml("pages/about.html");
+  return menu + html;
+});
+// router.addRoute("/settings", () => `${menu}<h1>Settings</h1><p class="name">Name</p><p class="name">Nickname</p>`);
+router.addRoute("/settings", async () => {
+  const html = await loadHtml("pages/settings.html");
+  return menu + html;
+});
+// router.addRoute("/rperrot", () => `${menu}<h1>The triathlete</h1><p>He's so bad at swiming !</p>`);
+router.addRoute("/rperrot", async () => {
+  const html = await loadHtml("pages/rperrot.html");
+  return menu + html;
+});
+// router.addRoute("/play", () => `${menu}<h1>Play</h1><a href=\"/localsolo\" class="txt">local solo</a> | <a href=\"/localmulti\" class="txt">local multiplayer</a>`);
+router.addRoute("/play", async () => {
+  const html = await loadHtml("pages/play.html");
+  return menu + html;
+});
+// router.addRoute("/localmulti", () => `${menu}<h1>Local Multiplayer</h1>`);
+router.addRoute("/localmulti", async () => {
+  const html = await loadHtml("pages/localmulti.html");
+  return menu + html;
+});
+// router.addRoute("/localsolo", () => `${menu}<h1>Local Solo</h1>`);
+router.addRoute("/localsolo", async () => {
+  const html = await loadHtml("pages/localsolo.html");
+  return menu + html;
+});
+// router.addRoute("/", () => `${menu}<h1>Home pge</h1><a href="/play" class="txt">Play</a>`);
+// route racine "/"
+router.addRoute("/", async () => {
+  const html = await loadHtml("pages/home.html");
+  return menu + html;
+});
 
 
 // 3. QUAND la page change ? Quand on clique sur un lien !

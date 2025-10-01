@@ -26,10 +26,13 @@ RUN		mkdir -p /app/dist
 RUN		npm install
 
 # Copy source code
-COPY	srcs/ ./srcs/
-COPY	html/index.html ./dist
-COPY	html/stylesheet.css ./dist
-COPY	html/assets/back.jpeg ./dist
+COPY	srcs/ 					./srcs/
+COPY	html/index.html 		./dist
+COPY	html/stylesheet.css 	./dist
+COPY	html/assets/back.jpeg 	./dist
+COPY	html/pages/				./dist/pages
 
 # Lauch the compilation
 RUN npm run build
+
+RUN ls * -la ./dist
