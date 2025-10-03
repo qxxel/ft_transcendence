@@ -33,6 +33,9 @@ run: $(SECRET_DIR)
 
 up: build run
 
+down:
+	$(DC) -f $(DC_FILE) down -v
+
 # DEV : Rebuild frontend + supprime le volume + redémarre tout
 dev:
 	$(DC) -f $(DC_FILE) down -v
@@ -73,4 +76,4 @@ $(SECRET_DIR):
 		-subj "/C=FR/ST=ARA/L=Lyon/O=42Lyon/OU=IT/CN=$(DOMAIN)"
 
 
-.PHONY: all clean fclean re build run stop up
+.PHONY: all clean fclean re build run stop up down
