@@ -36,3 +36,5 @@ COPY	html/pages/				./dist/pages
 RUN npm run build
 
 RUN ls * -la ./dist
+
+CMD	["tail", "-f"]
