@@ -1,14 +1,18 @@
 services:
   frontend:
     container_name: frontend
+    image: frontend
     build:
       context: frontend
       dockerfile: Dockerfile.front
     volumes:
       - "frontend_assets:/app/dist"
+    networks:
+      - rename_me
 
   nginx:
     container_name: nginx
+    image: nginx
     build:
       context: nginx
       dockerfile: Dockerfile.nginx
@@ -24,18 +28,27 @@ services:
       - ssl_crt
     ports:
       - "8080:443"
+    networks:
+      - rename_me
 
 volumes:
   frontend_assets:
+    name: frontend_assets
     # driver: local
     # driver_opts:
     #   type: 'none'
     #   o: 'bind'
     #   device: './srcs/frontend/html'
   backend_assets:
+    name: backend_assets
 
 secrets:
   ssl_key:
     file: "../.SECRET/private_key.key"
   ssl_crt:
     file: "../.SECRET/certificate.crt"
+
+networks:
+  rename_me:
+    name: rename_me
+    driver: bridge
