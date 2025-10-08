@@ -16,7 +16,7 @@ SECRET_DIR = .SECRET
 CERT_FILE = $(SECRET_DIR)/certificate.crt
 KEY_FILE = $(SECRET_DIR)/private_key.key
 
-LOGIN = agerbaud
+LOGIN = kiparis
 DOMAIN = $(LOGIN).42.fr
 
 DC = docker compose
