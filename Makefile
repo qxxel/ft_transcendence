@@ -23,15 +23,63 @@ DC = docker compose
 DC_FILE = srcs/docker-compose.yml
 RM = rm -rf
 
-all: up
+all:
+	@echo "\033[0;32mdocker compose:"
+	@echo "\tbuild run up down"
+	@echo "\033[0;33mstatus:"
+	@echo "\tls"
+	@echo "\033[0;36mreset:"
+	@echo "\tclean vclean fclean"
 
-build:
+ls:
+	@echo "\033[1;32m"
+	@docker ps -a
+	@echo "\033[1;33m"
+	@docker image ls
+	@echo "\033[1;34m"
+	@docker volume ls
+	@echo "\033[1;35m"
+	@docker network ls
+	@echo "\033[1;36m"
+	-docker logs nginx
+	@echo "\033[1;37m"
+	-docker logs frontend
+	@echo "\033[0m"
+
+build: $(SECRET_DIR)
 	$(DC) -f $(DC_FILE) build
 
-run: $(SECRET_DIR)
+run:
 	$(DC) -f $(DC_FILE) up -d
 
-up: build run
+up: $(SECRET_DIR)
+	$(DC) -f $(DC_FILE) up -d --build
+
+down:
+	$(DC) -f $(DC_FILE) down
+
+clean: down
+	-docker stop $$(docker ps -aq)
+	-docker rm $$(docker ps -aq)
+	-docker image rm -f $$(docker images -q)
+	-docker network prune -f
+
+vclean: clean
+	rm -rf $(SECRET_DIR)
+	-docker volume prune -a -f
+
+fclean: vclean
+	-docker system prune -a -f
+
+re: fclean up
+
+$(SECRET_DIR):
+	mkdir -p $(SECRET_DIR)
+	openssl req -x509 \
+		-newkey rsa:2048 \
+		-keyout $(KEY_FILE) -out $(CERT_FILE) \
+		-days 365 -nodes \
+		-subj "/C=FR/ST=ARA/L=Lyon/O=42Lyon/OU=IT/CN=$(DOMAIN)"
 
 # DEV : Rebuild frontend + supprime le volume + redémarre tout
 dev:
@@ -54,23 +102,4 @@ dev:
 # 	$(MAKE) build
 # 	$(MAKE) run
 
-clean:
-	$(DC) -f $(DC_FILE) down
-
-fclean:
-	$(RM) -r $(SECRET_DIR)
-	$(DC) -f $(DC_FILE) down -v
-
-re: fclean
-	$(MAKE) all
-
-$(SECRET_DIR):
-	mkdir -p $(SECRET_DIR)
-	openssl req -x509 \
-		-newkey rsa:2048 \
-		-keyout $(KEY_FILE) -out $(CERT_FILE) \
-		-days 365 -nodes \
-		-subj "/C=FR/ST=ARA/L=Lyon/O=42Lyon/OU=IT/CN=$(DOMAIN)"
-
-
-.PHONY: all clean fclean re build run stop up
+.PHONY: all ls build run up down clean vclean fclean re dev

@@ -14,10 +14,10 @@ services:
 
   frontend:
     container_name: frontend
+    image: frontend
     build:
       context: frontend
       dockerfile: Dockerfile.front
-    command: sh -c "sleep 2 && echo 'Build done'"
     volumes:
       - "frontend_assets:/app/dist"
     env_file:
@@ -27,6 +27,7 @@ services:
 
   nginx:
     container_name: nginx
+    image: nginx
     build:
       context: nginx
       dockerfile: Dockerfile.nginx
@@ -47,12 +48,14 @@ services:
 
 volumes:
   frontend_assets:
+    name: frontend_assets
     # driver: local
     # driver_opts:
     #   type: 'none'
     #   o: 'bind'
     #   device: './srcs/frontend/html'
   backend_assets:
+    name: backend_assets
 
 networks:
   ft_transcendence:
@@ -63,3 +66,8 @@ secrets:
     file: "../.SECRET/private_key.key"
   ssl_crt:
     file: "../.SECRET/certificate.crt"
+
+networks:
+  rename_me:
+    name: rename_me
+    driver: bridge
