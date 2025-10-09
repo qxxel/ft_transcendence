@@ -1,50 +1,22 @@
+import { PongGame } from './game.js'; // Make sure the path is correct
+
 interface Route {
   path: string;
   component: () => string | Promise<string>;
 }
 
-function removePlayer() {
-  const existingPlayer = document.getElementById('player');
-  if (existingPlayer) {
-    existingPlayer.remove();
+// This variable will hold the active game instance
+let currentGame: PongGame | null = null;
+
+/**
+ * Stops the current game if it's running.
+ * This is called before navigating to a new page.
+ */
+function stopCurrentGame() {
+  if (currentGame) {
+    currentGame.stop();
+    currentGame = null;
   }
-  window.removeEventListener('keydown', movePlayerHandler);
-}
-
-let player: HTMLDivElement | null = null;
-let posX = 200;
-let posY = 200;
-const step = 10;
-
-function movePlayerHandler(e: KeyboardEvent) {
-  if (!player) return;
-  switch (e.key) {
-    case 'ArrowUp':
-    case 'z': // Z key (forward)
-    case 'Z':
-      posY -= step;
-      break;
-
-    case 'ArrowDown':
-    case 's': // S key (backward)
-    case 'S':
-      posY += step;
-      break;
-
-    case 'ArrowLeft':
-    case 'q': // Q key (left)
-    case 'Q':
-      posX -= step;
-      break;
-
-    case 'ArrowRight':
-    case 'd': // D key (right)
-    case 'D':
-      posX += step;
-      break;
-  }
-  player.style.top = `${posY}px`;
-  player.style.left = `${posX}px`;
 }
 
 class Router {
@@ -60,8 +32,8 @@ class Router {
   }
 
   async render() {
-    // Remove player on each page change
-    removePlayer();
+    // 1. Stop any game that might be running before changing the page
+    stopCurrentGame();
 
     const currentPath = window.location.pathname;
     const route = this.routes.find(r => r.path === currentPath);
@@ -69,26 +41,17 @@ class Router {
     if (route) {
       const contentDiv = document.getElementById('app');
       if (contentDiv) {
+        // 2. Load the new page's HTML
         const html = await route.component();
         contentDiv.innerHTML = html;
       }
     }
 
-    // Create the player only for /play
-    if (currentPath === '/play') {
-      player = document.createElement('div');
-      player.id = 'player';
-      player.style.width = '50px';
-      player.style.height = '50px';
-      player.style.backgroundColor = 'red';
-      player.style.position = 'absolute';
-      player.style.top = '200px';
-      player.style.left = '200px';
-      document.body.appendChild(player);
-
-      posX = 200;
-      posY = 200;
-      window.addEventListener('keydown', movePlayerHandler);
+    // 3. If the new page is a game page, create and start a new PongGame instance
+    // This assumes your play.html, localmulti.html, etc., have the canvas.
+    if (['/play', '/localmulti', '/localsolo'].includes(currentPath)) {
+      currentGame = new PongGame('pong-canvas', 'score1', 'score2');
+      currentGame.start();
     }
   }
 }
@@ -102,7 +65,8 @@ const router = new Router();
 const menu = `<nav>
   <a href="/">Accueil</a> | 
   <a href="/about">À propos</a> | 
-  <a href="/settings">Paramètres</a>
+  <a href="/settings">Paramètres</a> |
+  <a href="/play">Play</a>
 </nav>`;
 
 async function loadHtml(path: string) {
@@ -154,7 +118,7 @@ router.addRoute("/", async () => {
 // 3. Handle link clicks
 document.addEventListener('click', (e) => {
   const target = e.target as HTMLAnchorElement;
-  if (target.tagName === 'A') {
+  if (target.tagName === 'A' && target.hasAttribute('href')) {
     e.preventDefault();
     router.navigate(target.getAttribute('href')!);
   }
