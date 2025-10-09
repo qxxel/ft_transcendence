@@ -6,7 +6,7 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/03 11:40:36 by agerbaud          #+#    #+#              #
-#    Updated: 2025/09/10 14:21:44 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/10/09 18:07:15 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,6 @@ WORKDIR	/app
 # Copy config files
 COPY	package*.json ./
 COPY	tsconfig.json ./
-
-# Create the /app/dist directory
-RUN		mkdir -p /app/dist
 
 # Install dependencies
 RUN		npm install
@@ -34,5 +31,3 @@ COPY	html/pages/				./dist/pages
 
 # Lauch the compilation
 RUN npm run build
-
-RUN ls * -la ./dist
