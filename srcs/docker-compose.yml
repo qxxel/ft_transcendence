@@ -1,26 +1,34 @@
 services:
-  frontend:
-    container_name: frontend
-    image: frontend
+  # frontend:
+    # container_name: frontend
+    # image: frontend
+    # build:
+      # context: frontend
+      # dockerfile: Dockerfile.front
+    # volumes:
+      # - "frontend_assets:/app/dist"
+    # networks:
+      # - rename_me
+  game:
+    container_name: game
+    image: game
     build:
-      context: frontend
-      dockerfile: Dockerfile.front
-    volumes:
-      - "frontend_assets:/app/dist"
+      context: game
+      dockerfile: Dockerfile.game
     networks:
       - rename_me
-
   nginx:
     container_name: nginx
     image: nginx
     build:
       context: nginx
       dockerfile: Dockerfile.nginx
-    depends_on:
-      - frontend
+    # depends_on:
+    #   - frontend
     restart: on-failure
     volumes:
       - "frontend_assets:/usr/share/nginx/html"
+      - "game_assets:/usr/share/nginx/html"
     env_file:
       - .env
     secrets:
@@ -41,6 +49,13 @@ volumes:
     #   device: './srcs/frontend/html'
   backend_assets:
     name: backend_assets
+  game_assets:
+    name: game_assets
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './game/public'
 
 secrets:
   ssl_key:
