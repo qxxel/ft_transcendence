@@ -66,8 +66,3 @@ secrets:
     file: "../.SECRET/private_key.key"
   ssl_crt:
     file: "../.SECRET/certificate.crt"
-
-networks:
-  rename_me:
-    name: rename_me
-    driver: bridge
