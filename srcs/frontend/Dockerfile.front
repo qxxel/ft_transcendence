@@ -16,14 +16,18 @@ WORKDIR	/app
 
 COPY	package*.json ./
 COPY	tsconfig.json ./
+COPY	srcs/         ./srcs/
 
 RUN		npm install
-RUN		mkdir -p ./dist
+RUN		mkdir -p ./html
+RUN		mkdir -p ./assets
+RUN		mkdir -p ./pages
 
-COPY	srcs/ 					./srcs/
-COPY	html/index.html 		./dist
-COPY	html/stylesheet.css 	./dist
-COPY	html/assets/back.jpeg 	./dist
-COPY	html/pages/				./dist/pages
+COPY	index.html 		        .
+COPY	stylesheet.css 	        .
+COPY	assets/back.jpeg 	    ./assets/back.jpeg 
+COPY	pages/				    ./pages/
 
 RUN npm run build
+
+CMD ["tail", "-f"]

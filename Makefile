@@ -44,8 +44,8 @@ ls:
 	-docker logs nginx
 	@echo "\033[1;37m"
 	-docker logs frontend
-	@echo "\033[1;36m"
-	-docker logs game
+# 	@echo "\033[1;36m"
+# 	-docker logs game
 	@echo "\033[0m"
 
 build: $(SECRET_DIR)

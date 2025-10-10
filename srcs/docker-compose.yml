@@ -19,20 +19,20 @@ services:
       context: frontend
       dockerfile: Dockerfile.front
     volumes:
-      - "frontend_assets:/app/dist"
+      - "frontend_assets:/app"
     env_file:
       - .env
     networks:
       - ft_transcendence
 
-  game:
-    container_name: game
-    image: game
-    build:
-      context: game
-      dockerfile: Dockerfile.game
-    networks:
-      - ft_transcendence
+  # game:
+  #   container_name: game
+  #   image: game
+  #   build:
+  #     context: game
+  #     dockerfile: Dockerfile.game
+  #   networks:
+  #     - ft_transcendence
 
   nginx:
     container_name: nginx
@@ -40,12 +40,13 @@ services:
     build:
       context: nginx
       dockerfile: Dockerfile.nginx
-    # depends_on:
-    #   - frontend
+    depends_on:
+      - frontend
     restart: on-failure
     volumes:
-      - "frontend_assets:/usr/share/nginx/html"
-      - "game_assets:/usr/share/nginx/html"
+      - "frontend_assets:/usr/share/nginx/"
+      # - "frontend_assets:/usr/share/nginx/html"
+      # - "game_assets:/usr/share/nginx/html"
     env_file:
       - .env
     secrets:
@@ -66,13 +67,13 @@ volumes:
     #   device: './srcs/frontend/html'
   backend_assets:
     name: backend_assets
-  game_assets:
-    name: game_assets
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: './game/public'
+  # game_assets:
+  #   name: game_assets
+  #   driver: local
+  #   driver_opts:
+  #     type: 'none'
+  #     o: 'bind'
+  #     device: './game/public'
 
 networks:
   ft_transcendence:
