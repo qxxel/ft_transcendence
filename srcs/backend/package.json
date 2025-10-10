@@ -1,9 +1,12 @@
 {
   "dependencies": {
+    "fastify": "^3.29.5",
     "typescript": "^5.9.2"
   },
-  
   "scripts": {
     "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.0"
   }
 }

@@ -116,56 +116,57 @@ async function loadHtml(path: string) {
 
 // 2. Define routes
 router.addRoute("/about", async () => {
-  const html = await loadHtml("pages/about.html");
-  return menu + html;
+	const html = await loadHtml("pages/about.html");
+	return menu + html;
 });
 
 router.addRoute("/settings", async () => {
-  const html = await loadHtml("pages/settings.html");
-  return menu + html;
+	const html = await loadHtml("pages/settings.html");
+	return menu + html;
 });
 
 router.addRoute("/rperrot", async () => {
-  const html = await loadHtml("pages/rperrot.html");
-  return menu + html;
+	const html = await loadHtml("pages/rperrot.html");
+	return menu + html;
 });
 
 router.addRoute("/play", async () => {
-  const html = await loadHtml("pages/play.html");
-  return menu + html;
+	const html = await loadHtml("pages/play.html");
+	return menu + html;
 });
 
 router.addRoute("/localmulti", async () => {
-  const html = await loadHtml("pages/localmulti.html");
-  return menu + html;
+	const html = await loadHtml("pages/localmulti.html");
+	return menu + html;
 });
 
 router.addRoute("/localsolo", async () => {
-  const html = await loadHtml("pages/localsolo.html");
-  return menu + html;
+	const html = await loadHtml("pages/localsolo.html");
+	return menu + html;
 });
 
 router.addRoute("/", async () => {
-  const html = await loadHtml("pages/home.html");
-  return menu + html;
+	const html = await loadHtml("pages/home.html");
+	return menu + html;
 });
 
+/* ========================================================== */
 
-// 3. Handle link clicks
 document.addEventListener('click', (e) => {
-  const target = e.target as HTMLAnchorElement;
-  if (target.tagName === 'A') {
-    e.preventDefault();
-    router.navigate(target.getAttribute('href')!);
-  }
+	// const target = e.target as HTMLAnchorElement;
+	const target = e.target as HTMLElement;
+	
+	if (target.tagName === 'A') {
+		e.preventDefault();
+		router.navigate(target.getAttribute('href')!); // Changement de page
+	}
+
+	
 });
 
 
-// 4. Handle back/forward navigation
 window.addEventListener('popstate', () => {
-  router.render();
+	router.render();
 });
 
-
-// 5. Initial render
 router.render();

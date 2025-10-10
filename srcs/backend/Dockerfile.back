@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Dockerfile.back                                    :+:      :+:    :+:    #
+#    Dockerfile                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/26 14:22:46 by agerbaud          #+#    #+#              #
-#    Updated: 2025/09/09 18:22:55 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/10/09 17:49:20 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,10 +22,12 @@ COPY	tsconfig.json ./
 # Install dependencies
 RUN		npm install
 
+
 # Copy source code
 COPY	srcs/ ./srcs/
 
-# Lauch the compilation
-RUN	npm run build
-CMD	["tail", "-f"]
-# CMD	["npm", "run", "build"]
+RUN		npm run build
+
+EXPOSE	9092
+
+CMD ["node", "dist/server.js"]

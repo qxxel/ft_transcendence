@@ -7,7 +7,7 @@ COPY    tsconfig.json ./
 COPY    __mocks__ ./__mocks__
 COPY    .vscode ./.vscode
 COPY    assets ./assets
-COPY    node_modules ./node_modules
+# COPY    node_modules ./node_modules
 COPY    public ./public
 COPY    src ./src
 COPY    tests ./tests
