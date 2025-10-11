@@ -1,11 +1,75 @@
 {
   "compilerOptions": {
+    "target": "es6",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    // "noResolve": false,
+    // "noImplicitAny": false,
+    // "sourceMap": true,
+    // "preserveConstEnums":true,
+    "strict": true,
+    "lib": [
+        "dom",
+        "es6"
+    ],
     "outDir": "dist",
-    "rootDir": "srcs",
-    "target": "es2020",
-    "module": "commonjs",
-    "strict": true
+    "rootDir": "srcs"
   },
   "include": ["srcs/**/*"],
   "exclude": ["node_modules"]
 }
+
+
+//////////////////////////////////////////// DOCS
+
+// {
+//   "compilerOptions": {
+//     "target": "es6",
+//     "module": "ESNext",
+//     "moduleResolution": "node",
+//     "noResolve": false,
+//     "noImplicitAny": false,
+//     "sourceMap": true,
+//     "preserveConstEnums":true,
+//     "lib": [
+//         "dom",
+//         "es6"
+//     ],
+//     "rootDir": "src"
+//   }
+// }
+
+
+
+//////////////////////////////////////////// STABLE
+
+// {
+  // "compilerOptions": {
+    // "outDir": "dist",
+    // "rootDir": "srcs",
+    // "target": "es2020",
+    // "module": "commonjs",
+    // "strict": true
+  // },
+  // "include": ["srcs/**/*"],
+  // "exclude": ["node_modules"]
+// }
+
+
+
+//////////////////////////////////////////// MUTANT
+
+// {
+//   "compilerOptions": {
+//     "lib": ["dom","es6"],
+//     "target": "es6",
+//     "module": "ESNext",
+//     "moduleResolution": "node",
+//     "strict": true,
+// 		// "skipLibCheck": true
+//     "outDir": "dist",
+//     "rootDir": "srcs"
+//   },
+//   "include": ["srcs/**/*"],
+//   "exclude": ["node_modules"]
+// }
