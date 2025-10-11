@@ -14,9 +14,9 @@ FROM	node:18-bookworm
 
 WORKDIR	/app
 
-COPY	package*.json       ./
-COPY	tsconfig.json       ./
-COPY	webpack.config.js   ./
+COPY	. .
+# COPY	tsconfig.json       ./
+# COPY	webpack.config.js   ./
 
 RUN		npm install
 RUN     npm install --save-dev @babylonjs/core
@@ -26,15 +26,15 @@ RUN     npm install --save-dev typescript webpack ts-loader webpack-cli
 RUN     npm install --save-dev html-webpack-plugin
 RUN     npm install --save-dev webpack-dev-server
 
-RUN		mkdir -p ./html
-RUN		mkdir -p ./assets
-RUN		mkdir -p ./pages
+# RUN		mkdir -p ./html
+# RUN		mkdir -p ./assets
+# RUN		mkdir -p ./pages
 
-COPY	index.html 		        .
-COPY	stylesheet.css 	        .
-COPY	assets/back.jpeg 	    ./assets/back.jpeg 
-COPY	pages/				    ./pages/
-COPY	srcs/                   ./srcs/
+# COPY	index.html 		        .
+# COPY	stylesheet.css 	        .
+# COPY	assets/back.jpeg 	    ./assets/back.jpeg 
+# COPY	pages/				    ./pages/
+# COPY	srcs/                   ./srcs/
 
 RUN npm run build
 
