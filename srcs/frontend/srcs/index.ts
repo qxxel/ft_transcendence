@@ -1,66 +1,79 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   index.ts                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/07 13:58:03 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/10/09 14:41:49 by agerbaud         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+import { PongGame } from './game.js'; // Make sure the path is correct
 
-interface	Route {
-	path: string;
-	component: () => string | Promise<string>;
+interface Route {
+  path: string;
+  component: () => string | Promise<string>;
+}
+
+// This variable will hold the active game instance
+let currentGame: PongGame | null = null;
+
+/**
+ * Stops the current game if it's running.
+ * This is called before navigating to a new page.
+ */
+function stopCurrentGame() {
+  if (currentGame) {
+    currentGame.stop();
+    currentGame = null;
+  }
 }
 
 class Router {
-	private routes: Route [] = [];
+  private routes: Route[] = [];
 
-	addRoute(path: string, component: () => string | Promise<string>) {
-		this.routes.push({path, component});
-	}
+  addRoute(path: string, component: () => string | Promise<string>) {
+    this.routes.push({ path, component });
+  }
 
-	navigate(path: string) {
-		history.pushState({}, '', path);
-		this.render();
-	}
+  navigate(path: string) {
+    history.pushState({}, '', path);
+    this.render();
+  }
 
-	async render() {
-		const currentPath = window.location.pathname;
-		const route = this.routes.find(r => r.path === currentPath);
+  async render() {
+    stopCurrentGame();
 
-		if (route) {
-			const contentDiv = document.getElementById('app');
-			if (contentDiv) {
-				const html = await route.component();
-				contentDiv.innerHTML = html;
-			}
-		}
-	}
+    const currentPath = window.location.pathname;
+    const route = this.routes.find(r => r.path === currentPath);
+
+    if (route) {
+      const contentDiv = document.getElementById('app');
+      if (contentDiv) {
+        const html = await route.component();
+        contentDiv.innerHTML = html;
+      }
+    }
+    if (['/play', '/localmulti', '/localsolo'].includes(currentPath)) {
+      currentGame = new PongGame('pong-canvas', 'score1', 'score2');
+      currentGame.start();
+    }
+  }
 }
 
-/* ========================================================== */
 
+// 1. Create the router
 const router = new Router();
 
-const menu = `<nav>
-	<a href="/">Accueil</a> | 
-	<a href="/about">À propos</a> | 
-	<a href="/settings">Paramètres</a>
-	</nav>`;
 
-/* ========================================================== */
+// 1.b. Create a menu
+const menu = `<nav>
+  <a href="/">Accueil</a> | 
+  <a href="/about">À propos</a> | 
+  <a href="/settings">Paramètres</a> |
+  <a href="/play">Play</a>
+</nav>`;
 
 async function loadHtml(path: string) {
-	const response = await fetch(path);
-	if (!response.ok) {
-		return `<h1>Erreur ${response.status}</h1><p>Impossible de charger ${path}</p>`;
-	}
-	return await response.text();
+  const response = await fetch(path);
+  if (!response.ok) {
+    return `<h1>Erreur ${response.status}</h1><p>Impossible de charger ${path}</p>`;
+  }
+  return await response.text();
 }
 
+
+// 2. Define routes
 router.addRoute("/about", async () => {
 	const html = await loadHtml("pages/about.html");
 	return menu + html;
@@ -98,21 +111,21 @@ router.addRoute("/", async () => {
 
 /* ========================================================== */
 
+// 3. Handle link clicks
 document.addEventListener('click', (e) => {
-	// const target = e.target as HTMLAnchorElement;
-	const target = e.target as HTMLElement;
-	
-	if (target.tagName === 'A') {
-		e.preventDefault();
-		router.navigate(target.getAttribute('href')!); // Changement de page
-	}
-
-	
+  const target = e.target as HTMLAnchorElement;
+  if (target.tagName === 'A' && target.hasAttribute('href')) {
+    e.preventDefault();
+    router.navigate(target.getAttribute('href')!);
+  }
 });
 
 
+// 4. Handle back/forward navigation
 window.addEventListener('popstate', () => {
-	router.render();
+  router.render();
 });
 
+
+// 5. Initial render
 router.render();
