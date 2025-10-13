@@ -1,19 +1,19 @@
-// Define interfaces for our game objects to keep things organized
 interface Paddle {
   x: number;
   y: number;
   width: number;
   height: number;
-  dy: number; // Velocity on the Y axis
+  dy: number;
   speed: number;
+  hits: number;
 }
 
 interface Ball {
   x: number;
   y: number;
   radius: number;
-  dx: number; // Velocity on the X axis
-  dy: number; // Velocity on the Y axis
+  dx: number;
+  dy: number;
   speed: number;
 }
 
@@ -55,6 +55,7 @@ export class PongGame {
       height: paddleHeight,
       dy: 0,
       speed: paddleSpeed,
+      hits: 0,
     };
 
     this.paddle2 = {
@@ -64,6 +65,7 @@ export class PongGame {
       height: paddleHeight,
       dy: 0,
       speed: paddleSpeed,
+      hits: 0,
     };
 
     this.ball = {
@@ -114,7 +116,10 @@ export class PongGame {
   }
   
   private movePaddles() {
-    if (this.keysPressed['z'] && this.paddle1.y > 0) {
+    // if (this.keysPressed['z'] && this.paddle1.y > 0) {
+    //   this.paddle1.y -= this.paddle1.speed;
+    // }
+    if (this.keysPressed['w'] && this.paddle1.y > 0) {
       this.paddle1.y -= this.paddle1.speed;
     }
     if (this.keysPressed['s'] && this.paddle1.y < this.canvas.height - this.paddle1.height) {
@@ -123,9 +128,8 @@ export class PongGame {
   }
 
   private moveBall() {
-    // We store the previous position before moving the ball
     const prevBallX = this.ball.x - this.ball.dx;
-    const prevBallY = this.ball.y - this.ball.dy;
+    // const prevBallY = this.ball.y - this.ball.dy;
 
     this.ball.x += this.ball.dx;
     this.ball.y += this.ball.dy;
@@ -134,9 +138,7 @@ export class PongGame {
       this.ball.dy *= -1;
     }
     
-    // --- Player 1 Collision (Left Paddle) ---
-    // The new logic checks if the paddle's front edge is between the ball's previous and current position.
-    if (this.ball.dx < 0) { // Only check if ball is moving left
+    if (this.ball.dx < 0) {
         const paddleFrontEdge = this.paddle1.x + this.paddle1.width;
         if (
             this.ball.x - this.ball.radius <= paddleFrontEdge &&
@@ -149,8 +151,7 @@ export class PongGame {
         }
     }
 
-    // --- Player 2 Collision (Right Paddle) ---
-    if (this.ball.dx > 0) { // Only check if ball is moving right
+    if (this.ball.dx > 0) {
         const paddleFrontEdge = this.paddle2.x;
         if (
             this.ball.x + this.ball.radius >= paddleFrontEdge &&
@@ -163,7 +164,6 @@ export class PongGame {
         }
     }
 
-    // Score points
     if (this.ball.x + this.ball.radius < 0) {
       this.score2++;
       this.updateScores();
@@ -184,6 +184,7 @@ export class PongGame {
     const direction = (this.ball.x < this.canvas.width / 2) ? 1 : -1;
     this.ball.dx = direction * this.ball.speed * Math.cos(bounceAngle);
     this.ball.dy = -1 * this.ball.speed * Math.sin(bounceAngle);
+    paddle.hits++;
   }
 
   private increaseBallSpeed() {

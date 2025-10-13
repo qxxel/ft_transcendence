@@ -32,7 +32,6 @@ class Router {
   }
 
   async render() {
-    // 1. Stop any game that might be running before changing the page
     stopCurrentGame();
 
     const currentPath = window.location.pathname;
@@ -41,14 +40,10 @@ class Router {
     if (route) {
       const contentDiv = document.getElementById('app');
       if (contentDiv) {
-        // 2. Load the new page's HTML
         const html = await route.component();
         contentDiv.innerHTML = html;
       }
     }
-
-    // 3. If the new page is a game page, create and start a new PongGame instance
-    // This assumes your play.html, localmulti.html, etc., have the canvas.
     if (['/play', '/localmulti', '/localsolo'].includes(currentPath)) {
       currentGame = new PongGame('pong-canvas', 'score1', 'score2');
       currentGame.start();
