@@ -6,7 +6,7 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/03 11:40:36 by agerbaud          #+#    #+#              #
-#    Updated: 2025/10/09 18:20:13 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/10/14 13:39:52 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,8 @@ RUN		mkdir -p ./dist
 
 COPY	srcs/ 					./srcs/
 COPY	html/index.html 		./dist
-COPY	html/stylesheet.css 	./dist
+COPY	html/index.css 			./dist
 COPY	html/assets/back.jpeg 	./dist
 COPY	html/pages/				./dist/pages
 
-RUN npm run build
+RUN	npm run build
