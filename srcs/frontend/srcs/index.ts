@@ -58,16 +58,16 @@ const router = new Router();
 
 // 1.b. Create a menu
 const menu = `<nav>
-  <a href="/">Accueil</a> | 
-  <a href="/about">À propos</a> | 
-  <a href="/settings">Paramètres</a> |
+  <a href="/">Home</a> | 
+  <a href="/about">About</a> | 
+  <a href="/settings">Settings</a> |
   <a href="/play">Play</a>
 </nav>`;
 
 async function loadHtml(path: string) {
   const response = await fetch(path);
   if (!response.ok) {
-    return `<h1>Erreur ${response.status}</h1><p>Impossible de charger ${path}</p>`;
+    return `<h1>Error ${response.status}</h1><p>Unable to load ${path}</p>`;
   }
   return await response.text();
 }
