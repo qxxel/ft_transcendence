@@ -56,3 +56,23 @@ p {
     padding-right: 25px;
     padding-bottom: 25px;
 }
+
+.dashboard {
+  display: none;
+  position: absolute;
+  right: 20px;
+  top: 120px;
+  background-color: rgba(20, 20, 20, 0.8);
+  border: 1px solid #fff;
+  border-radius: 8px;
+  padding: 20px;
+  color: #fff;
+  font-family: monospace;
+  width: 250px;
+}
+.dashboard h2 {
+  text-align: center;
+  margin-top: 0;
+  border-bottom: 1px solid #fff;
+  padding-bottom: 10px;
+}
