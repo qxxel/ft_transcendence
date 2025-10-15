@@ -11,6 +11,8 @@ services:
       - "9090"
     networks:
       - ft_transcendence
+    volumes:
+      - "database_assets:/app/dist/db"
 
   frontend:
     container_name: frontend
@@ -48,14 +50,17 @@ services:
 
 volumes:
   frontend_assets:
-    name: frontend_assets
     # driver: local
     # driver_opts:
     #   type: 'none'
     #   o: 'bind'
     #   device: './srcs/frontend/html'
-  backend_assets:
-    name: backend_assets
+  database_assets:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './backend/db'
 
 networks:
   ft_transcendence:

@@ -1,12 +1,13 @@
 {
   "dependencies": {
     "fastify": "^3.29.5",
+    "sqlite3": "^5.1.7",
     "typescript": "^5.9.2"
   },
   "scripts": {
     "build": "tsc"
   },
   "devDependencies": {
-    "@types/node": "^24.7.0"
+    "@types/node": "^24.7.2"
   }
 }
