@@ -24,7 +24,7 @@ export class PongGame {
 
   private isPaused: boolean = false;
   private isGameOver: boolean = false;
-  private readonly winningScore: number = 5;
+  private winningScore: number = 5;
 
   private readonly initialBallSpeed: number = 5;
   private readonly maxBallSpeed: number = 12;
@@ -36,7 +36,7 @@ export class PongGame {
 
   private score1: number = 0;
   private score2: number = 0;
-  private scoreElements: { p1: HTMLElement; p2: HTMLElement };
+  private scoreElements: { winScore: HTMLElement; p1: HTMLElement; p2: HTMLElement };
 
   private startTime: number = 0;
   private longestRally: number = 0;
@@ -44,12 +44,13 @@ export class PongGame {
 
   private keysPressed: { [key: string]: boolean } = {};
 
-  constructor(canvasId: string, score1Id: string, score2Id: string) {
+  constructor(canvasId: string, score1Id: string, score2Id: string, winScoreId: string) {
     this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
     this.ctx = this.canvas.getContext('2d')!;
     this.scoreElements = {
+      winScore: document.getElementById(winScoreId)!,
       p1: document.getElementById(score1Id)!,
-      p2: document.getElementById(score2Id)!,
+      p2: document.getElementById(score2Id)!
     };
 
     const paddleWidth = 10;
