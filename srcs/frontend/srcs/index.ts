@@ -45,7 +45,7 @@ class Router {
       }
     }
     if (['/play', '/localmulti', '/localsolo'].includes(currentPath)) {
-      currentGame = new PongGame('pong-canvas', 'score1', 'score2');
+      currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
       currentGame.start();
     }
   }
@@ -61,7 +61,7 @@ const menu = `<nav>
   <a href="/">Home</a> | 
   <a href="/about">About</a> | 
   <a href="/settings">Settings</a> |
-  <a href="/play">Play</a>
+  <a href="/gamemenu">Play</a>
 </nav>`;
 
 async function loadHtml(path: string) {
@@ -86,6 +86,11 @@ router.addRoute("/settings", async () => {
 
 router.addRoute("/rperrot", async () => {
 	const html = await loadHtml("pages/rperrot.html");
+	return menu + html;
+});
+
+router.addRoute("/gamemenu", async () => {
+	const html = await loadHtml("pages/gamemenu.html");
 	return menu + html;
 });
 

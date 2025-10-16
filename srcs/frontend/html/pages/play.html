@@ -2,20 +2,22 @@
 	<a href="/localsolo" class="txt">local solo</a> | <a href="/localmulti" class="txt">local multiplayer</a>
 
 <div class="game-container">
-  <div class="scores">
-    <span id="score1">0</span> - <span id="score2">0</span>
-  </div>
-  <div class="win-condition">First to 5 wins</div>
-  <canvas id="pong-canvas" width="800" height="600"></canvas>
+	<div class="scores">
+		<span id="score1">0</span> - <span id="score2">0</span>
+	</div>
+
+	<div class="win-condition">First to <p id="winning-points">5</p> wins</div>
+	
+	<canvas id="pong-canvas" width="800" height="600"></canvas>
   
-  <div id="game-over-dashboard" class="dashboard">
-    <h2>Match Stats</h2>
-    <p><strong>Winner:</strong> <span id="stat-winner">--</span></p>
-    <p><strong>Duration:</strong> <span id="stat-duration">--</span></s_an></p>
-    <p><strong>Player 1 Hits:</strong> <span id="stat-p1-hits">--</span></p>
-    <p><strong>Player 2 Hits:</strong> <span id="stat-p2-hits">--</span></p>
-    <p><strong>Longest Rally:</strong> <span id="stat-rally">--</span> hits</p>
-  </div>
+	<div id="game-over-dashboard" class="dashboard">
+		<h2>Match Stats</h2>
+		<p><strong>Winner:</strong> <span id="stat-winner">--</span></p>
+		<p><strong>Duration:</strong> <span id="stat-duration">--</span></s_an></p>
+		<p><strong>Player 1 Hits:</strong> <span id="stat-p1-hits">--</span></p>
+		<p><strong>Player 2 Hits:</strong> <span id="stat-p2-hits">--</span></p>
+		<p><strong>Longest Rally:</strong> <span id="stat-rally">--</span> hits</p>
+	</div>
 </div>
 <!-- <html>
   <body>
