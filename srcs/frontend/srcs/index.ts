@@ -1,12 +1,13 @@
 import { PongGame } from './game.js'; // Make sure the path is correct
 
+// Define route interface
 interface Route {
   path: string;
   component: () => string | Promise<string>;
 }
 
 // This variable will hold the active game instance
-let currentGame: PongGame | null = null;
+var currentGame: PongGame | null = null;
 
 /**
  * Stops the current game if it's running.
@@ -19,6 +20,29 @@ function stopCurrentGame() {
   }
 }
 
+function onClickPlay() {
+  const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+  currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
+
+  router.navigate('/play');
+}
+
+function  pathActions(currentPath: string) {
+  if (['/gamemenu'].includes(currentPath)) {
+    currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
+  }
+
+  if (['/play'].includes(currentPath)) {
+    if (!currentGame)
+      router.navigate('/gamemenu');
+    else {
+      currentGame.setCtx();
+      currentGame.start();
+    }
+  }
+}
+
+// Define the router class
 class Router {
   private routes: Route[] = [];
 
@@ -32,7 +56,7 @@ class Router {
   }
 
   async render() {
-    stopCurrentGame();
+    // stopCurrentGame();
 
     const currentPath = window.location.pathname;
     const route = this.routes.find(r => r.path === currentPath);
@@ -44,19 +68,17 @@ class Router {
         contentDiv.innerHTML = html;
       }
     }
-    if (['/play', '/localmulti', '/localsolo'].includes(currentPath)) {
-      currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
-      currentGame.start();
-    }
+
+    pathActions(currentPath);
   }
 }
 
 
-// 1. Create the router
+// Create the router
 const router = new Router();
 
 
-// 1.b. Create a menu
+// Create a menu
 const menu = `<nav>
   <a href="/">Home</a> | 
   <a href="/about">About</a> | 
@@ -64,6 +86,8 @@ const menu = `<nav>
   <a href="/gamemenu">Play</a>
 </nav>`;
 
+
+// HTML loader
 async function loadHtml(path: string) {
   const response = await fetch(path);
   if (!response.ok) {
@@ -73,7 +97,7 @@ async function loadHtml(path: string) {
 }
 
 
-// 2. Define routes
+// Define routes
 router.addRoute("/about", async () => {
 	const html = await loadHtml("pages/about.html");
 	return menu + html;
@@ -95,28 +119,20 @@ router.addRoute("/gamemenu", async () => {
 });
 
 router.addRoute("/play", async () => {
-	const html = await loadHtml("pages/play.html");
-	return menu + html;
-});
-
-router.addRoute("/localmulti", async () => {
-	const html = await loadHtml("pages/localmulti.html");
-	return menu + html;
-});
-
-router.addRoute("/localsolo", async () => {
-	const html = await loadHtml("pages/localsolo.html");
+  const html = await loadHtml("pages/play.html");
 	return menu + html;
 });
 
 router.addRoute("/", async () => {
-	const html = await loadHtml("pages/home.html");
+  const html = await loadHtml("pages/home.html");
 	return menu + html;
 });
 
-/* ========================================================== */
+router.render();
 
-// 3. Handle link clicks
+/* ============================= EVENTS ============================= */
+
+// Handle link clicks
 document.addEventListener('click', (e) => {
   const target = e.target as HTMLAnchorElement;
   if (target.tagName === 'A' && target.hasAttribute('href')) {
@@ -125,12 +141,13 @@ document.addEventListener('click', (e) => {
   }
 });
 
-
-// 4. Handle back/forward navigation
+// Handle back/forward navigation
 window.addEventListener('popstate', () => {
   router.render();
 });
 
 
-// 5. Initial render
-router.render();
+/* ============================= GLOBAL FUNCTIONS ============================= */
+
+// Add onClickPlay function
+(window as any).onClickPlay = onClickPlay;
