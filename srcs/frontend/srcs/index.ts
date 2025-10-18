@@ -1,4 +1,6 @@
 import { PongGame } from './game.js'; // Make sure the path is correct
+import { UserService } from './user.js'; // Make sure the path is correct
+import { User } from './user.js'; // Make sure the path is correct
 
 // Define route interface
 interface Route {
@@ -8,6 +10,9 @@ interface Route {
 
 // This variable will hold the active game instance
 var currentGame: PongGame | null = null;
+
+// This variable will hold the list of users
+var userService = new UserService();
 
 /**
  * Stops the current game if it's running.
@@ -20,11 +25,31 @@ function stopCurrentGame() {
   }
 }
 
+function displayUsers() {
+  const userList = document.getElementById('userList') as HTMLTableElement;
+  const users = userService.getUsers();
+  userList.innerHTML = users.map((user, index) => `
+      <tr>
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>${user.phoneNumber}</td>
+          <td>
+              <button onclick="editUser(${index})">Edit</button>
+              <button onclick="deleteUser(${index})">Delete</button>
+          </td>
+      </tr>
+  `).join('');
+}
+
 function onClickPlay() {
   const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
   currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
 
   router.navigate('/play');
+}
+
+function onClickDisplayUser() {
+  displayUsers();
 }
 
 function  pathActions(currentPath: string) {
@@ -83,6 +108,7 @@ const menu = `<nav>
   <a href="/">Home</a> | 
   <a href="/about">About</a> | 
   <a href="/settings">Settings</a> |
+  <a href="/user">User</a> |
   <a href="/gamemenu">Play</a>
 </nav>`;
 
@@ -105,6 +131,11 @@ router.addRoute("/about", async () => {
 
 router.addRoute("/settings", async () => {
 	const html = await loadHtml("pages/settings.html");
+	return menu + html;
+});
+
+router.addRoute("/user", async () => {
+	const html = await loadHtml("pages/user.html");
 	return menu + html;
 });
 
@@ -141,6 +172,31 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// Handle submit
+document.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const userForm = document.getElementById('userForm') as HTMLFormElement;
+  const userId = (document.getElementById('userId') as HTMLInputElement).value;
+  const user: User = {
+    name: (document.getElementById('name')  as HTMLInputElement).value,
+    email: (document.getElementById('email') as HTMLInputElement).value,
+    phoneNumber: (document.getElementById('phoneNumber') as HTMLInputElement).value
+  }
+
+  if (userId === '') {
+    userService.addUser(user);
+    console.log("User added successfully !");
+  }
+
+  else {
+    userService.updateUser(parseInt(userId, 10), user);
+    console.log("User updated successfully !");
+  }
+
+  userForm.reset();
+});
+
 // Handle back/forward navigation
 window.addEventListener('popstate', () => {
   router.render();
@@ -151,3 +207,7 @@ window.addEventListener('popstate', () => {
 
 // Add onClickPlay function
 (window as any).onClickPlay = onClickPlay;
+
+(window as any).onClickDisplayUser = onClickDisplayUser;
+(window as any).editUser = userService.updateUser;
+(window as any).deleteUser = userService.deleteUser;
