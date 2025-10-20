@@ -111,6 +111,8 @@ const menu = `<nav>
   <a href="/">Home</a> | 
   <a href="/about">About</a> | 
   <a href="/settings">Settings</a> |
+  <a href="/sign-in">Sign in</a> |
+  <a href="/sign-up">Sign up</a> |
   <a href="/user">User</a> |
   <a href="/game-menu">Play</a>
 </nav>`;
@@ -142,6 +144,16 @@ router.addRoute("/user", async () => {
 	return menu + html;
 });
 
+router.addRoute("/sign-in", async () => {
+	const html = await loadHtml("pages/sign-in.html");
+	return menu + html;
+});
+
+router.addRoute("/sign-up", async () => {
+	const html = await loadHtml("pages/sign-up.html");
+	return menu + html;
+});
+
 router.addRoute("/rperrot", async () => {
 	const html = await loadHtml("pages/rperrot.html");
 	return menu + html;
@@ -167,17 +179,40 @@ router.render();
 /* ============================= EVENTS ============================= */
 
 // Handle link clicks
-document.addEventListener('click', (e) => {
-  const target = e.target as HTMLAnchorElement;
+document.addEventListener('click', (event) => {
+  const target = event.target as HTMLAnchorElement;
   if (target.tagName === 'A' && target.hasAttribute('href')) {
-    e.preventDefault();
+    event.preventDefault();
     router.navigate(target.getAttribute('href')!);
   }
 });
 
 // Handle submit
-document.addEventListener('submit', (e) => {
-  
+document.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const form = event.target as HTMLFormElement;
+
+  if (form.id === "sign-in-form")
+  {
+    console.log("Sign in");
+    let username = (document.getElementById("sign-in-username") as HTMLInputElement).value;
+    let password = (document.getElementById("sign-in-password") as HTMLInputElement).value;
+    form.reset();
+
+    console.log("username: " + username);
+    console.log("password: " + password);
+  }
+  if (form.id === "sign-up-form")
+  {
+    console.log("Sign up");
+    let username = (document.getElementById("sign-up-username") as HTMLInputElement).value;
+    let password = (document.getElementById("sign-up-password") as HTMLInputElement).value;
+    form.reset();
+
+    console.log("username: " + username);
+    console.log("password: " + password);
+  }
 });
 
 // Handle back/forward navigation
