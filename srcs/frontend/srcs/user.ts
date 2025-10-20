@@ -1,42 +1,25 @@
-export interface User {
-	name: string;
-	email: string;
-	phoneNumber: string;
-}
-
-export class UserService {
-	private	users: User[];
+export class User {
+	private	signedIn: boolean;
+	private	username: string;
 
 	constructor() {
-		var	itemUsers: string | null = localStorage.getItem('users')
-		if (itemUsers === null) {
-			this.users = [];
-			return ;
-		}
-
-		this.users = JSON.parse(itemUsers);
+		this.signedIn = false;
+		this.username = "";
 	}
 
-	getUsers(): User[] {
-		return this.users;
+	isSignedIn(): boolean {
+		return this.signedIn;
 	}
 
-	addUser(user: User) {
-		this.users.push(user);
-		this.saveUsers();
+	getUsername(): string {
+		return this.username;
 	}
 
-	updateUser(index: number, user: User) {
-		this.users[index] = user;
-		this.saveUsers();
-	}
-	
-	deleteUser(index: number) {
-		this.users.splice(index, 1);
-		this.saveUsers();
+	setSigned(bool: boolean) {
+		this.signedIn = bool;
 	}
 
-	saveUsers() {
-		localStorage.setItem('users', JSON.stringify(this.users));
+	setUsername(username: string) {
+		this.username = username;
 	}
 }

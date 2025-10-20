@@ -1,5 +1,5 @@
 import { PongGame } from './game.js'; // Make sure the path is correct
-import { UserService } from './user.js'; // Make sure the path is correct
+// import { UserService } from './user.js'; // Make sure the path is correct
 import { User } from './user.js'; // Make sure the path is correct
 
 // Define route interface
@@ -11,8 +11,8 @@ interface Route {
 // This variable will hold the active game instance
 var currentGame: PongGame | null = null;
 
-// This variable will hold the list of users
-var userService = new UserService();
+// This variable will hold the active user infos
+var user = new User();
 
 /**
  * Stops the current game if it's running.
@@ -25,34 +25,11 @@ function stopCurrentGame() {
   }
 }
 
-function displayUsers() {
-  const userList = document.getElementById('userList') as HTMLTableElement;
-  const users = userService.getUsers();
-  userService.deleteUser(0);
-  userService.deleteUser(1);
-  userService.deleteUser(2);
-  userList.innerHTML = users.map((user, index) => `
-      <tr>
-          <td>${user.name}</td>
-          <td>${user.email}</td>
-          <td>${user.phoneNumber}</td>
-          <td>
-              <button onclick="editUser(${index})">Edit</button>
-              <button onclick="">Delete</button>
-          </td>
-      </tr>
-  `).join('');
-}
-
 function onClickPlay() {
   const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
   currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
 
   router.navigate('/play');
-}
-
-function onClickDisplayUser() {
-  displayUsers();
 }
 
 function  pathActions(currentPath: string) {
@@ -107,7 +84,7 @@ const router = new Router();
 
 
 // Create a menu
-const menu = `<nav>
+var menu = `<nav>
   <a href="/">Home</a> | 
   <a href="/about">About</a> | 
   <a href="/settings">Settings</a> |
@@ -203,6 +180,7 @@ document.addEventListener('submit', (event) => {
     console.log("username: " + username);
     console.log("password: " + password);
   }
+
   if (form.id === "sign-up-form")
   {
     console.log("Sign up");
@@ -210,8 +188,18 @@ document.addEventListener('submit', (event) => {
     let password = (document.getElementById("sign-up-password") as HTMLInputElement).value;
     form.reset();
 
+    user.setUsername(username);
+    user.setSigned(true);
     console.log("username: " + username);
     console.log("password: " + password);
+
+    menu = `<nav>
+              <a href="/">Home</a> | 
+              <a href="/about">About</a> | 
+              <a href="/settings">Settings</a> |
+              <a href="/user">${user.getUsername()}</a> |
+              <a href="/game-menu">Play</a>
+            </nav>`;
   }
 });
 
@@ -225,7 +213,3 @@ window.addEventListener('popstate', () => {
 
 // Add onClickPlay function
 (window as any).onClickPlay = onClickPlay;
-
-(window as any).onClickDisplayUser = onClickDisplayUser;
-(window as any).editUser = userService.updateUser;
-(window as any).deleteUser = userService.deleteUser;
