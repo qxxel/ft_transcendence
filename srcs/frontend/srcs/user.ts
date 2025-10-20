@@ -30,7 +30,7 @@ export class UserService {
 		this.users[index] = user;
 		this.saveUsers();
 	}
-
+	
 	deleteUser(index: number) {
 		this.users.splice(index, 1);
 		this.saveUsers();

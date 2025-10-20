@@ -28,6 +28,9 @@ function stopCurrentGame() {
 function displayUsers() {
   const userList = document.getElementById('userList') as HTMLTableElement;
   const users = userService.getUsers();
+  userService.deleteUser(0);
+  userService.deleteUser(1);
+  userService.deleteUser(2);
   userList.innerHTML = users.map((user, index) => `
       <tr>
           <td>${user.name}</td>
@@ -35,7 +38,7 @@ function displayUsers() {
           <td>${user.phoneNumber}</td>
           <td>
               <button onclick="editUser(${index})">Edit</button>
-              <button onclick="deleteUser(${index})">Delete</button>
+              <button onclick="">Delete</button>
           </td>
       </tr>
   `).join('');
@@ -53,13 +56,13 @@ function onClickDisplayUser() {
 }
 
 function  pathActions(currentPath: string) {
-  if (['/gamemenu'].includes(currentPath)) {
+  if (['/game-menu'].includes(currentPath)) {
     currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
   }
 
   if (['/play'].includes(currentPath)) {
     if (!currentGame)
-      router.navigate('/gamemenu');
+      router.navigate('/game-menu');
     else {
       currentGame.setCtx();
       currentGame.start();
@@ -109,7 +112,7 @@ const menu = `<nav>
   <a href="/about">About</a> | 
   <a href="/settings">Settings</a> |
   <a href="/user">User</a> |
-  <a href="/gamemenu">Play</a>
+  <a href="/game-menu">Play</a>
 </nav>`;
 
 
@@ -144,8 +147,8 @@ router.addRoute("/rperrot", async () => {
 	return menu + html;
 });
 
-router.addRoute("/gamemenu", async () => {
-	const html = await loadHtml("pages/gamemenu.html");
+router.addRoute("/game-menu", async () => {
+	const html = await loadHtml("pages/game-menu.html");
 	return menu + html;
 });
 
@@ -174,27 +177,7 @@ document.addEventListener('click', (e) => {
 
 // Handle submit
 document.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  const userForm = document.getElementById('userForm') as HTMLFormElement;
-  const userId = (document.getElementById('userId') as HTMLInputElement).value;
-  const user: User = {
-    name: (document.getElementById('name')  as HTMLInputElement).value,
-    email: (document.getElementById('email') as HTMLInputElement).value,
-    phoneNumber: (document.getElementById('phoneNumber') as HTMLInputElement).value
-  }
-
-  if (userId === '') {
-    userService.addUser(user);
-    console.log("User added successfully !");
-  }
-
-  else {
-    userService.updateUser(parseInt(userId, 10), user);
-    console.log("User updated successfully !");
-  }
-
-  userForm.reset();
+  
 });
 
 // Handle back/forward navigation
