@@ -30,6 +30,10 @@ export class PongGame {
   private readonly maxBallSpeed: number = 12;
   private readonly ballSpeedIncrease: number = 0.5;
 
+  private gameMode: 'pvp' | 'ai';
+  private aiLastDecisionTime: number = 0;
+  private aiTargetY: number = 0;
+
   private paddle1: Paddle | null = null;
   private paddle2: Paddle | null = null;
   private ball: Ball | null = null;
@@ -45,13 +49,20 @@ export class PongGame {
   private ids: { canvas: string; score1: string; score2: string; winScore: string };
   private keysPressed: { [key: string]: boolean } = {};
 
-  constructor(canvasId: string, score1Id: string, score2Id: string, winScoreId: string) {
+  constructor(
+    canvasId: string, 
+    score1Id: string, 
+    score2Id: string, 
+    winScoreId: string, 
+    gameMode: 'pvp' | 'ai' = 'ai'
+  ) {
     this.ids = {
       canvas: canvasId,
       score1: score1Id,
       score2: score2Id,
       winScore: winScoreId
     };
+    this.gameMode = gameMode;
   }
   
   public setCtx() {
@@ -98,6 +109,8 @@ export class PongGame {
       dy: 0,
     };
     
+    this.aiTargetY = this.canvas!.height / 2;
+
     this.resetBall(true);
     
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -116,8 +129,11 @@ export class PongGame {
     if (this.isPaused || this.isGameOver) {
       return;
     }
-    this.movePaddles();
-    this.moveAI();
+    this.movePaddle1();
+    if (this.gameMode === 'ai') {
+      this.moveAI();
+    }
+    this.movePaddle2();
     this.moveBall();
   }
 
@@ -166,13 +182,21 @@ export class PongGame {
     } 
   }
 
-  /* Handles player 1 paddle movement based on keyboard input (W/Z for up, S for down) */
-  private movePaddles() {
+  private movePaddle1() {
     if ((this.keysPressed['w'] || this.keysPressed['z']) && this.paddle1!.y > 0) {
       this.paddle1!.y -= this.paddle1!.speed;
     }
     if (this.keysPressed['s'] && this.paddle1!.y < this.canvas!.height - this.paddle1!.height) {
       this.paddle1!.y += this.paddle1!.speed;
+    }
+  }
+
+  private movePaddle2() {
+    if (this.keysPressed['ArrowUp'] && this.paddle2!.y > 0) {
+      this.paddle2!.y -= this.paddle2!.speed;
+    }
+    if (this.keysPressed['ArrowDown'] && this.paddle2!.y < this.canvas!.height - this.paddle2!.height) {
+      this.paddle2!.y += this.paddle2!.speed;
     }
   }
 
@@ -339,17 +363,35 @@ export class PongGame {
     }
   }
 
-  /* Simple AI that follows the ball vertically - moves paddle 2 up or down with slight delay */
   private moveAI() {
-    const paddleCenter = this.paddle2!.y + this.paddle2!.height / 2;
-    if (paddleCenter < this.ball!.y - 10) {
-      this.paddle2!.y += this.paddle2!.speed;
-    } else if (paddleCenter > this.ball!.y + 10) {
-      this.paddle2!.y -= this.paddle2!.speed;
+    const now = Date.now();
+    if (now - this.aiLastDecisionTime > 1000) {
+      this.aiLastDecisionTime = now;
+      
+      if (this.ball!.dx > 0) { 
+        const timeToImpact = (this.paddle2!.x - this.ball!.x) / this.ball!.dx;
+        let predictedY = this.ball!.y + (this.ball!.dy * timeToImpact);
+
+        // Upgrade ici : actuellement la prediction ne compte pas les rebonds sur les murs 
+        predictedY = Math.max(this.ball!.radius, Math.min(predictedY, this.canvas!.height - this.ball!.radius));
+        
+        this.aiTargetY = predictedY;
+      } else {
+        this.aiTargetY = this.canvas!.height / 2;
+      }
     }
-    if (this.paddle2!.y < 0) this.paddle2!.y = 0;
-    if (this.paddle2!.y > this.canvas!.height - this.paddle2!.height) {
-      this.paddle2!.y = this.canvas!.height - this.paddle2!.height;
+
+    const paddleCenter = this.paddle2!.y + this.paddle2!.height / 2;
+    
+    if (paddleCenter < this.aiTargetY - 10) {
+      this.keysPressed['ArrowDown'] = true; // "Press" Down
+      this.keysPressed['ArrowUp'] = false;
+    } else if (paddleCenter > this.aiTargetY + 10) {
+      this.keysPressed['ArrowDown'] = false; 
+      this.keysPressed['ArrowUp'] = true; // "Press" Up
+    } else {
+      this.keysPressed['ArrowDown'] = false;
+      this.keysPressed['ArrowUp'] = false;
     }
   }
 

@@ -88,6 +88,7 @@ dev:
 	$(DC) -f $(DC_FILE) build 
 # 	--no-cache frontend
 	$(DC) -f $(DC_FILE) up -d
+	@echo Project: https://localhost:8080/
 # 	@sleep 3
 # 	@docker exec nginx ls -lh /usr/share/nginx/html/ || true
 
