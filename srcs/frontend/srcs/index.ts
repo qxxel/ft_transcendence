@@ -32,6 +32,16 @@ function onClickPlay() {
   router.navigate('/play');
 }
 
+
+
+async function getMessage() {
+  const res = await fetch('http://localhost:9090/api/hello');
+  const data = await res.json();
+  console.log(data); // { message: 'Hello depuis Fastify !' }
+}
+
+
+
 function  pathActions(currentPath: string) {
   if (['/game-menu'].includes(currentPath)) {
     currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
@@ -213,3 +223,6 @@ window.addEventListener('popstate', () => {
 
 // Add onClickPlay function
 (window as any).onClickPlay = onClickPlay;
+
+
+(window as any).getMessage = getMessage;
