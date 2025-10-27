@@ -48,8 +48,22 @@ db.run();
 /* ======================= SERVER ======================= */
 
 
+// Autoriser le front à appeler ton API
+await fastify.register(cors, {
+  origin: '*', // ou précise ton front: 'http://localhost:3000'
+});
+
 fastify.get('/', async (request, reply) => {
 	return { hello: 'world' };
+});
+
+fastify.get('/api/hello', async (request, reply) => {
+  return { message: 'Hello depuis Fastify !' };
+});
+
+fastify.post('/api/data', async (request, reply) => {
+  const body = request.body;
+  return { received: body };
 });
 
 const start = async () => {
