@@ -16,6 +16,17 @@ const	fastify = Fastify({
 
 /* ======================= DATABASE ======================= */
 
+/*	SQLITE METHODS
+
+	SELECT
+		.get	=> get back the first line
+		.all	=> get back all the lines
+		.each	=> get back the lines one by one
+	
+	CREATE / INSERT / ...
+		.run
+
+*/
 
 const db = new sqlite3.Database(dbname, (err: string) => {
 	if (err)
@@ -24,12 +35,14 @@ const db = new sqlite3.Database(dbname, (err: string) => {
 	console.log("Database started");
 });
 
-db.close((err: string) => {
-	if (err)
-		console.error(err);
+db.run();
 
-	console.log('Database closed');
-})
+// db.close((err: string) => {
+// 	if (err)
+// 		console.error(err);
+
+// 	console.log('Database closed');
+// });
 
 
 /* ======================= SERVER ======================= */
