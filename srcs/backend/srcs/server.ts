@@ -1,21 +1,43 @@
 import Fastify from 'fastify';
 import * as fs from 'fs';
 
-const sqlite3 = require('sqlite3').verbose();
 
-const fastify = Fastify({
+/* ======================= INIT CONST VARIABLES ======================= */
+
+// FOR DATABASE
+const	sqlite3 = require('sqlite3')//.verbose();
+const	dbname = '/app/dist/db/mydatabase.db'
+
+// FOR FASTIFY
+const	fastify = Fastify({
 	logger: true
 });
 
 
-const db = new sqlite3.Database('/app/dist/db/mydatabase.db', (err: string) => {
-  if (err) console.error(err);
+/* ======================= DATABASE ======================= */
+
+
+const db = new sqlite3.Database(dbname, (err: string) => {
+	if (err)
+		console.error(err);
+
+	console.log("Database started");
 });
+
+db.close((err: string) => {
+	if (err)
+		console.error(err);
+
+	console.log('Database closed');
+})
+
+
+/* ======================= SERVER ======================= */
+
 
 fastify.get('/', async (request, reply) => {
 	return { hello: 'world' };
 });
-
 
 const start = async () => {
 	try {
