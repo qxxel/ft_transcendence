@@ -7,8 +7,8 @@ import cors from '@fastify/cors'
 
 
 // FOR DATABASE
-const	sqlite3 = require('sqlite3')//.verbose();
-const	dbname = '/app/dist/db/mydatabase.db'
+const	sqlite3 = require('sqlite3');
+const	dbname = '/app/dist/db/mydatabase.db';
 
 // FOR FASTIFY
 const	fastify = Fastify({
@@ -48,23 +48,9 @@ const db = new sqlite3.Database(dbname, (err: string) => {
 	console.log("Database started");
 });
 
-// db.run();
-
-// db.close((err: string) => {
-// 	if (err)
-// 		console.error(err);
-
-// 	console.log('Database closed');
-// });
-
 
 /* ======================= SERVER ======================= */
 
-
-// Autoriser le front à appeler ton API
-// await fastify.register(cors, {
-//   origin: '*', // ou précise ton front: 'http://localhost:3000'
-// });
 
 fastify.get('/api', async (request, reply) => {
 	return { hello: 'world' };
@@ -87,5 +73,5 @@ const start = async () => {
 		fastify.log.error(err);
 		process.exit(1);
 	}
-}
-start()
+};
+start();
