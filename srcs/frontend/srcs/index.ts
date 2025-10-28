@@ -104,7 +104,6 @@ var menu = `<nav>
   <a href="/game-menu">Play</a>
 </nav>`;
 
-
 // HTML loader
 async function loadHtml(path: string) {
   const response = await fetch(path);
