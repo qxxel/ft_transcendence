@@ -13,8 +13,8 @@ const	dbname = '/app/dist/db/mydatabase.db'
 // FOR FASTIFY
 const	fastify = Fastify({
 	https: {
-		key: fs.readFileSync('/etc/letsencrypt/live/ton-domaine.com/privkey.pem'),
-		cert: fs.readFileSync('/etc/letsencrypt/live/ton-domaine.com/fullchain.pem'),
+		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
+		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
 	},
 	logger: true
 });
@@ -25,7 +25,9 @@ fastify.register(cors, {
   allowedHeaders: ['Content-Type', 'Authorization']
 });
 
+
 /* ======================= DATABASE ======================= */
+
 
 /*	SQLITE METHODS
 
@@ -46,7 +48,7 @@ const db = new sqlite3.Database(dbname, (err: string) => {
 	console.log("Database started");
 });
 
-db.run();
+// db.run();
 
 // db.close((err: string) => {
 // 	if (err)
@@ -64,22 +66,22 @@ db.run();
 //   origin: '*', // ou précise ton front: 'http://localhost:3000'
 // });
 
-fastify.get('/', async (request, reply) => {
+fastify.get('/api', async (request, reply) => {
 	return { hello: 'world' };
 });
 
-fastify.get('/api/hello', async (request, reply) => {
+fastify.get('/api/user', async (request, reply) => {
   return { message: 'Hello depuis Fastify !' };
 });
 
-fastify.post('/api/data', async (request, reply) => {
+fastify.post('/api/signup', async (request, reply) => {
   const body = request.body;
   return { received: body };
 });
 
 const start = async () => {
 	try {
-		await fastify.listen({ port: 9090 });
+		await fastify.listen({ port: 9090, host: '0.0.0.0' });
 		console.log(`Server started on https://localhost:9090`);
 	} catch (err) {
 		fastify.log.error(err);
