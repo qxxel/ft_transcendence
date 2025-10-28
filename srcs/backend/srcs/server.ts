@@ -1,8 +1,10 @@
 import Fastify from 'fastify';
 import * as fs from 'fs';
+import cors from '@fastify/cors'
 
 
 /* ======================= INIT CONST VARIABLES ======================= */
+
 
 // FOR DATABASE
 const	sqlite3 = require('sqlite3')//.verbose();
@@ -10,9 +12,18 @@ const	dbname = '/app/dist/db/mydatabase.db'
 
 // FOR FASTIFY
 const	fastify = Fastify({
+	https: {
+		key: fs.readFileSync('/etc/letsencrypt/live/ton-domaine.com/privkey.pem'),
+		cert: fs.readFileSync('/etc/letsencrypt/live/ton-domaine.com/fullchain.pem'),
+	},
 	logger: true
 });
 
+fastify.register(cors, {
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+});
 
 /* ======================= DATABASE ======================= */
 
@@ -49,9 +60,9 @@ db.run();
 
 
 // Autoriser le front à appeler ton API
-await fastify.register(cors, {
-  origin: '*', // ou précise ton front: 'http://localhost:3000'
-});
+// await fastify.register(cors, {
+//   origin: '*', // ou précise ton front: 'http://localhost:3000'
+// });
 
 fastify.get('/', async (request, reply) => {
 	return { hello: 'world' };
@@ -69,7 +80,7 @@ fastify.post('/api/data', async (request, reply) => {
 const start = async () => {
 	try {
 		await fastify.listen({ port: 9090 });
-		console.log(`Server started on http://localhost:9090`);
+		console.log(`Server started on https://localhost:9090`);
 	} catch (err) {
 		fastify.log.error(err);
 		process.exit(1);
