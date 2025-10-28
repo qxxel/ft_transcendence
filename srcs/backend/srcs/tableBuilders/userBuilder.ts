@@ -1,13 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   userService.ts                                     :+:      :+:    :+:   */
+/*   userBuilder.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/28 22:16:40 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/10/28 22:22:51 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/10/28 22:19:05 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/10/28 22:19:33 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// will be the logic of the who will call repositories functions
+// will build user table (called in userRepository)
