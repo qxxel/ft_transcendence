@@ -6,18 +6,20 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/10/15 14:15:30 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/10/28 17:54:06 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_transcendence
 
 SECRET_DIR = .SECRET
-CERT_FILE = $(SECRET_DIR)/certificate.crt
-KEY_FILE = $(SECRET_DIR)/private_key.key
+CERT_FILE_FRONT = $(SECRET_DIR)/certificate.crt
+KEY_FILE_FRONT = $(SECRET_DIR)/private_key.key
+CERT_FILE_BACK = $(SECRET_DIR)/certificate.pem
+KEY_FILE_BACK = $(SECRET_DIR)/private_key.pem
 
-LOGIN = agerbaud
-DOMAIN = $(LOGIN).42.fr
+DOMAIN_FRONT = $(NAME).42.fr
+DOMAIN_BACK = localhost:9090
 
 DC = docker compose
 DC_FILE = srcs/docker-compose.yml
@@ -44,6 +46,8 @@ ls:
 	-docker logs nginx
 	@echo "\033[1;37m"
 	-docker logs frontend
+	@echo "\033[1;38m"
+	-docker logs backend
 	@echo "\033[0m"
 
 build: $(SECRET_DIR)
@@ -77,9 +81,14 @@ $(SECRET_DIR):
 	mkdir -p $(SECRET_DIR)
 	openssl req -x509 \
 		-newkey rsa:2048 \
-		-keyout $(KEY_FILE) -out $(CERT_FILE) \
+		-keyout $(KEY_FILE_FRONT) -out $(CERT_FILE_FRONT) \
 		-days 365 -nodes \
-		-subj "/C=FR/ST=ARA/L=Lyon/O=42Lyon/OU=IT/CN=$(DOMAIN)"
+		-subj "/C=FR/ST=ARA/L=Lyon/O=42Lyon/OU=IT/CN=$(DOMAIN_FRONT)"
+	openssl req -x509 \
+		-newkey rsa:2048 \
+		-keyout $(KEY_FILE_BACK) -out $(CERT_FILE_BACK) \
+		-days 365 -nodes \
+		-subj "/C=FR/ST=ARA/L=Lyon/O=42Lyon/OU=IT/CN=$(DOMAIN_BACK)"
 
 # DEV : Rebuild frontend + supprime le volume + redémarre tout
 dev:
