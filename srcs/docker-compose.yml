@@ -2,13 +2,17 @@ services:
 
   backend:
     container_name: backend
+    image: backend
     build:
       context: backend
       dockerfile: Dockerfile.back
     env_file:
       - .env
+    secrets:
+      - ssl_key_back
+      - ssl_crt_back
     ports:
-      - "9090"
+      - "9090:9090"
     networks:
       - ft_transcendence
     volumes:
@@ -41,8 +45,8 @@ services:
     env_file:
       - .env
     secrets:
-      - ssl_key
-      - ssl_crt
+      - ssl_key_front
+      - ssl_crt_front
     ports:
       - "8080:443"
       # - "8080:8080"
@@ -68,7 +72,11 @@ networks:
     name: ft_transcendence
 
 secrets:
-  ssl_key:
+  ssl_key_front:
     file: "../.SECRET/private_key.key"
-  ssl_crt:
+  ssl_crt_front:
     file: "../.SECRET/certificate.crt"
+  ssl_key_back:
+    file: "../.SECRET/private_key.pem"
+  ssl_crt_back:
+    file: "../.SECRET/certificate.pem"
