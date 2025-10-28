@@ -6,10 +6,6 @@ import cors from '@fastify/cors'
 /* ======================= INIT CONST VARIABLES ======================= */
 
 
-// FOR DATABASE
-const	sqlite3 = require('sqlite3');
-const	dbname = '/app/dist/db/mydatabase.db';
-
 // FOR FASTIFY
 const	fastify = Fastify({
 	https: {
@@ -23,29 +19,6 @@ fastify.register(cors, {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-});
-
-
-/* ======================= DATABASE ======================= */
-
-
-/*	SQLITE METHODS
-
-	SELECT
-		.get	=> get back the first line
-		.all	=> get back all the lines
-		.each	=> get back the lines one by one
-	
-	CREATE / INSERT / ...
-		.run
-
-*/
-
-const db = new sqlite3.Database(dbname, (err: string) => {
-	if (err)
-		console.error(err);
-
-	console.log("Database started");
 });
 
 
