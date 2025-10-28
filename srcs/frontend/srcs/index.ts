@@ -37,7 +37,7 @@ function onClickPlay() {
 async function getMessage() {
   const res = await fetch('https://backend:9090/api/hello');
   const data = await res.json();
-  console.log(data); // { message: 'Hello depuis Fastify !' }
+  console.log(data);
 }
 
 
