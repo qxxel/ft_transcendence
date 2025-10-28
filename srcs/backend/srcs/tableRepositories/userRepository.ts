@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   initdb.ts                                          :+:      :+:    :+:   */
+/*   userRepository.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 21:13:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/10/28 21:44:18 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/10/28 22:14:02 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-const	sqlite3 = require('sqlite3');
+import	{ db } from '../index.js'
+
 
 /* =================== SQLITE METHODS ===================
 
@@ -25,18 +26,11 @@ const	sqlite3 = require('sqlite3');
 ====================================================== */
 
 
-export class	DB {
+export class	userRepository {
 	private	db;
-	private dbname;
 	
-	constructor(dbname: string) {
-		this.dbname = '/app/dist/db/mydatabase.db';
-		this.db = new sqlite3.Database(dbname, (err: string) => {
-			if (err)
-				console.error(err);
-	
-			console.log(`Database started on ${dbname}`);
-		});
+	constructor(db: any) {
+		this.db = db;
 	}
 
 	getUserById(id: number): any {

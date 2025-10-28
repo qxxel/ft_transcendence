@@ -5,9 +5,19 @@ import cors from '@fastify/cors'
 
 /* ======================= INIT CONST VARIABLES ======================= */
 
+// FOR SQLITE
+const			sqlite3 = require('sqlite3');
+const			dbname = '/app/dist/db/mydatabase.db';
+export const	db = new sqlite3.Database(dbname, (err: string) => {
+	if (err)
+		console.error(err);
+
+	console.log(`Database started on ${dbname}`);
+});
+
 
 // FOR FASTIFY
-const	fastify = Fastify({
+export const	fastify = Fastify({
 	https: {
 		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
 		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
@@ -15,27 +25,14 @@ const	fastify = Fastify({
 	logger: true
 });
 
-fastify.register(cors, {
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-});
-
 
 /* ======================= SERVER ======================= */
 
 
-fastify.get('/api', async (request, reply) => {
-	return { hello: 'world' };
-});
-
-fastify.get('/api/user', async (request, reply) => {
-  return { message: 'Hello depuis Fastify !' };
-});
-
-fastify.post('/api/signup', async (request, reply) => {
-  const body = request.body;
-  return { received: body };
+fastify.register(cors, {
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 });
 
 const start = async () => {
