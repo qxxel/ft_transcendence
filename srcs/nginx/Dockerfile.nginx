@@ -6,7 +6,7 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/09 15:54:17 by agerbaud          #+#    #+#              #
-#    Updated: 2025/09/09 16:51:21 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/10/28 12:01:23 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ FROM nginx:bookworm
 # COPY	conf/nginx.conf /etc/nginx/nginx.conf
 COPY	conf/nginx_dev.conf /etc/nginx/nginx.conf
 
-# Expose 443
+# Expose 8080
+# EXPOSE 8080
 EXPOSE 443
 
 # Start nginx

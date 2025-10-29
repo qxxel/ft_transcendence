@@ -1,4 +1,6 @@
 import { PongGame } from './game.js'; // Make sure the path is correct
+// import { UserService } from './user.js'; // Make sure the path is correct
+import { User } from './user.js'; // Make sure the path is correct
 
 // Define route interface
 interface Route {
@@ -8,6 +10,9 @@ interface Route {
 
 // This variable will hold the active game instance
 var currentGame: PongGame | null = null;
+
+// This variable will hold the active user infos
+var user = new User();
 
 /**
  * Stops the current game if it's running.
@@ -27,14 +32,24 @@ function onClickPlay() {
   router.navigate('/play');
 }
 
+
+
+async function getMessage() {
+  const res = await fetch('https://backend:9090/api/hello');
+  const data = await res.json();
+  console.log(data);
+}
+
+
+
 function  pathActions(currentPath: string) {
-  if (['/gamemenu'].includes(currentPath)) {
+  if (['/game-menu'].includes(currentPath)) {
     currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
   }
 
   if (['/play'].includes(currentPath)) {
     if (!currentGame)
-      router.navigate('/gamemenu');
+      router.navigate('/game-menu');
     else {
       currentGame.setCtx();
       currentGame.start();
@@ -79,13 +94,15 @@ const router = new Router();
 
 
 // Create a menu
-const menu = `<nav>
+var menu = `<nav>
   <a href="/">Home</a> | 
   <a href="/about">About</a> | 
   <a href="/settings">Settings</a> |
-  <a href="/gamemenu">Play</a>
+  <a href="/sign-in">Sign in</a> |
+  <a href="/sign-up">Sign up</a> |
+  <a href="/user">User</a> |
+  <a href="/game-menu">Play</a>
 </nav>`;
-
 
 // HTML loader
 async function loadHtml(path: string) {
@@ -108,13 +125,28 @@ router.addRoute("/settings", async () => {
 	return menu + html;
 });
 
+router.addRoute("/user", async () => {
+	const html = await loadHtml("pages/user.html");
+	return menu + html;
+});
+
+router.addRoute("/sign-in", async () => {
+	const html = await loadHtml("pages/sign-in.html");
+	return menu + html;
+});
+
+router.addRoute("/sign-up", async () => {
+	const html = await loadHtml("pages/sign-up.html");
+	return menu + html;
+});
+
 router.addRoute("/rperrot", async () => {
 	const html = await loadHtml("pages/rperrot.html");
 	return menu + html;
 });
 
-router.addRoute("/gamemenu", async () => {
-	const html = await loadHtml("pages/gamemenu.html");
+router.addRoute("/game-menu", async () => {
+	const html = await loadHtml("pages/game-menu.html");
 	return menu + html;
 });
 
@@ -133,11 +165,50 @@ router.render();
 /* ============================= EVENTS ============================= */
 
 // Handle link clicks
-document.addEventListener('click', (e) => {
-  const target = e.target as HTMLAnchorElement;
+document.addEventListener('click', (event) => {
+  const target = event.target as HTMLAnchorElement;
   if (target.tagName === 'A' && target.hasAttribute('href')) {
-    e.preventDefault();
+    event.preventDefault();
     router.navigate(target.getAttribute('href')!);
+  }
+});
+
+// Handle submit
+document.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const form = event.target as HTMLFormElement;
+
+  if (form.id === "sign-in-form")
+  {
+    console.log("Sign in");
+    let username = (document.getElementById("sign-in-username") as HTMLInputElement).value;
+    let password = (document.getElementById("sign-in-password") as HTMLInputElement).value;
+    form.reset();
+
+    console.log("username: " + username);
+    console.log("password: " + password);
+  }
+
+  if (form.id === "sign-up-form")
+  {
+    console.log("Sign up");
+    let username = (document.getElementById("sign-up-username") as HTMLInputElement).value;
+    let password = (document.getElementById("sign-up-password") as HTMLInputElement).value;
+    form.reset();
+
+    user.setUsername(username);
+    user.setSigned(true);
+    console.log("username: " + username);
+    console.log("password: " + password);
+
+    menu = `<nav>
+              <a href="/">Home</a> | 
+              <a href="/about">About</a> | 
+              <a href="/settings">Settings</a> |
+              <a href="/user">${user.getUsername()}</a> |
+              <a href="/game-menu">Play</a>
+            </nav>`;
   }
 });
 
@@ -151,3 +222,6 @@ window.addEventListener('popstate', () => {
 
 // Add onClickPlay function
 (window as any).onClickPlay = onClickPlay;
+
+
+(window as any).getMessage = getMessage;
