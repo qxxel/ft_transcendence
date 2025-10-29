@@ -12,7 +12,7 @@ services:
       - ssl_key_back
       - ssl_crt_back
     ports:
-      - "9090:9090"
+      - "5000:3000"
     networks:
       - ft_transcendence
     volumes:
