@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 21:13:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/10/29 12:56:17 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:00:35 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 
 /* ====================== IMPORT ====================== */
 
-import	{ db } from '../index.js'
 import	{ userTableBuilder } from '../tableBuilders/userBuilder.js'
+import	{ userDto } from '../dtos/userDto.js'
 
 
 /* ====================== CLASS ====================== */
@@ -47,7 +47,10 @@ export class	userRepository {
 		}
 	}
 
-	getUserById(id: number): any {
-		
+	getUserById(userId: number): any {
+		var	row = this.db.get(`SELECT * FROM usr_user WHERE usr_spkuser = VALUE(?)`, [userId]);
+		if (!row)
+			console.error(`error: user ${userId} doesn't exist`);
+		return new userDto(row);
 	}
 }
