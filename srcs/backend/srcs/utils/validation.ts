@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 14:48:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/10/29 16:55:45 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:12:26 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 /* ====================== INTERFACE / TYPE ====================== */
 
-interface	validationResult {
+export interface	validationResult {
 	result: boolean,
-	error?: string;
+	error: string;
 };
 
 interface	rule {
