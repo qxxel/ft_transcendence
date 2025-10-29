@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 21:13:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/10/29 17:55:47 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/10/29 19:02:24 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,13 @@ export class	userRepository {
 		}
 	}
 
-	addUser(userDto: userDto): void {
-		this.db.run(`INSERT INTO usr_user (usr_cname, usr_cemail, usr_cpasswordhashed, usr_ielo) VALUES(?, ?, ?, ?)`,
+	addUser(userDto: userDto): number {
+		const user = this.db.run(`INSERT INTO usr_user (usr_cname, usr_cemail, usr_cpasswordhashed, usr_ielo) VALUES(?, ?, ?, ?)`,
 			[userDto.getName(), userDto.getEmail(), userDto.getPwd(), 400]);
+		return user.lastInsertRowid as number;
 	}
 
-	getUserById(userId: number): any {
+	getUserById(userId: number): userDto {
 		var	row = this.db.get(`SELECT * FROM usr_user WHERE usr_spkuser = VALUE(?)`, [userId]);
 		if (!row)
 			console.error(`error: user ${userId} doesn't exist`);

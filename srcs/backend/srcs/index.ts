@@ -1,33 +1,50 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   index.ts                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/10/29 19:29:02 by agerbaud         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
+/* ====================== IMPORT ====================== */
+
 import Fastify from 'fastify';
+import * as sqlite3 from 'sqlite3';
 import * as fs from 'fs';
 import cors from '@fastify/cors'
+import { userRepository } from './tableRepositories/userRepository.js'
 
 
-/* ======================= INIT CONST VARIABLES ======================= */
+/* ====================== DATABASE ====================== */
 
-// FOR SQLITE
-const			sqlite3 = require('sqlite3');
 const			dbname = '/app/dist/db/mydatabase.db';
-export const	db = new sqlite3.Database(dbname, (err: string) => {
+
+export const	db = new sqlite3.Database(dbname, (err: Error | null) => {
 	if (err)
 		console.error(err);
 
 	console.log(`Database started on ${dbname}`);
 });
 
+export const	userRepo = new userRepository(db);
+// const	userServ = new userService(userRepo);
 
-// FOR FASTIFY
+
+
+/* ====================== SERVER ====================== */
+
 export const	fastify = Fastify({
-	https: {
-		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
-		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
-	},
+	// https: {
+	// 	key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
+	// 	cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
+	// },
 	logger: true
 });
-
-
-/* ======================= SERVER ======================= */
-
 
 fastify.register(cors, {
   origin: '*',
