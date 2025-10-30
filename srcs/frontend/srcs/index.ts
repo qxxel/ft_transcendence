@@ -35,7 +35,7 @@ function onClickPlay() {
 
 
 async function getMessage() {
-  const res = await fetch('https://backend:9090/api/hello');
+  const res = await fetch('/api/user/10');
   const data = await res.json();
   console.log(data);
 }
