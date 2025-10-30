@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 22:18:37 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/10/29 17:45:45 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/10/30 18:15:36 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ export class	userDto {
 		const	nameResult = isValidName(this.name);
 		const	pwdResult = isValidPwd(this.pwdHashed);
 
-		const	errors = [nameResult.error, pwdResult.error].join(", ");
+		const	errors = [nameResult.error, pwdResult.error]
+			.filter(error => error && error.length > 0)
+			.join(", ");
 
 		return { result: errors.length === 0, error: errors }
 	}

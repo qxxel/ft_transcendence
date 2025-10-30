@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 21:13:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/10/29 19:02:24 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/10/30 18:23:23 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,21 @@
 
 import	{ userTableBuilder } from '../tableBuilders/userBuilder.js'
 import	{ userDto } from '../dtos/userDto.js'
+import	{ Database, Statement } from 'sqlite3'
+
+
+/* ====================== INTERFACE ====================== */
+
+// BECAUSE TYPESCRIPT DON'T ACCEPT `this.lastID` BUT IT APPEARS WITH THE COMPILATION
+interface	StatementWithLastID {
+    lastID: number;
+}
 
 
 /* ====================== CLASS ====================== */
 
 export class	userRepository {
-	private	db;
+	private	db: Database;
 	
 	constructor(db: any) {
 		try {
@@ -47,20 +56,52 @@ export class	userRepository {
 		}
 	}
 
-	addUser(userDto: userDto): number {
-		const user = this.db.run(`INSERT INTO usr_user (usr_cname, usr_cemail, usr_cpasswordhashed, usr_ielo) VALUES(?, ?, ?, ?)`,
-			[userDto.getName(), userDto.getEmail(), userDto.getPwd(), 400]);
-		return user.lastInsertRowid as number;
+	async addUser(userDto: userDto): Promise<number> {
+		return new Promise((resolve, reject) => {
+			const	query = `INSERT INTO usr_user (usr_cname, usr_cemail, usr_cpasswordhashed, usr_ielo) VALUES(?, ?, ?, ?)`;
+			const	elements = [userDto.getName(), userDto.getEmail(), userDto.getPwd(), 400];
+			this.db.run(query, elements, function (this: StatementWithLastID, err) {
+				if (err)
+					return reject(err);
+
+				resolve(this.lastID);
+			});
+		});
 	}
 
-	getUserById(userId: number): userDto {
-		var	row = this.db.get(`SELECT * FROM usr_user WHERE usr_spkuser = VALUE(?)`, [userId]);
-		if (!row)
-			console.error(`error: user ${userId} doesn't exist`);
-		return new userDto(row);
+	async getUserById(userId: number): Promise<userDto> {
+		return new Promise((resolve, reject) => {
+			const	query = `SELECT * FROM usr_user WHERE usr_spkuser = ?`;
+			const	elements = [userId];
+			this.db.get(query, elements, (err, row) => {
+				if (err)
+					return reject(err);
+
+				if (!row) {
+					console.error(`error: user ${userId} doesn't exist`);
+					return reject(new Error(`The user ${userId} doesn't exist`));
+				}
+
+				resolve(new userDto(row));
+			});
+		});
 	}
 
-	deleteUser(userId: number): void {
-		this.db.run(`DELETE FROM usr_user WHERE usr_spkuser = VALUE(?)`, [userId]);
+	async deleteUser(userId: number): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
+			const	query = `DELETE FROM usr_user WHERE usr_spkuser = ?`;
+			const	elements = [userId];
+			this.db.run(query, elements, function(err) {
+				if (err)
+					return reject(err);
+
+				resolve();
+			});
+		});
+	}
+
+	// GETTER
+	getDb(): Database {
+		return this.db;
 	}
 }
