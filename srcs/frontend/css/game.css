@@ -1,0 +1,126 @@
+/* --- 1. Main Layout & Background --- */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'monospace', sans-serif;
+}
+
+.game-wrapper {
+  /* This is your starry background */
+  background-image: url('../path/to/your/space-bg.jpg'); /* UPDATE THIS PATH */
+  background-size: cover;
+  background-position: center;
+  
+  /* This is the magic for centering */
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* This is the new container for your game */
+.game-area {
+  position: relative; /* VERY IMPORTANT: for positioning the dashboard */
+  width: 800px;
+}
+
+/* --- 2. Game Header & Score --- */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  font-size: 1.25em;
+  margin-bottom: 15px;
+  
+  /* This adds the "glow" effect */
+  text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+}
+
+.scoreboard {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 15px;
+  border-radius: 6px;
+  border: 1px solid #555;
+}
+
+.win-condition {
+  color: #FFFF00; /* Bright Yellow! */
+  font-weight: bold;
+}
+
+/* --- 3. The Game Canvas --- */
+#pong-canvas {
+  width: 100%;
+  height: auto;
+  border: 2px solid #fff;
+  border-radius: 12px; /* The rounded corners you wanted */
+  box-shadow: 0 0 15px #fff; /* Adds a white glow */
+}
+
+/* --- 4. The New Dashboard --- */
+.dashboard {
+  /* It's now hidden by default */
+  display: none; 
+  
+  /* This positions it ON TOP of the canvas area */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+
+  /* The "serious" styling */
+  background-color: rgba(10, 10, 20, 0.9); /* Dark blue/black tint */
+  border: 2px solid #FFFF00; /* Yellow border */
+  border-radius: 12px; /* Rounded corners */
+  padding: 25px;
+  color: #fff;
+  width: 350px;
+  box-shadow: 0 0 20px #FFFF00; /* Yellow glow */
+}
+
+.dashboard h2 {
+  text-align: center;
+  margin-top: 0;
+  color: #FFFF00; /* Yellow header */
+  border-bottom: 1px solid #FFFF00;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.dashboard p {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
+  margin: 10px 0;
+}
+
+.dashboard p strong {
+  color: #FFFF00; /* Yellow accent */
+}
+
+/* --- 5. Bonus: Yellow Button Style --- */
+/* You don't have buttons yet, but when you do... */
+.btn-yellow {
+  background-color: #FFFF00;
+  color: #000;
+  font-family: 'monospace', sans-serif;
+  font-weight: bold;
+  font-size: 1.2em;
+  text-decoration: none;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+}
+
+.btn-yellow:hover {
+  background-color: #fff;
+  box-shadow: 0 0 10px #fff;
+}

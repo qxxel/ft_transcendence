@@ -4,24 +4,21 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Menu du jeu</title>
-  <script defer src="gamemenu.js"></script>
-  <style>
-    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 50px; }
-    label, input, button { margin: 10px; }
-  </style>
-</head>
+  </head>
 <body>
-  <h1>Menu du jeu Pong 🏓</h1>
-  <label for="maxPoints">Nombre de points gagnants :</label>
-  <input type="range" id="choosenMaxPoints" min="1" max="5" value="5" step="1" list="tickmarks"/>
-  <datalist id="tickmarks">
-    <option value="1"></option>
-    <option value="2"></option>
-    <option value="3"></option>
-    <option value="4"></option>
-    <option value="5"></option>
-  </datalist> 
+  <div class="game-container">
+    <div class="menu-content">
+      
+      <h1>Pong 🏓</h1>
+      
+      <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
+      <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
 
-  <button onclick="onClickPlay();" id="startGame">Lancer la partie</button>
-</body>
+      <button onclick="onClickPlay();" id="startGame" class="btn-yellow">
+        Start Game
+      </button>
+
+    </div>
+  </div>
+  </body>
 </html>

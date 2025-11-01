@@ -1,3 +1,49 @@
-<h1>Settings</h1>
-	<p class="name">Name</p>
-	<p class="name">Nickname</p>
+<div class="game-container">
+  <h1>Settings</h1>
+
+  <form id="settings-form" class="settings-form">
+    <div class="form-group">
+      <label for="display-name">Display Name</label>
+      <input type="text" id="display-name" placeholder="Your public name">
+    </div>
+    
+    <div class="form-group">
+      <label for="nickname">Nickname</label>
+      <input type="text" id="nickname" placeholder="Your game nickname">
+    </div>
+    
+    <button type="submit" class="btn-yellow">Save Settings</button>
+  </form>
+</div>
+
+<style>
+  .settings-form {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .form-group {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #FFFF00;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #aaa;
+    background: #333;
+    color: #fff;
+    font-family: 'monospace', sans-serif;
+    font-size: 1em;
+    box-sizing: border-box;
+  }
+</style>

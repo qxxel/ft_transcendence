@@ -1,18 +1,12 @@
-import { PongGame } from './game.js'; // Make sure the path is correct
+import { PongGame } from './game.js';
 
-// Define route interface
 interface Route {
   path: string;
   component: () => string | Promise<string>;
 }
 
-// This variable will hold the active game instance
 var currentGame: PongGame | null = null;
 
-/**
- * Stops the current game if it's running.
- * This is called before navigating to a new page.
- */
 function stopCurrentGame() {
   if (currentGame) {
     currentGame.stop();
@@ -30,6 +24,17 @@ function onClickPlay() {
 function  pathActions(currentPath: string) {
   if (['/gamemenu'].includes(currentPath)) {
     currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
+
+    const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
+    const display = document.getElementById('points-display') as HTMLSpanElement;
+    
+    if (slider && display) {
+      display.innerHTML = slider.value;
+      
+      slider.addEventListener('input', () => {
+        display.innerHTML = slider.value;
+      });
+    }
   }
 
   if (['/play'].includes(currentPath)) {
@@ -42,7 +47,6 @@ function  pathActions(currentPath: string) {
   }
 }
 
-// Define the router class
 class Router {
   private routes: Route[] = [];
 
@@ -56,8 +60,6 @@ class Router {
   }
 
   async render() {
-    // stopCurrentGame();
-
     const currentPath = window.location.pathname;
     const route = this.routes.find(r => r.path === currentPath);
 
@@ -73,21 +75,15 @@ class Router {
   }
 }
 
-
-// Create the router
 const router = new Router();
 
-
-// Create a menu
 const menu = `<nav>
   <a href="/">Home</a> | 
-  <a href="/about">About</a> | 
+  <a href="/gamemenu">Play</a> |
   <a href="/settings">Settings</a> |
-  <a href="/gamemenu">Play</a>
+  <a href="/about">About</a>
 </nav>`;
 
-
-// HTML loader
 async function loadHtml(path: string) {
   const response = await fetch(path);
   if (!response.ok) {
@@ -96,8 +92,6 @@ async function loadHtml(path: string) {
   return await response.text();
 }
 
-
-// Define routes
 router.addRoute("/about", async () => {
 	const html = await loadHtml("pages/about.html");
 	return menu + html;

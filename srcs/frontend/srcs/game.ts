@@ -124,7 +124,6 @@ export class PongGame {
     this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
   }
 
-  /* Updates game logic each frame - handles paddle movement, AI, and ball physics */
   private update() {
     if (this.isPaused || this.isGameOver) {
       return;
@@ -137,7 +136,6 @@ export class PongGame {
     this.moveBall();
   }
 
-  /* Renders all game elements on the canvas - paddles, ball, center line, and UI overlays */
   private draw() {
     this.ctx!.fillStyle = '#000';
     this.ctx!.fillRect(0, 0, this.canvas!!.width, this.canvas!!.height);
@@ -200,7 +198,6 @@ export class PongGame {
     }
   }
 
-  /* Updates ball position and handles all collision detection (walls, paddles, scoring) */
   private moveBall() {
     const prevBallX = this.ball!.x - this.ball!.dx;
     this.ball!.x += this.ball!.dx;
@@ -231,7 +228,6 @@ export class PongGame {
     }
   }
 
-  /* Calculates bounce angle based on where the ball hits the paddle - creates varied gameplay */
   private calculateDeflection(paddle: Paddle) {
     const relativeIntersectY = (paddle.y + (paddle.height / 2)) - this.ball!.y;
     const normalizedIntersectY = relativeIntersectY / (paddle.height / 2);
@@ -244,7 +240,6 @@ export class PongGame {
     this.currentRallyHits++;
   }
 
-  /* Gradually increases ball speed after each paddle hit - caps at maxBallSpeed */
   private increaseBallSpeed() {
     if (this.ball!.speed >= this.maxBallSpeed) return;
     const newSpeed = Math.min(this.ball!.speed + this.ballSpeedIncrease, this.maxBallSpeed);
@@ -256,7 +251,6 @@ export class PongGame {
     }
   }
 
-  /* Resets ball to center with random direction - firstServe determines if it's the initial serve */
   private resetBall(firstServe: boolean = false) {
     console.log('ball reseted');
     this.longestRally = Math.max(this.longestRally, this.currentRallyHits);
@@ -271,7 +265,6 @@ export class PongGame {
     this.ball!.dy = this.ball!.speed * Math.sin(angle);
   }
 
-  /* Updates score display and checks for game over condition (winning score reached) */
   private updateScores() {
     this.scoreElements!.p1.innerText = this.score1.toString();
     this.scoreElements!.p2.innerText = this.score2.toString();
@@ -281,7 +274,6 @@ export class PongGame {
     }
   }
 
-  /* Displays end game statistics dashboard with winner, duration, hits, and longest rally */
   private showEndGameDashboard() {
     const dashboard = document.getElementById('game-over-dashboard');
     if (!dashboard) return;
@@ -296,7 +288,6 @@ export class PongGame {
     dashboard.style.display = 'block';
   }
 
-  /* Handles keydown events - processes pause toggle (Escape) and restart (Space) */
   private handleKeyDown(e: KeyboardEvent) {
     if (this.isGameOver && e.key === ' ') {
         this.restart();
@@ -310,12 +301,10 @@ export class PongGame {
     this.keysPressed[e.key] = true;
   }
 
-  /* Handles keyup events - updates keysPressed state for smooth paddle movement */
   private handleKeyUp(e: KeyboardEvent) {
     this.keysPressed[e.key] = false;
   }
 
-  /* Initializes and starts the game - sets up event listeners and begins game loop */
   public start() {
     if (!this.animationFrameId) {
       this.startTime = Date.now();
@@ -326,7 +315,6 @@ export class PongGame {
     }
   }
 
-  /* Resets all game state for a new match - scores, positions, stats, and ball */
   private restart() {
     this.score1 = 0;
     this.score2 = 0;
@@ -352,7 +340,6 @@ export class PongGame {
     this.resetBall(true);
   }
 
-  /* Stops the game and cleans up - cancels animation frame and removes event listeners */
   public stop() {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
@@ -384,11 +371,11 @@ export class PongGame {
     const paddleCenter = this.paddle2!.y + this.paddle2!.height / 2;
     
     if (paddleCenter < this.aiTargetY - 10) {
-      this.keysPressed['ArrowDown'] = true; // "Press" Down
+      this.keysPressed['ArrowDown'] = true;
       this.keysPressed['ArrowUp'] = false;
     } else if (paddleCenter > this.aiTargetY + 10) {
       this.keysPressed['ArrowDown'] = false; 
-      this.keysPressed['ArrowUp'] = true; // "Press" Up
+      this.keysPressed['ArrowUp'] = true;
     } else {
       this.keysPressed['ArrowDown'] = false;
       this.keysPressed['ArrowUp'] = false;
