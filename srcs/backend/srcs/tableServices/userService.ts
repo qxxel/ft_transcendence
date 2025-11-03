@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 22:16:40 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/10/30 18:14:06 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/03 18:28:37 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 
 /* ====================== IMPORT ====================== */
 
-import { userRepository } from "../tableRepositories/userRepository";
-import { userDto } from "../dtos/userDto";
+import { userRepository } from "../tableRepositories/userRepository.js";
+import { userDto } from "../dtos/userDto.js";
 import { isTaken } from "../utils/validation.js"
-import { resolve } from "path";
 
 /* ====================== CLASS ====================== */
 

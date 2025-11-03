@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/10/30 18:16:03 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/03 18:47:20 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ import userController from "./controllers/userController.js"
 /* ====================== DATABASE ====================== */
 
 const			dbname = '/app/dist/db/mydatabase.db';
-
 export const	db = new sqlite3.Database(dbname, (err: Error | null) => {
 	if (err)
 		console.error(err);
@@ -32,8 +31,7 @@ export const	db = new sqlite3.Database(dbname, (err: Error | null) => {
 	console.log(`Database started on ${dbname}`);
 });
 
-export const	userRepo = new userRepository(db);
-export const	userServ = new userService(userRepo);
+export const	userServ = new userService(new userRepository(db));
 
 
 
@@ -48,10 +46,6 @@ export const	fastify = Fastify({
 });
 
 fastify.register(userController, { prefix: '/api/user' });
-
-// fastify.get('/', async (request, reply) => {
-// 	return ( { message: "Hello world" })
-// });
 
 fastify.register(cors, {
   origin: '*',
