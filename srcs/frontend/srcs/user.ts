@@ -1,18 +1,19 @@
 export class User {
 	private	signedIn: boolean;
-	private	username: string;
+	private	id?: number;
+	private	username?: string;
 
 	constructor() {
 		this.signedIn = false;
-		this.username = "";
 	}
 
 	isSignedIn(): boolean {
 		return this.signedIn;
 	}
 
-	getUsername(): string {
-		return this.username;
+	getUsername(): string | undefined {
+		if (this.username)
+			return this.username;
 	}
 
 	setSigned(bool: boolean) {
@@ -21,5 +22,9 @@ export class User {
 
 	setUsername(username: string) {
 		this.username = username;
+	}
+
+	setId(id: number) {
+		this.id = id;
 	}
 }
