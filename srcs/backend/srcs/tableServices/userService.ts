@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 22:16:40 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/03 18:28:37 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/03 23:06:00 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ export class	userService {
 	}
 
 	async addUser(userDto: userDto): Promise<number> {
-		const	nameQuery = `SELECT 1 FROM usr_user WHERE usr_cname = ? LIMIT 1`
+		const	nameQuery = `SELECT 1 FROM user WHERE username = ? LIMIT 1`
 		if (await isTaken(this.userRepo.getDb(), nameQuery, [userDto.getName()]))
 			throw new Error(`The name ${userDto.getName()} is already taken. Try another one !`);
 
-		const	emailQuery = `SELECT 1 FROM usr_user WHERE usr_cemail = ? LIMIT 1`
+		const	emailQuery = `SELECT 1 FROM user WHERE email = ? LIMIT 1`
 		if (await isTaken(this.userRepo.getDb(), emailQuery, [userDto.getEmail()]))
 			throw new Error(`The email ${userDto.getEmail()} is already use for another account. Try to sign in !`);
 
@@ -41,7 +41,7 @@ export class	userService {
 	}
 
 	async getUserById(userId: number): Promise<userDto> {
-		const	existQuery = `SELECT 1 FROM usr_user WHERE usr_spkuser = ? LIMIT 1`;
+		const	existQuery = `SELECT 1 FROM user WHERE user = ? LIMIT 1`;
 		if (!(await isTaken(this.userRepo.getDb(), existQuery, [userId.toString()])))
 			throw new Error(`The user ${userId} does not exist`);
 
@@ -49,7 +49,7 @@ export class	userService {
 	}
 
 	async deleteUser(userId: number): Promise<void> {
-		const	existQuery = `SELECT 1 FROM usr_user WHERE usr_spkuser = ? LIMIT 1`;
+		const	existQuery = `SELECT 1 FROM user WHERE user = ? LIMIT 1`;
 		if (!(await isTaken(this.userRepo.getDb(), existQuery, [userId.toString()])))
 			throw new Error(`The user ${userId} does not exist`);
 

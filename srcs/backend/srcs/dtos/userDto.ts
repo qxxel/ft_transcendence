@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 22:18:37 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/10/30 18:15:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/03 23:15:01 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@ import { validationResult, isValidName, isValidPwd } from '../utils/validation.j
 /* ====================== CLASS ====================== */
 
 export class	userDto {
-	private	name: string;
+	private	username: string;
 	private	email: string;
-	private	pwdHashed: string;
+	private	password: string;
 	private	elo?: number;
 
 	constructor(row: any) {
-		this.name = row.usr_cname;
-		this.email = row.usr_cemail;
-		this.pwdHashed = row.usr_cpasswordhashed;
-		if (row.usr_ielo)
-			this.elo = row.usr_ielo;
+		this.username = row.username;
+		this.email = row.email;
+		this.password = row.password;
+		if (row.elo)
+			this.elo = row.elo;
 
 		var validation = this.isValid()
 		if (!validation.result)
@@ -38,8 +38,8 @@ export class	userDto {
 	}
 
 	isValid(): validationResult {
-		const	nameResult = isValidName(this.name);
-		const	pwdResult = isValidPwd(this.pwdHashed);
+		const	nameResult = isValidName(this.username);
+		const	pwdResult = isValidPwd(this.password);
 
 		const	errors = [nameResult.error, pwdResult.error]
 			.filter(error => error && error.length > 0)
@@ -51,7 +51,7 @@ export class	userDto {
 
 	// GETTERS
 	getName(): string {
-		return this.name;
+		return this.username;
 	}
 
 	getEmail(): string {
@@ -59,7 +59,7 @@ export class	userDto {
 	}
 
 	getPwd(): string {
-		return this.pwdHashed;
+		return this.password;
 	}
 
 	getElo(): number {

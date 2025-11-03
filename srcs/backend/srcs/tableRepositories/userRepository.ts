@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 21:13:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/10/30 18:23:23 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/03 23:15:22 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ export class	userRepository {
 
 	async addUser(userDto: userDto): Promise<number> {
 		return new Promise((resolve, reject) => {
-			const	query = `INSERT INTO usr_user (usr_cname, usr_cemail, usr_cpasswordhashed, usr_ielo) VALUES(?, ?, ?, ?)`;
+			const	query = `INSERT INTO user (username, email, password, elo) VALUES(?, ?, ?, ?)`;
 			const	elements = [userDto.getName(), userDto.getEmail(), userDto.getPwd(), 400];
 			this.db.run(query, elements, function (this: StatementWithLastID, err) {
 				if (err)
-					return reject(err);
+					return reject(err + "1");
 
 				resolve(this.lastID);
 			});
@@ -71,7 +71,7 @@ export class	userRepository {
 
 	async getUserById(userId: number): Promise<userDto> {
 		return new Promise((resolve, reject) => {
-			const	query = `SELECT * FROM usr_user WHERE usr_spkuser = ?`;
+			const	query = `SELECT * FROM user u WHERE u.user = ?`;
 			const	elements = [userId];
 			this.db.get(query, elements, (err, row) => {
 				if (err)
@@ -89,7 +89,7 @@ export class	userRepository {
 
 	async deleteUser(userId: number): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
-			const	query = `DELETE FROM usr_user WHERE usr_spkuser = ?`;
+			const	query = `DELETE FROM user u WHERE u.user = ?`;
 			const	elements = [userId];
 			this.db.run(query, elements, function(err) {
 				if (err)
