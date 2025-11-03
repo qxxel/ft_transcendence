@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/03 18:47:20 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/03 21:45:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ import { userService } from './tableServices/userService.js'
 import { userRepository } from './tableRepositories/userRepository.js'
 import userController from "./controllers/userController.js"
 
+
 /* ====================== DATABASE ====================== */
 
 const			dbname = '/app/dist/db/mydatabase.db';
@@ -32,7 +33,6 @@ export const	db = new sqlite3.Database(dbname, (err: Error | null) => {
 });
 
 export const	userServ = new userService(new userRepository(db));
-
 
 
 /* ====================== SERVER ====================== */
