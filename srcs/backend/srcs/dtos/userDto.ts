@@ -20,6 +20,7 @@ import { validationResult, isValidName, isValidPwd } from '../utils/validation.j
 /* ====================== CLASS ====================== */
 
 export class	userDto {
+	private	id?: number;
 	private	username: string;
 	private	email: string;
 	private	password: string;
@@ -31,6 +32,8 @@ export class	userDto {
 		this.password = row.password;
 		if (row.elo)
 			this.elo = row.elo;
+		if (row.id)
+			this.id = row.id;
 
 		var validation = this.isValid()
 		if (!validation.result)

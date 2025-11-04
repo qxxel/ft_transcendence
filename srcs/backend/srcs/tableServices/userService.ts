@@ -28,7 +28,7 @@ export class	userService {
 		this.userRepo = userRepo;
 	}
 
-	async addUser(userDto: userDto): Promise<number> {
+	async addUser(userDto: userDto): Promise<userDto> {
 		const	nameQuery = `SELECT 1 FROM user WHERE username = ? LIMIT 1`
 		if (await isTaken(this.userRepo.getDb(), nameQuery, [userDto.getName()]))
 			throw new Error(`The name ${userDto.getName()} is already taken. Try another one !`);
@@ -37,7 +37,8 @@ export class	userService {
 		if (await isTaken(this.userRepo.getDb(), emailQuery, [userDto.getEmail()]))
 			throw new Error(`The email ${userDto.getEmail()} is already use for another account. Try to sign in !`);
 
-		return await this.userRepo.addUser(userDto);
+		const	id = await this.userRepo.addUser(userDto)
+		return await this.getUserById(id);
 	}
 
 	async getUserById(userId: number): Promise<userDto> {

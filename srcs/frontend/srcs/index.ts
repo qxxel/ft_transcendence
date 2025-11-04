@@ -235,9 +235,9 @@ document.addEventListener('submit', async (event) => {
 		console.log("username: " + username);
 		console.log("email: " + email);
 		console.log("password: " + password);
-		
+
 		console.log(JSON.stringify({ username, email, password }));
-		
+
 		const response: Response = await fetch('/api/user/sign-up', {
 			method: "post",
 			headers: {
@@ -246,7 +246,8 @@ document.addEventListener('submit', async (event) => {
 			body: JSON.stringify({ username, email, password })
 		});
 		const result = await response.json();
-		
+
+		console.log(result);
 		user.setId(result.id as number);
 		user.setUsername(username);
 		user.setSigned(true);

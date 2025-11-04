@@ -40,7 +40,7 @@ export function	isValidName(name: string): validationResult {
 		{ test: v => v.length <= 20, message: "Username must not exceed 20 characters" },
 		{ test: v => /^[a-zA-Z0-9_-]+$/.test(v), message: "Username contains invalid characters" }
 	];
-	
+
 	return validate(name, rules);
 }
 
@@ -54,7 +54,7 @@ export function	isValidPwd(pwd: string): validationResult {
 		{ test: v => /\d/.test(v), message: "Password must contain at least one number" },
 		{ test: v => /[!@#$%^&*()_\-+=]/.test(v), message: "Password must contain at least one special character" }
 	];
-	
+
 	return validate(pwd, rules);
 }
 

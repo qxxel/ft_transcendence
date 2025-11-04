@@ -41,10 +41,10 @@ export default async function	userController(fastify: FastifyInstance, options: 
 
 		try {
 			const	newUser = new userDto(request.body);
-			const	userId = await userServ.addUser(newUser);
-	
+			const	user = await userServ.addUser(newUser);
+
 			reply.code(201);
-			return { message: "User created successfully.", id: `${userId}`};
+			return user;
 		}
 		catch (err) {
 			reply.code(400);
