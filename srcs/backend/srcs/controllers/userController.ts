@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 22:15:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/03 18:28:04 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/04 16:33:30 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ export default async function	userController(fastify: FastifyInstance, options: 
 		}
 	});
 
-	fastify.post('/', async (request, reply) => {
+	fastify.post('/sign-up', async (request, reply) => {
 		if (!request.body)
 		{
 			reply.code(400);
@@ -44,7 +44,28 @@ export default async function	userController(fastify: FastifyInstance, options: 
 			const	userId = await userServ.addUser(newUser);
 	
 			reply.code(201);
-			return "user created at id " + userId;
+			return { message: "User created successfully.", id: `${userId}`};
+		}
+		catch (err) {
+			reply.code(400);
+			return err;
+		}
+	});
+
+	fastify.post('/sign-in', async (request, reply) => {
+		if (!request.body)
+		{
+			reply.code(400);
+			return "The request is empty";
+		}
+
+		const	row = request.body as any;
+		try {
+			const user = await userServ.getUserByIdentifier(row.identifier);
+			if (user.getPwd() !== row.password)
+				throw new Error("Wrong password.");
+
+			return user;
 		}
 		catch (err) {
 			reply.code(400);

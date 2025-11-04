@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 21:13:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/03 23:15:22 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/04 15:58:58 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ export class	userRepository {
 
 	async getUserById(userId: number): Promise<userDto> {
 		return new Promise((resolve, reject) => {
-			const	query = `SELECT * FROM user u WHERE u.user = ?`;
+			const	query = `SELECT * FROM user u WHERE u.id = ?`;
 			const	elements = [userId];
 			this.db.get(query, elements, (err, row) => {
 				if (err)
@@ -87,9 +87,45 @@ export class	userRepository {
 		});
 	}
 
+	async getUserByUsername(username: string): Promise<userDto> {
+		return new Promise((resolve, reject) => {
+			const	query = `SELECT * FROM user u WHERE u.username = ?`;
+			const	elements = [username];
+			this.db.get(query, elements, (err, row) => {
+				if (err)
+					return reject(err);
+
+				if (!row) {
+					console.error(`error: user ${username} doesn't exist.`);
+					return reject(new Error(`The user ${username} doesn't exist.`));
+				}
+
+				resolve(new userDto(row));
+			});
+		});
+	}
+
+	async getUserByEmail(email: string): Promise<userDto> {
+		return new Promise((resolve, reject) => {
+			const	query = `SELECT * FROM user u WHERE u.email = ?`;
+			const	elements = [email];
+			this.db.get(query, elements, (err, row) => {
+				if (err)
+					return reject(err);
+
+				if (!row) {
+					console.error(`error: user ${email} doesn't exist.`);
+					return reject(new Error(`The user ${email} doesn't exist.`));
+				}
+
+				resolve(new userDto(row));
+			});
+		});
+	}
+
 	async deleteUser(userId: number): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
-			const	query = `DELETE FROM user u WHERE u.user = ?`;
+			const	query = `DELETE FROM user u WHERE u.id = ?`;
 			const	elements = [userId];
 			this.db.run(query, elements, function(err) {
 				if (err)
@@ -99,6 +135,7 @@ export class	userRepository {
 			});
 		});
 	}
+
 
 	// GETTER
 	getDb(): Database {
