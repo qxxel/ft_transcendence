@@ -33,6 +33,20 @@ function onClickPlay() {
 }
 
 
+function onClickLogout() {
+	user.logout();
+	
+	menu = `<nav>
+		<a href="/">Home</a> | 
+		<a href="/about">About</a> | 
+		<a href="/settings">Settings</a> |
+		<a href="/sign-in">Sign in</a> |
+		<a href="/sign-up">Sign up</a> |
+		<a href="/game-menu">Play</a>
+	</nav>`;
+
+	router.navigate("/");
+}
 
 async function getMessage() {
 	const res = await fetch('/api/user/10');
@@ -105,7 +119,6 @@ var menu = `<nav>
 	<a href="/settings">Settings</a> |
 	<a href="/sign-in">Sign in</a> |
 	<a href="/sign-up">Sign up</a> |
-	<a href="/user">User</a> |
 	<a href="/game-menu">Play</a>
 </nav>`;
 
@@ -215,12 +228,13 @@ document.addEventListener('submit', async (event) => {
 					<a href="/about">About</a> | 
 					<a href="/settings">Settings</a> |
 					<a href="/user">${user.getUsername()}</a> |
+					<button onclick="onClickLogout();" id="logout">Logout</button> |
 					<a href="/game-menu">Play</a>
 				</nav>`;
 
 		console.log(menu);
 
-		event.preventDefault();
+		// event.preventDefault();
 		router.navigate('/');
 	}
 
@@ -256,12 +270,13 @@ document.addEventListener('submit', async (event) => {
 					<a href="/about">About</a> | 
 					<a href="/settings">Settings</a> |
 					<a href="/user">${user.getUsername()}</a> |
+					<button onclick="onClickLogout();" id="logout">Logout</button> |
 					<a href="/game-menu">Play</a>
 				</nav>`;
 
 		console.log(menu);
 
-		event.preventDefault();
+		// event.preventDefault();
 		router.navigate('/');
 	}
 });
@@ -279,3 +294,6 @@ window.addEventListener('popstate', () => {
 
 
 (window as any).getMessage = getMessage;
+
+
+(window as any).onClickLogout = onClickLogout;
