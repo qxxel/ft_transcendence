@@ -7,6 +7,12 @@ export class User {
 		this.signedIn = false;
 	}
 
+	logout(): void {
+		this.id = undefined;
+		this.username = undefined;
+		this.signedIn = false;
+	}
+
 	isSignedIn(): boolean {
 		return this.signedIn;
 	}
