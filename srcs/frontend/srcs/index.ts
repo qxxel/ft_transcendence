@@ -4,8 +4,8 @@ import { User } from './user.js'; // Make sure the path is correct
 
 // Define route interface
 interface Route {
-  path: string;
-  component: () => string | Promise<string>;
+	path: string;
+	component: () => string | Promise<string>;
 }
 
 // This variable will hold the active game instance
@@ -19,73 +19,78 @@ var user = new User();
  * This is called before navigating to a new page.
  */
 function stopCurrentGame() {
-  if (currentGame) {
-    currentGame.stop();
-    currentGame = null;
-  }
+	if (currentGame) {
+		currentGame.stop();
+		currentGame = null;
+	}
 }
 
 function onClickPlay() {
-  const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-  currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
+	const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+	currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
 
-  router.navigate('/play');
+	router.navigate('/play');
 }
 
 
 
 async function getMessage() {
-  const res = await fetch('/api/user/10');
-  const data = await res.json();
-  console.log(data);
+	const res = await fetch('/api/user/10');
+	const data = await res.json();
+	console.log(data);
 }
 
 
 
 function  pathActions(currentPath: string) {
-  if (['/game-menu'].includes(currentPath)) {
-    currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
-  }
+	if (['/game-menu'].includes(currentPath)) {
+		currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
+	}
 
-  if (['/play'].includes(currentPath)) {
-    if (!currentGame)
-      router.navigate('/game-menu');
-    else {
-      currentGame.setCtx();
-      currentGame.start();
-    }
-  }
+	if (['/play'].includes(currentPath)) {
+		if (!currentGame)
+			router.navigate('/game-menu');
+		else {
+			currentGame.setCtx();
+			currentGame.start();
+		}
+	}
+
+	if (['/sign-in', '/sign-up'].includes(currentPath)) {
+		if (user.isSignedIn())
+			router.navigate('/');
+	}
 }
 
 // Define the router class
 class Router {
-  private routes: Route[] = [];
+	private routes: Route[] = [];
 
-  addRoute(path: string, component: () => string | Promise<string>) {
-    this.routes.push({ path, component });
-  }
+	addRoute(path: string, component: () => string | Promise<string>) {
+		this.routes.push({ path, component });
+	}
 
-  navigate(path: string) {
-    history.pushState({}, '', path);
-    this.render();
-  }
+	navigate(path: string) {
+		history.pushState({}, '', path);
+		this.render();
+	}
 
-  async render() {
-    // stopCurrentGame();
+	async render() {
+		// stopCurrentGame();
 
-    const currentPath = window.location.pathname;
-    const route = this.routes.find(r => r.path === currentPath);
+		const currentPath = window.location.pathname;
+		const route = this.routes.find(r => r.path === currentPath);
 
-    if (route) {
-      const contentDiv = document.getElementById('app');
-      if (contentDiv) {
-        const html = await route.component();
-        contentDiv.innerHTML = html;
-      }
-    }
+		if (route) {
+			const contentDiv = document.getElementById('app');
+			if (contentDiv) {
+				const html = await route.component();
+				contentDiv.innerHTML = html;
+			}
+		}
 
-    pathActions(currentPath);
-  }
+		pathActions(currentPath);
+	}
 }
 
 
@@ -95,22 +100,22 @@ const router = new Router();
 
 // Create a menu
 var menu = `<nav>
-  <a href="/">Home</a> | 
-  <a href="/about">About</a> | 
-  <a href="/settings">Settings</a> |
-  <a href="/sign-in">Sign in</a> |
-  <a href="/sign-up">Sign up</a> |
-  <a href="/user">User</a> |
-  <a href="/game-menu">Play</a>
+	<a href="/">Home</a> | 
+	<a href="/about">About</a> | 
+	<a href="/settings">Settings</a> |
+	<a href="/sign-in">Sign in</a> |
+	<a href="/sign-up">Sign up</a> |
+	<a href="/user">User</a> |
+	<a href="/game-menu">Play</a>
 </nav>`;
 
 // HTML loader
 async function loadHtml(path: string) {
-  const response = await fetch(path);
-  if (!response.ok) {
-    return `<h1>Error ${response.status}</h1><p>Unable to load ${path}</p>`;
-  }
-  return await response.text();
+	const response = await fetch(path);
+	if (!response.ok) {
+		return `<h1>Error ${response.status}</h1><p>Unable to load ${path}</p>`;
+	}
+	return await response.text();
 }
 
 
@@ -151,12 +156,12 @@ router.addRoute("/game-menu", async () => {
 });
 
 router.addRoute("/play", async () => {
-  const html = await loadHtml("pages/play.html");
+	const html = await loadHtml("pages/play.html");
 	return menu + html;
 });
 
 router.addRoute("/", async () => {
-  const html = await loadHtml("pages/home.html");
+	const html = await loadHtml("pages/home.html");
 	return menu + html;
 });
 
@@ -166,55 +171,104 @@ router.render();
 
 // Handle link clicks
 document.addEventListener('click', (event) => {
-  const target = event.target as HTMLAnchorElement;
-  if (target.tagName === 'A' && target.hasAttribute('href')) {
-    event.preventDefault();
-    router.navigate(target.getAttribute('href')!);
-  }
+	const target = event.target as HTMLAnchorElement;
+	if (target.tagName === 'A' && target.hasAttribute('href')) {
+		event.preventDefault();
+		console.log(target.getAttribute('href')!);
+		router.navigate(target.getAttribute('href')!);
+	}
 });
 
 // Handle submit
-document.addEventListener('submit', (event) => {
-  event.preventDefault();
+document.addEventListener('submit', async (event) => {
+	event.preventDefault();
 
-  const form = event.target as HTMLFormElement;
+	const form = event.target as HTMLFormElement;
 
-  if (form.id === "sign-in-form")
-  {
-    console.log("Sign in");
-    let username = (document.getElementById("sign-in-username") as HTMLInputElement).value;
-    let password = (document.getElementById("sign-in-password") as HTMLInputElement).value;
-    form.reset();
+	if (form.id === "sign-in-form")
+	{
+		console.log("Sign in");
+		let identifier = (document.getElementById("sign-in-username") as HTMLInputElement).value;
+		let password = (document.getElementById("sign-in-password") as HTMLInputElement).value;
+		form.reset();
 
-    console.log("username: " + username);
-    console.log("password: " + password);
-  }
+		console.log("identifier: " + identifier);
+		console.log("password: " + password);
 
-  if (form.id === "sign-up-form")
-  {
-    console.log("Sign up");
-    let username = (document.getElementById("sign-up-username") as HTMLInputElement).value;
-    let password = (document.getElementById("sign-up-password") as HTMLInputElement).value;
-    form.reset();
+		console.log(JSON.stringify({ identifier, password }));
+		
+		const response: Response = await fetch('/api/user/sign-in', {
+			method: "post",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ identifier, password })
+		});
+		const result = await response.json();
+		
+		user.setId(result.id as number);
+		user.setUsername(result.username);
+		user.setSigned(true);
 
-    user.setUsername(username);
-    user.setSigned(true);
-    console.log("username: " + username);
-    console.log("password: " + password);
+		menu =	`<nav>
+					<a href="/">Home</a> | 
+					<a href="/about">About</a> | 
+					<a href="/settings">Settings</a> |
+					<a href="/user">${user.getUsername()}</a> |
+					<a href="/game-menu">Play</a>
+				</nav>`;
 
-    menu = `<nav>
-              <a href="/">Home</a> | 
-              <a href="/about">About</a> | 
-              <a href="/settings">Settings</a> |
-              <a href="/user">${user.getUsername()}</a> |
-              <a href="/game-menu">Play</a>
-            </nav>`;
-  }
+		console.log(menu);
+
+		event.preventDefault();
+		router.navigate('/');
+	}
+
+	if (form.id === "sign-up-form")
+	{
+		console.log("Sign up");
+		let username = (document.getElementById("sign-up-username") as HTMLInputElement).value;
+		let email = (document.getElementById("sign-up-email") as HTMLInputElement).value;
+		let password = (document.getElementById("sign-up-password") as HTMLInputElement).value;
+		form.reset();
+
+		console.log("username: " + username);
+		console.log("email: " + email);
+		console.log("password: " + password);
+		
+		console.log(JSON.stringify({ username, email, password }));
+		
+		const response: Response = await fetch('/api/user/sign-up', {
+			method: "post",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ username, email, password })
+		});
+		const result = await response.json();
+		
+		user.setId(result.id as number);
+		user.setUsername(username);
+		user.setSigned(true);
+
+		menu =	`<nav>
+					<a href="/">Home</a> | 
+					<a href="/about">About</a> | 
+					<a href="/settings">Settings</a> |
+					<a href="/user">${user.getUsername()}</a> |
+					<a href="/game-menu">Play</a>
+				</nav>`;
+
+		console.log(menu);
+
+		event.preventDefault();
+		router.navigate('/');
+	}
 });
 
 // Handle back/forward navigation
 window.addEventListener('popstate', () => {
-  router.render();
+	router.render();
 });
 
 
