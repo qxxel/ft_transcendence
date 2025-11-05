@@ -12,16 +12,35 @@
 
 // handle the get, post, and all the info that fastify receive
 
-import { FastifyInstance } from 'fastify';
-import { userServ } from "../index.js";
+import { FastifyInstance, FastifyRequest } from 'fastify';
+import { userServ, jwtSecret } from "../index.js";
 import { userDto } from "../dtos/userDto.js";
-// import { userRepository } from "../tableRepositories/userRepository.js";
+const jose = require("jose");
 
+const expAccess = "15m";
+const expRefresh = "1m";
+
+async function	jwtGenerate(user: userDto, exp: string)
+{
+	const jwt: string = await new jose.SignJWT( {
+			'id': user.getId(),
+			'username': user.getName(),
+			'email': user.getEmail()
+		})
+		.setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
+		.setIssuedAt()
+		.setExpirationTime(exp)
+		.sign(jwtSecret);
+
+	return jwt;
+}
 
 export default async function	userController(fastify: FastifyInstance, options: any) {
-	fastify.get('/:id', async (request, reply) => {
+	fastify.get('/:id', async (request: FastifyRequest, reply) => {
 		const { id } = request.params as { id: string };
 		const parseId = parseInt(id, 10);
+
+		console.log("🍪 cookie:", request.headers.cookie);
 
 		try {
 			return await userServ.getUserById(parseId);
@@ -43,8 +62,19 @@ export default async function	userController(fastify: FastifyInstance, options: 
 			const	newUser = new userDto(request.body);
 			const	user = await userServ.addUser(newUser);
 
+			const jwtAccess: string = await jwtGenerate(user, expAccess)
+				.catch(() => {return ""}); // /!\ ???
+			
+			const jwtRefresh: string = await jwtGenerate(user, expRefresh)
+				.catch(() => {return ""}); // /!\ ???
+			
+			reply.header(
+  				"Set-Cookie",
+				`jwtRefresh=${jwtRefresh}; HttpOnly; secure; Max-Age=60`
+			);
+
 			reply.code(201);
-			return user;
+			return {user, jwtAccess};
 		}
 		catch (err) {
 			reply.code(400);
@@ -78,7 +108,8 @@ export default async function	userController(fastify: FastifyInstance, options: 
 		const parseId = parseInt(id, 10);
 	
 		try {
-			return await userServ.deleteUser(parseId);
+			await userServ.deleteUser(parseId);
+			return { message: `user ${parseId} deleted.`, id: parseId };
 		}
 		catch (err) {
 			reply.code(400);

@@ -35,9 +35,13 @@ function onClickPlay() {
 
 
 async function getMessage() {
-	const res = await fetch('/api/user/10');
+	const res = await fetch('/api/user/10', {
+  method: "GET",
+  credentials: "include" // <- envoie les cookies cross-origin
+});
 	const data = await res.json();
 	console.log(data);
+
 }
 
 
@@ -205,7 +209,7 @@ document.addEventListener('submit', async (event) => {
 			body: JSON.stringify({ identifier, password })
 		});
 		const result = await response.json();
-		
+
 		user.setId(result.id as number);
 		user.setUsername(result.username);
 		user.setSigned(true);
@@ -248,7 +252,10 @@ document.addEventListener('submit', async (event) => {
 		const result = await response.json();
 
 		console.log(result);
-		user.setId(result.id as number);
+		console.log(document.cookie);
+		// localStorage.setItem()
+
+		user.setId(result.user.id as number);
 		user.setUsername(username);
 		user.setSigned(true);
 

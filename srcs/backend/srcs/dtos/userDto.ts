@@ -64,8 +64,12 @@ export class	userDto {
 	getPwd(): string {
 		return this.password;
 	}
+	
+	getId(): number | undefined {
+		return this.id;
+	}
 
-	getElo(): number {
-		return this.elo!;
+	getElo(): number | undefined {
+		return this.elo;
 	}
 }

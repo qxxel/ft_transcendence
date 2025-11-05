@@ -34,6 +34,8 @@ export const	db = new sqlite3.Database(dbname, (err: Error | null) => {
 
 export const	userServ = new userService(new userRepository(db));
 
+export const	jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET);
+
 
 /* ====================== SERVER ====================== */
 
@@ -48,9 +50,10 @@ export const	fastify = Fastify({
 fastify.register(userController, { prefix: '/api/user' });
 
 fastify.register(cors, {
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+	origin: 'https://nginx:443',
+	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	allowedHeaders: ['Content-Type', 'Authorization'],
+	credentials: true
 });
 
 const start = async () => {

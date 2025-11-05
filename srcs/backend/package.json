@@ -2,6 +2,7 @@
   "dependencies": {
     "@fastify/cors": "^7.0.0",
     "fastify": "^3.29.5",
+    "jose": "^5.10.0",
     "sqlite3": "^5.1.7",
     "typescript": "^5.9.2"
   },

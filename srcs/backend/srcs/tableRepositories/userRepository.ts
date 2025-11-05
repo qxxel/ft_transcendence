@@ -71,7 +71,7 @@ export class	userRepository {
 
 	async getUserById(userId: number): Promise<userDto> {
 		return new Promise((resolve, reject) => {
-			const	query = `SELECT * FROM user u WHERE u.id = ?`;
+			const	query = `SELECT * FROM user WHERE id = ?`;
 			const	elements = [userId];
 			this.db.get(query, elements, (err, row) => {
 				if (err)
@@ -89,7 +89,7 @@ export class	userRepository {
 
 	async getUserByUsername(username: string): Promise<userDto> {
 		return new Promise((resolve, reject) => {
-			const	query = `SELECT * FROM user u WHERE u.username = ?`;
+			const	query = `SELECT * FROM user WHERE username = ?`;
 			const	elements = [username];
 			this.db.get(query, elements, (err, row) => {
 				if (err)
@@ -107,7 +107,7 @@ export class	userRepository {
 
 	async getUserByEmail(email: string): Promise<userDto> {
 		return new Promise((resolve, reject) => {
-			const	query = `SELECT * FROM user u WHERE u.email = ?`;
+			const	query = `SELECT * FROM user WHERE email = ?`;
 			const	elements = [email];
 			this.db.get(query, elements, (err, row) => {
 				if (err)
@@ -125,7 +125,7 @@ export class	userRepository {
 
 	async deleteUser(userId: number): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
-			const	query = `DELETE FROM user u WHERE u.id = ?`;
+			const	query = `DELETE FROM user WHERE id = ?`;
 			const	elements = [userId];
 			this.db.run(query, elements, function(err) {
 				if (err)
