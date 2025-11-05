@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/05 11:47:35 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/05 12:18:45 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ async function onClickGetMessage(): Promise<void> {
 
 
 export async function	setupClickHandlers(router: Router, user: User, currentGame: PongGame | null, menu: string): Promise<void> {
-	onClickPlay(router, currentGame, user);
-	onClickLogout(router, currentGame, user, menu);
-	onClickGetMessage();
+	(window as any).onClickPlay = () => onClickPlay(router, currentGame, user);
+	(window as any).onClickLogout = () => onClickLogout(router, currentGame, user, menu);
+	(window as any).onClickGetMessage = onClickGetMessage;
 	
 	document.addEventListener('click', (event) => {
 		const target = event.target as HTMLAnchorElement;
