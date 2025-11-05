@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 22:16:40 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/05 10:48:56 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/05 13:31:59 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ export class	userService {
 	}
 
 	async getUserById(userId: number): Promise<userDto> {
-		const	existQuery = `SELECT 1 FROM user WHERE user = ? LIMIT 1`;
+		const	existQuery = `SELECT 1 FROM user WHERE id = ? LIMIT 1`;
 		if (!(await isTaken(this.userRepo.getDb(), existQuery, [userId.toString()])))
 			throw new Error(`The user ${userId} does not exist`);
 
@@ -50,11 +50,11 @@ export class	userService {
 	}
 
 	async getUserByIdentifier(identifier: string): Promise<userDto> {
-		var	existQuery = `SELECT 1 FROM user u WHERE u.username = ? LIMIT 1`;
+		var	existQuery = `SELECT 1 FROM user WHERE username = ? LIMIT 1`;
 		if (await isTaken(this.userRepo.getDb(), existQuery, [identifier]))
 			return await this.userRepo.getUserByUsername(identifier);
 
-		const	emailQuery = `SELECT 1 FROM user u WHERE u.email = ? LIMIT 1`;
+		const	emailQuery = `SELECT 1 FROM user WHERE email = ? LIMIT 1`;
 		if (await isTaken(this.userRepo.getDb(), existQuery, [identifier]))
 			return await this.userRepo.getUserByEmail(identifier);
 

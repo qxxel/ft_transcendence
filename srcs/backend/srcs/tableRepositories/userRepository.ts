@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 21:13:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/05 10:49:47 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/05 13:31:41 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ export class	userRepository {
 			const	elements = [userDto.getName(), userDto.getEmail(), userDto.getPwd(), 400];
 			this.db.run(query, elements, function (this: StatementWithLastID, err) {
 				if (err)
-					return reject(err + "1");
+					return reject(err);
 
 				resolve(this.lastID);
 			});
@@ -72,7 +72,7 @@ export class	userRepository {
 
 	async getUserById(userId: number): Promise<userDto> {
 		return new Promise((resolve, reject) => {
-			const	query = `SELECT * FROM user u WHERE u.id = ?`;
+			const	query = `SELECT * FROM user WHERE id = ?`;
 			const	elements = [userId];
 			this.db.get(query, elements, (err, row) => {
 				if (err)
@@ -90,7 +90,7 @@ export class	userRepository {
 
 	async getUserByUsername(username: string): Promise<userDto> {
 		return new Promise((resolve, reject) => {
-			const	query = `SELECT * FROM user u WHERE u.username = ?`;
+			const	query = `SELECT * FROM user WHERE username = ?`;
 			const	elements = [username];
 			this.db.get(query, elements, (err, row) => {
 				if (err)
@@ -108,7 +108,7 @@ export class	userRepository {
 
 	async getUserByEmail(email: string): Promise<userDto> {
 		return new Promise((resolve, reject) => {
-			const	query = `SELECT * FROM user u WHERE u.email = ?`;
+			const	query = `SELECT * FROM user WHERE email = ?`;
 			const	elements = [email];
 			this.db.get(query, elements, (err, row) => {
 				if (err)
@@ -126,7 +126,7 @@ export class	userRepository {
 
 	async deleteUser(userId: number): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
-			const	query = `DELETE FROM user u WHERE u.id = ?`;
+			const	query = `DELETE FROM user WHERE id = ?`;
 			const	elements = [userId];
 			this.db.run(query, elements, function(err) {
 				if (err)
