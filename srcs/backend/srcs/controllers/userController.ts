@@ -6,17 +6,21 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 22:15:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/04 16:33:30 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/05 10:51:12 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// handle the get, post, and all the info that fastify receive
+// Handle the get, post, and all the info that fastify receive
+
+
+/* ====================== IMPORT ====================== */
 
 import { FastifyInstance } from 'fastify';
 import { userServ } from "../index.js";
 import { userDto } from "../dtos/userDto.js";
-// import { userRepository } from "../tableRepositories/userRepository.js";
 
+
+/* ====================== FUNCTIONS ====================== */
 
 export default async function	userController(fastify: FastifyInstance, options: any) {
 	fastify.get('/:id', async (request, reply) => {
