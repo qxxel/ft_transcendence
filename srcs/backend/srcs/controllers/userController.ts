@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 22:15:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/04 16:33:30 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/06 11:07:31 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ import { userServ, jwtSecret } from "../index.js";
 import { userDto } from "../dtos/userDto.js";
 const jose = require("jose");
 
-const expAccess = "15m";
-const expRefresh = "1m";
+const expAccess = "10s";
+const expRefresh = "10s";
+
 
 async function	jwtGenerate(user: userDto, exp: string)
 {
@@ -69,12 +70,16 @@ export default async function	userController(fastify: FastifyInstance, options: 
 				.catch(() => {return ""}); // /!\ ???
 			
 			reply.header(
-  				"Set-Cookie",
-				`jwtRefresh=${jwtRefresh}; HttpOnly; secure; Max-Age=60`
+				"Set-Cookie",
+				`jwtRefresh=${jwtRefresh}; HttpOnly; secure; Max-Age=10`
+			);
+			reply.header(
+				"Set-Cookie",
+				`jwtAccess=${jwtAccess}; HttpOnly; secure; Max-Age=10`
 			);
 
 			reply.code(201);
-			return {user, jwtAccess};
+			return user;
 		}
 		catch (err) {
 			reply.code(400);
