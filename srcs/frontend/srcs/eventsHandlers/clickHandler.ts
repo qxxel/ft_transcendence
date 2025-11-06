@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/05 12:18:45 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/06 11:35:01 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 import { Router } from '../router/router.js'
 import { User } from '../user/user.js'
 import { PongGame } from '../game/game.js'
-import { router } from '../index.js'
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -28,31 +27,36 @@ function onClickPlay(router: Router, currentGame: PongGame | null, user: User): 
 	router.navigate("/play", currentGame, user);
 }
 
-function onClickLogout(router: Router, currentGame: PongGame | null, user: User, menu: string): void {
+function onClickLogout(router: Router, currentGame: PongGame | null, user: User): void {
 	user.logout();
 	
-	menu = `<nav>
-		<a href="/">Home</a> | 
-		<a href="/about">About</a> | 
-		<a href="/settings">Settings</a> |
-		<a href="/sign-in">Sign in</a> |
-		<a href="/sign-up">Sign up</a> |
-		<a href="/game-menu">Play</a>
-	</nav>`;
+	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	if (menu)
+		menu.innerHTML =
+			`<nav>
+				<a href="/">Home</a> | 
+				<a href="/about">About</a> | 
+				<a href="/settings">Settings</a> |
+				<a href="/sign-in">Sign in</a> |
+				<a href="/sign-up">Sign up</a> |
+				<a href="/game-menu">Play</a>
+			</nav>`;
 
 	router.navigate("/", currentGame, user);
 }
 
 async function onClickGetMessage(): Promise<void> {
-	const res = await fetch('/api/user/10');
+	const res = await fetch('/api/user/10', {
+		method: "GET",
+		credentials: "include" // <- envoie les cookies cross-origin
+	});
 	const data = await res.json();
 	console.log(data);
 }
 
-
-export async function	setupClickHandlers(router: Router, user: User, currentGame: PongGame | null, menu: string): Promise<void> {
+export async function	setupClickHandlers(router: Router, user: User, currentGame: PongGame | null): Promise<void> {
 	(window as any).onClickPlay = () => onClickPlay(router, currentGame, user);
-	(window as any).onClickLogout = () => onClickLogout(router, currentGame, user, menu);
+	(window as any).onClickLogout = () => onClickLogout(router, currentGame, user);
 	(window as any).onClickGetMessage = onClickGetMessage;
 	
 	document.addEventListener('click', (event) => {

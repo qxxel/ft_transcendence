@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/06 11:14:45 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/06 11:34:32 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,25 @@ import { addRoutes }			from "./router/addRoutes.js"
 var currentGame: PongGame | null = null;
 var user = new User();
 
-export var	menu =	`<nav>
-						<a href="/">Home</a> | 
-						<a href="/about">About</a> | 
-						<a href="/settings">Settings</a> |
-						<a href="/sign-in">Sign in</a> |
-						<a href="/sign-up">Sign up</a> |
-						<a href="/game-menu">Play</a>
-					</nav>`;
+// var	menu =	`<nav>
+// 						<a href="/">Home</a> | 
+// 						<a href="/about">About</a> | 
+// 						<a href="/settings">Settings</a> |
+// 						<a href="/sign-in">Sign in</a> |
+// 						<a href="/sign-up">Sign up</a> |
+// 						<a href="/game-menu">Play</a>
+// 					</nav>`;
 export const	router = new Router();
 
 
 /* ============================= SETUP EVENTS ============================= */
 
-setupClickHandlers(router, user, currentGame, menu);
-setupSubmitHandler(currentGame, user, menu);
+setupClickHandlers(router, user, currentGame);
+setupSubmitHandler(currentGame, user);
 
 /* ============================= SETUP ROUTES ============================= */
 
-addRoutes(menu);
+addRoutes();
 
 
 /* ============================= FIRST RENDER ============================= */

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:00:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/05 11:28:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/06 11:35:52 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,49 +19,49 @@ import { loadHtml } from './loadHtml.js'
 
 /* ====================== FUNCTIONS ====================== */
 
-export function	addRoutes(menu: string): void {
+export function	addRoutes(): void {
 	router.addRoute("/about", async () => {
 		const html = await loadHtml("pages/about.html");
-		return menu + html;
+		return html;
 	});
 	
 	router.addRoute("/settings", async () => {
 		const html = await loadHtml("pages/settings.html");
-		return menu + html;
+		return html;
 	});
 	
 	router.addRoute("/user", async () => {
 		const html = await loadHtml("pages/user.html");
-		return menu + html;
+		return html;
 	});
 	
 	router.addRoute("/sign-in", async () => {
 		const html = await loadHtml("pages/sign-in.html");
-		return menu + html;
+		return html;
 	});
 	
 	router.addRoute("/sign-up", async () => {
 		const html = await loadHtml("pages/sign-up.html");
-		return menu + html;
+		return html;
 	});
 	
 	router.addRoute("/rperrot", async () => {
 		const html = await loadHtml("pages/rperrot.html");
-		return menu + html;
+		return html;
 	});
 	
 	router.addRoute("/game-menu", async () => {
 		const html = await loadHtml("pages/game-menu.html");
-		return menu + html;
+		return html;
 	});
 	
 	router.addRoute("/play", async () => {
 		const html = await loadHtml("pages/play.html");
-		return menu + html;
+		return html;
 	});
 	
 	router.addRoute("/", async () => {
 		const html = await loadHtml("pages/home.html");
-		return menu + html;
+		return html;
 	});
 }
