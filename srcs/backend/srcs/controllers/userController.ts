@@ -6,11 +6,14 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 22:15:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/06 11:07:31 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/06 11:14:28 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// handle the get, post, and all the info that fastify receive
+// Handle the get, post, and all the info that fastify receive
+
+
+/* ====================== IMPORT ====================== */
 
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { userServ, jwtSecret } from "../index.js";
@@ -35,6 +38,8 @@ async function	jwtGenerate(user: userDto, exp: string)
 
 	return jwt;
 }
+
+/* ====================== FUNCTIONS ====================== */
 
 export default async function	userController(fastify: FastifyInstance, options: any) {
 	fastify.get('/:id', async (request: FastifyRequest, reply) => {

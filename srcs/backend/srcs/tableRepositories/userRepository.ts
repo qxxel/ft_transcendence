@@ -6,11 +6,12 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 21:13:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/04 15:58:58 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/05 13:31:41 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // WILL BE THE STORAGE OF DB AND HANDLE CLASSIC METHODS OF THE DB (`getUser`, `deleteUser` AND `addUser`)
+
 
 /* =================== SQLITE METHODS =================== /*
 
@@ -62,7 +63,7 @@ export class	userRepository {
 			const	elements = [userDto.getName(), userDto.getEmail(), userDto.getPwd(), 400];
 			this.db.run(query, elements, function (this: StatementWithLastID, err) {
 				if (err)
-					return reject(err + "1");
+					return reject(err);
 
 				resolve(this.lastID);
 			});
