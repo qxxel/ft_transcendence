@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/06 11:35:01 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/06 12:08:38 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,38 @@ function onClickPlay(router: Router, currentGame: PongGame | null, user: User): 
 	router.navigate("/play", currentGame, user);
 }
 
-function onClickLogout(router: Router, currentGame: PongGame | null, user: User): void {
-	user.logout();
+async function	onClickLogout(router: Router, currentGame: PongGame | null, user: User): Promise<void> {
 	
-	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
-	if (menu)
-		menu.innerHTML =
-			`<nav>
-				<a href="/">Home</a> | 
-				<a href="/about">About</a> | 
-				<a href="/settings">Settings</a> |
-				<a href="/sign-in">Sign in</a> |
-				<a href="/sign-up">Sign up</a> |
-				<a href="/game-menu">Play</a>
-			</nav>`;
+	
+	try {
+		const response = await fetch('/api/auth/logout', {
+			method: 'POST',
+			credentials: 'include' // important pour envoyer le cookie
+		});
+		
+		if (!response.ok) {
+			throw new Error('Logout failed');
+		}
 
-	router.navigate("/", currentGame, user);
+		user.logout();
+
+		var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+		if (menu)
+			menu.innerHTML =
+				`<nav>
+					<a href="/">Home</a> | 
+					<a href="/about">About</a> | 
+					<a href="/settings">Settings</a> |
+					<a href="/sign-in">Sign in</a> |
+					<a href="/sign-up">Sign up</a> |
+					<a href="/game-menu">Play</a>
+				</nav>`;
+
+
+		router.navigate("/", currentGame, user);
+	} catch (err) {
+		console.error("Error during logout:", err);
+	}
 }
 
 async function onClickGetMessage(): Promise<void> {
