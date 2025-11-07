@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   index.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/03 21:45:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/07 20:42:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,13 @@ const start = async () => {
 	try {
 		await fastify.listen({ port: 3000, host: '0.0.0.0' });
 		console.log(`Server started on https://localhost:3000`);
+
+		process.on('SIGTERM', () => {
+			console.log('SIGTERM received, server shutdown...');
+			fastify.server.close(() => {
+				process.exit(0);
+			});
+		});
 	} catch (err) {
 		fastify.log.error(err);
 		process.exit(1);
