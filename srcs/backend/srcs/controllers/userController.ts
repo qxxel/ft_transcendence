@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userController.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 22:15:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/06 11:14:28 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/07 20:13:15 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 
 /* ====================== IMPORT ====================== */
 
-import { FastifyInstance, FastifyRequest } from 'fastify';
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { userServ, jwtSecret } from "../index.js";
 import { userDto } from "../dtos/userDto.js";
 const jose = require("jose");
 
 const expAccess = "10s";
-const expRefresh = "10s";
+const expRefresh = "1m";
 
+/* ====================== FUNCTIONS ====================== */
 
-async function	jwtGenerate(user: userDto, exp: string)
-{
+async function	jwtGenerate(user: userDto, exp: string) {
 	const jwt: string = await new jose.SignJWT( {
 			'id': user.getId(),
 			'username': user.getName(),
@@ -39,14 +39,44 @@ async function	jwtGenerate(user: userDto, exp: string)
 	return jwt;
 }
 
-/* ====================== FUNCTIONS ====================== */
+function	getCookies(request: FastifyRequest) {
+	const cookies = Object.fromEntries(
+		(request.headers.cookie || "")
+		.split("; ")
+		.map(c => c.split("="))
+	)
+	return cookies
+}
+
+function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string) {
+	reply.header(
+		"Set-Cookie",
+		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=10; path=/api/user/auth`
+	);
+}
+
+function	setCookiesAccessRefresh(reply: FastifyReply, jwtRefresh: string) {
+	reply.header(
+		"Set-Cookie",
+		`jwtRefresh=${jwtRefresh}; SameSite=strict; HttpOnly; secure; Max-Age=60; path=/api/user/auth/refresh`
+	);
+}
+
+async function	addJWT(reply: FastifyReply, user: userDto) {
+
+	const jwtAccess: string = await jwtGenerate(user, expAccess)
+		.catch(() => {return ""}); // /!\ ???
+	setCookiesAccessToken(reply, jwtAccess);
+
+	const jwtRefresh: string = await jwtGenerate(user, expRefresh)
+		.catch(() => {return ""}); // /!\ ???
+	setCookiesAccessRefresh(reply, jwtRefresh);
+}
 
 export default async function	userController(fastify: FastifyInstance, options: any) {
 	fastify.get('/:id', async (request: FastifyRequest, reply) => {
 		const { id } = request.params as { id: string };
 		const parseId = parseInt(id, 10);
-
-		console.log("🍪 cookie:", request.headers.cookie);
 
 		try {
 			return await userServ.getUserById(parseId);
@@ -54,6 +84,38 @@ export default async function	userController(fastify: FastifyInstance, options: 
 		catch (err) {
 			reply.code(400);
 			return err;
+		}
+	});
+
+	fastify.get('/auth', async (request: FastifyRequest, reply) => {
+		const cookies = getCookies(request);
+		const accessToken = cookies.jwtAccess;
+		
+		try {
+			const { payload, protectedHeader } = await jose.jwtVerify(accessToken, jwtSecret);
+			
+			reply.code(201);
+
+			return await userServ.getUserById(payload.id);
+		} catch (error) {
+			reply.code(401);
+			return "undifine"; // /!\ ???
+		}
+	});
+	fastify.get('/auth/refresh', async (request: FastifyRequest, reply) => {
+		const cookies = getCookies(request);
+		const refreshToken = cookies.jwtRefresh;
+
+		try {
+			const { payload, protectedHeader } = await jose.jwtVerify(refreshToken, jwtSecret)
+		
+			reply.code(201);
+			const user = await userServ.getUserById(payload.id);
+			await addJWT(reply, user);
+
+			return await userServ.getUserById(payload.id);
+		} catch (error) {
+			return "undifine"; // /!\ ???
 		}
 	});
 
@@ -68,20 +130,7 @@ export default async function	userController(fastify: FastifyInstance, options: 
 			const	newUser = new userDto(request.body);
 			const	user = await userServ.addUser(newUser);
 
-			const jwtAccess: string = await jwtGenerate(user, expAccess)
-				.catch(() => {return ""}); // /!\ ???
-			
-			const jwtRefresh: string = await jwtGenerate(user, expRefresh)
-				.catch(() => {return ""}); // /!\ ???
-			
-			reply.header(
-				"Set-Cookie",
-				`jwtRefresh=${jwtRefresh}; HttpOnly; secure; Max-Age=10`
-			);
-			reply.header(
-				"Set-Cookie",
-				`jwtAccess=${jwtAccess}; HttpOnly; secure; Max-Age=10`
-			);
+			await addJWT(reply, user);
 
 			reply.code(201);
 			return user;
