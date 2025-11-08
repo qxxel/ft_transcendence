@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/07 20:17:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/08 16:34:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ async function	handleLoadPage(currentGame: PongGame | null, user: User): Promise
 				credentials: "include",
 			});
 		}
+		if (!response.ok)
+			return;
 
 		const result = await response.json()
-		if (result === undefined)
-			return ;
 		
 		user.setId(result.id as number);
 		user.setUsername(result.username);

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 22:15:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/07 20:13:15 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/08 16:36:58 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,17 +64,15 @@ function	setCookiesAccessRefresh(reply: FastifyReply, jwtRefresh: string) {
 
 async function	addJWT(reply: FastifyReply, user: userDto) {
 
-	const jwtAccess: string = await jwtGenerate(user, expAccess)
-		.catch(() => {return ""}); // /!\ ???
+	const jwtAccess: string = await jwtGenerate(user, expAccess);
 	setCookiesAccessToken(reply, jwtAccess);
 
-	const jwtRefresh: string = await jwtGenerate(user, expRefresh)
-		.catch(() => {return ""}); // /!\ ???
+	const jwtRefresh: string = await jwtGenerate(user, expRefresh);
 	setCookiesAccessRefresh(reply, jwtRefresh);
 }
 
 export default async function	userController(fastify: FastifyInstance, options: any) {
-	fastify.get('/:id', async (request: FastifyRequest, reply) => {
+	fastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const { id } = request.params as { id: string };
 		const parseId = parseInt(id, 10);
 
@@ -87,39 +85,43 @@ export default async function	userController(fastify: FastifyInstance, options: 
 		}
 	});
 
-	fastify.get('/auth', async (request: FastifyRequest, reply) => {
+	fastify.get('/auth', async (request: FastifyRequest, reply: FastifyReply) => {
 		const cookies = getCookies(request);
 		const accessToken = cookies.jwtAccess;
 		
 		try {
 			const { payload, protectedHeader } = await jose.jwtVerify(accessToken, jwtSecret);
-			
-			reply.code(201);
+			const user = await userServ.getUserById(payload.id);
 
-			return await userServ.getUserById(payload.id);
-		} catch (error) {
-			reply.code(401);
-			return "undifine"; // /!\ ???
+			return reply.status(201).send(user);
+		} catch (err) {
+			if (err instanceof jose.errors.JOSEError)
+				return reply.status(401).send({error: "Invalid token"});
+			else
+				return reply.status(404).send({error: err});
 		}
 	});
-	fastify.get('/auth/refresh', async (request: FastifyRequest, reply) => {
+	
+	fastify.get('/auth/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
 		const cookies = getCookies(request);
 		const refreshToken = cookies.jwtRefresh;
 
 		try {
 			const { payload, protectedHeader } = await jose.jwtVerify(refreshToken, jwtSecret)
-		
-			reply.code(201);
 			const user = await userServ.getUserById(payload.id);
+				
 			await addJWT(reply, user);
-
-			return await userServ.getUserById(payload.id);
-		} catch (error) {
-			return "undifine"; // /!\ ???
+			
+			return await reply.status(201).send(user);
+		} catch (err) {
+			if (err instanceof jose.errors.JOSEError)
+				return reply.status(401).send({error: "Invalid token"});
+			else
+				return reply.status(404).send({error: err});
 		}
 	});
 
-	fastify.post('/sign-up', async (request, reply) => {
+	fastify.post('/sign-up', async (request: FastifyRequest, reply: FastifyReply) => {
 		if (!request.body)
 		{
 			reply.code(400);
@@ -141,7 +143,7 @@ export default async function	userController(fastify: FastifyInstance, options: 
 		}
 	});
 
-	fastify.post('/sign-in', async (request, reply) => {
+	fastify.post('/sign-in', async (request: FastifyRequest, reply: FastifyReply) => {
 		if (!request.body)
 		{
 			reply.code(400);
@@ -162,7 +164,7 @@ export default async function	userController(fastify: FastifyInstance, options: 
 		}
 	});
 
-	fastify.delete('/:id', async (request, reply) => {
+	fastify.delete('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const { id } = request.params as { id: string };
 		const parseId = parseInt(id, 10);
 	
