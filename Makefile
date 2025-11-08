@@ -6,7 +6,7 @@
 #    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/08 02:50:51 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/11/08 17:38:26 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,13 +37,13 @@ DC_START	= $(CMD_DC) start
 DC_STOP		= $(CMD_DC) stop
 DC_RESTART	= $(CMD_DC) restart
 
-# ---------------------------    command docker    --------------------------- #
+# ----------------------------    key and cert    ---------------------------- #
 SECRET_DIR		= .SECRET
-CERT_FILE_FRONT	= $(SECRET_DIR)/certificate.crt
-KEY_FILE_FRONT	= $(SECRET_DIR)/private_key.key
-CERT_FILE_BACK	= $(SECRET_DIR)/certificate.pem
-KEY_FILE_BACK	= $(SECRET_DIR)/private_key.pem
-CERT_AND_KEY	= $(CERT_FILE_FRONT) $(KEY_FILE_FRONT) $(CERT_FILE_BACK) $(KEY_FILE_BACK)
+CERT_FRONT		= $(SECRET_DIR)/certificate.crt
+KEY_FRONT		= $(SECRET_DIR)/private_key.key
+CERT_BACK		= $(SECRET_DIR)/certificate.pem
+KEY_BACK		= $(SECRET_DIR)/private_key.pem
+CERT_AND_KEY	= $(CERT_FRONT) $(KEY_FRONT) $(CERT_BACK) $(KEY_BACK)
 
 # ------------------------------    openssl    ------------------------------ #
 CMD_OPENSSL	= openssl req -x509 -newkey rsa:2048 \
@@ -74,6 +74,7 @@ MSG_HELP	= @$(ECHO) "$(GREEN)docker compose:\n\t$(LST_RULE_DC)"; \
 
 # ---------------------------------   run   --------------------------------- #
 RUN_CMD = $(call MSG_CMD,$(1),$(2)) $(1); $(MSG_RESET)
+
 
 # -------------------------------    RULES    ------------------------------- #
 # ---------------------------------   all   --------------------------------- #
@@ -135,8 +136,8 @@ fullre	: fclean up
 
 # -------------------------------   openssl   ------------------------------- #
 $(CERT_AND_KEY) : | $(BUILD_DIR)
-	$(call RUN_CMD,$(call CMD_OPENSSL,$(KEY_FILE_FRONT),$(CERT_FILE_FRONT),$(DOMAIN_FRONT)),$(F_GRAY))
-	$(call RUN_CMD,$(call CMD_OPENSSL,$(KEY_FILE_BACK),$(CERT_FILE_BACK),$(DOMAIN_BACK)),$(F_GRAY))
+	$(call RUN_CMD,$(call CMD_OPENSSL,$(KEY_FRONT),$(CERT_FRONT),$(DOMAIN_FRONT)),$(F_GRAY))
+	$(call RUN_CMD,$(call CMD_OPENSSL,$(KEY_BACK),$(CERT_BACK),$(DOMAIN_BACK)),$(F_GRAY))
 
 # ---------------------------   build directory   --------------------------- #
 $(BUILD_DIR) :
@@ -187,4 +188,4 @@ fclean	: vclean
 
 # ---------------------------------   dev   --------------------------------- #
 .PHONY	: dev
-dev	: vdown up
+dev	: vdown rebuild
