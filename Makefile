@@ -6,7 +6,7 @@
 #    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/08 17:38:26 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/11/08 20:49:48 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ CMD_DC	= $(DC) -f $(DC_FILE)
 
 # ---------------------------    command docker    --------------------------- #
 DC_UP		= $(CMD_DC) up -d
-DC_REBUILD	= $(CMD_DC) up --build -d
+DC_REFRESH	= $(CMD_DC) up --build -d
 DC_BUILD	= $(CMD_DC) build
 DC_DOWN		= $(CMD_DC) down
 DC_VDOWN	= $(CMD_DC) down -v --remove-orphans
@@ -91,10 +91,10 @@ $(NAME)	: up
 up		: $(CERT_AND_KEY) | $(BUILD_DIR)
 	$(call RUN_CMD,$(DC_UP))
 
-# -------------------------------   rebuild   ------------------------------- #
-.PHONY	: rebuild
-rebuild	:
-	$(DC_REBUILD)
+# -------------------------------   refresh   ------------------------------- #
+.PHONY	: refresh
+refresh	:
+	$(DC_REFRESH)
 
 # --------------------------------   build   -------------------------------- #
 .PHONY	: build
