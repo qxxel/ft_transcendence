@@ -6,7 +6,7 @@
 #    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/08 20:49:48 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/11/08 20:51:13 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,7 +94,7 @@ up		: $(CERT_AND_KEY) | $(BUILD_DIR)
 # -------------------------------   refresh   ------------------------------- #
 .PHONY	: refresh
 refresh	:
-	$(DC_REFRESH)
+	$(call RUN_CMD,$(DC_REFRESH))
 
 # --------------------------------   build   -------------------------------- #
 .PHONY	: build
