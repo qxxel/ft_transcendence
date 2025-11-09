@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 22:15:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/08 16:36:58 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/09 19:56:59 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,60 +16,11 @@
 /* ====================== IMPORT ====================== */
 
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { userServ, jwtSecret } from "../index.js";
+import { userServ } from "../index.js";
 import { userDto } from "../dtos/userDto.js";
-const jose = require("jose");
-
-const expAccess = "10s";
-const expRefresh = "1m";
+import { addJWT, accessToken } from "../jwt/VerifyToken.js";
 
 /* ====================== FUNCTIONS ====================== */
-
-async function	jwtGenerate(user: userDto, exp: string) {
-	const jwt: string = await new jose.SignJWT( {
-			'id': user.getId(),
-			'username': user.getName(),
-			'email': user.getEmail()
-		})
-		.setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
-		.setIssuedAt()
-		.setExpirationTime(exp)
-		.sign(jwtSecret);
-
-	return jwt;
-}
-
-function	getCookies(request: FastifyRequest) {
-	const cookies = Object.fromEntries(
-		(request.headers.cookie || "")
-		.split("; ")
-		.map(c => c.split("="))
-	)
-	return cookies
-}
-
-function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string) {
-	reply.header(
-		"Set-Cookie",
-		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=10; path=/api/user/auth`
-	);
-}
-
-function	setCookiesAccessRefresh(reply: FastifyReply, jwtRefresh: string) {
-	reply.header(
-		"Set-Cookie",
-		`jwtRefresh=${jwtRefresh}; SameSite=strict; HttpOnly; secure; Max-Age=60; path=/api/user/auth/refresh`
-	);
-}
-
-async function	addJWT(reply: FastifyReply, user: userDto) {
-
-	const jwtAccess: string = await jwtGenerate(user, expAccess);
-	setCookiesAccessToken(reply, jwtAccess);
-
-	const jwtRefresh: string = await jwtGenerate(user, expRefresh);
-	setCookiesAccessRefresh(reply, jwtRefresh);
-}
 
 export default async function	userController(fastify: FastifyInstance, options: any) {
 	fastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
@@ -86,41 +37,13 @@ export default async function	userController(fastify: FastifyInstance, options: 
 	});
 
 	fastify.get('/auth', async (request: FastifyRequest, reply: FastifyReply) => {
-		const cookies = getCookies(request);
-		const accessToken = cookies.jwtAccess;
-		
-		try {
-			const { payload, protectedHeader } = await jose.jwtVerify(accessToken, jwtSecret);
-			const user = await userServ.getUserById(payload.id);
+		return await accessToken(request, reply);
+	});
 
-			return reply.status(201).send(user);
-		} catch (err) {
-			if (err instanceof jose.errors.JOSEError)
-				return reply.status(401).send({error: "Invalid token"});
-			else
-				return reply.status(404).send({error: err});
-		}
+	fastify.post('/2fa', async (request: FastifyRequest, reply: FastifyReply) => {
+		// return await refreshToken(request, reply);
 	});
 	
-	fastify.get('/auth/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
-		const cookies = getCookies(request);
-		const refreshToken = cookies.jwtRefresh;
-
-		try {
-			const { payload, protectedHeader } = await jose.jwtVerify(refreshToken, jwtSecret)
-			const user = await userServ.getUserById(payload.id);
-				
-			await addJWT(reply, user);
-			
-			return await reply.status(201).send(user);
-		} catch (err) {
-			if (err instanceof jose.errors.JOSEError)
-				return reply.status(401).send({error: "Invalid token"});
-			else
-				return reply.status(404).send({error: err});
-		}
-	});
-
 	fastify.post('/sign-up', async (request: FastifyRequest, reply: FastifyReply) => {
 		if (!request.body)
 		{
@@ -156,6 +79,8 @@ export default async function	userController(fastify: FastifyInstance, options: 
 			if (user.getPwd() !== row.password)
 				throw new Error("Wrong password.");
 
+			await addJWT(reply, user);
+			
 			return user;
 		}
 		catch (err) {
