@@ -1,8 +1,12 @@
 {
   "dependencies": {
     "@fastify/cors": "^7.0.0",
+    "dotenv": "^17.2.3",
     "fastify": "^3.29.5",
+    "form-data": "^4.0.4",
     "jose": "^5.10.0",
+    "mailgun.js": "^12.1.1",
+    "speakeasy": "^2.0.0",
     "sqlite3": "^5.1.7",
     "typescript": "^5.9.2"
   },
