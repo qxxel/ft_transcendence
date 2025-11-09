@@ -6,7 +6,7 @@
 #    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/08 20:51:13 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/11/09 14:59:54 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,10 +57,10 @@ BUILD_DIR		= $(SECRET_DIR)
 include color.mk
 
 # ------------------------------   list rule   ------------------------------ #
-LST_RULE_DC		= all up build down vdown start stop restart re fullre
+LST_RULE_DC		= all up build down start stop restart
 LST_RULE_INFO	= help info ls logs
-LST_RULE_CLEAN	= clean vclean fclean
-LST_RULE_OTHER	= rebuild dev
+LST_RULE_CLEAN	= vdown clean vclean fclean
+LST_RULE_OTHER	= re fullre refresh dev
 
 # -------------------------------   message   ------------------------------- #
 MSG_RESET	= $(ECHO) "$(RESET)"
@@ -188,4 +188,4 @@ fclean	: vclean
 
 # ---------------------------------   dev   --------------------------------- #
 .PHONY	: dev
-dev	: vdown rebuild
+dev	: vdown refresh
