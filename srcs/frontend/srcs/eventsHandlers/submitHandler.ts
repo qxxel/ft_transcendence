@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/07 16:19:59 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/09 16:04:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,26 @@ import { PongGame } from "../game/game.js";
 
 /* ====================== FUNCTIONS ====================== */
 
+async function	handle2faForm(form: HTMLFormElement, currentGame: PongGame | null, user: User): Promise<void> {
+	console.log("2fa-form");
+	let digitCode = (document.getElementById("digit-code") as HTMLInputElement).value;
+	form.reset();
+
+	console.log(digitCode);
+
+	const response = await fetch('/api/user/2fa', {
+		method: "post",
+		credentials: "include",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({ digitCode })
+	});
+
+	const result = await response.json();
+	console.log(result);
+
+}
 
 async function	handleSignInForm(form: HTMLFormElement, currentGame: PongGame | null, user: User): Promise<void> {
 	console.log("Sign in");
@@ -112,5 +132,8 @@ export function	setupSubmitHandler(currentGame: PongGame | null, user: User): vo
 
 		if (form.id === "sign-up-form")
 			handleSignUpForm(form, currentGame, user);
+
+		if (form.id === "2fa")
+			handle2faForm(form, currentGame, user);
 	});
 }
