@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/09 19:58:24 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/10 15:02:59 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ const expRefresh = "1m";
 
 /* ====================== FUNCTIONS ====================== */
 
-async function	jwtGenerate(user: userDto, exp: string) {
-	const jwt: string = await new jose.SignJWT( {
+async function	jwtGenerate(user: userDto, exp: string): Promise<string> {
+	return await new jose.SignJWT( {
 			'id': user.getId(),
 			'username': user.getName(),
 			'email': user.getEmail()
@@ -32,8 +32,6 @@ async function	jwtGenerate(user: userDto, exp: string) {
 		.setIssuedAt()
 		.setExpirationTime(exp)
 		.sign(jwtSecret);
-
-	return jwt;
 }
 
 function	getCookies(request: FastifyRequest) {
@@ -45,6 +43,7 @@ function	getCookies(request: FastifyRequest) {
 	return cookies
 }
 
+// hostOnly ???
 function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string) {
 	reply.header(
 		"Set-Cookie",
@@ -59,6 +58,13 @@ function	setCookiesAccessRefresh(reply: FastifyReply, jwtRefresh: string) {
 	);
 }
 
+function	removeCookies(reply: FastifyReply, key: string) {
+	reply.header(
+		"Set-Cookie",
+		`${key}=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+	);
+}
+
 export async function	addJWT(reply: FastifyReply, user: userDto) {
 
 	const jwtAccess: string = await jwtGenerate(user, expAccess);
@@ -68,38 +74,45 @@ export async function	addJWT(reply: FastifyReply, user: userDto) {
 	setCookiesAccessRefresh(reply, jwtRefresh);
 }
 
-async function refreshToken(request: FastifyRequest, reply: FastifyReply) {
-    const cookies = getCookies(request);
-    const refreshToken = cookies.jwtRefresh;
-
-    try {
-        const { payload, protectedHeader } = await jose.jwtVerify(refreshToken, jwtSecret)
-        const user = await userServ.getUserById(payload.id);
-            
-        await addJWT(reply, user);
-        
-        return await reply.status(201).send(user);
-    } catch (err) {
-        if (err instanceof jose.errors.JOSEError)
-            return reply.status(401).send({error: "Invalid token"});
-        else
-            return reply.status(404).send({error: err});
-    }
+export async function	removeJWT(reply: FastifyReply) {
+	removeCookies(reply, "jwtAccess");
+	removeCookies(reply, "jwtRefresh");
 }
 
-export async function accessToken(request: FastifyRequest, reply: FastifyReply) {
-    const cookies = getCookies(request);
-    const accessToken = cookies.jwtAccess;
-    
-    try {
-        const { payload, protectedHeader } = await jose.jwtVerify(accessToken, jwtSecret);
-        const user = await userServ.getUserById(payload.id);
+async function	refreshToken(request: FastifyRequest, reply: FastifyReply) {
+	try {
+		const cookies = getCookies(request);
+		const refreshToken = cookies.jwtRefresh;
+	
+		const { payload, protectedHeader } = await jose.jwtVerify(refreshToken, jwtSecret);
+		const user = await userServ.getUserById(payload.id);
+		
+		await addJWT(reply, user);
 
-        return reply.status(201).send(user);
-    } catch (err) {
-        if (err instanceof jose.errors.JOSEError)
-            return refreshToken(request, reply);
-        else
-            return reply.status(404).send({error: err});
-    }
+		return reply.status(200).send(user);
+	} catch (err) {
+		if (err instanceof jose.errors.JOSEError) {
+			return reply.status(401).send(err);
+		} else {
+			return reply.status(404).send(err);
+		}
+	}
+}
+
+export async function	accessToken(request: FastifyRequest, reply: FastifyReply) {
+	const cookies = getCookies(request);
+	const accessToken = cookies.jwtAccess;
+	
+	try {
+		const { payload, protectedHeader } = await jose.jwtVerify(accessToken, jwtSecret);
+		const user = await userServ.getUserById(payload.id);
+
+		return reply.status(200).send(user);
+	} catch (err) {
+		if (err instanceof jose.errors.JOSEError) {
+			return await refreshToken(request, reply);
+		} else {
+			return reply.status(404).send(err);
+		}
+	}
 }
