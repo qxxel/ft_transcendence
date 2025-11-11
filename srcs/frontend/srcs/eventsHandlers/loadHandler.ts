@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/08 16:34:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/11 14:59:40 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 import { User } from "../user/user.js";
 import { router } from "../index.js";
+import { GameState } from "../index.js";
 import { PongGame } from "../game/game.js";
 
 /* ====================== FUNCTIONS ====================== */
 
-async function	handleLoadPage(currentGame: PongGame | null, user: User): Promise<void> {
+async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 	document.addEventListener("DOMContentLoaded", async (event) => {
 
 		console.log("DOMContentLoaded");
@@ -55,10 +56,10 @@ async function	handleLoadPage(currentGame: PongGame | null, user: User): Promise
 					<a href="/game-menu">Play</a>
 				</nav>`;
 
-		router.navigate("/", currentGame, user);
+		router.navigate("/", gameState, user);
 	});
 }
 
-export function	setupLoadHandler(currentGame: PongGame | null, user: User): void {
-	handleLoadPage(currentGame, user)
+export function	setupLoadHandler(gameState: GameState, user: User): void {
+	handleLoadPage(gameState, user)
 }

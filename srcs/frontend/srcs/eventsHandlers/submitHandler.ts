@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/07 16:19:59 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/11 15:00:26 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 
 import { User } from "../user/user.js";
 import { router } from "../index.js";
+import { GameState } from "../index.js";
 import { PongGame } from "../game/game.js";
 
 
 /* ====================== FUNCTIONS ====================== */
 
 
-async function	handleSignInForm(form: HTMLFormElement, currentGame: PongGame | null, user: User): Promise<void> {
+async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
 	console.log("Sign in");
 	let identifier = (document.getElementById("sign-in-username") as HTMLInputElement).value;
 	let password = (document.getElementById("sign-in-password") as HTMLInputElement).value;
@@ -57,10 +58,10 @@ async function	handleSignInForm(form: HTMLFormElement, currentGame: PongGame | n
 				<a href="/game-menu">Play</a>
 			</nav>`;
 
-	router.navigate("/", currentGame, user);
+	router.navigate("/", gameState, user);
 }
 
-async function	handleSignUpForm(form: HTMLFormElement, currentGame: PongGame | null, user: User): Promise<void> {
+async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
 	console.log("Sign up");
 
 	let username = (document.getElementById("sign-up-username") as HTMLInputElement).value;
@@ -98,19 +99,19 @@ async function	handleSignUpForm(form: HTMLFormElement, currentGame: PongGame | n
 				<a href="/game-menu">Play</a>
 			</nav>`;
 
-	router.navigate("/", currentGame, user);
+	router.navigate("/", gameState, user);
 }
 
-export function	setupSubmitHandler(currentGame: PongGame | null, user: User): void {
+export function	setupSubmitHandler(gameState: GameState, user: User): void {
 	document.addEventListener('submit', async (event) => {
 		event.preventDefault();
 
 		const form = event.target as HTMLFormElement;
 
 		if (form.id === "sign-in-form")
-			handleSignInForm(form, currentGame, user);
+			handleSignInForm(form, gameState, user);
 
 		if (form.id === "sign-up-form")
-			handleSignUpForm(form, currentGame, user);
+			handleSignUpForm(form, gameState, user);
 	});
 }
