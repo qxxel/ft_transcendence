@@ -120,7 +120,7 @@ export class PongGame {
   /* Main game loop that runs at ~60 FPS - updates game state and renders graphics */
   private gameLoop() {
     this.update();
-
+    console.log('P1 x=', this.paddle1!.x, 'y=', this.paddle1!.y);
     this.draw();
     this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
   }
@@ -182,19 +182,22 @@ export class PongGame {
   }
 
   private movePaddle1() {
+
+    console.log('this.canvas!.height - this.paddle1!.height | ', this.canvas!.height, ' - ', this.paddle1!.height, ' == ', this.canvas!.height - this.paddle1!.height);
+    console.log('this.canvas!.width - this.paddle1!.width | ', this.canvas!.width, ' - ', this.paddle1!.width, ' == ', this.canvas!.width - this.paddle1!.width);
+
     if ((this.keysPressed['w']) && this.paddle1!.y > 0) {
       this.paddle1!.y -= this.paddle1!.speed;
     }
     if (this.keysPressed['s'] && this.paddle1!.y < this.canvas!.height - this.paddle1!.height) {
       this.paddle1!.y += this.paddle1!.speed;
     }
-    if ((this.keysPressed['a']) && this.paddle1!.x < this.canvas!.width - this.paddle1!.width) {
+    if ((this.keysPressed['a']) && this.paddle1!.x > 0) {
       this.paddle1!.x -= this.paddle1!.speed;
     }
-    if ((this.keysPressed['d']) && this.paddle1!.x > 0) {
+    if ((this.keysPressed['d']) && this.paddle1!.x < this.canvas!.width - this.paddle1!.width) {
       this.paddle1!.x += this.paddle1!.speed;
     }
-
   }
 
   private movePaddle2() {
