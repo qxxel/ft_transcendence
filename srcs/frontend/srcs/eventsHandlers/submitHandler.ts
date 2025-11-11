@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/11 15:00:26 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/11 19:05:05 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,16 @@ import { PongGame } from "../game/game.js";
 
 /* ====================== FUNCTIONS ====================== */
 
+function	getMenu(username: string | undefined): string {
+	return `<nav>
+				<a href="/">Home</a> | 
+				<a href="/about">About</a> | 
+				<a href="/settings">Settings</a> |
+				<a href="/user">${username}</a> |
+				<button onclick="onClickLogout();" id="logout">Logout</button> |
+				<a href="/game-menu">Play</a>
+			</nav>`
+}
 
 async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
 	console.log("Sign in");
@@ -48,15 +58,7 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 
 	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML =
-			`<nav>
-				<a href="/">Home</a> | 
-				<a href="/about">About</a> | 
-				<a href="/settings">Settings</a> |
-				<a href="/user">${user.getUsername()}</a> |
-				<button onclick="onClickLogout();" id="logout">Logout</button> |
-				<a href="/game-menu">Play</a>
-			</nav>`;
+		menu.innerHTML = getMenu(user.getUsername());
 
 	router.navigate("/", gameState, user);
 }
@@ -89,15 +91,7 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 
 	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML =
-			`<nav>
-				<a href="/">Home</a> | 
-				<a href="/about">About</a> | 
-				<a href="/settings">Settings</a> |
-				<a href="/user">${user.getUsername()}</a> |
-				<button onclick="onClickLogout();" id="logout">Logout</button> |
-				<a href="/game-menu">Play</a>
-			</nav>`;
+		menu.innerHTML = getMenu(user.getUsername());
 
 	router.navigate("/", gameState, user);
 }
