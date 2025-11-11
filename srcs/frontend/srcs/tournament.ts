@@ -1,4 +1,3 @@
-// Define interfaces (assuming these are here or in another file)
 interface Player {
   name: string;
 }
@@ -16,28 +15,70 @@ export class TournamentController {
   public players: Player[] = [];
   public matches: Match[] = [];
   public currentMatch: { id: string; p1: string; p2: string } | null = null;
-  public winningScore: number = 5; // Default value
+  public winningScore: number = 5;
 
-  /**
-   * --- MODIFIED CONSTRUCTOR ---
-   * Now accepts 'winningScore' from the setup page.
-   */
   constructor(playerNames: string[], winningScore: number) {
     this.players = playerNames.map(name => ({ name }));
-    this.winningScore = winningScore; // Store the winning score
+    this.winningScore = winningScore;
     this.generateBracket();
   }
 
+  // private generateBracket() {
+  //   const numPlayers = this.players.length;
+    
+  //   const shuffledPlayers = [...this.players].sort(() => Math.random() - 0.5);
+    
+  //   // Rounds: players == 4 -> 2; players <= 8 -> 3; players <= 16 -> 4
+  //   // Nombres de 1v1 premier Round: players < 8 -> 8 - numPlayers; players < 16 - numPlayers
+  //   let roundTot = 4;
+  //   let firstRound = 8;
+  //   if (numPlayers < 16){
+  //     firstRound = 16 - numPlayers;
+  //     if (numPlayers <= 8){
+  //       firstRound = 8 - numPlayers;
+  //       roundTot = 3;
+  //       if (numPlayers == 4){
+  //         firstRound = 2;
+  //         roundTot = 2;
+  //       }
+  //     }
+  //   }
+      
+
+  //   let round = 1;
+  //   while (round <= roundTot){
+  //     let matchNum = 1;
+  //     for (let i = 0; i < numPlayers && firstRound; i += 2) {
+  //       const player1 = shuffledPlayers[i];
+  //       const player2 = (i + 1 < numPlayers) ? shuffledPlayers[i+1] : null;
+  
+  
+  //       const match: Match = {
+  //         id: `r${round}-m${matchNum}`,
+  //         round: round,
+  //         player1: player1,
+  //         player2: player2,
+  //         winner: player2 === null ? player1 : null,
+  //         nextMatchId: null 
+  //       };
+        
+  //       this.matches.push(match);
+  //       matchNum++;
+  //       if (round == 1)
+  //         firstRound--;
+  //     }
+  //     round++;
+  //     firstRound = 1;
+  //   }
+  // }
+
   private generateBracket() {
     const numPlayers = this.players.length;
-    
-    // Shuffle players for a random bracket
     const shuffledPlayers = [...this.players].sort(() => Math.random() - 0.5);
     
     let round = 1;
     let matchNum = 1;
     
-    // Create Round 1
     for (let i = 0; i < numPlayers; i += 2) {
       const player1 = shuffledPlayers[i];
       const player2 = (i + 1 < numPlayers) ? shuffledPlayers[i+1] : null;
@@ -56,7 +97,6 @@ export class TournamentController {
     }
   }
 
-  // Get the HTML for the bracket
   public renderBracket(): string {
     let html = '<div class="round">';
     
@@ -84,12 +124,10 @@ export class TournamentController {
     return html;
   }
 
-  // Called when user clicks "Play" on a match
   public startMatch(id: string, p1: string, p2: string) {
     this.currentMatch = { id, p1, p2 };
   }
 
-  // Called from PongGame when a winner is decided
   public reportMatchWinner(winnerName: string) {
     if (!this.currentMatch) return;
     

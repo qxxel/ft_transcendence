@@ -38,7 +38,6 @@ export class PongGame {
   private paddle2: Paddle | null = null;
   private ball: Ball | null = null;
 
-  // --- New properties for player names ---
   private player1Name: string = "Player 1";
   private player2Name: string = "Player 2";
 
@@ -114,7 +113,6 @@ export class PongGame {
       dy: 0,
     };
     
-    // Set default names based on game mode
     this.player1Name = "Player 1";
     this.player2Name = (this.gameMode === 'ai') ? "AI" : "Player 2";
     this.aiTargetY = this.canvas!.height / 2;
@@ -125,14 +123,9 @@ export class PongGame {
     this.handleKeyUp = this.handleKeyUp.bind(this);
   }
 
-  /**
-   * --- NEW METHOD ---
-   * Called by the router to set names for a tournament match.
-   */
   public setPlayerNames(p1: string, p2: string) {
     this.player1Name = p1;
     this.player2Name = p2;
-    // CRITICAL: A tournament match is always Player-vs-Player
     this.gameMode = 'pvp'; 
     this.isTournamentMatch = true;
   }
@@ -147,13 +140,13 @@ export class PongGame {
     if (this.isPaused || this.isGameOver) {
       return;
     }
-    this.movePaddle1(); // Player 1 (W/S)
+    this.movePaddle1();
     
     if (this.gameMode === 'ai') {
       this.moveAI();
     }
     
-    this.movePaddle2(); // Player 2 (Arrows) or AI (if it "presses" keys)
+    this.movePaddle2();
     this.moveBall();
   }
 
@@ -197,9 +190,7 @@ export class PongGame {
      this.ctx!.font = '30px monospace';
      this.ctx!.fillText(`${winner} Wins!`, this.canvas!.width / 2, this.canvas!.height / 2 - 10);
       
-     // --- MODIFIED GAME OVER TEXT ---
      this.ctx!.font = '20px monospace';
-     // Check our internal flag to show the correct message
      const message = this.isTournamentMatch ? "Press 'Space' to Continue" : "Press 'Space' to Restart";
      this.ctx!.fillText(message, this.canvas!.width / 2, this.canvas!.height / 2 + 40);
     } 
@@ -224,7 +215,6 @@ export class PongGame {
   }
 
   private moveBall() {
-    // ... (No changes here, collision logic is fine)
     const prevBallX = this.ball!.x - this.ball!.dx;
     this.ball!.x += this.ball!.dx;
     this.ball!.y += this.ball!.dy;
@@ -255,7 +245,6 @@ export class PongGame {
   }
 
   private calculateDeflection(paddle: Paddle) {
-    // ... (No changes here)
     const relativeIntersectY = (paddle.y + (paddle.height / 2)) - this.ball!.y;
     const normalizedIntersectY = relativeIntersectY / (paddle.height / 2);
     const maxBounceAngle = Math.PI / 3; // 60 degrees
@@ -268,7 +257,6 @@ export class PongGame {
   }
 
   private increaseBallSpeed() {
-    // ... (No changes here)
     if (this.ball!.speed >= this.maxBallSpeed) return;
     const newSpeed = Math.min(this.ball!.speed + this.ballSpeedIncrease, this.maxBallSpeed);
     const magnitude = Math.sqrt(this.ball!.dx ** 2 + this.ball!.dy ** 2);
@@ -280,7 +268,6 @@ export class PongGame {
   }
 
   private resetBall(firstServe: boolean = false) {
-    // ... (No changes here)
     console.log('ball reseted');
     this.longestRally = Math.max(this.longestRally, this.currentRallyHits);
     this.currentRallyHits = 0;
@@ -301,16 +288,12 @@ export class PongGame {
     if (!this.isGameOver && (this.score1 >= this.winningScore || this.score2 >= this.winningScore)) {
       this.isGameOver = true;
 
-      // --- NEW TOURNAMENT LOGIC ---
-      // Access the global tournament object (defined in index.ts)
       const tournament = (window as any).currentTournament;
       
-      // Check if we are in a tournament match
       if (tournament && tournament.currentMatch) {
         const winnerName = this.score1 >= this.winningScore ? this.player1Name : this.player2Name;
         tournament.reportMatchWinner(winnerName);
       }
-      // --- END NEW LOGIC ---
 
       this.showEndGameDashboard();
     }
@@ -323,7 +306,6 @@ export class PongGame {
     const minutes = Math.floor(matchDurationSeconds / 60);
     const seconds = matchDurationSeconds % 60;
 
-    // --- MODIFIED: Use dynamic winner name ---
     document.getElementById('stat-winner')!.innerText = this.score1 > this.score2 ? this.player1Name : this.player2Name;
     
     document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
@@ -335,7 +317,7 @@ export class PongGame {
 
   private handleKeyDown(e: KeyboardEvent) {
     if (this.isGameOver && e.key === ' ') {
-        this.restart(); // This method now handles tournament logic
+        this.restart();
         return;
     }
 
@@ -361,24 +343,16 @@ export class PongGame {
   }
 
   private restart() {
-    // --- MODIFIED TOURNAMENT LOGIC ---
-    // Access the global objects from index.ts
     const tournament = (window as any).currentTournament;
     const router = (window as any).router;
     
-    // If this was a tournament match, don't restart. Go back to the bracket.
-    // We use the reliable internal flag 'isTournamentMatch'
     if (this.isTournamentMatch) {
-      // We must also clear the currentMatch so we don't get stuck in a loop
       if (tournament) {
         tournament.currentMatch = null; 
       }
       router.navigate('/tournament-bracket');
-      return; // Stop execution here
+      return;
     }
-    // --- END MODIFIED LOGIC ---
-
-    // --- This is the original logic, for non-tournament games ---
     this.score1 = 0;
     this.score2 = 0;
     this.updateScores();
@@ -414,7 +388,6 @@ export class PongGame {
   }
 
   private moveAI() {
-    // ... (No changes here, AI logic is fine)
     const now = Date.now();
     if (now - this.aiLastDecisionTime > 1000) {
       this.aiLastDecisionTime = now;
@@ -447,7 +420,6 @@ export class PongGame {
 
   public setWinningScore(newWinningScore: number) {
     this.winningScore = newWinningScore;
-    // Update the score display if it's already set
     if (this.scoreElements) {
       this.scoreElements.winScore.innerHTML = this.winningScore.toString();
     }
