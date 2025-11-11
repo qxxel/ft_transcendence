@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/08 20:51:13 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/11/11 15:27:37 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -188,4 +188,4 @@ fclean	: vclean
 
 # ---------------------------------   dev   --------------------------------- #
 .PHONY	: dev
-dev	: vdown rebuild
+dev	: vdown build up
