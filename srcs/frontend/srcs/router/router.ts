@@ -6,16 +6,16 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/11 15:02:30 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/11 17:07:05 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORT ====================== */
 
-import { PongGame }		from '../game/game.js';
 import { User }			from '../user/user.js';
 import { pathActions }	from './navigationUtils.js'
 import { GameState }	from '../index.js'
+
 
 /* ====================== INTERFACE ====================== */
 

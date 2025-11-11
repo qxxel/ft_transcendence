@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:00:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/06 11:35:52 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/11 17:05:07 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ export function	addRoutes(): void {
 		const html = await loadHtml("pages/game-menu.html");
 		return html;
 	});
-	
+
 	router.addRoute("/play", async () => {
 		const html = await loadHtml("pages/play.html");
 		return html;
