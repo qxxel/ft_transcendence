@@ -1,4 +1,4 @@
-import { PongGame } from './game.js';
+import { PongGame } from './tank.js';
 
 interface Route {
   path: string;
