@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/09 14:59:54 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/11/12 18:45:16 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@
 NAME	= ft_transcendence
 
 DOMAIN_FRONT	= $(NAME).42.fr
-DOMAIN_BACK		= localhost:9090
+DOMAIN_BACK		= localhost:3000
 
 RM		= rm -rf
 MKDIR	= mkdir -p $@
@@ -80,7 +80,7 @@ RUN_CMD = $(call MSG_CMD,$(1),$(2)) $(1); $(MSG_RESET)
 # ---------------------------------   all   --------------------------------- #
 .DEFAULT_GOAL	:= all
 .PHONY	: all
-all		: up
+all		: refresh
 
 # ----------------------------   transcendence   ---------------------------- #
 .PHONY	: $(NAME)
