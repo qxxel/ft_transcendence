@@ -6,7 +6,7 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/26 14:22:46 by agerbaud          #+#    #+#              #
-#    Updated: 2025/10/30 19:15:17 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/11/12 18:44:54 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,6 @@ COPY	srcs/ ./srcs/
 
 RUN		npm run build
 
-EXPOSE	9090
+EXPOSE	3000
 
 CMD ["node", "dist/index.js"]
