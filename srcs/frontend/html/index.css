@@ -205,3 +205,18 @@ input[type=range]::-moz-range-thumb {
   cursor: pointer;
   border: 2px solid #FFFF00;
 }
+
+.game-choice-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.game-choice-btn {
+  text-align: center;
+  width: 80%;
+  max-width: 400px;
+  margin: 10px 0;
+  font-size: 1.5em;
+}
