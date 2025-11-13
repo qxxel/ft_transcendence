@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/12 17:59:30 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:30:50 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,18 @@ fastify.register(cors, {
 fastify.get('/api/jwt', async (request, reply) => {
   try {
     const response = await axios.get('https://jwt:3000/jwt', {
+      httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
+    });
+    reply.send(response.data);
+  } catch (err) {
+    fastify.log.error(err);
+    reply.status(500).send({ error: 'Failed to reach user service' });
+  }
+});
+
+fastify.get('/api/user', async (request, reply) => {
+  try {
+    const response = await axios.get('https://user:3000/', {
       httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
     });
     reply.send(response.data);
