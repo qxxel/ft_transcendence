@@ -45,6 +45,12 @@ function  pathActions(currentPath: string) {
       currentGame.start();
     }
   }
+
+  if (['/newgame'].includes(currentPath)) {
+    // mcurto
+    // C'est ici que tu vas mettre ton start de game en mode mygame.start();
+    console.log("Loading the new game...");
+  }
 }
 
 class Router {
@@ -55,6 +61,9 @@ class Router {
   }
 
   navigate(path: string) {
+    if (window.location.pathname === '/play') {
+      stopCurrentGame();
+    }
     history.pushState({}, '', path);
     this.render();
   }
@@ -79,7 +88,7 @@ const router = new Router();
 
 const menu = `<nav>
   <a href="/">Home</a> | 
-  <a href="/gamemenu">Play</a> |
+  <a href="/games">Play</a> |
   <a href="/settings">Settings</a> |
   <a href="/about">About</a>
 </nav>`;
@@ -93,40 +102,51 @@ async function loadHtml(path: string) {
 }
 
 router.addRoute("/about", async () => {
-	const html = await loadHtml("pages/about.html");
-	return menu + html;
+  const html = await loadHtml("pages/about.html");
+  return menu + html;
 });
 
 router.addRoute("/settings", async () => {
-	const html = await loadHtml("pages/settings.html");
-	return menu + html;
+  const html = await loadHtml("pages/settings.html");
+  return menu + html;
 });
 
 router.addRoute("/rperrot", async () => {
-	const html = await loadHtml("pages/rperrot.html");
-	return menu + html;
+  const html = await loadHtml("pages/rperrot.html");
+  return menu + html;
 });
 
 router.addRoute("/gamemenu", async () => {
-	const html = await loadHtml("pages/gamemenu.html");
-	return menu + html;
+  const html = await loadHtml("pages/gamemenu.html");
+  return menu + html;
 });
 
 router.addRoute("/play", async () => {
   const html = await loadHtml("pages/play.html");
-	return menu + html;
+  return menu + html;
+});
+
+router.addRoute("/games", async () => {
+  const html = await loadHtml("pages/games.html");
+  return menu + html;
+});
+
+router.addRoute("/newgame", async () => {
+  // mcurto
+  // Tu peux créer une page html et faire menu + html comme pour les autres pages
+  // Comme ca t'as qu'a fait ton js et ton html
+  return menu + `<div class="game-container"><h1>New Super Game !</h1><p>Wow this game is insane !!!</p></div>`;
 });
 
 router.addRoute("/", async () => {
   const html = await loadHtml("pages/home.html");
-	return menu + html;
+  return menu + html;
 });
 
 router.render();
 
 /* ============================= EVENTS ============================= */
 
-// Handle link clicks
 document.addEventListener('click', (e) => {
   const target = e.target as HTMLAnchorElement;
   if (target.tagName === 'A' && target.hasAttribute('href')) {
@@ -135,7 +155,6 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Handle back/forward navigation
 window.addEventListener('popstate', () => {
   router.render();
 });
@@ -143,5 +162,4 @@ window.addEventListener('popstate', () => {
 
 /* ============================= GLOBAL FUNCTIONS ============================= */
 
-// Add onClickPlay function
 (window as any).onClickPlay = onClickPlay;
