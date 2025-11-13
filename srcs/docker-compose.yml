@@ -1,22 +1,21 @@
 services:
-
-  backend:
-    container_name: backend
-    image: backend
-    build:
-      context: backend
-      dockerfile: Dockerfile.back
-    env_file:
-      - .env
-    secrets:
-      - ssl_key_back
-      - ssl_crt_back
-    ports:
-      - "5000:3000"
-    networks:
-      - ft_transcendence
-    volumes:
-      - "database_assets:/app/dist/db"
+  # backend:
+  #   container_name: backend
+  #   image: backend
+  #   build:
+  #     context: backend
+  #     dockerfile: Dockerfile.back
+  #   env_file:
+  #     - .env
+  #   secrets:
+  #     - ssl_key_back
+  #     - ssl_crt_back
+  #   ports:
+  #     - "5000:3000"
+  #   networks:
+  #     - web
+  #   volumes:
+  #     - "database_assets:/app/dist/db"
 
   frontend:
     container_name: frontend
@@ -29,7 +28,7 @@ services:
     env_file:
       - .env
     networks:
-      - ft_transcendence
+      - web
 
   nginx:
     container_name: nginx
@@ -49,27 +48,28 @@ services:
       - ssl_crt_front
     ports:
       - "8080:443"
-      # - "8080:8080"
     networks:
-      - ft_transcendence
+      - web
+
+# Include microservices from backend docker-compose
+include:
+  - ./backend/docker-compose.yml
+
 
 volumes:
   frontend_assets:
-    # driver: local
-    # driver_opts:
-    #   type: 'none'
-    #   o: 'bind'
-    #   device: './srcs/frontend/html'
-  database_assets:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: './backend/db'
+  # database_assets:
+  #   driver: local
+  #   driver_opts:
+  #     type: 'none'
+  #     o: 'bind'
+  #     device: './backend/db'
 
 networks:
-  ft_transcendence:
-    name: ft_transcendence
+  web:
+    name: web
+  backend:
+    name: backend
 
 secrets:
   ssl_key_front:

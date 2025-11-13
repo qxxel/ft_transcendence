@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/06 12:08:38 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/13 20:52:45 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,7 @@ async function	onClickLogout(router: Router, currentGame: PongGame | null, user:
 }
 
 async function onClickGetMessage(): Promise<void> {
-	const res = await fetch('/api/user/10', {
-		method: "GET",
-		credentials: "include" // <- envoie les cookies cross-origin
-	});
+	const res = await fetch('/api/user');
 	const data = await res.json();
 	console.log(data);
 }
