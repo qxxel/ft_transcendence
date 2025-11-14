@@ -1,4 +1,6 @@
 import { Ball } from './class_ball.js';
+import { Actor } from './class_actor.js';
+import { Rect2D, Line2D } from './class_mesh.js';
 
 const tankWidth = 40;
 const tankHeight = 40;
@@ -7,7 +9,7 @@ const rotationSpeed = 0.025;
 const stickLength = 37;
 const stickWidth = 8;
 
-export class Tank {
+export class Tank extends Actor {
 
   x: number;
   y: number;
@@ -17,7 +19,6 @@ export class Tank {
   center_y: number;
 
   speed: number;
-  aim: number;
   aim_x: number;
   aim_y: number;
   hits: number;
@@ -43,6 +44,7 @@ export class Tank {
     key_rot_right: string,
     key_fire: string,
   ) {
+    super(new Rect2D(x,y,tankWidth,tankHeight));
     this.x = x;
     this.y = y;
     this.key_up = key_up,
@@ -60,9 +62,9 @@ export class Tank {
     this.speed = tankSpeed;
     this.firerate = 100;
 
-    this.aim = 0;
     this.aim_x = this.center_x + Math.cos(0) * stickLength;
     this.aim_y= this.center_y + Math.sin(0) * stickLength;
+    this.addMesh(new Line2D(this.center_x, this.center_y, this.aim_x, this.aim_y, 8, stickLength, 0))
 
     this.hits = 0;
   }
@@ -73,49 +75,47 @@ export class Tank {
     if (!key) return null; // p-e pas oblige
 
     if ([this.key_up, this.key_down, this.key_left, this.key_right, this.key_fire, this.key_rot_left, this.key_rot_right].includes(key)) {
-      if (key == this.key_up && this.y > 0)                               this.moveUp();    this.updateAim();
-      if (key == this.key_down && this.y < canvas!.height - this.height)  this.moveDown();  this.updateAim();
-      if (key == this.key_left && this.x > 0)                             this.moveLeft();  this.updateAim();
-      if (key == this.key_right && this.x < canvas!.width - this.width)   this.moveRight(); this.updateAim();
-      if (key == this.key_rot_left)                                       this.aimLeft();   this.updateAim();
-      if (key == this.key_rot_right)                                      this.aimRight();  this.updateAim();
+      if (key == this.key_up && this.y > 0)                               this.moveAll(0, -this.speed);
+      if (key == this.key_down && this.y < canvas!.height - this.height)  this.moveAll(0, +this.speed);
+      if (key == this.key_left && this.x > 0)                             this.moveAll(-this.speed, 0);
+      if (key == this.key_right && this.x < canvas!.width - this.width)   this.moveAll(+this.speed, 0);
+      if (key == this.key_rot_left)                                       this.aim(-rotationSpeed);
+      if (key == this.key_rot_right)                                      this.aim(+rotationSpeed);
       if (key == this.key_fire) return this.fire();
     }
     return null;
   }
 
-  updateAim(): void {
-    this.center_x = this.x + this.width / 2;
-    this.center_y = this.y + this.height / 2;
-    this.aim_x = this.center_x + Math.cos(this.aim) * stickLength;
-    this.aim_y = this.center_y + Math.sin(this.aim) * stickLength;
-  }
-
   keyMove(): void { this.y -= this.speed; }
 
-  moveUp(): void    { this.y -= this.speed; }
-  moveDown(): void  { this.y += this.speed; }
-  moveLeft(): void  { this.x -= this.speed; }
-  moveRight(): void { this.x += this.speed; }
-  aimLeft(): void   { this.aim -= rotationSpeed; }
-  aimRight(): void  { this.aim += rotationSpeed; }
+  moveAll(dx: number, dy: number): void {
+    this.meshs[0].move(dx, dy);
+    this.meshs[1].move(dx, dy);
+  }
+
+  aim(angle: number): void {
+    if (this.meshs[1] instanceof Line2D)
+      this.meshs[1].slope(angle);
+  }
 
   hit(): void { this.hits++; }
 
-fire(): Ball | null{
-  const now = Date.now();
-  if (now - this.lastFireTime < this.fireCooldown) return null;
+  fire(): Ball | null{
+    const now = Date.now();
+    if (now - this.lastFireTime < this.fireCooldown) return null;
 
 
-  this.lastFireTime = now;
-  return new Ball(this.aim_x, this.aim_y, Math.cos(this.aim), Math.sin(this.aim));
-}
+    this.lastFireTime = now;
+    return new Ball(this.meshs[1].getX(), this.meshs[1].getY(), Math.cos(this.meshs[1].getA()), Math.sin(this.meshs[1].getA()));
+  }
 
   draw(ctx: CanvasRenderingContext2D): void {
 
     // BODY
     ctx.fillStyle = '#4ade80';
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    this.meshs[0].draw(ctx);
+    
+    // ctx.fillRect(this.x, this.y, this.width, this.height);
 
     // CANNON
     ctx.strokeStyle = '#2563eb';
@@ -126,6 +126,7 @@ fire(): Ball | null{
     ctx.lineTo(this.aim_x, this.aim_y);
     ctx.stroke();
 
+    this.meshs[1].draw(ctx);
 
 
     // END OF CANNON

@@ -1,6 +1,8 @@
 import { Tank } from './class_tank.js';
 import { Ball } from './class_ball.js';
 
+import { Actor } from './class_actor.js';
+
 export class TankGame {
   private canvas: HTMLCanvasElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
@@ -21,6 +23,7 @@ export class TankGame {
   // private tank1: Tank;
   // private tank2: Tank;
   // private ball: Ball;
+  private actors: Actor[] = [];
   private tanks: Tank[] = [];
   private balls: Ball[] = [];
   private score1: number = 0;

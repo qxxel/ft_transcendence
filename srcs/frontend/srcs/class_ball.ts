@@ -1,23 +1,24 @@
+// import { Actor } from "./class_actor";
+import { Circ2D } from "./class_mesh";
+
 const ballRadius = 7;
 const ballSpeed = 2;
 
+// export class Ball extends Actor {
 export class Ball {
 
-  x: number;
-  y: number;
   radius: number;
   speed: number;
   dx: number;
   dy: number;
 
   constructor(
-    x: number,
-    y: number,
+    public x: number,
+    public y: number,
     dx: number,
     dy: number,
   ) {
-    this.x = x;
-    this.y = y;
+    // super(new Circ2D(x,y,ballRadius));
     this.radius = ballRadius;
     this.speed = ballSpeed;
     this.dx = dx * ballSpeed;
