@@ -1,4 +1,5 @@
-import { PongGame } from './tank.js';
+import { PongGame } from './game.js';
+import { TankGame } from './tank.js';
 
 interface Route {
   path: string;
@@ -18,6 +19,8 @@ function onClickPlay() {
   const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
   currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
 
+  // TODO if currentGame == Pong -> navigate(pong)
+  //                     == Tank -> navigate(tank)
   router.navigate('/play');
 }
 
@@ -46,9 +49,10 @@ function  pathActions(currentPath: string) {
     }
   }
 
-  if (['/newgame'].includes(currentPath)) {
-    // mcurto
-    // C'est ici que tu vas mettre ton start de game en mode mygame.start();
+  if (['/tank'].includes(currentPath)) {
+    var currentTank = new TankGame('pong-canvas', 'score1', 'score2', 'winning-points');
+    currentTank.setCtx();
+    currentTank.start();
     console.log("Loading the new game...");
   }
 }
@@ -131,11 +135,9 @@ router.addRoute("/games", async () => {
   return menu + html;
 });
 
-router.addRoute("/newgame", async () => {
-  // mcurto
-  // Tu peux créer une page html et faire menu + html comme pour les autres pages
-  // Comme ca t'as qu'a fait ton js et ton html
-  return menu + `<div class="game-container"><h1>New Super Game !</h1><p>Wow this game is insane !!!</p></div>`;
+router.addRoute("/tank", async () => {
+  const html = await loadHtml("pages/tank.html");
+  return menu + html;
 });
 
 router.addRoute("/", async () => {

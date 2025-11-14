@@ -1,23 +1,7 @@
-interface Paddle {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  dy: number;
-  speed: number;
-  hits: number;
-}
+import { Tank } from './class_tank.js';
+import { Ball } from './class_ball.js';
 
-interface Ball {
-  x: number;
-  y: number;
-  radius: number;
-  dx: number;
-  dy: number;
-  speed: number;
-}
-
-export class PongGame {
+export class TankGame {
   private canvas: HTMLCanvasElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
   private animationFrameId: number | null = null;
@@ -34,10 +18,11 @@ export class PongGame {
   private aiLastDecisionTime: number = 0;
   private aiTargetY: number = 0;
 
-  private paddle1: Paddle | null = null;
-  private paddle2: Paddle | null = null;
-  private ball: Ball | null = null;
-
+  // private tank1: Tank;
+  // private tank2: Tank;
+  // private ball: Ball;
+  private tanks: Tank[] = [];
+  private balls: Ball[] = [];
   private score1: number = 0;
   private score2: number = 0;
   private scoreElements: { winScore: HTMLElement; p1: HTMLElement; p2: HTMLElement } | null = null;
@@ -62,12 +47,8 @@ export class PongGame {
       score2: score2Id,
       winScore: winScoreId
     };
-    this.gameMode = gameMode;
-  }
-  
-  public setCtx() {
     this.canvas! = document.getElementById(this.ids.canvas) as HTMLCanvasElement;
-    this.ctx = this.canvas!.getContext('2d');
+    this.ctx = this.canvas.getContext('2d');
     this.scoreElements! = {
       winScore: document.getElementById(this.ids.winScore)!,
       p1: document.getElementById(this.ids.score1)!,
@@ -76,204 +57,64 @@ export class PongGame {
 
     this.scoreElements.winScore.innerHTML = this.winningScore.toString();
     
-    const paddleWidth = 10;
-    const paddleHeight = 100;
-    const paddleSpeed = 6;
-    
-    this.paddle1! = {
-      x: 10,
-      y: this.canvas!.height / 2 - paddleHeight / 2,
-      width: paddleWidth,
-      height: paddleHeight,
-      dy: 0,
-      speed: paddleSpeed,
-      hits: 0,
-    };
-    
-    this.paddle2! = {
-      x: this.canvas!.width - paddleWidth - 10,
-      y: this.canvas!.height / 2 - paddleHeight / 2,
-      width: paddleWidth,
-      height: paddleHeight,
-      dy: 0,
-      speed: paddleSpeed,
-      hits: 0,
-    };
-    
-    this.ball! = {
-      x: this.canvas!.width / 2,
-      y: this.canvas!.height / 2,
-      radius: 7,
-      speed: this.initialBallSpeed,
-      dx: 0,
-      dy: 0,
-    };
-    
+    const tankWidth = 10;
+    const tankHeight = 100;
+    const tankSpeed = 6;
+
+
+    this.tanks.push(new Tank(10, this.canvas!.height / 2 - tankHeight / 2,
+                'w','s','a','d', 'q', 'e', ' '));
+    this.tanks.push(new Tank(this.canvas!.width - tankWidth - 10, this.canvas!.height / 2 - tankHeight / 2,
+                'i','j','k','l', 'u', 'o', 'Control'));
+
     this.aiTargetY = this.canvas!.height / 2;
 
-    this.resetBall(true);
-    
+    // this.resetBall(true);
+
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.gameMode = gameMode;
   }
-  
-  /* Main game loop that runs at ~60 FPS - updates game state and renders graphics */
+
+  public setCtx() {
+
+  }
+
+  // Main game loop that runs at ~60 FPS - updates game state and renders graphics
   private gameLoop() {
     this.update();
-    console.log('P1 x=', this.paddle1!.x, 'y=', this.paddle1!.y);
     this.draw();
     this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
   }
 
   private update() {
-    if (this.isPaused || this.isGameOver) {
-      return;
-    }
-    this.movePaddle1();
-    if (this.gameMode === 'ai') {
-      this.moveAI();
-    }
-    this.movePaddle2();
-    this.moveBall();
+    if (this.isPaused || this.isGameOver) { return; }
+    // console.log("keyPressed:", key);
+    // console.log("now:", Date.now());
+
+    this.updateTanks();
+    this.updateBalls();
   }
 
-  private draw() {
-    this.ctx!.fillStyle = '#000';
-    this.ctx!.fillRect(0, 0, this.canvas!!.width, this.canvas!!.height);
+  private updateTanks() {
+  for (const key in this.keysPressed) {
+    if (!this.keysPressed[key])
+      continue;
 
-    this.ctx!.fillStyle = '#fff';
-    this.ctx!.fillRect(this.paddle1!!.x, this.paddle1!!.y, this.paddle1!!.width, this.paddle1!!.height);
-    this.ctx!.fillRect(this.paddle2!!.x, this.paddle2!!.y, this.paddle2!!.width, this.paddle2!!.height);
-    this.ctx!.beginPath();
-    this.ctx!.arc(this.ball!!.x, this.ball!!.y, this.ball!!.radius, 0, Math.PI * 2);
-    this.ctx!.fill();
-
-    this.ctx!.strokeStyle = '#fff';
-    this.ctx!.setLineDash([10, 10]);
-    this.ctx!.beginPath();
-    this.ctx!.moveTo(this.canvas!.width / 2, 0);
-    this.ctx!.lineTo(this.canvas!.width / 2, this.canvas!.height);
-    this.ctx!.stroke();
-
-    if (this.isPaused && !this.isGameOver) {
-      this.ctx!.fillStyle = 'rgba(0, 0, 0, 0.5)';
-      this.ctx!.fillRect(0, 0, this.canvas!.width, this.canvas!.height);
-      this.ctx!.fillStyle = 'white';
-      this.ctx!.font = '50px monospace';
-      this.ctx!.textAlign = 'center';
-      this.ctx!.fillText('PAUSED', this.canvas!.width / 2, this.canvas!.height / 2);
-    }
-
-    if (this.isGameOver) {
-     this.ctx!.fillStyle = 'rgba(0, 0, 0, 0.7)';
-     this.ctx!.fillRect(0, 0, this.canvas!.width, this.canvas!.height);
-
-     const winner = this.score1 >= this.winningScore ? 'Player 1' : 'Player 2';
-     this.ctx!.fillStyle = 'white';
-     this.ctx!.font = '50px monospace';
-     this.ctx!.textAlign = 'center';
-     this.ctx!.fillText('GAME OVER', this.canvas!.width / 2, this.canvas!.height / 2 - 60);
-     this.ctx!.font = '30px monospace';
-     this.ctx!.fillText(`${winner} Wins!`, this.canvas!.width / 2, this.canvas!.height / 2 - 10);
-      
-     this.ctx!.font = '20px monospace';
-     this.ctx!.fillText("Press 'Space' to Restart", this.canvas!.width / 2, this.canvas!.height / 2 + 40);
-    } 
-  }
-
-  private movePaddle1() {
-
-    console.log('this.canvas!.height - this.paddle1!.height | ', this.canvas!.height, ' - ', this.paddle1!.height, ' == ', this.canvas!.height - this.paddle1!.height);
-    console.log('this.canvas!.width - this.paddle1!.width | ', this.canvas!.width, ' - ', this.paddle1!.width, ' == ', this.canvas!.width - this.paddle1!.width);
-
-    if ((this.keysPressed['w']) && this.paddle1!.y > 0) {
-      this.paddle1!.y -= this.paddle1!.speed;
-    }
-    if (this.keysPressed['s'] && this.paddle1!.y < this.canvas!.height - this.paddle1!.height) {
-      this.paddle1!.y += this.paddle1!.speed;
-    }
-    if ((this.keysPressed['a']) && this.paddle1!.x > 0) {
-      this.paddle1!.x -= this.paddle1!.speed;
-    }
-    if ((this.keysPressed['d']) && this.paddle1!.x < this.canvas!.width - this.paddle1!.width) {
-      this.paddle1!.x += this.paddle1!.speed;
+  for(const tank of this.tanks) {
+      let ball = tank.update(this.canvas!, key);
+      if (ball) this.balls.push(ball);
+      // this.balls.push(ball);
     }
   }
+}
 
-  private movePaddle2() {
-    if (this.keysPressed['ArrowUp'] && this.paddle2!.y > 0) {
-      this.paddle2!.y -= this.paddle2!.speed;
-    }
-    if (this.keysPressed['ArrowDown'] && this.paddle2!.y < this.canvas!.height - this.paddle2!.height) {
-      this.paddle2!.y += this.paddle2!.speed;
-    }
-  }
+  private updateBalls() {
 
-  private moveBall() {
-    const prevBallX = this.ball!.x - this.ball!.dx;
-    this.ball!.x += this.ball!.dx;
-    this.ball!.y += this.ball!.dy;
-
-    if (this.ball!.y + this.ball!.radius > this.canvas!.height || this.ball!.y - this.ball!.radius < 0) {
-      this.ball!.dy *= -1;
+    for(const ball of this.balls) {
+      this.balls = this.balls.filter(ball => !ball.update(this.canvas!)); // WTF
     }
 
-    if (this.ball!.dx < 0 && this.ball!.x - this.ball!.radius <= this.paddle1!.x + this.paddle1!.width && prevBallX - this.ball!.radius >= this.paddle1!.x + this.paddle1!.width && this.ball!.y > this.paddle1!.y && this.ball!.y < this.paddle1!.y + this.paddle1!.height) {
-      this.calculateDeflection(this.paddle1!);
-      this.increaseBallSpeed();
-    }
-
-    if (this.ball!.dx > 0 && this.ball!.x + this.ball!.radius >= this.paddle2!.x && prevBallX + this.ball!.radius <= this.paddle2!.x && this.ball!.y > this.paddle2!.y && this.ball!.y < this.paddle2!.y + this.paddle2!.height) {
-      this.calculateDeflection(this.paddle2!);
-      this.increaseBallSpeed();
-    }
-
-    if (this.ball!.x + this.ball!.radius < 0) {
-      this.score2++;
-      this.updateScores();
-      this.resetBall();
-    } else if (this.ball!.x - this.ball!.radius > this.canvas!.width) {
-      this.score1++;
-      this.updateScores();
-      this.resetBall();
-    }
-  }
-
-  private calculateDeflection(paddle: Paddle) {
-    const relativeIntersectY = (paddle.y + (paddle.height / 2)) - this.ball!.y;
-    const normalizedIntersectY = relativeIntersectY / (paddle.height / 2);
-    const maxBounceAngle = Math.PI / 3; // 60 degrees
-    const bounceAngle = normalizedIntersectY * maxBounceAngle;
-    const direction = (this.ball!.x < this.canvas!.width / 2) ? 1 : -1;
-    this.ball!.dx = direction * this.ball!.speed * Math.cos(bounceAngle);
-    this.ball!.dy = -1 * this.ball!.speed * Math.sin(bounceAngle);
-    paddle.hits++;
-    this.currentRallyHits++;
-  }
-
-  private increaseBallSpeed() {
-    if (this.ball!.speed >= this.maxBallSpeed) return;
-    const newSpeed = Math.min(this.ball!.speed + this.ballSpeedIncrease, this.maxBallSpeed);
-    const magnitude = Math.sqrt(this.ball!.dx ** 2 + this.ball!.dy ** 2);
-    if (magnitude > 0) {
-      this.ball!.dx = (this.ball!.dx / magnitude) * newSpeed;
-      this.ball!.dy = (this.ball!.dy / magnitude) * newSpeed;
-      this.ball!.speed = newSpeed;
-    }
-  }
-
-  private resetBall(firstServe: boolean = false) {
-    console.log('ball reseted');
-    this.longestRally = Math.max(this.longestRally, this.currentRallyHits);
-    this.currentRallyHits = 0;
-    this.ball!.x = this.canvas!.width / 2;
-    this.ball!.y = this.canvas!.height / 2;
-    this.ball!.speed = this.initialBallSpeed;
-    const currentDirectionX = Math.sign(this.ball!.dx);
-    let directionX = firstServe ? (Math.random() < 0.5 ? 1 : -1) : currentDirectionX * -1;
-    const angle = (Math.random() * Math.PI / 4) - (Math.PI / 8);
-    this.ball!.dx = directionX * this.ball!.speed * Math.cos(angle);
-    this.ball!.dy = this.ball!.speed * Math.sin(angle);
   }
 
   private updateScores() {
@@ -293,8 +134,8 @@ export class PongGame {
     const seconds = matchDurationSeconds % 60;
     document.getElementById('stat-winner')!.innerText = this.score1 > this.score2 ? 'Player 1' : 'Player 2';
     document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
-    document.getElementById('stat-p1-hits')!.innerText = this.paddle1!.hits.toString();
-    document.getElementById('stat-p2-hits')!.innerText = this.paddle2!.hits.toString();
+    document.getElementById('stat-p1-hits')!.innerText = this.tanks[0].hits.toString();
+    document.getElementById('stat-p2-hits')!.innerText = this.tanks[1].hits.toString();
     document.getElementById('stat-rally')!.innerText = this.longestRally.toString();
     dashboard.style.display = 'block';
   }
@@ -331,10 +172,10 @@ export class PongGame {
     this.score2 = 0;
     this.updateScores();
 
-    this.paddle1!.y = this.canvas!.height / 2 - this.paddle1!.height / 2;
-    this.paddle1!.hits = 0;
-    this.paddle2!.y = this.canvas!.height / 2 - this.paddle2!.height / 2;
-    this.paddle2!.hits = 0;
+    this.tanks[0].y = this.canvas!.height / 2 - this.tanks[0].height / 2;
+    this.tanks[0].hits = 0;
+    this.tanks[1].y = this.canvas!.height / 2 - this.tanks[1]!.height / 2;
+    this.tanks[1].hits = 0;
 
     this.isGameOver = false;
     this.isPaused = false;
@@ -348,7 +189,7 @@ export class PongGame {
         dashboard.style.display = 'none';
     }
 
-    this.resetBall(true);
+    // this.resetBall(true);
   }
 
   public stop() {
@@ -361,39 +202,56 @@ export class PongGame {
     }
   }
 
-  private moveAI() {
-    const now = Date.now();
-    if (now - this.aiLastDecisionTime > 1000) {
-      this.aiLastDecisionTime = now;
-      
-      if (this.ball!.dx > 0) { 
-        const timeToImpact = (this.paddle2!.x - this.ball!.x) / this.ball!.dx;
-        let predictedY = this.ball!.y + (this.ball!.dy * timeToImpact);
-
-        // Upgrade ici : actuellement la prediction ne compte pas les rebonds sur les murs 
-        predictedY = Math.max(this.ball!.radius, Math.min(predictedY, this.canvas!.height - this.ball!.radius));
-        
-        this.aiTargetY = predictedY;
-      } else {
-        this.aiTargetY = this.canvas!.height / 2;
-      }
-    }
-
-    const paddleCenter = this.paddle2!.y + this.paddle2!.height / 2;
-    
-    if (paddleCenter < this.aiTargetY - 10) {
-      this.keysPressed['ArrowDown'] = true;
-      this.keysPressed['ArrowUp'] = false;
-    } else if (paddleCenter > this.aiTargetY + 10) {
-      this.keysPressed['ArrowDown'] = false; 
-      this.keysPressed['ArrowUp'] = true;
-    } else {
-      this.keysPressed['ArrowDown'] = false;
-      this.keysPressed['ArrowUp'] = false;
-    }
-  }
-
   public setWinningScore(newWinningScore: number) {
     this.winningScore = newWinningScore;
   }
+
+  private draw() {
+    this.ctx!.fillStyle = '#000';
+    this.ctx!.fillRect(0, 0, this.canvas!!.width, this.canvas!!.height);
+
+    this.ctx!.fillStyle = '#fff';
+
+    for (const tank of this.tanks) {
+      tank.draw(this.ctx!);
+    }
+    for (const ball of this.balls) {
+      ball.draw(this.ctx!);
+    }
+
+    this.ctx!.strokeStyle = '#fff';
+    this.ctx!.setLineDash([10, 10]);
+    this.ctx!.beginPath();
+    this.ctx!.moveTo(this.canvas!.width / 2, 0);
+    this.ctx!.lineTo(this.canvas!.width / 2, this.canvas!.height);
+    this.ctx!.stroke();
+    this.ctx!.setLineDash([]);
+
+    if (this.isPaused && !this.isGameOver) {
+      this.ctx!.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      this.ctx!.fillRect(0, 0, this.canvas!.width, this.canvas!.height);
+      this.ctx!.fillStyle = 'white';
+      this.ctx!.font = '50px monospace';
+      this.ctx!.textAlign = 'center';
+      this.ctx!.fillText('PAUSED', this.canvas!.width / 2, this.canvas!.height / 2);
+    }
+
+    if (this.isGameOver) {
+     this.ctx!.fillStyle = 'rgba(0, 0, 0, 0.7)';
+     this.ctx!.fillRect(0, 0, this.canvas!.width, this.canvas!.height);
+
+     const winner = this.score1 >= this.winningScore ? 'Player 1' : 'Player 2';
+     this.ctx!.fillStyle = 'white';
+     this.ctx!.font = '50px monospace';
+     this.ctx!.textAlign = 'center';
+     this.ctx!.fillText('GAME OVER', this.canvas!.width / 2, this.canvas!.height / 2 - 60);
+     this.ctx!.font = '30px monospace';
+     this.ctx!.fillText(`${winner} Wins!`, this.canvas!.width / 2, this.canvas!.height / 2 - 10);
+      
+     this.ctx!.font = '20px monospace';
+     this.ctx!.fillText("Press 'Space' to Restart", this.canvas!.width / 2, this.canvas!.height / 2 + 40);
+    }
+  }
 }
+
+
