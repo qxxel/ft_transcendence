@@ -65,7 +65,7 @@ export class TankGame {
     this.tanks.push(new Tank(10, this.canvas!.height / 2 - tankHeight / 2,
                 'w','s','a','d', 'q', 'e', ' '));
     this.tanks.push(new Tank(this.canvas!.width - tankWidth - 10, this.canvas!.height / 2 - tankHeight / 2,
-                'i','j','k','l', 'u', 'o', 'Control'));
+                'i','k','j','l', 'u', 'o', 'n'));
 
     this.aiTargetY = this.canvas!.height / 2;
 
