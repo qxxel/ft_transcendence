@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/13 17:30:50 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/14 23:07:52 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,60 @@ fastify.register(cors, {
 	credentials: true
 });
 
-fastify.get('/api/jwt', async (request, reply) => {
+const httpsAgent = new https.Agent({ rejectUnauthorized: false }); // utile si certificat auto-signé
+
+fastify.get('/api/auth', async (request, reply) => {
   try {
-    const response = await axios.get('https://jwt:3000/jwt', {
-      httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
-    });
+    const response = await axios.get('https://auth:3000', { httpsAgent });
     reply.send(response.data);
   } catch (err) {
     fastify.log.error(err);
-    reply.status(500).send({ error: 'Failed to reach user service' });
+    reply.status(500).send({ error: 'Failed to reach auth service' });
+  }
+});
+
+fastify.post('/api/auth/sign-up', async (request, reply) => {
+  try {
+	const response = await axios.post('https://auth:3000/sign-up', request.body, { httpsAgent });
+    reply.send(response.data);
+  } catch (err) {
+    fastify.log.error(err);
+    reply.status(500).send({ error: 'Failed to reach auth service' });
+  }
+});
+
+fastify.post('/api/auth/sign-in', async (request, reply) => {
+  try {
+	const response = await axios.post('https://auth:3000/sign-in', request.body, { httpsAgent });
+    reply.send(response.data);
+  } catch (err) {
+    fastify.log.error(err);
+    reply.status(500).send({ error: 'Failed to reach auth service' });
+  }
+});
+
+fastify.post('/api/jwt/test', async (request, reply) => {
+  try {
+	const response = await axios.post('https://jwt:3000/test', request.body, { httpsAgent });
+    reply.send(response.data);
+  } catch (err) {
+    fastify.log.error(err);
+    reply.status(500).send({ error: 'Failed to reach auth service' });
+  }
+});
+fastify.get('/api/jwt/test', async (request, reply) => {
+  try {
+	const response = await axios.get('https://jwt:3000/test', { httpsAgent });
+    reply.send(response.data);
+  } catch (err) {
+    fastify.log.error(err);
+    reply.status(500).send({ error: 'Failed to reach auth service' });
   }
 });
 
 fastify.get('/api/user', async (request, reply) => {
   try {
-    const response = await axios.get('https://user:3000/', {
-      httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
-    });
+	const response = await axios.get('https://user:3000', { httpsAgent });
     reply.send(response.data);
   } catch (err) {
     fastify.log.error(err);

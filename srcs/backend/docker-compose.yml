@@ -41,3 +41,17 @@ services:
       - "3000"
     networks:
       - backend
+
+  auth:
+    container_name: auth
+    image: auth
+    build:
+      context: ./auth
+      dockerfile: Dockerfile.auth
+    secrets:
+      - ssl_key_back
+      - ssl_crt_back
+    ports:
+      - "3000"
+    networks:
+      - backend
