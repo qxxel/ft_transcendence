@@ -1,5 +1,5 @@
 import { PongGame } from './game.js';
-import { TankGame } from './tank.js';
+import { TankGame } from './v1/tank.js';
 
 interface Route {
   path: string;
