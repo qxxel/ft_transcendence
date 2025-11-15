@@ -64,12 +64,24 @@ include:
 
 volumes:
   frontend_assets:
+  authDB:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './backend/auth/db'
   userDB:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
       device: './backend/user/db'
+  jwtDB:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './backend/jwt/db'
 
 networks:
   web:

@@ -14,17 +14,19 @@ services:
       - web
       - backend
 
-  jwt:
-    container_name: jwt
-    image: jwt
+  auth:
+    container_name: auth
+    image: auth
     build:
-      context: ./jwt
-      dockerfile: Dockerfile.jwt
+      context: ./auth
+      dockerfile: Dockerfile.auth
     secrets:
       - ssl_key_back
       - ssl_crt_back
     ports:
       - "3000"
+    volumes:
+      - "authDB:/app/dist/db"
     networks:
       - backend
 
@@ -44,16 +46,18 @@ services:
     networks:
       - backend
 
-  auth:
-    container_name: auth
-    image: auth
+  jwt:
+    container_name: jwt
+    image: jwt
     build:
-      context: ./auth
-      dockerfile: Dockerfile.auth
+      context: ./jwt
+      dockerfile: Dockerfile.jwt
     secrets:
       - ssl_key_back
       - ssl_crt_back
     ports:
       - "3000"
+    volumes:
+      - "jwtDB:/app/dist/db"
     networks:
       - backend
