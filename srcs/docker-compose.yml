@@ -58,12 +58,12 @@ include:
 
 volumes:
   frontend_assets:
-  # database_assets:
-  #   driver: local
-  #   driver_opts:
-  #     type: 'none'
-  #     o: 'bind'
-  #     device: './backend/db'
+  userDB:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './backend/user/db'
 
 networks:
   web:

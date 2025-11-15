@@ -39,5 +39,7 @@ services:
       - ssl_crt_back
     ports:
       - "3000"
+    volumes:
+      - "userDB:/app/dist/db"
     networks:
       - backend
