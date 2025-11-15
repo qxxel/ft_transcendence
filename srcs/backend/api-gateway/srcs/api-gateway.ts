@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/13 17:30:50 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/15 18:57:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@ import axios from 'axios';
 import fs from 'fs';
 import https from 'https';
 
+import { requestErrorsHandler } from "./utils/requestErrors.js"
+
 /* ====================== SERVER ====================== */
 
-const	fastify = Fastify({
+const	gatewayFastify = Fastify({
 	https: {
 		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
 		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
@@ -29,52 +31,100 @@ const	fastify = Fastify({
 	logger: true
 });
 
-// fastify.register(userController, { prefix: '/api/user' });
+// gatewayFastify.register(userController, { prefix: '/api/user' });
 
-fastify.register(cors, {
+gatewayFastify.register(cors, {
 	origin: 'https://nginx:443',
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
 });
 
-fastify.get('/api/jwt', async (request, reply) => {
-  try {
-    const response = await axios.get('https://jwt:3000/jwt', {
-      httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
-    });
-    reply.send(response.data);
-  } catch (err) {
-    fastify.log.error(err);
-    reply.status(500).send({ error: 'Failed to reach user service' });
-  }
+
+
+gatewayFastify.get('/api/jwt', async (request, reply) => {
+	try {
+		const response = await axios.get('https://jwt:3000/jwt', {
+			httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
+		});
+		reply.send(response.data);
+	} catch (err) {
+		gatewayFastify.log.error(err);
+		reply.status(500).send({ error: 'Failed to reach user service' });
+	}
 });
 
-fastify.get('/api/user', async (request, reply) => {
-  try {
-    const response = await axios.get('https://user:3000/', {
-      httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
-    });
-    reply.send(response.data);
-  } catch (err) {
-    fastify.log.error(err);
-    reply.status(500).send({ error: 'Failed to reach user service' });
-  }
+
+
+gatewayFastify.get('/api/user', async (request, reply) => {
+	try {
+		const response = await axios.get('https://user:3000/', {
+			httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
+		});
+		return reply.send(response.data);
+	} catch (err) {
+		gatewayFastify.log.error(err);
+		return reply.status(500).send({ error: 'Failed to reach user service' });
+	}
 });
+
+gatewayFastify.get('/api/user/:id', async (request, reply) => {
+	const { id } = request.params as { id: string };
+	const parseId = parseInt(id, 10);
+
+	try {
+		const response = await axios.get(`https://user:3000/${parseId}`, {
+			httpsAgent: new https.Agent({ rejectUnauthorized: false })
+		});
+
+		return reply.send(response.data);
+	} catch (err) {
+		return requestErrorsHandler(gatewayFastify, reply, err);
+	}
+});
+
+gatewayFastify.post('/api/user', async (request, reply) => {
+	try {
+		const response = await axios.post('https://user:3000/', request.body, {
+			httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
+		});
+
+		return reply.send(response.data);
+	} catch (err) {
+		return requestErrorsHandler(gatewayFastify, reply, err);
+	}
+});
+
+gatewayFastify.delete('/api/user/:id', async (request, reply) => {
+	const { id } = request.params as { id: string };
+	const parseId = parseInt(id, 10);
+
+	try {
+		const response = await axios.delete(`https://user:3000/${parseId}`, {
+			httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
+		});
+
+		return reply.send(response.data);
+	} catch (err) {
+		return requestErrorsHandler(gatewayFastify, reply, err);
+	}
+});
+
+
 
 const start = async () => {
 	try {
-		await fastify.listen({ port: 3000, host: '0.0.0.0' });
+		await gatewayFastify.listen({ port: 3000, host: '0.0.0.0' });
 		console.log(`Server started on https://localhost:3000`);
 
 		process.on('SIGTERM', () => {
 			console.log('SIGTERM received, server shutdown...');
-			fastify.server.close(() => {
+			gatewayFastify.server.close(() => {
 				process.exit(0);
 			});
 		});
 	} catch (err) {
-		fastify.log.error(err);
+		gatewayFastify.log.error(err);
 		process.exit(1);
 	}
 };
