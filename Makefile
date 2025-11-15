@@ -6,7 +6,7 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/12 18:45:16 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/11/14 21:46:47 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -165,7 +165,9 @@ ls		:
 logs	:
 	-$(call RUN_CMD,docker logs nginx,$(GREEN))
 	-$(call RUN_CMD,docker logs frontend,$(YELLOW))
-	-$(call RUN_CMD,docker logs backend,$(BLUE))
+	-$(call RUN_CMD,docker logs gateway,$(BLUE))
+	-$(call RUN_CMD,docker logs jwt,$(BLUE))
+	-$(call RUN_CMD,docker logs user,$(BLUE))
 
 # --------------------------------   clean   -------------------------------- #
 .PHONY	: clean
