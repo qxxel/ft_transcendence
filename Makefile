@@ -6,7 +6,7 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/14 21:46:47 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/11/16 00:13:29 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,12 @@ DC_START	= $(CMD_DC) start
 DC_STOP		= $(CMD_DC) stop
 DC_RESTART	= $(CMD_DC) restart
 
+
+# ----------------------------    databases    ---------------------------- #
+AUTH_DB	= srcs/backend/auth/db
+USER_DB	= srcs/backend/user/db
+JWT_DB	= srcs/backend/jwt/db
+
 # ----------------------------    key and cert    ---------------------------- #
 SECRET_DIR		= .SECRET
 CERT_FRONT		= $(SECRET_DIR)/certificate.crt
@@ -51,7 +57,7 @@ CMD_OPENSSL	= openssl req -x509 -newkey rsa:2048 \
 		-subj "/C=FR/ST=ARA/L=Lyon/O=42Lyon/OU=IT/CN=$(3)"
 
 # --------------------------    build directory    -------------------------- #
-BUILD_DIR		= $(SECRET_DIR)
+BUILD_DIR		= $(SECRET_DIR) $(AUTH_DB) $(USER_DB) $(JWT_DB)
 
 # -------------------------------    colors    ------------------------------- #
 include color.mk
@@ -93,7 +99,7 @@ up		: $(CERT_AND_KEY) | $(BUILD_DIR)
 
 # -------------------------------   refresh   ------------------------------- #
 .PHONY	: refresh
-refresh	:
+refresh	: $(CERT_AND_KEY) | $(BUILD_DIR)
 	$(call RUN_CMD,$(DC_REFRESH))
 
 # --------------------------------   build   -------------------------------- #
