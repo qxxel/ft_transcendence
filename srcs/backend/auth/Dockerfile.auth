@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Dockerfile.user                                    :+:      :+:    :+:    #
+#    Dockerfile.auth                                    :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/11 20:29:23 by mreynaud          #+#    #+#              #
-#    Updated: 2025/11/14 18:36:46 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/11/15 19:37:49 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ FROM	node:22
 WORKDIR	/app
 
 # Copy config files
-COPY	package*.json ./
-COPY	tsconfig.json ./
+COPY	build/package*.json ./
+COPY	build/tsconfig.json ./
 
 # Install dependencies
 RUN		npm install
