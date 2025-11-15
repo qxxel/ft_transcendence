@@ -1,7 +1,4 @@
 
-var ACTORS;
-
-
 export class TankGame {
   private isPaused: boolean = false;
   private isGameOver: boolean = false;

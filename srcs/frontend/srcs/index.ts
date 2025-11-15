@@ -51,7 +51,6 @@ function  pathActions(currentPath: string) {
 
   if (['/tank'].includes(currentPath)) {
     var currentTank = new TankGame('pong-canvas', 'score1', 'score2', 'winning-points');
-    currentTank.setCtx();
     currentTank.start();
     console.log("Loading the new game...");
   }
