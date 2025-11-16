@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/11/16 19:51:38 by agerbaud         ###   ########.fr       */
+=======
+/*   Updated: 2025/11/16 18:43:11 by mreynaud         ###   ########.fr       */
+>>>>>>> a368d0c6199bae257bc48b0f73875fd53ba2a54e
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +20,19 @@
 import { Router } from '../router/router.js'
 import { User } from '../user/user.js'
 import { PongGame } from '../game/game.js'
+import { GameState } from '../index.js';
 
 
 /* ====================== FUNCTIONS ====================== */
 
-function onClickPlay(router: Router, currentGame: PongGame | null, user: User): void {
+function onClickPlay(router: Router, gameState: GameState, user: User): void {
 	const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-	currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
+	gameState.currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
 
-	router.navigate("/play", currentGame, user);
+	router.navigate("/play", gameState, user);
 }
 
-async function	onClickLogout(router: Router, currentGame: PongGame | null, user: User): Promise<void> {
-	
-	
+async function	onClickLogout(router: Router, gameState: GameState, user: User): Promise<void> {
 	try {
 		const response = await fetch('/api/auth/logout', {
 			method: 'POST',
@@ -55,7 +58,7 @@ async function	onClickLogout(router: Router, currentGame: PongGame | null, user:
 				</nav>`;
 
 
-		router.navigate("/", currentGame, user);
+		router.navigate("/", gameState, user);
 	} catch (err) {
 		console.error("Error during logout:", err);
 	}
@@ -102,9 +105,9 @@ async function onClickRefreshMessage(): Promise<void> {
 }
 
 
-export async function	setupClickHandlers(router: Router, user: User, currentGame: PongGame | null): Promise<void> {
-	(window as any).onClickPlay = () => onClickPlay(router, currentGame, user);
-	(window as any).onClickLogout = () => onClickLogout(router, currentGame, user);
+export async function	setupClickHandlers(router: Router, user: User, gameState: GameState): Promise<void> {
+	(window as any).onClickPlay = () => onClickPlay(router, gameState, user);
+	(window as any).onClickLogout = () => onClickLogout(router, gameState, user);
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;
 	(window as any).onClickRefreshMessage = onClickRefreshMessage;
@@ -114,12 +117,12 @@ export async function	setupClickHandlers(router: Router, user: User, currentGame
 		if (target.tagName === 'A' && target.hasAttribute('href')) {
 			event.preventDefault();
 			console.log(target.getAttribute('href')!);
-			router.navigate(target.getAttribute('href')!, currentGame, user);
+			router.navigate(target.getAttribute('href')!, gameState, user);
 		}
 	});
 	
 	// Handle back/forward navigation
 	window.addEventListener('popstate', () => {
-		router.render(currentGame, user);
+		router.render(gameState, user);
 	});
 }

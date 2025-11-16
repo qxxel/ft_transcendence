@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   addRoutes.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:00:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/09 14:54:23 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/11 17:05:07 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,6 @@ import { loadHtml } from './loadHtml.js'
 /* ====================== FUNCTIONS ====================== */
 
 export function	addRoutes(): void {
-	router.addRoute("/2fa", async () => {
-		const html = await loadHtml("pages/2fa.html");
-		return html;
-	});
-
 	router.addRoute("/about", async () => {
 		const html = await loadHtml("pages/about.html");
 		return html;
@@ -59,7 +54,7 @@ export function	addRoutes(): void {
 		const html = await loadHtml("pages/game-menu.html");
 		return html;
 	});
-	
+
 	router.addRoute("/play", async () => {
 		const html = await loadHtml("pages/play.html");
 		return html;

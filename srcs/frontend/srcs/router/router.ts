@@ -6,15 +6,16 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/05 11:47:35 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/11 17:07:05 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORT ====================== */
 
-import { PongGame }		from '../game/game.js';
 import { User }			from '../user/user.js';
 import { pathActions }	from './navigationUtils.js'
+import { GameState }	from '../index.js'
+
 
 /* ====================== INTERFACE ====================== */
 
@@ -33,13 +34,12 @@ export class	Router {
 		this.routes.push({ path, component });
 	}
 
-	navigate(path: string, currentGame: PongGame | null, user: User) {
+	navigate(path: string, gameState: GameState, user: User) {
 		history.pushState({}, '', path);
-		this.render(currentGame, user);
+		this.render(gameState, user);
 	}
 
-	async render(currentGame: PongGame | null, user: User) {
-		// stopCurrentGame();
+	async render(gameState: GameState, user: User) {
 
 		const currentPath = window.location.pathname;
 		const route = this.routes.find(r => r.path === currentPath);
@@ -51,7 +51,7 @@ export class	Router {
 				contentDiv.innerHTML = html;
 			}
 
-			pathActions(currentPath, currentGame, user);
+			pathActions(currentPath, gameState, user);
 		}
 
 	}

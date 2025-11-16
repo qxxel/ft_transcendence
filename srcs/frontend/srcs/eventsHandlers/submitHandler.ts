@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/15 21:46:37 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 18:47:19 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,33 +15,24 @@
 
 import { User } from "../user/user.js";
 import { router } from "../index.js";
+import { GameState } from "../index.js";
 import { PongGame } from "../game/game.js";
 
 
 /* ====================== FUNCTIONS ====================== */
 
-async function	handle2faForm(form: HTMLFormElement, currentGame: PongGame | null, user: User): Promise<void> {
-	console.log("2fa-form");
-	let digitCode = (document.getElementById("digit-code") as HTMLInputElement).value;
-	form.reset();
-
-	console.log(digitCode);
-
-	const response = await fetch('/api/user/2fa', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ digitCode })
-	});
-
-	const result = await response.json();
-	console.log(result);
-
+function	getMenu(username: string | undefined): string {
+	return `<nav>
+				<a href="/">Home</a> | 
+				<a href="/about">About</a> | 
+				<a href="/settings">Settings</a> |
+				<a href="/user">${username}</a> |
+				<button onclick="onClickLogout();" id="logout">Logout</button> |
+				<a href="/game-menu">Play</a>
+			</nav>`
 }
 
-async function	handleSignInForm(form: HTMLFormElement, currentGame: PongGame | null, user: User): Promise<void> {
+async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
 	console.log("Sign in");
 	let identifier = (document.getElementById("sign-in-username") as HTMLInputElement).value;
 	let password = (document.getElementById("sign-in-password") as HTMLInputElement).value;
@@ -67,20 +58,12 @@ async function	handleSignInForm(form: HTMLFormElement, currentGame: PongGame | n
 
 	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML =
-			`<nav>
-				<a href="/">Home</a> | 
-				<a href="/about">About</a> | 
-				<a href="/settings">Settings</a> |
-				<a href="/user">${user.getUsername()}</a> |
-				<button onclick="onClickLogout();" id="logout">Logout</button> |
-				<a href="/game-menu">Play</a>
-			</nav>`;
+		menu.innerHTML = getMenu(user.getUsername());
 
-	router.navigate("/", currentGame, user);
+	router.navigate("/", gameState, user);
 }
 
-async function	handleSignUpForm(form: HTMLFormElement, currentGame: PongGame | null, user: User): Promise<void> {
+async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
 	console.log("Sign up");
 
 	let username = (document.getElementById("sign-up-username") as HTMLInputElement).value;
@@ -108,32 +91,21 @@ async function	handleSignUpForm(form: HTMLFormElement, currentGame: PongGame | n
 
 	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML =
-			`<nav>
-				<a href="/">Home</a> | 
-				<a href="/about">About</a> | 
-				<a href="/settings">Settings</a> |
-				<a href="/user">${user.getUsername()}</a> |
-				<button onclick="onClickLogout();" id="logout">Logout</button> |
-				<a href="/game-menu">Play</a>
-			</nav>`;
+		menu.innerHTML = getMenu(user.getUsername());
 
-	router.navigate("/", currentGame, user);
+	router.navigate("/", gameState, user);
 }
 
-export function	setupSubmitHandler(currentGame: PongGame | null, user: User): void {
+export function	setupSubmitHandler(gameState: GameState, user: User): void {
 	document.addEventListener('submit', async (event) => {
 		event.preventDefault();
 
 		const form = event.target as HTMLFormElement;
 
 		if (form.id === "sign-in-form")
-			handleSignInForm(form, currentGame, user);
+			handleSignInForm(form, gameState, user);
 
 		if (form.id === "sign-up-form")
-			handleSignUpForm(form, currentGame, user);
-
-		if (form.id === "2fa")
-			handle2faForm(form, currentGame, user);
+			handleSignUpForm(form, gameState, user);
 	});
 }
