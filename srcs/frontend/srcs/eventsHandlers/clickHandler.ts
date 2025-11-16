@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/11/16 19:51:38 by agerbaud         ###   ########.fr       */
-=======
-/*   Updated: 2025/11/16 18:43:11 by mreynaud         ###   ########.fr       */
->>>>>>> a368d0c6199bae257bc48b0f73875fd53ba2a54e
+/*   Updated: 2025/11/16 20:02:55 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
