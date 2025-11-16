@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwt.ts                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/16 15:21:35 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 18:32:08 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ async function	jwtGenerate(user: userDto, exp: string): Promise<string> {
 function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string) {
 	reply.header(
 		"Set-Cookie",
-		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=10; path=/api/auth`
+		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=10; path=/api/jwt/`
 	);
 }
 
 function	setCookiesRefreshToken(reply: FastifyReply, jwtRefresh: string) {
 	reply.header(
 		"Set-Cookie",
-		`jwtRefresh=${jwtRefresh}; SameSite=strict; HttpOnly; secure; Max-Age=60; path=/api/auth/refresh`
+		`jwtRefresh=${jwtRefresh}; SameSite=strict; HttpOnly; secure; Max-Age=60; path=/api/jwt/refresh`
 	);
 }
 
@@ -77,6 +77,30 @@ async function	addJWT(reply: FastifyReply, user: userDto) {
 	const jwtRefresh: string = await jwtGenerate(user, expRefresh);
 	setCookiesRefreshToken(reply, jwtRefresh);
 }
+
+
+function	removeCookies(reply: FastifyReply, key: string) {
+	reply.header(
+		"Set-Cookie",
+		`${key}=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+	);
+}
+
+export async function	removeJWT(reply: FastifyReply) {
+	removeCookies(reply, "jwtAccess");
+	removeCookies(reply, "jwtRefresh");
+}
+
+
+function	getCookies(request: FastifyRequest) {
+	const cookies = Object.fromEntries(
+		(request.headers.cookie || "")
+		.split("; ")
+		.map(c => c.split("="))
+	)
+	return cookies
+}
+
 
 /* ====================== DATABASE ====================== */
 
@@ -112,18 +136,34 @@ jwtFastify.register(cors, {
 
 jwtFastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
 	try {
-		const user :userDto = request.body as userDto;
-		
-		await addJWT(reply, user);
+		const user: userDto = request.body as userDto;
 
+		await addJWT(reply, user);
+console.log(user);
 		return reply.status(201).send(user);
-		
 	} catch (error) {
 		console.log(error);
-		reply.status(600).send(error);
+		reply.status(500).send(error);
 	}
 	return { message: "Hello World!"};
 });
+
+jwtFastify.get('/validate', async (request: FastifyRequest, reply: FastifyReply) => {
+	try {
+		const cookies = getCookies(request);
+
+		console.log("cookies1:" + request.headers.cookie)
+		console.log("cookies2:" + cookies.jwtAccess)
+		
+
+		return reply.status(201).send();
+	} catch (error) {
+		console.log(error);
+		reply.status(500).send(error);
+	}
+	return { message: "Hello World!"};
+});
+
 
 jwtFastify.register(jwtController);
 
