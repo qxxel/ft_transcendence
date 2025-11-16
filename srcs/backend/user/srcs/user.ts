@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/14 22:37:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 00:19:28 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,16 @@ const	userFastify = Fastify({
 	logger: true
 });
 
-userFastify.register(userController);
 
 userFastify.register(cors, {
-	origin: '*',
+	origin: 'https://gateway:3000',
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
 });
+
+
+userFastify.register(userController);
 
 userFastify.get('/', async (request, reply) => {	//
 	return { message: "Hello User!" };				// A ENLEVER (TEST CONNECTION)

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/16 00:38:16 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 15:21:35 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,13 @@ import fs from 'fs';
 import axios from 'axios';
 import https from 'https';
 import * as jose from 'jose';
+import sqlite3Pkg from 'sqlite3';
 
 import type { FastifyRequest, FastifyReply } from 'fastify';
+
+import { jwtController }	from './controllers/jwtController.js';
+import { jwtService }		from './services/jwtService.js';
+import { jwtRepository }	from './repositories/jwtRepository.js';
 
 interface userDto {
 	id?: number;
@@ -73,10 +78,23 @@ async function	addJWT(reply: FastifyReply, user: userDto) {
 	setCookiesRefreshToken(reply, jwtRefresh);
 }
 
+/* ====================== DATABASE ====================== */
+
+const			{ Database } = sqlite3Pkg;
+const			dbname = '/app/dist/db/jwt.db';
+export const	db = new Database(dbname, (err: Error | null) => {
+	if (err)
+		console.error(err);
+
+	console.log(`Database started on ${dbname}`);
+});
+
+export const	jwtServ = new jwtService(new jwtRepository(db));
+
 
 /* ====================== SERVER ====================== */
 
-const	fastify = Fastify({
+const	jwtFastify = Fastify({
 	https: {
 		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
 		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
@@ -84,14 +102,15 @@ const	fastify = Fastify({
 	logger: true
 });
 
-fastify.register(cors, {
-	origin: '*',
+
+jwtFastify.register(cors, {
+	origin: 'https://gateway:3000',
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
 });
 
-fastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
+jwtFastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
 	try {
 		const user :userDto = request.body as userDto;
 		
@@ -106,19 +125,25 @@ fastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
 	return { message: "Hello World!"};
 });
 
+jwtFastify.register(jwtController);
+
+jwtFastify.get('/jwt', async (request, reply) => {
+	return "Hello World!";
+});
+
 const start = async () => {
 	try {
-		await fastify.listen({ port: 3000, host: '0.0.0.0' });
+		await jwtFastify.listen({ port: 3000, host: '0.0.0.0' });
 		console.log(`Server started on https://jwt:3000`);
 
 		process.on('SIGTERM', () => {
 			console.log('SIGTERM received, server shutdown...');
-			fastify.server.close(() => {
+			jwtFastify.server.close(() => {
 				process.exit(0);
 			});
 		});
 	} catch (err) {
-		fastify.log.error(err);
+		jwtFastify.log.error(err);
 		process.exit(1);
 	}
 };

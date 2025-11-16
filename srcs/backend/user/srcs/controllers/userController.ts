@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/15 19:05:14 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 14:27:12 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ import { errorsHandler }				from '../utils/errorsHandler.js';
 
 /* ====================== FUNCTIONS ====================== */
 
-export async function	userController(userFastify: FastifyInstance, options: any) {
+export async function	userController(userFastify: FastifyInstance) {
 	// GET A USER WITH HIS ID
 	userFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const { id } = request.params as { id: string };
@@ -33,6 +33,23 @@ export async function	userController(userFastify: FastifyInstance, options: any)
 
 		try {
 			const	user: userRespDto = await userServ.getUserById(parseId);
+
+			return reply.code(200).send(user);
+		}
+		catch (err) {
+			return errorsHandler(userFastify, reply, err);
+		}
+	});
+
+	// GET A USER WITH AN IDENTIFIER (EMAIL OR USERNAME)
+	userFastify.get('/lookup/:identifier', async (request: FastifyRequest, reply: FastifyReply) => {
+		const { identifier } = request.params as { identifier: string };
+
+		try {
+			if (!identifier.includes("@"))
+				var	user: userRespDto = await userServ.getUserByUsername(identifier);
+			else
+				var	user: userRespDto = await userServ.getUserByEmail(identifier);
 
 			return reply.code(200).send(user);
 		}

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/15 19:03:22 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 00:39:34 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ export class	userService {
 		return await this.getUserById(id);
 	}
 
-
 	async getUserById(userId: number): Promise<userRespDto> {
 		const	existQuery = `SELECT 1 FROM user WHERE id = ? LIMIT 1`;
 		if (!(await isTaken(this.userRepo.getDb(), existQuery, [userId.toString()])))
@@ -54,26 +53,27 @@ export class	userService {
 
 		return await this.userRepo.getUserById(userId);
 	}
+	
+	async getUserByUsername(username: string): Promise<userRespDto> {
+		const	existQuery = `SELECT 1 FROM user WHERE username = ? LIMIT 1`;
+		if (await isTaken(this.userRepo.getDb(), existQuery, [username]))
+			return await this.userRepo.getUserByUsername(username);
 
-	async getUserByIdentifier(identifier: string): Promise<userRespDto> {
-		var	existQuery = `SELECT 1 FROM user WHERE username = ? LIMIT 1`;
-		if (await isTaken(this.userRepo.getDb(), existQuery, [identifier]))
-			return await this.userRepo.getUserByUsername(identifier);
-
-		existQuery = `SELECT 1 FROM user WHERE email = ? LIMIT 1`;
-		if (await isTaken(this.userRepo.getDb(), existQuery, [identifier]))
-			return await this.userRepo.getUserByEmail(identifier);
-
-		throw new NotExistError(`The user ${identifier} does not exist.`)
+		throw new NotExistError(`The user with username ${username} does not exist`);
 	}
 
+	async getUserByEmail(userEmail: string): Promise<userRespDto> {
+		const	existQuery = `SELECT 1 FROM user WHERE email = ? LIMIT 1`;
+		if (await isTaken(this.userRepo.getDb(), existQuery, [userEmail]))
+			return await this.userRepo.getUserByEmail(userEmail);
+
+		throw new NotExistError(`The user with email ${userEmail} does not exist`);
+	}
 
 	async deleteUser(userId: number): Promise<void> {
-		console.log("2");
 		const	existQuery = `SELECT 1 FROM user WHERE id = ? LIMIT 1`;
 		if (!(await isTaken(this.userRepo.getDb(), existQuery, [userId.toString()])))
 			throw new NotExistError(`The user ${userId} does not exist`);
-		console.log("3");
 
 		return await this.userRepo.deleteUser(userId);
 	}

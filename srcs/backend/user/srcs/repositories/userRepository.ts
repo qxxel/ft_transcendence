@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:20:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/15 19:03:46 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 00:32:17 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 
 import type { Database }	from 'sqlite3'
 
-import { userTableBuilder }	from '../builders/userBuilder.js';
+import { userTableBuilder }	from '../tableBuilders/userTableBuilder.js';
 import { userAddDto }		from '../dtos/userAddDto.js'
 import { userRespDto }		from '../dtos/userRespDto.js';
 
