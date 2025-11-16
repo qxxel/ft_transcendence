@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/15 19:34:40 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 00:32:33 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,11 @@ gatewayFastify.get('/api/auth', async (request, reply) => {
 gatewayFastify.post('/api/auth/sign-up', async (request, reply) => {
   try {
 	const response = await axios.post('https://auth:3000/sign-up', request.body, { httpsAgent });
-    reply.send(response.data);
+    
+	if (response.headers['set-cookie'])
+		reply.header('Set-Cookie', response.headers['set-cookie']);
+	
+	reply.send(response.data);
   } catch (err) {
     gatewayFastify.log.error(err);
     reply.status(500).send({ error: 'Failed to reach auth service' });
@@ -64,26 +68,21 @@ gatewayFastify.post('/api/auth/sign-up', async (request, reply) => {
 
 gatewayFastify.post('/api/auth/sign-in', async (request, reply) => {
   try {
-	const response = await axios.post('https://auth:3000/sign-in', request.body, { httpsAgent });
-    reply.send(response.data);
+	const response = await axios.post('https://auth:3000/sign-in', request.body, { httpsAgent, withCredentials: true });
+    
+	if (response.headers['set-cookie'])
+			reply.header('Set-Cookie', response.headers['set-cookie']);
+
+	reply.send(response.data);
   } catch (err) {
     gatewayFastify.log.error(err);
     reply.status(500).send({ error: 'Failed to reach auth service' });
   }
 });
 
-gatewayFastify.post('/api/jwt/test', async (request, reply) => {
+gatewayFastify.post('/api/jwt', async (request, reply) => {
   try {
-	const response = await axios.post('https://jwt:3000/test', request.body, { httpsAgent });
-    reply.send(response.data);
-  } catch (err) {
-    gatewayFastify.log.error(err);
-    reply.status(500).send({ error: 'Failed to reach auth service' });
-  }
-});
-gatewayFastify.get('/api/jwt/test', async (request, reply) => {
-  try {
-	const response = await axios.get('https://jwt:3000/test', { httpsAgent });
+	const response = await axios.get('https://jwt:3000', { httpsAgent });
     reply.send(response.data);
   } catch (err) {
     gatewayFastify.log.error(err);
@@ -93,9 +92,7 @@ gatewayFastify.get('/api/jwt/test', async (request, reply) => {
 
 gatewayFastify.get('/api/user', async (request, reply) => {
 	try {
-		const response = await axios.get('https://user:3000/', {
-			httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
-		});
+		const response = await axios.get('https://user:3000/', { httpsAgent });
 		return reply.send(response.data);
 	} catch (err) {
 		gatewayFastify.log.error(err);
@@ -108,9 +105,7 @@ gatewayFastify.get('/api/user/:id', async (request, reply) => {
 	const parseId = parseInt(id, 10);
 
 	try {
-		const response = await axios.get(`https://user:3000/${parseId}`, {
-			httpsAgent: new https.Agent({ rejectUnauthorized: false })
-		});
+		const response = await axios.get(`https://user:3000/${parseId}`, { httpsAgent });
 
 		return reply.send(response.data);
 	} catch (err) {
@@ -120,9 +115,7 @@ gatewayFastify.get('/api/user/:id', async (request, reply) => {
 
 gatewayFastify.post('/api/user', async (request, reply) => {
 	try {
-		const response = await axios.post('https://user:3000/', request.body, {
-			httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
-		});
+		const response = await axios.post('https://user:3000/', request.body, { httpsAgent });
 
 		return reply.send(response.data);
 	} catch (err) {
@@ -135,17 +128,13 @@ gatewayFastify.delete('/api/user/:id', async (request, reply) => {
 	const parseId = parseInt(id, 10);
 
 	try {
-		const response = await axios.delete(`https://user:3000/${parseId}`, {
-			httpsAgent: new https.Agent({ rejectUnauthorized: false }) // utile si certificat auto-signé
-		});
+		const response = await axios.delete(`https://user:3000/${parseId}`, { httpsAgent });
 
 		return reply.send(response.data);
 	} catch (err) {
 		return requestErrorsHandler(gatewayFastify, reply, err);
 	}
 });
-
-
 
 const start = async () => {
 	try {

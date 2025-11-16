@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/12 18:08:34 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 00:38:16 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,63 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors'
 import fs from 'fs';
+import axios from 'axios';
+import https from 'https';
+import * as jose from 'jose';
 
-// import type { FastifyRequest, FastifyReply } from 'fastify';
+import type { FastifyRequest, FastifyReply } from 'fastify';
 
+interface userDto {
+	id?: number;
+	username: string;
+	email: string;
+	password: string;
+	elo?: number;
+}
+
+const expAccess = "10s";
+const expRefresh = "1m";
+
+/* ====================== FUNCTIONS ====================== */
+
+const	jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET);
+
+
+async function	jwtGenerate(user: userDto, exp: string): Promise<string> {
+	return await new jose.SignJWT( {
+			'id': user.id,
+			'username': user.username,
+			'email': user.email
+		})
+		.setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
+		.setIssuedAt()
+		.setExpirationTime(exp)
+		.sign(jwtSecret);
+}
+
+// hostOnly ???
+function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string) {
+	reply.header(
+		"Set-Cookie",
+		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=10; path=/api/auth`
+	);
+}
+
+function	setCookiesRefreshToken(reply: FastifyReply, jwtRefresh: string) {
+	reply.header(
+		"Set-Cookie",
+		`jwtRefresh=${jwtRefresh}; SameSite=strict; HttpOnly; secure; Max-Age=60; path=/api/auth/refresh`
+	);
+}
+
+async function	addJWT(reply: FastifyReply, user: userDto) {
+
+	const jwtAccess: string = await jwtGenerate(user, expAccess);
+	setCookiesAccessToken(reply, jwtAccess);
+
+	const jwtRefresh: string = await jwtGenerate(user, expRefresh);
+	setCookiesRefreshToken(reply, jwtRefresh);
+}
 
 
 /* ====================== SERVER ====================== */
@@ -30,8 +84,6 @@ const	fastify = Fastify({
 	logger: true
 });
 
-// fastify.register(userController, { prefix: '/api/user' });
-
 fastify.register(cors, {
 	origin: '*',
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -39,8 +91,19 @@ fastify.register(cors, {
 	credentials: true
 });
 
-fastify.get('/jwt', async (request, reply) => {
-	return "Hello World!";
+fastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
+	try {
+		const user :userDto = request.body as userDto;
+		
+		await addJWT(reply, user);
+
+		return reply.status(201).send(user);
+		
+	} catch (error) {
+		console.log(error);
+		reply.status(600).send(error);
+	}
+	return { message: "Hello World!"};
 });
 
 const start = async () => {

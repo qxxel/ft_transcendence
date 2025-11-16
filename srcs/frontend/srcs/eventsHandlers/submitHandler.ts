@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/09 16:04:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/15 21:46:37 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ async function	handleSignInForm(form: HTMLFormElement, currentGame: PongGame | n
 
 	console.log(JSON.stringify({ identifier, password }));
 
-	const response: Response = await fetch('/api/user/sign-in', {
+	const response: Response = await fetch('/api/auth/sign-in', {
 		method: "post",
 		headers: {
 			"Content-Type": "application/json"
@@ -92,7 +92,7 @@ async function	handleSignUpForm(form: HTMLFormElement, currentGame: PongGame | n
 	console.log("email: " + email);
 	console.log("password: " + password);
 	console.log(JSON.stringify({ username, email, password }));
-	const response: Response = await fetch('/api/user/sign-up', {
+	const response: Response = await fetch('/api/auth/sign-up', {
 		method: "post",
 		headers: {
 			"Content-Type": "application/json"

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/15 15:08:05 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 00:36:26 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,28 +42,46 @@ fastify.post('/sign-up', async (request, reply) => {
 		reply.code(400).send("The request is empty");
 	try {
 		// surement devoir faire un check si la personne est deja co avec c'est token dans le header
-		const response = await axios.post('https://jwt:3000/test', request.body, { httpsAgent });
+		const response = await axios.post('https://user:3000', request.body, { httpsAgent });
+		
 		// creer jwt, bien pencer a catch les erreurs (suprimer le user si jwt erreur)
-		await axios.get('https://jwt:3000', { httpsAgent } );
-		return reply.status(201).send(response.data);
+		const res = await axios.post('https://jwt:3000', response.data, { httpsAgent, withCredentials: true } )
+			.catch( async (e) => {
+				await axios.delete(`https://user:3000/${response.data.id}`, { httpsAgent });
+				throw e;
+			});
+		
+		if (res.headers['set-cookie'])
+			reply.header('Set-Cookie', res.headers['set-cookie']);
+		
+		return reply.status(201).send(res.data);
 	} catch (error) {
 		// delete user
 		return reply.status(501).send(error);
 	}
 });
 
-fastify.post('/sign-in', async (request, reply) => {
+interface SignInBody {
+	identifier: string;
+	password: string;
+}
+
+fastify.post<{ Body:SignInBody }>('/sign-in', async (request, reply) => {
 	if (!request.body)
 		reply.code(400).send("The request is empty");
 	try {
 		// surement devoir faire un check si la personne est deja co avec c'est token dans le header
 		// recup id
-		const response = await axios.get('https://jwt:3000/test', { httpsAgent });
+		const response = await axios.get(`https://user:3000/`, { httpsAgent }); // request.body.identifier
 		// verify password
-		// if (request.pwd !== password[id])
+		// if (request.body.identifier !== password[response.data.user.id])
 		// 		throw new Error("Wrong password or username.");
 		// creer jwt
-		await axios.get('https://jwt:3000', { httpsAgent });
+		const res = await axios.post('https://jwt:3000', response.data, { httpsAgent, withCredentials: true } );
+		
+		if (res.headers['set-cookie'])
+			reply.header('Set-Cookie', res.headers['set-cookie']);
+		
 		return reply.status(201).send(response.data);
 	} catch (error) {
 		return reply.status(501).send(error);
