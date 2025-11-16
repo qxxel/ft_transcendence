@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/11 19:05:05 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 18:47:19 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 
 	console.log(JSON.stringify({ identifier, password }));
 
-	const response: Response = await fetch('/api/user/sign-in', {
+	const response: Response = await fetch('/api/auth/sign-in', {
 		method: "post",
 		headers: {
 			"Content-Type": "application/json"
@@ -75,7 +75,7 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 	console.log("email: " + email);
 	console.log("password: " + password);
 	console.log(JSON.stringify({ username, email, password }));
-	const response: Response = await fetch('/api/user/sign-up', {
+	const response: Response = await fetch('/api/auth/sign-up', {
 		method: "post",
 		headers: {
 			"Content-Type": "application/json"
