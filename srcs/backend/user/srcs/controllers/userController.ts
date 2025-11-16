@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/16 00:36:44 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 14:27:12 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ import { errorsHandler }				from '../utils/errorsHandler.js';
 
 /* ====================== FUNCTIONS ====================== */
 
-export async function	userController(userFastify: FastifyInstance, options: any) {
+export async function	userController(userFastify: FastifyInstance) {
 	// GET A USER WITH HIS ID
 	userFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const { id } = request.params as { id: string };
