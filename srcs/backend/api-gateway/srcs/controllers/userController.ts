@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/16 14:39:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 17:08:40 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ export async function	gatewayController(gatewayFastify: FastifyInstance, options
 
 			return reply.send(response.data);
 		} catch (err) {
-			gatewayFastify.log.error(err);
-			return reply.status(500).send({ error: 'Failed to reach user service' });
+			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
 	});
 
