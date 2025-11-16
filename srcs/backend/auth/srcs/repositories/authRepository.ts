@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authRepository.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/15 23:14:22 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 22:32:40 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,41 @@ export class	authRepository {
 		}
 	}
 
+	async addClient(id: string, password: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const	query = `INSERT INTO auth (id_client, password) VALUES(?, ?)`;
+			const	elements = [id, password];
+			this.db.run(query, elements, function (err) {
+				if (err)
+					return reject(err);
+				return resolve();
+			});
+		});
+	}
+
+	async getClient(id: string): Promise<string>{
+		return new Promise((resolve, reject) => {
+			const	query = `SELECT * FROM user WHERE id_client = ?`;
+			const	elements = [id];
+			this.db.get(query, elements, (err, row: string) => {
+				if (err)
+					return reject(err);
+				return resolve(row);
+			});
+		});
+	}
+
+	async deleteClient(id: string): Promise<void>{
+		return new Promise((resolve, reject) => {
+			const	query = `DELETE FROM user WHERE id = ?`;
+			const	elements = [id];
+			this.db.run(query, elements, function(err) {
+				if (err)
+					return reject(err);
+				return resolve();
+			});
+		});
+	}
 
 	// GETTER
 	getDb(): Database {

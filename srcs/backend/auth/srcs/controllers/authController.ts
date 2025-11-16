@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/16 18:26:59 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 00:27:18 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,42 @@ import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify';
 
 import { authServ } 	from "../auth.js";
 
-const httpsAgent = new https.Agent({ rejectUnauthorized: false }); // utile si certificat auto-signé
+const auth = axios.create({
+    httpsAgent: new https.Agent({ rejectUnauthorized: false }), // for certificat auto-signé
+    // timeout: 5000,
+});
 
 /* ====================== FUNCTIONS ====================== */
 
+interface SignUpBody {
+	username: string;
+	email: string;
+	password: string;
+}
 
-async function	signUp(request: FastifyRequest, reply: FastifyReply) {
+async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: FastifyReply) {
 	if (!request.body)
-		reply.code(400).send("The request is empty");
+		return reply.code(400).send("The request is empty");
 	try {
 		// surement devoir faire un check si la personne est deja co avec c'est token dans le header
-		const response = await axios.post('https://user:3000', request.body, { httpsAgent });
+		const userRes = await auth.post('https://user:3000', request.body);
 		
-		// creer jwt, bien pencer a catch les erreurs (suprimer le user si jwt erreur)
-		const res = await axios.post('https://jwt:3000', response.data, { httpsAgent, withCredentials: true } )
-			.catch( async (e) => {
-				await axios.delete(`https://user:3000/${response.data.id}`, { httpsAgent });
-				throw e;
-			});
-		
-		if (res.headers['set-cookie'])
-			reply.header('Set-Cookie', res.headers['set-cookie']);
-		
-		return reply.status(201).send(res.data);
+		try {
+			const jwtRes = await auth.post('https://jwt:3000', userRes.data, { withCredentials: true } );
+			
+			await authServ.addClient(userRes.data.id, request.body.password);
+
+			if (jwtRes.headers['set-cookie'])
+				reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
+			
+			return reply.status(201).send(jwtRes.data);
+		} catch (error) {
+			await auth.delete(`https://user:3000/${userRes.data.id}`);
+			throw error;
+		}
 	} catch (error) {
-		// delete user
-		return reply.status(501).send(error);
+		console.error(error instanceof Error ? error.message : error);
+		return reply.code(400).send(error instanceof Error ? error.message : error);
 	}
 }
 
@@ -55,40 +65,36 @@ interface SignInBody {
 	password: string;
 }
 
-async function	signIn(request: FastifyRequest<{ Body:SignInBody }>, reply: FastifyReply) {
+async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: FastifyReply) {
 	if (!request.body)
-		reply.code(400).send("The request is empty");
+		return reply.code(400).send("The request is empty");
+
+	const { identifier, password } = request.body;
+	
 	try {
 		// surement devoir faire un check si la personne est deja co avec c'est token dans le header
 		// recup id
-		console.log(request.body.identifier);
-		const response = await axios.get(`https://user:3000/lookup/${request.body.identifier}`, { httpsAgent }); // request.body.identifier
+		const userRes = await auth.get(`https://user:3000/lookup/${identifier}`);
+		
 		// verify password
-		// if (request.body.identifier !== password[response.data.user.id])
-		// 		throw new Error("Wrong password or username.");
+		const pwd = await authServ.getClient(userRes.data.id);
+		if (password !== pwd)
+			throw new Error("Wrong password or username.");
+
 		// creer jwt
-		const res = await axios.post('https://jwt:3000', response.data, { httpsAgent, withCredentials: true } );
+		const jwtRes = await auth.post('https://jwt:3000', userRes.data, { withCredentials: true } );
 		
-		if (res.headers['set-cookie'])
-			reply.header('Set-Cookie', res.headers['set-cookie']);
+		if (jwtRes.headers['set-cookie'])
+			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
 		
-		return reply.status(201).send(response.data);
+		return reply.status(201).send(jwtRes.data); // faut renvoyer quoi ?? userRes.data | jwtRes.data | autre ?
 	} catch (error) {
-		return reply.status(501).send(error);
+		console.error(error instanceof Error ? error.message : error);
+		return reply.code(400).send(error instanceof Error ? error.message : error);
 	}
 }
 
 export async function	authController(authFastify: FastifyInstance) {
-
-	authFastify.post('/sign-up', async (request, reply) => {
-		return await signUp(request, reply);
-	});
-
-	authFastify.post<{ Body:SignInBody }>('/sign-in', async (request, reply) => {
-		return await signIn(request, reply);
-	});
-
-	authFastify.get('/', async (request, reply) => {
-		return { message: "Hello auth!" };
-	});
+	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
+	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
 }
