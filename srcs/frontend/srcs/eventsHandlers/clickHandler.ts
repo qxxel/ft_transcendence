@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/16 18:04:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 19:51:38 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,12 @@ async function onClickGetMessage(): Promise<void> {
 		headers: {
 			"Content-Type": "application/json"
 		},
-		body: JSON.stringify({ message: "cookie created." })
+		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
 	});
 	const data = await res.json();
 	console.log(data);
 }
+
 
 async function onClickValidateMessage(): Promise<void> {
 	const res = await fetch('/api/jwt/validate', {
@@ -81,17 +82,32 @@ async function onClickValidateMessage(): Promise<void> {
 		headers: {
 			"Content-Type": "application/json"
 		},
-		body: JSON.stringify({ message: "valid." })
+		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
 	});
 	const data = await res.json();
 	console.log(data);
 }
+
+async function onClickRefreshMessage(): Promise<void> {
+	const res = await fetch('/api/jwt/refresh', {
+		method: "post",
+		credentials: "include",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
+	});
+	const data = await res.json();
+	console.log(data);
+}
+
 
 export async function	setupClickHandlers(router: Router, user: User, currentGame: PongGame | null): Promise<void> {
 	(window as any).onClickPlay = () => onClickPlay(router, currentGame, user);
 	(window as any).onClickLogout = () => onClickLogout(router, currentGame, user);
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;
+	(window as any).onClickRefreshMessage = onClickRefreshMessage;
 	
 	document.addEventListener('click', (event) => {
 		const target = event.target as HTMLAnchorElement;
