@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/16 18:32:08 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 19:59:17 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ async function	jwtGenerate(user: userDto, exp: string): Promise<string> {
 function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string) {
 	reply.header(
 		"Set-Cookie",
-		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=10; path=/api/jwt/`
+		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=10; path=/api/jwt/validate`
 	);
 }
 
@@ -139,29 +139,47 @@ jwtFastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
 		const user: userDto = request.body as userDto;
 
 		await addJWT(reply, user);
-console.log(user);
+
 		return reply.status(201).send(user);
 	} catch (error) {
 		console.log(error);
 		reply.status(500).send(error);
 	}
-	return { message: "Hello World!"};
 });
 
 jwtFastify.get('/validate', async (request: FastifyRequest, reply: FastifyReply) => {
 	try {
 		const cookies = getCookies(request);
+		const { payload, protectedHeader } = await jose.jwtVerify(cookies.jwtAccess, jwtSecret);
 
-		console.log("cookies1:" + request.headers.cookie)
-		console.log("cookies2:" + cookies.jwtAccess)
-		
+		return reply.status(201).send({ result: "valid." });
+	} catch (err) {
+		if (err instanceof jose.errors.JOSEError)
+			return reply.status(401).send(err);
 
-		return reply.status(201).send();
-	} catch (error) {
-		console.log(error);
-		reply.status(500).send(error);
+		console.log(err);
+		reply.status(500).send(err);
 	}
-	return { message: "Hello World!"};
+});
+
+jwtFastify.post('/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
+	try {
+		const cookies = getCookies(request);
+
+		const { payload, protectedHeader } = await jose.jwtVerify(cookies.jwtRefresh, jwtSecret);
+
+		const user: userDto = request.body as userDto;
+		const jwtAccess: string = await jwtGenerate(user, expAccess);
+		setCookiesAccessToken(reply, jwtAccess);
+
+		return reply.status(201).send({ result: "ok" });
+	} catch (err) {
+		if (err instanceof jose.errors.JOSEError)
+			return reply.status(401).send(err);
+
+		console.log(err);
+		reply.status(500).send(err);
+	}
 });
 
 

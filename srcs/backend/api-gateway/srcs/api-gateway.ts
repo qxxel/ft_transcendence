@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/16 18:18:19 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 19:57:25 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,46 +91,34 @@ gatewayFastify.post('/api/jwt', async (request, reply) => {
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
 
-		console.log(response.headers['set-cookie']);
-		// const setCookies = response.headers['set-cookie'];
-		// if (setCookies){
-		// 	setCookies.forEach(cookie => reply.header('Set-Cookie', cookie));
-		// 	console.log(setCookies);
-		// }
-
 		reply.send(response.data);
 	} catch (err) {
 		return requestErrorsHandler(gatewayFastify, reply, err);
-		// gatewayFastify.log.error(err);
-		// console.log((err as any).message);
-		// console.log(err);
-
-		// reply.status(500).send({ error: 'Failed to reach auth service' });
 	}
 });
 
 gatewayFastify.post('/api/jwt/validate', async (request, reply) => {
 	try {
-		console.log("cookies:" + request.headers.cookie);
 		const response = await axios.get('https://jwt:3000/validate', { httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		reply.send(response.data);
 	} catch (err) {
-		gatewayFastify.log.error(err);
-
-		reply.status(500).send({ error: 'Failed to reach auth service' });
+		return requestErrorsHandler(gatewayFastify, reply, err);
 	}
 });
 
-// gatewayFastify.post('/api/jwt/refresh', async (request, reply) => {
-//   try {
-// 	const response = await axios.get('https://jwt:3000/refresh', { httpsAgent });
-//     reply.send(response.data);
-//   } catch (err) {
-//     gatewayFastify.log.error(err);
-//     reply.status(500).send({ error: 'Failed to reach auth service' });
-//   }
-// });
+gatewayFastify.post('/api/jwt/refresh', async (request, reply) => {
+	try {
+		const response = await axios.post('https://jwt:3000/refresh', request.body, { httpsAgent,withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+
+		if (response.headers['set-cookie'])
+			reply.header('Set-Cookie', response.headers['set-cookie']);
+
+		reply.send(response.data);
+	} catch (err) {
+		return requestErrorsHandler(gatewayFastify, reply, err);
+	}
+});
 
 
 
