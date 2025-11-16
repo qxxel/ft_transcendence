@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/13 20:52:45 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 18:04:48 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,27 @@ async function	onClickLogout(router: Router, currentGame: PongGame | null, user:
 }
 
 async function onClickGetMessage(): Promise<void> {
-	const res = await fetch('/api/user');
+	const res = await fetch('/api/jwt', {
+		method: "post",
+		credentials: "include",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({ message: "cookie created." })
+	});
+	const data = await res.json();
+	console.log(data);
+}
+
+async function onClickValidateMessage(): Promise<void> {
+	const res = await fetch('/api/jwt/validate', {
+		method: "post",
+		credentials: "include",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({ message: "valid." })
+	});
 	const data = await res.json();
 	console.log(data);
 }
@@ -71,6 +91,7 @@ export async function	setupClickHandlers(router: Router, user: User, currentGame
 	(window as any).onClickPlay = () => onClickPlay(router, currentGame, user);
 	(window as any).onClickLogout = () => onClickLogout(router, currentGame, user);
 	(window as any).onClickGetMessage = onClickGetMessage;
+	(window as any).onClickValidateMessage = onClickValidateMessage;
 	
 	document.addEventListener('click', (event) => {
 		const target = event.target as HTMLAnchorElement;
