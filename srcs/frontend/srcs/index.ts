@@ -50,7 +50,7 @@ function  pathActions(currentPath: string) {
   }
 
   if (['/tank'].includes(currentPath)) {
-    var currentTank = new TankGame('pong-canvas', 1);
+    var currentTank = new TankGame('pong-canvas', 'desertfox', 4);
     currentTank.start();
   }
 }
