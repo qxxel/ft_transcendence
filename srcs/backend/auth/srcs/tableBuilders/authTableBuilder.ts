@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authTableBuilder.ts                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:03:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/15 23:07:46 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 17:36:05 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

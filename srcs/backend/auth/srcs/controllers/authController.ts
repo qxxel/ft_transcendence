@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 16:12:56 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:36:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 import axios from 'axios';
 import https from 'https';
+import argon2 from "argon2";
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify';
 
@@ -28,6 +29,17 @@ const auth = axios.create({
 
 /* ====================== FUNCTIONS ====================== */
 
+async function isLoggedIn(cookie: string | undefined) {
+	try {
+		const res = await auth.get("https://jwt:3000/validate", { withCredentials: true, headers: { Cookie: cookie || "" } });
+		return (res.status === 200);
+	} catch (error: any) {
+		if (error.response?.status === 401)
+			return false;
+		throw error;
+	}
+}
+
 interface SignUpBody {
 	username: string;
 	email: string;
@@ -35,23 +47,31 @@ interface SignUpBody {
 }
 
 async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: FastifyReply) {
-	if (!request.body)
-		return reply.code(400).send({ error: "The request is empty" });
 	try {
-		// surement devoir faire un check si la personne est deja co avec c'est token dans le header
+		if (!request.body)
+			throw new Error("The request is empty");
+
+		if (await isLoggedIn(request.headers.cookie))
+			throw new Error("You are already connected");
+		
 		const userRes = await auth.post('https://user:3000', request.body);
+		const user = userRes.data;
 		
 		try {
-			const jwtRes = await auth.post('https://jwt:3000', userRes.data, { withCredentials: true } );
+			const jwtRes = await auth.post('https://jwt:3000', user, { withCredentials: true } );
 			
-			await authServ.addClient(userRes.data.id, request.body.password);
+			const hash = await argon2.hash(request.body.password);
+			await authServ.addClient(user.id, hash);
 
 			if (jwtRes.headers['set-cookie'])
 				reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
-			
-			return reply.status(201).send(jwtRes.data);
+
+			return reply.status(201).send({
+				id: user.id,
+				username: user.username
+			});
 		} catch (error) {
-			await auth.delete(`https://user:3000/${userRes.data.id}`);
+			await auth.delete(`https://user:3000/${user.id}`);
 			throw error;
 		}
 	} catch (error) {
@@ -66,28 +86,35 @@ interface SignInBody {
 }
 
 async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: FastifyReply) {
-	if (!request.body)
-		return reply.code(400).send({ error: "The request is empty" });
-
-	const { identifier, password } = request.body;
-	
 	try {
-		// surement devoir faire un check si la personne est deja co avec c'est token dans le header
-		// recup id
-		const userRes = await auth.get(`https://user:3000/lookup/${identifier}`);
+		if (!request.body)
+			throw new Error("The request is empty");
+
+		const { identifier, password } = request.body;
+
+		if (await isLoggedIn(request.headers.cookie))
+			throw new Error("You are already connected");
 		
-		// verify password
-		const pwd = await authServ.getClient(userRes.data.id);
-		if (password !== pwd)
+		const userRes = await auth.get(`https://user:3000/lookup/${identifier}`);
+		const user = userRes.data;
+		
+		if (!user)
 			throw new Error("Wrong password or username.");
 
-		// creer jwt
-		const jwtRes = await auth.post('https://jwt:3000', userRes.data, { withCredentials: true } );
+		const pwdHash = await authServ.getClient(user.id);
+		const pwdIsValid = await argon2.verify(pwdHash, password);
+		if (!pwdIsValid)
+			throw new Error("Wrong password or username.");
+
+		const jwtRes = await auth.post('https://jwt:3000', user, { withCredentials: true } );
 		
 		if (jwtRes.headers['set-cookie'])
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
 		
-		return reply.status(201).send(jwtRes.data); // faut renvoyer quoi ?? userRes.data | jwtRes.data | autre ?
+		return reply.status(201).send({
+			id: user.id,
+			username: user.username
+		});
 	} catch (error) {
 		console.error(error instanceof Error ? error.message : error);
 		return reply.code(400).send(error instanceof Error ? error.message : error);
