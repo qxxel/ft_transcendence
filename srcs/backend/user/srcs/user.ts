@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/16 00:19:28 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/16 22:10:33 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ import { userRepository }	from './repositories/userRepository.js';
 
 const			{ Database } = sqlite3Pkg;
 const			dbname = '/app/dist/db/user.db';
-export const	db = new Database(dbname, (err: Error | null) => {
+const	db = new Database(dbname, (err: Error | null) => {
 	if (err)
 		console.error(err);
 

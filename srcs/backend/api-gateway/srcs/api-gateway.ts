@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/16 19:57:25 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 16:01:29 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,39 +46,39 @@ gatewayFastify.register(gatewayController, { prefix: '/api/user', httpsAgent: ht
 
 gatewayFastify.get('/api/auth', async (request, reply) => {
 	try {
-	const response = await axios.get('https://auth:3000', { httpsAgent });
-	reply.send(response.data);
+		const response = await axios.get('https://auth:3000', { httpsAgent });
+		reply.send(response.data);
 	} catch (err) {
-	gatewayFastify.log.error(err);
-	reply.status(500).send({ error: 'Failed to reach auth service' });
+		gatewayFastify.log.error(err);
+		reply.status(500).send({ error: 'Failed to reach auth service' });
 	}
 });
 
 gatewayFastify.post('/api/auth/sign-up', async (request, reply) => {
 	try {
-	const response = await axios.post('https://auth:3000/sign-up', request.body, { httpsAgent });
-	
-	if (response.headers['set-cookie'])
-		reply.header('Set-Cookie', response.headers['set-cookie']);
-	
-	reply.send(response.data);
+		const response = await axios.post('https://auth:3000/sign-up', request.body, { httpsAgent });
+		
+		if (response.headers['set-cookie'])
+			reply.header('Set-Cookie', response.headers['set-cookie']);
+		
+		reply.send(response.data);
 	} catch (err) {
-	gatewayFastify.log.error(err);
-	reply.status(500).send({ error: 'Failed to reach auth service' });
+		gatewayFastify.log.error(err);
+		reply.status(500).send({ error: 'Failed to reach auth service' });
 	}
 });
 
 gatewayFastify.post('/api/auth/sign-in', async (request, reply) => {
 	try {
-	const response = await axios.post('https://auth:3000/sign-in', request.body, { httpsAgent, withCredentials: true });
-	
-	if (response.headers['set-cookie'])
-			reply.header('Set-Cookie', response.headers['set-cookie']);
+		const response = await axios.post('https://auth:3000/sign-in', request.body, { httpsAgent, withCredentials: true });
+		
+		if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);
 
-	reply.send(response.data);
+		reply.send(response.data);
 	} catch (err) {
-	gatewayFastify.log.error(err);
-	reply.status(500).send({ error: 'Failed to reach auth service' });
+		gatewayFastify.log.error(err);
+		reply.status(500).send({ error: 'Failed to reach auth service' });
 	}
 });
 

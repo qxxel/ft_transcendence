@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/16 15:42:46 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 16:24:04 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ import { authRepository }	from "./repositories/authRepository.js"
 
 const			{ Database } = sqlite3Pkg;
 const			dbname = '/app/dist/db/auth.db';
-export const	db = new Database(dbname, (err: Error | null) => {
+const	db = new Database(dbname, (err: Error | null) => {
 	if (err)
 		console.error(err);
 

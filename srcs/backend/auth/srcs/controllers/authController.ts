@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 00:27:18 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 16:12:56 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify';
 import { authServ } 	from "../auth.js";
 
 const auth = axios.create({
-    httpsAgent: new https.Agent({ rejectUnauthorized: false }), // for certificat auto-signé
-    // timeout: 5000,
+	httpsAgent: new https.Agent({ rejectUnauthorized: false }), // for certificat auto-signé
+	// timeout: 1000,
 });
 
 /* ====================== FUNCTIONS ====================== */
@@ -36,7 +36,7 @@ interface SignUpBody {
 
 async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: FastifyReply) {
 	if (!request.body)
-		return reply.code(400).send("The request is empty");
+		return reply.code(400).send({ error: "The request is empty" });
 	try {
 		// surement devoir faire un check si la personne est deja co avec c'est token dans le header
 		const userRes = await auth.post('https://user:3000', request.body);
@@ -67,7 +67,7 @@ interface SignInBody {
 
 async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: FastifyReply) {
 	if (!request.body)
-		return reply.code(400).send("The request is empty");
+		return reply.code(400).send({ error: "The request is empty" });
 
 	const { identifier, password } = request.body;
 	
