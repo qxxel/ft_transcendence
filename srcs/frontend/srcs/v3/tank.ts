@@ -4,6 +4,8 @@ import { GSTATE } from "./global.js";
 import { Tank } from "./class_tank.js";
 import { Map } from "./class_map.js";
 import { Ball } from "./class_ball.js";
+import { Color } from "./class_color.js";
+import { Keys } from "./class_keys.js";
 
 export class TankGame {
 
@@ -29,20 +31,32 @@ export class TankGame {
     this.input = new Input();
     this.map = new Map(this.canvas.width, this.canvas.height, 2, map_name);
 
+    let colors: Color[] = [];
+    colors.push( {r:255,g:255,b:0} );
+    colors.push( {r:255,g:0,b:255} );
+    colors.push( {r:0,g:255,b:255} );
+    colors.push( {r:255,g:255,b:255} );
+
+    let keys: Keys[] = [];
+    keys.push( {up:'w',down:'s',left:'a',right:'d',rot_left:'q',rot_right:'e',fire:' '} );
+    keys.push( {up:'i',down:'k',left:'j',right:'l',rot_left:'u',rot_right:'o',fire:'z'} );
+    keys.push( {up:'', down:'', left:'', right:'', rot_left:'', rot_right:'', fire:'x'} );
+    keys.push( {up:'', down:'', left:'', right:'', rot_left:'', rot_right:'', fire:'c'} );
+
+    let tank_width:number = 25;
+    let tank_height:number = 25;
+
     if (map_name == 'desertfox')
     {
       for (let i = 0; i < nplayer; ++i)
       {
-        const spawnX = this.map.spawns[i].x;
-        const spawnY = this.map.spawns[i].y;
         GSTATE.ACTORS.push(
-          new Tank(spawnX,spawnY,25,25, {r:0,g:255,b:0},
-            {up:"w",down:"s",left:"a",right:"d",rot_left:"q",rot_right:"e",fire:" "}));
+          new Tank(this.map.spawns[i].x, this.map.spawns[i].y, tank_width, tank_height, {r:0,g:255,b:0}, colors[i], keys[i]));
       }
     }
     else {
         GSTATE.ACTORS.push(
-          new Tank(16,16,25,25, {r:0,g:255,b:0},
+          new Tank(16,16,25,25, {r:0,g:255,b:0},{r:0,g:255,b:0},
             {up:"w",down:"s",left:"a",right:"d",rot_left:"q",rot_right:"e",fire:" "}));
     }
       // GSTATE.ACTORS.push(
@@ -50,7 +64,7 @@ export class TankGame {
             // {up:"i",down:"k",left:"j",right:"l",fire:"u"}));
 
       // GSTATE.ACTORS.push(
-      //   new Ball(450,16,15,15,3.5,7,
+      //   new Ball(450,16,16,16,3.5,7,
       //     {r:255,g:0,b:0}));
 
   }

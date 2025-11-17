@@ -36,10 +36,10 @@ export class Map {
   generate_fy_snow(): void {
     console.log("generate_fy_snow()");
 
-    this.walls.push(new Wall(0, 0, 15, this.map_height, {r:0,g:0,b:255}));                    // EXTERIOR LEFT
-    this.walls.push(new Wall(this.map_width - 15, 0, 15, this.map_height, {r:0,g:0,b:255}));  // EXTERIOR RIGHT
-    this.walls.push(new Wall(0, 0, this.map_width, 15, {r:0,g:0,b:255}));                     // EXTERIOR TOP
-    this.walls.push(new Wall(0, this.map_height - 15, this.map_width, 15, {r:0,g:0,b:255}));       // EXTERIOR BOT
+    this.walls.push(new Wall(0, 0, 16, this.map_height, {r:0,g:0,b:255}));                    // EXTERIOR LEFT
+    this.walls.push(new Wall(this.map_width - 16, 0, 16, this.map_height, {r:0,g:0,b:255}));  // EXTERIOR RIGHT
+    this.walls.push(new Wall(0, 0, this.map_width, 16, {r:0,g:0,b:255}));                     // EXTERIOR TOP
+    this.walls.push(new Wall(0, this.map_height - 16, this.map_width, 16, {r:0,g:0,b:255}));       // EXTERIOR BOT
 
     this.walls.push(new Wall(this.map_width / 5, this.map_height / 5, this.map_width / 7, this.map_height / 7, {r:0,g:0,b:255}));     // CUBE TOP LEFT
     this.walls.push(new Wall(this.map_width / 1.5, this.map_height / 5, this.map_width / 7, this.map_height / 7, {r:0,g:0,b:255}));   // CUBE TOP RIGHT
@@ -58,7 +58,7 @@ export class Map {
     const c_blk1 = {r:84,g:60,b:44};
     const c_blk2 = {r:223,g:145,b:94};
 
-    const ext_width = 15;
+    const ext_width = 16;
     const cell =  this.map_height/10; // IDK AM I DUMB
 
 
@@ -114,15 +114,15 @@ export class Map {
       GSTATE.ACTORS.push(w);
     }
 
-    // this.walls.push(new Wall(cell*2.5 - 15/2, cell*1.5- 15/2, 15,15,   {r:255,g:0,b:0}));   // a
-    // this.walls.push(new Wall(cell*1.5 - 15/2, cell*7.5- 15/2, 15,15,   {r:255,g:0,b:0}));   // b
-    // this.walls.push(new Wall(cell*8.5 - 15/2, cell*2.5- 15/2, 15,15,   {r:255,g:0,b:0}));   // c
-    // this.walls.push(new Wall(cell*7.5 - 15/2, cell*8.5- 15/2, 15,15,   {r:255,g:0,b:0}));   // d
+    // this.walls.push(new Wall(cell*2.5 - 16/2, cell*1.5- 16/2, 16,16,   {r:255,g:0,b:0}));   // a
+    // this.walls.push(new Wall(cell*1.5 - 16/2, cell*7.5- 16/2, 16,16,   {r:255,g:0,b:0}));   // b
+    // this.walls.push(new Wall(cell*8.5 - 16/2, cell*2.5- 16/2, 16,16,   {r:255,g:0,b:0}));   // c
+    // this.walls.push(new Wall(cell*7.5 - 16/2, cell*8.5- 16/2, 16,16,   {r:255,g:0,b:0}));   // d
     
-      this.spawns.push({x:cell*2.5 - 15/2,y:cell*1.5- 15/2}); // a
-      this.spawns.push({x:cell*1.5 - 15/2,y:cell*7.5- 15/2}); // b
-      this.spawns.push({x:cell*8.5 - 15/2,y:cell*2.5- 15/2}); // c
-      this.spawns.push({x:cell*7.5 - 15/2,y:cell*8.5- 15/2}); // d
+      this.spawns.push({x:cell*2.5 - 16/2,y:cell*1.5- 16/2}); // a
+      this.spawns.push({x:cell*1.5 - 16/2,y:cell*7.5- 16/2}); // b
+      this.spawns.push({x:cell*8.5 - 16/2,y:cell*2.5- 16/2}); // c
+      this.spawns.push({x:cell*7.5 - 16/2,y:cell*8.5- 16/2}); // d
   }
     generate_default(): void {
     console.log("generate_default()");

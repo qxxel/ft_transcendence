@@ -20,7 +20,8 @@ export class Ball extends Actor {
     public h:number,
     public dx:number,
     public dy:number,
-    public color:Color,) {
+    public color:Color,
+    public author?:Tank) {
     super(x,y)
     this.rect = new Rect2D(this.x, this.y, this.w, this.h);
     console.log("C Ball at x:", x, "y:", y);
@@ -76,7 +77,7 @@ export class Ball extends Actor {
   collide(rect1: Rect2D) {
 
     for (let a of GSTATE.ACTORS) {
-      if (a == this ) continue;
+      if (a == this || a == this.author) continue;
       if (a.getRect().collide(rect1))
       {
         if (a instanceof Tank) {
