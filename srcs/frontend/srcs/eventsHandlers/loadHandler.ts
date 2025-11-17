@@ -6,16 +6,19 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/11 14:59:40 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:59:38 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// CONTAINS FUNCTION THAT HANDLE THE LOAD OF THE PAGE
+
+
 /* ====================== IMPORTS ====================== */
 
-import { User } from "../user/user.js";
-import { router } from "../index.js";
-import { GameState } from "../index.js";
-import { PongGame } from "../game/game.js";
+import { User }				from "../user/user.js";
+import { router }			from "../index.js";
+
+import type { GameState }	from "../index.js";
 
 /* ====================== FUNCTIONS ====================== */
 

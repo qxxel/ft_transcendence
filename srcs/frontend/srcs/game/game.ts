@@ -1,3 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game.ts                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/17 20:59:58 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/17 21:00:41 by agerbaud         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// A CLASS THAT CONTAINS ALL THE GAME METHODS
+
+
+/* ====================== INTERFACES ====================== */
+
 interface Paddle {
 	x: number;
 	y: number;
@@ -16,6 +33,9 @@ interface Ball {
 	dy: number;
 	speed: number;
 }
+
+
+/* ====================== CLASS ====================== */
 
 export class PongGame {
 	private canvas: HTMLCanvasElement | null = null;

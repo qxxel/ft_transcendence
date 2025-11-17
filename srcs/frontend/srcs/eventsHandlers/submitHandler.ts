@@ -3,20 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 18:45:10 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:58:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// CONTAINS FUNCTION THAT HANDLE EVERY SUBMITS
 
 
 /* ====================== IMPORTS ====================== */
 
-import { User } from "../user/user.js";
-import { router } from "../index.js";
-import { GameState } from "../index.js";
-import { PongGame } from "../game/game.js";
+import { User }				from "../user/user.js";
+import { router }			from "../index.js";
+
+import type { GameState }	from "../index.js";
 
 
 /* ====================== FUNCTIONS ====================== */

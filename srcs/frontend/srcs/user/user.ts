@@ -6,17 +6,19 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 12:01:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/05 12:02:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 21:03:34 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// USER CLASS WHO CONTAINS ALL THE CRUCIALS INFO OF THE CLIENT HIMSELF
 
 
 /* ====================== CLASS ====================== */
 
 export class User {
 	private	signedIn: boolean;
-	private	id?: number;
-	private	username?: string;
+	private	id: number | undefined;
+	private	username: string | undefined;
 
 	constructor() {
 		this.signedIn = false;
@@ -33,19 +35,23 @@ export class User {
 	}
 
 	getUsername(): string | undefined {
-		if (this.username)
-			return this.username;
+		return this.username;
 	}
 
-	setSigned(bool: boolean) {
+	getId(): number | undefined {
+		return this.id;
+	}
+
+
+	setSigned(bool: boolean): void {
 		this.signedIn = bool;
 	}
 
-	setUsername(username: string) {
+	setUsername(username: string): void {
 		this.username = username;
 	}
 
-	setId(id: number) {
+	setId(id: number): void {
 		this.id = id;
 	}
 }

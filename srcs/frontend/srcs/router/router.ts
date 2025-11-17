@@ -6,15 +6,19 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/11 17:07:05 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 21:02:49 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// CLASS WHO ROUTE FOR THE SINGLE PAGE APPLICATION (SPA)
+
 
 /* ====================== IMPORT ====================== */
 
 import { User }			from '../user/user.js';
 import { pathActions }	from './navigationUtils.js'
-import { GameState }	from '../index.js'
+
+import type { GameState }	from '../index.js'
 
 
 /* ====================== INTERFACE ====================== */
