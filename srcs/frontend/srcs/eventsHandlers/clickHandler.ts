@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 21:49:29 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 22:11:47 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 /* ====================== IMPORTS ====================== */
 
-import axios				from 'axios'
 import { Router }			from "../router/router.js"
 import { User }				from "../user/user.js"
 
@@ -32,53 +31,73 @@ function onClickPlay(router: Router, gameState: GameState, user: User): void {
 }
 
 async function	onClickLogout(router: Router, gameState: GameState, user: User): Promise<void> {
-	try {
-		const response = await axios.post('/api/auth/logout', { withCredentials: true });
+	const response = await fetch('/api/auth/logout', {
+		method: 'POST',
+		credentials: 'include'
+	});
 
-		user.logout();
+	if (!response.ok)
+		throw new Error('Logout failed');
 
-		var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
-		if (menu)
-			menu.innerHTML =
-				`<nav>
-					<a href="/">Home</a> | 
-					<a href="/about">About</a> | 
-					<a href="/settings">Settings</a> |
-					<a href="/sign-in">Sign in</a> |
-					<a href="/sign-up">Sign up</a> |
-					<a href="/game-menu">Play</a>
-				</nav>`;
+	user.logout();
 
+	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	if (menu)
+		menu.innerHTML =
+			`<nav>
+				<a href="/">Home</a> | 
+				<a href="/about">About</a> | 
+				<a href="/settings">Settings</a> |
+				<a href="/sign-in">Sign in</a> |
+				<a href="/sign-up">Sign up</a> |
+				<a href="/game-menu">Play</a>
+			</nav>`;
 
-		router.navigate("/", gameState, user);
-	} catch (err) {
-		console.error("Error during logout:", err);
-	}
+	router.navigate("/", gameState, user);
 }
 
 async function onClickGetMessage(): Promise<void> {
-	const response = await axios.post('/api/jwt',
-		{ id: 1, username: "mreynaud", email: "mreynaud@42.fr" },
-		{ withCredentials: true }
-	);
-	console.log(response.data);
+	const res = await fetch('/api/jwt', {
+		method: "post",
+		credentials: "include",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
+	});
+
+	const data = await res.json();
+	console.log(data);
 }
 
 
 async function onClickValidateMessage(): Promise<void> {
-	const response = await axios.post('/api/jwt/validate',
-		{ id: 1, username: "mreynaud", email: "mreynaud@42.fr" },
-		{ withCredentials: true }
-	);
-	console.log(response.data);
+	const res = await fetch('/api/jwt/validate', {
+		method: "post",
+		credentials: "include",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
+	});
+
+	const data = await res.json();
+	console.log(data);
 }
 
 async function onClickRefreshMessage(): Promise<void> {
-	const response = await axios.post('/api/jwt/refresh',
-		{ id: 1, username: "mreynaud", email: "mreynaud@42.fr" },
-		{ withCredentials: true }
-	);
-	console.log(response.data);
+	
+	const res = await fetch('/api/jwt/refresh', {
+		method: "post",
+		credentials: "include",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
+	});
+
+	const data = await res.json();
+	console.log(data);
 }
 
 
