@@ -6,21 +6,21 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 18:03:42 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:26:04 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // HANDLE THE ALL THE REQUEST THAT API GATEWAY RECEIVE FROM `/api/user`
 
 
-/* ====================== IMPORT ====================== */
+/* ====================== IMPORTS ====================== */
 
-import axios	from 'axios';
-import https	from 'https';
+import axios    from 'axios';
+import https    from 'https';
 
-import type { FastifyInstance }	from 'fastify';
+import type { FastifyInstance }    from 'fastify';
 
-import { requestErrorsHandler }	from "../utils/requestErrors.js";
+import { requestErrorsHandler }    from "../utils/requestErrors.js";
 
 
 /* ====================== FUNCTION ====================== */
