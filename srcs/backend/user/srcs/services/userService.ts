@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/16 00:39:34 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:37:20 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ export class	userService {
 
 		return await this.userRepo.getUserById(userId);
 	}
-	
+
 	async getUserByUsername(username: string): Promise<userRespDto> {
 		const	existQuery = `SELECT 1 FROM user WHERE username = ? LIMIT 1`;
 		if (await isTaken(this.userRepo.getDb(), existQuery, [username]))

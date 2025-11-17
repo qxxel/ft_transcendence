@@ -6,11 +6,11 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:49:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/14 21:09:00 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:44:46 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// FILE TO DEFINE ALL THROW ERRORS
+// FILE TO DEFINE ALL THROW ERRORS FOR USER SERVICE
 
 
 /* ====================== CLASS ====================== */
