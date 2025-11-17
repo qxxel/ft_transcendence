@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   userController.ts                                  :+:      :+:    :+:   */
+/*   gatewayUserController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/16 17:08:40 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:03:42 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// HANDLE THE ALL THE REQUEST THAT API GATEWAY RECEIVE
+// HANDLE THE ALL THE REQUEST THAT API GATEWAY RECEIVE FROM `/api/user`
 
 
 /* ====================== IMPORT ====================== */
@@ -18,14 +18,14 @@
 import axios	from 'axios';
 import https	from 'https';
 
-import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify';
+import type { FastifyInstance }	from 'fastify';
 
 import { requestErrorsHandler }	from "../utils/requestErrors.js";
 
 
-/* ====================== FUNCTIONS ====================== */
+/* ====================== FUNCTION ====================== */
 
-export async function	gatewayController(gatewayFastify: FastifyInstance, options: { httpsAgent: https.Agent }) {
+export async function	gatewayUserController(gatewayFastify: FastifyInstance, options: { httpsAgent: https.Agent }) {
 	const { httpsAgent } = options;
 
 	gatewayFastify.get('/', async (request, reply) => {
