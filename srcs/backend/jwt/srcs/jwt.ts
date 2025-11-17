@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwt.ts                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/17 20:12:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 21:34:25 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ import { jwtRepository }	from './repositories/jwtRepository.js';
 
 /* ====================== TOKENS VARIABLES ====================== */
 
-export const	expAccess = "10s";
-export const	expRefresh = "1min";
+export const	expAccess = "1000s";
+export const	expRefresh = "10000s";
 
 export const	jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET);
 

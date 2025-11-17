@@ -6,15 +6,17 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:00:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/11 17:05:07 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 21:01:12 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// ADD ALL ROUTES IN THE 'HOMEMADE' ROUTER
 
 
 /* ====================== IMPORTS ====================== */
 
-import { router } from "../index.js";
-import { loadHtml } from './loadHtml.js'
+import { router }	from "../index.js";
+import { loadHtml }	from "./loadHtml.js"
 
 
 /* ====================== FUNCTIONS ====================== */

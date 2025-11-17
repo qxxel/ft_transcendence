@@ -6,18 +6,22 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 21:32:51 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 21:46:49 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// CONTAINS FUNCTION THAT HANDLE EVERY CLICKS
 
 
 /* ====================== IMPORTS ====================== */
 
-import { Router } from '../router/router.js'
-import { User } from '../user/user.js'
-import { PongGame } from '../game/game.js'
-import { GameState } from '../index.js';
+import axios				from 'axios'
+import { Router }			from "../router/router.js"
+import { User }				from "../user/user.js"
 
+import { httpsAgent }	from "../index.js"
+
+import type { GameState }	from "../index.js"
 
 /* ====================== FUNCTIONS ====================== */
 
@@ -30,18 +34,7 @@ function onClickPlay(router: Router, gameState: GameState, user: User): void {
 
 async function	onClickLogout(router: Router, gameState: GameState, user: User): Promise<void> {
 	try {
-		const response = await fetch('/api/auth/logout', {
-			method: 'POST',
-			credentials: 'include',
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({ logout: 1 })
-		});
-		
-		if (!response.ok) {
-			throw new Error('Logout failed');
-		}
+		const response = await axios.post('/api/auth/logout', { httpsAgent, withCredentials: true });
 
 		user.logout();
 
@@ -65,43 +58,28 @@ async function	onClickLogout(router: Router, gameState: GameState, user: User): 
 }
 
 async function onClickGetMessage(): Promise<void> {
-	const res = await fetch('/api/jwt', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
-	});
-	const data = await res.json();
-	console.log(data);
+	const response = await axios.post('/api/jwt',
+		{ id: 1, username: "mreynaud", email: "mreynaud@42.fr" },
+		{ httpsAgent, withCredentials: true }
+	);
+	console.log(response.data);
 }
 
 
 async function onClickValidateMessage(): Promise<void> {
-	const res = await fetch('/api/jwt/validate', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
-	});
-	const data = await res.json();
-	console.log(data);
+	const response = await axios.post('/api/jwt/validate',
+		{ id: 1, username: "mreynaud", email: "mreynaud@42.fr" },
+		{ httpsAgent, withCredentials: true }
+	);
+	console.log(response.data);
 }
 
 async function onClickRefreshMessage(): Promise<void> {
-	const res = await fetch('/api/jwt/refresh', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
-	});
-	const data = await res.json();
-	console.log(data);
+	const response = await axios.post('/api/jwt/refresh',
+		{ id: 1, username: "mreynaud", email: "mreynaud@42.fr" },
+		{ httpsAgent, withCredentials: true }
+	);
+	console.log(response.data);
 }
 
 
