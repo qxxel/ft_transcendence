@@ -1,5 +1,8 @@
 .SECRET/
 db
 user.db
+auth.db
+jwt.db
 node_modules
 _old
+ztest.ts
