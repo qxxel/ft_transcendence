@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:00:05 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 20:08:14 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:34:32 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance, opti
 		try {
 			const response = await axios.post('https://jwt:3000/refresh',
 				request.body,
-				{ httpsAgent,withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 
 			if (response.headers['set-cookie'])
