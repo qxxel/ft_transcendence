@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 15:26:01 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:45:10 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 
 	const response: Response = await fetch('/api/auth/sign-in', {
 		method: "post",
+		credentials: "include",
 		headers: {
 			"Content-Type": "application/json"
 		},
@@ -81,6 +82,7 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 	console.log(JSON.stringify({ username, email, password }));
 	const response: Response = await fetch('/api/auth/sign-up', {
 		method: "post",
+		credentials: "include",
 		headers: {
 			"Content-Type": "application/json"
 		},

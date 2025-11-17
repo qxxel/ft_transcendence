@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 16:01:29 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:36:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ gatewayFastify.get('/api/auth', async (request, reply) => {
 
 gatewayFastify.post('/api/auth/sign-up', async (request, reply) => {
 	try {
-		const response = await axios.post('https://auth:3000/sign-up', request.body, { httpsAgent });
+		const response = await axios.post('https://auth:3000/sign-up', request.body, { httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" }  });
 		
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
@@ -70,7 +70,7 @@ gatewayFastify.post('/api/auth/sign-up', async (request, reply) => {
 
 gatewayFastify.post('/api/auth/sign-in', async (request, reply) => {
 	try {
-		const response = await axios.post('https://auth:3000/sign-in', request.body, { httpsAgent, withCredentials: true });
+		const response = await axios.post('https://auth:3000/sign-in', request.body, { httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" }  });
 		
 		if (response.headers['set-cookie'])
 				reply.header('Set-Cookie', response.headers['set-cookie']);
@@ -109,7 +109,7 @@ gatewayFastify.post('/api/jwt/validate', async (request, reply) => {
 
 gatewayFastify.post('/api/jwt/refresh', async (request, reply) => {
 	try {
-		const response = await axios.post('https://jwt:3000/refresh', request.body, { httpsAgent,withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const response = await axios.post('https://jwt:3000/refresh', request.body, { httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
