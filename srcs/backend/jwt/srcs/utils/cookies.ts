@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cookies.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:06:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 20:04:11 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 21:37:39 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ import type { FastifyRequest, FastifyReply }	from "fastify";
 export function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string) {
 	reply.header(
 		"Set-Cookie",
-		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=10; path=/api/jwt/validate`
+		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=1000; path=/api/`
 	);
 }
 
 export function	setCookiesRefreshToken(reply: FastifyReply, jwtRefresh: string) {
 	reply.header(
 		"Set-Cookie",
-		`jwtRefresh=${jwtRefresh}; SameSite=strict; HttpOnly; secure; Max-Age=60; path=/api/jwt/refresh`
+		`jwtRefresh=${jwtRefresh}; SameSite=strict; HttpOnly; secure; Max-Age=10000; path=/api/jwt/refresh`
 	);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userController.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/16 14:27:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:35:15 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,11 @@ export async function	userController(userFastify: FastifyInstance) {
 		const parseId: number = parseInt(id, 10);
 	
 		try {
-			console.log("1");
 			await userServ.deleteUser(parseId);
 
-			console.log("6");
 			return reply.code(204).send();
 		}
 		catch (err) {
-			console.log("7");
 			return errorsHandler(userFastify, reply, err);
 		}
 	});

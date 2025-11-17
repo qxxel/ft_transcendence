@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/16 20:02:55 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 21:32:51 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,11 @@ async function	onClickLogout(router: Router, gameState: GameState, user: User): 
 	try {
 		const response = await fetch('/api/auth/logout', {
 			method: 'POST',
-			credentials: 'include' // important pour envoyer le cookie
+			credentials: 'include',
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ logout: 1 })
 		});
 		
 		if (!response.ok) {

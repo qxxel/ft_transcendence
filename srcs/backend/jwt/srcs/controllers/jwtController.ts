@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtController.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 20:08:51 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 21:04:41 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ export async function	jwtController(jwtFastify: FastifyInstance) {
 			const cookies = getCookies(request);
 			const { payload, protectedHeader } = await jose.jwtVerify(cookies.jwtAccess, jwtSecret);
 
-			return reply.status(201).send({ result: "valid." });
+			return reply.status(200).send(payload);
 		} catch (err) {
 			if (err instanceof jose.errors.JOSEError)
 				return reply.status(401).send(err);

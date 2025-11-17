@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 19:36:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 21:42:44 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,24 @@ import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify';
 import { authServ } 	from "../auth.js";
 
 const auth = axios.create({
-	httpsAgent: new https.Agent({ rejectUnauthorized: false }), // for certificat auto-signé
-	// timeout: 1000,
+	httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+	timeout: 1000
 });
 
 /* ====================== FUNCTIONS ====================== */
+
+function	getCookies(request: FastifyRequest) {
+	try {
+		const cookies = Object.fromEntries(
+			(request.headers.cookie || "")
+			.split("; ")
+			.map(c => c.split("="))
+		)
+		return cookies;
+	} catch (err) {
+		return ;
+	}
+}
 
 async function isLoggedIn(cookie: string | undefined) {
 	try {
@@ -121,7 +134,47 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 	}
 }
 
+async function	logout(request: FastifyRequest, reply: FastifyReply) {
+	try {
+		const { jwtAccess } = getCookies(request);
+
+		if (!jwtAccess)
+			throw new Error("You are not connected");
+		
+		const payload = await auth.get("https://jwt:3000/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+
+		// auth.delete(`https://jwt:3000/${payload.data.id}`);
+
+		return reply.status(201).send(payload.data.id);
+	} catch (error) {
+		console.error(error instanceof Error ? error.message : error);
+		return reply.code(400).send(error instanceof Error ? error.message : error);
+	}
+}
+
+async function	deleteClient(request: FastifyRequest, reply: FastifyReply) {
+	try {
+		const { jwtAccess } = getCookies(request);
+
+		if (!jwtAccess)
+			throw new Error("You are not connected");
+		
+		const payload = await auth.get("https://jwt:3000/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+
+		// auth.delete(`https://jwt:3000/${payload.data.id}`);
+
+		auth.delete(`https://user:3000/${payload.data.id}`);
+		
+		return reply.status(204).send(payload.data.id);
+	} catch (error) {
+		console.error(error instanceof Error ? error.message : error);
+		return reply.code(400).send(error instanceof Error ? error.message : error);
+	}
+}
+
 export async function	authController(authFastify: FastifyInstance) {
 	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
 	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
+	authFastify.post('/logout', logout);
+	authFastify.delete('/me', deleteClient);
 }
