@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 16:01:29 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:01:25 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// THE FILE THAT LAUNCH THE FASTIFY SERVER FOR API GATEWAY SERVICE
 
 
 /* ====================== IMPORT ====================== */
@@ -20,7 +22,14 @@ import fs from 'fs';
 import https from 'https';
 
 import { requestErrorsHandler }	from "./utils/requestErrors.js"
-import { gatewayController }	from "./controllers/userController.js"
+import { gatewayUserController }	from "./controllers/gatewayUserController.js"
+import { gatewayJwtController }	from "./controllers/gatewayJwtController.js"
+
+
+/* ====================== HTTPS AGENT VARIABLE ====================== */
+
+const httpsAgent = new https.Agent({ rejectUnauthorized: false }); // TO BY-PASS SELF SIGNED CERTIFICATES
+
 
 /* ====================== SERVER ====================== */
 
@@ -32,7 +41,6 @@ const	gatewayFastify = Fastify({
 	logger: true
 });
 
-
 gatewayFastify.register(cors, {
 	origin: 'https://nginx:443',
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -40,9 +48,9 @@ gatewayFastify.register(cors, {
 	credentials: true
 });
 
-const httpsAgent = new https.Agent({ rejectUnauthorized: false }); // utile si certificat auto-signé
 
-gatewayFastify.register(gatewayController, { prefix: '/api/user', httpsAgent: httpsAgent });
+gatewayFastify.register(gatewayUserController, { prefix: '/api/user', httpsAgent: httpsAgent });
+gatewayFastify.register(gatewayJwtController, { prefix: '/api/jwt', httpsAgent: httpsAgent });
 
 gatewayFastify.get('/api/auth', async (request, reply) => {
 	try {
@@ -83,42 +91,6 @@ gatewayFastify.post('/api/auth/sign-in', async (request, reply) => {
 });
 
 
-
-gatewayFastify.post('/api/jwt', async (request, reply) => {
-	try {
-		const response = await axios.post('https://jwt:3000', request.body, { httpsAgent });
-
-		if (response.headers['set-cookie'])
-			reply.header('Set-Cookie', response.headers['set-cookie']);
-
-		reply.send(response.data);
-	} catch (err) {
-		return requestErrorsHandler(gatewayFastify, reply, err);
-	}
-});
-
-gatewayFastify.post('/api/jwt/validate', async (request, reply) => {
-	try {
-		const response = await axios.get('https://jwt:3000/validate', { httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-
-		reply.send(response.data);
-	} catch (err) {
-		return requestErrorsHandler(gatewayFastify, reply, err);
-	}
-});
-
-gatewayFastify.post('/api/jwt/refresh', async (request, reply) => {
-	try {
-		const response = await axios.post('https://jwt:3000/refresh', request.body, { httpsAgent,withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-
-		if (response.headers['set-cookie'])
-			reply.header('Set-Cookie', response.headers['set-cookie']);
-
-		reply.send(response.data);
-	} catch (err) {
-		return requestErrorsHandler(gatewayFastify, reply, err);
-	}
-});
 
 
 
