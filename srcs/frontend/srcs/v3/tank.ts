@@ -19,6 +19,7 @@ export class TankGame {
 
   constructor(
     canvasId: string, 
+    map_name: string,
     nplayer: number,
     private gameMode: 'pvp' | 'ai' = 'ai',
   ) {
@@ -26,19 +27,31 @@ export class TankGame {
     this.ctx = this.canvas.getContext('2d')!;
 
     this.input = new Input();
-    this.map = new Map(this.canvas.width, this.canvas.height, 2, "fy_snow");
+    this.map = new Map(this.canvas.width, this.canvas.height, 2, map_name);
 
-      GSTATE.ACTORS.push(
-        new Tank(50,50,50,50, {r:0,g:255,b:0},
-            {up:"w",down:"s",left:"a",right:"d",fire:" "}));
-
+    if (map_name == 'desertfox')
+    {
+      for (let i = 0; i < nplayer; ++i)
+      {
+        const spawnX = this.map.spawns[i].x;
+        const spawnY = this.map.spawns[i].y;
+        GSTATE.ACTORS.push(
+          new Tank(spawnX,spawnY,25,25, {r:0,g:255,b:0},
+            {up:"w",down:"s",left:"a",right:"d",rot_left:"q",rot_right:"e",fire:" "}));
+      }
+    }
+    else {
+        GSTATE.ACTORS.push(
+          new Tank(16,16,25,25, {r:0,g:255,b:0},
+            {up:"w",down:"s",left:"a",right:"d",rot_left:"q",rot_right:"e",fire:" "}));
+    }
       // GSTATE.ACTORS.push(
         // new Tank(400,400,50,50, {r:0,g:255,b:0},
             // {up:"i",down:"k",left:"j",right:"l",fire:"u"}));
 
-      GSTATE.ACTORS.push(
-        new Ball(350,100,15,15,3.5,7,
-          {r:255,g:0,b:0}));
+      // GSTATE.ACTORS.push(
+      //   new Ball(450,16,15,15,3.5,7,
+      //     {r:255,g:0,b:0}));
 
   }
 
@@ -51,7 +64,7 @@ export class TankGame {
   private update() {
 
     if (GSTATE.REDRAW) {
-      console.log("REDRAW");
+      // console.log("REDRAW");
       this.map.draw(this.ctx);
       for (let a of GSTATE.ACTORS) {
           a.draw(this.ctx);

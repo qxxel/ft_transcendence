@@ -10,6 +10,7 @@ export class Ball extends Actor {
   redraw: boolean = true;
   speed: number = 5;
   damage: number = 1;
+  bounce_count: number = 5;
   SCOTCH_DIRECTION_IMPACT: string = "";
 
   constructor(
@@ -31,7 +32,11 @@ export class Ball extends Actor {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-      this.rect.draw(ctx, this.color)
+      // this.rect.draw(ctx, {r:0,g:0,b:255});
+      ctx.beginPath();
+      ctx.fillStyle = `#${((this.color.r << 16) | (this.color.g << 8) | this.color.b).toString(16).padStart(6,'0')}`; // HUH
+      ctx.arc(this.x + this.w/2, this.y + this.h/2, this.w/2, 0, Math.PI * 2);
+      ctx.fill();
    }
 
   // move(dx:number,dy:number) {
@@ -47,7 +52,7 @@ export class Ball extends Actor {
   const future = new Rect2D(this.x + this.dx, this.y + this.dy, this.w, this.h);
 
   if (this.collide(future)) {
-    console.log(this.SCOTCH_DIRECTION_IMPACT);
+    // console.log(this.SCOTCH_DIRECTION_IMPACT);
     if      (this.SCOTCH_DIRECTION_IMPACT == "vertical") this.dy = -this.dy;
     else if (this.SCOTCH_DIRECTION_IMPACT == "horizontal") this.dx = -this.dx;
 
@@ -78,6 +83,9 @@ export class Ball extends Actor {
           a.addHealth(-this.damage);
           this.destroy();
         }
+        this.bounce_count--;
+        if (this.bounce_count <= 0)
+          this.destroy();
         this.SCOTCH_DIRECTION_IMPACT = this.getBounce(a.getRect());
         return true;
       }
@@ -95,7 +103,7 @@ getBounce(other: Rect2D): "horizontal" | "vertical" {
     const overlapY = (this.h / 2 + other.h / 2) - Math.abs(dy);
 
 
-    console.log(dx, dy, overlapX, overlapY);
+    // console.log(dx, dy, overlapX, overlapY);
     return overlapX < overlapY ? "horizontal" : "vertical";
 }
 
