@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/17 20:59:38 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 21:45:03 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,53 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { User }				from "../user/user.js";
-import { router }			from "../index.js";
+import axios		from 'axios'
+import { User }		from "../user/user.js";
+import { router }	from "../index.js";
 
-import type { GameState }	from "../index.js";
+import type { Axios, AxiosResponse }	from 'axios';
+import type { GameState }		from "../index.js";
+
 
 /* ====================== FUNCTIONS ====================== */
 
+async function getUserAuth(): Promise<AxiosResponse<any, any, {}> | void> {
+	try {
+		const response = await axios.get('/api/jwt/validate', { withCredentials: true });
+
+		return response;
+	} catch (err: any) {
+		if (err.response && err.response.status === 401) {
+			console.log("Token expired, try to refresh.");
+
+			try {
+				await axios.get('/api/jwt/refresh', { withCredentials: true });
+
+				const retryResponse = await axios.get('/api/user/auth', { withCredentials: true });
+				return retryResponse;
+
+			} catch (err: any) {
+				console.error("Refresh failed, user needs to login.");
+				return ;
+			}
+		}
+
+		console.error("Error:", err);
+		return ; 
+	}
+}
+
 async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 	document.addEventListener("DOMContentLoaded", async (event) => {
-
 		console.log("DOMContentLoaded");
 
-		let response: Response = await fetch("/api/user/auth", {
-			method: "GET",
-			credentials: "include",
-		});
-		
-		if (response.status === 401){
-			response = await fetch("/api/user/auth/refresh", {
-				method: "GET",
-				credentials: "include",
-			});
-		}
-		if (!response.ok)
-			return;
+		const	response = await getUserAuth();
 
-		const result = await response.json()
-		
+		if (!response)
+			return ;
+
+		const result = response.data;
+
 		user.setId(result.id as number);
 		user.setUsername(result.username);
 		user.setSigned(true);

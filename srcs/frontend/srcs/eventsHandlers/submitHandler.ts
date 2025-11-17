@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 20:58:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 21:45:15 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { User }				from "../user/user.js";
-import { router }			from "../index.js";
+import axios		from "axios";
+import { User }		from "../user/user.js";
+import { router }	from "../index.js";
 
-import type { GameState }	from "../index.js";
+import type { GameState }		from "../index.js";
+import type { AxiosResponse }	from "axios";
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -45,19 +47,23 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 
 	console.log(JSON.stringify({ identifier, password }));
 
-	const response: Response = await fetch('/api/auth/sign-in', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ identifier, password })
-	});
+	let	response: AxiosResponse | undefined;
+	try {
+		response = await axios.post('/api/auth/sign-in',
+			{ identifier, password },
+			{ withCredentials: true }
+		);
+	} catch (err) {
+		if (axios.isAxiosError(err) && err.response)
+			console.error("Error: ", err.response.data);
+		else
+			console.error("Error: ", err);
+	}
 
-	if (!response.ok)
+	if (!response)
 		return ;
-	
-	const result = await response.json();
+
+	const result = await response.data;
 
 	user.setId(result.id as number);
 	user.setUsername(result.username);
@@ -82,19 +88,24 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 	console.log("email: " + email);
 	console.log("password: " + password);
 	console.log(JSON.stringify({ username, email, password }));
-	const response: Response = await fetch('/api/auth/sign-up', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ username, email, password })
-	});
 
-	if (!response.ok)
+	let	response: AxiosResponse | undefined;
+	try {
+		response = await axios.post('/api/auth/sign-up',
+			{ username, email, password },
+			{ withCredentials: true }
+		);
+	} catch (err) {
+		if (axios.isAxiosError(err) && err.response)
+			console.error("Error: ", err.response.data);
+		else
+			console.error("Error: ", err);
+	}
+
+	if (!response)
 		return ;
 
-	const result = await response.json();
+	const result = await response.data;
 
 	user.setId(result.id as number);
 	user.setUsername(username);

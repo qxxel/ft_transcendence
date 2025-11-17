@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 20:59:25 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 21:46:08 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ import axios				from 'axios'
 import { Router }			from "../router/router.js"
 import { User }				from "../user/user.js"
 
-import { httpsAgent }	from "../index.js"
-
 import type { GameState }	from "../index.js"
+
 
 /* ====================== FUNCTIONS ====================== */
 
@@ -34,7 +33,7 @@ function onClickPlay(router: Router, gameState: GameState, user: User): void {
 
 async function	onClickLogout(router: Router, gameState: GameState, user: User): Promise<void> {
 	try {
-		const response = await axios.post('/api/auth/logout', { httpsAgent, withCredentials: true });
+		const response = await axios.post('/api/auth/logout', { withCredentials: true });
 
 		user.logout();
 
@@ -60,7 +59,7 @@ async function	onClickLogout(router: Router, gameState: GameState, user: User): 
 async function onClickGetMessage(): Promise<void> {
 	const response = await axios.post('/api/jwt',
 		{ id: 1, username: "mreynaud", email: "mreynaud@42.fr" },
-		{ httpsAgent, withCredentials: true }
+		{ withCredentials: true }
 	);
 	console.log(response.data);
 }
@@ -69,7 +68,7 @@ async function onClickGetMessage(): Promise<void> {
 async function onClickValidateMessage(): Promise<void> {
 	const response = await axios.post('/api/jwt/validate',
 		{ id: 1, username: "mreynaud", email: "mreynaud@42.fr" },
-		{ httpsAgent, withCredentials: true }
+		{ withCredentials: true }
 	);
 	console.log(response.data);
 }
@@ -77,7 +76,7 @@ async function onClickValidateMessage(): Promise<void> {
 async function onClickRefreshMessage(): Promise<void> {
 	const response = await axios.post('/api/jwt/refresh',
 		{ id: 1, username: "mreynaud", email: "mreynaud@42.fr" },
-		{ httpsAgent, withCredentials: true }
+		{ withCredentials: true }
 	);
 	console.log(response.data);
 }
