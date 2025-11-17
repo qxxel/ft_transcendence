@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:30 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/15 23:52:03 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:51:51 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,16 @@
 /* ====================== IMPORT ====================== */
 
 import { jwtTableBuilder }	from "../tableBuilders/jwtTableBuilder.js"
+import { jwtRespDto }		from "../dtos/jwtRespDto.js";
 
 import type { Database }	from 'sqlite3'
+
+
+/* ====================== INTERFACE ====================== */
+
+interface	StatementWithLastID {
+	lastID: number
+};
 
 
 /* ====================== CLASS ====================== */
@@ -47,6 +55,56 @@ export class	jwtRepository {
 			console.error(err);
 			process.exit(1);
 		}
+	}
+
+	async addToken(token: string, clientId: number): Promise<number> {
+		return new Promise((resolve, reject) => {
+			let	currentTimestamp = Date.now();
+
+			console.log(clientId);
+			console.log(token);
+			console.log(currentTimestamp);
+			
+			const	query = `INSERT INTO jwt (idclient, token, creationtime) VALUES(?, ?, ?)`;
+			const	elements = [clientId, token, currentTimestamp];
+			this.db.run(query, elements, function (this: StatementWithLastID, err) {
+				if (err)
+					return reject(err);
+
+				resolve(this.lastID);
+			});
+		});
+	}
+
+	async getClientIdByToken(token: string): Promise<jwtRespDto> {
+		return new Promise((resolve, reject) => {
+			const	query: string = `SELECT * FROM jwt WHERE token = ?`;
+			const	elements: string[] = [token];
+			this.db.get(query, elements, (err, row) => {
+				if (err)
+					return reject(err);
+
+				if (!row) {
+					console.error(`error: the token isn't liked to a client.`);
+					return reject(new Error(`The token isn't liked to a client.`));
+				}
+
+				resolve(new jwtRespDto(row));
+			});
+		});
+	}
+
+	async deleteToken(token: string): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
+			const	query = `DELETE FROM jwt WHERE token = ?`;
+			const	elements = [token];
+			this.db.run(query, elements, function(err) {
+				if (err)
+					return reject(err);
+
+				resolve();
+			});
+		});
 	}
 
 

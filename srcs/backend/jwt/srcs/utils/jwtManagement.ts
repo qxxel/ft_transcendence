@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:14:11 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 17:34:18 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:43:42 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,14 @@ export async function	jwtGenerate(user: userDto, exp: string): Promise<string> {
 		.sign(jwtSecret);
 }
 
-export async function	addJWT(reply: FastifyReply, user: userDto) {
-	
+export async function	addJWT(reply: FastifyReply, user: userDto): Promise<string> {
 	const jwtAccess: string = await jwtGenerate(user, expAccess);
 	setCookiesAccessToken(reply, jwtAccess);
 	
 	const jwtRefresh: string = await jwtGenerate(user, expRefresh);
 	setCookiesRefreshToken(reply, jwtRefresh);
+
+	return jwtRefresh;
 }
 
 export async function	removeJWT(reply: FastifyReply) {

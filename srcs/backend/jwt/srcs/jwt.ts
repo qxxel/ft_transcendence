@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/17 17:33:47 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:12:36 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ import { jwtRepository }	from './repositories/jwtRepository.js';
 /* ====================== TOKENS VARIABLES ====================== */
 
 export const	expAccess = "10s";
-export const	expRefresh = "1m";
+export const	expRefresh = "1min";
 
 export const	jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET);
 

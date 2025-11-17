@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:06:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 17:25:03 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:04:11 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,14 @@ export function	removeCookies(reply: FastifyReply, key: string) {
 
 
 export function	getCookies(request: FastifyRequest) {
-	const cookies = Object.fromEntries(
-		(request.headers.cookie || "")
-		.split("; ")
-		.map(c => c.split("="))
-	)
-	return cookies
+	try {
+		const cookies = Object.fromEntries(
+			(request.headers.cookie || "")
+			.split("; ")
+			.map(c => c.split("="))
+		)
+		return cookies;
+	} catch (err) {
+		return ;
+	}
 }
