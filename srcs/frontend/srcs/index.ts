@@ -1,5 +1,5 @@
 import { PongGame } from './game.js';
-import { TankGame } from './v1/tank.js';
+import { TankGame } from './v3/tank.js';
 
 interface Route {
   path: string;
@@ -50,9 +50,8 @@ function  pathActions(currentPath: string) {
   }
 
   if (['/tank'].includes(currentPath)) {
-    var currentTank = new TankGame('pong-canvas', 'score1', 'score2', 'winning-points');
+    var currentTank = new TankGame('pong-canvas', 1);
     currentTank.start();
-    console.log("Loading the new game...");
   }
 }
 
@@ -64,7 +63,7 @@ class Router {
   }
 
   navigate(path: string) {
-    if (window.location.pathname === '/play') {
+    if (window.location.pathname === '/play' || window.location.pathname === '/tank') { // === /tank ig ? pourquoi je rentre pas là
       stopCurrentGame();
     }
     history.pushState({}, '', path);
