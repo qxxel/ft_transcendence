@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:00:05 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 18:04:30 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:08:14 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,3 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance, opti
 	});
 
 }
-
-
-
