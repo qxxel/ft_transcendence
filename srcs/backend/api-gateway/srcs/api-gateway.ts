@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 18:01:25 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:05:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ import axios from 'axios';
 import fs from 'fs';
 import https from 'https';
 
-import { requestErrorsHandler }	from "./utils/requestErrors.js"
 import { gatewayUserController }	from "./controllers/gatewayUserController.js"
 import { gatewayJwtController }	from "./controllers/gatewayJwtController.js"
 
