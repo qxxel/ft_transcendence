@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtManagement.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:14:11 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 18:43:42 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 19:04:17 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,6 @@ export async function	addJWT(reply: FastifyReply, user: userDto): Promise<string
 }
 
 export async function	removeJWT(reply: FastifyReply) {
-	removeCookies(reply, "jwtAccess");
-	removeCookies(reply, "jwtRefresh");
+	removeCookies(reply, "jwtAccess", "/api");
+	removeCookies(reply, "jwtRefresh", "/api/jwt/refresh");
 }

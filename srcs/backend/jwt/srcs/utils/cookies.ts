@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:06:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 21:37:39 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 19:03:35 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ import type { FastifyRequest, FastifyReply }	from "fastify";
 export function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string) {
 	reply.header(
 		"Set-Cookie",
-		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=1000; path=/api/`
+		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=1000; path=/api`
 	);
 }
 
@@ -35,10 +35,10 @@ export function	setCookiesRefreshToken(reply: FastifyReply, jwtRefresh: string) 
 	);
 }
 
-export function	removeCookies(reply: FastifyReply, key: string) {
+export function	removeCookies(reply: FastifyReply, key: string, path: string) {
 	reply.header(
 		"Set-Cookie",
-		`${key}=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+		`${key}=; SameSite=strict; HttpOnly; secure; Expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}`
 	);
 }
 
