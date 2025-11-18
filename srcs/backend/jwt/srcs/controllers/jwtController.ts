@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtController.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 19:04:49 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 23:09:05 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,15 @@ export async function	jwtController(jwtFastify: FastifyInstance) {
 	jwtFastify.post('/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
 		const cookies = getCookies(request);
 		if (!cookies)
-			return reply.status(401).send("Can't get the refresh token in cookies.");
+			return reply.status(401).send({ error: "Can't get the refresh token in cookies." });
 
 		try {
-			const salut = await jwtServ.getClientIdByToken(cookies.jwtRefresh)
-			console.log(salut);
-
+			
 			const { payload, protectedHeader } = await jose.jwtVerify(cookies.jwtRefresh, jwtSecret);
 
+			if (await jwtServ.isValidToken(cookies.jwtRefresh))
+				throw jose.errors.JOSEError;
+			
 			const user: userDto = request.body as userDto;
 			const jwtAccess: string = await jwtGenerate(user, expAccess);
 			setCookiesAccessToken(reply, jwtAccess);
@@ -96,11 +97,12 @@ export async function	jwtController(jwtFastify: FastifyInstance) {
 		}
 	});
 
-	jwtFastify.delete('/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
+	jwtFastify.delete('/refresh/logout', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const cookies = getCookies(request);
 
 			removeJWT(reply);
+
 			await jwtServ.deleteToken(cookies.jwtRefresh);
 
 			return reply.status(204).send({ result: "deleted." });
