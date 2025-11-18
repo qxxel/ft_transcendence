@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 16:53:26 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 23:09:40 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,18 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 		body: JSON.stringify({ identifier, password })
 	});
 	
+	let result = null;
+	try {
+		result = await response.json();
+	} catch (error) {}
+
 	if (!response.ok)
 	{
 		const p = document.getElementById("msg-error");
-		p!.textContent = response.statusText;
+		console.log("response :", result);
+		p!.textContent = result?.error || "An unexpected error has occurred";
 		return ;
 	}
-
-	const result = await response.json();
 
 	user.setId(result.id as number);
 	user.setUsername(result.username);
@@ -105,7 +109,7 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 	{
 		const p = document.getElementById("msg-error");
 		console.log("response :", result);
-		p!.textContent = result?.error || result?.message || "An unexpected error has occurred";
+		p!.textContent = result?.error || "An unexpected error has occurred";
 		return ;
 	}
 	console.log("response :", result);
