@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/18 01:19:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 18:48:55 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { User }		from "../user/user.js";
-import { router }	from "../index.js";
+import { User }			from "../user/user.js";
+import { router }		from "../index.js";
+import { sendRequest }	from "../utils/sendRequest.js";
 
-import type { GameState }		from "../index.js";
+import type { GameState }	from "../index.js";
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -27,17 +28,18 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 	document.addEventListener("DOMContentLoaded", async (event) => {
 		console.log("DOMContentLoaded");
 
-		let response: Response = await fetch("/api/jwt/validate", {
-			method: "GET",
-			credentials: "include",
-		});
+		// let response2: Response = await f etch("/api/jwt/validate", {
+		// 	method: "GET",
+		// 	credentials: "include",
+		// });
 		
-		if (response.status === 401){
-			response = await fetch("/api/user/auth/refresh", {
-				method: "GET",
-				credentials: "include",
-			});
-		}
+		// if (response.status === 401){
+		// 		response = await f etch("/api/user/auth/refresh", {
+		// 			method: "GET",
+		// 			credentials: "include",
+		// 		});
+		// }
+		const response = await sendRequest('/api/jwt/validate', 'GET', null);
 
 		if (!response.ok)
 			return;
