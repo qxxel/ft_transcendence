@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayJwtController.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:00:05 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 20:34:32 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 01:23:19 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,18 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance, opti
 	});
 
 	gatewayFastify.post('/validate', async (request, reply) => {
+		try {
+			const response = await axios.get('https://jwt:3000/validate',
+				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+
+			reply.send(response.data);
+		} catch (err) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+	gatewayFastify.get('/validate', async (request, reply) => {
 		try {
 			const response = await axios.get('https://jwt:3000/validate',
 				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
