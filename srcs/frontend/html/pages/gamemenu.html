@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Menu du jeu</title>
-  </head>
+</head>
 <body>
   <div class="game-container">
     <div class="menu-content">
@@ -14,11 +14,16 @@
       <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
       <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
 
-      <button onclick="onClickPlay();" id="startGame" class="btn-yellow">
-        Start Game
-      </button>
+      <div class="button-group">
+        <button onclick="onClickPlayAI();" id="startAiGame" class="btn-yellow">
+          Play vs. AI
+        </button>
+        <button onclick="onClickPlayPVP();" id="startPvpGame" class="btn-yellow">
+          Play 1v1
+        </button>
+      </div>
 
     </div>
   </div>
-  </body>
+</body>
 </html>

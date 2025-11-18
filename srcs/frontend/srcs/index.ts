@@ -49,9 +49,23 @@ function stopCurrentGame() {
   }
 }
 
-function onClickPlay() {
+function onClickPlayAI() {
   const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-  currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
+  const winningScore = parseInt(maxPointsInput.value, 10);
+  
+  currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', 'ai');
+  currentGame.setWinningScore(winningScore);
+  
+  router.navigate('/play');
+}
+
+function onClickPlayPVP() {
+  const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+  const winningScore = parseInt(maxPointsInput.value, 10);
+  
+  currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', 'pvp');
+  currentGame.setWinningScore(winningScore);
+  
   router.navigate('/play');
 }
 
@@ -88,7 +102,6 @@ function startTournamentMatch(matchId: string, p1: string, p2: string) {
 function  pathActions(currentPath: string) {
   
   if (['/gamemenu'].includes(currentPath)) {
-    currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
     const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
     const display = document.getElementById('points-display') as HTMLSpanElement;
     
@@ -129,11 +142,9 @@ function  pathActions(currentPath: string) {
     
     if (currentTournament && currentTournament.currentMatch) {
       const match = currentTournament.currentMatch;
-      currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
+      currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points'); 
       currentGame.setCtx();
-
       currentGame.setWinningScore(currentTournament.winningScore);
-
       currentGame.setPlayerNames(match.p1, match.p2);
       currentGame.start();
     } 
@@ -219,7 +230,8 @@ window.addEventListener('popstate', () => {
   router.render();
 });
 
-(window as any).onClickPlay = onClickPlay;
+(window as any).onClickPlayAI = onClickPlayAI;
+(window as any).onClickPlayPVP = onClickPlayPVP;
 (window as any).onStartTournament = onStartTournament;
 (window as any).startTournamentMatch = startTournamentMatch;
 
