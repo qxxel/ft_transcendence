@@ -389,12 +389,13 @@ export class PongGame {
 
   private moveAI() {
     const now = Date.now();
+    
     if (now - this.aiLastDecisionTime > 1000) {
       this.aiLastDecisionTime = now;
       
-      if (this.ball!.dx > 0) { 
-        const timeToImpact = (this.paddle2!.x - this.ball!.x) / this.ball!.dx;
-        let predictedY = this.ball!.y + (this.ball!.dy * timeToImpact);
+      if (this.ball!.dx > 0) {
+        
+        let predictedY = this.predictBallLandingY();
  
         predictedY = Math.max(this.ball!.radius, Math.min(predictedY, this.canvas!.height - this.ball!.radius));
         
@@ -416,6 +417,27 @@ export class PongGame {
       this.keysPressed['ArrowDown'] = false;
       this.keysPressed['ArrowUp'] = false;
     }
+  }
+
+  private predictBallLandingY(): number {
+    const targetX = this.paddle2!.x - this.ball!.radius;
+    const timeToImpact = (targetX - this.ball!.x) / this.ball!.dx;
+    let predictedY = this.ball!.y + (this.ball!.dy * timeToImpact);
+
+    const canvasHeight = this.canvas!.height;
+    const ballRadius = this.ball!.radius;
+
+    const topWall = ballRadius;
+    const bottomWall = canvasHeight - ballRadius;
+
+    while (predictedY < topWall || predictedY > bottomWall) {
+      if (predictedY < topWall) {
+        predictedY = topWall + (topWall - predictedY);
+      } else if (predictedY > bottomWall) {
+        predictedY = bottomWall - (predictedY - bottomWall);
+      }
+    }
+    return predictedY;
   }
 
   public setWinningScore(newWinningScore: number) {
