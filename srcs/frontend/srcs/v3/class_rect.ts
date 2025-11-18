@@ -1,4 +1,4 @@
-import { Color } from "./class_color";
+import { Color } from "./interface";
 
 export class Rect2D {
 

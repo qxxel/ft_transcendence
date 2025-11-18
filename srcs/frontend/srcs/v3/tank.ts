@@ -4,8 +4,7 @@ import { GSTATE } from "./global.js";
 import { Tank } from "./class_tank.js";
 import { Map } from "./class_map.js";
 import { Ball } from "./class_ball.js";
-import { Color } from "./class_color.js";
-import { Keys } from "./class_keys.js";
+import { Color, Keys } from "./interface.js";
 
 export class TankGame {
 

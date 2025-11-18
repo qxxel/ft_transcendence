@@ -1,4 +1,4 @@
-import { Color } from "./class_color.js";
+import { Color } from "./interface.js";
 
 export class Line2D {
 
@@ -42,12 +42,11 @@ export class Line2D {
     return false;
   }
 
-  slope(angle: number): boolean {
+  slope(angle: number) {
     this.angle += angle;
     this.x2 = this.x1 + Math.cos(this.angle) * this.h;
     this.y2 = this.y1 + Math.sin(this.angle) * this.h;
   
-    return false;
   }
 
   getX(): number { return this.x2; }

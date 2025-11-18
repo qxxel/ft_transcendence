@@ -7,6 +7,7 @@ interface Route {
 }
 
 var currentGame: PongGame | null = null;
+var currentTank: TankGame | null = null;
 
 function stopCurrentGame() {
   if (currentGame) {
@@ -50,7 +51,7 @@ function  pathActions(currentPath: string) {
   }
 
   if (['/tank'].includes(currentPath)) {
-    var currentTank = new TankGame('pong-canvas', 'desertfox', 4);
+    currentTank = new TankGame('pong-canvas', 'desertfox', 4);
     currentTank.start();
   }
 }
@@ -65,6 +66,8 @@ class Router {
   navigate(path: string) {
     if (window.location.pathname === '/play' || window.location.pathname === '/tank') { // === /tank ig ? pourquoi je rentre pas là
       stopCurrentGame();
+      if (currentTank)
+        currentTank.stop();
     }
     history.pushState({}, '', path);
     this.render();

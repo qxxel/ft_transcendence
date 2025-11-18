@@ -1,15 +1,16 @@
 import { Actor } from "./class_actor.js";
 import { Rect2D } from "./class_rect.js";
-import { Color } from "./class_color.js";
-import { Keys } from "./class_keys.js";
+import { Color, Keys } from "./interface.js";
 import { GSTATE } from "./global.js";
 import { Ball } from "./class_ball.js";
 import { Line2D } from "./class_line.js";
+import { Hud } from "./class_hud.js";
+import { Cannon } from "./class_cannon.js";
 
 export class Tank extends Actor {
 
   rect: Rect2D;
-  cannon: Line2D;
+  cannon: Cannon;
   redraw: boolean = true;
   speed: number = 0.75;
   rot_speed: number = 0.05;
@@ -17,6 +18,7 @@ export class Tank extends Actor {
   fire_rate: number = 2000; // ms
   fire_last: number = 0;
   fire_speed: number = 3;
+  hud: Hud;
   constructor(
     x:number,
     y:number,
@@ -27,8 +29,8 @@ export class Tank extends Actor {
     public keys:Keys) {
     super(x,y)
     this.rect = new Rect2D(this.x, this.y, this.w, this.h);
-    this.cannon = new Line2D(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),
-                            3,0);
+    this.cannon = new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),3,0,fire_color);
+    this.hud = new Hud(this.x,this.y,this.x + this.w, this.y,fire_color);
     console.log("C Tank at x:", x, "y:", y);
   }
 
@@ -40,27 +42,15 @@ export class Tank extends Actor {
 
   draw(ctx: CanvasRenderingContext2D): void {
       this.rect.draw(ctx, this.color)
-      this.cannon.draw(ctx, {r:100,g:100,b:100});
-      
-      //TODO CLASS HUD
-      if (Date.now() - this.fire_last < this.fire_rate) {
+      this.cannon.draw(ctx);
+
+      if (!this.canFire()) {
         const elapsed = Date.now() - this.fire_last;
         const progress = Math.min(elapsed / this.fire_rate, 1);
-
         const start = -Math.PI / 2;
         const end = start + progress * Math.PI * 2;
-
-    const color = `#${((this.fire_color.r << 16) |
-                       (this.fire_color.g << 8) |
-                        this.fire_color.b)
-                      .toString(16).padStart(6,'0')}`;
-
-    ctx.beginPath();
-    ctx.strokeStyle = `#${((this.fire_color.r << 16) | (this.fire_color.g << 8) | this.fire_color.b).toString(16).padStart(6,'0')}`; // HUH;
-    ctx.lineWidth = 4;
-    ctx.arc(this.x + this.w, this.y, 5, start, end);
-    ctx.stroke();
-      }
+        this.hud.wheel_draw(ctx,start,end);
+    }
   }
 
   listen(input: string[]): void {
@@ -82,37 +72,31 @@ export class Tank extends Actor {
     this.y += dy;
     this.rect.x += dx;
     this.rect.y += dy;
-    this.cannon.x1 += dx;
-    this.cannon.y1 += dy;
-    this.cannon.x2 += dx;
-    this.cannon.y2 += dy;
+    this.cannon.move(dx,dy);
+    this.hud.move(dx,dy);
   }
 
   fire() {
 
+    if (!this.canFire()) return;
+    
     const now = Date.now(); // performance.now();
-    if (now - this.fire_last < this.fire_rate) return;
 
     const spawnRect = new Rect2D(this.cannon.getEnd().x - 10/2 ,this.cannon.getEnd().y - 10/2 ,10,10);
 
     for (let a of GSTATE.ACTORS) {
-      if (a == this) continue;
+      if (a == this)
+        continue;
       if (a.getRect().collide(spawnRect))
-      {
         return;
-      }
     }
 
     this.fire_last = now;
 
     GSTATE.ACTORS.push(
-        new Ball(this.cannon.getEnd().x - 10/2 ,this.cannon.getEnd().y - 10/2 ,10,10, Math.cos(this.cannon.angle) * 3, Math.sin(this.cannon.angle) * 3,
+        new Ball(this.cannon.getEnd().x - 10/2 ,this.cannon.getEnd().y - 10/2 ,10,10, Math.cos(this.cannon.geometry.angle) * 3, Math.sin(this.cannon.geometry.angle) * 3,
           this.fire_color, this));
 
-
-    // GSTATE.ACTORS.push(
-        // new Ball(this.x + this.w/2 + 25,this.y + this.h/2 - 7.5,16,16,5,0,
-          // {r:255,g:0,b:0}));
    }
 
   collide(rect1: Rect2D) {
@@ -135,5 +119,9 @@ export class Tank extends Actor {
     this.color.g -= 50;
     console.log("health():",this.health);
     if (this.health == 0) this.destroy();
+  }
+
+  canFire(): boolean {
+      return Date.now() - this.fire_last > this.fire_rate;
   }
 }
