@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayJwtController.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:00:05 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 22:55:51 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 23:38:48 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,21 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance, opti
 	gatewayFastify.delete('/refresh/logout', async (request, reply) => {
 		try {
 			const response = await axios.delete('https://jwt:3000/refresh/logout',
+				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+
+			if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);
+
+			reply.send(response.data);
+		} catch (err) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+	gatewayFastify.delete('/:id', async (request, reply) => {
+		try {
+			const response = await axios.delete('https://jwt:3000/:id',
 				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 

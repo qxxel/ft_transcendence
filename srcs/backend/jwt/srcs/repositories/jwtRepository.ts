@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtRepository.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:30 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 23:05:23 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 23:37:03 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,18 @@ export class	jwtRepository {
 		});
 	}
 
+	async deleteTokenById(token: number): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
+			const	query = `DELETE FROM jwt WHERE idclient = ?`;
+			const	elements = [token];
+			this.db.run(query, elements, function(err) {
+				if (err)
+					return reject(err);
+
+				resolve();
+			});
+		});
+	}
 
 	// GETTER
 	getDb(): Database {

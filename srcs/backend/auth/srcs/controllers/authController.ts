@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 22:56:18 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 23:56:52 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,12 +154,16 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply) {
 		if (!jwtAccess)
 			throw new Error("You are not connected");
 		
-		// probleme refresh n'est pas dans les cookies
-		await auth.delete(`https://jwt:3000/refresh`, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-
 		const payload = await auth.get("https://jwt:3000/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		
+		const response = await auth.delete(`https://jwt:3000/${payload.data.id}`);
+
+		if (response.headers['set-cookie'])
+			reply.header('Set-Cookie', response.headers['set-cookie']);
 
 		await auth.delete(`https://user:3000/${payload.data.id}`);
+
+		await authServ.deleteClient(payload.data.id);
 		
 		return reply.status(204).send(payload.data.id);
 	} catch (error) {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtService.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 23:05:35 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 23:35:52 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,9 @@ export class	jwtService {
 
 	async deleteToken(token: string): Promise<void> {
 		return await this.jwtRepo.deleteToken(token);
+	}
+
+	async deleteTokenById(id: number): Promise<void> {
+		return await this.jwtRepo.deleteTokenById(id);
 	}
 }
