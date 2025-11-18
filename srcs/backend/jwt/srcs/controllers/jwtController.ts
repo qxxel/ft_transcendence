@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtController.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 21:53:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 19:04:49 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,11 @@ export async function	jwtController(jwtFastify: FastifyInstance) {
 		}
 	});
 
-	jwtFastify.delete('/', async (request: FastifyRequest, reply: FastifyReply) => {
+	jwtFastify.delete('/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const cookies = getCookies(request);
 
+			removeJWT(reply);
 			await jwtServ.deleteToken(cookies.jwtRefresh);
 
 			return reply.status(204).send({ result: "deleted." });
@@ -112,7 +113,4 @@ export async function	jwtController(jwtFastify: FastifyInstance) {
 		}
 	});
 
-	jwtFastify.get('/jwt', async (request, reply) => {		//
-		return "Hello World!";								//	DEBUG: A ENLEVER !!
-	});														//
 }

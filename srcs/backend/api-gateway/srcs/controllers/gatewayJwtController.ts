@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:00:05 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 01:23:19 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 18:25:32 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,21 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance, opti
 		try {
 			const response = await axios.post('https://jwt:3000/refresh',
 				request.body,
+				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+
+			if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);
+
+			reply.send(response.data);
+		} catch (err) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+	gatewayFastify.delete('/refresh', async (request, reply) => {
+		try {
+			const response = await axios.delete('https://jwt:3000/refresh',
 				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 

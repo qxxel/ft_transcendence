@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/16 22:32:40 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 21:51:20 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,21 +61,22 @@ export class	authRepository {
 		});
 	}
 
-	async getClient(id: string): Promise<string>{
+	async getPasswordByIdClient(id: string): Promise<string>{
 		return new Promise((resolve, reject) => {
-			const	query = `SELECT * FROM user WHERE id_client = ?`;
+			const	query = `SELECT password FROM auth WHERE id_client = ?`;
 			const	elements = [id];
-			this.db.get(query, elements, (err, row: string) => {
+			this.db.get(query, elements, (err, row: { password: string }) => {
 				if (err)
 					return reject(err);
-				return resolve(row);
+
+				return resolve(row.password);
 			});
 		});
 	}
 
 	async deleteClient(id: string): Promise<void>{
 		return new Promise((resolve, reject) => {
-			const	query = `DELETE FROM user WHERE id = ?`;
+			const	query = `DELETE FROM auth WHERE id = ?`;
 			const	elements = [id];
 			this.db.run(query, elements, function(err) {
 				if (err)

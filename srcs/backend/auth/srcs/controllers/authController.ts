@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 17:46:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 21:55:35 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,8 @@ function errorsHandler(err: unknown) {
 		if (err.response?.data?.error)
 			return err.response.data.error;
 		return err.message;
-	}
-
-	if (err instanceof Error)
+	} else if (err instanceof Error)
 		return err.message;
-
 	return "Unknown error";
 }
 
@@ -127,12 +124,13 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		
 		if (!user)
 			throw new Error("Wrong password or username.");
-
-		const pwdHash = await authServ.getClient(user.id);
-		const pwdIsValid = await argon2.verify(pwdHash, password);
+		
+		const pwdHash: string = await authServ.getPasswordByIdClient(user.id);
+		
+		const	pwdIsValid = await argon2.verify(pwdHash, password);
 		if (!pwdIsValid)
 			throw new Error("Wrong password or username.");
-
+		
 		const jwtRes = await auth.post('https://jwt:3000', user, { withCredentials: true } );
 		
 		if (jwtRes.headers['set-cookie'])
@@ -149,26 +147,6 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 	}
 }
 
-async function	logout(request: FastifyRequest, reply: FastifyReply) {
-	try {
-		const { jwtAccess } = getCookies(request);
-
-		if (!jwtAccess)
-			throw new Error("You are not connected");
-		
-		const payload = await auth.get("https://jwt:3000/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-
-		// probleme refresh n'est pas dans les cookies
-		// await auth.delete(`https://jwt:3000/`, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-
-		return reply.status(201).send(payload.data.id);
-	} catch (error) {
-		const msgError = errorsHandler(error);
-		console.error(msgError);
-		return reply.code(400).send({ error: msgError });
-	}
-}
-
 async function	deleteClient(request: FastifyRequest, reply: FastifyReply) {
 	try {
 		const { jwtAccess } = getCookies(request);
@@ -177,7 +155,7 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply) {
 			throw new Error("You are not connected");
 		
 		// probleme refresh n'est pas dans les cookies
-		// await auth.delete(`https://jwt:3000/`, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		await auth.delete(`https://jwt:3000/refresh`, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		const payload = await auth.get("https://jwt:3000/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
@@ -194,6 +172,5 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply) {
 export async function	authController(authFastify: FastifyInstance) {
 	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
 	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
-	authFastify.delete('/logout', logout);
 	authFastify.delete('/me', deleteClient);
 }

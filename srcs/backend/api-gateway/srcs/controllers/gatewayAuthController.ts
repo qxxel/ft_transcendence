@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/18 00:58:19 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 20:17:02 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,22 +54,6 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 			);
 			
 			if (response.headers['set-cookie'])
-					reply.header('Set-Cookie', response.headers['set-cookie']);
-
-			return reply.send(response.data);
-		} catch (err) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
-		}
-	});
-
-	gatewayFastify.delete('/logout', async (request, reply) => {
-		try {
-			const response = await axios.delete(
-				'https://auth:3000/logout',
-				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
-			);
-			
-			if (response.headers['set-cookie'])
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
@@ -86,7 +70,7 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 			);
 			
 			if (response.headers['set-cookie'])
-					reply.header('Set-Cookie', response.headers['set-cookie']);
+				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
 		} catch (err) {
