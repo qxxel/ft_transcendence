@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 18:51:10 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 22:56:04 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ function onClickPlay(router: Router, gameState: GameState, user: User): void {
 }
 
 async function	onClickLogout(router: Router, gameState: GameState, user: User): Promise<void> {
-	const response: Response = await sendRequest('/api/jwt/refresh', 'DELETE', null);
+	const response: Response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
 
 	if (!response.ok)
 		throw new Error('Logout failed');

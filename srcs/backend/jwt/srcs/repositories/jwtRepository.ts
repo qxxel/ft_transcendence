@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:30 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 19:51:51 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 23:05:23 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,19 @@ export class	jwtRepository {
 				}
 
 				resolve(new jwtRespDto(row));
+			});
+		});
+	}
+
+	async isValidToken(token: string): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			const	query: string = `SELECT * FROM jwt WHERE token = ?`;
+			const	elements: string[] = [token];
+			this.db.get(query, elements, (err, row) => {
+				if (err)
+					return reject(err);
+
+				resolve(!!row);
 			});
 		});
 	}

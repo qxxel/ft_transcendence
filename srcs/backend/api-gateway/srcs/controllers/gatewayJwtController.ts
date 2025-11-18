@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayJwtController.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:00:05 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 18:25:32 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 22:55:51 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance, opti
 		}
 	});
 
-	gatewayFastify.delete('/refresh', async (request, reply) => {
+	gatewayFastify.delete('/refresh/logout', async (request, reply) => {
 		try {
-			const response = await axios.delete('https://jwt:3000/refresh',
+			const response = await axios.delete('https://jwt:3000/refresh/logout',
 				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 
