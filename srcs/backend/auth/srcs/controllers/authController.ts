@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 21:42:44 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 01:01:20 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,8 @@ async function	logout(request: FastifyRequest, reply: FastifyReply) {
 		
 		const payload = await auth.get("https://jwt:3000/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
-		// auth.delete(`https://jwt:3000/${payload.data.id}`);
+		// probleme refresh n'est pas dans les cookies
+		// await auth.delete(`https://jwt:3000/`, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		return reply.status(201).send(payload.data.id);
 	} catch (error) {
@@ -159,11 +160,12 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply) {
 		if (!jwtAccess)
 			throw new Error("You are not connected");
 		
+		// probleme refresh n'est pas dans les cookies
+		// await auth.delete(`https://jwt:3000/`, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+
 		const payload = await auth.get("https://jwt:3000/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
-		// auth.delete(`https://jwt:3000/${payload.data.id}`);
-
-		auth.delete(`https://user:3000/${payload.data.id}`);
+		await auth.delete(`https://user:3000/${payload.data.id}`);
 		
 		return reply.status(204).send(payload.data.id);
 	} catch (error) {
@@ -175,6 +177,6 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply) {
 export async function	authController(authFastify: FastifyInstance) {
 	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
 	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
-	authFastify.post('/logout', logout);
+	authFastify.delete('/logout', logout);
 	authFastify.delete('/me', deleteClient);
 }

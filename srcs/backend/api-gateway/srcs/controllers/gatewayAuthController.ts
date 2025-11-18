@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/17 21:30:22 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 00:58:19 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,15 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 		}
 	});
 
-	gatewayFastify.post('/logout', async (request, reply) => {
+	gatewayFastify.delete('/logout', async (request, reply) => {
 		try {
-			const response = await axios.post(
+			const response = await axios.delete(
 				'https://auth:3000/logout',
-				request.body,
 				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 			
 			if (response.headers['set-cookie'])
-					reply.header('Set-Cookie', response.headers['set-cookie']);
+				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
 		} catch (err) {
@@ -81,9 +80,8 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 
 	gatewayFastify.delete('/me', async (request, reply) => {
 		try {
-			const response = await axios.post(
+			const response = await axios.delete(
 				'https://auth:3000/me',
-				request.body,
 				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 			
