@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
+#    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/18 21:58:51 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/11/19 00:08:00 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -228,6 +228,7 @@ logs	:
 	-$(call RUN_CMD,docker logs nginx,$(GREEN))
 	-$(call RUN_CMD,docker logs frontend,$(YELLOW))
 	-$(call RUN_CMD,docker logs gateway,$(BLUE))
+	-$(call RUN_CMD,docker logs auth,$(BLUE))
 	-$(call RUN_CMD,docker logs jwt,$(BLUE))
 	-$(call RUN_CMD,docker logs user,$(BLUE))
 
