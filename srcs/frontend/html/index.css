@@ -38,6 +38,10 @@ p {
     color: yellow;
 }
 
+p#msg-error {
+    color: red;
+}
+
 .tab {
     padding-left: var(--sp-6);
     padding-right: var(--sp-6);

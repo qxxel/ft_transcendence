@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 01:01:20 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/18 17:46:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,19 @@ async function isLoggedIn(cookie: string | undefined) {
 	}
 }
 
+function errorsHandler(err: unknown) {
+	if (axios.isAxiosError(err)) {
+		if (err.response?.data?.error)
+			return err.response.data.error;
+		return err.message;
+	}
+
+	if (err instanceof Error)
+		return err.message;
+
+	return "Unknown error";
+}
+
 interface SignUpBody {
 	username: string;
 	email: string;
@@ -88,8 +101,9 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 			throw error;
 		}
 	} catch (error) {
-		console.error(error instanceof Error ? error.message : error);
-		return reply.code(400).send(error instanceof Error ? error.message : error);
+		const msgError = errorsHandler(error);
+		console.error(msgError);
+		return reply.code(400).send({ error: msgError });
 	}
 }
 
@@ -129,8 +143,9 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 			username: user.username
 		});
 	} catch (error) {
-		console.error(error instanceof Error ? error.message : error);
-		return reply.code(400).send(error instanceof Error ? error.message : error);
+		const msgError = errorsHandler(error);
+		console.error(msgError);
+		return reply.code(400).send({ error: msgError });
 	}
 }
 
@@ -148,8 +163,9 @@ async function	logout(request: FastifyRequest, reply: FastifyReply) {
 
 		return reply.status(201).send(payload.data.id);
 	} catch (error) {
-		console.error(error instanceof Error ? error.message : error);
-		return reply.code(400).send(error instanceof Error ? error.message : error);
+		const msgError = errorsHandler(error);
+		console.error(msgError);
+		return reply.code(400).send({ error: msgError });
 	}
 }
 
@@ -169,8 +185,9 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply) {
 		
 		return reply.status(204).send(payload.data.id);
 	} catch (error) {
-		console.error(error instanceof Error ? error.message : error);
-		return reply.code(400).send(error instanceof Error ? error.message : error);
+		const msgError = errorsHandler(error);
+		console.error(msgError);
+		return reply.code(400).send({ error: msgError });
 	}
 }
 
