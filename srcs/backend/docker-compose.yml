@@ -30,6 +30,22 @@ services:
     networks:
       - backend
 
+  game:
+    container_name: game
+    image: game
+    build:
+      context: ./game
+      dockerfile: Dockerfile.game
+    secrets:
+      - ssl_key_back
+      - ssl_crt_back
+    ports:
+      - "3000"
+    volumes:
+      - "gameDB:/app/dist/db"
+    networks:
+      - backend
+
   user:
     container_name: user
     image: user
