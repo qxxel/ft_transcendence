@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:08:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 18:27:03 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:44:00 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 /* ====================== IMPORT ====================== */
 
-import type { Database }	from 'sqlite3';
+import type { Database }	from 'sqlite3'
 
 
-/* ====================== FUNCTIONS ====================== */
+/* ====================== FUNCTION ====================== */
 
-export function	jwtTableBuilder(db: Database) {
+export function	jwtTableBuilder(db: Database): void {
 	db.exec(`CREATE TABLE IF NOT EXISTS jwt (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		idclient INT NOT NULL,

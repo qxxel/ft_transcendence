@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtService.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 23:35:52 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:19:25 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,20 @@
 
 /* ====================== IMPORT ====================== */
 
-import type { jwtRespDto } from "../dtos/jwtRespDto.js";
 import { jwtRepository }	from "../repositories/jwtRepository.js"
+
+import type { jwtRespDto }	from "../dtos/jwtRespDto.js"
 
 
 /* ====================== CLASS ====================== */
 
 export class	jwtService {
-	private	jwtRepo;
+	private	jwtRepo: jwtRepository;
 
 	constructor(jwtRepo: jwtRepository) {
 		this.jwtRepo = jwtRepo;
 	}
+
 
 	async addToken(token: string, clientId: number): Promise<number> {
 		return await this.jwtRepo.addToken(token, clientId);

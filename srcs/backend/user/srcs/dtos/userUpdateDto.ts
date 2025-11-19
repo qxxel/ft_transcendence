@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:13:44 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/14 21:15:32 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:30:43 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { isValidName, isValidEmail } from '../utils/validation.js'
-import type { validationResult } from '../utils/validation.js';
+// import { isValidName, isValidEmail } from '../utils/validation.js'
+// import type { validationResult } from '../utils/validation.js';
 
 
 /* ====================== CLASS ====================== */
@@ -29,7 +29,7 @@ import type { validationResult } from '../utils/validation.js';
 // 		this.username = row.username;
 // 		this.email = row.email;
 
-// 		var validation = this.isValid()
+// 		var	validation = this.isValid()
 // 		if (!validation.result)
 // 			throw new Error(validation.error);
 // 	}

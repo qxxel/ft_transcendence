@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 03:10:16 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:42:24 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ export class	authRepository {
 
 	async addClient(id: string, password: string): Promise<void> {
 		return new Promise((resolve, reject) => {
-			const	query: string = `INSERT INTO auth (id_client, password) VALUES(?, ?)`;
+			const	query: string = "INSERT INTO auth (id_client, password) VALUES(?, ?)";
 			const	elements: string[] = [id, password];
 
 			this.db.run(query, elements, function (err: unknown) {
@@ -65,7 +65,7 @@ export class	authRepository {
 
 	async getPasswordByIdClient(id: string): Promise<string>{
 		return new Promise((resolve, reject) => {
-			const	query: string = `SELECT password FROM auth WHERE id_client = ?`;
+			const	query: string = "SELECT password FROM auth WHERE id_client = ?";
 			const	elements: string[] = [id];
 
 			this.db.get(query, elements, (err: unknown, row: { password: string }) => {
@@ -79,7 +79,7 @@ export class	authRepository {
 
 	async deleteClient(id: string): Promise<void>{
 		return new Promise((resolve, reject) => {
-			const	query: string = `DELETE FROM auth WHERE id = ?`;
+			const	query: string = "DELETE FROM auth WHERE id = ?";
 			const	elements: string[] = [id];
 
 			this.db.run(query, elements, function(err: unknown) {

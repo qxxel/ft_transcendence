@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:03:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 02:37:45 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:44:14 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 import type { Database }	from 'sqlite3';
 
 
-/* ====================== FUNCTIONS ====================== */
+/* ====================== FUNCTION ====================== */
 
 export function	authTableBuilder(db: Database): void {
 	db.exec(`CREATE TABLE IF NOT EXISTS auth (

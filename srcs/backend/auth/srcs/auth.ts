@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/19 02:38:15 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:26:11 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 import axios				from 'axios'
 import cors					from '@fastify/cors'
-import Fastify				from 'fastify'
+import Fastify, { type FastifyInstance }				from 'fastify'
 import fs					from 'fs'
 import https				from 'https'
 import sqlite3Pkg			from 'sqlite3'
@@ -36,8 +36,9 @@ export const	authAxios = axios.create({
 
 /* ====================== DATABASE ====================== */
 
-const			{ Database } = sqlite3Pkg;
-const			dbname = '/app/dist/db/auth.db';
+const	{ Database } = sqlite3Pkg;
+const	dbname = '/app/dist/db/auth.db';
+
 const	db = new Database(dbname, (err: Error | null) => {
 	if (err)
 		console.error(err);
@@ -49,7 +50,7 @@ export const	authServ = new authService(new authRepository(db));
 
 /* ====================== SERVER ====================== */
 
-const	authFastify = Fastify({
+const	authFastify: FastifyInstance = Fastify({
 	https: {
 		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
 		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
@@ -77,7 +78,7 @@ const	start = async () => {
 				process.exit(0);
 			});
 		});
-	} catch (err) {
+	} catch (err: unknown) {
 		authFastify.log.error(err);
 		process.exit(1);
 	}

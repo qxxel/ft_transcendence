@@ -3,40 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   jwt.ts                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/17 21:34:25 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:26:37 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // THE FILE THAT LAUNCH THE FASTIFY SERVER FOR JWT SERVICE
 
 
-/* ====================== IMPORT ====================== */
+/* ====================== IMPORTS ====================== */
 
-import Fastify		from 'fastify';
-import cors			from '@fastify/cors'
-import fs			from 'fs';
-import sqlite3Pkg	from 'sqlite3';
-
-import { jwtController }	from './controllers/jwtController.js';
-import { jwtService }		from './services/jwtService.js';
-import { jwtRepository }	from './repositories/jwtRepository.js';
+import cors					from '@fastify/cors'
+import Fastify, { type FastifyInstance }				from 'fastify'
+import fs					from 'fs'
+import sqlite3Pkg			from 'sqlite3'
+import { jwtController }	from "./controllers/jwtController.js"
+import { jwtService }		from "./services/jwtService.js"
+import { jwtRepository }	from "./repositories/jwtRepository.js"
 
 
 /* ====================== TOKENS VARIABLES ====================== */
 
-export const	expAccess = "1000s";
-export const	expRefresh = "10000s";
+export const	expAccess: string = "1000s";
+export const	expRefresh: string = "10000s";
 
-export const	jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET);
+export const	jwtSecret: Uint8Array<ArrayBuffer> = new TextEncoder().encode(process.env.JWT_SECRET);
 
 
 /* ====================== DATABASE ====================== */
 
-const			{ Database } = sqlite3Pkg;
-const			dbname = '/app/dist/db/jwt.db';
+const	{ Database } = sqlite3Pkg;
+const	dbname: string = '/app/dist/db/jwt.db';
+
 const	db = new Database(dbname, (err: Error | null) => {
 	if (err)
 		console.error(err);
@@ -44,12 +44,12 @@ const	db = new Database(dbname, (err: Error | null) => {
 	console.log(`Database started on ${dbname}`);
 });
 
-export const	jwtServ = new jwtService(new jwtRepository(db));
+export const	jwtServ: jwtService = new jwtService(new jwtRepository(db));
 
 
 /* ====================== SERVER ====================== */
 
-const	jwtFastify = Fastify({
+const	jwtFastify: FastifyInstance = Fastify({
 	https: {
 		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
 		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
@@ -66,7 +66,7 @@ jwtFastify.register(cors, {
 
 jwtFastify.register(jwtController);
 
-const start = async () => {
+const	start = async () => {
 	try {
 		await jwtFastify.listen({ port: 3000, host: '0.0.0.0' });
 		console.log(`Server started on https://jwt:3000`);
@@ -77,7 +77,7 @@ const start = async () => {
 				process.exit(0);
 			});
 		});
-	} catch (err) {
+	} catch (err: unknown) {
 		jwtFastify.log.error(err);
 		process.exit(1);
 	}

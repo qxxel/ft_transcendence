@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:51:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/15 17:30:20 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:30:14 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { isValidName, isValidEmail } from "../utils/validation.js"
-import { ValidationError } from "../utils/throwErrors.js"
+import { isValidName, isValidEmail }	from "../utils/validation.js"
+import { ValidationError }				from "../utils/throwErrors.js"
 
-import type { validationResult } from "../utils/validation.js";
+import type { validationResult }	from "../utils/validation.js"
+
 
 /* ====================== CLASS ====================== */
 
@@ -30,20 +31,20 @@ export class	userAddDto {
 		this.username = row.username;
 		this.email = row.email;
 
-		var validation = this.isValid()
+		var	validation: validationResult = this.isValid()
 		if (!validation.result)
 			throw new ValidationError(validation.error);
 	}
 
 	isValid(): validationResult {
-		const	nameResult = isValidName(this.username);
-		const	emailResult = isValidEmail(this.email);
+		const	nameResult: validationResult = isValidName(this.username);
+		const	emailResult: validationResult = isValidEmail(this.email);
 
-		const	errors = [nameResult.error, emailResult.error]
+		const	errors: string | undefined = [nameResult.error, emailResult.error]
 			.filter(error => error && error.length > 0)
 			.join("; ");
 
-		return { result: errors.length === 0, error: errors } // change to send error by error
+		return { result: errors.length === 0, error: errors } // maybe change to send error by error
 	}
 
 
