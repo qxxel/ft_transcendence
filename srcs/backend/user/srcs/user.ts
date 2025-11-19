@@ -6,20 +6,20 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/19 02:27:49 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:50:21 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORT ====================== */
 
-import Fastify		from 'fastify';
+import Fastify		from 'fastify'
 import cors			from '@fastify/cors'
-import fs			from 'fs';
-import sqlite3Pkg from 'sqlite3';
+import fs			from 'fs'
+import sqlite3Pkg from 'sqlite3'
 
 import { userController }	from "./controllers/userController.js"
-import { userService }		from './services/userService.js';
-import { userRepository }	from './repositories/userRepository.js';
+import { userService }		from './services/userService.js'
+import { userRepository }	from './repositories/userRepository.js'
 
 /* ====================== DATABASE ====================== */
 

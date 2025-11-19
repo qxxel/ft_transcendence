@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:26:30 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:50:05 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 /* ====================== IMPORT ====================== */
 
-import axios	from 'axios';
+import axios	from 'axios'
 import cors		from '@fastify/cors'
-import Fastify, { type FastifyInstance }	from 'fastify';
-import fs		from 'fs';
-import https	from 'https';
+import Fastify, { type FastifyInstance }	from 'fastify'
+import fs		from 'fs'
+import https	from 'https'
 
 import { gatewayAuthController }	from "./controllers/gatewayAuthController.js"
 import { gatewayJwtController }		from "./controllers/gatewayJwtController.js"

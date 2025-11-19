@@ -6,16 +6,16 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 18:49:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/15 19:00:55 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:49:29 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 /* ====================== IMPORTS ====================== */
 
-import { IsTakenError, NotExistError } from "./throwErrors.js";
+import { IsTakenError, NotExistError } from "./throwErrors.js"
 
-import type { FastifyInstance, FastifyReply } from "fastify";
+import type { FastifyInstance, FastifyReply } from "fastify"
 
 
 /* ====================== FUNCTION ====================== */
