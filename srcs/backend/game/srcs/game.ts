@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 19:02:08 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 21:51:28 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ import sqlite3Pkg			from 'sqlite3'
 import { pongController }	from "./controllers/pongController.js"
 import { pongService }		from "./services/pongService.js"
 import { pongRepository }	from "./repositories/pongRepository.js"
-// import { tankController }	from "./controllers/tankController.js"
-// import { tankService }		from "./services/tankService.js"
-// import { tankRepository }	from "./repositories/tankRepository.js"
+import { tankController }	from "./controllers/tankController.js"
+import { tankService }		from "./services/tankService.js"
+import { tankRepository }	from "./repositories/tankRepository.js"
 
 import type { FastifyInstance }	from 'fastify'
 
@@ -42,7 +42,7 @@ const	db = new Database(dbname, (err: Error | null) => {
 });
 
 export const	pongServ: pongService = new pongService(new pongRepository(db));
-// export const	tankServ: tankService = new tankService(new tankRepository(db));
+export const	tankServ: tankService = new tankService(new tankRepository(db));
 
 
 /* ====================== SERVER ====================== */
@@ -67,7 +67,7 @@ gameFastify.get('/', (request, reply) => {						//
 });																//
 
 gameFastify.register(pongController, { prefix: '/pong' });
-// gameFastify.register(tankController, { prefix: '/tank' });
+gameFastify.register(tankController, { prefix: '/tank' });
 
 const	start = async () => {
 	try {
