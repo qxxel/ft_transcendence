@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authRepository.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 21:51:20 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 03:10:16 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 /* ====================================================== */
 
 
-/* ====================== IMPORT ====================== */
+/* ====================== IMPORTS ====================== */
 
 import { authTableBuilder }	from "../tableBuilders/authTableBuilder.js"
 
@@ -38,12 +38,12 @@ import type { Database }	from 'sqlite3'
 export class	authRepository {
 	private	db: Database;
 
-	constructor(db: any) {
+	constructor(db: Database) {
 		try {
 			this.db = db;
 			authTableBuilder(db);
 		}
-		catch (err) {
+		catch (err: unknown) {
 			console.error(err);
 			process.exit(1);
 		}
@@ -51,11 +51,13 @@ export class	authRepository {
 
 	async addClient(id: string, password: string): Promise<void> {
 		return new Promise((resolve, reject) => {
-			const	query = `INSERT INTO auth (id_client, password) VALUES(?, ?)`;
-			const	elements = [id, password];
-			this.db.run(query, elements, function (err) {
+			const	query: string = `INSERT INTO auth (id_client, password) VALUES(?, ?)`;
+			const	elements: string[] = [id, password];
+
+			this.db.run(query, elements, function (err: unknown) {
 				if (err)
 					return reject(err);
+
 				return resolve();
 			});
 		});
@@ -63,9 +65,10 @@ export class	authRepository {
 
 	async getPasswordByIdClient(id: string): Promise<string>{
 		return new Promise((resolve, reject) => {
-			const	query = `SELECT password FROM auth WHERE id_client = ?`;
-			const	elements = [id];
-			this.db.get(query, elements, (err, row: { password: string }) => {
+			const	query: string = `SELECT password FROM auth WHERE id_client = ?`;
+			const	elements: string[] = [id];
+
+			this.db.get(query, elements, (err: unknown, row: { password: string }) => {
 				if (err)
 					return reject(err);
 
@@ -76,11 +79,13 @@ export class	authRepository {
 
 	async deleteClient(id: string): Promise<void>{
 		return new Promise((resolve, reject) => {
-			const	query = `DELETE FROM auth WHERE id = ?`;
-			const	elements = [id];
-			this.db.run(query, elements, function(err) {
+			const	query: string = `DELETE FROM auth WHERE id = ?`;
+			const	elements: string[] = [id];
+
+			this.db.run(query, elements, function(err: unknown) {
 				if (err)
 					return reject(err);
+
 				return resolve();
 			});
 		});

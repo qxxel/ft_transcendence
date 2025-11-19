@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 20:01:08 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 02:47:48 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,23 @@
 
 /* ====================== IMPORT ====================== */
 
-import Fastify from 'fastify';
-import cors from '@fastify/cors'
-import axios from 'axios';
-import fs from 'fs';
-import https from 'https';
+import axios	from 'axios';
+import cors		from '@fastify/cors'
+import Fastify	from 'fastify';
+import fs		from 'fs';
+import https	from 'https';
 
-import { gatewayUserController }	from "./controllers/gatewayUserController.js"
-import { gatewayJwtController }	from "./controllers/gatewayJwtController.js"
 import { gatewayAuthController }	from "./controllers/gatewayAuthController.js"
+import { gatewayJwtController }		from "./controllers/gatewayJwtController.js"
+import { gatewayUserController }	from "./controllers/gatewayUserController.js"
 
 
-/* ====================== HTTPS AGENT VARIABLE ====================== */
+/* ====================== AXIOS VARIABLES ====================== */
 
-const httpsAgent = new https.Agent({ rejectUnauthorized: false }); // TO BY-PASS SELF SIGNED CERTIFICATES
+export const	gatewayAxios = axios.create({
+	httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+	timeout: 1000
+});
 
 
 /* ====================== SERVER ====================== */
@@ -49,11 +52,11 @@ gatewayFastify.register(cors, {
 });
 
 
-gatewayFastify.register(gatewayUserController, { prefix: '/api/user', httpsAgent: httpsAgent });
-gatewayFastify.register(gatewayJwtController, { prefix: '/api/jwt', httpsAgent: httpsAgent });
-gatewayFastify.register(gatewayAuthController, { prefix: '/api/auth', httpsAgent: httpsAgent });
+gatewayFastify.register(gatewayUserController, { prefix: '/api/user' });
+gatewayFastify.register(gatewayJwtController, { prefix: '/api/jwt' });
+gatewayFastify.register(gatewayAuthController, { prefix: '/api/auth' });
 
-const start = async () => {
+const	start = async () => {
 	try {
 		await gatewayFastify.listen({ port: 3000, host: '0.0.0.0' });
 		console.log(`Server started on https://localhost:3000`);
