@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:50:05 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 23:12:00 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ import https	from 'https'
 import { gatewayAuthController }	from "./controllers/gatewayAuthController.js"
 import { gatewayJwtController }		from "./controllers/gatewayJwtController.js"
 import { gatewayUserController }	from "./controllers/gatewayUserController.js"
+import { gateway2faController }		from "./controllers/gateway2faController.js"
 
 
 /* ====================== AXIOS VARIABLES ====================== */
@@ -55,6 +56,7 @@ gatewayFastify.register(cors, {
 gatewayFastify.register(gatewayUserController, { prefix: '/api/user' });
 gatewayFastify.register(gatewayJwtController, { prefix: '/api/jwt' });
 gatewayFastify.register(gatewayAuthController, { prefix: '/api/auth' });
+gatewayFastify.register(gateway2faController, { prefix: '/api/2fa' });
 
 const	start = async () => {
 	try {

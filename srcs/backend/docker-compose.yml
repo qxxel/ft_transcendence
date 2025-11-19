@@ -62,3 +62,18 @@ services:
     networks:
       - backend
     env_file: ../.env
+
+  2fa:
+    container_name: 2fa
+    image: 2fa
+    build:
+      context: ./2fa
+      dockerfile: Dockerfile.2fa
+    secrets:
+      - ssl_key_back
+      - ssl_crt_back
+    ports:
+      - "3000"
+    networks:
+      - backend
+    # env_file: ../.env
