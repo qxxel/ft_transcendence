@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pongAddDto.ts                                      :+:      :+:    :+:   */
+/*   tankRespDto.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 19:04:52 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 20:55:08 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/11/19 21:35:37 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/19 21:37:29 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW PONG GAMES
+// WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW TANK GAMES
 
 
 /* ====================== IMPORTS ====================== */
@@ -23,37 +23,39 @@
 
 /* ====================== class	====================== */
 
-export class	pongAddDto {
+export class	tankRespDto {
+	private	id: number;
 	private	winner: number;
 	private	p1: number;
 	private	p2: number;
-	private	p1score: number;
-	private	p2score: number;
+	private	p3: number;
+	private	p4: number;
+	private	p1kill: number;
+	private	p2kill: number;
+	private	p3kill: number;
+	private	p4kill: number;
 	private	start: number;
 
 	constructor(row: any) {
+		this.id = row.id;
 		this.winner = row.winner;
 		this.p1 = row.p1;
 		this.p2 = row.p2;
-		this.p1score = row.p1score;
-		this.p2score = row.p2score;
+		this.p3 = row.p3;
+		this.p4 = row.p4;
+		this.p1kill = row.p1score;
+		this.p2kill = row.p2score;
+		this.p3kill = row.p3score;
+		this.p4kill = row.p4score;
 		this.start = row.start;
 	}
 
 
-	getTable(): number[] {
-		return [
-			this.winner,
-			this.p1,
-			this.p1score,
-			this.p2,
-			this.p2score,
-			this.start
-		]
+	// GETTERS
+	getId(): number {
+		return this.id;
 	}
 
-
-	// GETTERS
 	getWinner(): number {
 		return this.winner;
 	}
@@ -66,12 +68,28 @@ export class	pongAddDto {
 		return this.p2;
 	}
 
-	getP1Score(): number {
-		return this.p1score;
+	getP3(): number {
+		return this.p3;
 	}
 
-	getP2Score(): number {
-		return this.p2score;
+	getP4(): number {
+		return this.p4;
+	}
+
+	getP1Kill(): number {
+		return this.p1kill;
+	}
+
+	getP2Kill(): number {
+		return this.p2kill;
+	}
+
+	getP3Kill(): number {
+		return this.p3kill;
+	}
+
+	getP4Kill(): number {
+		return this.p4kill;
 	}
 
 	getStart(): number {

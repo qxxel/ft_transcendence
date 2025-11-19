@@ -6,11 +6,11 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:48:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 19:39:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 21:46:46 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// WILL BE THE LOGIC OF THE WHO WILL CALL REPOSITORIES FUNCTIONS
+// WILL BE THE LOGIC OF THE WHO WILL CALL PONG REPOSITORIES FUNCTIONS
 
 
 /* ====================== IMPORTS ====================== */
