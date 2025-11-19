@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authService.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 21:49:00 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 02:36:19 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ import { authRepository }	from "../repositories/authRepository.js"
 /* ====================== CLASS ====================== */
 
 export class	authService {
-	private	authRepo;
+	private	authRepo: authRepository;
 
 	constructor(authRepo: authRepository) {
 		this.authRepo = authRepo;

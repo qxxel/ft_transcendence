@@ -3,23 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   auth.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/17 16:24:04 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 02:38:15 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// THE FILE THAT LAUNCH THE FASTIFY SERVER FOR AUTH SERVICE
+
+
 /* ====================== IMPORT ====================== */
 
-import Fastify from 'fastify';
-import cors from '@fastify/cors'
-import fs from 'fs';
-import sqlite3Pkg from 'sqlite3';
-
-import { authController }	from './controllers/authController.js';
-import { authService }		from './services/authService.js';
+import axios				from 'axios'
+import cors					from '@fastify/cors'
+import Fastify				from 'fastify'
+import fs					from 'fs'
+import https				from 'https'
+import sqlite3Pkg			from 'sqlite3'
+import { authController }	from './controllers/authController.js'
 import { authRepository }	from "./repositories/authRepository.js"
+import { authService }		from './services/authService.js'
+
+
+/* ====================== AXIOS VARIABLES ====================== */
+
+export const	authAxios = axios.create({
+	httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+	timeout: 1000
+});
+
 
 /* ====================== DATABASE ====================== */
 
@@ -53,7 +66,7 @@ authFastify.register(cors, {
 
 authFastify.register(authController);
 
-const start = async () => {
+const	start = async () => {
 	try {
 		await authFastify.listen({ port: 3000, host: '0.0.0.0' });
 		console.log('Server started on https://auth:3000');

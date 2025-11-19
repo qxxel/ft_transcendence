@@ -3,79 +3,75 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayAuthController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/18 20:17:02 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 03:04:19 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // HANDLE THE ALL THE REQUEST THAT API GATEWAY RECEIVE FROM `/api/auth`
 
 
-/* ====================== IMPORT ====================== */
+/* ====================== IMPORTS ====================== */
 
-import axios	from 'axios';
-import https	from 'https';
-
+import { gatewayAxios }			from '../api-gateway.js';
 import { requestErrorsHandler }	from "../utils/requestErrors.js";
 
-import type { FastifyInstance }	from 'fastify';
+import type { AxiosResponse }									from 'axios';
+import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify';
 
-const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
 /* ====================== FUNCTION ====================== */
 
 export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
-
-	gatewayFastify.post('/sign-up', async (request, reply) => {
+	gatewayFastify.post('/sign-up', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const response = await axios.post(
+			const	response: AxiosResponse = await gatewayAxios.post(
 				'https://auth:3000/sign-up',
 				request.body,
-				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
-			
+
 			if (response.headers['set-cookie'])
 				reply.header('Set-Cookie', response.headers['set-cookie']);
-			
+
 			return reply.send(response.data);
-		} catch (err) {
+		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
 	});
 
-	gatewayFastify.post('/sign-in', async (request, reply) => {
+	gatewayFastify.post('/sign-in', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const response = await axios.post(
+			const	response: AxiosResponse = await gatewayAxios.post(
 				'https://auth:3000/sign-in',
 				request.body,
-				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 			
 			if (response.headers['set-cookie'])
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err) {
+		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
 	});
 
-	gatewayFastify.delete('/me', async (request, reply) => {
+	gatewayFastify.delete('/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const response = await axios.delete(
+			const	response: AxiosResponse = await gatewayAxios.delete(
 				'https://auth:3000/me',
-				{ httpsAgent, withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 			
 			if (response.headers['set-cookie'])
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err) {
+		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
 	});
-
 }
