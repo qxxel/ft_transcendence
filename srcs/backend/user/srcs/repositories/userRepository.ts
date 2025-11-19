@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:20:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:42:18 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ import { userTableBuilder }	from "../tableBuilders/userTableBuilder.js"
 
 import type { Database }	from 'sqlite3'
 
-/* ====================== INTERFACE ====================== */
+/* ====================== interface	====================== */
 
 // BECAUSE TYPESCRIPT DON'T ACCEPT `this.lastID` BUT IT APPEARS WITH THE COMPILATION
 interface	StatementWithLastID {
@@ -42,7 +42,7 @@ interface	StatementWithLastID {
 }
 
 
-/* ====================== CLASS ====================== */
+/* ====================== class	====================== */
 
 export class	userRepository {
 	private	db: Database;

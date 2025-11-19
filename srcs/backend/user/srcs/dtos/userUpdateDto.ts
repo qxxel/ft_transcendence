@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:13:44 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:53:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 // import type { validationResult } from "../utils/validation.js"
 
 
-/* ====================== CLASS ====================== */
+/* ====================== class	====================== */
 
 // export class	userUpdateDto {
 // 	private	username?: string;

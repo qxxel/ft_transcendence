@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 23:09:40 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:53:01 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { User }		from "../user/user.js";
-import { router }	from "../index.js";
+import { router }	from "../index.js"
+import { User }		from "../user/user.js"
 
-import type { GameState }		from "../index.js";
+import type { GameState }	from "../index.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -36,8 +36,8 @@ function	getMenu(username: string | undefined): string {
 
 async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
 	console.log("Sign in");
-	let identifier = (document.getElementById("sign-in-username") as HTMLInputElement).value;
-	let password = (document.getElementById("sign-in-password") as HTMLInputElement).value;
+	const	identifier: string = (document.getElementById("sign-in-username") as HTMLInputElement).value;
+	const	password: string = (document.getElementById("sign-in-password") as HTMLInputElement).value;
 	form.reset();
 
 	console.log("identifier: " + identifier);
@@ -45,7 +45,7 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 
 	console.log(JSON.stringify({ identifier, password }));
 
-	const response: Response = await fetch('/api/auth/sign-in', {
+	const	response: Response = await fetch('/api/auth/sign-in', {
 		method: "post",
 		credentials: "include",
 		headers: {
@@ -53,17 +53,20 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 		},
 		body: JSON.stringify({ identifier, password })
 	});
-	
-	let result = null;
-	try {
-		result = await response.json();
-	} catch (error) {}
+
+	const	result: any = await response.json();
 
 	if (!response.ok)
 	{
-		const p = document.getElementById("msg-error");
+		const	p: HTMLElement | null = document.getElementById("msg-error");
+		if (!p)
+		{
+			console.error("No HTMLElement named \`msg-error\`.");
+			return ;
+		}
+
 		console.log("response :", result);
-		p!.textContent = result?.error || "An unexpected error has occurred";
+		p.textContent = result?.error || "An unexpected error has occurred";
 		return ;
 	}
 
@@ -81,9 +84,9 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
 	console.log("Sign up");
 
-	let username = (document.getElementById("sign-up-username") as HTMLInputElement).value;
-	let email = (document.getElementById("sign-up-email") as HTMLInputElement).value;
-	let password = (document.getElementById("sign-up-password") as HTMLInputElement).value;
+	const	username: string = (document.getElementById("sign-up-username") as HTMLInputElement).value;
+	const	email: string = (document.getElementById("sign-up-email") as HTMLInputElement).value;
+	const	password: string = (document.getElementById("sign-up-password") as HTMLInputElement).value;
 	form.reset();
 
 	console.log("username: " + username);
@@ -91,7 +94,7 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 	console.log("password: " + password);
 	console.log(JSON.stringify({ username, email, password }));
 
-	const response: Response = await fetch('/api/auth/sign-up', {
+	const	response: Response = await fetch('/api/auth/sign-up', {
 		method: "post",
 		credentials: "include",
 		headers: {
@@ -100,20 +103,21 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 		body: JSON.stringify({ username, email, password })
 	});
 
-	let result = null;
-	try {
-		result = await response.json();
-	} catch (error) {}
+	const	result = await response.json();
 
 	if (!response.ok)
 	{
-		const p = document.getElementById("msg-error");
+		const	p = document.getElementById("msg-error");
+		if (!p)
+		{
+			console.error("No HTMLElement named \`msg-error\`.");
+			return ;
+		}
+
 		console.log("response :", result);
-		p!.textContent = result?.error || "An unexpected error has occurred";
+		p.textContent = result?.error || "An unexpected error has occurred";
 		return ;
 	}
-	console.log("response :", result);
-
 
 	user.setId(result.id as number);
 	user.setUsername(username);
@@ -127,10 +131,10 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 }
 
 export function	setupSubmitHandler(gameState: GameState, user: User): void {
-	document.addEventListener('submit', async (event) => {
+	document.addEventListener('submit', async (event: SubmitEvent) => {
 		event.preventDefault();
 
-		const form = event.target as HTMLFormElement;
+		const	form: HTMLFormElement = event.target as HTMLFormElement;
 
 		if (form.id === "sign-in-form")
 			handleSignInForm(form, gameState, user);

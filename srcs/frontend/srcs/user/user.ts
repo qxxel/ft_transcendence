@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 12:01:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 21:03:34 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:22:22 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== CLASS ====================== */
 
-export class User {
+export class	User {
 	private	signedIn: boolean;
 	private	id: number | undefined;
 	private	username: string | undefined;
@@ -30,6 +30,8 @@ export class User {
 		this.signedIn = false;
 	}
 
+
+	// GETTERS
 	isSignedIn(): boolean {
 		return this.signedIn;
 	}
@@ -42,7 +44,7 @@ export class User {
 		return this.id;
 	}
 
-
+	// SETTERS
 	setSigned(bool: boolean): void {
 		this.signedIn = bool;
 	}

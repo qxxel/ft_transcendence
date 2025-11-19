@@ -1,23 +1,46 @@
-import { Game } from "./class_game.js";
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game.ts                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 16:53:38 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/19 16:57:01 by agerbaud         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// THE FILE THAT CONTAIN THE class	FOR THE PONGGAME (WITH ALL METHODS)
+
+
+/* ====================== IMPORT ====================== */
+
+import { Game } from "./class_game.js"
+
+
+/* ====================== INTERFACES ====================== */
 
 interface Paddle {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  dy: number;
-  speed: number;
-  hits: number;
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+	dy: number;
+	speed: number;
+	hits: number;
 }
 
-interface Ball {
-  x: number;
-  y: number;
-  radius: number;
-  dx: number;
-  dy: number;
-  speed: number;
+interface	Ball {
+	x: number;
+	y: number;
+	radius: number;
+	dx: number;
+	dy: number;
+	speed: number;
 }
+
+
+/* ====================== CLASS ====================== */
 
 export class PongGame extends Game {
   private canvas: HTMLCanvasElement | null = null;

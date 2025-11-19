@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   index.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 01:08:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:58:38 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,16 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { PongGame } from './game/game.js';
-// import { TankGame }       from './tank.js';
-import { User } 				from "./user/user.js";
-import { Router } 				from "./router/router.js";
-import { setupClickHandlers } 	from "./eventsHandlers/clickHandler.js"
-import { setupSubmitHandler } 	from "./eventsHandlers/submitHandler.js"
-import { setupLoadHandler } 	from "./eventsHandlers/loadHandler.js"
 import { addRoutes }			from "./router/addRoutes.js"
-import { Game } 				from './game/class_game.js';
+import { Game } 				from './game/class_game.js'
+import { Router }				from "./router/router.js"
+import { setupClickHandlers }	from "./eventsHandlers/clickHandler.js"
+import { setupLoadHandler }		from "./eventsHandlers/loadHandler.js"
+import { setupSubmitHandler }	from "./eventsHandlers/submitHandler.js"
+import { User }					from "./user/user.js"
 
 
-/* ====================== INTERFACE ====================== */
+/* ====================== interface	====================== */
 
 export interface	GameState {
 	currentGame: Game | null;
@@ -38,9 +36,9 @@ var	gameState: GameState = {
 	currentGame: null
 };
 
-var user = new User();
+var	user: User = new User();
 
-export const	router = new Router();
+export const	router: Router = new Router();
 
 
 /* ============================= SETUP EVENTS ============================= */

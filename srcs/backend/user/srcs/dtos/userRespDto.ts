@@ -6,20 +6,20 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:33:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/14 21:10:58 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW USERS
 
 
-/* ====================== CLASS ====================== */
+/* ====================== class	====================== */
 
 export class	userRespDto {
-	private id: number;
+	private	id: number;
 	private	username: string;
 	private	email: string;
-	private elo: number;
+	private	elo: number;
 
 
 	constructor(row: any) {

@@ -2,12 +2,7 @@ import { Ball } from './class_ball.js';
 import { Actor } from './class_actor.js';
 import { Rect2D, Line2D } from './class_mesh.js';
 
-const tankWidth = 40;
-const tankHeight = 40;
-const tankSpeed = 2;
-const rotationSpeed = 0.025;
-const stickLength = 37;
-const stickWidth = 8;
+// /!\ DESCRIBE THE FILE /!\
 
 export class Tank extends Actor {
 
@@ -69,7 +64,7 @@ export class Tank extends Actor {
     this.hits = 0;
   }
 
-  // TODO hyperchiant ca, je suis oblige de me trimballer canvas, p-e scaleup genre class Map idk
+  // TODO hyperchiant ca, je suis oblige de me trimballer canvas, p-e scaleup genre class	Map idk
   update(canvas: HTMLCanvasElement, key: string): Ball | null {
 
     if (!key) return null; // p-e pas oblige

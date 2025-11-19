@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:49:22 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ import { userRespDto }		from "../dtos/userRespDto.js"
 import { IsTakenError, NotExistError }	from "../utils/throwErrors.js"
 
 
-/* ====================== CLASS ====================== */
+/* ====================== class	====================== */
 
 export class	userService {
 	private	userRepo: userRepository;
