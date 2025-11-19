@@ -134,8 +134,8 @@ export class TankGame {
     const seconds = matchDurationSeconds % 60;
     document.getElementById('stat-winner')!.innerText = this.score1 > this.score2 ? 'Player 1' : 'Player 2';
     document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
-    document.getElementById('stat-p1-hits')!.innerText = this.tanks[0].hits.toString();
-    document.getElementById('stat-p2-hits')!.innerText = this.tanks[1].hits.toString();
+    document.getElementById('stat-p1-hits')!.innerText = this.tanks[0]!.hits.toString();
+    document.getElementById('stat-p2-hits')!.innerText = this.tanks[1]!.hits.toString();
     document.getElementById('stat-rally')!.innerText = this.longestRally.toString();
     dashboard.style.display = 'block';
   }
@@ -172,10 +172,10 @@ export class TankGame {
     this.score2 = 0;
     this.updateScores();
 
-    this.tanks[0].y = this.canvas!.height / 2 - this.tanks[0].height / 2;
-    this.tanks[0].hits = 0;
-    this.tanks[1].y = this.canvas!.height / 2 - this.tanks[1]!.height / 2;
-    this.tanks[1].hits = 0;
+    this.tanks[0]!.y = this.canvas!.height / 2 - this.tanks[0]!.height / 2;
+    this.tanks[0]!.hits = 0;
+    this.tanks[1]!.y = this.canvas!.height / 2 - this.tanks[1]!.height / 2;
+    this.tanks[1]!.hits = 0;
 
     this.isGameOver = false;
     this.isPaused = false;

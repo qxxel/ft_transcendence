@@ -3,104 +3,262 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
+#    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/10/15 14:15:30 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/11/19 00:54:54 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ft_transcendence
+# -------------------------------     HEAD     ------------------------------- #
 
-SECRET_DIR = .SECRET
-CERT_FILE = $(SECRET_DIR)/certificate.crt
-KEY_FILE = $(SECRET_DIR)/private_key.key
+# -------------------------------   preamble   ------------------------------- #
 
-LOGIN = agerbaud
-DOMAIN = $(LOGIN).42.fr
+NAME	= ft_transcendence
 
-DC = docker compose
-DC_FILE = srcs/docker-compose.yml
-RM = rm -rf
+DOMAIN_FRONT	= $(NAME).42.fr
+DOMAIN_BACK		= localhost:3000
 
-all:
-	@echo "\033[0;32mdocker compose:"
-	@echo "\tbuild run up down"
-	@echo "\033[0;33mstatus:"
-	@echo "\tls"
-	@echo "\033[0;36mreset:"
-	@echo "\tclean vclean fclean"
+RM		= rm -rf
+MKDIR	= mkdir -p $@
+ECHO	= echo
 
-ls:
-	@echo "\033[1;32m"
-	@docker ps -a
-	@echo "\033[1;33m"
-	@docker image ls
-	@echo "\033[1;34m"
-	@docker volume ls
-	@echo "\033[1;35m"
-	@docker network ls
-	@echo "\033[1;36m"
-	-docker logs nginx
-	@echo "\033[1;37m"
-	-docker logs frontend
-	@echo "\033[0m"
 
-build: $(SECRET_DIR)
-	$(DC) -f $(DC_FILE) build
+# ---------------------------    docker compose    --------------------------- #
 
-run:
-	$(DC) -f $(DC_FILE) up -d
+DC		= docker compose
+DC_FILE	= srcs/docker-compose.yml
+CMD_DC	= $(DC) -f $(DC_FILE)
 
-up: $(SECRET_DIR)
-	$(DC) -f $(DC_FILE) up -d --build
 
-down:
-	$(DC) -f $(DC_FILE) down
+# ---------------------------    command docker    --------------------------- #
 
-clean: down
-	-docker stop $$(docker ps -aq)
-	-docker rm $$(docker ps -aq)
-	-docker image rm -f $$(docker images -q)
-	-docker network prune -f
+DC_UP		= $(CMD_DC) up -d
+DC_REFRESH	= $(CMD_DC) up --build -d
+DC_BUILD	= $(CMD_DC) build
+DC_DOWN		= $(CMD_DC) down
+DC_VDOWN	= $(CMD_DC) down -v --remove-orphans
+DC_START	= $(CMD_DC) start
+DC_STOP		= $(CMD_DC) stop
+DC_RESTART	= $(CMD_DC) restart
 
-vclean: clean
-	rm -rf $(SECRET_DIR)
-	-docker volume prune -a -f
 
-fclean: vclean
-	-docker system prune -a -f
+# ----------------------------    databases    ---------------------------- #
 
-re: fclean up
+AUTH_DB	= srcs/backend/auth/db
+USER_DB	= srcs/backend/user/db
+JWT_DB	= srcs/backend/jwt/db
 
-$(SECRET_DIR):
-	mkdir -p $(SECRET_DIR)
-	openssl req -x509 \
-		-newkey rsa:2048 \
-		-keyout $(KEY_FILE) -out $(CERT_FILE) \
-		-days 365 -nodes \
-		-subj "/C=FR/ST=ARA/L=Lyon/O=42Lyon/OU=IT/CN=$(DOMAIN)"
 
-# DEV : Rebuild frontend + supprime le volume + redémarre tout
-dev:
-	$(DC) -f $(DC_FILE) down -v
-# 	@docker volume rm srcs_frontend_assets 2>/dev/null || true
-	$(DC) -f $(DC_FILE) build 
-# 	--no-cache frontend
-	$(DC) -f $(DC_FILE) up -d
-	@echo Project: https://localhost:8080/
-# 	@sleep 3
-# 	@docker exec nginx ls -lh /usr/share/nginx/html/ || true
+# ----------------------------    key and cert    ---------------------------- #
 
-# dev:
-# 	$(DC) -f $(DC_FILE) down frontend
-# 	$(DC) -f $(DC_FILE) volume rm -f frontend_assets || true
-# 	$(DC) -f $(DC_FILE) build --no-cache frontend
-# 	$(DC) -f $(DC_FILE) up -d frontend
-# 	$(DC) -f $(DC_FILE) restart nginx
-# dev:
-# 	$(DC) -f $(DC_FILE) down -v
-# 	$(MAKE) build
-# 	$(MAKE) run
+SECRET_DIR		= .SECRET
+CERT_FRONT		= $(SECRET_DIR)/certificate.crt
+KEY_FRONT		= $(SECRET_DIR)/private_key.key
+CERT_BACK		= $(SECRET_DIR)/certificate.pem
+KEY_BACK		= $(SECRET_DIR)/private_key.pem
+CERT_AND_KEY	= $(CERT_FRONT) $(KEY_FRONT) $(CERT_BACK) $(KEY_BACK)
 
-.PHONY: all ls build run up down clean vclean fclean re dev
+
+# ------------------------------    openssl    ------------------------------ #
+
+CMD_OPENSSL	= openssl req -x509 -newkey rsa:2048 \
+		-keyout $(1) -out $(2) -days 365 -nodes \
+		-subj "/C=FR/ST=ARA/L=Lyon/O=42Lyon/OU=IT/CN=$(3)"
+
+
+# --------------------------    build directory    -------------------------- #
+
+BUILD_DIR		= $(SECRET_DIR) $(AUTH_DB) $(USER_DB) $(JWT_DB)
+
+
+# -------------------------------    colors    ------------------------------- #
+
+include color.mk
+
+
+# ------------------------------   list rule   ------------------------------ #
+
+LST_RULE_DC		= all up build down start stop restart
+LST_RULE_INFO	= help info ls logs
+LST_RULE_CLEAN	= vdown clean vclean fclean
+LST_RULE_OTHER	= re fullre refresh dev
+
+
+# -------------------------------   message   ------------------------------- #
+
+MSG_RESET	= $(ECHO) "$(RESET)"
+MSG_CMD		= @$(ECHO) "$(B_WHITE)Running: [ $(1) ]$(2)";
+MSG_HELP	= @$(ECHO) "$(GREEN)docker compose:\n\t$(LST_RULE_DC)"; \
+	$(ECHO) "$(YELLOW)status:\n\t$(LST_RULE_INFO)"; \
+	$(ECHO) "$(BLUE)reset:\n\t$(LST_RULE_CLEAN)"; \
+	$(ECHO) "$(MAGENTA)other:\n\t$(LST_RULE_OTHER)"; \
+	$(MSG_RESET)
+
+
+# ---------------------------------   run   --------------------------------- #
+
+RUN_CMD = $(call MSG_CMD,$(1),$(2)) $(1); $(MSG_RESET)
+
+
+
+# -------------------------------    RULES    ------------------------------- #
+
+# ---------------------------------   all   --------------------------------- #
+
+.DEFAULT_GOAL	:= all
+.PHONY	: all
+all		: refresh
+
+
+# ----------------------------   transcendence   ---------------------------- #
+
+.PHONY	: $(NAME)
+$(NAME)	: up
+
+
+# ----------------------------------   up   ---------------------------------- #
+
+.PHONY	: up
+up		: $(CERT_AND_KEY) | $(BUILD_DIR)
+	$(call RUN_CMD,$(DC_UP))
+
+
+# -------------------------------   refresh   ------------------------------- #
+
+.PHONY	: refresh
+refresh	: $(CERT_AND_KEY) | $(BUILD_DIR)
+	$(call RUN_CMD,$(DC_REFRESH))
+
+
+# --------------------------------   build   -------------------------------- #
+
+.PHONY	: build
+build	: $(CERT_AND_KEY) | $(BUILD_DIR)
+	$(call RUN_CMD,$(DC_BUILD))
+
+
+# ---------------------------------   down   --------------------------------- #
+
+.PHONY	: down
+down	:
+	$(call RUN_CMD,$(DC_DOWN))
+
+
+# --------------------------------   vdown   -------------------------------- #
+
+.PHONY	: vdown
+vdown	:
+	$(call RUN_CMD,$(DC_VDOWN))
+
+
+# --------------------------------   start   -------------------------------- #
+
+.PHONY	: start
+start	:
+	$(call RUN_CMD,$(DC_START))
+
+
+# ---------------------------------   stop   --------------------------------- #
+
+.PHONY	: stop
+stop	:
+	$(call RUN_CMD,$(DC_STOP))
+
+
+# -------------------------------   restart   ------------------------------- #
+
+.PHONY	: restart
+restart	:
+	$(call RUN_CMD,$(DC_RESTART))
+
+
+# ----------------------------------   re   ---------------------------------- #
+
+.PHONY	: re
+re		: down up
+
+
+# --------------------------------   fullre   -------------------------------- #
+
+.PHONY	: fullre
+fullre	: fclean up
+
+
+# -------------------------------   openssl   ------------------------------- #
+
+$(CERT_AND_KEY) : | $(BUILD_DIR)
+	$(call RUN_CMD,$(call CMD_OPENSSL,$(KEY_FRONT),$(CERT_FRONT),$(DOMAIN_FRONT)),$(F_GRAY))
+	$(call RUN_CMD,$(call CMD_OPENSSL,$(KEY_BACK),$(CERT_BACK),$(DOMAIN_BACK)),$(F_GRAY))
+
+
+# ---------------------------   build directory   --------------------------- #
+
+$(BUILD_DIR) :
+	$(call RUN_CMD,$(MKDIR))
+
+
+# ---------------------------------   help   --------------------------------- #
+
+.PHONY	: help
+help	:
+	$(MSG_HELP)
+
+
+# ---------------------------------   info   --------------------------------- #
+
+.PHONY	: info
+info	: ls logs
+
+
+# ----------------------------------   ls   ---------------------------------- #
+
+.PHONY	: ls
+ls		:
+	$(call RUN_CMD,docker ps -as,$(GREEN))
+	$(call RUN_CMD,docker image ls,$(YELLOW))
+	$(call RUN_CMD,docker volume ls,$(BLUE))
+	$(call RUN_CMD,docker network ls,$(MAGENTA))
+
+
+# ---------------------------------   logs   --------------------------------- #
+
+.PHONY	: logs
+logs	:
+	-$(call RUN_CMD,docker logs nginx,$(GREEN))
+	-$(call RUN_CMD,docker logs frontend,$(YELLOW))
+	-$(call RUN_CMD,docker logs gateway,$(BLUE))
+	-$(call RUN_CMD,docker logs auth,$(BLUE))
+	-$(call RUN_CMD,docker logs jwt,$(BLUE))
+	-$(call RUN_CMD,docker logs user,$(BLUE))
+
+
+# --------------------------------   clean   -------------------------------- #
+
+.PHONY	: clean
+clean	: down
+	-$(call RUN_CMD,docker stop $$(docker ps -aq),$(YELLOW))
+	-$(call RUN_CMD,docker rm $$(docker ps -aq),$(BLUE))
+	-$(call RUN_CMD,docker image rm -f $$(docker images -q),$(MAGENTA))
+	-$(call RUN_CMD,docker réseau rm $$(docker network ls -q),$(CYAN))
+
+
+# --------------------------------   vclean   -------------------------------- #
+
+.PHONY	: vclean
+vclean	: clean
+	-$(call RUN_CMD,$(RM) $(BUILD_DIR),$(YELLOW))
+	-$(call RUN_CMD,docker volume rm $$(docker volume ls -q),$(BLUE))
+
+
+# --------------------------------   fclean   -------------------------------- #
+
+.PHONY	: fclean
+fclean	: vclean
+	-$(call RUN_CMD,docker system prune -a -f,$(MAGENTA))
+
+
+# ---------------------------------   dev   --------------------------------- #
+
+.PHONY	: dev
+dev	: vdown refresh

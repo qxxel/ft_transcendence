@@ -1,167 +1,61 @@
-import { PongGame } from './game.js';
-import { TankGame } from './tank.js';
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   index.ts                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/19 01:08:38 by mreynaud         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-interface Route {
-  path: string;
-  component: () => string | Promise<string>;
-}
-
-var currentGame: PongGame | null = null;
-
-function stopCurrentGame() {
-  if (currentGame) {
-    currentGame.stop();
-    currentGame = null;
-  }
-}
-
-function onClickPlay() {
-  const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-  currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
-
-  // TODO if currentGame == Pong -> navigate(pong)
-  //                     == Tank -> navigate(tank)
-  router.navigate('/play');
-}
-
-function  pathActions(currentPath: string) {
-  if (['/gamemenu'].includes(currentPath)) {
-    currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
-
-    const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
-    const display = document.getElementById('points-display') as HTMLSpanElement;
-    
-    if (slider && display) {
-      display.innerHTML = slider.value;
-      
-      slider.addEventListener('input', () => {
-        display.innerHTML = slider.value;
-      });
-    }
-  }
-
-  if (['/play'].includes(currentPath)) {
-    if (!currentGame)
-      router.navigate('/gamemenu');
-    else {
-      currentGame.setCtx();
-      currentGame.start();
-    }
-  }
-
-  if (['/tank'].includes(currentPath)) {
-    var currentTank = new TankGame('pong-canvas', 'score1', 'score2', 'winning-points');
-    currentTank.setCtx();
-    currentTank.start();
-    console.log("Loading the new game...");
-  }
-}
-
-class Router {
-  private routes: Route[] = [];
-
-  addRoute(path: string, component: () => string | Promise<string>) {
-    this.routes.push({ path, component });
-  }
-
-  navigate(path: string) {
-    if (window.location.pathname === '/play') {
-      stopCurrentGame();
-    }
-    history.pushState({}, '', path);
-    this.render();
-  }
-
-  async render() {
-    const currentPath = window.location.pathname;
-    const route = this.routes.find(r => r.path === currentPath);
-
-    if (route) {
-      const contentDiv = document.getElementById('app');
-      if (contentDiv) {
-        const html = await route.component();
-        contentDiv.innerHTML = html;
-      }
-    }
-
-    pathActions(currentPath);
-  }
-}
-
-const router = new Router();
-
-const menu = `<nav>
-  <a href="/">Home</a> | 
-  <a href="/games">Play</a> |
-  <a href="/settings">Settings</a> |
-  <a href="/about">About</a>
-</nav>`;
-
-async function loadHtml(path: string) {
-  const response = await fetch(path);
-  if (!response.ok) {
-    return `<h1>Error ${response.status}</h1><p>Unable to load ${path}</p>`;
-  }
-  return await response.text();
-}
-
-router.addRoute("/about", async () => {
-  const html = await loadHtml("pages/about.html");
-  return menu + html;
-});
-
-router.addRoute("/settings", async () => {
-  const html = await loadHtml("pages/settings.html");
-  return menu + html;
-});
-
-router.addRoute("/rperrot", async () => {
-  const html = await loadHtml("pages/rperrot.html");
-  return menu + html;
-});
-
-router.addRoute("/gamemenu", async () => {
-  const html = await loadHtml("pages/gamemenu.html");
-  return menu + html;
-});
-
-router.addRoute("/play", async () => {
-  const html = await loadHtml("pages/play.html");
-  return menu + html;
-});
-
-router.addRoute("/games", async () => {
-  const html = await loadHtml("pages/games.html");
-  return menu + html;
-});
-
-router.addRoute("/tank", async () => {
-  const html = await loadHtml("pages/tank.html");
-  return menu + html;
-});
-
-router.addRoute("/", async () => {
-  const html = await loadHtml("pages/home.html");
-  return menu + html;
-});
-
-router.render();
-
-/* ============================= EVENTS ============================= */
-
-document.addEventListener('click', (e) => {
-  const target = e.target as HTMLAnchorElement;
-  if (target.tagName === 'A' && target.hasAttribute('href')) {
-    e.preventDefault();
-    router.navigate(target.getAttribute('href')!);
-  }
-});
-
-window.addEventListener('popstate', () => {
-  router.render();
-});
+// THE MASTER FILE OF THE FRONTEND
 
 
-/* ============================= GLOBAL FUNCTIONS ============================= */
+/* ====================== IMPORTS ====================== */
 
-(window as any).onClickPlay = onClickPlay;
+import { PongGame } from './game/game.js';
+// import { TankGame }       from './tank.js';
+import { User } 				from "./user/user.js";
+import { Router } 				from "./router/router.js";
+import { setupClickHandlers } 	from "./eventsHandlers/clickHandler.js"
+import { setupSubmitHandler } 	from "./eventsHandlers/submitHandler.js"
+import { setupLoadHandler } 	from "./eventsHandlers/loadHandler.js"
+import { addRoutes }			from "./router/addRoutes.js"
+
+
+
+/* ====================== INTERFACE ====================== */
+
+export interface	GameState {
+	currentGame: PongGame | null;
+};
+
+
+/* ====================== GLOBAL VARIABLES ====================== */
+
+var	gameState: GameState = {
+	currentGame: null
+};
+
+var user = new User();
+
+export const	router = new Router();
+
+
+/* ============================= SETUP EVENTS ============================= */
+
+setupClickHandlers(router, user, gameState);
+setupSubmitHandler(gameState, user);
+setupLoadHandler(gameState, user);
+
+
+/* ============================= SETUP ROUTES ============================= */
+
+addRoutes();
+
+
+/* ============================= FIRST RENDER ============================= */
+
+router.render(gameState, user);

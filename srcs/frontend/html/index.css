@@ -32,6 +32,10 @@ body {
 }
 
 /* --- 3. "SERIOUS" NAV STYLING --- */
+body input, button {
+    color: black;
+}
+
 nav {
     width: 100%;
     max-width: 900px;
@@ -58,6 +62,15 @@ nav a:hover {
     color: #000;
     background-color: #FFFF00;
     text-shadow: none;
+}
+
+p#msg-error {
+    color: red;
+}
+
+.tab {
+    padding-left: var(--sp-6);
+    padding-right: var(--sp-6);
 }
 
 /* --- 4. NEW DASHBOARD & BUTTON STYLES --- */
