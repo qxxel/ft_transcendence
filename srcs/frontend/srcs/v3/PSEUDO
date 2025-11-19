@@ -1,24 +1,24 @@
 TankGame {
 
-Class Vector2D {}
-Class Rect2D {}
-Class Color {}
+class	Vector2D {}
+class	Rect2D {}
+class	Color {}
 
 
-Class GameObject {
+class	GameObject {
     Color
     Vector2D[]
     Rect2D[]
 }
 
-Class Gun : GameObject {}
+class	Gun : GameObject {}
 
-Class Tank : GameObject {}
+class	Tank : GameObject {}
 
-Class Powerup : GameObject {}
+class	Powerup : GameObject {}
 
-Class Ball : GameObject {}
+class	Ball : GameObject {}
 
-Class Collision {}
+class	Collision {}
 
 }

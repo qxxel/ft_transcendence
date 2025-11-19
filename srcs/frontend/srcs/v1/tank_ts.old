@@ -6,45 +6,45 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/19 16:27:16 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/19 16:58:21 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/11/19 17:21:48 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 import { Actor } from './class_actor.js';
 
-export class TankGame {
-  private canvas: HTMLCanvasElement | null = null;
-  private ctx: CanvasRenderingContext2D | null = null;
-  private animationFrameId: number | null = null;
+export class	TankGame {
+  private	canvas: HTMLCanvasElement | null = null;
+  private	ctx: CanvasRenderingContext2D | null = null;
+  private	animationFrameId: number | null = null;
 
-  private isPaused: boolean = false;
-  private isGameOver: boolean = false;
-  private winningScore: number = 5;
+  private	isPaused: boolean = false;
+  private	isGameOver: boolean = false;
+  private	winningScore: number = 5;
 
-  private readonly initialBallSpeed: number = 5;
-  private readonly maxBallSpeed: number = 12;
-  private readonly ballSpeedIncrease: number = 0.5;
+  private	readonly initialBallSpeed: number = 5;
+  private	readonly maxBallSpeed: number = 12;
+  private	readonly ballSpeedIncrease: number = 0.5;
 
-  private gameMode: 'pvp' | 'ai';
-  private aiLastDecisionTime: number = 0;
-  private aiTargetY: number = 0;
+  private	gameMode: 'pvp' | 'ai';
+  private	aiLastDecisionTime: number = 0;
+  private	aiTargetY: number = 0;
 
-  // private tank1: Tank;
-  // private tank2: Tank;
-  // private ball: Ball;
-  private actors: Actor[] = [];
-  private tanks: Tank[] = [];
-  private balls: Ball[] = [];
-  private score1: number = 0;
-  private score2: number = 0;
-  private scoreElements: { winScore: HTMLElement; p1: HTMLElement; p2: HTMLElement } | null = null;
+  // private	tank1: Tank;
+  // private	tank2: Tank;
+  // private	ball: Ball;
+  private	actors: Actor[] = [];
+  private	tanks: Tank[] = [];
+  private	balls: Ball[] = [];
+  private	score1: number = 0;
+  private	score2: number = 0;
+  private	scoreElements: { winScore: HTMLElement; p1: HTMLElement; p2: HTMLElement } | null = null;
 
-  private startTime: number = 0;
-  private longestRally: number = 0;
-  private currentRallyHits: number = 0;
+  private	startTime: number = 0;
+  private	longestRally: number = 0;
+  private	currentRallyHits: number = 0;
 
-  private ids: { canvas: string; score1: string; score2: string; winScore: string };
-  private keysPressed: { [key: string]: boolean } = {};
+  private	ids: { canvas: string; score1: string; score2: string; winScore: string };
+  private	keysPressed: { [key: string]: boolean } = {};
 
   constructor(
     canvasId: string, 
@@ -80,7 +80,7 @@ import { Ball } from "./class_ball.js"
 import { Tank } from "./class_tank.js"
 
 
-/* ====================== CLASS ====================== */
+/* ====================== class	====================== */
 
 export class	TankGame {
 	private	canvas: HTMLCanvasElement | null = null;

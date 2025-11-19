@@ -1,6 +1,6 @@
 import { Circ2D, Mesh, Rect2D } from "./class_mesh";
 
-export class Actor {
+export class	Actor {
 
   meshs: Mesh[] = []
   constructor(

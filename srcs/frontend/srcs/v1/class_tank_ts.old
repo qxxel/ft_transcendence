@@ -4,7 +4,7 @@ import { Rect2D, Line2D } from './class_mesh.js';
 
 // /!\ DESCRIBE THE FILE /!\
 
-export class Tank extends Actor {
+export class	Tank extends Actor {
 
   x: number;
   y: number;

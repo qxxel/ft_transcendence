@@ -12,13 +12,13 @@ export interface Mesh {
   // getR(): number;
 }
 
-export class Rect2D implements Mesh {
+export class	Rect2D implements Mesh {
 
   constructor(
-    public x: number,
-    public y: number,
-    public w: number,
-    public h: number,
+    public	x: number,
+    public	y: number,
+    public	w: number,
+    public	h: number,
   ) {}
 
 
@@ -61,12 +61,12 @@ export class Rect2D implements Mesh {
 }
 
 
-export class Circ2D {
+export class	Circ2D {
 
   constructor(
-    public x: number,
-    public y: number,
-    public r: number,
+    public	x: number,
+    public	y: number,
+    public	r: number,
   ) {}
 
   draw(ctx : CanvasRenderingContext2D): void {
@@ -105,16 +105,16 @@ export class Circ2D {
 
 }
 
-export class Line2D implements Mesh {
+export class	Line2D implements Mesh {
 
   constructor(
-    public x1: number,
-    public y1: number,
-    public x2: number,
-    public y2: number,
-    public w: number,
-    public h: number,
-    public angle: number,
+    public	x1: number,
+    public	y1: number,
+    public	x2: number,
+    public	y2: number,
+    public	w: number,
+    public	h: number,
+    public	angle: number,
   ) {}
 
 

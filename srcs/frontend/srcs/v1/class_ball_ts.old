@@ -4,8 +4,8 @@ import { Circ2D } from "./class_mesh";
 const ballRadius = 7;
 const ballSpeed = 2;
 
-// export class Ball extends Actor {
-export class Ball {
+// export class	Ball extends Actor {
+export class	Ball {
 
   radius: number;
   speed: number;
@@ -13,8 +13,8 @@ export class Ball {
   dy: number;
 
   constructor(
-    public x: number,
-    public y: number,
+    public	x: number,
+    public	y: number,
     dx: number,
     dy: number,
   ) {
@@ -29,7 +29,7 @@ const	ballRadius: number = 7;
 const	ballSpeed: number = 2;
 
 
-/* ====================== CLASS ====================== */
+/* ====================== class	====================== */
 
 export class	Ball {
 	private	x: number;

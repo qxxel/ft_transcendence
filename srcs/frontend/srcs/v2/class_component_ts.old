@@ -1,8 +1,8 @@
 import { Mesh } from "./class_mesh";
 
-export class Component {
+export class	Component {
 
-  private meshs: Mesh[] = [];
+  private	meshs: Mesh[] = [];
 
   addMesh(m: Mesh): void {
     this.meshs.push(m);

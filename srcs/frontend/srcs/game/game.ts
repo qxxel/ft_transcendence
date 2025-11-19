@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:53:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:57:01 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:21:48 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,43 +40,43 @@ interface	Ball {
 }
 
 
-/* ====================== CLASS ====================== */
+/* ====================== class	====================== */
 
-export class PongGame extends Game {
-  private canvas: HTMLCanvasElement | null = null;
-  private ctx: CanvasRenderingContext2D | null = null;
-  private animationFrameId: number | null = null;
+export class	PongGame extends Game {
+  private	canvas: HTMLCanvasElement | null = null;
+  private	ctx: CanvasRenderingContext2D | null = null;
+  private	animationFrameId: number | null = null;
 
-  private isPaused: boolean = false;
-  private isGameOver: boolean = false;
-  private winningScore: number = 5;
+  private	isPaused: boolean = false;
+  private	isGameOver: boolean = false;
+  private	winningScore: number = 5;
 
-  private readonly initialBallSpeed: number = 5;
-  private readonly maxBallSpeed: number = 12;
-  private readonly ballSpeedIncrease: number = 0.5;
+  private	readonly initialBallSpeed: number = 5;
+  private	readonly maxBallSpeed: number = 12;
+  private	readonly ballSpeedIncrease: number = 0.5;
 
-  private gameMode: 'pvp' | 'ai';
-  private aiLastDecisionTime: number = 0;
-  private aiTargetY: number = 0;
+  private	gameMode: 'pvp' | 'ai';
+  private	aiLastDecisionTime: number = 0;
+  private	aiTargetY: number = 0;
 
-  private paddle1: Paddle | null = null;
-  private paddle2: Paddle | null = null;
-  private ball: Ball | null = null;
+  private	paddle1: Paddle | null = null;
+  private	paddle2: Paddle | null = null;
+  private	ball: Ball | null = null;
 
-  private player1Name: string = "Player 1";
-  private player2Name: string = "Player 2";
+  private	player1Name: string = "Player 1";
+  private	player2Name: string = "Player 2";
 
-  private score1: number = 0;
-  private score2: number = 0;
-  private scoreElements: { winScore: HTMLElement; p1: HTMLElement; p2: HTMLElement } | null = null;
-  private isTournamentMatch: boolean = false;
+  private	score1: number = 0;
+  private	score2: number = 0;
+  private	scoreElements: { winScore: HTMLElement; p1: HTMLElement; p2: HTMLElement } | null = null;
+  private	isTournamentMatch: boolean = false;
 
-  private startTime: number = 0;
-  private longestRally: number = 0;
-  private currentRallyHits: number = 0;
+  private	startTime: number = 0;
+  private	longestRally: number = 0;
+  private	currentRallyHits: number = 0;
 
-  private ids: { canvas: string; score1: string; score2: string; winScore: string };
-  private keysPressed: { [key: string]: boolean } = {};
+  private	ids: { canvas: string; score1: string; score2: string; winScore: string };
+  private	keysPressed: { [key: string]: boolean } = {};
 
   constructor(
     canvasId: string, 
@@ -95,7 +95,7 @@ export class PongGame extends Game {
     this.gameMode = gameMode;
   }
   
-  public setCtx() {
+  public	setCtx() {
     this.canvas! = document.getElementById(this.ids.canvas) as HTMLCanvasElement;
     this.ctx = this.canvas!.getContext('2d');
     this.scoreElements! = {
@@ -149,20 +149,20 @@ export class PongGame extends Game {
     this.handleKeyUp = this.handleKeyUp.bind(this);
   }
 
-  public setPlayerNames(p1: string, p2: string) {
+  public	setPlayerNames(p1: string, p2: string) {
     this.player1Name = p1;
     this.player2Name = p2;
     this.gameMode = 'pvp'; 
     this.isTournamentMatch = true;
   }
   
-  private gameLoop() {
+  private	gameLoop() {
     this.update();
     this.draw();
     this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
   }
 
-  private update() {
+  private	update() {
     if (this.isPaused || this.isGameOver) {
       return;
     }
@@ -176,7 +176,7 @@ export class PongGame extends Game {
     this.moveBall();
   }
 
-  private draw() {
+  private	draw() {
     this.ctx!.fillStyle = '#000';
     this.ctx!.fillRect(0, 0, this.canvas!!.width, this.canvas!!.height);
 
@@ -222,7 +222,7 @@ export class PongGame extends Game {
     } 
   }
 
-  private movePaddle1() {
+  private	movePaddle1() {
     if ((this.keysPressed['w'] || this.keysPressed['z']) && this.paddle1!.y > 0) {
       this.paddle1!.y -= this.paddle1!.speed;
     }
@@ -231,7 +231,7 @@ export class PongGame extends Game {
     }
   }
 
-  private movePaddle2() {
+  private	movePaddle2() {
     if (this.keysPressed['ArrowUp'] && this.paddle2!.y > 0) {
       this.paddle2!.y -= this.paddle2!.speed;
     }
@@ -240,7 +240,7 @@ export class PongGame extends Game {
     }
   }
 
-  private moveBall() {
+  private	moveBall() {
     const prevBallX = this.ball!.x - this.ball!.dx;
     this.ball!.x += this.ball!.dx;
     this.ball!.y += this.ball!.dy;
@@ -270,7 +270,7 @@ export class PongGame extends Game {
     }
   }
 
-  private calculateDeflection(paddle: Paddle) {
+  private	calculateDeflection(paddle: Paddle) {
     const relativeIntersectY = (paddle.y + (paddle.height / 2)) - this.ball!.y;
     const normalizedIntersectY = relativeIntersectY / (paddle.height / 2);
     const maxBounceAngle = Math.PI / 3; // 60 degrees
@@ -282,7 +282,7 @@ export class PongGame extends Game {
     this.currentRallyHits++;
   }
 
-  private increaseBallSpeed() {
+  private	increaseBallSpeed() {
     if (this.ball!.speed >= this.maxBallSpeed) return;
     const newSpeed = Math.min(this.ball!.speed + this.ballSpeedIncrease, this.maxBallSpeed);
     const magnitude = Math.sqrt(this.ball!.dx ** 2 + this.ball!.dy ** 2);
@@ -293,7 +293,7 @@ export class PongGame extends Game {
     }
   }
 
-  private resetBall(firstServe: boolean = false) {
+  private	resetBall(firstServe: boolean = false) {
     console.log('ball reseted');
     this.longestRally = Math.max(this.longestRally, this.currentRallyHits);
     this.currentRallyHits = 0;
@@ -307,7 +307,7 @@ export class PongGame extends Game {
     this.ball!.dy = this.ball!.speed * Math.sin(angle);
   }
 
-  private updateScores() {
+  private	updateScores() {
     this.scoreElements!.p1.innerText = this.score1.toString();
     this.scoreElements!.p2.innerText = this.score2.toString();
 
@@ -325,7 +325,7 @@ export class PongGame extends Game {
     }
   }
 
-  private showEndGameDashboard() {
+  private	showEndGameDashboard() {
     const dashboard = document.getElementById('game-over-dashboard');
     if (!dashboard) return;
     const matchDurationSeconds = Math.floor((Date.now() - this.startTime) / 1000);
@@ -341,7 +341,7 @@ export class PongGame extends Game {
     dashboard.style.display = 'block';
   }
 
-  private handleKeyDown(e: KeyboardEvent) {
+  private	handleKeyDown(e: KeyboardEvent) {
     if (this.isGameOver && e.key === ' ') {
         this.restart();
         return;
@@ -354,11 +354,11 @@ export class PongGame extends Game {
     this.keysPressed[e.key] = true;
   }
 
-  private handleKeyUp(e: KeyboardEvent) {
+  private	handleKeyUp(e: KeyboardEvent) {
     this.keysPressed[e.key] = false;
   }
 
-  public start() {
+  public	start() {
     if (!this.animationFrameId) {
       this.startTime = Date.now();
       window.addEventListener('keydown', this.handleKeyDown);
@@ -368,7 +368,7 @@ export class PongGame extends Game {
     }
   }
 
-  private restart() {
+  private	restart() {
     const tournament = (window as any).currentTournament;
     const router = (window as any).router;
     
@@ -403,7 +403,7 @@ export class PongGame extends Game {
     this.resetBall(true);
   }
 
-  public stop() {
+  public	stop() {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
       window.removeEventListener('keydown', this.handleKeyDown);
@@ -413,7 +413,7 @@ export class PongGame extends Game {
     }
   }
 
-  private moveAI() {
+  private	moveAI() {
     const now = Date.now();
     
     if (now - this.aiLastDecisionTime > 1000) {
@@ -445,7 +445,7 @@ export class PongGame extends Game {
     }
   }
 
-  private predictBallLandingY(): number {
+  private	predictBallLandingY(): number {
     const targetX = this.paddle2!.x - this.ball!.radius;
     const timeToImpact = (targetX - this.ball!.x) / this.ball!.dx;
     let predictedY = this.ball!.y + (this.ball!.dy * timeToImpact);
@@ -466,7 +466,7 @@ export class PongGame extends Game {
     return predictedY;
   }
 
-  private adjustShootDirection(predictedY: number): number {
+  private	adjustShootDirection(predictedY: number): number {
     // TODO: for harder gameplay, sometimes it can redirect on the opposite of the first choice, like if rally is >10 then its not + 33 but -45
     let newY = predictedY;
     let offsetY = this.paddle1!.y - this.paddle2!.y;
@@ -486,7 +486,7 @@ export class PongGame extends Game {
     // return predictedY;
   }
 
-  public setWinningScore(newWinningScore: number) {
+  public	setWinningScore(newWinningScore: number) {
     this.winningScore = newWinningScore;
     if (this.scoreElements) {
       this.scoreElements.winScore.innerHTML = this.winningScore.toString();

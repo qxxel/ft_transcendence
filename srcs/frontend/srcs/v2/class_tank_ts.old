@@ -1,13 +1,13 @@
 
-export class TankGame {
-  private isPaused: boolean = false;
-  private isGameOver: boolean = false;
-  private startTime: number = 0;
-  private canvas: HTMLCanvasElement | null = null;
-  private ctx: CanvasRenderingContext2D | null = null;
-  private animationFrameId: number | null = null;
-  private ids: { canvas: string; score1: string; score2: string; winScore: string };
-  private keysPressed: { [key: string]: boolean } = {};
+export class	TankGame {
+  private	isPaused: boolean = false;
+  private	isGameOver: boolean = false;
+  private	startTime: number = 0;
+  private	canvas: HTMLCanvasElement | null = null;
+  private	ctx: CanvasRenderingContext2D | null = null;
+  private	animationFrameId: number | null = null;
+  private	ids: { canvas: string; score1: string; score2: string; winScore: string };
+  private	keysPressed: { [key: string]: boolean } = {};
 
   constructor(
     canvasId: string, 
@@ -31,13 +31,13 @@ export class TankGame {
 
 
   // Main game loop that runs at ~60 FPS - updates game state and renders graphics
-  private gameLoop() {
+  private	gameLoop() {
     this.update();
     this.draw();
     this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
   }
 
-  private update() {
+  private	update() {
     // if (this.isPaused || this.isGameOver) { return; }
     // console.log("keyPressed:", key);
     // console.log("now:", Date.now());
@@ -45,7 +45,7 @@ export class TankGame {
   }
 
 
-  private handleKeyDown(e: KeyboardEvent) {
+  private	handleKeyDown(e: KeyboardEvent) {
     if (this.isGameOver && e.key === ' ') {
         this.restart();
         return;
@@ -58,11 +58,11 @@ export class TankGame {
     this.keysPressed[e.key] = true;
   }
 
-  private handleKeyUp(e: KeyboardEvent) {
+  private	handleKeyUp(e: KeyboardEvent) {
     this.keysPressed[e.key] = false;
   }
 
-  public start() {
+  public	start() {
     if (!this.animationFrameId) {
       this.startTime = Date.now();
       window.addEventListener('keydown', this.handleKeyDown);
@@ -72,7 +72,7 @@ export class TankGame {
     }
   }
 
-  private restart() {
+  private	restart() {
 
     this.isGameOver = false;
     this.isPaused = false;
@@ -86,7 +86,7 @@ export class TankGame {
 
   }
 
-  public stop() {
+  public	stop() {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
       window.removeEventListener('keydown', this.handleKeyDown);
@@ -97,7 +97,7 @@ export class TankGame {
   }
 
 
-  private draw() {
+  private	draw() {
     this.ctx!.fillStyle = '#000';
     this.ctx!.fillRect(0, 0, this.canvas!!.width, this.canvas!!.height);
 

@@ -1,23 +1,42 @@
-import { Rect2D } from "./class_rect.js";
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   class_actor.ts                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 17:22:15 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/19 17:23:17 by agerbaud         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// /!\ DESCRIBE THE FILE /!\
+
+
+/* ============================= IMPORTS ============================= */
+
 import { GSTATE } from "./global.js";
+import { Rect2D } from "./class_rect.js";
 
-export class Actor {
 
+/* ============================= CLASS ============================= */
 
-  constructor(
-    public x:number,
-    public y:number,
-    public isMovable:boolean = true) {
-    console.log("C Actor at x:", x, "y:", y);
-  }
+export class	Actor {
 
-  update(input: string[]): void {}
+	constructor(
+		public	x:number,
+		public	y:number,
+		public	isMovable:boolean = true) {
+		console.log("C Actor at x:", x, "y:", y);
+	}
 
-  draw(ctx: CanvasRenderingContext2D): void {}
+	update(input: string[]): void {}
 
-  getRect(): Rect2D { return new Rect2D(0,0,0,0); };
+	draw(ctx: CanvasRenderingContext2D): void {}
 
-  destroy(): void {
-    GSTATE.ACTORS = GSTATE.ACTORS.filter(a => a !== this);
-  }
+	getRect(): Rect2D { return new Rect2D(0,0,0,0); };
+
+	destroy(): void {
+		GSTATE.ACTORS = GSTATE.ACTORS.filter(a => a !== this);
+	}
 }
