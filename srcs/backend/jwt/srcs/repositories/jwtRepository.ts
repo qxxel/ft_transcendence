@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:30 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:42:51 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ import { jwtTableBuilder }	from "../tableBuilders/jwtTableBuilder.js"
 import type { Database }	from 'sqlite3'
 
 
-/* ====================== INTERFACE ====================== */
+/* ====================== interface	====================== */
 
 interface	StatementWithLastID {
 	lastID: number
 };
 
 
-/* ====================== CLASS ====================== */
+/* ====================== class	====================== */
 
 export class	jwtRepository {
 	private	db: Database;

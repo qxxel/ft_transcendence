@@ -1,13 +1,36 @@
-import { Ball } from './class_ball.js';
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   class_tank.ts                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 16:25:36 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/19 16:27:07 by agerbaud         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-const tankWidth = 40;
-const tankHeight = 40;
-const tankSpeed = 2;
-const rotationSpeed = 0.025;
-const stickLength = 37;
-const stickWidth = 8;
+// /!\ DESCRIBE THE FILE /!\
 
-export class Tank {
+
+/* ====================== IMPORT ====================== */
+
+import { Ball } from './class_ball.js'
+
+
+/* ====================== UTILS CONST ====================== */
+
+const	tankWidth = 40;
+const	tankHeight = 40;
+const	tankSpeed = 2;
+const	rotationSpeed = 0.025;
+const	stickLength = 37;
+const	stickWidth = 8;
+
+
+/* ====================== CLASS ====================== */
+
+export class	Tank {
 
   x: number;
   y: number;
@@ -67,7 +90,7 @@ export class Tank {
     this.hits = 0;
   }
 
-  // TODO hyperchiant ca, je suis oblige de me trimballer canvas, p-e scaleup genre class Map idk
+  // TODO hyperchiant ca, je suis oblige de me trimballer canvas, p-e scaleup genre class	Map idk
   update(canvas: HTMLCanvasElement, key: string): Ball | null {
 
     if (!key) return null; // p-e pas oblige
@@ -103,7 +126,7 @@ export class Tank {
   hit(): void { this.hits++; }
 
 fire(): Ball | null{
-  const now = Date.now();
+  const	now = Date.now();
   if (now - this.lastFireTime < this.fireCooldown) return null;
 
 

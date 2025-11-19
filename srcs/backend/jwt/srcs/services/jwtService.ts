@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:19:25 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ import { jwtRepository }	from "../repositories/jwtRepository.js"
 import type { jwtRespDto }	from "../dtos/jwtRespDto.js"
 
 
-/* ====================== CLASS ====================== */
+/* ====================== class	====================== */
 
 export class	jwtService {
 	private	jwtRepo: jwtRepository;

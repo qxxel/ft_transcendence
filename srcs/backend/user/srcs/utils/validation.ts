@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:58:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:49:33 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:06:51 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 import type { Database }	from "sqlite3"
 
-/* ====================== INTERFACE ====================== */
+/* ====================== interface	====================== */
 
 export interface	validationResult {
 	result: boolean,

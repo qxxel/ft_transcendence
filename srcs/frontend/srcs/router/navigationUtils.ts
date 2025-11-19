@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   navigationUtils.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 01:07:53 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:18:11 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // ALL UTILS TO NAVIGATION ARE LOCATED HERE
 
 
-/* ====================== IMPORT ====================== */
+/* ====================== IMPORTS ====================== */
 
-import { PongGame } from "../game/game.js";
-import { User }		from "../user/user.js";
-import { router }	from "../index.js";
+import { PongGame } from "../game/game.js"
+import { router }	from "../index.js"
+import { User }		from "../user/user.js"
 
-import type { GameState }	from "../index.js";
+import type { GameState }	from "../index.js"
 
 
-/* ====================== FUNCTIONS ====================== */
+/* ====================== FUNCTION ====================== */
 
-export function  pathActions(currentPath: string, gameState: GameState, user: User): void {
+export function	pathActions(currentPath: string, gameState: GameState, user: User): void {
 	if (['/game-menu'].includes(currentPath)) {
 		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
 	}
@@ -44,35 +44,35 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 	}
 }
 
-// function  pathActions(currentPath: string) {
-//   if (['/gamemenu'].includes(currentPath)) {
-//     currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
+// function	pathActions(currentPath: string) {
+// 	if (['/gamemenu'].includes(currentPath)) {
+// 		currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
 
-//     const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
-//     const display = document.getElementById('points-display') as HTMLSpanElement;
-    
-//     if (slider && display) {
-//       display.innerHTML = slider.value;
-      
-//       slider.addEventListener('input', () => {
-//         display.innerHTML = slider.value;
-//       });
-//     }
-//   }
+// 		const	slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
+// 		const	display = document.getElementById('points-display') as HTMLSpanElement;
+		
+// 		if (slider && display) {
+// 			display.innerHTML = slider.value;
+			
+// 			slider.addEventListener('input', () => {
+// 				display.innerHTML = slider.value;
+// 			});
+// 		}
+// 	}
 
-//   if (['/play'].includes(currentPath)) {
-//     if (!currentGame)
-//       router.navigate('/gamemenu');
-//     else {
-//       currentGame.setCtx();
-//       currentGame.start();
-//     }
-//   }
+// 	if (['/play'].includes(currentPath)) {
+// 		if (!currentGame)
+// 			router.navigate('/gamemenu');
+// 		else {
+// 			currentGame.setCtx();
+// 			currentGame.start();
+// 		}
+// 	}
 
-//   if (['/tank'].includes(currentPath)) {
-//     var currentTank = new TankGame('pong-canvas', 'score1', 'score2', 'winning-points');
-//     currentTank.setCtx();
-//     currentTank.start();
-//     console.log("Loading the new game...");
-//   }
+// 	if (['/tank'].includes(currentPath)) {
+// 		var	currentTank = new TankGame('pong-canvas', 'score1', 'score2', 'winning-points');
+// 		currentTank.setCtx();
+// 		currentTank.start();
+// 		console.log("Loading the new game...");
+// 	}
 // }

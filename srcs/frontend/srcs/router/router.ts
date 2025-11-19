@@ -6,24 +6,24 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/17 21:02:49 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:21:39 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// CLASS WHO ROUTE FOR THE SINGLE PAGE APPLICATION (SPA)
+// class	WHO ROUTE FOR THE SINGLE PAGE APPLICATION (SPA)
 
 
-/* ====================== IMPORT ====================== */
+/* ====================== IMPORTS ====================== */
 
-import { User }			from '../user/user.js';
-import { pathActions }	from './navigationUtils.js'
+import { pathActions }	from "./navigationUtils.js"
+import { User }			from "../user/user.js"
 
-import type { GameState }	from '../index.js'
+import type { GameState }	from "../index.js"
 
 
 /* ====================== INTERFACE ====================== */
 
-interface Route {
+interface	Route {
 	path: string;
 	component: () => string | Promise<string>;
 }
@@ -32,26 +32,25 @@ interface Route {
 /* ====================== CLASS ====================== */
 
 export class	Router {
-	private routes: Route[] = [];
+	private	routes: Route[] = [];
 
-	addRoute(path: string, component: () => string | Promise<string>) {
+	addRoute(path: string, component: () => string | Promise<string>): void {
 		this.routes.push({ path, component });
 	}
 
-	navigate(path: string, gameState: GameState, user: User) {
+	navigate(path: string, gameState: GameState, user: User): void {
 		history.pushState({}, '', path);
 		this.render(gameState, user);
 	}
 
-	async render(gameState: GameState, user: User) {
-
-		const currentPath = window.location.pathname;
-		const route = this.routes.find(r => r.path === currentPath);
+	async render(gameState: GameState, user: User): Promise<void> {
+		const	currentPath: string = window.location.pathname;
+		const	route: Route | undefined = this.routes.find(r => r.path === currentPath);
 
 		if (route) {
-			const contentDiv = document.getElementById('app');
+			const	contentDiv: HTMLElement | null = document.getElementById('app');
 			if (contentDiv) {
-				const html = await route.component();
+				const	html: string = await route.component();
 				contentDiv.innerHTML = html;
 			}
 
