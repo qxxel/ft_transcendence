@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cookies.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:06:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/18 19:03:35 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:22:03 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,29 @@
 
 /* ====================== IMPORT ====================== */
 
-import type { FastifyRequest, FastifyReply }	from "fastify";
+import { expAccess, expRefresh }	from "../jwt.js"
+
+import type { FastifyRequest, FastifyReply }	from "fastify"
 
 
 /* ====================== IMPORT ====================== */
 
 // hostOnly ???
-export function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string) {
+export function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string): void {
 	reply.header(
 		"Set-Cookie",
-		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=1000; path=/api`
+		`jwtAccess=${jwtAccess}; SameSite=strict; HttpOnly; secure; Max-Age=${expAccess.slice(0, -1)}; path=/api`
 	);
 }
 
-export function	setCookiesRefreshToken(reply: FastifyReply, jwtRefresh: string) {
+export function	setCookiesRefreshToken(reply: FastifyReply, jwtRefresh: string): void {
 	reply.header(
 		"Set-Cookie",
-		`jwtRefresh=${jwtRefresh}; SameSite=strict; HttpOnly; secure; Max-Age=10000; path=/api/jwt/refresh`
+		`jwtRefresh=${jwtRefresh}; SameSite=strict; HttpOnly; secure; Max-Age=${expRefresh.slice(0, -1)}; path=/api/jwt/refresh`
 	);
 }
 
-export function	removeCookies(reply: FastifyReply, key: string, path: string) {
+export function	removeCookies(reply: FastifyReply, key: string, path: string): void {
 	reply.header(
 		"Set-Cookie",
 		`${key}=; SameSite=strict; HttpOnly; secure; Expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}`
@@ -43,15 +45,16 @@ export function	removeCookies(reply: FastifyReply, key: string, path: string) {
 }
 
 
-export function	getCookies(request: FastifyRequest) {
+export function	getCookies(request: FastifyRequest): any {
 	try {
-		const cookies = Object.fromEntries(
+		const	cookies: any = Object.fromEntries(
 			(request.headers.cookie || "")
 			.split("; ")
 			.map(c => c.split("="))
 		)
+
 		return cookies;
-	} catch (err) {
+	} catch (err: unknown) {
 		return ;
 	}
 }

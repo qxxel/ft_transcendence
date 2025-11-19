@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:58:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/15 17:19:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 02:27:49 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ interface	rule {
 /* ====================== FUNCTIONS ====================== */
 
 export function	isValidName(name: string): validationResult {
-	const rules: rule[] = [
+	const	rules: rule[] = [
 		{ test: v => typeof v === "string", message: "Username must be a valid string" },
 		{ test: v => v.length >= 3, message: "Username must be at least 3 characters long" },
 		{ test: v => v.length <= 20, message: "Username must not exceed 20 characters" },
@@ -43,7 +43,7 @@ export function	isValidName(name: string): validationResult {
 }
 
 export function	isValidEmail(email: string): validationResult {
-	const rules: rule[] = [
+	const	rules: rule[] = [
 		{ test: v => typeof v === "string", message: "Email must be a valid string" },
 		{ test: v => v.length >= 6, message: "Username must be at least 6 characters long" },
 		{ test: v => v.length <= 320, message: "Email must not exceed 320 characters" },
@@ -54,7 +54,7 @@ export function	isValidEmail(email: string): validationResult {
 }
 
 function	validate(value: string, rules: rule[]): validationResult {
-	const errors = rules
+	const	errors = rules
 		.filter(rule => !rule.test(value))
 		.map(rule => rule.message)
 		.join("; ");

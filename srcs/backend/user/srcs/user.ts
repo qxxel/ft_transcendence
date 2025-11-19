@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/16 22:10:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 02:27:49 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ userFastify.get('/', async (request, reply) => {	//
 	return { message: "Hello User!" };				// A ENLEVER (TEST CONNECTION)
 });													//
 
-const start = async () => {
+const	start = async () => {
 	try {
 		await userFastify.listen({ port: 3000, host: '0.0.0.0' });
 		console.log(`Server started on https://user:3000`);

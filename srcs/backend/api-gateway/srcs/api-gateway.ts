@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 02:47:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:26:30 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 import axios	from 'axios';
 import cors		from '@fastify/cors'
-import Fastify	from 'fastify';
+import Fastify, { type FastifyInstance }	from 'fastify';
 import fs		from 'fs';
 import https	from 'https';
 
@@ -36,7 +36,7 @@ export const	gatewayAxios = axios.create({
 
 /* ====================== SERVER ====================== */
 
-const	gatewayFastify = Fastify({
+const	gatewayFastify: FastifyInstance = Fastify({
 	https: {
 		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
 		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
@@ -67,7 +67,7 @@ const	start = async () => {
 				process.exit(0);
 			});
 		});
-	} catch (err) {
+	} catch (err: unknown) {
 		gatewayFastify.log.error(err);
 		process.exit(1);
 	}

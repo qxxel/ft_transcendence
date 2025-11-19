@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   userBuilder.ts                                     :+:      :+:    :+:   */
+/*   userTableBuilder.ts                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:21:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/14 21:56:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:43:52 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 import type { Database }	from 'sqlite3';
 
 
-/* ====================== FUNCTIONS ====================== */
+/* ====================== FUNCTION ====================== */
 
-export function	userTableBuilder(db: Database) {
+export function	userTableBuilder(db: Database): void {
 	db.exec(`CREATE TABLE IF NOT EXISTS user (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		username TEXT NOT NULL UNIQUE,
