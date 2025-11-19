@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/19 03:04:19 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:48:51 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { gatewayAxios }			from '../api-gateway.js';
-import { requestErrorsHandler }	from "../utils/requestErrors.js";
+import { gatewayAxios }			from '../api-gateway.js'
+import { requestErrorsHandler }	from "../utils/requestErrors.js"
 
-import type { AxiosResponse }									from 'axios';
-import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify';
+import type { AxiosResponse }									from 'axios'
+import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 
 
 /* ====================== FUNCTION ====================== */
