@@ -294,7 +294,7 @@ export class PongGame {
         const winnerName = this.score1 >= this.winningScore ? this.player1Name : this.player2Name;
         tournament.reportMatchWinner(winnerName);
       }
-
+      this.longestRally = Math.max(this.longestRally, this.currentRallyHits);
       this.showEndGameDashboard();
     }
   }
@@ -396,7 +396,7 @@ export class PongGame {
       if (this.ball!.dx > 0) {
         
         let predictedY = this.predictBallLandingY();
- 
+        predictedY = this.adjustShootDirection(predictedY);
         predictedY = Math.max(this.ball!.radius, Math.min(predictedY, this.canvas!.height - this.ball!.radius));
         
         this.aiTargetY = predictedY;
@@ -438,6 +438,26 @@ export class PongGame {
       }
     }
     return predictedY;
+  }
+
+  private adjustShootDirection(predictedY: number): number {
+    // TODO: for harder gameplay, sometimes it can redirect on the opposite of the first choice, like if rally is >10 then its not + 33 but -45
+    let newY = predictedY;
+    let offsetY = this.paddle1!.y - this.paddle2!.y;
+    if (this.paddle1!.y < this.paddle2!.y){
+      console.log("this.paddle1!.y < this.paddle2!.y");
+      newY -= (this.paddle2!.height / 3);
+    }
+    else if (this.paddle1!.y > this.paddle2!.y){
+      console.log("this.paddle1!.y > this.paddle2!.y");
+      newY += (this.paddle2!.height / 3);
+    }
+    
+    console.log("predictedY = ", predictedY);
+    console.log("newY = ", newY);
+
+    return newY;
+    // return predictedY;
   }
 
   public setWinningScore(newWinningScore: number) {
