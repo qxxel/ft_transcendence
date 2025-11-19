@@ -1,18 +1,21 @@
 services:
-
-  backend:
-    container_name: backend
-    build:
-      context: backend
-      dockerfile: Dockerfile.back
-    env_file:
-      - .env
-    ports:
-      - "9090"
-    networks:
-      - ft_transcendence
-    volumes:
-      - "database_assets:/app/dist/db"
+  # backend:
+  #   container_name: backend
+  #   image: backend
+  #   build:
+  #     context: backend
+  #     dockerfile: Dockerfile.back
+  #   env_file:
+  #     - .env
+  #   secrets:
+  #     - ssl_key_back
+  #     - ssl_crt_back
+  #   ports:
+  #     - "5000:3000"
+  #   networks:
+  #     - web
+  #   volumes:
+  #     - "database_assets:/app/dist/db"
 
   frontend:
     container_name: frontend
@@ -20,54 +23,78 @@ services:
     build:
       context: frontend
       dockerfile: Dockerfile.front
+    restart: on-failure
     volumes:
       - "frontend_assets:/app/dist"
     env_file:
       - .env
-    networks:
-      - ft_transcendence
-
-  nginx:
-    container_name: nginx
-    image: nginx
-    build:
-      context: nginx
-      dockerfile: Dockerfile.nginx
-    depends_on:
-      - frontend
-    restart: on-failure
-    volumes:
-      - "frontend_assets:/usr/share/nginx/html"
-    env_file:
-      - .env
     secrets:
-      - ssl_key
-      - ssl_crt
+      - ssl_key_front
+      - ssl_crt_front
     ports:
       - "8080:443"
     networks:
-      - ft_transcendence
+      - web
+
+  # nginx:
+  #   container_name: nginx
+  #   image: nginx
+  #   build:
+  #     context: nginx
+  #     dockerfile: Dockerfile.nginx
+  #   depends_on:
+  #     - frontend
+  #   restart: on-failure
+  #   volumes:
+  #     - "frontend_assets:/usr/share/nginx/html"
+  #   env_file:
+  #     - .env
+  #   secrets:
+  #     - ssl_key_front
+  #     - ssl_crt_front
+  #   ports:
+  #     - "8080:443"
+  #   networks:
+  #     - web
+
+# Include microservices from backend docker-compose
+include:
+  - ./backend/docker-compose.yml
+
 
 volumes:
   frontend_assets:
-    # driver: local
-    # driver_opts:
-    #   type: 'none'
-    #   o: 'bind'
-    #   device: './srcs/frontend/html'
-  database_assets:
+  authDB:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: './backend/db'
+      device: './backend/auth/db'
+  userDB:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './backend/user/db'
+  jwtDB:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './backend/jwt/db'
 
 networks:
-  ft_transcendence:
-    name: ft_transcendence
+  web:
+    name: web
+  backend:
+    name: backend
 
 secrets:
-  ssl_key:
+  ssl_key_front:
     file: "../.SECRET/private_key.key"
-  ssl_crt:
+  ssl_crt_front:
     file: "../.SECRET/certificate.crt"
+  ssl_key_back:
+    file: "../.SECRET/private_key.pem"
+  ssl_crt_back:
+    file: "../.SECRET/certificate.pem"

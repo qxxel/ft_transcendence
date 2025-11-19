@@ -1,0 +1,10 @@
+import { Mesh } from "./class_mesh";
+
+export class Component {
+
+  private meshs: Mesh[] = [];
+
+  addMesh(m: Mesh): void {
+    this.meshs.push(m);
+  }
+}

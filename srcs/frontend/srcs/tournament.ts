@@ -80,8 +80,8 @@ export class TournamentController {
     let matchNum = 1;
     
     for (let i = 0; i < numPlayers; i += 2) {
-      const player1 = shuffledPlayers[i];
-      const player2 = (i + 1 < numPlayers) ? shuffledPlayers[i+1] : null;
+      const player1 = shuffledPlayers[i]!;
+      const player2 = (i + 1 < numPlayers) ? shuffledPlayers[i+1]! : null;
 
       const match: Match = {
         id: `r${round}-m${matchNum}`,
