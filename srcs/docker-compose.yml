@@ -1,22 +1,4 @@
 services:
-  # backend:
-  #   container_name: backend
-  #   image: backend
-  #   build:
-  #     context: backend
-  #     dockerfile: Dockerfile.back
-  #   env_file:
-  #     - .env
-  #   secrets:
-  #     - ssl_key_back
-  #     - ssl_crt_back
-  #   ports:
-  #     - "5000:3000"
-  #   networks:
-  #     - web
-  #   volumes:
-  #     - "database_assets:/app/dist/db"
-
   frontend:
     container_name: frontend
     image: frontend
@@ -35,27 +17,6 @@ services:
       - "8080:443"
     networks:
       - web
-
-  # nginx:
-  #   container_name: nginx
-  #   image: nginx
-  #   build:
-  #     context: nginx
-  #     dockerfile: Dockerfile.nginx
-  #   depends_on:
-  #     - frontend
-  #   restart: on-failure
-  #   volumes:
-  #     - "frontend_assets:/usr/share/nginx/html"
-  #   env_file:
-  #     - .env
-  #   secrets:
-  #     - ssl_key_front
-  #     - ssl_crt_front
-  #   ports:
-  #     - "8080:443"
-  #   networks:
-  #     - web
 
 # Include microservices from backend docker-compose
 include:
