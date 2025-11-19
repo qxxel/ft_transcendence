@@ -1,4 +1,4 @@
-import { Color } from "./interface.js";
+import type { Color } from "./interface.js";
 
 export class Line2D {
 

@@ -1,6 +1,6 @@
 import { Actor } from "./class_actor.js";
 import { Rect2D } from "./class_rect.js";
-import { Color, Keys } from "./interface.js";
+import type { Color, Keys } from "./interface.js";
 import { GSTATE } from "./global.js";
 import { Ball } from "./class_ball.js";
 import { Line2D } from "./class_line.js";

@@ -4,7 +4,7 @@ import { GSTATE } from "./global.js";
 import { Tank } from "./class_tank.js";
 import { Map } from "./class_map.js";
 import { Ball } from "./class_ball.js";
-import { Color, Keys } from "./interface.js";
+import type { Color, Keys } from "./interface.js";
 
 export class TankGame {
 
@@ -49,9 +49,11 @@ export class TankGame {
     {
       for (let i = 0; i < nplayer; ++i)
       {
+        if (this.map.spawns && this.map.spawns[i]) { // SCOTCH
         GSTATE.ACTORS.push(
-          new Tank(this.map.spawns[i].x, this.map.spawns[i].y, tank_width, tank_height, {r:0,g:255,b:0}, colors[i], keys[i]));
+          new Tank(this.map.spawns[i]!.x, this.map.spawns[i]!.y, tank_width, tank_height, {r:0,g:255,b:0}, colors[i]!, keys[i]!));
       }
+    }
     }
     else {
         GSTATE.ACTORS.push(

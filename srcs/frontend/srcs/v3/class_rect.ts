@@ -1,4 +1,4 @@
-import { Color } from "./interface";
+import type { Color } from "./interface.js";
 
 export class Rect2D {
 

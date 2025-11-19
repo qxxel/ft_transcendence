@@ -1,7 +1,7 @@
 import { Actor } from "./class_actor.js";
 import { Wall } from "./class_wall.js";
 import { GSTATE } from "./global.js";
-import { Spawn } from "./class_spawn.js";
+import type { Spawn } from "./class_spawn.js";
 
 export class Map {
 

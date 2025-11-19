@@ -1,0 +1,64 @@
+services:
+  gateway:
+    container_name: gateway
+    image: gateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile.gateway
+    secrets:
+      - ssl_key_back
+      - ssl_crt_back
+    ports:
+      - "5000:3000"
+    networks:
+      - web
+      - backend
+
+  auth:
+    container_name: auth
+    image: auth
+    build:
+      context: ./auth
+      dockerfile: Dockerfile.auth
+    secrets:
+      - ssl_key_back
+      - ssl_crt_back
+    ports:
+      - "3000"
+    volumes:
+      - "authDB:/app/dist/db"
+    networks:
+      - backend
+
+  user:
+    container_name: user
+    image: user
+    build:
+      context: ./user
+      dockerfile: Dockerfile.user
+    secrets:
+      - ssl_key_back
+      - ssl_crt_back
+    ports:
+      - "3000"
+    volumes:
+      - "userDB:/app/dist/db"
+    networks:
+      - backend
+
+  jwt:
+    container_name: jwt
+    image: jwt
+    build:
+      context: ./jwt
+      dockerfile: Dockerfile.jwt
+    secrets:
+      - ssl_key_back
+      - ssl_crt_back
+    ports:
+      - "3000"
+    volumes:
+      - "jwtDB:/app/dist/db"
+    networks:
+      - backend
+    env_file: ../.env

@@ -1,0 +1,14 @@
+<h1>Two-factor authentication</h1>
+
+<form id="2fa-form">
+	<input type="hidden" id="sign-in-user-id" name="user-id">
+
+	<p>Open your email and enter the code.</p>
+
+	<div class="form-group">
+		<input type="text" id="digit-code" name="digit-code" maxlength="4" placeholder="Enter 4 digit code" pattern="^[0-9]{4}$" required>
+	</div>
+
+	<button type="submit" id="verify-submit">Verify</button>
+
+</form>
