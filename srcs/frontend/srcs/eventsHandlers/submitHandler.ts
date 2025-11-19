@@ -30,7 +30,7 @@ function	getMenu(username: string | undefined): string {
 				<a href="/settings">Settings</a> |
 				<a href="/user">${username}</a> |
 				<button onclick="onClickLogout();" id="logout">Logout</button> |
-				<a href="/game-menu">Play</a>
+				<a href="/games">Play</a>
 			</nav>`
 }
 

@@ -1,3 +1,5 @@
+import { Game } from "./class_game.js";
+
 interface Paddle {
   x: number;
   y: number;
@@ -17,7 +19,7 @@ interface Ball {
   speed: number;
 }
 
-export class PongGame {
+export class PongGame extends Game {
   private canvas: HTMLCanvasElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
   private animationFrameId: number | null = null;
@@ -60,6 +62,7 @@ export class PongGame {
     winScoreId: string, 
     gameMode: 'pvp' | 'ai' = 'ai'
   ) {
+    super();
     this.ids = {
       canvas: canvasId,
       score1: score1Id,

@@ -16,6 +16,7 @@
 /* ====================== IMPORT ====================== */
 
 import { PongGame } from "../game/game.js";
+import { TankGame } from "../v3/tank.js";
 import { User }		from "../user/user.js";
 import { router }	from "../index.js";
 
@@ -25,13 +26,16 @@ import type { GameState }	from "../index.js";
 /* ====================== FUNCTIONS ====================== */
 
 export function  pathActions(currentPath: string, gameState: GameState, user: User): void {
-	if (['/game-menu'].includes(currentPath)) {
-		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
+
+
+	if (!['/pong', '/tank'].includes(currentPath)) {
+		if (gameState.currentGame) 
+			gameState.currentGame.stop();
 	}
 
-	if (['/play'].includes(currentPath)) {
+	if (['/pong'].includes(currentPath)) {
 		if (!gameState.currentGame)
-			router.navigate("/game-menu", gameState, user);
+			router.navigate("/pongmenu", gameState, user);
 		else {
 			gameState.currentGame.setCtx();
 			gameState.currentGame.start();
@@ -42,10 +46,32 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 		if (user.isSignedIn())
 			router.navigate("/", gameState, user);
 	}
+
+	if (['/pongmenu'].includes(currentPath)) {
+		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
+		const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
+    	const display = document.getElementById('points-display') as HTMLSpanElement;
+		
+    	if (slider && display) {
+    	  display.innerHTML = slider.value;
+		
+    	  slider.addEventListener('input', () => {
+    	    display.innerHTML = slider.value;
+    	  });
+    	}
+	}
+
+	if (['/tank'].includes(currentPath)) {
+    	gameState.currentGame = new TankGame('pong-canvas', 'desertfox', 4);
+    	gameState.currentGame.start();
+    	console.log("Loading the new game...");
+  	}
+
+
 }
 
 // function  pathActions(currentPath: string) {
-//   if (['/gamemenu'].includes(currentPath)) {
+//   if (['/pongmenu'].includes(currentPath)) {
 //     currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
 
 //     const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
@@ -62,7 +88,7 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 
 //   if (['/play'].includes(currentPath)) {
 //     if (!currentGame)
-//       router.navigate('/gamemenu');
+//       router.navigate('/pongmenu');
 //     else {
 //       currentGame.setCtx();
 //       currentGame.start();

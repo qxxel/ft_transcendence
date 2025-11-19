@@ -52,18 +52,28 @@ export function	addRoutes(): void {
 		return html;
 	});
 	
-	router.addRoute("/game-menu", async () => {
-		const html = await loadHtml("pages/game-menu.html");
+	router.addRoute("/pongmenu", async () => {
+		const html = await loadHtml("pages/pongmenu.html");
 		return html;
 	});
 
-	router.addRoute("/play", async () => {
-		const html = await loadHtml("pages/play.html");
+	router.addRoute("/games", async () => {
+		const html = await loadHtml("pages/games.html");
+		return html;
+	});
+
+	router.addRoute("/pong", async () => {
+		const html = await loadHtml("pages/pong.html");
 		return html;
 	});
 
 	router.addRoute("/tank", async () => {
 	  const html = await loadHtml("pages/tank.html");
+	  return html;
+	});
+
+	router.addRoute("/tankmenu", async () => {
+	  const html = await loadHtml("pages/tankmenu.html");
 	  return html;
 	});
 

@@ -12,11 +12,6 @@
 
 // THE MASTER FILE OF THE FRONTEND
 
-// (window as any).onClickPlayAI = onClickPlayAI;
-// (window as any).onClickPlayPVP = onClickPlayPVP;
-// (window as any).onStartTournament = onStartTournament;
-// (window as any).startTournamentMatch = startTournamentMatch;
-
 /* ====================== IMPORTS ====================== */
 
 import { PongGame } from './game/game.js';
@@ -27,13 +22,13 @@ import { setupClickHandlers } 	from "./eventsHandlers/clickHandler.js"
 import { setupSubmitHandler } 	from "./eventsHandlers/submitHandler.js"
 import { setupLoadHandler } 	from "./eventsHandlers/loadHandler.js"
 import { addRoutes }			from "./router/addRoutes.js"
-
+import { Game } 				from './game/class_game.js';
 
 
 /* ====================== INTERFACE ====================== */
 
 export interface	GameState {
-	currentGame: PongGame | null;
+	currentGame: Game | null;
 };
 
 

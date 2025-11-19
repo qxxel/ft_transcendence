@@ -15,6 +15,8 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { PongGame } from "../game/game.js";
+import { TournamentController } from "../tournament.js";
 import { Router }		from "../router/router.js"
 import { User }			from "../user/user.js"
 import { sendRequest }	from "../utils/sendRequest.js";
@@ -28,7 +30,7 @@ function onClickPlay(router: Router, gameState: GameState, user: User): void {
 	const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
 	gameState.currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
 
-	router.navigate("/play", gameState, user);
+	router.navigate("/pong", gameState, user);
 }
 
 async function	onClickLogout(router: Router, gameState: GameState, user: User): Promise<void> {
@@ -48,7 +50,7 @@ async function	onClickLogout(router: Router, gameState: GameState, user: User): 
 				<a href="/settings">Settings</a> |
 				<a href="/sign-in">Sign in</a> |
 				<a href="/sign-up">Sign up</a> |
-				<a href="/game-menu">Play</a>
+				<a href="/games">Play</a>
 			</nav>`;
 
 	router.navigate("/", gameState, user);
@@ -97,14 +99,70 @@ async function onClickRefreshMessage(): Promise<void> {
 	const data = await res.json();
 	console.log(data);
 }
+/////////////////////
 
+var currentTournament: TournamentController | null = null;
 
+function onClickPlayAI(router: Router, gameState: GameState, user: User) {
+  const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+  const winningScore = parseInt(maxPointsInput.value, 10);
+  
+  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', 'ai');
+  gameState.currentGame.setWinningScore(winningScore);
+  
+  router.navigate("/pong", gameState, user);
+}
+
+function onClickPlayPVP(router: Router, gameState: GameState, user: User) {
+  const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+  const winningScore = parseInt(maxPointsInput.value, 10);
+  
+  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', 'pvp');
+  gameState.currentGame.setWinningScore(winningScore);
+  
+  router.navigate("/pong", gameState, user);
+}
+
+function onStartTournament(router: Router, gameState: GameState, user: User) {
+  const inputs = document.querySelectorAll('.player-name-input') as NodeListOf<HTMLInputElement>;
+  const playerNames: string[] = [];
+  
+  inputs.forEach(input => {
+    if (input.value.trim() !== '') {
+      playerNames.push(input.value.trim());
+    }
+  });
+
+  if (playerNames.length < 4) {
+    alert("You need at least 4 players to start a tournament.");
+    return;
+  }
+
+  const scoreInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+  const winningScore = parseInt(scoreInput.value, 10);
+
+  currentTournament = new TournamentController(playerNames, winningScore);
+  
+  router.navigate("/tournament-bracket", gameState, user);
+}
+
+// function startTournamentMatch(matchId: string, p1: string, p2: string) {
+//   if (currentTournament) {
+//     currentTournament.startMatch(matchId, p1, p2);
+//     router.navigate('/pong');
+//   }
+// }
+////////////////
 export async function	setupClickHandlers(router: Router, user: User, gameState: GameState): Promise<void> {
 	(window as any).onClickPlay = () => onClickPlay(router, gameState, user);
 	(window as any).onClickLogout = () => onClickLogout(router, gameState, user);
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;
 	(window as any).onClickRefreshMessage = onClickRefreshMessage;
+	(window as any).onClickPlayAI = () => onClickPlayAI(router, gameState, user);
+	(window as any).onClickPlayPVP = () => onClickPlayPVP(router, gameState, user);
+	(window as any).onStartTournament = () => onStartTournament(router, gameState, user);
+	// (window as any).startTournamentMatch = () => startTournamentMatch(router, gameState, user);
 	
 	document.addEventListener('click', (event) => {
 		const target = event.target as HTMLAnchorElement;

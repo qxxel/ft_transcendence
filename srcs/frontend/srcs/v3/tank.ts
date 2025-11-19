@@ -5,8 +5,9 @@ import { Tank } from "./class_tank.js";
 import { Map } from "./class_map.js";
 import { Ball } from "./class_ball.js";
 import type { Color, Keys } from "./interface.js";
+import { Game } from "../game/class_game.js";
 
-export class TankGame {
+export class TankGame extends Game {
 
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
@@ -24,6 +25,7 @@ export class TankGame {
     nplayer: number,
     private gameMode: 'pvp' | 'ai' = 'ai',
   ) {
+    super();
     this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
     this.ctx = this.canvas.getContext('2d')!;
 
@@ -113,5 +115,7 @@ export class TankGame {
   }
 
   private draw() {}
+
+
 
 }
