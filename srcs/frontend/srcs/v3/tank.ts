@@ -20,6 +20,18 @@ import { GSTATE }	from "./global.js"
 import { Input }	from "./class_input.js"
 import { Map }		from "./class_map.js"
 import { Tank }		from "./class_tank.js"
+v0.2.2
+Formatting:
+All interfaces are now stored in a single file (./interfaces.ts).
+
+Tank:
+HUD and Cannon are now separate classes.
+
+Line2D:
+Removed the unnecessary boolean return from slope().
+
+Other:
+Added a temporary scotch to actually close the game.import { Collectible } from "./class_collectible.js"
 
 import type { Color, Keys }	from "./interface.js"
 
@@ -65,16 +77,26 @@ export class	TankGame extends Game {
 
 		let tank_width:number = 25;
 		let tank_height:number = 25;
+		let collectible_width:number = 10;
+		let collectible_height:number = 10;
+
 
 		if (map_name == 'desertfox')
 		{
 			for (let i = 0; i < nplayer; ++i)
 			{
-				if (this.map.spawns && this.map.spawns[i]) { // SCOTCH
-				GSTATE.ACTORS.push(
-					new Tank(this.map.spawns[i]!.x, this.map.spawns[i]!.y, tank_width, tank_height, {r:0,g:255,b:0}, colors[i]!, keys[i]!));
+				if (this.map.spawns_tank && this.map.spawns_tank[i]) { // SCOTCH
+					GSTATE.ACTORS.push(
+						new Tank(this.map.spawns_tank[i]!.x, this.map.spawns_tank[i]!.y, tank_width, tank_height, {r:0,g:255,b:0}, colors[i]!, keys[i]!));
+				}
 			}
-		}
+			for (let i = 0; i < nplayer; ++i)
+			{
+				if (this.map.spawns_collectible && this.map.spawns_collectible[i]) { // SCOTCH
+					GSTATE.ACTORS.push(
+						new Collectible(this.map.spawns_collectible[i]!.x, this.map.spawns_collectible[i]!.y, collectible_width, collectible_height, "SPEED", {r:150,g:150,b:0}));
+				}
+			}
 		}
 		else {
 				GSTATE.ACTORS.push(
@@ -98,7 +120,6 @@ export class	TankGame extends Game {
 	}
 
 	private	update(): void {
-
 		if (GSTATE.REDRAW) {
 			// console.log("REDRAW");
 			this.map.draw(this.ctx);

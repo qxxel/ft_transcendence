@@ -23,6 +23,7 @@ import { Hud }		from "./class_hud.js"
 import { Rect2D }	from "./class_rect.js"
 
 import type { Color, Keys }	from "./interface.js"
+import { Collectible } from "./class_collectible.js"
 
 
 /* ============================= CLASS ============================= */
@@ -31,7 +32,6 @@ export class	Tank extends Actor {
 
 	rect: Rect2D;
 	cannon: Cannon;
-	redraw: boolean = true;
 	speed: number = 0.75;
 	rot_speed: number = 0.05;
 	health: number = 5;
@@ -122,7 +122,7 @@ export class	Tank extends Actor {
 	collide(rect1: Rect2D): boolean {
 
 		for (let a of GSTATE.ACTORS) {
-			if (a == this || a instanceof Ball ) continue;
+			if (a == this || a instanceof Ball || a instanceof Collectible) continue;
 			if (a.getRect().collide(rect1))
 			{
 				return true;

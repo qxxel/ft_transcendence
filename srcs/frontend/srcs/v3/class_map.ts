@@ -27,7 +27,8 @@ import type { Spawn } from "./class_spawn.js"
 export class	Map {
 
 		public	walls: Actor[] = [];
-		public	spawns: Spawn[] = [];
+		public	spawns_tank: Spawn[] = [];
+		public	spawns_collectible: Spawn[] = [];
 	constructor(
 		public	map_width:number,
 		public	map_height:number,
@@ -95,15 +96,13 @@ export class	Map {
 		this.walls.push(new Wall(0, 30, this.map_width, ext_width, c_ext));                           // SCOTCH EXTERIOR TOP
 		this.walls.push(new Wall(0, this.map_height - 30 - ext_width, this.map_width, ext_width, c_ext));  // SCOTCH EXTERIOR BOT
 
-
-
 // XXXXXXXXXX
 // X a      X
 // X 1 22 3cX
-// X        X
+// X  w  x  X
 // X 4 55 6 X
 // X 4 55 6 X
-// X        X
+// X  y  z  X
 // Xb7 88 9 X
 // X      d X
 // XXXXXXXXXX
@@ -135,15 +134,26 @@ export class	Map {
 			GSTATE.ACTORS.push(w);
 		}
 
-		// this.walls.push(new Wall(cell*2.5 - 16/2, cell*1.5- 16/2, 16,16,   {r:255,g:0,b:0}));   // a
-		// this.walls.push(new Wall(cell*1.5 - 16/2, cell*7.5- 16/2, 16,16,   {r:255,g:0,b:0}));   // b
-		// this.walls.push(new Wall(cell*8.5 - 16/2, cell*2.5- 16/2, 16,16,   {r:255,g:0,b:0}));   // c
-		// this.walls.push(new Wall(cell*7.5 - 16/2, cell*8.5- 16/2, 16,16,   {r:255,g:0,b:0}));   // d
+		// this.walls.push(new Wall(cell*3.5 - 16/2, cell*3.5- 16/2, 16,16,   {r:255,g:0,b:0}));   // w
+		// this.walls.push(new Wall(cell*6.5 - 16/2, cell*3.5- 16/2, 16,16,   {r:255,g:0,b:0}));   // x
+		// this.walls.push(new Wall(cell*3.5 - 16/2, cell*6.5- 16/2, 16,16,   {r:255,g:0,b:0}));   // w
+		// this.walls.push(new Wall(cell*6.5 - 16/2, cell*6.5- 16/2, 16,16,   {r:255,g:0,b:0}));   // w
 		
-			this.spawns.push({x:cell*2.5 - 16/2,y:cell*1.5- 16/2}); // a
-			this.spawns.push({x:cell*1.5 - 16/2,y:cell*7.5- 16/2}); // b
-			this.spawns.push({x:cell*8.5 - 16/2,y:cell*2.5- 16/2}); // c
-			this.spawns.push({x:cell*7.5 - 16/2,y:cell*8.5- 16/2}); // d
+			this.spawns_tank.push({x:cell*2.5 - 16/2,y:cell*1.5- 16/2}); // a
+			this.spawns_tank.push({x:cell*1.5 - 16/2,y:cell*7.5- 16/2}); // b
+			this.spawns_tank.push({x:cell*8.5 - 16/2,y:cell*2.5- 16/2}); // c
+			this.spawns_tank.push({x:cell*7.5 - 16/2,y:cell*8.5- 16/2}); // d
+
+
+			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*3.5- 16/2});   // w
+			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*3.5- 16/2});   // x
+			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*6.5- 16/2});   // y
+			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*6.5- 16/2});   // z
+
+			// this.spawns_tank.push({x:cell*2.5 - 16/2,y:cell*1.5- 16/2}); // w
+			// this.spawns_tank.push({x:cell*1.5 - 16/2,y:cell*7.5- 16/2}); // x
+			// this.spawns_tank.push({x:cell*8.5 - 16/2,y:cell*2.5- 16/2}); // y
+			// this.spawns_tank.push({x:cell*7.5 - 16/2,y:cell*8.5- 16/2}); // z
 	}
 		generate_default(): void {
 		console.log("generate_default()");
