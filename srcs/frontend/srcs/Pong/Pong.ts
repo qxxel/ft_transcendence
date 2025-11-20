@@ -6,10 +6,13 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/20 23:15:13 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/20 23:27:39 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// MAIN PONG GAME CONTROLLER
+
+/* ====================== IMPORTS ====================== */
 
 import { Game } from "./GameClass.js"
 import { Router } from "../router/router.js";
@@ -19,8 +22,12 @@ import { PongRenderer } from "./Renderer.js";
 import { PongPhysics } from "./Physics.js";
 import type { GameState } from "../index.js";
 
+/* ====================== INTERFACES ====================== */
+
 export interface Paddle { x: number; y: number; width: number; height: number; dy: number; speed: number; hits: number; }
 export interface Ball { x: number; y: number; radius: number; dx: number; dy: number; speed: number; }
+
+/* ====================== CLASS ====================== */
 
 export class PongGame extends Game {
   private canvas: HTMLCanvasElement | null = null;

@@ -6,9 +6,13 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:04:46 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/20 23:05:27 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/20 23:26:41 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// MANAGES THE AI LOGIC AND PREDICTIONS
+
+/* ====================== INTERFACES ====================== */
 
 interface AIState {
     ball: { x: number, y: number, dx: number, dy: number, radius: number };
@@ -16,6 +20,8 @@ interface AIState {
     opponentPaddle: { y: number };
     canvasHeight: number;
 }
+
+/* ====================== CLASS ====================== */
 
 export class AIController {
     private lastDecisionTime: number = 0;

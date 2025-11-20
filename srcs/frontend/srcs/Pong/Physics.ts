@@ -6,11 +6,17 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:05:33 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/20 23:12:14 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/20 23:27:07 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// HANDLES COLLISION DETECTION AND MOVEMENT CALCULATIONS
+
+/* ====================== IMPORTS ====================== */
+
 import type { Ball, Paddle } from "./Pong.js";
+
+/* ====================== CLASS ====================== */
 
 export class PongPhysics {
     private width: number;
