@@ -6,7 +6,7 @@
 #    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/19 21:55:34 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/11/20 05:04:10 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ DC_RESTART	= $(CMD_DC) restart
 AUTH_DB	= srcs/backend/auth/db
 USER_DB	= srcs/backend/user/db
 JWT_DB	= srcs/backend/jwt/db
+2FA_DB	= srcs/backend/2fa/db
 
 
 # ----------------------------    key and cert    ---------------------------- #
@@ -69,7 +70,7 @@ CMD_OPENSSL	= openssl req -x509 -newkey rsa:2048 \
 
 # --------------------------    build directory    -------------------------- #
 
-BUILD_DIR		= $(SECRET_DIR) $(AUTH_DB) $(USER_DB) $(JWT_DB)
+BUILD_DIR		= $(SECRET_DIR) $(AUTH_DB) $(USER_DB) $(JWT_DB) $(2FA_DB)
 
 
 # -------------------------------    colors    ------------------------------- #
