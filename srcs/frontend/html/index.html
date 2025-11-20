@@ -6,25 +6,28 @@
         <link rel="stylesheet" href="index.css" type="text/css" >
     </head>
 
-	<body>
-		
-		<nav id="nav">
-			<a href="/">Home</a> | 
-			<a href="/about">About</a> | 
-			<a href="/settings">Settings</a> |
-			<a href="/sign-in">Sign in</a> |
-			<a href="/sign-up">Sign up</a> |
-			<a href="/games">Play</a>
-		</nav>
+    <body>
+        
+        <div id="app" class="tab">
+            
+            <nav id="nav">
+			    <a href="/">Home</a>
+			    <a href="/games">Play</a>
+			    <a href="/tournament-setup">Tournament</a>
+			    <a href="/sign-in">Sign in</a>
+			    <a href="/sign-up">Sign up</a>
+			    <a href="/settings">Settings</a>
+			    <a href="/about">About</a>
+			</nav>
 
-		<div id="app" class="tab">
-			<h1>Home</h1>
-			<p>Welcome !</p>
-		</div>
+            <div id="page-content">
+                <h1>Home</h1>
+                <p>Welcome !</p>
+            </div>
 
-		<script type="module" src="./index.js"></script>
+        </div>
 
-	</body>
+        <script type="module" src="./index.js"></script>
 
-
+    </body>
 </html>

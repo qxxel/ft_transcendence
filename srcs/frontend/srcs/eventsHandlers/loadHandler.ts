@@ -42,14 +42,13 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 		var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)
 			menu.innerHTML =
-				`<nav>
-					<a href="/">Home</a> | 
-					<a href="/about">About</a> | 
-					<a href="/settings">Settings</a> |
-					<a href="/user">${user.getUsername()}</a> |
-					<button onclick="onClickLogout();" id="logout">Logout</button> |
-					<a href="/games">Play</a>
-				</nav>`;
+				`<a href="/">Home</a>
+				<a href="/games">Play</a>
+				<a href="/tournament-setup">Tournament</a>
+				<a href="/user">${user.getUsername()}</a>
+				<button onclick="onClickLogout();" id="logout">Logout</button>
+				<a href="/settings">Settings</a>
+				<a href="/about">About</a>`;
 
 		router.navigate("/", gameState, user);
 	});

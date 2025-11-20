@@ -59,28 +59,33 @@ export class TournamentController {
 
         const shuffledPlayers = [...this.players].sort(() => Math.random() - 0.5);
         const round1Matches = this.matches.filter(m => m.round === 1);
-
         let playerIdx = 0;
+
         for (const match of round1Matches) {
             if (playerIdx < numPlayers) {
                 match.player1 = shuffledPlayers[playerIdx] || null;
                 playerIdx++;
             } else {
-                match.player1 = null; 
+                match.player1 = null;
             }
+        }
 
+        for (const match of round1Matches) {
             if (playerIdx < numPlayers) {
                 match.player2 = shuffledPlayers[playerIdx] || null;
                 playerIdx++;
             } else {
-                match.player2 = null; 
+                match.player2 = null;
             }
+        }
 
+        for (const match of round1Matches) {
             this.processBye(match);
         }
     }
 
     private processBye(match: Match) {
+		if (match.round !== 1) return;
         if (match.player1 && !match.player2) {
             match.winner = match.player1;
             this.advanceWinnerToNextRound(match);
@@ -125,8 +130,8 @@ export class TournamentController {
                 const p1Name = match.player1?.name || (match.round === 1 ? 'BYE' : 'TBD');
                 const p2Name = match.player2?.name || (match.round === 1 ? 'BYE' : 'TBD');
                 
-                const p1Class = match.winner === match.player1 && match.player1 ? 'winner' : '';
-                const p2Class = match.winner === match.player2 && match.player2 ? 'winner' : '';
+                const p1Class = (match.winner && match.winner === match.player1) ? 'winner' : '';
+                const p2Class = (match.winner && match.winner === match.player2) ? 'winner' : '';
                 
                 let button = '';
                 const isPlayable = !match.winner && match.player1 && match.player2;

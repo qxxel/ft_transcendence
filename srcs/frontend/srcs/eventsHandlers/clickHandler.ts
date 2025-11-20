@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:52:45 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 04:21:02 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,21 +43,58 @@ async function  onClickLogout(router: Router, gameState: GameState, user: User):
     var menu: HTMLElement = document.getElementById("nav") as HTMLElement;
     if (menu)
         menu.innerHTML =
-            `<nav>
-                <a href="/">Home</a> | 
-                <a href="/about">About</a> | 
-                <a href="/settings">Settings</a> |
-                <a href="/sign-in">Sign in</a> |
-                <a href="/sign-up">Sign up</a> |
-                <a href="/games">Play</a>
-            </nav>`;
+			`<a href="/">Home</a>
+			<a href="/games">Play</a>
+			<a href="/tournament-setup">Tournament</a>
+			<a href="/user">${user.getUsername()}</a>
+			<button onclick="onClickLogout();" id="logout">Logout</button>
+			<a href="/settings">Settings</a>
+			<a href="/about">About</a>`;
 
     router.navigate("/", gameState, user);
 }
 
-async function onClickGetMessage(): Promise<void> { /* ... */ }
-async function onClickValidateMessage(): Promise<void> { /* ... */ }
-async function onClickRefreshMessage(): Promise<void> { /* ... */ }
+async function onClickGetMessage(): Promise<void> {
+    const   res: Response = await fetch('/api/jwt', {
+        method: "post",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
+    });
+
+    const   data: unknown = await res.json();
+    console.log(data);
+}
+
+async function onClickValidateMessage(): Promise<void> {
+    const   res: Response = await fetch('/api/jwt/validate', {
+        method: "post",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
+    });
+
+    const   data: unknown = await res.json();
+    console.log(data);
+}
+
+async function onClickRefreshMessage(): Promise<void> {
+    const   res: Response = await fetch('/api/jwt/refresh', {
+        method: "post",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
+    });
+
+    const   data: unknown = await res.json();
+    console.log(data);
+}
 
 
 /* ====================== GAME & TOURNAMENT HANDLERS ====================== */
@@ -66,7 +103,7 @@ function onClickPlayAI(router: Router, gameState: GameState, user: User) {
   const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
   const winningScore = parseInt(maxPointsInput.value, 10);
   
-  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', 'ai');
+  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'ai');
   gameState.currentGame.setWinningScore(winningScore);
   
   router.navigate("/pong", gameState, user);
@@ -76,7 +113,7 @@ function onClickPlayPVP(router: Router, gameState: GameState, user: User) {
   const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
   const winningScore = parseInt(maxPointsInput.value, 10);
   
-  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', 'pvp');
+  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'pvp');
   gameState.currentGame.setWinningScore(winningScore);
   
   router.navigate("/pong", gameState, user);
@@ -137,8 +174,17 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
         }
     });
 
-	// HANDLE BACK/FORWARD NAVIGATION
-	window.addEventListener('popstate', () => {
-		router.render(gameState, user);
-	});
+    document.addEventListener('input', (event) => {
+        const target = event.target as HTMLInputElement;
+        if (target && target.id === 'choosenMaxPoints') {
+            const display = document.getElementById('points-display');
+            if (display) {
+                display.innerText = target.value;
+            }
+        }
+    });
+
+    window.addEventListener('popstate', () => {
+        router.render(gameState, user);
+    });
 }

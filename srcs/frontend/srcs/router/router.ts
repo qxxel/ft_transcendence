@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   router.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:21:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 04:37:34 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ export class	Router {
 		const	route: Route | undefined = this.routes.find(r => r.path === currentPath);
 
 		if (route) {
-			const	contentDiv: HTMLElement | null = document.getElementById('app');
+			const	contentDiv: HTMLElement | null = document.getElementById('page-content');
 			if (contentDiv) {
 				const	html: string = await route.component();
 				contentDiv.innerHTML = html;
