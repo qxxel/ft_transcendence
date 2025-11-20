@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/19 23:28:34 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 02:42:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 
 import axios			from 'axios'
 import speakeasy		from 'speakeasy'
-import mailgun			from 'mailgun.js'
-import { twofaAxios }	from "../2fa.js"
+import formData			from "form-data";
+import Mailgun			from 'mailgun.js'
+import { twofaAxios, mailgunApiKey }	from "../2fa.js"
 
 import type { AxiosResponse }									from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
+
+const mailgun: Mailgun = new Mailgun(formData);
 
 /* ====================== INTERFACES ====================== */
 
@@ -66,6 +69,34 @@ function errorsHandler(err: unknown): string {
 	return "Unknown error";
 }
 
+function MailCodeMessage(user: string, otp: string, email: string) {
+	return {
+		from: "ft_transcendence <postmaster@sandbox67d0d7ae1bf74bc88c36bd3c0118fce1.mailgun.org>",
+		to: [`${user} <${email}>`],
+		subject: "Verification code",
+		template: "ft_transcendence",
+		"h:X-Mailgun-Variables": JSON.stringify({
+			optCode: `${otp}`,
+		}),
+	}
+}
+
+async function sendMailMessage(mail: any) {
+	try {
+		console.log("api:[", mailgunApiKey,"]")
+		const mg = mailgun.client({
+			username: "api",
+			key: mailgunApiKey || ""
+		});
+		const data = await mg.messages.create("sandbox67d0d7ae1bf74bc88c36bd3c0118fce1.mailgun.org", mail);
+
+		console.log(data);
+	} catch (error) {
+		console.log(error);
+		throw error
+	}
+}
+
 async function	getOpt(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
 		const otpSecretKey: string = generateOtpSecretKey();
@@ -73,7 +104,11 @@ async function	getOpt(request: FastifyRequest, reply: FastifyReply): Promise<Fas
 		// const isOtpValid = verifyOtp(otpSecretKey, otp);
 		
 		console.log("otp :", otp);
-		return reply.status(204).send(otp);
+		const dataMail = MailCodeMessage("mreynaud", otp, "mathisreynaud07@gmail.com")
+		console.log("mail :", dataMail);
+		await sendMailMessage(dataMail)
+
+		return reply.status(200).send(otp);
 	} catch (err: unknown) {
 		const	msgError: string = errorsHandler(err);
 

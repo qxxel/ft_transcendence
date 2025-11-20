@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:21 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/19 22:45:41 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 02:17:08 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ import fs					from 'fs'
 import https				from 'https'
 import { twofaController }	from './controllers/2faController.js'
 
+/* ====================== VARIABLES ====================== */
+
+export const	mailgunApiKey = process.env.MAILGUN_API_KEY;
 
 /* ====================== AXIOS VARIABLES ====================== */
 
