@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/20 23:27:39 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/20 23:52:06 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,14 +244,30 @@ export class PongGame extends Game {
   private showEndGameDashboard() {
     const dashboard = document.getElementById('game-over-dashboard');
     if (!dashboard) return;
+
     const matchDurationSeconds = Math.floor((Date.now() - this.startTime) / 1000);
     const minutes = Math.floor(matchDurationSeconds / 60);
     const seconds = matchDurationSeconds % 60;
-    document.getElementById('stat-winner')!.innerText = this.score1 > this.score2 ? this.player1Name : this.player2Name;
+
+    const winnerName = this.score1 > this.score2 ? this.player1Name : this.player2Name;
+    const winnerDisplay = document.getElementById('winner-display');
+    if (winnerDisplay) winnerDisplay.innerText = `${winnerName} Wins!`;
+
     document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
+    
+    document.getElementById('p1-stat-name')!.innerText = `${this.player1Name} Hits:`;
     document.getElementById('stat-p1-hits')!.innerText = this.paddle1!.hits.toString();
+
+    document.getElementById('p2-stat-name')!.innerText = `${this.player2Name} Hits:`;
     document.getElementById('stat-p2-hits')!.innerText = this.paddle2!.hits.toString();
+    
     document.getElementById('stat-rally')!.innerText = this.longestRally.toString();
+
+    const restartMsg = document.getElementById('restart-msg');
+    if (restartMsg) {
+        restartMsg.innerText = this.isTournamentMatch ? "Press 'Space' to Continue" : "Press 'Space' to Restart";
+    }
+
     dashboard.style.display = 'block';
   }
 

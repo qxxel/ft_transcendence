@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:06:22 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/20 23:28:05 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/20 23:52:25 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,7 @@ export class PongRenderer {
     }
 
     public drawGameOver(winnerName: string, isTournament: boolean) {
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.85)'; 
         this.ctx.fillRect(0, 0, this.width, this.height);
-
-        this.ctx.fillStyle = 'white';
-        this.ctx.font = '50px monospace';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText('GAME OVER', this.width / 2, this.height / 2 - 60);
-        this.ctx.font = '30px monospace';
-        this.ctx.fillText(`${winnerName} Wins!`, this.width / 2, this.height / 2 - 10);
-        
-        this.ctx.font = '20px monospace';
-        const message = isTournament ? "Press 'Space' to Continue" : "Press 'Space' to Restart";
-        this.ctx.fillText(message, this.width / 2, this.height / 2 + 40);
     }
 }

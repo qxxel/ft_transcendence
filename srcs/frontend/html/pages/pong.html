@@ -15,41 +15,32 @@
   <canvas id="pong-canvas" width="800" height="600"></canvas>
 
   <div id="game-over-dashboard" class="dashboard">
-    <h2>Match Stats</h2>
-    <p><strong>Winner:</strong> <span id="stat-winner">--</span></p>
-    <p><strong>Duration:</strong> <span id="stat-duration">--</span></p>
-    <p><strong>Player 1 Hits:</strong> <span id="stat-p1-hits">--</span></p>
-    <p><strong>Player 2 Hits:</strong> <span id="stat-p2-hits">--</span></p>
-    <p><strong>Longest Rally:</strong> <span id="stat-rally">--</span> hits</p>
+    
+    <div class="dashboard-header">
+        <h1>GAME OVER</h1>
+        <h2 id="winner-display">AI Wins!</h2>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-row">
+            <span>Duration:</span>
+            <span id="stat-duration">--</span>
+        </div>
+        <div class="stat-row">
+            <span id="p1-stat-name">Player 1 Hits:</span>
+            <span id="stat-p1-hits">--</span>
+        </div>
+        <div class="stat-row">
+            <span id="p2-stat-name">Player 2 Hits:</span>
+            <span id="stat-p2-hits">--</span>
+        </div>
+        <div class="stat-row">
+            <span>Longest Rally:</span>
+            <span id="stat-rally">--</span>
+        </div>
+    </div>
+
+    <p id="restart-msg" class="press-space">Press 'Space' to Restart</p>
   </div>
+
 </div>
-
-<style>
-  .game-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #fff;
-    font-size: 1.25em;
-    margin-bottom: 15px;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff;
-  }
-
-  .scoreboard {
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 5px 15px;
-    border-radius: 6px;
-    border: 1px solid #555;
-  }
-
-  .win-condition {
-    color: #FFFF00;
-    font-weight: bold;
-  }
-
-  #pong-canvas {
-    width: 100%;
-    height: auto;
-    border-radius: 6px;
-  }
-</style>
