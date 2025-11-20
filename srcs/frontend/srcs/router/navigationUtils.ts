@@ -23,6 +23,10 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
             gameState.currentGame.stop();
     }
 
+    if (!['/tournament-setup', '/tournament-bracket', '/pong'].includes(currentPath)) {
+        gameState.currentTournament = null;
+    }
+
     if (['/pong'].includes(currentPath)) {
         
        if (gameState.currentTournament && gameState.currentTournament.currentMatch) {
