@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/20 23:52:06 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/21 00:53:18 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,7 +265,9 @@ export class PongGame extends Game {
 
     const restartMsg = document.getElementById('restart-msg');
     if (restartMsg) {
-        restartMsg.innerText = this.isTournamentMatch ? "Press 'Space' to Continue" : "Press 'Space' to Restart";
+        const baseMsg = this.isTournamentMatch ? "Press 'Space' to Continue" : "Press 'Space' to Restart";
+        const escMsg = this.isTournamentMatch ? "" : " or 'Esc' to Quit";
+        restartMsg.innerText = baseMsg + escMsg;
     }
 
     dashboard.style.display = 'block';
@@ -276,6 +278,10 @@ export class PongGame extends Game {
         this.restart();
         return;
     }
+    if (e.key === 'Escape' && !this.isTournamentMatch && this.isGameOver) {
+            this.router.navigate('/games', this.gameState, this.user);
+            return;
+        }
     if (e.key === 'Escape' && !this.isGameOver) {
       this.isPaused = !this.isPaused;
     }
