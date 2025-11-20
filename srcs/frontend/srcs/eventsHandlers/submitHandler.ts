@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:53:01 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 05:56:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 			return ;
 		}
 
-		console.log("response :", result);
 		p.textContent = result?.error || "An unexpected error has occurred";
 		return ;
 	}
@@ -114,13 +113,60 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 			return ;
 		}
 
-		console.log("response :", result);
 		p.textContent = result?.error || "An unexpected error has occurred";
 		return ;
 	}
 
 	user.setId(result.id as number);
 	user.setUsername(username);
+	user.setSigned(true);
+
+	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	if (menu)
+		menu.innerHTML = getMenu(user.getUsername());
+
+	router.navigate("/", gameState, user);
+}
+
+async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
+	console.log("2fa");
+
+	const	code: string = (document.getElementById("digit-code") as HTMLInputElement).value;
+	form.reset();
+
+	console.log("code: " + code);
+	console.log(JSON.stringify({ code }));
+
+	const	response: Response = await fetch('/api/2fa/otp', {
+		method: "get",
+		credentials: "include",
+	});
+
+	// const	response: Response = await fetch('/api/2fa/validate', {
+	// 	method: "post",
+	// 	credentials: "include",
+	// 	headers: {
+	// 		"Content-Type": "application/json"
+	// 	},
+	// 	body: JSON.stringify({ code })
+	// });
+
+	const	result = await response.json();
+
+	if (!response.ok)
+	{
+		const	p = document.getElementById("msg-error");
+		if (!p)
+		{
+			console.error("No HTMLElement named \`msg-error\`.");
+			return ;
+		}
+		p.textContent = result?.error || "An unexpected error has occurred";
+		return ;
+	}
+
+	user.setId(result.id as number);
+	user.setUsername(result.username);
 	user.setSigned(true);
 
 	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
@@ -141,5 +187,8 @@ export function	setupSubmitHandler(gameState: GameState, user: User): void {
 
 		if (form.id === "sign-up-form")
 			handleSignUpForm(form, gameState, user);
+
+		if (form.id === "2fa-form")
+			handle2faForm(form, gameState, user);
 	});
 }

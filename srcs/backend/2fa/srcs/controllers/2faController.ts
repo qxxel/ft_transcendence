@@ -6,17 +6,18 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/20 02:42:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 05:41:25 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORTS ====================== */
 
 import axios			from 'axios'
+import argon2			from 'argon2'
 import speakeasy		from 'speakeasy'
 import formData			from "form-data";
 import Mailgun			from 'mailgun.js'
-import { twofaAxios, mailgunApiKey }	from "../2fa.js"
+import { twofaAxios, twofaServ, mailgunApiKey }	from "../2fa.js"
 
 import type { AxiosResponse }									from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
@@ -76,7 +77,7 @@ function MailCodeMessage(user: string, otp: string, email: string) {
 		subject: "Verification code",
 		template: "ft_transcendence",
 		"h:X-Mailgun-Variables": JSON.stringify({
-			optCode: `${otp}`,
+			otpCode: `${otp}`,
 		}),
 	}
 }
@@ -97,14 +98,18 @@ async function sendMailMessage(mail: any) {
 	}
 }
 
-async function	getOpt(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+async function	generateMailCode(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const otpSecretKey: string = generateOtpSecretKey();
-		const otp: string = generateOtp(otpSecretKey);
-		// const isOtpValid = verifyOtp(otpSecretKey, otp);
+		const	payload: AxiosResponse = await twofaAxios.get("https://jwt:3000/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		
+		const	otpSecretKey: string = generateOtpSecretKey();
+		const	otp: string = generateOtp(otpSecretKey);
+
+		await twofaServ.deleteOtpByIdClient(payload.data.id);
+		await twofaServ.addOtp(payload.data.id, otpSecretKey, otp);
 		
 		console.log("otp :", otp);
-		const dataMail = MailCodeMessage("mreynaud", otp, "mathisreynaud07@gmail.com")
+		const	dataMail = MailCodeMessage(payload.data.user, otp, payload.data.email)
 		console.log("mail :", dataMail);
 		await sendMailMessage(dataMail)
 
@@ -118,6 +123,34 @@ async function	getOpt(request: FastifyRequest, reply: FastifyReply): Promise<Fas
 	}
 }
 
+async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }>, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		if (!request.body)
+			throw new Error("The request is empty");
+
+		const	payload: AxiosResponse = await twofaAxios.get("https://jwt:3000/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		
+		const	otpSecretKey = await twofaServ.getOtpSecretKeyByIdClient(payload.data.id);
+		// const	otp = await twofaServ.getOtpByIdClient(payload.data.id);
+		
+		const	isOtpValid = verifyOtp(otpSecretKey, request.body.otp);
+		
+		if (!isOtpValid)
+			throw new Error("Bad code");
+		
+		await twofaServ.deleteOtpByIdClient(payload.data.id);
+
+		return reply.status(200).send(payload.data.id);
+	} catch (err: unknown) {
+		const	msgError: string = errorsHandler(err);
+
+		console.error(msgError);
+
+		return reply.code(400).send({ error: msgError });
+	}
+}
+
 export async function	twofaController(authFastify: FastifyInstance): Promise<void> {
-	authFastify.get('/opt', getOpt);
+	authFastify.get('/otp', generateMailCode);
+	authFastify.post<{ Body: { otp: string } }>('/validate', validateCodeOtp);
 }

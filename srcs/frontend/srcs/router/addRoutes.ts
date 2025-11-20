@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   addRoutes.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:00:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:57:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 05:09:06 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ import { router }	from "../index.js"
 /* ====================== FUNCTIONS ====================== */
 
 export function	addRoutes(): void {
+	router.addRoute('/2fa', async () => {
+		const	html: string = await loadHtml("pages/2fa.html");
+		return html;
+	});
+
 	router.addRoute('/about', async () => {
 		const	html: string = await loadHtml("pages/about.html");
 		return html;
