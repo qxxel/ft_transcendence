@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:05:33 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/20 23:27:07 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/20 23:39:34 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,33 @@ export class PongPhysics {
         ball.x += ball.dx;
         ball.y += ball.dy;
 
-        if (ball.y + ball.radius > this.height || ball.y - ball.radius < 0) {
+        if (ball.y + ball.radius > this.height) {
+            ball.y = this.height - ball.radius;
+            ball.dy *= -1;
+        } 
+        else if (ball.y - ball.radius < 0) {
+            ball.y = ball.radius;
             ball.dy *= -1;
         }
 
-        if (ball.dx < 0 && ball.x - ball.radius <= p1.x + p1.width && prevBallX - ball.radius >= p1.x + p1.width && ball.y > p1.y && ball.y < p1.y + p1.height) {
+        if (ball.dx < 0 && 
+            ball.x - ball.radius <= p1.x + p1.width && 
+            prevBallX - ball.radius >= p1.x + p1.width && 
+            ball.y > p1.y && ball.y < p1.y + p1.height) {
+            
+            ball.x = p1.x + p1.width + ball.radius; 
+            
             this.calculateDeflection(p1, ball);
             this.increaseBallSpeed(ball);
         }
 
-        if (ball.dx > 0 && ball.x + ball.radius >= p2.x && prevBallX + ball.radius <= p2.x && ball.y > p2.y && ball.y < p2.y + p2.height) {
+        if (ball.dx > 0 && 
+            ball.x + ball.radius >= p2.x && 
+            prevBallX + ball.radius <= p2.x && 
+            ball.y > p2.y && ball.y < p2.y + p2.height) {
+            
+            ball.x = p2.x - ball.radius; 
+            
             this.calculateDeflection(p2, ball);
             this.increaseBallSpeed(ball);
         }
