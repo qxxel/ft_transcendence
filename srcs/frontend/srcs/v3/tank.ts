@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tank.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:38:20 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 23:12:03 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { Game }		from "../game/class_game.js"
+import { Game }		from "../Pong/class_game.js"
 import { GSTATE }	from "./global.js"
 import { Input }	from "./class_input.js"
 import { Map }		from "./class_map.js"

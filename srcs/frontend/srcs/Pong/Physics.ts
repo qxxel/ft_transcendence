@@ -6,11 +6,11 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:05:33 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/20 23:06:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/20 23:12:14 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import type { Ball, Paddle } from "./game.js";
+import type { Ball, Paddle } from "./Pong.js";
 
 export class PongPhysics {
     private width: number;

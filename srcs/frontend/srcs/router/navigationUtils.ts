@@ -6,7 +6,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { PongGame } from "../game/game.js";
+import { PongGame } from "../Pong/Pong.js";
 import { router }   from "../index.js";
 import { TankGame } from "../v3/tank.js";
 import { User }     from "../user/user.js";

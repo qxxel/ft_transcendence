@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 04:21:02 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/20 23:12:14 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { PongGame } from "../game/game.js";
+import { PongGame } from "../Pong/Pong.js";
 import { TournamentController } from "../tournament.js";
 import { Router }       from "../router/router.js"
 import { sendRequest }  from "../utils/sendRequest.js"
