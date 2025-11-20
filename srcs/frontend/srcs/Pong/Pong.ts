@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   game.ts                                            :+:      :+:    :+:   */
+/*   Pong.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/20 23:04:41 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/20 23:15:13 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-import { Game } from "./class_game.js"
+import { Game } from "./GameClass.js"
 import { Router } from "../router/router.js";
 import { User } from "../user/user.js";
 import { AIController } from "./AI.js";
