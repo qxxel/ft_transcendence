@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/21 00:53:18 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/21 00:58:45 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,8 @@ export class PongGame extends Game {
   }
 
   private updateScoresUI() {
+    this.longestRally = Math.max(this.longestRally, this.currentRallyHits);
+    
     this.scoreElements!.p1.innerText = this.score1.toString();
     this.scoreElements!.p2.innerText = this.score2.toString();
 
