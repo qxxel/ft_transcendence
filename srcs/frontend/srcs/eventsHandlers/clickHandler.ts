@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 06:29:08 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/21 23:53:59 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,27 +295,10 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
             }
         }
 
-        if (target.id === 'aiHardcore') {
-            const display = document.getElementById('ai-level-display');
+        if (target.id === 'powerupFreq') {
+            const display = document.getElementById('powerup-freq-display');
             if (display) {
-                const val = parseInt(target.value);
-                
-                if (val === 1) {
-                    display.innerText = "EASY";
-                    display.style.color = "#00FF00";
-                }
-                else if (val === 2) {
-                    display.innerText = "MEDIUM";
-                    display.style.color = "#FFFF00";
-                }
-                else if (val === 3) {
-                    display.innerText = "HARD";
-                    display.style.color = "#FF0000";
-                }
-                else if (val === 4) {
-                    display.innerText = "BORIS";
-                    display.style.color = "#FF00FF";
-                }
+                display.innerText = target.value + " sec";
             }
         }
     });
