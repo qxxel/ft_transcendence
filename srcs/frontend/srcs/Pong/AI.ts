@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:04:46 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/21 01:34:42 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/21 04:43:37 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,20 @@ export class AIController {
             
             if (state.ball.dx > 0) {
                 let predictedY = this.predictBallLandingY(state);
-                predictedY = this.adjustShootDirection(predictedY, state);
+                if (this.difficulty == 'hard'){
+                    this.targetY = this.calculateOptimalPaddlePosition(predictedY, state);
+                }
+                else {
+                    const errorMargin = (this.difficulty === 'easy') ? 7 : 60;
+                    const randomOffset = (Math.random() * errorMargin * 2) - errorMargin;
+                    this.targetY = predictedY + randomOffset;
+                }
+                this.targetY = Math.max(state.paddle.height / 2, Math.min(this.targetY, state.canvasHeight - state.paddle.height / 2));
                 
-                predictedY = Math.max(state.ball.radius, Math.min(predictedY, state.canvasHeight - state.ball.radius));
-                
-                this.targetY = predictedY;
             } else {
-                this.targetY = state.canvasHeight / 2;
+                if (this.difficulty != 'easy'){
+                    this.targetY = state.canvasHeight / 2;
+                }
             }
         }
 
@@ -81,13 +88,57 @@ export class AIController {
         return predictedY;
     }
 
-    private adjustShootDirection(predictedY: number, state: AIState): number {
-        let newY = predictedY;
-        if (state.opponentPaddle.y < state.paddle.y) {
-            newY -= (state.paddle.height / 3);
-        } else if (state.opponentPaddle.y > state.paddle.y) {
-            newY += (state.paddle.height / 3);
+    private offensiveBounce(predictedY: number, state: AIState): number {
+        const opponentCenterY = state.opponentPaddle.y + (state.paddle.height / 2);
+        
+        let targetY = 0;
+        
+        if (opponentCenterY < state.canvasHeight / 2) {
+            targetY = state.canvasHeight;
+        } else {
+            targetY = 0;
         }
-        return newY;
+
+        const distanceX = state.paddle.x; 
+        const distanceY = targetY - predictedY;
+
+        // tan(angle) = opposite / adjacent
+        let requiredAngle = Math.atan(distanceY / distanceX);
+        const maxAngle = Math.PI / 3;
+        if (requiredAngle > maxAngle) requiredAngle = maxAngle;
+        if (requiredAngle < -maxAngle) requiredAngle = -maxAngle;
+
+        // bounceAngle = normalizedIntersectY * maxAngle ==> normalizedIntersectY = requiredAngle / maxAngle
+        const normalizedIntersectY = requiredAngle / maxAngle;
+
+        const offset = normalizedIntersectY * (state.paddle.height / 2);
+
+        return predictedY - offset;
+    }
+
+    private hardBounce(predictedY: number, state: AIState): number{
+        const opponentCenterY = state.opponentPaddle.y + (state.paddle.height / 2);
+        const center = state.canvasHeight / 2;
+
+        const aimForBottom = opponentCenterY < center;
+
+        const maxOffset = (state.paddle.height / 2) * 0.8;
+
+        if (aimForBottom) {
+            return predictedY - maxOffset;
+        } else {
+            return predictedY + maxOffset;
+        }
+
+    }
+    private calculateOptimalPaddlePosition(predictedY: number, state: AIState): number {
+        if (Math.random() > 0.5){
+            console.log('case 1');
+            return this.hardBounce(predictedY, state);
+        }
+        else {
+            console.log('case 2');
+            return this.offensiveBounce(predictedY, state);
+        }
     }
 }
