@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:04:46 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/21 04:43:37 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/21 04:55:01 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ export class AIController {
                 }
             }
         }
-
         const paddleCenter = state.paddle.y + state.paddle.height / 2;
         const deadZone = 10;
 
@@ -66,7 +65,6 @@ export class AIController {
         } else if (paddleCenter > this.targetY + deadZone) {
             keys.up = true;
         }
-
         return keys;
     }
 
@@ -89,8 +87,8 @@ export class AIController {
     }
 
     private offensiveBounce(predictedY: number, state: AIState): number {
+
         const opponentCenterY = state.opponentPaddle.y + (state.paddle.height / 2);
-        
         let targetY = 0;
         
         if (opponentCenterY < state.canvasHeight / 2) {
@@ -110,9 +108,7 @@ export class AIController {
 
         // bounceAngle = normalizedIntersectY * maxAngle ==> normalizedIntersectY = requiredAngle / maxAngle
         const normalizedIntersectY = requiredAngle / maxAngle;
-
         const offset = normalizedIntersectY * (state.paddle.height / 2);
-
         return predictedY - offset;
     }
 
@@ -121,7 +117,6 @@ export class AIController {
         const center = state.canvasHeight / 2;
 
         const aimForBottom = opponentCenterY < center;
-
         const maxOffset = (state.paddle.height / 2) * 0.8;
 
         if (aimForBottom) {
@@ -129,15 +124,12 @@ export class AIController {
         } else {
             return predictedY + maxOffset;
         }
-
     }
     private calculateOptimalPaddlePosition(predictedY: number, state: AIState): number {
         if (Math.random() > 0.5){
-            console.log('case 1');
             return this.hardBounce(predictedY, state);
         }
         else {
-            console.log('case 2');
             return this.offensiveBounce(predictedY, state);
         }
     }
