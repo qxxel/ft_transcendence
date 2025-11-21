@@ -11,23 +11,25 @@
       
       <h1>Pong 🏓</h1>
 
-      <div class="mode-switcher">
-        <button id="btn-mode-default" class="btn-tab active" onclick="switchGameMode('default')">Default</button>
-        <button id="btn-mode-featured" class="btn-tab" onclick="switchGameMode('featured')">Featured</button>
-      </div>
+      <div id="default-mode-content" style="width: 80%;">
+          
+          <div class="control-group" style="width: 100%;">
+            <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
+            <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
+          </div>
 
-      <div id="default-mode-content">
-          <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
-          <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
-
-          <div id="main-menu-btns" class="button-group">
-            <button onclick="showDifficultyMenu();" id="startAiGame" class="btn-yellow">
+          <div id="main-menu-btns" class="button-group" style="width: 100%; gap: 15px; margin-bottom: 15px;">
+            <button onclick="showDifficultyMenu();" class="btn-yellow" style="flex: 1;">
               Play vs. AI
             </button>
-            <button onclick="onClickPlayPVP();" id="startPvpGame" class="btn-yellow">
+            <button onclick="onClickPlayPVP();" class="btn-yellow" style="flex: 1;">
               Play 1v1
             </button>
           </div>
+
+          <button onclick="switchGameMode('featured')" class="btn-purple" style="width: 100%;">
+            ✨ Featured Mode
+          </button>
 
           <div id="difficulty-btns" class="difficulty-menu hidden">
             <p class="diff-title">Select Difficulty</p>
@@ -42,43 +44,38 @@
           </div>
       </div>
 
-      <div id="featured-mode-content" class="menu-content hidden">
+      <div id="featured-mode-content" class="menu-content hidden" style="width: 100%;">
           
-          <div class="control-group">
-              <label for="powerupFreq">
-                  Power-up Frequency
-                  </label>
+          <div class="control-group" style="width: 80%;">
+              <label for="powerupFreq">Power-up Frequency</label>
               <input type="range" id="powerupFreq" min="1" max="10" value="5" step="1"/>
           </div>
 
-          <div class="control-group">
-              <label for="aiBoris">
-                  AI Difficulty
-                  <span id="ai-level-display">Medium</span>
-              </label>
-              <input type="range" id="aiBoris" min="1" max="4" value="2" step="1" oninput="updateAiLabel()"/>
+          <div class="control-group" style="width: 80%;">
+              <label>AI Difficulty</label>
+              
+              <input type="hidden" id="aiHardcore" value="2">
+
+              <div class="difficulty-selector">
+                  <button id="btn-feat-1" onclick="selectFeaturedDifficulty(1)" class="btn-select btn-select-green">Easy</button>
+                  <button id="btn-feat-2" onclick="selectFeaturedDifficulty(2)" class="btn-select btn-select-yellow active">Medium</button>
+                  <button id="btn-feat-3" onclick="selectFeaturedDifficulty(3)" class="btn-select btn-select-red">Hard</button>
+                  <button id="btn-feat-4" onclick="selectFeaturedDifficulty(4)" class="btn-select btn-select-purple">Boris</button>
+              </div>
           </div>
 
-          <p class="diff-title">ALLOWED POWER-UPS</p>
+          <p class="diff-title" style="width: 80%;">ALLOWED POWER-UPS</p>
           
           <div class="checkbox-group">
-              <label class="checkbox-btn">
-                  <input type="checkbox" id="chk-1star" checked>
-                  <span>★</span>
-              </label>
-              <label class="checkbox-btn">
-                  <input type="checkbox" id="chk-2star" checked>
-                  <span>★★</span>
-              </label>
-              <label class="checkbox-btn">
-                  <input type="checkbox" id="chk-3star" checked>
-                  <span>★★★</span>
-              </label>
+              <label class="checkbox-btn"><input type="checkbox" id="chk-1star" checked><span>★</span></label>
+              <label class="checkbox-btn"><input type="checkbox" id="chk-2star" checked><span>★★</span></label>
+              <label class="checkbox-btn"><input type="checkbox" id="chk-3star" checked><span>★★★</span></label>
           </div>
 
-          <button onclick="onClickStartFeatured();" class="btn-yellow" style="margin-top: 25px; width: 80%;">
-            Start Featured Game
-          </button>
+          <div style="width: 80%; margin-top: 25px; display: flex; flex-direction: column; gap: 10px;">
+            <button onclick="onClickStartFeatured();" class="btn-yellow" style="width: 100%;">Start Featured Game</button>
+            <button onclick="switchGameMode('default')" class="btn-cancel" style="width: 100%;">Back to Default</button>
+          </div>
       </div>
 
     </div>

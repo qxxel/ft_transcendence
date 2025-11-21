@@ -122,21 +122,13 @@ function hideDifficultyMenu() {
 function switchGameMode(mode: 'default' | 'featured') {
     const defDiv = document.getElementById('default-mode-content');
     const featDiv = document.getElementById('featured-mode-content');
-    const btnDef = document.getElementById('btn-mode-default');
-    const btnFeat = document.getElementById('btn-mode-featured');
 
     if (mode === 'default') {
         defDiv?.classList.remove('hidden');
         featDiv?.classList.add('hidden');
-        
-        btnDef?.classList.add('active');
-        btnFeat?.classList.remove('active');
     } else {
         defDiv?.classList.add('hidden');
         featDiv?.classList.remove('hidden');
-        
-        btnDef?.classList.remove('active');
-        btnFeat?.classList.add('active');
     }
 }
 
@@ -169,6 +161,19 @@ function updateAiLabel() {
 
     display.innerText = text;
     display.style.color = color;
+}
+
+function selectFeaturedDifficulty(level: number) {
+    const input = document.getElementById('aiHardcore') as HTMLInputElement;
+    if (input) {
+        input.value = level.toString();
+    }
+
+    for (let i = 1; i <= 4; i++) {
+        document.getElementById(`btn-feat-${i}`)?.classList.remove('active');
+    }
+
+    document.getElementById(`btn-feat-${level}`)?.classList.add('active');
 }
 
 /* ====================== GAME & TOURNAMENT HANDLERS ====================== */
@@ -259,6 +264,7 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
     (window as any).switchGameMode = switchGameMode;
     (window as any).updateAiLabel = updateAiLabel;
     (window as any).onClickStartFeatured = () => onClickStartFeatured(router, gameState, user);
+    (window as any).selectFeaturedDifficulty = selectFeaturedDifficulty;
 
     (window as any).onClickPlayAI = (difficulty: 'easy' | 'medium' | 'hard') => 
         onClickPlayAI(difficulty, router, gameState, user);
