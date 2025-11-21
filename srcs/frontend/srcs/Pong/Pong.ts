@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/21 01:33:16 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/21 01:53:10 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,16 +181,18 @@ export class PongGame extends Game {
     
     this.physics.movePaddle(this.paddle2!, p2Up, p2Down);
 
+    const hitsBefore = this.paddle1!.hits + this.paddle2!.hits;
     const result = this.physics.update(this.ball!, this.paddle1!, this.paddle2!);
-    
+    const hitsAfter = this.paddle1!.hits + this.paddle2!.hits;
+    if (hitsAfter > hitsBefore) {
+        this.currentRallyHits++;
+    }
     if (result === 1) {
         this.score1++;
         this.handleScore();
     } else if (result === 2) {
         this.score2++;
         this.handleScore();
-    } else {
-        this.currentRallyHits = this.paddle1!.hits + this.paddle2!.hits;
     }
   }
 
@@ -278,14 +280,16 @@ export class PongGame extends Game {
   }
 
   private handleKeyDown(e: KeyboardEvent) {
-    if (this.isGameOver && e.key === ' ') {
-        this.restart();
-        return;
-    }
-    if (e.key === 'Escape' && !this.isTournamentMatch && this.isGameOver) {
+    if (this.isGameOver) {
+        if (e.key === ' ') {
+            this.restart();
+            return;
+        }
+        if (e.key === 'Escape' && !this.isTournamentMatch) {
             this.router.navigate('/games', this.gameState, this.user);
             return;
         }
+    }
     if (e.key === 'Escape' && !this.isGameOver) {
       this.isPaused = !this.isPaused;
     }
