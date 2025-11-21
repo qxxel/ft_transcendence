@@ -67,6 +67,7 @@ export class	TankGame extends Game {
 
 	private setup_tanks() : void 
 	{
+		GSTATE.TANKS = 0;
 		let tank_width:number = 25;
 		let tank_height:number = 25;
 		let colors: Color[] = [];
