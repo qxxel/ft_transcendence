@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 21:35:37 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 21:37:29 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:43:57 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ export class	tankRespDto {
 	private	p3kill: number;
 	private	p4kill: number;
 	private	start: number;
+	private	duration: number;
 
 	constructor(row: any) {
 		this.id = row.id;
@@ -48,6 +49,7 @@ export class	tankRespDto {
 		this.p3kill = row.p3score;
 		this.p4kill = row.p4score;
 		this.start = row.start;
+		this.duration = row.duration;
 	}
 
 
@@ -94,5 +96,9 @@ export class	tankRespDto {
 
 	getStart(): number {
 		return this.start;
+	}
+
+	getDuration(): number {
+		return this.duration;
 	}
 }

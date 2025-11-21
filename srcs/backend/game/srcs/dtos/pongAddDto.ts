@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:04:52 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 20:55:08 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:41:27 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ export class	pongAddDto {
 	private	p1score: number;
 	private	p2score: number;
 	private	start: number;
+	private	duration: number;
 
 	constructor(row: any) {
 		this.winner = row.winner;
@@ -38,6 +39,7 @@ export class	pongAddDto {
 		this.p1score = row.p1score;
 		this.p2score = row.p2score;
 		this.start = row.start;
+		this.duration = row.duration;
 	}
 
 
@@ -48,7 +50,8 @@ export class	pongAddDto {
 			this.p1score,
 			this.p2,
 			this.p2score,
-			this.start
+			this.start,
+			this.duration
 		]
 	}
 
@@ -76,5 +79,9 @@ export class	pongAddDto {
 
 	getStart(): number {
 		return this.start;
+	}
+
+	getDuration(): number {
+		return this.duration;
 	}
 }
