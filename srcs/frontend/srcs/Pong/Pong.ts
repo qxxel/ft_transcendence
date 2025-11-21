@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/21 00:58:45 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/21 01:33:16 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ export class PongGame extends Game {
   private isGameOver: boolean = false;
   private winningScore: number = 5;
   private gameMode: 'pvp' | 'ai';
+  private aiDifficulty: 'easy' | 'medium' | 'hard';
   private isTournamentMatch: boolean = false;
 
   // Objects
@@ -70,14 +71,15 @@ export class PongGame extends Game {
   private user: User;
   private readonly initialBallSpeed: number = 5;
 
-  constructor(canvasId: string, score1Id: string, score2Id: string, winScoreId: string, router: Router, gameState: GameState, user: User, gameMode: 'pvp' | 'ai' = 'ai') {
+  constructor(canvasId: string, score1Id: string, score2Id: string, winScoreId: string, router: Router, gameState: GameState, user: User, gameMode: 'pvp' | 'ai' = 'ai', aiDifficulty: 'easy' | 'medium' | 'hard' = 'medium') {
     super();
     this.ids = { canvas: canvasId, score1: score1Id, score2: score2Id, winScore: winScoreId };
     this.router = router;
     this.gameState = gameState;
     this.user = user;
     this.gameMode = gameMode;
-    this.aiController = new AIController();
+    this.aiDifficulty = aiDifficulty;
+    this.aiController = new AIController(aiDifficulty);
   }
   
   public setCtx() {

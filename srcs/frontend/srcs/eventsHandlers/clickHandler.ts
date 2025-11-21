@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 23:12:14 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/21 01:19:31 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ async function  onClickLogout(router: Router, gameState: GameState, user: User):
     var menu: HTMLElement = document.getElementById("nav") as HTMLElement;
     if (menu)
         menu.innerHTML =
-			`<a href="/">Home</a>
-			<a href="/games">Play</a>
-			<a href="/tournament-setup">Tournament</a>
-			<a href="/user">${user.getUsername()}</a>
-			<button onclick="onClickLogout();" id="logout">Logout</button>
-			<a href="/settings">Settings</a>
-			<a href="/about">About</a>`;
+            `<a href="/">Home</a>
+            <a href="/games">Play</a>
+            <a href="/tournament-setup">Tournament</a>
+            <a href="/user">${user.getUsername()}</a>
+            <button onclick="onClickLogout();" id="logout">Logout</button>
+            <a href="/settings">Settings</a>
+            <a href="/about">About</a>`;
 
     router.navigate("/", gameState, user);
 }
@@ -97,13 +97,36 @@ async function onClickRefreshMessage(): Promise<void> {
 }
 
 
+/* ====================== UI TOGGLE HELPERS ====================== */
+
+function showDifficultyMenu() {
+    const mainBtns = document.getElementById('main-menu-btns');
+    const diffBtns = document.getElementById('difficulty-btns');
+    
+    if (mainBtns && diffBtns) {
+        mainBtns.classList.add('hidden');
+        diffBtns.classList.remove('hidden');
+    }
+}
+
+function hideDifficultyMenu() {
+    const mainBtns = document.getElementById('main-menu-btns');
+    const diffBtns = document.getElementById('difficulty-btns');
+    
+    if (mainBtns && diffBtns) {
+        mainBtns.classList.remove('hidden');
+        diffBtns.classList.add('hidden');
+    }
+}
+
+
 /* ====================== GAME & TOURNAMENT HANDLERS ====================== */
 
-function onClickPlayAI(router: Router, gameState: GameState, user: User) {
+function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', router: Router, gameState: GameState, user: User) {
   const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
   const winningScore = parseInt(maxPointsInput.value, 10);
   
-  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'ai');
+  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'ai', difficulty);
   gameState.currentGame.setWinningScore(winningScore);
   
   router.navigate("/pong", gameState, user);
@@ -158,7 +181,12 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
     (window as any).onClickValidateMessage = onClickValidateMessage;
     (window as any).onClickRefreshMessage = onClickRefreshMessage;
     
-    (window as any).onClickPlayAI = () => onClickPlayAI(router, gameState, user);
+    (window as any).showDifficultyMenu = showDifficultyMenu;
+    (window as any).hideDifficultyMenu = hideDifficultyMenu;
+
+    (window as any).onClickPlayAI = (difficulty: 'easy' | 'medium' | 'hard') => 
+        onClickPlayAI(difficulty, router, gameState, user);
+
     (window as any).onClickPlayPVP = () => onClickPlayPVP(router, gameState, user);
     (window as any).onStartTournament = () => onStartTournament(router, gameState, user);
     

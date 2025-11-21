@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:04:46 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/20 23:26:41 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/21 01:34:42 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,11 @@ interface AIState {
 export class AIController {
     private lastDecisionTime: number = 0;
     private targetY: number = 0;
+    private difficulty: 'easy' | 'medium' | 'hard';
 
-    constructor() {}
+    constructor(difficulty: 'easy' | 'medium' | 'hard') {
+        this.difficulty = difficulty;
+    }
 
     public update(state: AIState): { up: boolean, down: boolean } {
         const now = Date.now();
@@ -35,7 +38,7 @@ export class AIController {
 
         if (now - this.lastDecisionTime > 1000) {
             this.lastDecisionTime = now;
-
+            
             if (state.ball.dx > 0) {
                 let predictedY = this.predictBallLandingY(state);
                 predictedY = this.adjustShootDirection(predictedY, state);
