@@ -14,13 +14,29 @@
       <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
       <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
 
-      <div class="button-group">
-        <button onclick="onClickPlayAI();" id="startAiGame" class="btn-yellow">
+      <div id="main-menu-btns" class="button-group">
+        <button onclick="showDifficultyMenu();" id="startAiGame" class="btn-yellow">
           Play vs. AI
         </button>
         <button onclick="onClickPlayPVP();" id="startPvpGame" class="btn-yellow">
           Play 1v1
         </button>
+      </div>
+
+      <div id="difficulty-btns" class="difficulty-menu hidden">
+        
+        <p class="diff-title">Select Difficulty</p>
+
+        <div class="difficulty-row">
+            <button onclick="onClickPlayAI('easy');" class="btn-green">Easy</button>
+            <button onclick="onClickPlayAI('medium');" class="btn-yellow-ai">Medium</button>
+            <button onclick="onClickPlayAI('hard');" class="btn-red">Hard</button>
+        </div>
+        
+        <div class="cancel-row">
+            <button onclick="hideDifficultyMenu();" class="btn-cancel">Cancel</button>
+        </div>
+
       </div>
 
     </div>
