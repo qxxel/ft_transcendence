@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tank.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:38:20 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 23:15:13 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,12 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { Game }		from "../game/class_game.js"
+import { Game }		from "../Pong/GameClass.js"
 import { GSTATE }	from "./global.js"
 import { Input }	from "./class_input.js"
 import { Map }		from "./class_map.js"
 import { Tank }		from "./class_tank.js"
-v0.2.2
-Formatting:
-All interfaces are now stored in a single file (./interfaces.ts).
-
-Tank:
-HUD and Cannon are now separate classes.
-
-Line2D:
-Removed the unnecessary boolean return from slope().
-
-Other:
-Added a temporary scotch to actually close the game.import { Collectible } from "./class_collectible.js"
+import { Collectible } from "./class_collectible.js"
 
 import type { Color, Keys }	from "./interface.js"
 
