@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:52:45 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 08:14:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,45 @@ async function	onClickLogout(router: Router, gameState: GameState, user: User): 
 			</nav>`;
 
 	router.navigate("/", gameState, user);
+}
+
+// userRespDto {
+// 	private	id: number;
+// 	private	username: string;
+// 	private	email: string;
+// 	private	elo: number;
+	
+async function	onClickEdit(user: User): Promise<void> {
+	console.log("Edit");
+
+	const	Response: Response = await sendRequest(`/api/user/${user.getId()}`, 'get', null);
+	if (!Response.ok)
+	{
+		// error /!\
+		return ;
+	}
+	const	userRes = await Response.json();
+
+	const hiddenElements = document.getElementById("user-settings-form")!.querySelectorAll("[hidden]");
+	
+	hiddenElements.forEach(e => {
+		(e as HTMLElement).hidden = false;
+	});
+
+	const username = document.getElementById("edit-username") as HTMLInputElement;
+	username.value = userRes.username ?? "eh non";
+	const mail = document.getElementById("edit-email") as HTMLInputElement;
+	mail.value = userRes.email ?? "aie";
+	
+	document.getElementById("edit-submit")!.hidden = true;
+
+	const check2fa = document.getElementById("check-2fa") as HTMLInputElement;
+	const label2fa = document.getElementById("label-2fa") as HTMLLabelElement;
+	
+	check2fa.addEventListener("change", () => {
+		console.log("checkbox2fa")
+		label2fa.textContent = (check2fa.checked ? "Disable" : "Enable") + " two-factor authentication";
+	});
 }
 
 async function onClickGetMessage(): Promise<void> {
@@ -154,6 +193,7 @@ function onStartTournament(router: Router, gameState: GameState, user: User) {
 export async function	setupClickHandlers(router: Router, user: User, gameState: GameState): Promise<void> {
 	(window as any).onClickPlay = () => onClickPlay(router, gameState, user);
 	(window as any).onClickLogout = () => onClickLogout(router, gameState, user);
+	(window as any).onClickEdit = () => onClickEdit(user);
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;
 	(window as any).onClickRefreshMessage = onClickRefreshMessage;

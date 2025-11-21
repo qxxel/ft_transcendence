@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 00:36:28 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 06:55:58 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,27 @@ async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: 
 	router.navigate("/", gameState, user);
 }
 
+async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
+	console.log("UserSettings");
+	// const response: Response = await sendRequest('/api/user/???', 'post');
+
+	// const	result = await response.json();
+
+	// if (!response.ok)
+	// {
+	// 	const	p = document.getElementById("msg-error");
+	// 	if (!p)
+	// 	{
+	// 		console.error("No HTMLElement named \`msg-error\`.");
+	// 		return ;
+	// 	}
+	// 	p.textContent = result?.error || "An unexpected error has occurred";
+	// 	return ;
+	// }
+
+	router.navigate("/", gameState, user);
+}
+
 export function	setupSubmitHandler(gameState: GameState, user: User): void {
 	document.addEventListener('submit', async (event: SubmitEvent) => {
 		event.preventDefault();
@@ -178,5 +199,8 @@ export function	setupSubmitHandler(gameState: GameState, user: User): void {
 
 		if (form.id === "2fa-form")
 			handle2faForm(form, gameState, user);
+
+		// if (form.id === "user-settings-form")
+		// 	handleUserSettingsForm(form, gameState, user);
 	});
 }

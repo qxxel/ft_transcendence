@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 23:32:48 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 08:35:50 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,27 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 		console.log("Loading the new game...");
 	}
 
+	if (['/user'].includes(currentPath)) {
+		loadUser(user);
+	}
+}
+
+async function loadUser(user: User) {
+	const	Response: Response = await sendRequest(`/api/user/${user.getId()}`, 'get', null);
+		if (!Response.ok)
+		{
+			// error /!\
+			return ;
+		}
+		const	userRes = await Response.json();
+		const usernameEl = document.getElementById("user-username") as HTMLSpanElement;
+		const emailEl = document.getElementById("user-email") as HTMLSpanElement;
+
+		if (!usernameEl || !emailEl) 
+			return;
+
+		usernameEl.textContent = userRes.username ?? "";
+		emailEl.textContent = userRes.email ?? "";
 }
 
 export function  sendActionsRequest(currentPath: string): void {
