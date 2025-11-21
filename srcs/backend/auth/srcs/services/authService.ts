@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 import { authRepository }	from "../repositories/authRepository.js"
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
 export class	authService {
 	private	authRepo: authRepository;

@@ -6,11 +6,11 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:53:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 20:05:28 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// THE FILE THAT CONTAIN THE class	FOR THE PONGGAME (WITH ALL METHODS)
+// THE FILE THAT CONTAIN THE CLASS FOR THE PONGGAME (WITH ALL METHODS)
 
 
 /* ====================== IMPORT ====================== */
@@ -40,7 +40,7 @@ interface	Ball {
 }
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
 export class	PongGame extends Game {
 	private	canvas: HTMLCanvasElement | null = null;

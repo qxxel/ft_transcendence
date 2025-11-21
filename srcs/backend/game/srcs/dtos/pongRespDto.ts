@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:20:29 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 20:42:25 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // import type { validationResult }	from "../utils/validation.js"
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
 export class	pongRespDto {
 	private id: number;

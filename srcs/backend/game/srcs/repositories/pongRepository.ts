@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:54:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 21:43:34 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ interface	StatementWithLastID {
 }
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
 export class	pongRepository {
 	private	db: Database;

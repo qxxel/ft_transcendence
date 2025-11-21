@@ -1,38 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   userController.ts                                  :+:      :+:    :+:   */
+/*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:28:56 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:26:48 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// HANDLE THE GET, POST, AND ALL THE INFO THAT USER SERVICE RECEIVE
+// HANDLE THE GET, POST, AND ALL THE INFO THAT USER SERVICE RECEIVE FOR USERS TABLE
 
 
 /* ====================== IMPORTS ====================== */
 
 import { errorsHandler }	from "../utils/errorsHandler.js"
-import { userAddDto }		from "../dtos/userAddDto.js"
-import { userRespDto }		from "../dtos/userRespDto.js"
-import { userServ } 		from "../user.js"
+import { usersAddDto }		from "../dtos/usersAddDto.js"
+import { usersRespDto }		from "../dtos/usersRespDto.js"
+import { usersServ } 		from "../user.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 
 
 /* ====================== FUNCTION ====================== */
 
-export async function	userController(userFastify: FastifyInstance): Promise<void> {
+export async function	usersController(userFastify: FastifyInstance): Promise<void> {
 	// GET A USER WITH HIS ID
 	userFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const	{ id } = request.params as { id: string };
 		const	parseId: number = parseInt(id, 10);
 
 		try {
-			const	user: userRespDto = await userServ.getUserById(parseId);
+			const	user: usersRespDto = await usersServ.getUserById(parseId);
 
 			return reply.code(200).send(user);
 		}
@@ -47,9 +47,9 @@ export async function	userController(userFastify: FastifyInstance): Promise<void
 
 		try {
 			if (!identifier.includes("@"))
-				var	user: userRespDto = await userServ.getUserByUsername(identifier);
+				var	user: usersRespDto = await usersServ.getUserByUsername(identifier);
 			else
-				var	user: userRespDto = await userServ.getUserByEmail(identifier);
+				var	user: usersRespDto = await usersServ.getUserByEmail(identifier);
 
 			return reply.code(200).send(user);
 		}
@@ -68,8 +68,8 @@ export async function	userController(userFastify: FastifyInstance): Promise<void
 		}
 
 		try {
-			const	newUser: userAddDto = new userAddDto(request.body);
-			const	user: userRespDto = await userServ.addUser(newUser);
+			const	newUser: usersAddDto = new usersAddDto(request.body);
+			const	user: usersRespDto = await usersServ.addUser(newUser);
 
 			return reply.code(201).send(user);
 		}
@@ -84,7 +84,7 @@ export async function	userController(userFastify: FastifyInstance): Promise<void
 		const	parseId: number = parseInt(id, 10);
 	
 		try {
-			await userServ.deleteUser(parseId);
+			await usersServ.deleteUser(parseId);
 
 			return reply.code(204).send();
 		}

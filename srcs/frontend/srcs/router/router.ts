@@ -6,11 +6,11 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:21:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// class	WHO ROUTE FOR THE SINGLE PAGE APPLICATION (SPA)
+// CLASS WHO ROUTE FOR THE SINGLE PAGE APPLICATION (SPA)
 
 
 /* ====================== IMPORTS ====================== */
@@ -29,7 +29,7 @@ interface	Route {
 }
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
 export class	Router {
 	private	routes: Route[] = [];

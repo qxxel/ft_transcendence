@@ -29,7 +29,7 @@ const	ballRadius: number = 7;
 const	ballSpeed: number = 2;
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
 export class	Ball {
 	private	x: number;
