@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/21 01:53:10 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/21 06:16:00 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ export class PongGame extends Game {
   private isGameOver: boolean = false;
   private winningScore: number = 5;
   private gameMode: 'pvp' | 'ai';
-  private aiDifficulty: 'easy' | 'medium' | 'hard';
+  private aiDifficulty: 'easy' | 'medium' | 'hard' | 'boris';
   private isTournamentMatch: boolean = false;
 
   // Objects
@@ -71,7 +71,15 @@ export class PongGame extends Game {
   private user: User;
   private readonly initialBallSpeed: number = 5;
 
-  constructor(canvasId: string, score1Id: string, score2Id: string, winScoreId: string, router: Router, gameState: GameState, user: User, gameMode: 'pvp' | 'ai' = 'ai', aiDifficulty: 'easy' | 'medium' | 'hard' = 'medium') {
+  constructor(canvasId: string, 
+      score1Id: string, 
+      score2Id: string, 
+      winScoreId: string, 
+      router: Router, 
+      gameState: GameState, 
+      user: User, 
+      gameMode: 'pvp' | 'ai' = 'ai', 
+      aiDifficulty: 'easy' | 'medium' | 'hard' | 'boris' = 'medium') {
     super();
     this.ids = { canvas: canvasId, score1: score1Id, score2: score2Id, winScore: winScoreId };
     this.router = router;

@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:04:46 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/21 04:55:01 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/21 06:13:51 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ interface AIState {
 export class AIController {
     private lastDecisionTime: number = 0;
     private targetY: number = 0;
-    private difficulty: 'easy' | 'medium' | 'hard';
+    private difficulty: 'easy' | 'medium' | 'hard' | 'boris';
 
-    constructor(difficulty: 'easy' | 'medium' | 'hard') {
+    constructor(difficulty: 'easy' | 'medium' | 'hard' | 'boris') {
         this.difficulty = difficulty;
     }
 

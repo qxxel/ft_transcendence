@@ -10,33 +10,75 @@
     <div class="menu-content">
       
       <h1>Pong 🏓</h1>
-      
-      <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
-      <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
 
-      <div id="main-menu-btns" class="button-group">
-        <button onclick="showDifficultyMenu();" id="startAiGame" class="btn-yellow">
-          Play vs. AI
-        </button>
-        <button onclick="onClickPlayPVP();" id="startPvpGame" class="btn-yellow">
-          Play 1v1
-        </button>
+      <div class="mode-switcher">
+        <button id="btn-mode-default" class="btn-tab active" onclick="switchGameMode('default')">Default</button>
+        <button id="btn-mode-featured" class="btn-tab" onclick="switchGameMode('featured')">Featured</button>
       </div>
 
-      <div id="difficulty-btns" class="difficulty-menu hidden">
-        
-        <p class="diff-title">Select Difficulty</p>
+      <div id="default-mode-content">
+          <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
+          <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
 
-        <div class="difficulty-row">
-            <button onclick="onClickPlayAI('easy');" class="btn-green">Easy</button>
-            <button onclick="onClickPlayAI('medium');" class="btn-yellow-ai">Medium</button>
-            <button onclick="onClickPlayAI('hard');" class="btn-red">Hard</button>
-        </div>
-        
-        <div class="cancel-row">
-            <button onclick="hideDifficultyMenu();" class="btn-cancel">Cancel</button>
-        </div>
+          <div id="main-menu-btns" class="button-group">
+            <button onclick="showDifficultyMenu();" id="startAiGame" class="btn-yellow">
+              Play vs. AI
+            </button>
+            <button onclick="onClickPlayPVP();" id="startPvpGame" class="btn-yellow">
+              Play 1v1
+            </button>
+          </div>
 
+          <div id="difficulty-btns" class="difficulty-menu hidden">
+            <p class="diff-title">Select Difficulty</p>
+            <div class="difficulty-row">
+                <button onclick="onClickPlayAI('easy');" class="btn-green">Easy</button>
+                <button onclick="onClickPlayAI('medium');" class="btn-yellow">Medium</button>
+                <button onclick="onClickPlayAI('hard');" class="btn-red">Hard</button>
+            </div>
+            <div class="cancel-row">
+                <button onclick="hideDifficultyMenu();" class="btn-cancel">Cancel</button>
+            </div>
+          </div>
+      </div>
+
+      <div id="featured-mode-content" class="menu-content hidden">
+          
+          <div class="control-group">
+              <label for="powerupFreq">
+                  Power-up Frequency
+                  </label>
+              <input type="range" id="powerupFreq" min="1" max="10" value="5" step="1"/>
+          </div>
+
+          <div class="control-group">
+              <label for="aiBoris">
+                  AI Difficulty
+                  <span id="ai-level-display">Medium</span>
+              </label>
+              <input type="range" id="aiBoris" min="1" max="4" value="2" step="1" oninput="updateAiLabel()"/>
+          </div>
+
+          <p class="diff-title">ALLOWED POWER-UPS</p>
+          
+          <div class="checkbox-group">
+              <label class="checkbox-btn">
+                  <input type="checkbox" id="chk-1star" checked>
+                  <span>★</span>
+              </label>
+              <label class="checkbox-btn">
+                  <input type="checkbox" id="chk-2star" checked>
+                  <span>★★</span>
+              </label>
+              <label class="checkbox-btn">
+                  <input type="checkbox" id="chk-3star" checked>
+                  <span>★★★</span>
+              </label>
+          </div>
+
+          <button onclick="onClickStartFeatured();" class="btn-yellow" style="margin-top: 25px; width: 80%;">
+            Start Featured Game
+          </button>
       </div>
 
     </div>

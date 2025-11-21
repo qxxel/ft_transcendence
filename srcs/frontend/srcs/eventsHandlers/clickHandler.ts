@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 01:19:31 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/21 06:29:08 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,57 @@ function hideDifficultyMenu() {
     }
 }
 
+function switchGameMode(mode: 'default' | 'featured') {
+    const defDiv = document.getElementById('default-mode-content');
+    const featDiv = document.getElementById('featured-mode-content');
+    const btnDef = document.getElementById('btn-mode-default');
+    const btnFeat = document.getElementById('btn-mode-featured');
+
+    if (mode === 'default') {
+        defDiv?.classList.remove('hidden');
+        featDiv?.classList.add('hidden');
+        
+        btnDef?.classList.add('active');
+        btnFeat?.classList.remove('active');
+    } else {
+        defDiv?.classList.add('hidden');
+        featDiv?.classList.remove('hidden');
+        
+        btnDef?.classList.remove('active');
+        btnFeat?.classList.add('active');
+    }
+}
+
+function updateAiLabel() {
+    const slider = document.getElementById('aiHardcore') as HTMLInputElement;
+    const display = document.getElementById('ai-level-display');
+    if (!slider || !display) return;
+
+    const val = parseInt(slider.value);
+    
+    let text = "MEDIUM";
+    let color = "#FFFF00";
+
+    if (val === 1) {
+        text = "EASY";
+        color = "#00FF00";
+    } 
+    else if (val === 2) {
+        text = "MEDIUM";
+        color = "#FFFF00";
+    } 
+    else if (val === 3) {
+        text = "HARD";
+        color = "#FF0000";
+    } 
+    else if (val === 4) {
+        text = "BORIS";
+        color = "#FF00FF";
+    }
+
+    display.innerText = text;
+    display.style.color = color;
+}
 
 /* ====================== GAME & TOURNAMENT HANDLERS ====================== */
 
@@ -172,6 +223,27 @@ function startTournamentMatch(matchId: string, p1: string, p2: string, router: R
   }
 }
 
+function onClickStartFeatured(router: Router, gameState: GameState, user: User) {
+    const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
+    const aiInput = document.getElementById("aiBoris") as HTMLInputElement;
+    
+    const star1 = (document.getElementById("chk-1star") as HTMLInputElement).checked;
+    const star2 = (document.getElementById("chk-2star") as HTMLInputElement).checked;
+    const star3 = (document.getElementById("chk-3star") as HTMLInputElement).checked;
+
+    const aiVal = parseInt(aiInput.value);
+    let difficulty: any = 'medium'; 
+    if (aiVal === 1) difficulty = 'easy';
+    if (aiVal === 3) difficulty = 'hard';
+    if (aiVal === 4) difficulty = 'boris';
+
+    console.log(`Starting Featured: Freq=${freqInput.value}, Diff=${difficulty}, Stars=[${star1},${star2},${star3}]`);
+
+    gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'ai', difficulty);
+    
+    router.navigate("/pong", gameState, user);
+}
+
 /* ====================== SETUP ====================== */
 
 export async function   setupClickHandlers(router: Router, user: User, gameState: GameState): Promise<void> {
@@ -183,6 +255,10 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
     
     (window as any).showDifficultyMenu = showDifficultyMenu;
     (window as any).hideDifficultyMenu = hideDifficultyMenu;
+
+    (window as any).switchGameMode = switchGameMode;
+    (window as any).updateAiLabel = updateAiLabel;
+    (window as any).onClickStartFeatured = () => onClickStartFeatured(router, gameState, user);
 
     (window as any).onClickPlayAI = (difficulty: 'easy' | 'medium' | 'hard') => 
         onClickPlayAI(difficulty, router, gameState, user);
@@ -204,10 +280,36 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 
     document.addEventListener('input', (event) => {
         const target = event.target as HTMLInputElement;
-        if (target && target.id === 'choosenMaxPoints') {
+        if (!target) return;
+
+        if (target.id === 'choosenMaxPoints') {
             const display = document.getElementById('points-display');
             if (display) {
                 display.innerText = target.value;
+            }
+        }
+
+        if (target.id === 'aiHardcore') {
+            const display = document.getElementById('ai-level-display');
+            if (display) {
+                const val = parseInt(target.value);
+                
+                if (val === 1) {
+                    display.innerText = "EASY";
+                    display.style.color = "#00FF00";
+                }
+                else if (val === 2) {
+                    display.innerText = "MEDIUM";
+                    display.style.color = "#FFFF00";
+                }
+                else if (val === 3) {
+                    display.innerText = "HARD";
+                    display.style.color = "#FF0000";
+                }
+                else if (val === 4) {
+                    display.innerText = "BORIS";
+                    display.style.color = "#FF00FF";
+                }
             }
         }
     });
