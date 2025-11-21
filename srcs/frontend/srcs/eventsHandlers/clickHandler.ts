@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 08:14:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 20:23:12 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,13 @@ async function	onClickEdit(user: User): Promise<void> {
 	});
 
 	const username = document.getElementById("edit-username") as HTMLInputElement;
-	username.value = userRes.username ?? "eh non";
+	username.value = userRes.username ?? "";
 	const mail = document.getElementById("edit-email") as HTMLInputElement;
-	mail.value = userRes.email ?? "aie";
+	mail.value = userRes.email ?? "";
 	
 	document.getElementById("edit-submit")!.hidden = true;
+	document.getElementById("user-email")!.hidden = true;
+	document.getElementById("user-username")!.hidden = true;
 
 	const check2fa = document.getElementById("check-2fa") as HTMLInputElement;
 	const label2fa = document.getElementById("label-2fa") as HTMLLabelElement;

@@ -17,6 +17,10 @@ body {
     min-height: 100vh;
 }
 
+[hidden] {
+    display: none !important;
+}
+
 /* --- 2. THE KEY: CENTERING THE APP --- */
 #app {
     min-height: 100vh;
