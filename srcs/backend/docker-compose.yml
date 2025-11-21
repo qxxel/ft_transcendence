@@ -63,17 +63,19 @@ services:
       - backend
     env_file: ../.env
 
-  2fa:
-    container_name: 2fa
-    image: 2fa
+  twofa:
+    container_name: twofa
+    image: twofa
     build:
-      context: ./2fa
-      dockerfile: Dockerfile.2fa
+      context: ./twofa
+      dockerfile: Dockerfile.twofa
     secrets:
       - ssl_key_back
       - ssl_crt_back
     ports:
       - "3000"
+    volumes:
+      - "twofaDB:/app/dist/db"
     networks:
       - backend
     env_file: ../.env

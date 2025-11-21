@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   navigationUtils.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:58:02 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 23:32:48 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ import { PongGame }	from "../game/game.js";
 import { router }	from "../index.js";
 import { TankGame }	from "../v3/tank.js";
 import { User }		from "../user/user.js";
+import { sendRequest }	from "../utils/sendRequest.js"
 
 import type { GameState }	from "../index.js"
 
@@ -48,26 +49,31 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 	if (['/pongmenu'].includes(currentPath)) {
 		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');
 		const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
-    	const display = document.getElementById('points-display') as HTMLSpanElement;
+		const display = document.getElementById('points-display') as HTMLSpanElement;
 		
-    	if (slider && display) {
-    	  display.innerHTML = slider.value;
+		if (slider && display) {
+		display.innerHTML = slider.value;
 		
-    	  slider.addEventListener('input', () => {
-    	    display.innerHTML = slider.value;
-    	  });
-    	}
+		slider.addEventListener('input', () => {
+			display.innerHTML = slider.value;
+		});
+		}
 	}
 
 	if (['/tank'].includes(currentPath)) {
-    	gameState.currentGame = new TankGame('pong-canvas', 'desertfox', 4);
-    	gameState.currentGame.start();
-    	console.log("Loading the new game...");
-  	}
-
+		gameState.currentGame = new TankGame('pong-canvas', 'desertfox', 4);
+		gameState.currentGame.start();
+		console.log("Loading the new game...");
+	}
 
 }
 
+export function  sendActionsRequest(currentPath: string): void {
+	if (['/2fa'].includes(currentPath)) {
+		const response = sendRequest('/api/twofa/otp', 'GET', null);
+	}
+
+}
 // function  pathActions(currentPath: string) {
 //   if (['/pongmenu'].includes(currentPath)) {
 //     currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');

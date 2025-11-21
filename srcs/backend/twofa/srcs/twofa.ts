@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   2fa.ts                                             :+:      :+:    :+:   */
+/*   twofa.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:21 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/20 03:49:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 23:06:53 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@ import Fastify, { type FastifyInstance }				from 'fastify'
 import fs					from 'fs'
 import https				from 'https'
 import sqlite3Pkg			from 'sqlite3'
-import { twofaController }	from './controllers/2faController.js'
-import { twofaService }		from "./services/2faService.js"
-import { twofaRepository }	from "./repositories/2faRepository.js"
+import { twofaController }	from './controllers/twofaController.js'
+import { twofaService }		from "./services/twofaService.js"
+import { twofaRepository }	from "./repositories/twofaRepository.js"
 
 /* ====================== DATABASE ====================== */
 
 const	{ Database } = sqlite3Pkg;
-const	dbname: string = '/app/dist/db/2fa.db';
+const	dbname: string = '/app/dist/db/twofa.db';
 
 const	db = new Database(dbname, (err: Error | null) => {
 	if (err)
@@ -70,7 +70,7 @@ twofaFastify.register(twofaController);
 const	start = async () => {
 	try {
 		await twofaFastify.listen({ port: 3000, host: '0.0.0.0' });
-		console.log('Server started on https://2fa:3000');
+		console.log('Server started on https://twofa:3000');
 
 		process.on('SIGTERM', () => {
 			console.log('SIGTERM received, server shutdown...');

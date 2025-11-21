@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   2faTableBuilder.ts                                 :+:      :+:    :+:   */
+/*   twofaTableBuilder.ts                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:03:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 03:56:48 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 23:09:40 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ export function	twofaTableBuilder(db: Database): void {
 	db.exec(`CREATE TABLE IF NOT EXISTS twofa (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		id_client INT NOT NULL UNIQUE,
-		otpSecretKey TEXT NOT NULL
+		otpSecretKey TEXT NOT NULL,
 		otp TEXT NOT NULL
 	);`);
 }

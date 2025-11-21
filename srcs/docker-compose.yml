@@ -43,6 +43,12 @@ volumes:
       type: 'none'
       o: 'bind'
       device: './backend/jwt/db'
+  twofaDB:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './backend/twofa/db'
 
 networks:
   web:

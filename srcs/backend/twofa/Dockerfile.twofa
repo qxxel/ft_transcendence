@@ -1,7 +1,7 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Dockerfile.2fa                                     :+:      :+:    :+:    #
+#    Dockerfile.twofa                                     :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
@@ -33,4 +33,4 @@ RUN		npm run build
 EXPOSE	3000
 
 # LAUNCH THE SERVER
-CMD ["node", "dist/2fa.js"]
+CMD ["node", "dist/twofa.js"]

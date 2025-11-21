@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   2faRepository.ts                                   :+:      :+:    :+:   */
+/*   twofaRepository.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 04:55:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 23:48:17 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { twofaTableBuilder }	from "../tableBuilders/2faTableBuilder.js"
+import { twofaTableBuilder }	from "../tableBuilders/twofaTableBuilder.js"
 
 import type { Database }	from 'sqlite3'
 
@@ -68,11 +68,11 @@ export class	twofaRepository {
 			const	query: string = "SELECT otp FROM twofa WHERE id_client = ?";
 			const	elements: string[] = [id];
 
-			this.db.get(query, elements, (err: unknown, row: { password: string }) => {
+			this.db.get(query, elements, (err: unknown, row: { otp: string }) => {
 				if (err)
 					return reject(err);
 
-				return resolve(row.password);
+				return resolve(row.otp);
 			});
 		});
 	}
@@ -82,18 +82,18 @@ export class	twofaRepository {
 			const	query: string = "SELECT otpSecretKey FROM twofa WHERE id_client = ?";
 			const	elements: string[] = [id];
 
-			this.db.get(query, elements, (err: unknown, row: { password: string }) => {
+			this.db.get(query, elements, (err: unknown, row: { otpSecretKey: string }) => {
 				if (err)
 					return reject(err);
-
-				return resolve(row.password);
+				//if row null ???
+				return resolve(row.otpSecretKey);
 			});
 		});
 	}
 
 	async deleteOtpByIdClient(id: string): Promise<void>{
 		return new Promise((resolve, reject) => {
-			const	query: string = "DELETE FROM twofa WHERE id = ?";
+			const	query: string = "DELETE FROM twofa WHERE id_client = ?";
 			const	elements: string[] = [id];
 
 			this.db.run(query, elements, function(err: unknown) {

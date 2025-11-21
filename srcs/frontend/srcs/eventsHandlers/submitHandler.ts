@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 05:56:01 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 00:36:28 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 import { router }	from "../index.js"
 import { User }		from "../user/user.js"
+import { sendRequest }	from "../utils/sendRequest.js"
 
 import type { GameState }	from "../index.js"
 
@@ -131,25 +132,12 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
 	console.log("2fa");
 
-	const	code: string = (document.getElementById("digit-code") as HTMLInputElement).value;
+	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
 	form.reset();
 
-	console.log("code: " + code);
-	console.log(JSON.stringify({ code }));
+	console.log(JSON.stringify(otp));
 
-	const	response: Response = await fetch('/api/2fa/otp', {
-		method: "get",
-		credentials: "include",
-	});
-
-	// const	response: Response = await fetch('/api/2fa/validate', {
-	// 	method: "post",
-	// 	credentials: "include",
-	// 	headers: {
-	// 		"Content-Type": "application/json"
-	// 	},
-	// 	body: JSON.stringify({ code })
-	// });
+	const response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
 
 	const	result = await response.json();
 

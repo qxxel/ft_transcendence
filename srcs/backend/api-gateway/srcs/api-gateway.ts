@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 23:12:00 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 22:41:49 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ import https	from 'https'
 import { gatewayAuthController }	from "./controllers/gatewayAuthController.js"
 import { gatewayJwtController }		from "./controllers/gatewayJwtController.js"
 import { gatewayUserController }	from "./controllers/gatewayUserController.js"
-import { gateway2faController }		from "./controllers/gateway2faController.js"
+import { gatewaytwofaController }		from "./controllers/gatewaytwofaController.js"
 
 
 /* ====================== AXIOS VARIABLES ====================== */
@@ -56,7 +56,7 @@ gatewayFastify.register(cors, {
 gatewayFastify.register(gatewayUserController, { prefix: '/api/user' });
 gatewayFastify.register(gatewayJwtController, { prefix: '/api/jwt' });
 gatewayFastify.register(gatewayAuthController, { prefix: '/api/auth' });
-gatewayFastify.register(gateway2faController, { prefix: '/api/2fa' });
+gatewayFastify.register(gatewaytwofaController, { prefix: '/api/twofa' });
 
 const	start = async () => {
 	try {

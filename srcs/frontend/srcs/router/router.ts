@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   router.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:21:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:56:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { pathActions }	from "./navigationUtils.js"
-import { User }			from "../user/user.js"
+import { pathActions, sendActionsRequest }	from "./navigationUtils.js"
+import { User }								from "../user/user.js"
 
-import type { GameState }	from "../index.js"
+import type { GameState }					from "../index.js"
 
 
 /* ====================== INTERFACE ====================== */
@@ -55,6 +55,7 @@ export class	Router {
 			}
 
 			pathActions(currentPath, gameState, user);
+			sendActionsRequest(currentPath);
 		}
 
 	}

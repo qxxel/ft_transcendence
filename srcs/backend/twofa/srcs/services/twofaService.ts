@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   2faService.ts                                      :+:      :+:    :+:   */
+/*   twofaService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 04:55:35 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 22:40:32 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORT ====================== */
 
-import { twofaRepository }	from "../repositories/2faRepository.js"
+import { twofaRepository }	from "../repositories/twofaRepository.js"
 
 
 /* ====================== class	====================== */

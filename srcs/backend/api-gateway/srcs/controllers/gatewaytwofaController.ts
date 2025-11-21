@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gateway2faController.ts                            :+:      :+:    :+:   */
+/*   gatewaytwofaController.ts                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 23:09:42 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/20 05:52:05 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/20 22:45:29 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 
 /* ====================== FUNCTION ====================== */
 
-export async function	gateway2faController(gatewayFastify: FastifyInstance) {
+export async function	gatewaytwofaController(gatewayFastify: FastifyInstance) {
 
 	gatewayFastify.get('/otp', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			console.log("\n\n hein \n\n");
 			const	response: AxiosResponse = await gatewayAxios.get(
-				'https://2fa:3000/otp',
+				'https://twofa:3000/otp',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 			
@@ -43,7 +43,7 @@ export async function	gateway2faController(gatewayFastify: FastifyInstance) {
 	gatewayFastify.post('/validate', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.post(
-				'https://2fa:3000/validate',
+				'https://twofa:3000/validate',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);

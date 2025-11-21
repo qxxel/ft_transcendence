@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sendRequest.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:23:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:22:29 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 00:39:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,18 @@
 
 /* ====================== FUNCTION ====================== */
 
-export async function	sendRequest(path: string, requestMethod: string, body: Object | null): Promise<Response> {
+async function	sendMainRequest(path: string, requestMethod: string, body: Object | null): Promise<Response> {
+	let	response: Response;
 	if (body === null)
 	{
-		var	response: Response = await fetch(path, {
+		response = await fetch(path, {
 			method: requestMethod,
 			credentials: "include"
 		});
 	}
 	else
 	{
-		var	response: Response = await fetch(path, {
+		response = await fetch(path, {
 			method: requestMethod,
 			credentials: "include",
 			headers: {
@@ -34,13 +35,21 @@ export async function	sendRequest(path: string, requestMethod: string, body: Obj
 			body: JSON.stringify(body)
 		});
 	}
+	return response;
+}
 
+export async function	sendRequest(path: string, requestMethod: string, body: Object | null): Promise<Response> {
+	
+	let response: Response = await sendMainRequest(path, requestMethod, body);
+	
 	if (response.status === 401){
 		response = await fetch("/api/jwt/refresh", {
 			method: "GET",
 			credentials: "include",
 		});
+		
+		if (response.ok)
+			response = await sendMainRequest(path, requestMethod, body);
 	}
-
 	return response;
 }
