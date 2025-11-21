@@ -98,7 +98,7 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
     }
 
     if (['/tank'].includes(currentPath)) {
-        gameState.currentGame = new TankGame('pong-canvas', 'desertfox', 4);
+        gameState.currentGame = new TankGame('tank-canvas', 'desertfox', 2, 'pvp', 'p1-name', 'p2-name');
         gameState.currentGame.start();
         console.log("Loading the new game...");
     }

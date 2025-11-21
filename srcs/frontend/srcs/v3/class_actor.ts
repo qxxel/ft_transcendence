@@ -25,8 +25,7 @@ export class	Actor {
 
 	constructor(
 		public	x:number,
-		public	y:number,
-		public	isMovable:boolean = true) {
+		public	y:number) {
 		console.log("C Actor at x:", x, "y:", y);
 	}
 

@@ -21,8 +21,10 @@ import { Input }	from "./class_input.js"
 import { Map }		from "./class_map.js"
 import { Tank }		from "./class_tank.js"
 import { Collectible } from "./class_collectible.js"
+import { HealthPack } from "./class_collectible_health.js"
 
 import type { Color, Keys }	from "./interface.js"
+import type { publicDecrypt } from "crypto"
 
 
 /* ============================= CLASS ============================= */
@@ -32,18 +34,20 @@ export class	TankGame extends Game {
 	private	canvas: HTMLCanvasElement;
 	private	ctx: CanvasRenderingContext2D;
 	private	animationFrameId: number | null = null;
-	// private	ids: { canvas: string; score1: string; score2: string; winScore: string };
 
 	private	startTime: number = 0;
 	private	input: Input;
 	private	map: Map;
-
+	private	isPaused: boolean = false;
+	// private	isGameOver: boolean = false;
 
 	constructor(
 		canvasId: string, 
 		map_name: string,
-		nplayer: number,
+		public nplayer: number,
 		private	gameMode: 'pvp' | 'ai' = 'ai',
+		public p_p1name: string,
+		public p_p2name: string,
 	) {
 		super();
 		this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
@@ -52,6 +56,19 @@ export class	TankGame extends Game {
 		this.input = new Input();
 		this.map = new Map(this.canvas.width, this.canvas.height, 2, map_name);
 
+
+
+
+
+		this.setup_tanks();
+		this.setup_collectible();
+
+	}
+
+	private setup_tanks() : void 
+	{
+		let tank_width:number = 25;
+		let tank_height:number = 25;
 		let colors: Color[] = [];
 		colors.push( {r:255,g:255,b:0} );
 		colors.push( {r:255,g:0,b:255} );
@@ -64,26 +81,13 @@ export class	TankGame extends Game {
 		keys.push( {up:'', down:'', left:'', right:'', rot_left:'', rot_right:'', fire:'x'} );
 		keys.push( {up:'', down:'', left:'', right:'', rot_left:'', rot_right:'', fire:'c'} );
 
-		let tank_width:number = 25;
-		let tank_height:number = 25;
-		let collectible_width:number = 10;
-		let collectible_height:number = 10;
-
-
-		if (map_name == 'desertfox')
+		if (this.map.name == 'desertfox')
 		{
-			for (let i = 0; i < nplayer; ++i)
-			{
+			for (let i = 0; i < this.nplayer; ++i) {
 				if (this.map.spawns_tank && this.map.spawns_tank[i]) { // SCOTCH
-					GSTATE.ACTORS.push(
-						new Tank(this.map.spawns_tank[i]!.x, this.map.spawns_tank[i]!.y, tank_width, tank_height, {r:0,g:255,b:0}, colors[i]!, keys[i]!));
-				}
-			}
-			for (let i = 0; i < nplayer; ++i)
-			{
-				if (this.map.spawns_collectible && this.map.spawns_collectible[i]) { // SCOTCH
-					GSTATE.ACTORS.push(
-						new Collectible(this.map.spawns_collectible[i]!.x, this.map.spawns_collectible[i]!.y, collectible_width, collectible_height, "SPEED", {r:150,g:150,b:0}));
+					const tank: Tank = new Tank(this.map.spawns_tank[i]!.x, this.map.spawns_tank[i]!.y, tank_width, tank_height, {r:0,g:0,b:255}, colors[i]!, keys[i]!);
+					GSTATE.ACTORS.push(tank);
+					GSTATE.TANKS += 1;
 				}
 			}
 		}
@@ -91,37 +95,130 @@ export class	TankGame extends Game {
 				GSTATE.ACTORS.push(
 					new Tank(16,16,25,25, {r:0,g:255,b:0},{r:0,g:255,b:0},
 						{up:"w",down:"s",left:"a",right:"d",rot_left:"q",rot_right:"e",fire:" "}));
+				GSTATE.TANKS += 1;
 		}
-			// GSTATE.ACTORS.push(
-				// new Tank(400,400,50,50, {r:0,g:255,b:0},
-						// {up:"i",down:"k",left:"j",right:"l",fire:"u"}));
+	}
 
-			// GSTATE.ACTORS.push(
-			//   new Ball(450,16,16,16,3.5,7,
-			//     {r:255,g:0,b:0}));
+	private setup_collectible() : void 
+	{
+		let collectible_width:number = 10;
+		let collectible_height:number = 10;
 
+		if (this.map.name == 'desertfox')
+		{
+			for (let i = 0; i < this.nplayer; ++i) {
+				if (this.map.spawns_collectible && this.map.spawns_collectible[i]) { // SCOTCH
+					GSTATE.ACTORS.push(
+						new HealthPack(this.map.spawns_collectible[i]!.x, this.map.spawns_collectible[i]!.y, collectible_width, collectible_height, {r:150,g:150,b:0}));
+				}
+			}
+		}
 	}
 
 	private	gameLoop(): void {
-		this.draw();
+		this.listen();
 		this.update();
 		this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
 	}
 
+	private listen() : void {
+		for (let inp of this.input.getPressedKeys()) {
+
+			if (inp == 'Escape') {
+
+				if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA QUIT
+
+				}
+				else if (GSTATE.TANKS != 1) { // SWITCH PAUSE UNPAUSE
+					this.isPaused = !this.isPaused;
+					GSTATE.REDRAW = true;
+				}
+				// if 		(this.isPaused == false) this.isPaused = true;
+				// else if (this.isPaused == true) { this.isPaused = false; GSTATE.REDRAW = true; }
+			}
+			else if (this.isPaused && inp == 'r')
+			{
+				if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA RESTART
+					for (let a of GSTATE.ACTORS)
+					{
+						if (a instanceof Tank)
+							a.destroy();
+					}
+					this.setup_tanks();
+					this.setup_collectible();
+					this.isPaused = false;
+				}
+			}
+		}
+	}
+
 	private	update(): void {
+
 		if (GSTATE.REDRAW) {
-			// console.log("REDRAW");
-			this.map.draw(this.ctx);
+			this.map.drawBackground(this.ctx);
 			for (let a of GSTATE.ACTORS) {
 					a.draw(this.ctx);
 			}
+
 			GSTATE.REDRAW = false;
-		}
-		for (let a of GSTATE.ACTORS) {
-			a.update(this.input.getPressedKeys());
+
+			if (this.isPaused) {
+				this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        		this.ctx.fillStyle = 'white';
+        		this.ctx.font = '50px monospace';
+        		this.ctx.textAlign = 'center';
+        		if (GSTATE.TANKS != 1) this.ctx.fillText('PAUSED', this.canvas.width / 2, this.canvas.height / 2);
+				return ;
+			}
 		}
 
+		if (!this.isPaused) {
+			for (let a of GSTATE.ACTORS) {
+				a.update(this.input.getPressedKeys());
+			}
+		}
+
+		if (!this.isPaused && GSTATE.TANKS == 1) {
+			let winner: Tank;
+			this.showEndGameDashboard()
+			this.isPaused = true;
+		}
 	}
+  private showEndGameDashboard() {
+
+	console.log("ECHO");
+    const dashboard = document.getElementById('game-over-dashboard');
+    if (!dashboard) return;
+
+    const matchDurationSeconds = Math.floor((Date.now() - this.startTime) / 1000);
+    const minutes = Math.floor(matchDurationSeconds / 60);
+    const seconds = matchDurationSeconds % 60;
+
+    const winnerName = "WINNER HERE"; //this.score1 > this.score2 ? this.player1Name : this.player2Name;
+    const winnerDisplay = document.getElementById('winner-display');
+
+	if (winnerDisplay) winnerDisplay.innerText = `${winnerName} Wins!`;
+
+    document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
+    
+    document.getElementById('p1-stat-name')!.innerText = 'DATA2:';
+    document.getElementById('stat-p1-hits')!.innerText = 'X';
+
+    document.getElementById('p2-stat-name')!.innerText = 'DATA3:';
+    document.getElementById('stat-p2-hits')!.innerText = 'X';
+    
+    document.getElementById('stat-rally')!.innerText = 'X';
+
+    const restartMsg = document.getElementById('restart-msg');
+    if (restartMsg) {
+        // const baseMsg = this.isTournamentMatch ? "Press 'Space' to Continue" : "Press 'Space' to Restart";
+        // const escMsg = this.isTournamentMatch ? "" : " or 'Esc' to Quit";
+        restartMsg.innerText = "Press 'R' to Restart or 'Esc' to Quit" //baseMsg + escMsg;
+    }
+
+    dashboard.style.display = 'block';
+  }
 
 	public	start(): void {
 		if (!this.animationFrameId) {
@@ -144,7 +241,5 @@ export class	TankGame extends Game {
 	}
 
 	private	draw(): void {}
-
-
 
 }

@@ -22,6 +22,7 @@ import { Actor }	from "./class_actor.js"
 
 export interface	GlobalState {
 	ACTORS: Actor[];
+	TANKS: number;
 	CANVAS: HTMLCanvasElement;
 	CTX: CanvasRenderingContext2D;
 	REDRAW: boolean;
@@ -32,6 +33,7 @@ export interface	GlobalState {
 
 export const	GSTATE: GlobalState = {
 	ACTORS: [],
+	TANKS: 0,
 	CANVAS: undefined as unknown as HTMLCanvasElement,
 	CTX: undefined as unknown as CanvasRenderingContext2D,
 	REDRAW: true as boolean

@@ -58,6 +58,7 @@ export class	Tank extends Actor {
 		this.listen(input);
 		if (Date.now() - this.fire_last < this.fire_rate)
 			GSTATE.REDRAW = true;
+		
 	}
 
 	draw(ctx: CanvasRenderingContext2D): void {
@@ -75,6 +76,7 @@ export class	Tank extends Actor {
 
 	listen(input: string[]): void {
 		for (let inp of input) {
+			// console.log("INPUT =", inp);
 			if (inp == this.keys.up)        { this.move(0,-this.speed); GSTATE.REDRAW = true; }
 			if (inp == this.keys.down)      { this.move(0,+this.speed); GSTATE.REDRAW = true; }
 			if (inp == this.keys.left)      { this.move(-this.speed,0); GSTATE.REDRAW = true; }
@@ -138,7 +140,10 @@ export class	Tank extends Actor {
 		this.color.r += 50;
 		this.color.g -= 50;
 		console.log("health():",this.health);
-		if (this.health == 0) this.destroy();
+		if (this.health == 0) {
+			GSTATE.TANKS -= 1;
+			this.destroy();
+		}
 	}
 
 	canFire(): boolean {
