@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 23:53:59 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/22 02:57:54 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ function switchGameMode(mode: 'default' | 'featured') {
 }
 
 function updateAiLabel() {
-    const slider = document.getElementById('aiHardcore') as HTMLInputElement;
+    const slider = document.getElementById('aiBoris') as HTMLInputElement;
     const display = document.getElementById('ai-level-display');
     if (!slider || !display) return;
 
@@ -164,7 +164,7 @@ function updateAiLabel() {
 }
 
 function selectFeaturedDifficulty(level: number) {
-    const input = document.getElementById('aiHardcore') as HTMLInputElement;
+    const input = document.getElementById('aiBoris') as HTMLInputElement;
     if (input) {
         input.value = level.toString();
     }
@@ -294,7 +294,7 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
                 display.innerText = target.value;
             }
         }
-
+        
         if (target.id === 'powerupFreq') {
             const display = document.getElementById('powerup-freq-display');
             if (display) {

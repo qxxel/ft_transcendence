@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:04:46 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/21 06:13:51 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/22 02:39:32 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ export class AIController {
         const now = Date.now();
         const keys = { up: false, down: false };
 
-        if (now - this.lastDecisionTime > 1000) {
+        
+        if (now - this.lastDecisionTime > 1000 || this.difficulty == 'boris') {
             this.lastDecisionTime = now;
-            
             if (state.ball.dx > 0) {
                 let predictedY = this.predictBallLandingY(state);
-                if (this.difficulty == 'hard'){
+                if (this.difficulty == 'hard' || this.difficulty == 'boris'){
                     this.targetY = this.calculateOptimalPaddlePosition(predictedY, state);
                 }
                 else {
@@ -125,6 +125,7 @@ export class AIController {
             return predictedY + maxOffset;
         }
     }
+
     private calculateOptimalPaddlePosition(predictedY: number, state: AIState): number {
         if (Math.random() > 0.5){
             return this.hardBounce(predictedY, state);
