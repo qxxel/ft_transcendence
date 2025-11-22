@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 20:23:12 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 22:17:37 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,13 @@ async function	onClickLogout(router: Router, gameState: GameState, user: User): 
 async function	onClickEdit(user: User): Promise<void> {
 	console.log("Edit");
 
-	const	Response: Response = await sendRequest(`/api/user/${user.getId()}`, 'get', null);
-	if (!Response.ok)
+	const	response: Response = await sendRequest(`/api/user/${user.getId()}`, 'get', null);
+	if (!response.ok)
 	{
-		// error /!\
+		console.log(response.statusText);
 		return ;
 	}
-	const	userRes = await Response.json();
+	const	userRes = await response.json();
 
 	const hiddenElements = document.getElementById("user-settings-form")!.querySelectorAll("[hidden]");
 	
