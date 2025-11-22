@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:26:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/22 16:56:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 import { errorsHandler }	from "../utils/errorsHandler.js"
 import { usersAddDto }		from "../dtos/usersAddDto.js"
 import { usersRespDto }		from "../dtos/usersRespDto.js"
-import { usersServ } 		from "../user.js"
+import { usersServ, userStatsServ } 		from "../user.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 
@@ -70,6 +70,8 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 		try {
 			const	newUser: usersAddDto = new usersAddDto(request.body);
 			const	user: usersRespDto = await usersServ.addUser(newUser);
+
+			
 
 			return reply.code(201).send(user);
 		}

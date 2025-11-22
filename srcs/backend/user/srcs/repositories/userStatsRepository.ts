@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:47:32 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:18:59 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/22 18:52:22 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,20 @@
 
 /* ====================== IMPORTS ====================== */
 
-// import { userStatsAddDto }			from "../dtos/userStatsAddDto.js"
-// import { userStatsRespDto }			from "../dtos/userStatsRespDto.js"
+import { userStatsPongUpdateDto }	from "../dtos/userStatsUpdateDto.js"
+import { userStatsRespDto }			from "../dtos/userStatsRespDto.js";
 import { userStatsTableBuilder }	from "../tableBuilders/userStatsTableBuilder.js"
+import { userStatsTankUpdateDto }	from "../dtos/userStatsUpdateDto.js"
+import { userStatsTrigger }			from "../triggers/userStatsTrigger.js"
 
 import type { Database }	from 'sqlite3'
 
 /* ====================== INTERFACE ====================== */
 
 // BECAUSE TYPESCRIPT DON'T ACCEPT `this.lastID` BUT IT APPEARS WITH THE COMPILATION
-// interface	StatementWithLastID {
-// 	lastID: number;
-// }
+interface	StatementWithLastID {
+	lastID: number;
+}
 
 
 /* ====================== CLASS ====================== */
@@ -51,6 +53,8 @@ export class	userStatsRepository {
 		try {
 			this.db = db;
 			userStatsTableBuilder(db);
+			userStatsTrigger(db);
+
 		}
 		catch (err: unknown) {
 			console.error(err);
@@ -58,11 +62,77 @@ export class	userStatsRepository {
 		}
 	}
 
-	// UPDATE STATS
+	// UPDATE PONG STATS
+	async updatePongStats(userStatsUpdate: userStatsPongUpdateDto): Promise<userStatsRespDto> {
+		return new Promise((resolve, reject) => {
+			const	resultCol = userStatsUpdate.isWinner() ? "pong_wins" : "pong_losses";
+			
+			const	query = `UPDATE user_stats SET
+					pong_elo = pong_elo + ?,
+					${resultCol} = ${resultCol} + 1,
+					pong_total_time = pong_total_time + ?,
+					pong_points_marked = pong_points_marked + ?
+				WHERE user_id = ? RETURNING *;`;
+			const	elements: number[] = userStatsUpdate.getTable();
 
+			this.db.get(query, elements, function (err: unknown, row: unknown) {
+				if (err)
+					return reject(err);
 
-	// GETTER
-	getDb(): Database {
-		return this.db;
+				resolve(new userStatsRespDto(row));
+			});
+		});
+	}
+
+	// UPDATE TANK STATS
+	async updateTankStats(userStatsUpdate: userStatsTankUpdateDto): Promise<userStatsRespDto> {
+		return new Promise((resolve, reject) => {
+			const	resultCol = userStatsUpdate.isWinner() ? "tank_wins" : "tank_losses";
+
+			const	query = `UPDATE user_stats SET
+					tank_elo = tank_elo + ?,
+					${resultCol} = ${resultCol} + 1,
+					tank_total_time = tank_total_time + ?,
+					tank_kills = tank_kills + ?
+				WHERE user_id = ? RETURNING *;`;
+			const	elements: number[] = userStatsUpdate.getTable();
+
+			this.db.run(query, elements, function (row: unknown, err: unknown) {
+				if (err)
+					return reject(err);
+
+				resolve(new userStatsRespDto(row));
+			});
+		});
+	}
+
+	async getStatsByUserId(userId: number): Promise<userStatsRespDto> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "SELECT * FROM user_stats WHERE user_id = ?";
+			const	elements: [number] = [userId];
+
+			this.db.get(query, elements, (err: unknown, row: unknown) => {
+				if (err)
+					return reject(err);
+
+				if (!row) {
+					console.error(`error: user ${userId} doesn't exist`);
+					return reject(new Error(`The user ${userId} doesn't exist`));
+				}
+
+				resolve(new userStatsRespDto(row));
+			});
+		});
+	}
+
+	async isTaken(query: string, elements: Array<string>): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			this.db.get(query, elements, (err: unknown, row: unknown) => {
+				if (err)
+					return reject(err);
+
+				resolve(!!row);
+			});
+		});
 	}
 }
