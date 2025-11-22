@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:20:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/22 17:22:58 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ export class	usersRepository {
 
 	async addUser(user: usersAddDto): Promise<number> {
 		return new Promise((resolve, reject) => {
-			const	query: string = "INSERT INTO users (username, email, elo) VALUES(?, ?, ?)";
+			const	query: string = "INSERT INTO users (username, email, avatar) VALUES(?, ?, ?)";
 			const	elements: [string, string, string | null] = user.getTable();
 
 			this.db.run(query, elements, function (this: StatementWithLastID, err: unknown) {
@@ -151,11 +151,5 @@ export class	usersRepository {
 				resolve();
 			});
 		});
-	}
-
-
-	// GETTER
-	getDb(): Database {
-		return this.db;
 	}
 }

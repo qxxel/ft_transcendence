@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:33:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/22 14:00:56 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ export class	usersRespDto {
 		this.username = row.username;
 		this.email = row.email;
 		this.avatar = row.avatar;
-		this.is2faEnable = row.is2faEnable;
+		this.is2faEnable = row.is_2fa_enable;
 	}
 
 

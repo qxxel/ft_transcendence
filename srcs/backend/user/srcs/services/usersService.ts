@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:23:39 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/22 14:05:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ import { IsTakenError, NotExistError }	from "../utils/throwErrors.js"
 export class	usersService {
 	private	usersRepo: usersRepository;
 
-	constructor(userRepo: usersRepository) {
-		this.usersRepo = userRepo;
+	constructor(usersRepo: usersRepository) {
+		this.usersRepo = usersRepo;
 	}
 
 	async addUser(user: usersAddDto): Promise<usersRespDto> {

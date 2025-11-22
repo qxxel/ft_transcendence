@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:35:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/22 19:00:36 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,15 @@ import cors			from '@fastify/cors'
 import fs			from 'fs'
 import sqlite3Pkg from 'sqlite3'
 
-import { usersController }	from "./controllers/usersController.js"
-import { usersService }		from "./services/usersService.js"
-import { usersRepository }	from "./repositories/usersRepository.js"
-import { userStatsController }	from "./controllers/userStatsController.js"
-import { userStatsService }		from "./services/userStatsService.js"
-import { userStatsRepository }	from "./repositories/userStatsRepository.js"
+import { friendshipsController }	from "./controllers/friendshipsController.js"
+import { friendshipsService }		from "./services/friendshipsService.js"
+import { friendshipsRepository }	from "./repositories/friendshipsRepository.js"
+import { usersController }			from "./controllers/usersController.js"
+import { usersService }				from "./services/usersService.js"
+import { usersRepository }			from "./repositories/usersRepository.js"
+import { userStatsController }		from "./controllers/userStatsController.js"
+import { userStatsService }			from "./services/userStatsService.js"
+import { userStatsRepository }		from "./repositories/userStatsRepository.js"
 
 /* ====================== DATABASE ====================== */
 
@@ -31,12 +34,19 @@ const			dbname = '/app/dist/db/user.db';
 const	db = new Database(dbname, (err: Error | null) => {
 	if (err)
 		console.error(err);
-
-	console.log(`Database started on ${dbname}`);
+	else
+	{
+		db.run('PRAGMA foreign_keys = ON;', (pragmaErr) => {
+            if (pragmaErr)
+				console.error("Impossible to turn on Foreign Keys", pragmaErr);
+        });
+		console.log(`Database started on ${dbname}`);
+	}
 });
 
 export const	usersServ = new usersService(new usersRepository(db));
 export const	userStatsServ = new userStatsService(new userStatsRepository(db));
+export const	friendshipsServ = new friendshipsService(new friendshipsRepository(db));
 
 
 /* ====================== SERVER ====================== */
@@ -58,8 +68,9 @@ userFastify.register(cors, {
 });
 
 
-userFastify.register(usersController, { prefix: '/users' });
-userFastify.register(userStatsController, { prefix: '/userstats' } ); // A VERIFIER SI C'EST A GARDER
+userFastify.register(usersController);
+userFastify.register(userStatsController, { prefix: '/user-stats' } ); // A VERIFIER SI C'EST A GARDER
+userFastify.register(friendshipsController, { prefix: '/friendships' } ); // A VERIFIER SI C'EST A GARDER
 
 userFastify.get('/', async (request, reply) => {	//
 	return { message: "Hello User!" };				// A ENLEVER (TEST CONNECTION)

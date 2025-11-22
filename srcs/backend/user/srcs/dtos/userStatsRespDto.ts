@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:54:53 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/22 18:54:56 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@ export class	userStatsRespDto {
 	private	id: number;
 	private	userId: number;
 
+	private	pongElo: number;
+	private	tankElo: number;
+
 	private	pongWins: number;
-	private	pongLooses: number;
+	private	pongLosses: number;
 	private	pongTotalTime: number;
 	private	pongPointsMarked: number;
 
@@ -32,17 +35,20 @@ export class	userStatsRespDto {
 
 	constructor(row: any) {
 		this.id = row.id;
-		this.userId = row.userId;
+		this.userId = row.user_id;
 
-		this.pongWins = row.pongWins;
-		this.pongLooses = row.pongLooses;
-		this.pongTotalTime = row.pongTotalTime;
-		this.pongPointsMarked = row.pongPointsMarked;
+		this.pongElo = row.pong_elo;
+		this.tankElo = row.tank_elo;
 
-		this.tankWins = row.tankWins;
-		this.tankLosses = row.tankLosses;
-		this.tankTotalTime = row.tankTotalTime;
-		this.tankKills = row.tankKills;
+		this.pongWins = row.pong_wins;
+		this.pongLosses = row.pong_losses;
+		this.pongTotalTime = row.pong_total_time;
+		this.pongPointsMarked = row.pong_points_marked;
+
+		this.tankWins = row.tank_wins;
+		this.tankLosses = row.tank_losses;
+		this.tankTotalTime = row.tank_total_time;
+		this.tankKills = row.tank_kills;
 	}
 
 
@@ -50,8 +56,10 @@ export class	userStatsRespDto {
 		return [
 			this.id,
 			this.userId,
+			this.pongElo,
+			this.tankElo,
 			this.pongWins,
-			this.pongLooses,
+			this.pongLosses,
 			this.pongTotalTime,
 			this.pongPointsMarked,
 			this.tankWins,
