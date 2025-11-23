@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 08:35:50 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/23 05:23:23 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,25 +73,35 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 
 async function loadUser(user: User) {
 	const	Response: Response = await sendRequest(`/api/user/${user.getId()}`, 'get', null);
-		if (!Response.ok)
-		{
-			// error /!\
+		if (!Response.ok) {
+			console.log(Response.statusText)
 			return ;
 		}
 		const	userRes = await Response.json();
-		const usernameEl = document.getElementById("user-username") as HTMLSpanElement;
-		const emailEl = document.getElementById("user-email") as HTMLSpanElement;
+		const	switchSpan = document.getElementById("switch-span") as HTMLInputElement;
+		
+		if (switchSpan && userRes.is2faEnable) {
+			switchSpan.textContent = "Enable";
+			switchSpan.classList.add('enable');
+			switchSpan.classList.remove('disable');
+		}
 
-		if (!usernameEl || !emailEl) 
-			return;
-
-		usernameEl.textContent = userRes.username ?? "";
-		emailEl.textContent = userRes.email ?? "";
+		const	usernameEl = document.getElementById("user-username") as HTMLSpanElement;
+		const	emailEl = document.getElementById("user-email") as HTMLSpanElement;
+		
+		if (usernameEl && emailEl) {
+			usernameEl.textContent = userRes.username ?? "";
+			emailEl.textContent = userRes.email ?? "";
+		}
 }
 
-export function  sendActionsRequest(currentPath: string): void {
+export async function  sendActionsRequest(currentPath: string): Promise<void> {
 	if (['/2fa'].includes(currentPath)) {
-		const response = sendRequest('/api/twofa/otp', 'GET', null);
+		const response = await sendRequest('/api/twofa/otp', 'GET', null);
+		if (!response.ok) {
+			console.log(response.statusText)
+			return;
+		}
 	}
 
 }

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 22:17:37 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/23 06:06:12 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,46 +55,58 @@ async function	onClickLogout(router: Router, gameState: GameState, user: User): 
 
 	router.navigate("/", gameState, user);
 }
-
-// userRespDto {
-// 	private	id: number;
-// 	private	username: string;
-// 	private	email: string;
-// 	private	elo: number;
 	
 async function	onClickEdit(user: User): Promise<void> {
 	console.log("Edit");
 
 	const	response: Response = await sendRequest(`/api/user/${user.getId()}`, 'get', null);
-	if (!response.ok)
-	{
+	if (!response.ok) {
 		console.log(response.statusText);
 		return ;
 	}
 	const	userRes = await response.json();
 
-	const hiddenElements = document.getElementById("user-settings-form")!.querySelectorAll("[hidden]");
+	const editElements = document.querySelectorAll(".edit-mode");
+	const viewElements = document.querySelectorAll(".view-mode");
 	
-	hiddenElements.forEach(e => {
+	editElements.forEach(e => {
 		(e as HTMLElement).hidden = false;
+	});
+	
+	viewElements.forEach(e => {
+		(e as HTMLElement).hidden = true;
 	});
 
 	const username = document.getElementById("edit-username") as HTMLInputElement;
 	username.value = userRes.username ?? "";
 	const mail = document.getElementById("edit-email") as HTMLInputElement;
 	mail.value = userRes.email ?? "";
-	
-	document.getElementById("edit-submit")!.hidden = true;
-	document.getElementById("user-email")!.hidden = true;
-	document.getElementById("user-username")!.hidden = true;
+}
 
-	const check2fa = document.getElementById("check-2fa") as HTMLInputElement;
-	const label2fa = document.getElementById("label-2fa") as HTMLLabelElement;
+function	onClickCancel(user: User): void {
+	console.log("Cancel");
+
+	const viewElements = document.querySelectorAll(".view-mode");
+	const editElements = document.querySelectorAll(".edit-mode");
 	
-	check2fa.addEventListener("change", () => {
-		console.log("checkbox2fa")
-		label2fa.textContent = (check2fa.checked ? "Disable" : "Enable") + " two-factor authentication";
+	viewElements.forEach(e => {
+		(e as HTMLElement).hidden = false;
 	});
+	
+	editElements.forEach(e => {
+		(e as HTMLElement).hidden = true;
+	});
+}
+
+async function	onClickDeleteAccount(router: Router, gameState: GameState, user: User): Promise<void> {
+	console.log("DeleteAccount");
+	
+	const	response: Response = await sendRequest(`/api/auth/me`, 'delete', null);
+	if (!response.ok) {
+		console.log(response.statusText);
+		return ;
+	}
+	await onClickLogout(router, gameState, user);
 }
 
 async function onClickGetMessage(): Promise<void> {
@@ -196,6 +208,8 @@ export async function	setupClickHandlers(router: Router, user: User, gameState: 
 	(window as any).onClickPlay = () => onClickPlay(router, gameState, user);
 	(window as any).onClickLogout = () => onClickLogout(router, gameState, user);
 	(window as any).onClickEdit = () => onClickEdit(user);
+	(window as any).onClickCancel = () => onClickCancel(user);
+	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;
 	(window as any).onClickRefreshMessage = onClickRefreshMessage;

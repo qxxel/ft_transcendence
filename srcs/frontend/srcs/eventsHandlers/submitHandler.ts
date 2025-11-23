@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/23 01:07:31 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/23 07:18:58 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,24 +160,29 @@ async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: 
 }
 
 async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
-	console.log("UserSettings");
-	// const response: Response = await sendRequest('/api/user/???', 'post');
+	console.log("Save Settings");
+	
+	const	newUsername: string = (document.getElementById("edit-username") as HTMLInputElement).value;
+	const	newEmail: string = (document.getElementById("edit-email") as HTMLInputElement).value;
 
-	// const	result = await response.json();
-
-	// if (!response.ok)
-	// {
-	// 	const	p = document.getElementById("msg-error");
-	// 	if (!p)
-	// 	{
-	// 		console.error("No HTMLElement named \`msg-error\`.");
-	// 		return ;
-	// 	}
-	// 	p.textContent = result?.error || "An unexpected error has occurred";
-	// 	return ;
-	// }
-
-	router.navigate("/", gameState, user);
+	console.log(newUsername, newEmail);
+	const response: Response = await sendRequest(`/api/user/${user.getId()}`, 'post', {
+		username: newUsername,
+		email: newEmail
+	});
+	
+	if (!response.ok) {
+		const	result = await response.json();
+		const	p = document.getElementById("msg-error");
+		if (!p) {
+			console.error(response.statusText);
+			return ;
+		}
+		p.textContent = result?.error || "An unexpected error has occurred";
+		return ;
+	}
+	console.log("fin");
+	router.navigate("/user", gameState, user);
 }
 
 export function	setupSubmitHandler(gameState: GameState, user: User): void {
@@ -187,15 +192,15 @@ export function	setupSubmitHandler(gameState: GameState, user: User): void {
 		const	form: HTMLFormElement = event.target as HTMLFormElement;
 
 		if (form.id === "sign-in-form")
-			handleSignInForm(form, gameState, user);
+			await handleSignInForm(form, gameState, user);
 
 		if (form.id === "sign-up-form")
-			handleSignUpForm(form, gameState, user);
+			await handleSignUpForm(form, gameState, user);
 
 		if (form.id === "2fa-form")
-			handle2faForm(form, gameState, user);
+			await handle2faForm(form, gameState, user);
 
-		// if (form.id === "user-settings-form")
-		// 	handleUserSettingsForm(form, gameState, user);
+		if (form.id === "user-settings-form")
+			await handleUserSettingsForm(form, gameState, user);
 	});
 }

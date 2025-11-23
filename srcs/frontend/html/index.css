@@ -144,6 +144,20 @@ p#msg-error {
     box-shadow: 0 0 10px #fff;
 }
 
+span.disable, span.enable {
+    padding-left: 10px;
+    margin-left: 20px;
+    padding-right: 10px;
+}
+
+span.disable {
+    background-color: red;
+}
+
+span.enable {
+    background-color: green;
+}
+
 /* --- 5. CLEANUP YOUR OLD STYLES --- */
 h1 {
     color: #FFFF00;

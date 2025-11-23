@@ -1,32 +1,39 @@
 <h1>User</h1>
 <div class="settings">
-  <h2>user settings</h2>
-
+  <h2>Settings</h2>
   <form id="user-settings-form" class="user-settings-form">
-    <button type="button" onclick="onClickEdit();" id="edit-submit">edit profile</button>
-    <div class="form-group">
-      <label for="check-2fa" id="label-2fa">Enable two-factor authentication</label> <!-- switch enable disable in js -->
-      <input type="checkbox" id="check-2fa" hidden>
-    </div>
+    <button type="button" onclick="onClickEdit();" id="edit-submit" class="view-mode">edit profile</button>
+    <h3>User</h3>
 
     <div class="form-group">
       <label for="edit-username">Username:</label>
-      <input type="text" id="edit-username" name="username" hidden>
-      <span id="user-username"></span>
+      <input type="text" id="edit-username" class="edit-mode" name="username" hidden>
+      <span id="user-username" class="view-mode"></span>
     </div>
     
     <div class="form-group">
       <label for="edit-email">Email:</label>
-      <input type="email" id="edit-email" name="email" hidden>
-      <span id="user-email"></span>
+      <input type="email" id="edit-email" class="edit-mode" name="email" hidden>
+      <span id="user-email" class="view-mode"></span>
     </div>
-    
+    <p id="msg-error" class="edit-mode" hidden></p>
+
+    <h3>Authentication</h3>
+
+    <div class="form-group">
+      <label>2FA:</label>
+      <span id="switch-span" class="disable">Disable</span> <!-- switch Enable Disable in js -->
+    </div>
+
     <!-- <div class="form-group">
       <label for="edit-password">Password:</label>
       <input type="password" id="edit-password" name="password" hidden>
     </div> -->
 
-    <button type="submit" id="save-settings-submit" class="btn-yellow" hidden>Save Settings</button>
-    <button type="button" id="do-not-save-settings-submit" class="btn-yellow" hidden>Don't Save Settings</button>
+    <h3>Account</h3>
+    <button type="button" onclick="onClickDeleteAccount();" id="delete-account">Delete Account</button>
+    <br />
+    <button type="submit" id="save-settings-submit" class="btn-yellow edit-mode" hidden>Save Settings</button>
+    <button type="button" onclick="onClickCancel();" id="do-not-save-settings-submit" class="btn-yellow edit-mode" hidden>Don't Save Settings</button>
   </form>
 </div>

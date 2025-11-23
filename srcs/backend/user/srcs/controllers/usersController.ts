@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/23 00:47:55 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/23 07:12:49 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,18 +98,22 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 		const	parseId: number = parseInt(id, 10);
 	
 		try {
+			const	oldUser: usersRespDto = await usersServ.getUserById(parseId);
 			const	userUpdate: userUpdate = request.body;
 
-			if (userUpdate.username)
+			if (userUpdate.username && userUpdate.username !== oldUser.getUsername())
 				await usersServ.updateUsernameById(parseId, userUpdate.username);
-			if (userUpdate.email)
+
+			if (userUpdate.email && userUpdate.email !== oldUser.getEmail())
 				await usersServ.updateEmailById(parseId, userUpdate.email);
-			if (userUpdate.avatar)
+
+			if (userUpdate.avatar && userUpdate.avatar !== oldUser.getAvatar())
 				await usersServ.updateAvatarById(parseId, userUpdate.avatar);
-			if (userUpdate.is2faEnable)
+			
+			if (userUpdate.is2faEnable && userUpdate.is2faEnable !== oldUser.getIs2faEnable())
 				await usersServ.update2faById(parseId, userUpdate.is2faEnable);
 
-			return reply.code(201).send();
+			return reply.code(201).send(parseId);
 		}
 		catch (err: unknown) {
 			return errorsHandler(userFastify, reply, err);

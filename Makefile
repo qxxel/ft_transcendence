@@ -6,7 +6,7 @@
 #    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/23 01:05:45 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/11/23 06:07:34 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,8 +70,8 @@ CMD_OPENSSL	= openssl req -x509 -newkey rsa:2048 \
 
 
 # --------------------------    build directory    -------------------------- #
-
-BUILD_DIR		= $(SECRET_DIR) $(AUTH_DB) $(GAME_DB) $(USER_DB) $(JWT_DB) $(TWOFA_DB)
+DB_DIR		= $(AUTH_DB) $(GAME_DB) $(USER_DB) $(JWT_DB) $(TWOFA_DB)
+BUILD_DIR	= $(SECRET_DIR) $(DB_DIR)
 
 
 # -------------------------------    colors    ------------------------------- #
