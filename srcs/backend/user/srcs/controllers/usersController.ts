@@ -1,38 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   userController.ts                                  :+:      :+:    :+:   */
+/*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:28:56 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/23 00:47:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// HANDLE THE GET, POST, AND ALL THE INFO THAT USER SERVICE RECEIVE
+// HANDLE THE GET, POST, AND ALL THE INFO THAT USER SERVICE RECEIVE FOR USERS TABLE
 
 
 /* ====================== IMPORTS ====================== */
 
 import { errorsHandler }	from "../utils/errorsHandler.js"
-import { userAddDto }		from "../dtos/userAddDto.js"
-import { userRespDto }		from "../dtos/userRespDto.js"
-import { userServ } 		from "../user.js"
+import { usersAddDto }		from "../dtos/usersAddDto.js"
+import { usersRespDto }		from "../dtos/usersRespDto.js"
+import { usersServ, userStatsServ } 		from "../user.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 
 
+interface	userUpdate {
+	username?: string;
+	email?: string;
+	avatar?: string;
+	is2faEnable?: boolean;
+}
+
 /* ====================== FUNCTION ====================== */
 
-export async function	userController(userFastify: FastifyInstance): Promise<void> {
+export async function	usersController(userFastify: FastifyInstance): Promise<void> {
 	// GET A USER WITH HIS ID
 	userFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const	{ id } = request.params as { id: string };
 		const	parseId: number = parseInt(id, 10);
 
 		try {
-			const	user: userRespDto = await userServ.getUserById(parseId);
+			const	user: usersRespDto = await usersServ.getUserById(parseId);
 
 			return reply.code(200).send(user);
 		}
@@ -47,9 +54,9 @@ export async function	userController(userFastify: FastifyInstance): Promise<void
 
 		try {
 			if (!identifier.includes("@"))
-				var	user: userRespDto = await userServ.getUserByUsername(identifier);
+				var	user: usersRespDto = await usersServ.getUserByUsername(identifier);
 			else
-				var	user: userRespDto = await userServ.getUserByEmail(identifier);
+				var	user: usersRespDto = await usersServ.getUserByEmail(identifier);
 
 			return reply.code(200).send(user);
 		}
@@ -68,10 +75,41 @@ export async function	userController(userFastify: FastifyInstance): Promise<void
 		}
 
 		try {
-			const	newUser: userAddDto = new userAddDto(request.body);
-			const	user: userRespDto = await userServ.addUser(newUser);
+			const	newUser: usersAddDto = new usersAddDto(request.body);
+			const	user: usersRespDto = await usersServ.addUser(newUser);
+
+			
 
 			return reply.code(201).send(user);
+		}
+		catch (err: unknown) {
+			return errorsHandler(userFastify, reply, err);
+		}
+	});
+
+	// UPDATE A USER WITH HIS ID
+	userFastify.post<{ Body: userUpdate }>('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
+		if (!request.body) {
+			userFastify.log.error("The request is empty");
+			console.error("The request is empty");
+			return reply.code(400).send({ error: "The request is empty" });
+		}
+		const	{ id } = request.params as { id: string };
+		const	parseId: number = parseInt(id, 10);
+	
+		try {
+			const	userUpdate: userUpdate = request.body;
+
+			if (userUpdate.username)
+				await usersServ.updateUsernameById(parseId, userUpdate.username);
+			if (userUpdate.email)
+				await usersServ.updateEmailById(parseId, userUpdate.email);
+			if (userUpdate.avatar)
+				await usersServ.updateAvatarById(parseId, userUpdate.avatar);
+			if (userUpdate.is2faEnable)
+				await usersServ.update2faById(parseId, userUpdate.is2faEnable);
+
+			return reply.code(201).send();
 		}
 		catch (err: unknown) {
 			return errorsHandler(userFastify, reply, err);
@@ -84,7 +122,7 @@ export async function	userController(userFastify: FastifyInstance): Promise<void
 		const	parseId: number = parseInt(id, 10);
 	
 		try {
-			await userServ.deleteUser(parseId);
+			await usersServ.deleteUser(parseId);
 
 			return reply.code(204).send();
 		}

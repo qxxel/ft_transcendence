@@ -1,49 +1,61 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   userRespDto.ts                                     :+:      :+:    :+:   */
+/*   usersRespDto.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:33:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/22 14:00:56 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW USERS
+// WILL BE THE DTO TO TRANSFERT DATA FROM DB TO REPOSITORY FOR USERS
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
-export class	userRespDto {
+export class	usersRespDto {
 	private	id: number;
 	private	username: string;
 	private	email: string;
-	private	elo: number;
+	private	avatar: string;
+	private	is2faEnable: boolean;
 
 
 	constructor(row: any) {
 		this.id = row.id;
 		this.username = row.username;
 		this.email = row.email;
-		this.elo = row.elo;
+		this.avatar = row.avatar;
+		this.is2faEnable = row.is_2fa_enable;
 	}
 
 
 	// GETTERS
-	getId(): number {
-		return this.id;
+	getTable(): [number, string, string, string, boolean] {
+		return [
+			this.id,
+			this.username,
+			this.email,
+			this.avatar,
+			this.is2faEnable
+		];
 	}
 
-	getName(): string {
-		return this.username;
-	}
+	// getId(): number {
+	// 	return this.id;
+	// }
 
-	getEmail(): string {
-		return this.email;
-	}
+	// getName(): string {
+	// 	return this.username;
+	// }
 
-	getElo(): number {
-		return this.elo;
-	}
+	// getEmail(): string {
+	// 	return this.email;
+	// }
+
+	// getElo(): number {
+	// 	return this.elo;
+	// }
 }

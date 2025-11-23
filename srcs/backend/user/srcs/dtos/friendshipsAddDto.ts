@@ -1,23 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   throwErrors.ts                                     :+:      :+:    :+:   */
+/*   friendshipsAddDto.ts                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/17 18:44:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/11/21 17:48:22 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/22 14:00:43 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// FILE TO DEFINE ALL THROW ERRORS FOR JWT SERVICE
+// WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW FRIENDSHIPS
 
 
 /* ====================== CLASS ====================== */
 
-export class	MissingIdError extends Error {
-	constructor(message: string) {
-		super(message);
-		this.name = "MissingIdError";
+export class	friendshipsAddDto {
+	private	requesterId: number;
+	private	receiverId: number;
+
+
+	constructor(row: any) {
+		this.requesterId = row.requesterId;
+		this.receiverId = row.receiverId;
+	}
+
+
+	getTable(): [number, number] {
+		return [
+			this.requesterId,
+			this.receiverId
+		];
 	}
 }

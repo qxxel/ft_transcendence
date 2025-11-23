@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   jwtRepository.ts                                   :+:      :+:    :+:   */
+/*   pongRepository.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/15 23:50:30 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 16:35:27 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/11/19 18:54:55 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/22 16:35:32 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// WILL BE THE STORAGE OF DB AND HANDLE CLASSIC METHODS OF THE DB
+// WILL BE THE STORAGE OF PONG DB AND HANDLE CLASSIC METHODS OF THIS DB
 
 
 /* =================== SQLITE METHODS =================== /*
@@ -28,28 +28,30 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { jwtRespDto }		from "../dtos/jwtRespDto.js"
-import { jwtTableBuilder }	from "../tableBuilders/jwtTableBuilder.js"
+import { resolve } from "path";
+import { pongAddDto }		from "../dtos/pongAddDto.js"
+import { pongRespDto }		from "../dtos/pongRespDto.js"
+import { pongTableBuilder }	from "../tableBuilders/pongTableBuilder.js"
 
 import type { Database }	from 'sqlite3'
 
-
 /* ====================== interface	====================== */
 
+// BECAUSE TYPESCRIPT DON'T ACCEPT `this.lastID` BUT IT APPEARS WITH THE COMPILATION
 interface	StatementWithLastID {
-	lastID: number
-};
+    lastID: number;
+}
 
 
 /* ====================== CLASS ====================== */
 
-export class	jwtRepository {
+export class	pongRepository {
 	private	db: Database;
 
 	constructor(db: Database) {
 		try {
 			this.db = db;
-			jwtTableBuilder(db);
+			pongTableBuilder(db);
 		}
 		catch (err: unknown) {
 			console.error(err);
@@ -57,12 +59,10 @@ export class	jwtRepository {
 		}
 	}
 
-	async addToken(token: string, clientId: number): Promise<number> {
+	async addPongGame(pongAddDto: pongAddDto): Promise<number> {
 		return new Promise((resolve, reject) => {
-			let	currentTimestamp: number = Date.now();
-
-			const	query: string = "INSERT INTO jwt (idclient, token, creationtime) VALUES(?, ?, ?)";
-			const	elements: [number, string, number] = [clientId, token, currentTimestamp];
+			const	query: string = "INSERT INTO pong (winner, p1, p1score, p2, p2score, start) VALUES(?, ?, ?, ?, ?, ?)";
+			const	elements: number[] = pongAddDto.getTable();
 
 			this.db.run(query, elements, function (this: StatementWithLastID, err: unknown) {
 				if (err)
@@ -73,30 +73,27 @@ export class	jwtRepository {
 		});
 	}
 
-	async getClientIdByToken(token: string): Promise<jwtRespDto> {
+	async getPongGameById(gameId: number): Promise<pongRespDto> {
 		return new Promise((resolve, reject) => {
-			const	query: string = "SELECT * FROM jwt WHERE token = ?";
-			const	elements: string[] = [token];
+			const	query: string = "SELECT * FROM pong WHERE id = ?";
+			const	elements: number[] = [gameId];
 
 			this.db.get(query, elements, (err: unknown, row: unknown) => {
 				if (err)
 					return reject(err);
 
 				if (!row) {
-					console.error("error: the token isn't liked to a client.");
-					return reject(new Error("The token isn't liked to a client."));
+					console.error(`error: pong game ${gameId} doesn't exist`);
+					return reject(new Error(`The pong game ${gameId} doesn't exist`));
 				}
 
-				resolve(new jwtRespDto(row));
+				resolve(new pongRespDto(row));
 			});
 		});
 	}
 
-	async isValidToken(token: string): Promise<boolean> {
+	async isTaken(query: string, elements: Array<string>): Promise<boolean> {
 		return new Promise((resolve, reject) => {
-			const	query: string = "SELECT * FROM jwt WHERE token = ?";
-			const	elements: string[] = [token];
-
 			this.db.get(query, elements, (err: unknown, row: unknown) => {
 				if (err)
 					return reject(err);
@@ -106,24 +103,10 @@ export class	jwtRepository {
 		});
 	}
 
-	async deleteToken(token: string): Promise<void> {
+	async deletePongGame(gameId: number): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
-			const	query: string = "DELETE FROM jwt WHERE token = ?";
-			const	elements: string[] = [token];
-
-			this.db.run(query, elements, function(err: unknown) {
-				if (err)
-					return reject(err);
-
-				resolve();
-			});
-		});
-	}
-
-	async deleteTokenById(token: number): Promise<void> {
-		return new Promise<void>((resolve, reject) => {
-			const	query: string = "DELETE FROM jwt WHERE idclient = ?";
-			const	elements: number[] = [token];
+			const	query: string = "DELETE FROM pong WHERE id = ?";
+			const	elements: number[] = [gameId];
 
 			this.db.run(query, elements, function(err: unknown) {
 				if (err)

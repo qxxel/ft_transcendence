@@ -5,19 +5,19 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/17 18:44:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/11/14 20:49:20 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/19 19:28:53 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// FILE TO DEFINE ALL THROW ERRORS FOR JWT SERVICE
+// FILE TO DEFINE ALL THROW ERRORS FOR USER SERVICE
 
 
 /* ====================== CLASS ====================== */
 
-export class	MissingIdError extends Error {
+export class	NotExistError extends Error {
 	constructor(message: string) {
 		super(message);
-		this.name = "MissingIdError";
+		this.name = "NotExistError";
 	}
 }

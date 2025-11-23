@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   userRepository.ts                                  :+:      :+:    :+:   */
+/*   usersRepository.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:20:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/23 00:54:32 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// WILL BE THE STORAGE OF DB AND HANDLE CLASSIC METHODS OF THE DB (`getUser`, "DELETEUser` AND `addUser`)
+// WILL BE THE STORAGE OF DB AND HANDLE CLASSIC METHODS OF USERS TABLE
 
 
 /* =================== SQLITE METHODS =================== /*
@@ -28,9 +28,9 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { userAddDto }		from "../dtos/userAddDto.js"
-import { userRespDto }		from "../dtos/userRespDto.js"
-import { userTableBuilder }	from "../tableBuilders/userTableBuilder.js"
+import { usersAddDto }			from "../dtos/usersAddDto.js"
+import { usersRespDto }			from "../dtos/usersRespDto.js"
+import { usersTableBuilder }	from "../tableBuilders/usersTableBuilder.js"
 
 import type { Database }	from 'sqlite3'
 
@@ -42,15 +42,15 @@ interface	StatementWithLastID {
 }
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
-export class	userRepository {
+export class	usersRepository {
 	private	db: Database;
 
 	constructor(db: Database) {
 		try {
 			this.db = db;
-			userTableBuilder(db);
+			usersTableBuilder(db);
 		}
 		catch (err: unknown) {
 			console.error(err);
@@ -58,10 +58,10 @@ export class	userRepository {
 		}
 	}
 
-	async addUser(userAddDto: userAddDto): Promise<number> {
+	async addUser(user: usersAddDto): Promise<number> {
 		return new Promise((resolve, reject) => {
-			const	query: string = "INSERT INTO user (username, email, elo) VALUES(?, ?, ?)";
-			const	elements: [string, string, number] = [userAddDto.getName(), userAddDto.getEmail(), 400];
+			const	query: string = "INSERT INTO users (username, email, avatar) VALUES(?, ?, ?)";
+			const	elements: [string, string, string | null] = user.getTable();
 
 			this.db.run(query, elements, function (this: StatementWithLastID, err: unknown) {
 				if (err)
@@ -72,9 +72,9 @@ export class	userRepository {
 		});
 	}
 
-	async getUserById(userId: number): Promise<userRespDto> {
+	async getUserById(userId: number): Promise<usersRespDto> {
 		return new Promise((resolve, reject) => {
-			const	query: string = "SELECT * FROM user WHERE id = ?";
+			const	query: string = "SELECT * FROM users WHERE id = ?";
 			const	elements: number[] = [userId];
 			this.db.get(query, elements, (err: unknown, row: unknown) => {
 				if (err)
@@ -85,14 +85,14 @@ export class	userRepository {
 					return reject(new Error(`The user ${userId} doesn't exist`));
 				}
 
-				resolve(new userRespDto(row));
+				resolve(new usersRespDto(row));
 			});
 		});
 	}
 
-	async getUserByUsername(username: string): Promise<userRespDto> {
+	async getUserByUsername(username: string): Promise<usersRespDto> {
 		return new Promise((resolve, reject) => {
-			const	query: string = "SELECT * FROM user WHERE username = ?";
+			const	query: string = "SELECT * FROM users WHERE username = ?";
 			const	elements: string[] = [username];
 
 			this.db.get(query, elements, (err: unknown, row: unknown) => {
@@ -104,14 +104,14 @@ export class	userRepository {
 					return reject(new Error(`The user ${username} doesn't exist.`));
 				}
 
-				resolve(new userRespDto(row));
+				resolve(new usersRespDto(row));
 			});
 		});
 	}
 
-	async getUserByEmail(email: string): Promise<userRespDto> {
+	async getUserByEmail(email: string): Promise<usersRespDto> {
 		return new Promise((resolve, reject) => {
-			const	query: string = "SELECT * FROM user WHERE email = ?";
+			const	query: string = "SELECT * FROM users WHERE email = ?";
 			const	elements: string[] = [email];
 
 			this.db.get(query, elements, (err: unknown, row: unknown) => {
@@ -123,7 +123,63 @@ export class	userRepository {
 					return reject(new Error(`The user ${email} doesn't exist.`));
 				}
 
-				resolve(new userRespDto(row));
+				resolve(new usersRespDto(row));
+			});
+		});
+	}
+
+	async updateUsernameById(userId: number, username: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "UPDATE users SET username = ? WHERE id = ?";
+			const	elements: [string, number] = [username, userId];
+
+			this.db.run(query, elements, (err: unknown, row: unknown) => {
+				if (err)
+					return reject(err);
+
+				resolve();
+			});
+		});
+	}
+
+	async updateEmailById(userId: number, email: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "UPDATE users SET email = ? WHERE id = ?";
+			const	elements: [string, number] = [email, userId];
+
+			this.db.run(query, elements, (err: unknown, row: unknown) => {
+				if (err)
+					return reject(err);
+
+				resolve();
+			});
+		});
+	}
+
+	async updateAvatarById(userId: number, avatar: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "UPDATE users SET avatar = ? WHERE id = ?";
+			const	elements: [string, number] = [avatar, userId];
+
+			this.db.run(query, elements, (err: unknown, row: unknown) => {
+				if (err)
+					return reject(err);
+
+				resolve();
+			});
+		});
+	}
+
+	async update2faById(userId: number, is2faEnable: boolean): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "UPDATE users SET is_2fa_Enable = ? WHERE id = ?";
+			const	elements: [boolean, number] = [is2faEnable, userId];
+
+			this.db.run(query, elements, (err: unknown, row: unknown) => {
+				if (err)
+					return reject(err);
+
+				resolve();
 			});
 		});
 	}
@@ -141,7 +197,7 @@ export class	userRepository {
 
 	async deleteUser(userId: number): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
-			const	query: string = "DELETE FROM user WHERE id = ?";
+			const	query: string = "DELETE FROM users WHERE id = ?";
 			const	elements: number[] = [userId];
 
 			this.db.run(query, elements, function(err: unknown) {
@@ -151,11 +207,5 @@ export class	userRepository {
 				resolve();
 			});
 		});
-	}
-
-
-	// GETTER
-	getDb(): Database {
-		return this.db;
 	}
 }

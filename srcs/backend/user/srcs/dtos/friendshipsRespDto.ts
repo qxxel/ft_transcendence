@@ -1,49 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   jwtRespDto.ts                                      :+:      :+:    :+:   */
+/*   friendshipsRespDto.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/17 18:30:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:19:59 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/11/21 18:20:19 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/22 14:00:31 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW USERS
+// WILL BE THE DTO TO TRANSFERT DATA FROM DB TO REPOSITORY FOR FRIENDSHIPS
 
 
 /* ====================== CLASS ====================== */
 
-export class	jwtRespDto {
+export class	friendshipsRespDto {
 	private	id: number;
-	private	clientId: number;
-	private	token: string;
-	private	creationTime: number;
+	private	requesterId: number;
+	private	receiverId: number;
+	private	status: string;
+	private	createdAt: number;
 
 
 	constructor(row: any) {
 		this.id = row.id;
-		this.clientId = row.idclient;
-		this.token = row.token;
-		this.creationTime = row.creationtime;
+		this.requesterId = row.requester_id;
+		this.receiverId = row.receiver_id;
+		this.status = row.status;
+		this.createdAt = row.created_at;
 	}
 
 
-	// GETTERS
-	getId(): number {
-		return this.id;
-	}
-
-	getClientId(): number {
-		return this.clientId;
-	}
-
-	getToken(): string {
-		return this.token;
-	}
-
-	getCreationTime(): number {
-		return this.creationTime;
+	getTable(): [number, number, number, string, number] {
+		return [
+			this.id,
+			this.requesterId,
+			this.receiverId,
+			this.status,
+			this.createdAt
+		];
 	}
 }

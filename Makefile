@@ -6,7 +6,7 @@
 #    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/20 23:03:44 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/11/23 01:05:45 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ DC_RESTART	= $(CMD_DC) restart
 # ----------------------------    databases    ---------------------------- #
 
 AUTH_DB	= srcs/backend/auth/db
+GAME_DB	= srcs/backend/game/db
 USER_DB	= srcs/backend/user/db
 JWT_DB	= srcs/backend/jwt/db
 TWOFA_DB	= srcs/backend/twofa/db
@@ -70,7 +71,7 @@ CMD_OPENSSL	= openssl req -x509 -newkey rsa:2048 \
 
 # --------------------------    build directory    -------------------------- #
 
-BUILD_DIR		= $(SECRET_DIR) $(AUTH_DB) $(USER_DB) $(JWT_DB) $(TWOFA_DB)
+BUILD_DIR		= $(SECRET_DIR) $(AUTH_DB) $(GAME_DB) $(USER_DB) $(JWT_DB) $(TWOFA_DB)
 
 
 # -------------------------------    colors    ------------------------------- #
@@ -230,8 +231,9 @@ logs	:
 	-$(call RUN_CMD,docker logs frontend,$(YELLOW))
 	-$(call RUN_CMD,docker logs gateway,$(BLUE))
 	-$(call RUN_CMD,docker logs auth,$(BLUE))
-	-$(call RUN_CMD,docker logs jwt,$(BLUE))
+	-$(call RUN_CMD,docker logs game,$(BLUE))
 	-$(call RUN_CMD,docker logs user,$(BLUE))
+	-$(call RUN_CMD,docker logs jwt,$(BLUE))
 
 
 # --------------------------------   clean   -------------------------------- #

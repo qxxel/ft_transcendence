@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayUserController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:49:03 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/23 00:36:05 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,19 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		}
 	});
 
+	gatewayFastify.post('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
+		const	{ id } = request.params as { id: string };
+		const	parseId: number = parseInt(id, 10);
+		
+		try {
+			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/${parseId}`, request.body);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
 	gatewayFastify.delete('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const	{ id } = request.params as { id: string };
 		const	parseId: number = parseInt(id, 10);
@@ -70,4 +83,17 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
 	});
+
+	gatewayFastify.patch('/user-stats/:id', async (request: FastifyRequest, reply: FastifyReply) => {								//
+		const	{ id } = request.params as { id: string };																			//
+		const	parseId: number = parseInt(id, 10);																					//
+																																	//
+		try {																														//
+			const	response: AxiosResponse = await gatewayAxios.patch(`https://user:3000/user-stats/${parseId}`, request.body);	// A ENLEVER
+																																	//
+			return reply.send(response.data);																						//
+		} catch (err: unknown) {																									//
+			return requestErrorsHandler(gatewayFastify, reply, err);																//
+		}																															//
+	});																																//
 }
