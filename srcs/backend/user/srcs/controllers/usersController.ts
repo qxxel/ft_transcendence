@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 16:56:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/23 00:47:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ import { usersServ, userStatsServ } 		from "../user.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 
+
+interface	userUpdate {
+	username?: string;
+	email?: string;
+	avatar?: string;
+	is2faEnable?: boolean;
+}
 
 /* ====================== FUNCTION ====================== */
 
@@ -74,6 +81,35 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 			
 
 			return reply.code(201).send(user);
+		}
+		catch (err: unknown) {
+			return errorsHandler(userFastify, reply, err);
+		}
+	});
+
+	// UPDATE A USER WITH HIS ID
+	userFastify.post<{ Body: userUpdate }>('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
+		if (!request.body) {
+			userFastify.log.error("The request is empty");
+			console.error("The request is empty");
+			return reply.code(400).send({ error: "The request is empty" });
+		}
+		const	{ id } = request.params as { id: string };
+		const	parseId: number = parseInt(id, 10);
+	
+		try {
+			const	userUpdate: userUpdate = request.body;
+
+			if (userUpdate.username)
+				await usersServ.updateUsernameById(parseId, userUpdate.username);
+			if (userUpdate.email)
+				await usersServ.updateEmailById(parseId, userUpdate.email);
+			if (userUpdate.avatar)
+				await usersServ.updateAvatarById(parseId, userUpdate.avatar);
+			if (userUpdate.is2faEnable)
+				await usersServ.update2faById(parseId, userUpdate.is2faEnable);
+
+			return reply.code(201).send();
 		}
 		catch (err: unknown) {
 			return errorsHandler(userFastify, reply, err);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersRepository.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:20:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 17:22:58 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/23 00:54:32 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,62 @@ export class	usersRepository {
 				}
 
 				resolve(new usersRespDto(row));
+			});
+		});
+	}
+
+	async updateUsernameById(userId: number, username: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "UPDATE users SET username = ? WHERE id = ?";
+			const	elements: [string, number] = [username, userId];
+
+			this.db.run(query, elements, (err: unknown, row: unknown) => {
+				if (err)
+					return reject(err);
+
+				resolve();
+			});
+		});
+	}
+
+	async updateEmailById(userId: number, email: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "UPDATE users SET email = ? WHERE id = ?";
+			const	elements: [string, number] = [email, userId];
+
+			this.db.run(query, elements, (err: unknown, row: unknown) => {
+				if (err)
+					return reject(err);
+
+				resolve();
+			});
+		});
+	}
+
+	async updateAvatarById(userId: number, avatar: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "UPDATE users SET avatar = ? WHERE id = ?";
+			const	elements: [string, number] = [avatar, userId];
+
+			this.db.run(query, elements, (err: unknown, row: unknown) => {
+				if (err)
+					return reject(err);
+
+				resolve();
+			});
+		});
+	}
+
+	async update2faById(userId: number, is2faEnable: boolean): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "UPDATE users SET is_2fa_Enable = ? WHERE id = ?";
+			const	elements: [boolean, number] = [is2faEnable, userId];
+
+			this.db.run(query, elements, (err: unknown, row: unknown) => {
+				if (err)
+					return reject(err);
+
+				resolve();
 			});
 		});
 	}
