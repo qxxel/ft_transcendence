@@ -14,7 +14,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import type { Ball, Paddle } from "./Pong.js";
+import type { Ball, Paddle, Collectible } from "./Pong.js";
 
 /* ====================== CLASS ====================== */
 
@@ -102,5 +102,37 @@ export class PongPhysics {
         if (down && paddle.y < this.height - paddle.height) {
             paddle.y += paddle.speed;
         }
+    }
+
+    public updateCollectibles(collectibles: Collectible[]) {
+        for (const c of collectibles) {
+            c.y += c.dy;
+
+            if (c.y - c.radius < 0 || c.y + c.radius > this.height) {
+                
+                if (c.y - c.radius < 0) c.y = c.radius;
+                else c.y = this.height - c.radius;
+
+                if (Math.random() < 0.3) {
+                    c.active = false;
+                } else {
+                    c.dy *= -1;
+                }
+            }
+        }
+    }
+
+    public checkCollectibleCollision(ball: Ball, collectibles: Collectible[]): number {
+        for (const c of collectibles) {
+            // Formula: sqrt((x2-x1)^2 + (y2-y1)^2)
+            const dx = ball.x - c.x;
+            const dy = ball.y - c.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < ball.radius + c.radius) {
+                return c.id;
+            }
+        }
+        return -1;
     }
 }

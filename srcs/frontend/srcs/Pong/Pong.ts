@@ -27,6 +27,15 @@ import type { GameState } from "../index.js";
 export interface Paddle { x: number; y: number; width: number; height: number; dy: number; speed: number; hits: number; }
 export interface Ball { x: number; y: number; radius: number; dx: number; dy: number; speed: number; }
 
+export interface Collectible { 
+    id: number; 
+    x: number; 
+    y: number; 
+    radius: number; 
+    dy: number;
+    active: boolean;
+}
+
 /* ====================== CLASS ====================== */
 
 export class PongGame extends Game {
@@ -50,6 +59,12 @@ export class PongGame extends Game {
   private paddle1: Paddle | null = null;
   private paddle2: Paddle | null = null;
   private ball: Ball | null = null;
+
+  // Collectibles
+  private collectibles: Collectible[] = [];
+  private lastCollectibleSpawn: number = 0;
+  private powerupFrequency: number = 5; // Default 5 seconds
+  private nextCollectibleId: number = 0;
 
   // Data
   private player1Name: string = "Player 1";
@@ -88,6 +103,11 @@ export class PongGame extends Game {
     this.gameMode = gameMode;
     this.aiDifficulty = aiDifficulty;
     this.aiController = new AIController(aiDifficulty);
+
+    const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
+    if (freqInput) {
+        this.powerupFrequency = parseInt(freqInput.value);
+    }
   }
   
   public setCtx() {
@@ -111,6 +131,9 @@ export class PongGame extends Game {
     this.paddle2 = { x: this.canvas.width - paddleWidth - 10, y: this.canvas.height / 2 - paddleHeight / 2, width: paddleWidth, height: paddleHeight, dy: 0, speed: paddleSpeed, hits: 0 };
     this.ball = { x: this.canvas.width / 2, y: this.canvas.height / 2, radius: 7, speed: this.initialBallSpeed, dx: 0, dy: 0 };
     
+    this.collectibles = [];
+    this.lastCollectibleSpawn = Date.now();
+
     if (!this.isTournamentMatch) {
         this.player1Name = "Player 1";
         this.player2Name = (this.gameMode === 'ai') ? "AI" : "Player 2";
@@ -167,6 +190,13 @@ export class PongGame extends Game {
   private update() {
     if (this.isPaused || this.isGameOver || !this.physics) return;
 
+    // TODO check featured mode
+    const now = Date.now();
+    if (now - this.lastCollectibleSpawn > (this.powerupFrequency * 1000)) {
+        this.spawnCollectible();
+        this.lastCollectibleSpawn = now;
+    }
+
     const p1Up = !!(this.keysPressed['w'] || this.keysPressed['z']);
     const p1Down = !!this.keysPressed['s'];
     
@@ -189,6 +219,14 @@ export class PongGame extends Game {
     
     this.physics.movePaddle(this.paddle2!, p2Up, p2Down);
 
+    this.physics.updateCollectibles(this.collectibles);
+    this.collectibles = this.collectibles.filter(c => c.active);
+    const hitId = this.physics.checkCollectibleCollision(this.ball!, this.collectibles);
+    if (hitId !== -1) {
+        console.log("BALL HIT BUBBLE ID:", hitId);
+        this.collectibles = this.collectibles.filter(c => c.id !== hitId);
+    }
+
     const hitsBefore = this.paddle1!.hits + this.paddle2!.hits;
     const result = this.physics.update(this.ball!, this.paddle1!, this.paddle2!);
     const hitsAfter = this.paddle1!.hits + this.paddle2!.hits;
@@ -204,10 +242,28 @@ export class PongGame extends Game {
     }
   }
 
+  private spawnCollectible() {
+    if (!this.canvas) return;
+    
+    const safeZoneX = this.canvas.width * 0.2;
+    const randomX = safeZoneX + (Math.random() * (this.canvas.width - (safeZoneX * 2)));
+    const randomY = Math.random() * this.canvas.height;
+
+    const newBubble: Collectible = {
+        id: this.nextCollectibleId++,
+        x: randomX,
+        y: randomY,
+        radius: 15,
+        dy: (Math.random() < 0.5 ? 1 : -1) * 1.5,
+        active: true
+    };
+    this.collectibles.push(newBubble);
+  }
+
   private draw() {
     if (!this.renderer) return;
 
-    this.renderer.draw(this.paddle1!, this.paddle2!, this.ball!);
+    this.renderer.draw(this.paddle1!, this.paddle2!, this.ball!, this.collectibles);
 
     if (this.isPaused && !this.isGameOver) {
         this.renderer.drawPaused();

@@ -14,7 +14,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import type { Ball, Paddle } from "./Pong.js";
+import type { Ball, Paddle, Collectible } from "./Pong.js";
 
 /* ====================== CLASS ====================== */
 
@@ -29,17 +29,32 @@ export class PongRenderer {
         this.height = canvas.height;
     }
 
-    public draw(p1: Paddle, p2: Paddle, ball: Ball) {
+    public draw(p1: Paddle, p2: Paddle, ball: Ball, collectibles: Collectible[]) {
         // Background
         this.ctx.fillStyle = '#000';
         this.ctx.fillRect(0, 0, this.width, this.height);
+
+        this.ctx.setLineDash([]);
 
         // Paddles
         this.ctx.fillStyle = '#fff';
         this.ctx.fillRect(p1.x, p1.y, p1.width, p1.height);
         this.ctx.fillRect(p2.x, p2.y, p2.width, p2.height);
 
+        // Collectibles
+        this.ctx.fillStyle = '#FFFF00';
+        this.ctx.strokeStyle = '#FFA500';
+        this.ctx.lineWidth = 2;
+
+        for (const c of collectibles) {
+            this.ctx.beginPath();
+            this.ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+            this.ctx.fill();
+            this.ctx.stroke();
+        }
+
         //Ball
+        this.ctx.fillStyle = '#fff';
         this.ctx.beginPath();
         this.ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
         this.ctx.fill();
