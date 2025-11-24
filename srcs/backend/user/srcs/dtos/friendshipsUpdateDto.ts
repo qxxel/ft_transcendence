@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   friendshipsAddDto.ts                               :+:      :+:    :+:   */
+/*   friendshipsUpdateDto.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/21 17:48:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 13:42:36 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/11/24 13:43:27 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/24 13:45:08 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-// WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW FRIENDSHIPS
+// WILL BE THE DTO TO TRANSFERT DATA FROM DB TO REPOSITORY FOR UPDATES OF USER STATS
 
 
 /* ====================== IMPORT ====================== */
@@ -21,9 +20,10 @@ import { SelfFriendRequestError }	from "../utils/throwErrors.js";
 
 /* ====================== CLASS ====================== */
 
-export class	friendshipsAddDto {
+export class	friendshipsUpdateDto {
 	private	requesterId: number;
 	private	receiverId: number;
+	private	status: string;
 
 
 	constructor(row: any) {
@@ -32,13 +32,15 @@ export class	friendshipsAddDto {
 
 		this.requesterId = row.requesterId;
 		this.receiverId = row.receiverId;
+		this.status = row.status;
 	}
 
 
-	getTable(): [number, number] {
+	getTable(): [number, number, string] {
 		return [
 			this.requesterId,
-			this.receiverId
+			this.receiverId,
+			this.status
 		];
 	}
 
