@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/23 07:18:58 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/24 03:14:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,8 +181,22 @@ async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameStat
 		p.textContent = result?.error || "An unexpected error has occurred";
 		return ;
 	}
-	console.log("fin");
-	router.navigate("/user", gameState, user);
+
+	const res: Response = await sendRequest(`/api/jwt/${user.getId()}`, 'delete', null);
+
+	if (!res.ok) {
+		const	result = await response.json();
+		const	p = document.getElementById("msg-error");
+		if (!p) {
+			console.error(response.statusText);
+			return ;
+		}
+		p.textContent = (result?.error || "An unexpected error has occurred") + ". We recommend that you try logging out!";
+		return ;
+	}
+
+	router.navigate("/", gameState, user);
+	location.reload();
 }
 
 export function	setupSubmitHandler(gameState: GameState, user: User): void {
