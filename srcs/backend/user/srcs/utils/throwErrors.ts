@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:49:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 13:03:37 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/24 18:12:00 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ export class	AlreadyAcceptedError extends Error {
 	}
 }
 
-export class	NoRequestPendingError extends Error {
+export class	NoRelationError extends Error {
 	constructor(message: string) {
 		super(message);
-		this.name = "NoRequestPendingError";
+		this.name = "NoRelationError";
 	}
 }
 

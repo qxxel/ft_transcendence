@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:48:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 13:42:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/24 18:16:02 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,13 @@ export class	friendshipsAddDto {
 			this.receiverId,
 			this.requesterId
 		];
+	}
+
+	getRequesterId(): number {
+		return this.requesterId;
+	}
+
+	getReceiverId(): number {
+		return this.receiverId;
 	}
 }

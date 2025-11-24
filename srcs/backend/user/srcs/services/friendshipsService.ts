@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 14:02:53 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 13:45:41 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/24 18:40:06 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ import { friendshipsRepository }	from "../repositories/friendshipsRepository.js"
 import { friendshipsRespDto }		from "../dtos/friendshipsRespDto.js"
 import { friendshipsUpdateDto }		from "../dtos/friendshipsUpdateDto.js";
 
-import { AlreadyRelatedError, BlockedError, NoRequestPendingError }	from "../utils/throwErrors.js"
+import { AlreadyRelatedError, BlockedError, NoRelationError }	from "../utils/throwErrors.js"
+import type { FriendUser } from "../objects/friendUser.js";
+import { stat } from "fs";
 
 
 /* ====================== CLASS ====================== */
@@ -34,33 +36,96 @@ export class	friendshipsService {
 
 
 	async addFriendRequest(friendship: friendshipsAddDto): Promise<friendshipsRespDto> {
-		const	status: string | null = await this.friendshipsRepo.getRelationStatus(friendship.getCheckTable());
+		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus(friendship.getCheckTable());
 
-		if (status)
+		if (relation && relation.status)
 		{
-			if (status === "BLOCKED")
+			if (relation.status === "BLOCKED")
 				throw new BlockedError("This user blocked you or you blocked him.");
-			if (status === "ACCEPTED")
-				throw new AlreadyRelatedError("You are already friends or a request is pending.");
-			throw new Error("A request already exist.");
+			if (relation.status === "ACCEPTED")
+				throw new AlreadyRelatedError("You are already friends.");
+
+			if (Number(relation.requester_id as unknown) !== friendship.getRequesterId())
+			{
+				const swapDto: friendshipsUpdateDto = new friendshipsUpdateDto({
+					requesterId: Number(relation.requester_id),
+					receiverId: friendship.getRequesterId()
+				});
+
+				return await this.friendshipsRepo.acceptFriendRequest(swapDto);
+			}
+
+			throw new Error("You already send a friend request.");
 		}
 
 		return await this.friendshipsRepo.addFriendRequest(friendship);
 	}
 
 	async acceptRequest(friendship: friendshipsUpdateDto): Promise<friendshipsRespDto> {
-		const	status: string | null = await this.friendshipsRepo.getRelationStatus(friendship.getCheckTable());
+		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus(friendship.getCheckTable());
 
-		if (status !== 'PENDING')
+		if (!relation)
+			throw new NoRelationError("No relation yet with this user, try to send him a friend request.");
+
+		if (relation.status !== 'PENDING')
 		{
-			if (!status)
-				throw new NoRequestPendingError("No relation yet with this user, try to send him a friend request.");
-			if (status === "BLOCKED")
+			if (relation.status === "BLOCKED")
 				throw new BlockedError("This user blocked you or you blocked him.");
-			if (status === "ACCEPTED")
+			if (relation.status === "ACCEPTED")
 				throw new AlreadyRelatedError("You are already friends or a request is pending.");
 		}
 
 		return await this.friendshipsRepo.acceptFriendRequest(friendship);
+	}
+
+	async blockUser(friendship: friendshipsAddDto): Promise<friendshipsRespDto> {
+		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus(friendship.getCheckTable());
+
+		if (relation && relation.status === "BLOCKED" && Number(relation.requester_id) !== friendship.getRequesterId())
+			throw new BlockedError("This user already blocked you.");
+
+		if (relation && relation.status === "BLOCKED" && Number(relation.requester_id) === friendship.getRequesterId())
+			throw new BlockedError("You already block this user.");
+
+		return await this.friendshipsRepo.blockUser(friendship);
+	}
+
+	async getRelationStatus(idA: number, idB: number): Promise<{ status: string }> {
+		if (idA === idB)
+			return { status: "SELF" };
+		
+		const params = [idA, idB, idB, idA];
+		
+		const relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus(params);
+		
+		if (!relation)
+			return { status: "NONE" };
+	
+		return { status: relation.status };
+	}
+	
+	async getFriendsList(userId: number): Promise<FriendUser[]> {
+		return await this.friendshipsRepo.getFriendsList(userId);
+	}
+	
+	async removeRelation(userIdA: number, userIdB: number): Promise<void> {
+		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus([userIdA, userIdB, userIdB, userIdA]);
+
+		if (!relation)
+			throw new NoRelationError("No relation yet with this user.");
+		
+		return await this.friendshipsRepo.removeRelation(userIdA, userIdB);
+	}
+	
+	async unblockUser(userIdA: number, userIdB: number): Promise<void> {
+		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus([userIdA, userIdB, userIdB, userIdA]);
+
+		if (!relation)
+			throw new NoRelationError("No relation yet with this user.");
+
+		if (relation.status !== "BLOCKED" || Number(relation.requester_id) !== userIdA)
+			throw new BlockedError("You are not blocking this user.");
+
+		return await this.friendshipsRepo.removeRelation(userIdA, userIdB);
 	}
 }

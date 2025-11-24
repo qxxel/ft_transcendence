@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/23 00:47:55 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/24 14:46:16 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,6 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 			const	newUser: usersAddDto = new usersAddDto(request.body);
 			const	user: usersRespDto = await usersServ.addUser(newUser);
 
-			
-
 			return reply.code(201).send(user);
 		}
 		catch (err: unknown) {
@@ -120,7 +118,7 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 	userFastify.delete('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const	{ id } = request.params as { id: string };
 		const	parseId: number = parseInt(id, 10);
-	
+
 		try {
 			await usersServ.deleteUser(parseId);
 
