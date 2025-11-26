@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 03:14:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/24 05:49:14 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,11 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 
 	user.setId(result.id as number);
 	user.setUsername(result.username);
+
+	if (result.is2faEnable) {
+		router.navigate("/2fa", gameState, user);
+		return ;
+	}
 	user.setSigned(true);
 
 	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
@@ -148,8 +153,6 @@ async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: 
 		return ;
 	}
 
-	user.setId(result.id as number);
-	user.setUsername(result.username);
 	user.setSigned(true);
 
 	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;

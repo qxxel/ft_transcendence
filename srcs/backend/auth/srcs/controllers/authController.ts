@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authController.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 03:09:38 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/24 05:30:18 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,8 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 
 		return reply.status(201).send({
 			id: user.id,
-			username: user.username
+			username: user.username,
+			is2faEnable: user.is2faEnable
 		});
 	} catch (err: unknown) {
 		const	msgError = errorsHandler(err);
