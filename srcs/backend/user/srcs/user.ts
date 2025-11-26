@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:50:21 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:35:27 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,12 @@ import cors			from '@fastify/cors'
 import fs			from 'fs'
 import sqlite3Pkg from 'sqlite3'
 
-import { userController }	from "./controllers/userController.js"
-import { userService }		from './services/userService.js'
-import { userRepository }	from './repositories/userRepository.js'
+import { usersController }	from "./controllers/usersController.js"
+import { usersService }		from "./services/usersService.js"
+import { usersRepository }	from "./repositories/usersRepository.js"
+import { userStatsController }	from "./controllers/userStatsController.js"
+import { userStatsService }		from "./services/userStatsService.js"
+import { userStatsRepository }	from "./repositories/userStatsRepository.js"
 
 /* ====================== DATABASE ====================== */
 
@@ -32,7 +35,8 @@ const	db = new Database(dbname, (err: Error | null) => {
 	console.log(`Database started on ${dbname}`);
 });
 
-export const	userServ = new userService(new userRepository(db));
+export const	usersServ = new usersService(new usersRepository(db));
+export const	userStatsServ = new userStatsService(new userStatsRepository(db));
 
 
 /* ====================== SERVER ====================== */
@@ -54,7 +58,8 @@ userFastify.register(cors, {
 });
 
 
-userFastify.register(userController);
+userFastify.register(usersController, { prefix: '/users' });
+userFastify.register(userStatsController, { prefix: '/userstats' } ); // A VERIFIER SI C'EST A GARDER
 
 userFastify.get('/', async (request, reply) => {	//
 	return { message: "Hello User!" };				// A ENLEVER (TEST CONNECTION)

@@ -6,14 +6,14 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:30:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:19:59 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW USERS
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
 export class	jwtRespDto {
 	private	id: number;

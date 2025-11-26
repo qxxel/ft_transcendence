@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   userUpdateDto.ts                                   :+:      :+:    :+:   */
+/*   usersUpdateDto.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:13:44 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 // import type { validationResult } from "../utils/validation.js"
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
-// export class	userUpdateDto {
+// export class	usersUpdateDto {
 // 	private	username?: string;
 // 	private	email?: string;
 

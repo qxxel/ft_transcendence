@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 20:32:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 21:45:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ interface	StatementWithLastID {
 }
 
 
-/* ====================== CLASS	====================== */
+/* ====================== CLASS ====================== */
 
 export class	tankRepository {
 	private	db: Database;

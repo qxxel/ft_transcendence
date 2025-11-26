@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   userAddDto.ts                                      :+:      :+:    :+:   */
+/*   usersAddDto.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:51:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,19 @@ import { ValidationError }				from "../utils/throwErrors.js"
 import type { validationResult }	from "../utils/validation.js"
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
-export class	userAddDto {
+export class	usersAddDto {
 	private	username: string;
 	private	email: string;
+	private	avatar: string | null;
 
 	constructor(row: any) {
 		this.username = row.username;
 		this.email = row.email;
+		if (row.avatar)
+			this.avatar = row.avatar;
+		this.avatar = null;
 
 		var	validation: validationResult = this.isValid()
 		if (!validation.result)
@@ -49,6 +53,14 @@ export class	userAddDto {
 
 
 	// GETTERS
+	getTable(): [string, string, string | null] {
+		return [
+			this.username,
+			this.email,
+			this.avatar
+		];
+	}
+
 	getName(): string {
 		return this.username;
 	}

@@ -6,14 +6,14 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 12:01:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:21:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// USER class	WHO CONTAINS ALL THE CRUCIALS INFO OF THE CLIENT HIMSELF
+// USER CLASS WHO CONTAINS ALL THE CRUCIALS INFO OF THE CLIENT HIMSELF
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
 export class	User {
 	private	signedIn: boolean;
