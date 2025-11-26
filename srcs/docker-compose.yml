@@ -31,6 +31,12 @@ volumes:
       type: 'none'
       o: 'bind'
       device: './backend/auth/db'
+  gameDB:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './backend/game/db'
   userDB:
     driver: local
     driver_opts:

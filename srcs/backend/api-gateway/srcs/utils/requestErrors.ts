@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 18:37:41 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 03:06:39 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 19:45:58 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ export function	requestErrorsHandler(gatewayFastify: FastifyInstance, reply: Fas
 	{
 		if (err.response)
 		{
-			console.error("Error form user service :", err.response.data);
+			console.error("Error from a service :", err.response.data);
 			return reply.status(err.response.status).send(err.response.data);
 		}
 
-		console.error("Error: user service unavailable");
+		console.error("Error: service unavailable");
 		return reply.status(503).send({ error: 'Service unavailable' });
 	}
 
