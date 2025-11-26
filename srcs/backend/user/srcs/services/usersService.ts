@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 14:05:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/23 00:55:15 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,46 @@ export class	usersService {
 			return await this.usersRepo.getUserByEmail(userEmail);
 
 		throw new NotExistError(`The user with email ${userEmail} does not exist`);
+	}
+
+	async updateUsernameById(userId: number, username: string): Promise<void> {
+		const	query: string = "SELECT 1 FROM users WHERE id = ? LIMIT 1";
+		if (!(await this.usersRepo.isTaken(query, [userId.toString()])))
+			throw new NotExistError(`The user ${userId} does not exist`);
+
+		const	nameQuery: string = "SELECT 1 FROM users WHERE username = ? LIMIT 1";
+		if (await this.usersRepo.isTaken(nameQuery, [username]))
+			throw new IsTakenError(`The name ${username} is already taken. Try another one !`);
+	
+		return this.usersRepo.updateUsernameById(userId, username);
+	}
+
+	async updateEmailById(userId: number, email: string): Promise<void> {
+		const	query: string = "SELECT 1 FROM users WHERE id = ? LIMIT 1";
+		if (!(await this.usersRepo.isTaken(query, [userId.toString()])))
+			throw new NotExistError(`The user ${userId} does not exist`);
+
+		const	nameQuery: string = "SELECT 1 FROM users WHERE email = ? LIMIT 1";
+		if (await this.usersRepo.isTaken(nameQuery, [email]))
+			throw new IsTakenError(`The name ${email} is already taken. Try another one !`);
+	
+		return this.usersRepo.updateEmailById(userId, email);
+	}
+
+	async updateAvatarById(userId: number, avatar: string): Promise<void> {
+		const	query: string = "SELECT 1 FROM users WHERE id = ? LIMIT 1";
+		if (!(await this.usersRepo.isTaken(query, [userId.toString()])))
+			throw new NotExistError(`The user ${userId} does not exist`);
+	
+		return this.usersRepo.updateAvatarById(userId, avatar);
+	}
+
+	async update2faById(userId: number, is2faEnable: boolean): Promise<void> {
+		const	query: string = "SELECT 1 FROM users WHERE id = ? LIMIT 1";
+		if (!(await this.usersRepo.isTaken(query, [userId.toString()])))
+			throw new NotExistError(`The user ${userId} does not exist`);
+	
+		return this.usersRepo.update2faById(userId, is2faEnable);
 	}
 
 	async deleteUser(userId: number): Promise<void> {
