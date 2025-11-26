@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/24 15:17:47 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 23:24:39 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,9 @@ userFastify.register(cors, {
 
 
 userFastify.register(usersController);
-userFastify.register(userStatsController, { prefix: '/stats' } ); // A VERIFIER SI C'EST A GARDER
-userFastify.register(friendshipsController, { prefix: '/friends' } ); // A VERIFIER SI C'EST A GARDER
+userFastify.register(userStatsController, { prefix: '/stats' } ); //	A VERIFIER SI C'EST A GARDER
+userFastify.register(friendshipsController, { prefix: '/friends' } ); //	A VERIFIER SI C'EST A GARDER
 
-userFastify.get('/', async (request, reply) => {	//
-	return { message: "Hello User!" };				// A ENLEVER (TEST CONNECTION)
-});													//
 
 const	start = async () => {
 	try {

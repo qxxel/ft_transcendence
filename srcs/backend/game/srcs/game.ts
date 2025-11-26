@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/25 11:49:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 23:25:31 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,6 @@ gameFastify.register(cors, {
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
 });
-
-gameFastify.get('/', (request, reply) => {						//
-	return reply.code(200).send({ message: "Hello World !" });	//	/!\ TEST: HAVE TO REMOVE /!\
-});																//
 
 gameFastify.register(pongController, { prefix: '/pong' });
 gameFastify.register(tankController, { prefix: '/tank' });

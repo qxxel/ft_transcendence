@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 18:25:08 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 22:40:04 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,12 @@ export class	friendshipsRepository {
 		});
 	}
 
-	async removeRelation(userIdA: number, userIdB: number): Promise<void> {
+	async removeRelation(userId: number, targetId: number): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
 			const	query: string = `DELETE FROM friendships
 				WHERE (requester_id = ? AND receiver_id = ?) 
 				OR (requester_id = ? AND receiver_id = ?)`;
-			const	elements: number[] = [userIdA, userIdB, userIdB, userIdA];
+			const	elements: number[] = [userId, targetId, targetId, userId];
 
 			this.db.run(query, elements, function(err: unknown) {
 				if (err)

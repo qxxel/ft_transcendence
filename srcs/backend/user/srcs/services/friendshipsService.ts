@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 14:02:53 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 18:40:06 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 23:00:18 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,7 @@ export class	friendshipsService {
 
 			if (Number(relation.requester_id as unknown) !== friendship.getRequesterId())
 			{
-				const swapDto: friendshipsUpdateDto = new friendshipsUpdateDto({
-					requesterId: Number(relation.requester_id),
-					receiverId: friendship.getRequesterId()
-				});
+				const	swapDto: friendshipsUpdateDto = new friendshipsUpdateDto(Number(relation.requester_id), friendship.getRequesterId());
 
 				return await this.friendshipsRepo.acceptFriendRequest(swapDto);
 			}
@@ -108,24 +105,24 @@ export class	friendshipsService {
 		return await this.friendshipsRepo.getFriendsList(userId);
 	}
 	
-	async removeRelation(userIdA: number, userIdB: number): Promise<void> {
-		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus([userIdA, userIdB, userIdB, userIdA]);
+	async removeRelation(userId: number, targetId: number): Promise<void> {
+		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus([userId, targetId, targetId, userId]);
 
 		if (!relation)
 			throw new NoRelationError("No relation yet with this user.");
-		
-		return await this.friendshipsRepo.removeRelation(userIdA, userIdB);
+
+		return await this.friendshipsRepo.removeRelation(userId, targetId);
 	}
 	
-	async unblockUser(userIdA: number, userIdB: number): Promise<void> {
-		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus([userIdA, userIdB, userIdB, userIdA]);
+	async unblockUser(userId: number, targetId: number): Promise<void> {
+		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus([userId, targetId, targetId, userId]);
 
 		if (!relation)
 			throw new NoRelationError("No relation yet with this user.");
 
-		if (relation.status !== "BLOCKED" || Number(relation.requester_id) !== userIdA)
+		if (relation.status !== "BLOCKED" || Number(relation.requester_id) !== userId)
 			throw new BlockedError("You are not blocking this user.");
 
-		return await this.friendshipsRepo.removeRelation(userIdA, userIdB);
+		return await this.friendshipsRepo.removeRelation(userId, targetId);
 	}
 }
