@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:38:43 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 17:48:19 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 18:41:50 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 
 		try {
 			const	userId: number = extractUserId(request);
-
+console.log(userId);
 			const	friendship: friendshipsAddDto = new friendshipsAddDto(request.body, userId);
 
 			return reply.code(201).send(await friendshipsServ.blockUser(friendship));
