@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:38:43 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 18:40:16 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 17:48:19 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@
 /* ====================== IMPORTS ====================== */
 
 import { errorsHandler }		from "../utils/errorsHandler.js"
+import { extractUserId }		from "../utils/extractHeaders.js"
 import { friendshipsAddDto }	from "../dtos/friendshipsAddDto.js"
 import { friendshipsRespDto }	from "../dtos/friendshipsRespDto.js"
 import { friendshipsServ } 		from "../user.js"
 import { friendshipsUpdateDto }	from "../dtos/friendshipsUpdateDto.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
+import { MissingHeaderError } from "../utils/throwErrors.js"
 
 
 /* ====================== FUNCTION ====================== */
@@ -36,7 +38,9 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 		}
 
 		try {
-			const	friendship: friendshipsAddDto = new friendshipsAddDto(request.body);
+			const	userId: number = extractUserId(request);
+
+			const	friendship: friendshipsAddDto = new friendshipsAddDto(request.body, userId);
 
 			return reply.code(201).send(await friendshipsServ.addFriendRequest(friendship));
 		} catch (err: unknown) {
@@ -70,7 +74,9 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 		}
 
 		try {
-			const	friendship: friendshipsAddDto = new friendshipsAddDto(request.body);
+			const	userId: number = extractUserId(request);
+
+			const	friendship: friendshipsAddDto = new friendshipsAddDto(request.body, userId);
 
 			return reply.code(201).send(await friendshipsServ.blockUser(friendship));
 		} catch (err: unknown) {

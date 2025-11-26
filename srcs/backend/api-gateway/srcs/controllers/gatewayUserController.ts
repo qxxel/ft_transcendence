@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 18:42:42 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 15:40:38 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,15 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 
 	gatewayFastify.post('/friends/block', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/friends/block`, request.body);
+			const	payload: AxiosResponse = await gatewayAxios.get('https://jwt:3000/validate',
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+
+			const	userId = payload.data.id;
+
+			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/friends/block`, request.body,
+				{ headers: { 'user-id': userId } }
+			);
 
 			return reply.send(response.data);
 		} catch (err: unknown) {

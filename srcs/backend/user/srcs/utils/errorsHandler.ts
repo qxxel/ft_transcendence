@@ -6,14 +6,14 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 18:49:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 18:11:55 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 17:46:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 /* ====================== IMPORTS ====================== */
 
-import { IsTakenError, NotExistError, GameNotFoundError, AlreadyRelatedError }	from "./throwErrors.js"
+import { IsTakenError, NotExistError, GameNotFoundError, AlreadyRelatedError, MissingHeaderError }	from "./throwErrors.js"
 import { AlreadyAcceptedError, NoRelationError, BlockedError, SelfFriendRequestError } from "./throwErrors.js"
 
 import type { FastifyInstance, FastifyReply } from "fastify"
@@ -76,6 +76,13 @@ export function	errorsHandler(userFastify: FastifyInstance, reply: FastifyReply,
 		userFastify.log.error(err.message);
 		console.error(err.message);
 		return reply.code(404).send({ errorType: err.name, error: err.message });
+	}
+
+	if (err instanceof MissingHeaderError)
+	{
+		userFastify.log.error(err.message);
+		console.error(err.message);
+		return reply.code(401).send({ errorType: err.name, error: err.message });
 	}
 
 	if (err instanceof Error)
