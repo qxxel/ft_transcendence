@@ -16,11 +16,13 @@
     "axios": "^1.13.2",
     "fastify": "^5.6.2",
     "mailgun.js": "^12.1.1",
+    "nodemailer": "^7.0.10",
     "speakeasy": "^2.0.0",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
+    "@types/nodemailer": "^7.0.4",
     "@types/speakeasy": "^2.0.10",
     "typescript": "^5.9.3"
   }

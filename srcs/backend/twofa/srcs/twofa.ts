@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:21 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/20 23:06:53 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 10:13:47 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ export const	twofaServ: twofaService = new twofaService(new twofaRepository(db))
 
 /* ====================== VARIABLES ====================== */
 
-export const	mailgunApiKey = process.env.MAILGUN_API_KEY;
+export const	emailName: string = process.env.EMAIL || "";
+export const	emailPass: string = process.env.APP_PASS_EMAIL || "";
+
 
 /* ====================== AXIOS VARIABLES ====================== */
 

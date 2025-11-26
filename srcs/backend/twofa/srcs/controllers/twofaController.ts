@@ -6,23 +6,19 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/24 08:10:44 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 10:13:20 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORTS ====================== */
 
 import axios			from 'axios'
-import argon2			from 'argon2'
 import speakeasy		from 'speakeasy'
-import formData			from "form-data";
-import Mailgun			from 'mailgun.js'
-import { twofaAxios, twofaServ, mailgunApiKey }	from "../twofa.js"
+import nodemailer		from 'nodemailer'
+import { twofaAxios, twofaServ, emailName, emailPass }	from "../twofa.js"
 
 import type { AxiosResponse }									from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
-
-const mailgun: Mailgun = new Mailgun(formData);
 
 /* ====================== INTERFACES ====================== */
 
@@ -72,26 +68,33 @@ function errorsHandler(err: unknown): string {
 
 function MailCodeMessage(user: string, otp: string, email: string) {
 	return {
-		from: "ft_transcendence <postmaster@sandbox67d0d7ae1bf74bc88c36bd3c0118fce1.mailgun.org>",
-		to: [`${user} <${email}>`],
+		from: `ft_transcendence <${emailName}>`,
+		to: `${user} <${email}>`,
 		subject: "Verification code",
-		template: "ft_transcendence",
-		"h:X-Mailgun-Variables": JSON.stringify({
-			otpCode: `${otp}`,
-		}),
-	}
+		text: `Your ft_transcendence verification code is: ${otp}`,
+		html: `<p>Hello ${user},</p>
+			   <p>Your ft_transcendence verification code is:</p>
+			   <h2>${otp}</h2>
+			   <p>This code expires in 5 minutes.</p>
+			   <p>Thanks, Transcendence Team.</p>`
+	};
 }
 
 async function sendMailMessage(mail: any) {
+	const transporter = nodemailer.createTransport({
+		service: "gmail",
+		auth: {
+			user: emailName,
+			pass: emailPass
+		}
+	});
+
 	try {
-		const mg = mailgun.client({
-			username: "api",
-			key: mailgunApiKey || ""
-		});
-		const data = await mg.messages.create("sandbox67d0d7ae1bf74bc88c36bd3c0118fce1.mailgun.org", mail);
+		await transporter.sendMail(mail);
+		console.log("Email envoyé !");
 	} catch (error) {
-		console.log(error);
-		throw error
+		console.error("Erreur:", error);
+		throw error;
 	}
 }
 
