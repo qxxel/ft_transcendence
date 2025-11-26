@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 17:59:41 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 18:17:14 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,6 @@ export interface	GameState {
 
 /* ====================== INTERFACE ====================== */
 
-import { io } from "socket.io-client"; // <--- C'est ici
-
-const socket = io("https://localhost:8080", {
-    path: "/game/socket.io",
-    transports: ["websocket"]
-});
 
 
 /* ====================== GLOBAL VARIABLES ====================== */
