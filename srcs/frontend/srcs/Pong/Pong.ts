@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/21 06:16:00 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/27 15:02:28 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ import type { GameState } from "../index.js";
 /* ====================== INTERFACES ====================== */
 
 export interface Paddle { x: number; y: number; width: number; height: number; dy: number; speed: number; hits: number; }
-export interface Ball { x: number; y: number; radius: number; dx: number; dy: number; speed: number; }
+export interface Ball { x: number; y: number; radius: number; dx: number; dy: number; speed: number; lastHitter: number; }
 
 export interface Collectible { 
     id: number; 
@@ -34,6 +34,7 @@ export interface Collectible {
     radius: number; 
     dy: number;
     active: boolean;
+    type: string;
 }
 
 /* ====================== CLASS ====================== */
@@ -65,6 +66,9 @@ export class PongGame extends Game {
   private lastCollectibleSpawn: number = 0;
   private powerupFrequency: number = 5; // Default 5 seconds
   private nextCollectibleId: number = 0;
+  private star1: boolean = false;
+  private star2: boolean = false;
+  private star3: boolean = false;
 
   // Data
   private player1Name: string = "Player 1";
@@ -94,7 +98,10 @@ export class PongGame extends Game {
       gameState: GameState, 
       user: User, 
       gameMode: 'pvp' | 'ai' = 'ai', 
-      aiDifficulty: 'easy' | 'medium' | 'hard' | 'boris' = 'medium') {
+      aiDifficulty: 'easy' | 'medium' | 'hard' | 'boris' = 'medium',
+      star1: boolean = false,
+      star2: boolean = false,
+      star3: boolean = false) {
     super();
     this.ids = { canvas: canvasId, score1: score1Id, score2: score2Id, winScore: winScoreId };
     this.router = router;
@@ -103,6 +110,9 @@ export class PongGame extends Game {
     this.gameMode = gameMode;
     this.aiDifficulty = aiDifficulty;
     this.aiController = new AIController(aiDifficulty);
+    this.star1 = star1;
+    this.star2 = star2;
+    this.star3 = star3;
 
     const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
     if (freqInput) {
@@ -129,7 +139,7 @@ export class PongGame extends Game {
     
     this.paddle1 = { x: 10, y: this.canvas.height / 2 - paddleHeight / 2, width: paddleWidth, height: paddleHeight, dy: 0, speed: paddleSpeed, hits: 0 };
     this.paddle2 = { x: this.canvas.width - paddleWidth - 10, y: this.canvas.height / 2 - paddleHeight / 2, width: paddleWidth, height: paddleHeight, dy: 0, speed: paddleSpeed, hits: 0 };
-    this.ball = { x: this.canvas.width / 2, y: this.canvas.height / 2, radius: 7, speed: this.initialBallSpeed, dx: 0, dy: 0 };
+    this.ball = { x: this.canvas.width / 2, y: this.canvas.height / 2, radius: 7, speed: this.initialBallSpeed, dx: 0, dy: 0 , lastHitter : 0};
     
     this.collectibles = [];
     this.lastCollectibleSpawn = Date.now();
@@ -190,11 +200,12 @@ export class PongGame extends Game {
   private update() {
     if (this.isPaused || this.isGameOver || !this.physics) return;
 
-    // TODO check featured mode
-    const now = Date.now();
-    if (now - this.lastCollectibleSpawn > (this.powerupFrequency * 1000)) {
-        this.spawnCollectible();
-        this.lastCollectibleSpawn = now;
+    if (this.star1 || this.star2 || this.star3){
+      const now = Date.now();
+      if (now - this.lastCollectibleSpawn > (this.powerupFrequency * 1000)) {
+          this.spawnCollectible();
+          this.lastCollectibleSpawn = now;
+      }
     }
 
     const p1Up = !!(this.keysPressed['w'] || this.keysPressed['z']);
@@ -219,12 +230,18 @@ export class PongGame extends Game {
     
     this.physics.movePaddle(this.paddle2!, p2Up, p2Down);
 
-    this.physics.updateCollectibles(this.collectibles);
-    this.collectibles = this.collectibles.filter(c => c.active);
-    const hitId = this.physics.checkCollectibleCollision(this.ball!, this.collectibles);
-    if (hitId !== -1) {
-        console.log("BALL HIT BUBBLE ID:", hitId);
-        this.collectibles = this.collectibles.filter(c => c.id !== hitId);
+    if (this.star1 || this.star2 || this.star3){
+      this.physics.updateCollectibles(this.collectibles);
+      this.collectibles = this.collectibles.filter(c => c.active);
+      const hitId = this.physics.checkCollectibleCollision(this.ball!, this.collectibles);
+      if (hitId !== -1) {
+          const bubble = this.collectibles.find(c => c.id === hitId);
+          if (bubble) {
+              console.log("Applied Effect:", bubble.type);
+              this.applyPowerUp(bubble.type);
+          }
+          this.collectibles = this.collectibles.filter(c => c.id !== hitId);
+      }
     }
 
     const hitsBefore = this.paddle1!.hits + this.paddle2!.hits;
@@ -242,6 +259,28 @@ export class PongGame extends Game {
     }
   }
 
+  private applyPowerUp(type: string) {
+    if (this.ball!.lastHitter === 0) return;
+
+    const targetPaddle = (this.ball!.lastHitter === 1) ? this.paddle1 : this.paddle2;
+    if (!targetPaddle) return;
+
+    switch (type) {
+        case 'IncreaseBallSize':
+            this.ball!.radius = Math.min(this.ball!.radius + 5, 30); // Max size limit
+            break;
+        case 'DecreaseBallSize':
+            this.ball!.radius = Math.max(this.ball!.radius - 2, 5); // Min size limit
+            break;
+        case 'IncreasePaddleSize':
+            targetPaddle.height = Math.min(targetPaddle.height + 30, 200); // Grow
+            break;
+        case 'DecreasePaddleSize':
+            targetPaddle.height = Math.max(targetPaddle.height - 30, 30); // Shrink
+            break;
+    }
+  }
+
   private spawnCollectible() {
     if (!this.canvas) return;
     
@@ -249,13 +288,32 @@ export class PongGame extends Game {
     const randomX = safeZoneX + (Math.random() * (this.canvas.width - (safeZoneX * 2)));
     const randomY = Math.random() * this.canvas.height;
 
+    /**
+     * ++ballSize
+     * --ballSize
+     * ++paddleSize
+     * --paddleSize
+     */
+
+    let BubbleType: string = '';
+    const rand = Math.random();
+    if (rand < 0.25)
+      BubbleType = 'IncreaseBallSize';
+    else if (rand < 0.5)
+      BubbleType = 'DecreaseBallSize';
+    else if (rand < 0.75)
+      BubbleType = 'IncreasePaddleSize';
+    else
+      BubbleType = 'DecreasePaddleSize';
+
     const newBubble: Collectible = {
         id: this.nextCollectibleId++,
         x: randomX,
         y: randomY,
         radius: 15,
         dy: (Math.random() < 0.5 ? 1 : -1) * 1.5,
-        active: true
+        active: true,
+        type : BubbleType
     };
     this.collectibles.push(newBubble);
   }
@@ -288,6 +346,11 @@ export class PongGame extends Game {
     this.ball!.y = this.canvas!.height / 2;
     this.ball!.speed = this.initialBallSpeed;
     
+    this.ball!.radius = 7;
+    this.ball!.lastHitter = 0;
+    if (this.paddle1) this.paddle1.height = 100;
+    if (this.paddle2) this.paddle2.height = 100;
+
     const currentDirectionX = Math.sign(this.ball!.dx);
     let directionX = firstServe ? (Math.random() < 0.5 ? 1 : -1) : currentDirectionX * -1;
     const angle = (Math.random() * Math.PI / 4) - (Math.PI / 8);

@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:06:22 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/20 23:52:25 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/27 15:05:14 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,27 @@ export class PongRenderer {
         this.ctx.fillRect(p2.x, p2.y, p2.width, p2.height);
 
         // Collectibles
-        this.ctx.fillStyle = '#FFFF00';
-        this.ctx.strokeStyle = '#FFA500';
-        this.ctx.lineWidth = 2;
-
         for (const c of collectibles) {
+            switch (c.type) {
+                case 'IncreaseBallSize':
+                    this.ctx.fillStyle = '#FFFF00';
+                    this.ctx.strokeStyle = '#FF0000';
+                    break;
+                case 'DecreaseBallSize':
+                    this.ctx.fillStyle = '#FFFF00';
+                    this.ctx.strokeStyle = '#0000FF';
+                    break;
+                case 'IncreasePaddleSize':
+                    this.ctx.fillStyle = '#00FFFF';
+                    this.ctx.strokeStyle = '#FF0000';
+                    break;
+                case 'DecreasePaddleSize':
+                    this.ctx.fillStyle = '#00FFFF';
+                    this.ctx.strokeStyle = '#0000FF';
+                    break;
+            }
+            this.ctx.lineWidth = 4;
+
             this.ctx.beginPath();
             this.ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
             this.ctx.fill();

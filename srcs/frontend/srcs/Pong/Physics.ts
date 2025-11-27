@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:05:33 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/21 04:31:56 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/27 15:02:38 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ export class PongPhysics {
             
             ball.x = p1.x + p1.width + ball.radius; 
             
-            this.calculateDeflection(p1, ball);
+            this.calculateDeflection(p1, ball, 1);
             this.increaseBallSpeed(ball);
         }
 
@@ -63,7 +63,7 @@ export class PongPhysics {
             
             ball.x = p2.x - ball.radius; 
             
-            this.calculateDeflection(p2, ball);
+            this.calculateDeflection(p2, ball, 2);
             this.increaseBallSpeed(ball);
         }
 
@@ -73,7 +73,7 @@ export class PongPhysics {
         return 0;
     }
 
-    private calculateDeflection(paddle: Paddle, ball: Ball) {
+    private calculateDeflection(paddle: Paddle, ball: Ball, playerID: number) {
         const relativeIntersectY = (paddle.y + (paddle.height / 2)) - ball.y;
         const normalizedIntersectY = relativeIntersectY / (paddle.height / 2);
         const maxBounceAngle = Math.PI / 3;
@@ -81,6 +81,7 @@ export class PongPhysics {
         const direction = (ball.x < this.width / 2) ? 1 : -1;
         ball.dx = direction * ball.speed * Math.cos(bounceAngle);
         ball.dy = -1 * ball.speed * Math.sin(bounceAngle);
+        ball.lastHitter = playerID;
         paddle.hits++;
     }
 
