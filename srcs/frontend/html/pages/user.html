@@ -21,14 +21,11 @@
     <h3>Authentication</h3>
 
     <div class="form-group">
-      <label>2FA:</label>
-      <span id="switch-span" class="disable">Disable</span> <!-- switch Enable Disable in js -->
+      <span>2FA:</span>
+      <span id="switch-span" class="view-mode disable">Disable</span> <!-- switch Enable Disable in js -->
+      <label for="edit-2fa" class="edit-mode" hidden>Enable/Disable</label>
+      <input type="checkbox" id="edit-2fa" class="edit-mode" hidden>
     </div>
-
-    <!-- <div class="form-group">
-      <label for="edit-password">Password:</label>
-      <input type="password" id="edit-password" name="password" hidden>
-    </div> -->
 
     <h3>Account</h3>
     <button type="button" onclick="onClickDeleteAccount();" id="delete-account">Delete Account</button>

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 11:13:14 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 15:47:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,11 +167,13 @@ async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameStat
 	
 	const	newUsername: string = (document.getElementById("edit-username") as HTMLInputElement).value;
 	const	newEmail: string = (document.getElementById("edit-email") as HTMLInputElement).value;
+	const	new2fa: boolean = (document.getElementById("edit-2fa") as HTMLInputElement).checked;
 
 	console.log(newUsername, newEmail);
 	const response: Response = await sendRequest(`/api/user/${user.getId()}`, 'post', {
 		username: newUsername,
-		email: newEmail
+		email: newEmail,
+		is2faEnable: new2fa
 	});
 	
 	if (!response.ok) {

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/27 15:15:40 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:27:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,17 @@ async function loadUser(user: User) {
 			return ;
 		}
 		const	userRes = await Response.json();
-		const	switchSpan = document.getElementById("switch-span") as HTMLInputElement;
 		
-		if (switchSpan && userRes.is2faEnable === 'true') {
-			switchSpan.textContent = "Enable";
-			switchSpan.classList.add('enable');
-			switchSpan.classList.remove('disable');
+		if (userRes.is2faEnable === 'true') {
+			const	switchSpan = document.getElementById("switch-span") as HTMLInputElement;
+			if (switchSpan) {
+				switchSpan.textContent = "Enable";
+				switchSpan.classList.add('enable');
+				switchSpan.classList.remove('disable');
+			}
+			const	checkbox2fa = document.getElementById("edit-2fa") as HTMLInputElement;
+			if (checkbox2fa)
+				checkbox2fa.checked = true;
 		}
 
 		const	usernameEl = document.getElementById("user-username") as HTMLSpanElement;
