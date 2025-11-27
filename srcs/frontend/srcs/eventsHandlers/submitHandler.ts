@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 05:49:14 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 11:13:14 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,8 @@ async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameStat
 		p.textContent = (result?.error || "An unexpected error has occurred") + ". We recommend that you try logging out!";
 		return ;
 	}
-
+	
+	user.logout();
 	router.navigate("/", gameState, user);
 	location.reload();
 }

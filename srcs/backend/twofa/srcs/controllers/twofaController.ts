@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/26 10:13:20 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 12:04:51 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,19 +88,16 @@ async function sendMailMessage(mail: any) {
 			pass: emailPass
 		}
 	});
-
 	try {
 		await transporter.sendMail(mail);
-		console.log("Email envoyé !");
 	} catch (error) {
-		console.error("Erreur:", error);
 		throw error;
 	}
 }
 
 async function	generateMailCode(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	payload: AxiosResponse = await twofaAxios.get("https://jwt:3000/twofa/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	payload: AxiosResponse = await twofaAxios.get("https://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		const	otpSecretKey: string = generateOtpSecretKey();
 		const	otp: string = generateOtp(otpSecretKey);
 
@@ -125,16 +122,16 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 		if (!request.body)
 			throw new Error("The request is empty");
 
-		const	payload: AxiosResponse = await twofaAxios.get("https://jwt:3000/twofa/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	payload: AxiosResponse = await twofaAxios.get("https://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		const	otpSecretKey = await twofaServ.getOtpSecretKeyByIdClient(payload.data.id);
-
-		const	otp = await twofaServ.getOtpByIdClient(payload.data.id);
 
 		const	isOtpValid = verifyOtp(otpSecretKey, request.body.otp);
 		
 		if (!isOtpValid)
 			throw new Error("Bad code");
+
+		await twofaAxios.get("https://jwt:3000/twofa/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		await twofaServ.deleteOtpByIdClient(payload.data.id);
 

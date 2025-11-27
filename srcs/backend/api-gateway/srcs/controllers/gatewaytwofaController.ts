@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 23:09:42 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/20 22:45:29 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 11:23:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ export async function	gatewaytwofaController(gatewayFastify: FastifyInstance) {
 
 	gatewayFastify.get('/otp', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			console.log("\n\n hein \n\n");
 			const	response: AxiosResponse = await gatewayAxios.get(
 				'https://twofa:3000/otp',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }

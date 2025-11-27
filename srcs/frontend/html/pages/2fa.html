@@ -9,6 +9,8 @@
 		<input type="text" id="digit-code" name="digit-code" maxlength="4" placeholder="Enter 4 digit code" pattern="^[0-9]{4}$" required>
 	</div>
 
+	<button type="button" onclick="window.location.reload()">send a new code</button>
+	<p>The verification code is valid until : <span id="date-with-offset"></span></p>
 	<p id="msg-error"></p>
 
 	<button type="submit" id="verify-submit">Verify</button>

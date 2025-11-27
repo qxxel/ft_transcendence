@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 07:19:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 11:30:02 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ import { router }	from "../index.js";
 import { TankGame }	from "../v3/tank.js";
 import { User }		from "../user/user.js";
 import { sendRequest }	from "../utils/sendRequest.js"
+import { DisplayDate }	from "../utils/displayDate.js"
 
 import type { GameState }	from "../index.js"
 
@@ -69,6 +70,10 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 	if (['/user'].includes(currentPath)) {
 		loadUser(user);
 	}
+
+	if (['/2fa'].includes(currentPath)) {
+		DisplayDate(5);
+	}
 }
 
 async function loadUser(user: User) {
@@ -95,8 +100,9 @@ async function loadUser(user: User) {
 		}
 }
 
-export async function  sendActionsRequest(currentPath: string): Promise<void> {
+export async function  sendActionsRequest(currentPath: string, user: User): Promise<void> {
 	if (['/2fa'].includes(currentPath)) {
+		await sendRequest('/api/jwt/twofa/refresh', 'post', user);
 		const response = await sendRequest('/api/twofa/otp', 'GET', null);
 		if (!response.ok) {
 			console.log(response.statusText)

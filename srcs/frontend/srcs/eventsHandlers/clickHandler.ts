@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/23 06:06:12 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 15:39:53 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,9 @@ function	onClickCancel(user: User): void {
 async function	onClickDeleteAccount(router: Router, gameState: GameState, user: User): Promise<void> {
 	console.log("DeleteAccount");
 	
+	if (!confirm("Are you sure you want to delete your account?"))
+		return ;
+
 	const	response: Response = await sendRequest(`/api/auth/me`, 'delete', null);
 	if (!response.ok) {
 		console.log(response.statusText);

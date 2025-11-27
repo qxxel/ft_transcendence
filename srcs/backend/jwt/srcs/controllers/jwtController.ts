@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 08:09:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 11:49:59 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@
 import * as jose											from 'jose'
 import { getCookies, setCookiesAccessToken, removeCookies }	from "../utils/cookies.js"
 import { jwtGenerate, addJWT, addTwofaJWT, removeJWT }		from "../utils/jwtManagement.js"
-import { jwtServ, jwtSecret, expAccess }					from "../jwt.js"
+import { jwtServ, jwtSecret, expAccess, jwtAxios }			from "../jwt.js"
 import { MissingIdError }									from "../utils/throwErrors.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
+import type { AxiosResponse }									from 'axios'
 import type { userDto }											from "../dtos/userDto.js"
 
 interface JwtTwofaPayload {
@@ -58,6 +59,48 @@ export async function	jwtController(jwtFastify: FastifyInstance) {
 			}
 
 			console.error(err);
+			reply.status(500).send(err);
+		}
+	});
+
+	jwtFastify.post('/twofa/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	payload: AxiosResponse = await jwtAxios.get("https://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+			
+			const	user: userDto = payload.data as userDto;
+
+			if (!user.id)
+				throw new MissingIdError("Id of the user is missing !")
+
+			await addTwofaJWT(reply, user);
+			return reply.status(201).send(user.id);
+		} catch (err: unknown) {
+			removeJWT(reply);
+
+			if (err instanceof MissingIdError) {
+				console.error(err.message);
+				reply.status(401).send(err.message);
+			}
+
+			console.error(err);
+			reply.status(500).send(err);
+		}
+	});
+
+	jwtFastify.get('/twofa', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	cookies: any = getCookies(request);
+			const	{ payload } = await jose.jwtVerify(cookies.jwtTwofa, jwtSecret);
+
+			return reply.status(201).send(payload);
+		} catch (err: unknown) {
+			if (err instanceof jose.errors.JOSEError)
+			{
+				console.error(err.message);	
+				return reply.status(401).send(err.message);
+			}
+
+			console.log(err);
 			reply.status(500).send(err);
 		}
 	});
