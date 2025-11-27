@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/27 15:02:28 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/27 15:42:45 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -350,6 +350,9 @@ export class PongGame extends Game {
     this.ball!.lastHitter = 0;
     if (this.paddle1) this.paddle1.height = 100;
     if (this.paddle2) this.paddle2.height = 100;
+
+    this.collectibles = [];
+    this.lastCollectibleSpawn = Date.now();
 
     const currentDirectionX = Math.sign(this.ball!.dx);
     let directionX = firstServe ? (Math.random() < 0.5 ? 1 : -1) : currentDirectionX * -1;
