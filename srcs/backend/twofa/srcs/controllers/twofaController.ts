@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/27 12:04:51 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:21:52 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,10 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 		if (!isOtpValid)
 			throw new Error("Bad code");
 
-		await twofaAxios.get("https://jwt:3000/twofa/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	jwtRes = await twofaAxios.get("https://jwt:3000/twofa/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+
+		if (jwtRes.headers['set-cookie'])
+			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
 
 		await twofaServ.deleteOtpByIdClient(payload.data.id);
 
