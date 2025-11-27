@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/27 11:30:02 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 15:15:40 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,24 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 	}
 
 	if (['/2fa'].includes(currentPath)) {
+		let Cooldown = 5;
+		const btnCooldown = document.getElementById("btnCooldown");
+
+		const interval = setInterval(() => {
+			Cooldown--;
+			btnCooldown!.textContent = `(${Cooldown}s)`;
+
+			if (Cooldown <= 0) {
+				clearInterval(interval);
+				btnCooldown!.textContent = "";
+				const btnSend2faCode = document.getElementById("btnSend2faCode") as HTMLButtonElement;
+				const lock = document.querySelectorAll(".lock");
+				lock.forEach(e => {
+					(e as HTMLElement).hidden = true;
+				});
+				btnSend2faCode!.disabled = false;
+			}
+		}, 1000);
 		DisplayDate(5);
 	}
 }

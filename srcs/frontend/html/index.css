@@ -245,6 +245,11 @@ input[type=range]::-moz-range-thumb {
   margin-top: 20px;
 }
 
+button:disabled {
+  opacity: 0.9;
+  cursor: not-allowed;
+}
+
 .game-choice-menu {
   display: flex;
   flex-direction: column;
