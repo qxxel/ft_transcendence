@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/27 15:42:45 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/27 15:51:52 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,38 +283,49 @@ export class PongGame extends Game {
 
   private spawnCollectible() {
     if (!this.canvas) return;
-    
-    const safeZoneX = this.canvas.width * 0.2;
+
+    const availableTypes: string[] = [];
+
+    if (this.star1) {
+        availableTypes.push('IncreaseBallSize', 'DecreaseBallSize');
+    }
+
+    if (this.star2) {
+        availableTypes.push('IncreasePaddleSize', 'DecreasePaddleSize');
+    }
+
+    if (this.star3) {
+        availableTypes.push('IncreaseBallSize', 'DecreaseBallSize', 'IncreasePaddleSize', 'DecreasePaddleSize');
+
+        // TODO add some real 3 stars power ups
+    }
+
+    if (availableTypes.length === 0) return;
+
+
+    const randomIndex = Math.floor(Math.random() * availableTypes.length);
+    const selectedType = availableTypes[randomIndex]!;
+
+
+    const radius = 15;
+    const safeZoneX = this.canvas.width * 0.2; 
     const randomX = safeZoneX + (Math.random() * (this.canvas.width - (safeZoneX * 2)));
-    const randomY = Math.random() * this.canvas.height;
+    
+    const minY = radius;
+    const maxY = this.canvas.height - radius;
+    const randomY = minY + (Math.random() * (maxY - minY));
 
-    /**
-     * ++ballSize
-     * --ballSize
-     * ++paddleSize
-     * --paddleSize
-     */
-
-    let BubbleType: string = '';
-    const rand = Math.random();
-    if (rand < 0.25)
-      BubbleType = 'IncreaseBallSize';
-    else if (rand < 0.5)
-      BubbleType = 'DecreaseBallSize';
-    else if (rand < 0.75)
-      BubbleType = 'IncreasePaddleSize';
-    else
-      BubbleType = 'DecreasePaddleSize';
 
     const newBubble: Collectible = {
         id: this.nextCollectibleId++,
         x: randomX,
         y: randomY,
-        radius: 15,
+        radius: radius,
         dy: (Math.random() < 0.5 ? 1 : -1) * 1.5,
         active: true,
-        type : BubbleType
+        type: selectedType
     };
+
     this.collectibles.push(newBubble);
   }
 
