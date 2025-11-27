@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:04:46 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/22 02:39:32 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/27 15:13:58 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ export class AIController {
                     this.targetY = this.calculateOptimalPaddlePosition(predictedY, state);
                 }
                 else {
-                    const errorMargin = (this.difficulty === 'easy') ? 7 : 60;
+                    const errorMargin = (this.difficulty === 'easy') ? state.paddle.height / 10 : state.paddle.height / 2;
                     const randomOffset = (Math.random() * errorMargin * 2) - errorMargin;
                     this.targetY = predictedY + randomOffset;
                 }
