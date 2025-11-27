@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 18:43:46 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 14:01:25 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ async function  onClickLogout(router: Router, gameState: GameState, user: User):
 			`<a href="/">Home</a>
 			<a href="/games">Play</a>
 			<a href="/tournament-setup">Tournament</a>
-			<a href="/user">${user.getUsername()}</a>
-			<button onclick="onClickLogout();" id="logout">Logout</button>
+			<a href="/sign-in">Sign in</a>
+			<a href="/sign-up">Sign up</a>
 			<a href="/settings">Settings</a>
 			<a href="/about">About</a>`;
 

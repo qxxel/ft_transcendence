@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 17:16:00 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 14:03:03 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ function	getMenu(username: string | undefined): string {
 				<a href="/about">About</a> | 
 				<a href="/settings">Settings</a> |
 				<a href="/user">${username}</a> |
+				<a href="/friends">Friends</a> |
 				<button onclick="onClickLogout();" id="logout">Logout</button> |
 				<a href="/games">Play</a>
 			</nav>`

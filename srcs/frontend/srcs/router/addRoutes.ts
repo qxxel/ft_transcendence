@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:00:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:57:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 14:03:40 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,17 @@ export function	addRoutes(): void {
 		const	html: string = await loadHtml("pages/settings.html");
 		return html;
 	});
-	
+
 	router.addRoute('/user', async () => {
 		const	html: string = await loadHtml("pages/user.html");
 		return html;
 	});
-	
+
+	router.addRoute('/friends', async () => {
+		const	html: string = await loadHtml("pages/friends.html");
+		return html;
+	});
+
 	router.addRoute('/sign-in', async () => {
 		const	html: string = await loadHtml("pages/sign-in.html");
 		return html;
