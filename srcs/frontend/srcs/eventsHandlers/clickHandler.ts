@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/27 12:28:59 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/27 15:37:13 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,39 +132,8 @@ function switchGameMode(mode: 'default' | 'featured') {
     }
 }
 
-function updateAiLabel() {
-    const slider = document.getElementById('aiBoris') as HTMLInputElement;
-    const display = document.getElementById('ai-level-display');
-    if (!slider || !display) return;
-
-    const val = parseInt(slider.value);
-    
-    let text = "MEDIUM";
-    let color = "#FFFF00";
-
-    if (val === 1) {
-        text = "EASY";
-        color = "#00FF00";
-    } 
-    else if (val === 2) {
-        text = "MEDIUM";
-        color = "#FFFF00";
-    } 
-    else if (val === 3) {
-        text = "HARD";
-        color = "#FF0000";
-    } 
-    else if (val === 4) {
-        text = "BORIS";
-        color = "#FF00FF";
-    }
-
-    display.innerText = text;
-    display.style.color = color;
-}
-
 function selectFeaturedDifficulty(level: number) {
-    const input = document.getElementById('aiBoris') as HTMLInputElement;
+    const input = document.getElementById('aiHardcore') as HTMLInputElement;
     if (input) {
         input.value = level.toString();
     }
@@ -230,7 +199,10 @@ function startTournamentMatch(matchId: string, p1: string, p2: string, router: R
 
 function onClickStartFeatured(router: Router, gameState: GameState, user: User) {
     const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
-    const aiInput = document.getElementById("aiBoris") as HTMLInputElement;
+    const aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
+
+    const pointsInput = document.getElementById("featuredMaxPoints") as HTMLInputElement;
+    const winningScore = parseInt(pointsInput.value, 10);
     
     const star1 = (document.getElementById("chk-1star") as HTMLInputElement).checked;
     const star2 = (document.getElementById("chk-2star") as HTMLInputElement).checked;
@@ -246,6 +218,8 @@ function onClickStartFeatured(router: Router, gameState: GameState, user: User) 
 
     gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'ai', difficulty, star1, star2, star3);
     
+    gameState.currentGame.setWinningScore(winningScore);
+
     router.navigate("/pong", gameState, user);
 }
 
@@ -262,7 +236,6 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
     (window as any).hideDifficultyMenu = hideDifficultyMenu;
 
     (window as any).switchGameMode = switchGameMode;
-    (window as any).updateAiLabel = updateAiLabel;
     (window as any).onClickStartFeatured = () => onClickStartFeatured(router, gameState, user);
     (window as any).selectFeaturedDifficulty = selectFeaturedDifficulty;
 
@@ -299,6 +272,13 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
             const display = document.getElementById('powerup-freq-display');
             if (display) {
                 display.innerText = target.value + " sec";
+            }
+        }
+
+        if (target.id === 'featuredMaxPoints') {
+            const display = document.getElementById('featured-points-display');
+            if (display) {
+                display.innerText = target.value;
             }
         }
     });
