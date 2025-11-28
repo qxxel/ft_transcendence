@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/27 14:13:12 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 15:44:00 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { pathActions, sendActionsRequest }	from "./navigationUtils.js"
-import { User }								from "../user/user.js"
+import { pathActions }	from "./navigationUtils.js"
+import { User }			from "../user/user.js"
 
 import type { GameState }					from "../index.js"
 
@@ -32,6 +32,7 @@ interface	Route {
 /* ====================== CLASS ====================== */
 
 export class	Router {
+	private currentPath: string = window.location.pathname;
 	private	routes: Route[] = [];
 
 	addRoute(path: string, component: () => string | Promise<string>): void {
@@ -39,6 +40,9 @@ export class	Router {
 	}
 
 	navigate(path: string, gameState: GameState, user: User): void {
+		if (location.pathname === "/2fa")
+			if (!confirm("This page is asking you to confirm that you want to leave — information you’ve entered may not be saved."))
+				return ;
 		history.pushState({}, '', path);
 		this.render(gameState, user);
 	}
@@ -53,10 +57,14 @@ export class	Router {
 				const	html: string = await route.component();
 				contentDiv.innerHTML = html;
 			}
-
+			this.currentPath = currentPath;
 			pathActions(currentPath, gameState, user);
-			await sendActionsRequest(currentPath, user);
 		}
 
 	}
+	
+	public get Path(): string {
+		return this.currentPath;
+	}
+	
 }

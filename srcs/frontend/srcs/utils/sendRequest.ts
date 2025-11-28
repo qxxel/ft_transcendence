@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:23:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 00:39:55 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 14:51:47 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ export async function	sendRequest(path: string, requestMethod: string, body: Obj
 	
 	if (response.status === 401){
 		response = await fetch("/api/jwt/refresh", {
-			method: "GET",
+			method: "POST",
 			credentials: "include",
 		});
 		

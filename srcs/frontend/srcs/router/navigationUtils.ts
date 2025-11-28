@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/27 16:27:01 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 13:28:05 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ import { TankGame }	from "../v3/tank.js";
 import { User }		from "../user/user.js";
 import { sendRequest }	from "../utils/sendRequest.js"
 import { DisplayDate }	from "../utils/displayDate.js"
+import { btnCooldown }	from "../utils/buttonCooldown.js"
 
 import type { GameState }	from "../index.js"
 
@@ -72,24 +73,7 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 	}
 
 	if (['/2fa'].includes(currentPath)) {
-		let Cooldown = 5;
-		const btnCooldown = document.getElementById("btnCooldown");
-
-		const interval = setInterval(() => {
-			Cooldown--;
-			btnCooldown!.textContent = `(${Cooldown}s)`;
-
-			if (Cooldown <= 0) {
-				clearInterval(interval);
-				btnCooldown!.textContent = "";
-				const btnSend2faCode = document.getElementById("btnSend2faCode") as HTMLButtonElement;
-				const lock = document.querySelectorAll(".lock");
-				lock.forEach(e => {
-					(e as HTMLElement).hidden = true;
-				});
-				btnSend2faCode!.disabled = false;
-			}
-		}, 1000);
+		btnCooldown();
 		DisplayDate(5);
 	}
 }
@@ -123,17 +107,6 @@ async function loadUser(user: User) {
 		}
 }
 
-export async function  sendActionsRequest(currentPath: string, user: User): Promise<void> {
-	if (['/2fa'].includes(currentPath)) {
-		await sendRequest('/api/jwt/twofa/refresh', 'post', user);
-		const response = await sendRequest('/api/twofa/otp', 'GET', null);
-		if (!response.ok) {
-			console.log(response.statusText)
-			return;
-		}
-	}
-
-}
 // function  pathActions(currentPath: string) {
 //   if (['/pongmenu'].includes(currentPath)) {
 //     currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points');

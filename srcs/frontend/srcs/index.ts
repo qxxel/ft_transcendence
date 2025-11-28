@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   index.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:58:38 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 10:35:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ export const	router: Router = new Router();
 
 setupClickHandlers(router, user, gameState);
 setupSubmitHandler(gameState, user);
-setupLoadHandler(gameState, user);
+await setupLoadHandler(gameState, user);
 
 
 /* ============================= SETUP ROUTES ============================= */

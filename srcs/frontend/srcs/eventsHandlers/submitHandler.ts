@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/27 15:47:01 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 15:43:17 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,12 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 
 	if (result.is2faEnable) {
 		router.navigate("/2fa", gameState, user);
+		
+		const response = await sendRequest('/api/twofa/otp', 'GET', null);
+		if (!response.ok) {
+			console.log(response.statusText)
+			return;
+		}
 		return ;
 	}
 	user.setSigned(true);
@@ -134,8 +140,6 @@ async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: 
 
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
 	form.reset();
-
-	console.log(JSON.stringify(otp));
 
 	const response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
 

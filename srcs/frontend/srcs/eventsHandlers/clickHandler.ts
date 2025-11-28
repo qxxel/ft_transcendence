@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 15:39:53 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 15:39:52 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ import { TournamentController } from "../tournament.js";
 import { Router }		from "../router/router.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 import { User }			from "../user/user.js"
+import { DisplayDate }	from "../utils/displayDate.js"
+import { btnCooldown }	from "../utils/buttonCooldown.js"
 
 import type { GameState }	from "../index.js"
 
@@ -110,6 +112,30 @@ async function	onClickDeleteAccount(router: Router, gameState: GameState, user: 
 		return ;
 	}
 	await onClickLogout(router, gameState, user);
+}
+
+async function	onClickNewCode(router: Router, gameState: GameState, user: User): Promise<void> {
+	const btn = document.getElementById("btnCooldown");
+	if (btn) {
+		btn.textContent = "(5s)";
+		const btnSend2faCode = document.getElementById("btnSend2faCode") as HTMLButtonElement;
+		const lock = document.querySelectorAll(".lock");
+		lock.forEach(e => {
+			(e as HTMLElement).hidden = false;
+		});
+		if (btnSend2faCode)
+			btnSend2faCode.disabled = true;
+	}
+
+	await sendRequest('/api/jwt/twofa/refresh', 'post', user);
+	const response = await sendRequest('/api/twofa/otp', 'GET', null);
+	if (!response.ok) {
+		console.log(response.statusText)
+		return;
+	}
+
+	btnCooldown();
+	DisplayDate(5);
 }
 
 async function onClickGetMessage(): Promise<void> {
@@ -213,6 +239,7 @@ export async function	setupClickHandlers(router: Router, user: User, gameState: 
 	(window as any).onClickEdit = () => onClickEdit(user);
 	(window as any).onClickCancel = () => onClickCancel(user);
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
+	(window as any).onClickNewCode = () => onClickNewCode(router, gameState, user);
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;
 	(window as any).onClickRefreshMessage = onClickRefreshMessage;
@@ -232,6 +259,9 @@ export async function	setupClickHandlers(router: Router, user: User, gameState: 
 
 	// HANDLE BACK/FORWARD NAVIGATION
 	window.addEventListener('popstate', () => {
+		if (router.Path === "/2fa")
+			if (!confirm("This page is asking you to confirm that you want to leave — information you’ve entered may not be saved."))
+				return ;
 		router.render(gameState, user);
 	});
 }

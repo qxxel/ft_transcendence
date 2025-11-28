@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/21 08:14:26 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 15:39:57 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,15 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 	});
 }
 
-export function	setupLoadHandler(gameState: GameState, user: User): void {
+function handleUnload() {
+	window.addEventListener("beforeunload", async (event: Event) => {
+		if (location.pathname !== "/2fa")
+			return;
+		event.preventDefault();
+	});
+}
+
+export async function	setupLoadHandler(gameState: GameState, user: User): Promise<void> {
 	handleLoadPage(gameState, user);
+	handleUnload();
 }
