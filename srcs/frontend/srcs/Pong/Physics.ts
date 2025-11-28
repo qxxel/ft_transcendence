@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:05:33 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/27 15:02:38 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/28 12:31:13 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 import type { Ball, Paddle, Collectible } from "./Pong.js";
 
 /* ====================== CLASS ====================== */
-
 export class PongPhysics {
     private width: number;
     private height: number;
@@ -65,6 +64,10 @@ export class PongPhysics {
             
             this.calculateDeflection(p2, ball, 2);
             this.increaseBallSpeed(ball);
+        }
+        let x = 1.5;
+        if (ball.dx < x && ball.dx > -x){
+            ball.dx = 1.5;
         }
 
         if (ball.x + ball.radius < 0) return 2;
