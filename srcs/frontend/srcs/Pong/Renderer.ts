@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:06:22 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/28 11:05:43 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/28 12:51:06 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,9 @@ export class PongRenderer {
         this.ctx.font = '50px monospace';
         this.ctx.textAlign = 'center';
         this.ctx.fillText('PAUSED', this.width / 2, this.height / 2);
-        this.ctx.font = '30px monospace';
+        this.ctx.font = '15px monospace';
         this.ctx.textAlign = 'center';
-        this.ctx.fillText('Press \'Esc\' to resume', this.width / 2, this.height / 1.8);
+        this.ctx.fillText('Press \'Esc\' to resume', this.width / 2, this.height / 1.85);
     }
 
     public drawGameOver(winnerName: string, isTournament: boolean) {

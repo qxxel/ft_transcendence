@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/28 11:37:39 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/28 13:02:22 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ export class PongGame extends Game {
     if (freqInput) {
         this.powerupFrequency = parseInt(freqInput.value);
     }
+    (window as any).quitGame = () => this.quitGame();
   }
   
   public setCtx() {
@@ -158,6 +159,11 @@ export class PongGame extends Game {
     
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
+  }
+
+  private quitGame() {
+      this.stop(); 
+      this.router.navigate('/games', this.gameState, this.user);
   }
 
   public setPlayerNames(p1: string, p2: string) {
