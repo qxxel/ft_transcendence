@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/27 15:37:13 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/28 11:42:03 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ function startTournamentMatch(matchId: string, p1: string, p2: string, router: R
   }
 }
 
-function onClickStartFeatured(router: Router, gameState: GameState, user: User) {
+function onClickStartFeatured(mode: 'ai' | 'pvp',router: Router, gameState: GameState, user: User) {
     const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
     const aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
 
@@ -214,9 +214,9 @@ function onClickStartFeatured(router: Router, gameState: GameState, user: User) 
     if (aiVal === 3) difficulty = 'hard';
     if (aiVal === 4) difficulty = 'boris';
 
-    console.log(`Starting Featured: Freq=${freqInput.value}, Diff=${difficulty}, Stars=[${star1},${star2},${star3}]`);
+    console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Diff=${difficulty}, Stars=[${star1},${star2},${star3}]`);
 
-    gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'ai', difficulty, star1, star2, star3);
+    gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3);
     
     gameState.currentGame.setWinningScore(winningScore);
 
@@ -236,7 +236,7 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
     (window as any).hideDifficultyMenu = hideDifficultyMenu;
 
     (window as any).switchGameMode = switchGameMode;
-    (window as any).onClickStartFeatured = () => onClickStartFeatured(router, gameState, user);
+    (window as any).onClickStartFeatured = (mode: 'ai' | 'pvp') => onClickStartFeatured(mode, router, gameState, user);
     (window as any).selectFeaturedDifficulty = selectFeaturedDifficulty;
 
     (window as any).onClickPlayAI = (difficulty: 'easy' | 'medium' | 'hard') => 

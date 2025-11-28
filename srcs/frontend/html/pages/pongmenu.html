@@ -81,8 +81,15 @@
           </div>
 
           <div style="width: 80%; margin-top: 25px; display: flex; flex-direction: column; gap: 10px;">
-            <button onclick="onClickStartFeatured();" class="btn-yellow" style="width: 100%;">Start Featured Game</button>
-            <button onclick="switchGameMode('default')" class="btn-cancel" style="width: 100%;">Back to Default</button>
+            <button onclick="onClickStartFeatured('ai');" class="btn-yellow" style="flex: 1;">
+              Play vs. AI
+            </button>
+            <button onclick="onClickStartFeatured('pvp');" class="btn-yellow" style="flex: 1;">
+              Play 1v1
+            </button>
+            <button onclick="switchGameMode('default')" class="btn-cancel" style="width: 100%;">
+              Back to Default
+            </button>
           </div>
       </div>
 

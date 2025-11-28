@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/28 11:13:41 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/28 11:37:39 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,10 +410,12 @@ export class PongGame extends Game {
     if (this.paddle1) {
       this.paddle1.speed = this.paddleSpeed;
       this.paddle1.height = this.paddleHeight;
+      this.paddle1.y = this.canvas!.height / 2 - this.paddleHeight / 2;
     }
     if (this.paddle2) {
       this.paddle2.speed = this.paddleSpeed;
       this.paddle2.height = this.paddleHeight;
+      this.paddle2.y = this.canvas!.height / 2 - this.paddleHeight / 2;
     }
 
     this.collectibles = [];
