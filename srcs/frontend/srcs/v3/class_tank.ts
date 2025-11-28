@@ -21,6 +21,7 @@ import { Cannon }	from "./class_cannon.js"
 import { GSTATE }	from "./global.js"
 import { Hud }		from "./class_hud.js"
 import { Rect2D }	from "./class_rect.js"
+import { Input } 	from "./class_input.js";
 
 import type { Color, Keys }	from "./interface.js"
 import { Collectible } from "./class_collectible.js"
@@ -34,7 +35,7 @@ export class	Tank extends Actor {
 	cannon: Cannon;
 	speed: number = 0.75;
 	rot_speed: number = 0.05;
-	health: number = 5;
+	health: number = 1;
 	fire_rate: number = 2000; // ms
 	fire_last: number = 0;
 	fire_speed: number = 3;
@@ -54,7 +55,7 @@ export class	Tank extends Actor {
 		console.log("C Tank at x:", x, "y:", y);
 	}
 
-	update(input: string[]): void {
+	update(input: Input): void {
 		this.listen(input);
 		if (Date.now() - this.fire_last < this.fire_rate)
 			GSTATE.REDRAW = true;
@@ -74,18 +75,16 @@ export class	Tank extends Actor {
 		}
 	}
 
-	listen(input: string[]): void {
-		for (let inp of input) {
-			// console.log("INPUT =", inp);
-			if (inp == this.keys.up)        { this.move(0,-this.speed); GSTATE.REDRAW = true; }
-			if (inp == this.keys.down)      { this.move(0,+this.speed); GSTATE.REDRAW = true; }
-			if (inp == this.keys.left)      { this.move(-this.speed,0); GSTATE.REDRAW = true; }
-			if (inp == this.keys.right)     { this.move(+this.speed,0); GSTATE.REDRAW = true; }
-			if (inp == this.keys.rot_left)  { this.cannon.slope(-this.rot_speed); GSTATE.REDRAW = true; }
-			if (inp == this.keys.rot_right) { this.cannon.slope(+this.rot_speed); GSTATE.REDRAW = true; }
-			if (inp == this.keys.fire) this.fire();
-		}
+	listen(input: Input): void {
+		if (input.isDown(this.keys.up))			{ this.move(0,-this.speed); GSTATE.REDRAW = true; }
+		if (input.isDown(this.keys.down))		{ this.move(0,+this.speed); GSTATE.REDRAW = true; }
+		if (input.isDown(this.keys.left))		{ this.move(-this.speed,0); GSTATE.REDRAW = true; }
+		if (input.isDown(this.keys.right))		{ this.move(+this.speed,0); GSTATE.REDRAW = true; }
+		if (input.isDown(this.keys.rot_left))	{ this.cannon.slope(-this.rot_speed); GSTATE.REDRAW = true; }
+		if (input.isDown(this.keys.rot_right))	{ this.cannon.slope(+this.rot_speed); GSTATE.REDRAW = true; }
+		if (input.isPressed(this.keys.fire))	{ this.fire(); }
 	}
+
 
 	move(dx:number,dy:number): void {
 		if (this.collide(new Rect2D(this.x + dx, this.y + dy, this.w, this.h)))

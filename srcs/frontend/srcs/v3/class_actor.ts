@@ -17,7 +17,7 @@
 
 import { GSTATE } from "./global.js";
 import { Rect2D } from "./class_rect.js";
-
+import { Input } from "./class_input.js";
 
 /* ============================= CLASS ============================= */
 
@@ -29,7 +29,7 @@ export class	Actor {
 		console.log("C Actor at x:", x, "y:", y);
 	}
 
-	update(input: string[]): void {}
+	update(input: Input): void {}
 
 	draw(ctx: CanvasRenderingContext2D): void {}
 

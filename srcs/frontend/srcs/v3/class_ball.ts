@@ -19,7 +19,7 @@ import { Actor }	from "./class_actor.js"
 import { GSTATE }	from "./global.js"
 import { Rect2D }	from "./class_rect.js"
 import { Tank }		from "./class_tank.js"
-
+import { Input }	from "./class_input.js"
 import type { Color }	from "./interface.js"
 
 
@@ -48,7 +48,7 @@ export class	Ball extends Actor {
 		console.log("C Ball at x:", x, "y:", y);
 	}
 
-	update(input: string[]): void {
+	update(input: Input): void {
 		this.move();
 		GSTATE.REDRAW = true;
 	}

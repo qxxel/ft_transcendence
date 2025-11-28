@@ -20,6 +20,7 @@ import { GSTATE }	from "./global.js"
 import { Input }	from "./class_input.js"
 import { Map }		from "./class_map.js"
 import { Tank }		from "./class_tank.js"
+import { Ball }		from "./class_ball.js"
 import { Collectible } from "./class_collectible.js"
 import { HealthPack } from "./class_collectible_health.js"
 
@@ -29,7 +30,7 @@ import type { publicDecrypt } from "crypto"
 
 /* ============================= CLASS ============================= */
 
-export class	TankGame extends Game {
+export class	TankGame extends Game { // TODO some throw ig
 
 	private	canvas: HTMLCanvasElement;
 	private	ctx: CanvasRenderingContext2D;
@@ -54,12 +55,13 @@ export class	TankGame extends Game {
 		this.ctx = this.canvas.getContext('2d')!;
 
 		this.input = new Input();
+		this.input.start();
 		this.map = new Map(this.canvas.width, this.canvas.height, 2, map_name);
 
 
 
 
-
+		GSTATE.REDRAW = true;
 		this.setup_tanks();
 		this.setup_collectible();
 
@@ -86,7 +88,7 @@ export class	TankGame extends Game {
 		{
 			for (let i = 0; i < this.nplayer; ++i) {
 				if (this.map.spawns_tank && this.map.spawns_tank[i]) { // SCOTCH
-					const tank: Tank = new Tank(this.map.spawns_tank[i]!.x, this.map.spawns_tank[i]!.y, tank_width, tank_height, {r:0,g:0,b:255}, colors[i]!, keys[i]!);
+					const tank: Tank = new Tank(this.map.spawns_tank[i]!.x, this.map.spawns_tank[i]!.y, tank_width, tank_height, {r:0,g:255,b:0}, colors[i]!, keys[i]!);
 					GSTATE.ACTORS.push(tank);
 					GSTATE.TANKS += 1;
 				}
@@ -119,36 +121,33 @@ export class	TankGame extends Game {
 	private	gameLoop(): void {
 		this.listen();
 		this.update();
+		this.input.update(); // CURRENT SAVED INTO PREVIOUS
+
 		this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
 	}
 
 	private listen() : void {
-		for (let inp of this.input.getPressedKeys()) {
 
-			if (inp == 'Escape') {
-
-				if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA QUIT
-
-				}
-				else if (GSTATE.TANKS != 1) { // SWITCH PAUSE UNPAUSE
-					this.isPaused = !this.isPaused;
-					GSTATE.REDRAW = true;
-				}
-				// if 		(this.isPaused == false) this.isPaused = true;
-				// else if (this.isPaused == true) { this.isPaused = false; GSTATE.REDRAW = true; }
+		if (this.input.isPressed('Escape')) {
+			if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA QUIT
 			}
-			else if (this.isPaused && inp == 'r')
-			{
-				if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA RESTART
-					for (let a of GSTATE.ACTORS)
-					{
-						if (a instanceof Tank)
-							a.destroy();
-					}
-					this.setup_tanks();
-					this.setup_collectible();
-					this.isPaused = false;
+			else if (GSTATE.TANKS != 1) { // SWITCH PAUSE UNPAUSE
+				this.isPaused = !this.isPaused;
+				GSTATE.REDRAW = true;
+			}
+		}
+		else if (this.isPaused && this.input.isPressed('r'))
+		{
+			if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA RESTART
+				for (let a of GSTATE.ACTORS)
+				{
+					if (a instanceof Tank || a instanceof Ball)
+						a.destroy();
 				}
+				this.setup_tanks();
+				this.setup_collectible();
+				this.hideEndGameDashboard();
+				this.isPaused = false;
 			}
 		}
 	}
@@ -176,7 +175,7 @@ export class	TankGame extends Game {
 
 		if (!this.isPaused) {
 			for (let a of GSTATE.ACTORS) {
-				a.update(this.input.getPressedKeys());
+				a.update(this.input);
 			}
 		}
 
@@ -220,6 +219,13 @@ export class	TankGame extends Game {
 
     dashboard.style.display = 'block';
   }
+
+	private hideEndGameDashboard() {
+		const dashboard = document.getElementById('game-over-dashboard');
+    	if (!dashboard) return;
+    	dashboard.style.display = 'none';
+	}
+
 
 	public	start(): void {
 		if (!this.animationFrameId) {

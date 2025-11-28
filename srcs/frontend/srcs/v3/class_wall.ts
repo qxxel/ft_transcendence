@@ -17,6 +17,7 @@
 
 import { Actor }	from "./class_actor.js"
 import { Rect2D }	from "./class_rect.js"
+import { Input } 	from "./class_input.js";
 
 import type { Color }	from "./interface.js"
 
@@ -37,7 +38,7 @@ export class	Wall extends Actor {
 		console.log("C Wall at x:", x, "y:", y);
 	}
 
-	update(input: string[]): void {}
+	update(input: Input): void {}
 
 	draw(ctx: CanvasRenderingContext2D): void {
 		this.rect.draw(ctx, this.color)
