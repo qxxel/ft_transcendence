@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 13:28:05 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 16:03:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 	}
 
 	if (['/2fa'].includes(currentPath)) {
+		router.canLeave = false;
 		btnCooldown();
 		DisplayDate(5);
 	}

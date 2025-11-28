@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 15:44:00 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 16:05:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,16 @@ interface	Route {
 /* ====================== CLASS ====================== */
 
 export class	Router {
-	private currentPath: string = window.location.pathname;
+	private	currentPath: string = window.location.pathname;
 	private	routes: Route[] = [];
+	public	canLeave = true;
 
 	addRoute(path: string, component: () => string | Promise<string>): void {
 		this.routes.push({ path, component });
 	}
 
 	navigate(path: string, gameState: GameState, user: User): void {
-		if (location.pathname === "/2fa")
+		if (!this.canLeave)
 			if (!confirm("This page is asking you to confirm that you want to leave — information you’ve entered may not be saved."))
 				return ;
 		history.pushState({}, '', path);

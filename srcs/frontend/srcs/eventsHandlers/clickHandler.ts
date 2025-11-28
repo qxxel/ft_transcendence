@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 15:55:29 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 16:02:19 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,7 @@ export async function	setupClickHandlers(router: Router, user: User, gameState: 
 
 	// HANDLE BACK/FORWARD NAVIGATION
 	window.addEventListener('popstate', () => {
-		if (router.Path === "/2fa") {
+		if (!router.canLeave) {
 			if (!confirm("This page is asking you to confirm that you want to leave — information you’ve entered may not be saved.")) {
 				history.pushState({}, "", router.Path);
 				return ;

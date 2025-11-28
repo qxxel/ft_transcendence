@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 15:43:17 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 16:03:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: 
 	if (menu)
 		menu.innerHTML = getMenu(user.getUsername());
 
+	router.canLeave = true;
 	router.navigate("/", gameState, user);
 }
 
