@@ -45,14 +45,14 @@
       </div>
 
       <div id="featured-mode-content" class="menu-content hidden" style="width: 100%;">
-          <div class="control-group" style="width: 80%;">
+          <div class="control-group" style="width: 100%;">
               <label for="featuredMaxPoints">
                   Points to Win: 
                   <span id="featured-points-display" style="color: #FFFF00;">5</span>
               </label>
               <input type="range" id="featuredMaxPoints" min="1" max="10" value="5" step="1"/>
           </div>
-          <div class="control-group" style="width: 80%;">
+          <div class="control-group" style="width: 100%;">
               <label for="powerupFreq">
                   Power-up Frequency:
                   <span id="powerup-freq-display" style="color: #FFFF00;">5 sec</span>
@@ -60,7 +60,7 @@
               <input type="range" id="powerupFreq" min="1" max="10" value="5" step="1"/>
           </div>
 
-          <div class="control-group" style="width: 80%;">
+          <div class="control-group" style="width: 90%;">
               <label>AI Difficulty</label>
               
               <input type="hidden" id="aiHardcore" value="2">
@@ -72,7 +72,7 @@
               </div>
           </div>
 
-          <p class="diff-title" style="width: 80%;">ALLOWED POWER-UPS</p>
+          <p class="diff-title" style="width: 90%;">ALLOWED POWER-UPS</p>
           
           <div class="checkbox-group">
               <label class="checkbox-btn"><input type="checkbox" id="chk-1star" checked><span>★</span></label>
@@ -80,7 +80,7 @@
               <label class="checkbox-btn"><input type="checkbox" id="chk-3star" checked><span>★★★</span></label>
           </div>
 
-          <div style="width: 80%; margin-top: 25px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="width: 90%; margin-top: 25px; display: flex; flex-direction: column; gap: 10px;">
             <button onclick="onClickStartFeatured('ai');" class="btn-yellow" style="flex: 1;">
               Play vs. AI
             </button>

@@ -101,8 +101,16 @@ p#msg-error {
     border-radius: 12px;
     box-shadow: 0 0 15px #fff;
     padding: 40px;
+
+
     width: 90%;
+    /* max-width: 1000px;
+
+    width: 100%; */
+    min-width: 350px;
     max-width: 1000px;
+
+
     margin: 0 auto;
 }
 
