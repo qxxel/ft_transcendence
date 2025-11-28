@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:06:22 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/27 15:05:14 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/28 11:05:43 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,27 @@ export class PongRenderer {
             switch (c.type) {
                 case 'IncreaseBallSize':
                     this.ctx.fillStyle = '#FFFF00';
-                    this.ctx.strokeStyle = '#FF0000';
+                    this.ctx.strokeStyle = '#0000FF';
                     break;
                 case 'DecreaseBallSize':
                     this.ctx.fillStyle = '#FFFF00';
-                    this.ctx.strokeStyle = '#0000FF';
+                    this.ctx.strokeStyle = '#FF0000';
                     break;
                 case 'IncreasePaddleSize':
                     this.ctx.fillStyle = '#00FFFF';
-                    this.ctx.strokeStyle = '#FF0000';
+                    this.ctx.strokeStyle = '#0000FF';
                     break;
                 case 'DecreasePaddleSize':
                     this.ctx.fillStyle = '#00FFFF';
-                    this.ctx.strokeStyle = '#0000FF';
+                    this.ctx.strokeStyle = '#FF0000';
+                    break;
+                case 'ChangeBallDirection':
+                    this.ctx.fillStyle = '#FF00FF';
+                    this.ctx.strokeStyle = '#FFFF00';
+                    break;
+                case 'IncreasePaddleSpeed':
+                    this.ctx.fillStyle = '#888888';
+                    this.ctx.strokeStyle = '#FFFF00';
                     break;
             }
             this.ctx.lineWidth = 4;
@@ -91,6 +99,9 @@ export class PongRenderer {
         this.ctx.font = '50px monospace';
         this.ctx.textAlign = 'center';
         this.ctx.fillText('PAUSED', this.width / 2, this.height / 2);
+        this.ctx.font = '30px monospace';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText('Press \'Esc\' to resume', this.width / 2, this.height / 1.8);
     }
 
     public drawGameOver(winnerName: string, isTournament: boolean) {

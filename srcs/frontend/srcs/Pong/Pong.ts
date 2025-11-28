@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/27 15:51:52 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/28 10:59:55 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,10 @@ export class PongGame extends Game {
   private user: User;
   private readonly initialBallSpeed: number = 5;
 
+  private paddleWidth = 10;
+  private paddleHeight = 100;
+  private paddleSpeed = 6;
+
   constructor(canvasId: string, 
       score1Id: string, 
       score2Id: string, 
@@ -133,12 +137,10 @@ export class PongGame extends Game {
     };
     this.scoreElements.winScore.innerHTML = this.winningScore.toString();
     
-    const paddleWidth = 10;
-    const paddleHeight = 100;
-    const paddleSpeed = 6;
     
-    this.paddle1 = { x: 10, y: this.canvas.height / 2 - paddleHeight / 2, width: paddleWidth, height: paddleHeight, dy: 0, speed: paddleSpeed, hits: 0 };
-    this.paddle2 = { x: this.canvas.width - paddleWidth - 10, y: this.canvas.height / 2 - paddleHeight / 2, width: paddleWidth, height: paddleHeight, dy: 0, speed: paddleSpeed, hits: 0 };
+    
+    this.paddle1 = { x: 10, y: this.canvas.height / 2 - this.paddleHeight / 2, width: this.paddleWidth, height: this.paddleHeight, dy: 0, speed: this.paddleSpeed, hits: 0 };
+    this.paddle2 = { x: this.canvas.width - this.paddleWidth - 10, y: this.canvas.height / 2 - this.paddleHeight / 2, width: this.paddleWidth, height: this.paddleHeight, dy: 0, speed: this.paddleSpeed, hits: 0 };
     this.ball = { x: this.canvas.width / 2, y: this.canvas.height / 2, radius: 7, speed: this.initialBallSpeed, dx: 0, dy: 0 , lastHitter : 0};
     
     this.collectibles = [];
@@ -150,7 +152,7 @@ export class PongGame extends Game {
     }
 
     this.updateNameDisplay();
-    this.resetBall(true);
+    this.resetRound(true);
     
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
@@ -267,16 +269,22 @@ export class PongGame extends Game {
 
     switch (type) {
         case 'IncreaseBallSize':
-            this.ball!.radius = Math.min(this.ball!.radius + 5, 30); // Max size limit
+            this.ball!.radius = Math.min(this.ball!.radius + 5, 30);
             break;
         case 'DecreaseBallSize':
-            this.ball!.radius = Math.max(this.ball!.radius - 2, 5); // Min size limit
+            this.ball!.radius = Math.max(this.ball!.radius - 2, 5);
             break;
         case 'IncreasePaddleSize':
-            targetPaddle.height = Math.min(targetPaddle.height + 30, 200); // Grow
+            targetPaddle.height = Math.min(targetPaddle.height + 30, 200);
             break;
         case 'DecreasePaddleSize':
-            targetPaddle.height = Math.max(targetPaddle.height - 30, 30); // Shrink
+            targetPaddle.height = Math.max(targetPaddle.height - 30, 30);
+            break;
+        case 'ChangeBallDirection':
+            this.ball!.dy *= -1;
+            break;
+        case 'IncreasePaddleSpeed':
+            targetPaddle.speed = Math.max(targetPaddle.speed + 1, 10);
             break;
     }
   }
@@ -295,7 +303,7 @@ export class PongGame extends Game {
     }
 
     if (this.star3) {
-        availableTypes.push('IncreaseBallSize', 'DecreaseBallSize', 'IncreasePaddleSize', 'DecreasePaddleSize');
+        availableTypes.push('ChangeBallDirection', 'IncreasePaddleSpeed');
 
         // TODO add some real 3 stars power ups
     }
@@ -346,10 +354,10 @@ export class PongGame extends Game {
 
   private handleScore() {
     this.updateScoresUI();
-    this.resetBall();
+    this.resetRound();
   }
 
-  private resetBall(firstServe: boolean = false) {
+  private resetRound(firstServe: boolean = false) {
     this.longestRally = Math.max(this.longestRally, this.currentRallyHits);
     this.currentRallyHits = 0;
     
@@ -359,8 +367,14 @@ export class PongGame extends Game {
     
     this.ball!.radius = 7;
     this.ball!.lastHitter = 0;
-    if (this.paddle1) this.paddle1.height = 100;
-    if (this.paddle2) this.paddle2.height = 100;
+    if (this.paddle1) {
+      this.paddle1.speed = this.paddleSpeed;
+      this.paddle1.height = this.paddleHeight;
+    }
+    if (this.paddle2) {
+      this.paddle2.speed = this.paddleSpeed;
+      this.paddle2.height = this.paddleHeight;
+    }
 
     this.collectibles = [];
     this.lastCollectibleSpawn = Date.now();
@@ -469,7 +483,7 @@ export class PongGame extends Game {
     const dashboard = document.getElementById('game-over-dashboard');
     if (dashboard) dashboard.style.display = 'none';
 
-    this.resetBall(true);
+    this.resetRound(true);
   }
 
   public setWinningScore(newWinningScore: number) {
