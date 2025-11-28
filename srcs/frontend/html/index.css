@@ -124,6 +124,51 @@ p#msg-error {
     margin-bottom: 10px;
 }
 
+.legend-container {
+    position: absolute;
+    top: 80px;
+    right: -290px;
+    width: 240px;
+    
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #555;
+    border-radius: 12px;
+    padding: 15px;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.legend-title {
+    color: #FFFF00;
+    text-align: center;
+    font-size: 1em;
+    font-weight: bold;
+    border-bottom: 1px solid #555;
+    padding-bottom: 8px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ccc;
+    font-size: 0.9em;
+    font-family: 'monospace', sans-serif;
+}
+
+.legend-bubble {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border-width: 4px;
+    border-style: solid;
+    flex-shrink: 0;
+}
+
 /* ==========================================================================
    5. GAME HEADER & SCOREBOARD
    ========================================================================== */

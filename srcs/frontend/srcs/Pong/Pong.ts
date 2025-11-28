@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/28 10:59:55 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/28 11:13:41 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,8 @@ export class PongGame extends Game {
         this.player2Name = (this.gameMode === 'ai') ? "AI" : "Player 2";
     }
 
+    this.generateLegend();
+
     this.updateNameDisplay();
     this.resetRound(true);
     
@@ -171,6 +173,44 @@ export class PongGame extends Game {
     const p2Span = document.getElementById('p2-name');
     if (p1Span) p1Span.innerText = this.player1Name + ": ";
     if (p2Span) p2Span.innerText = this.player2Name + ": ";
+  }
+
+  private generateLegend() {
+    const legendContainer = document.getElementById('powerup-legend');
+    if (!legendContainer) return;
+
+    legendContainer.innerHTML = '';
+    legendContainer.style.display = 'none';
+
+    if (!this.star1 && !this.star2 && !this.star3) return;
+
+    legendContainer.style.display = 'flex';
+    let html = '<div class="legend-title">Power-Ups</div>';
+
+    const createRow = (text: string, fill: string, stroke: string) => {
+        return `
+        <div class="legend-item">
+            <div class="legend-bubble" style="background-color: ${fill}; border-color: ${stroke};"></div>
+            <span>${text}</span>
+        </div>`;
+    };
+
+    if (this.star1) {
+        html += createRow("Bigger Ball", "#FFFF00", "#0000FF");
+        html += createRow("Smaller Ball", "#FFFF00", "#FF0000");
+    }
+
+    if (this.star2) {
+        html += createRow("Bigger Paddle", "#00FFFF", "#0000FF");
+        html += createRow("Smaller Paddle", "#00FFFF", "#FF0000");
+    }
+
+    if (this.star3) {
+        html += createRow("Change Direction", "#FF00FF", "#FFFF00");
+        html += createRow("Faster Paddle", "#888888", "#FFFF00");
+    }
+
+    legendContainer.innerHTML = html;
   }
   
   public start() {
