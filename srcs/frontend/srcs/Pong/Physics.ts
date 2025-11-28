@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:05:33 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/28 12:31:13 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/28 15:20:23 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,10 @@ export class PongPhysics {
         paddle.hits++;
     }
 
-    private increaseBallSpeed(ball: Ball) {
-        if (ball.speed >= this.maxBallSpeed) return;
-        const newSpeed = Math.min(ball.speed + this.ballSpeedIncrease, this.maxBallSpeed);
+    public increaseBallSpeed(ball: Ball, customMaxSpeed?: number) {
+        const limit = customMaxSpeed ?? this.maxBallSpeed;
+        if (ball.speed >= limit) return;
+        const newSpeed = Math.min(ball.speed + this.ballSpeedIncrease, limit);
         const magnitude = Math.sqrt(ball.dx ** 2 + ball.dy ** 2);
         if (magnitude > 0) {
             ball.dx = (ball.dx / magnitude) * newSpeed;

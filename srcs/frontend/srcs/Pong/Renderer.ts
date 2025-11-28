@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:06:22 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/28 12:51:06 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/28 15:14:17 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ export class PongRenderer {
                     this.ctx.fillStyle = '#FF00FF';
                     this.ctx.strokeStyle = '#FFFF00';
                     break;
-                case 'IncreasePaddleSpeed':
+                case 'IncreaseGameSpeed':
                     this.ctx.fillStyle = '#888888';
                     this.ctx.strokeStyle = '#FFFF00';
                     break;

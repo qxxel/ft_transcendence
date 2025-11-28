@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/28 13:02:22 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/28 15:22:57 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ export class PongGame extends Game {
 
     if (this.star3) {
         html += createRow("Change Direction", "#FF00FF", "#FFFF00");
-        html += createRow("Faster Paddle", "#888888", "#FFFF00");
+        html += createRow("Faster Game", "#888888", "#FFFF00");
     }
 
     legendContainer.innerHTML = html;
@@ -329,8 +329,9 @@ export class PongGame extends Game {
         case 'ChangeBallDirection':
             this.ball!.dy *= -1;
             break;
-        case 'IncreasePaddleSpeed':
+        case 'IncreaseGameSpeed':
             targetPaddle.speed = Math.max(targetPaddle.speed + 1, 10);
+            this.physics?.increaseBallSpeed(this.ball!, 16);
             break;
     }
   }
@@ -349,9 +350,7 @@ export class PongGame extends Game {
     }
 
     if (this.star3) {
-        availableTypes.push('ChangeBallDirection', 'IncreasePaddleSpeed');
-
-        // TODO add some real 3 stars power ups
+        availableTypes.push('ChangeBallDirection', 'IncreaseGameSpeed');
     }
 
     if (availableTypes.length === 0) return;
