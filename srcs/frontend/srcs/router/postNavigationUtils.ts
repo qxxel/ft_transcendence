@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   navigationUtils.ts                                 :+:      :+:    :+:   */
+/*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:55:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:00:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// ALL UTILS TO NAVIGATION ARE LOCATED HERE
+// ALL UTILS TO POST NAVIGATION ARE LOCATED HERE
 
 
 /* ====================== IMPORTS ====================== */

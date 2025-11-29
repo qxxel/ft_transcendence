@@ -6,7 +6,11 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:23:51 by agerbaud          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/11/29 15:56:30 by agerbaud         ###   ########.fr       */
+=======
+/*   Updated: 2025/11/28 18:51:47 by agerbaud         ###   ########.fr       */
+>>>>>>> 59d7161 (implement friends page working / start fixing the page refresh problem)
 /*                                                                            */
 /* ************************************************************************** */
 

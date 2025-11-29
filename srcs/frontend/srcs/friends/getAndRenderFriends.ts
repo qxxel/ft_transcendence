@@ -6,26 +6,29 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/27 23:01:33 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 16:54:41 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // FUNCTION THAT MAKE A GET REQUEST TO THE BACK WHEN WE ACCESS `/friends` TO DISPLAY THEM
 
 
-/* ====================== IMPORT ====================== */
+/* ====================== IMPORTS ====================== */
 
-import type { User } from "../user/user.js";
-import { sendRequest }	from "../utils/sendRequest.js"
+import { attachDelegationListeners }	from "./friendsEvents.js"
+import { sendRequest }					from "../utils/sendRequest.js"
+import { user }							from "../index.js"
 
 
+/* ====================== INTERFACE ====================== */
 
 interface	UserObject {
 	id: number,
 	username: string,
 	avatar: string | null,
 	email: string,
-	status: string
+	status: string,
+	receiver_id: string
 }
 
 
@@ -39,48 +42,54 @@ export async function	getAndRenderFriends(): Promise<void> {
 		console.error(errorData);
 
 		displayErrors();
-
+		
 		return ;
 	}
 
 	const	friendsData: UserObject[] = await response.json();
 
-	if (friendsData.filter((value: UserObject) => { return value.status === "PENDING"; }).length === 0)
-		displayNoRequest();
-
-	if (friendsData.filter((value: UserObject) => { return value.status === "ACCEPTED"; }).length === 0)
-		displayNoFriends();
-
 	renderFriends(friendsData);
 }
 
 function	renderFriends(friendsData: UserObject[]): void {
+	const	requestsListDiv: HTMLDivElement = document.getElementById("requests-list") as HTMLDivElement;
+	requestsListDiv.innerHTML = "<h2>PENDING REQUEST</h2>";
+
+	const	friendsListDiv: HTMLDivElement = document.getElementById("friends-list") as HTMLDivElement;
+	friendsListDiv.innerHTML = "<h1>FRIENDS LIST</h1>";
+
+
+	if (friendsData.filter((value: UserObject) => { return user.getId() === parseInt(value.receiver_id, 10) && value.status === "PENDING"; }).length === 0)
+		displayNoRequest(requestsListDiv);
+
+	if (friendsData.filter((value: UserObject) => { return value.status === "ACCEPTED"; }).length === 0)
+		displayNoFriends(friendsListDiv);
+
 	friendsData.forEach((value: UserObject) => {
-		createFriendElement(value);
+		createFriendElement(requestsListDiv, friendsListDiv, value);
 	});
+
+
+	attachDelegationListeners(requestsListDiv, friendsListDiv);
 }
 
-function	createFriendElement(friend: UserObject): void {
-	console.log(friend);
+function	createFriendElement(requestsListDiv: HTMLDivElement, friendsListDiv: HTMLDivElement, friend: UserObject): void {
 
-	if (friend.status === "PENDING")
+	if (user.getId() === parseInt(friend.receiver_id, 10) && friend.status === "PENDING")
 	{
-		addRequestInList(friend);
+		addRequestInList(requestsListDiv, friend);
 		return ;
 	}
 
 	if (friend.status === "ACCEPTED")
 	{
-		addFriendInList(friend);
+		addFriendInList(friendsListDiv, friend);
 		return ;
 	}
 }
 
-function	addRequestInList(friend: UserObject): void {
-	const	requestsListDiv: HTMLDivElement = document.getElementById("requests-list") as HTMLDivElement;
-
+function	addRequestInList(requestsListDiv: HTMLDivElement, friend: UserObject): void {
 	const	newDiv: HTMLDivElement = document.createElement("div");
-	newDiv.id = `${friend.id}`;
 	newDiv.classList.add("friend-entry");
 	newDiv.classList.add("pending-request");
 
@@ -95,11 +104,15 @@ function	addRequestInList(friend: UserObject): void {
 	acceptButton.classList.add("neon-button");
 	acceptButton.classList.add("accept-button");
 	acceptButton.textContent = "ACCEPT";
+	acceptButton.dataset.targetId = friend.id.toString();
+	acceptButton.dataset.targetUsername = friend.username;
 
 	const	ignoreButton: HTMLSpanElement = document.createElement("button");
 	ignoreButton.classList.add("neon-button");
 	ignoreButton.classList.add("ignore-button");
 	ignoreButton.textContent = "IGNORE";
+	ignoreButton.dataset.targetId = friend.id.toString();
+	ignoreButton.dataset.targetUsername = friend.username;
 
 
 	newActionDiv.appendChild(acceptButton);
@@ -111,11 +124,8 @@ function	addRequestInList(friend: UserObject): void {
 	requestsListDiv.appendChild(newDiv);
 }
 
-function	addFriendInList(friend: UserObject): void {
-	const	friendsListDiv: HTMLDivElement = document.getElementById("friends-list") as HTMLDivElement;
-
+function	addFriendInList(friendsListDiv: HTMLDivElement, friend: UserObject): void {
 	const	newDiv: HTMLDivElement = document.createElement("div");
-	newDiv.id = `${friend.id}`;
 	newDiv.classList.add("friend-entry");
 	newDiv.classList.add("online");
 
@@ -134,10 +144,14 @@ function	addFriendInList(friend: UserObject): void {
 	challengeButton.classList.add("neon-button");
 	challengeButton.classList.add("challenge-button");
 	challengeButton.textContent = "FIGHT ⚔️";
+	challengeButton.dataset.targetId = friend.id.toString();
+	challengeButton.dataset.targetUsername = friend.username;
 
 	const	removeButton: HTMLSpanElement = document.createElement("button");
 	removeButton.classList.add("remove-button");
 	removeButton.textContent = "✕";
+	removeButton.dataset.targetId = friend.id.toString();
+	removeButton.dataset.targetUsername = friend.username;
 
 
 	newActionDiv.appendChild(challengeButton);
@@ -150,9 +164,7 @@ function	addFriendInList(friend: UserObject): void {
 	friendsListDiv.appendChild(newDiv);
 }
 
-function	displayNoRequest(): void {
-	const	requestsListDiv: HTMLDivElement = document.getElementById("requests-list") as HTMLDivElement;
-
+function	displayNoRequest(requestsListDiv: HTMLDivElement): void {
 	const	emptyMessageParagraph: HTMLParagraphElement = document.createElement("p");
 	emptyMessageParagraph.classList.add("empty-message");
 	emptyMessageParagraph.classList.add("requests-empty");
@@ -162,9 +174,7 @@ function	displayNoRequest(): void {
 	requestsListDiv.appendChild(emptyMessageParagraph);
 }
 
-function	displayNoFriends(): void {
-	const	friendsListDiv: HTMLDivElement = document.getElementById("friends-list") as HTMLDivElement;
-
+function	displayNoFriends(friendsListDiv: HTMLDivElement): void {
 	const	emptyMessageParagraph: HTMLParagraphElement = document.createElement("p");
 	emptyMessageParagraph.classList.add("empty-message");
 	emptyMessageParagraph.classList.add("friends-empty");
@@ -175,8 +185,11 @@ function	displayNoFriends(): void {
 }
 
 function	displayErrors(): void {
+	const	requestsListDiv: HTMLDivElement = document.getElementById("requests-list") as HTMLDivElement;
+	requestsListDiv.innerHTML = "<h2>PENDING REQUEST</h2>";	
+
 	const	friendsListDiv: HTMLDivElement = document.getElementById("friends-list") as HTMLDivElement;
-	const	requestsListDiv: HTMLDivElement = document.getElementById("friends-list") as HTMLDivElement;
+	friendsListDiv.innerHTML = "<h1>FRIENDS LIST</h1>";
 
 	const	requestsErrorParagraph: HTMLParagraphElement = document.createElement("p");
 	requestsErrorParagraph.classList.add("error-message");
@@ -192,3 +205,4 @@ function	displayErrors(): void {
 	requestsListDiv.appendChild(requestsErrorParagraph);
 	friendsListDiv.appendChild(friendsErrorParagraph);
 }
+

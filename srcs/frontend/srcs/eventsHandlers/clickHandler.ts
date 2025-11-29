@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:53:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:59:50 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { PongGame } from "../Pong/Pong.js";
-import { TournamentController } from "../tournament.js";
+import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
+import { PongGame }				from "../Pong/Pong.js"
+import { TournamentController } from "../tournament.js"
 import { Router }		from "../router/router.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 import { User }			from "../user/user.js"
@@ -134,6 +135,42 @@ async function	onClickNewCode(router: Router, gameState: GameState, user: User):
 
 	btnCooldown();
 	DisplayDate(5);
+}
+
+async function	onClickSendRequest(router: Router, gameState: GameState, user: User): Promise<void> {
+	const	inputUserAdd: HTMLInputElement = document.getElementById("username-add-input") as HTMLInputElement;
+	if (!inputUserAdd)
+		return ;
+
+	const	targetName: string = inputUserAdd.value;
+	if (targetName.length === 0)
+		return ;
+
+	inputUserAdd.value = "";
+
+	const	respTargetId: Response = await sendRequest(`/api/user/lookup/${targetName}`, "get", null);
+	if (!respTargetId.ok)
+	{
+		console.log((await respTargetId.json() as any).error)
+		return ;																					//	AXEL: AFFICHER BULLE ERREUR
+	}
+	const	targetId: number = (await respTargetId.json() as any).id;
+
+	const	response: Response = await sendRequest(`/api/user/friends/request/${targetId}`, "post", {});
+	if (!response.ok)
+	{
+		console.log(await response.json())
+		return ;																					//	AXEL: AFFICHER BULLE ERREUR
+	}
+
+	const	friendship: any = await response.json();
+
+	if (friendship.status === "PENDING")
+		console.log(`Request sended to ${targetName}.`);
+	if (friendship.status === "ACCEPTED")
+		console.log(`You are now friend with ${targetName}.`);
+
+	await getAndRenderFriends();
 }
 
 async function onClickGetMessage(): Promise<void> {
@@ -348,10 +385,14 @@ function onClickStartFeatured(mode: 'ai' | 'pvp',router: Router, gameState: Game
 export async function   setupClickHandlers(router: Router, user: User, gameState: GameState): Promise<void> {
 	(window as any).onClickPlay = () => onClickPlay(router, gameState, user);
 	(window as any).onClickLogout = () => onClickLogout(router, gameState, user);
+<<<<<<< HEAD
 	(window as any).onClickEdit = () => onClickEdit(user);
 	(window as any).onClickCancel = () => onClickCancel(user);
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
 	(window as any).onClickNewCode = () => onClickNewCode(router, gameState, user);
+=======
+	(window as any).onClickSendRequest = () => onClickSendRequest(router, gameState, user);
+>>>>>>> 59d7161 (implement friends page working / start fixing the page refresh problem)
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;
 	(window as any).onClickRefreshMessage = onClickRefreshMessage;
@@ -372,7 +413,7 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	
 	(window as any).startTournamentMatch = (matchId: string, p1: string, p2: string) => 
 		startTournamentMatch(matchId, p1, p2, router, gameState, user);
-	
+
 	document.addEventListener('click', (event) => {
 		const target = event.target as HTMLAnchorElement;
 		if (target.tagName === 'A' && target.hasAttribute('href')) {

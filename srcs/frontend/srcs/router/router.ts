@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   router.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 12:36:49 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:01:07 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { pathActions }	from "./navigationUtils.js"
+import { pathActions }	from "./postNavigationUtils.js"
 import { User }			from "../user/user.js"
 
 import type { GameState }					from "../index.js"
@@ -54,9 +54,11 @@ export class	Router {
 		const	currentPath: string = window.location.pathname;
 		const	route: Route | undefined = this.routes.find(r => r.path === currentPath);
 
-		if (route) {
+		if (route)
+		{
 			const	contentDiv: HTMLElement | null = document.getElementById('page-content');
-			if (contentDiv) {
+			if (contentDiv)
+			{
 				const	html: string = await route.component();
 				contentDiv.innerHTML = html;
 			}

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 14:02:53 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:52:57 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:59:31 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ export class	friendshipsService {
 				return await this.friendshipsRepo.acceptFriendRequest(swapDto);
 			}
 
-			throw new Error("You already send a friend request.");
+			throw new Error("You already sent a friend request.");
 		}
 
 		return await this.friendshipsRepo.addFriendRequest(friendship);
@@ -75,7 +75,7 @@ export class	friendshipsService {
 				return await this.friendshipsRepo.acceptFriendRequest(swapDto);
 			}
 
-			throw new Error("You already send a friend request.");
+			throw new Error("You already sent a friend request.");
 		}
 
 		return await this.friendshipsRepo.addFriend(friendship);

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:52:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:58:44 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,19 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 
 		try {
 			const	response: AxiosResponse = await gatewayAxios.get(`https://user:3000/${parseId}`);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+	gatewayFastify.get('/lookup/:identifier', async (request: FastifyRequest, reply: FastifyReply) => {
+
+		try {
+			const	{ identifier } = request.params as { identifier: string };
+
+			const	response: AxiosResponse = await gatewayAxios.get(`https://user:3000/lookup/${identifier}`);
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
