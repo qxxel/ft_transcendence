@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:48:27 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:03:05 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { PongGame } from "../Pong/Pong.js";
-import { TournamentController } from "../tournament.js";
+import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
+import { PongGame }				from "../Pong/Pong.js"
+import { TournamentController } from "../tournament.js"
 import { Router }		from "../router/router.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 import { User }			from "../user/user.js"
@@ -348,10 +349,12 @@ function onClickStartFeatured(mode: 'ai' | 'pvp',router: Router, gameState: Game
 export async function   setupClickHandlers(router: Router, user: User, gameState: GameState): Promise<void> {
 	(window as any).onClickPlay = () => onClickPlay(router, gameState, user);
 	(window as any).onClickLogout = () => onClickLogout(router, gameState, user);
+
 	(window as any).onClickEdit = () => onClickEdit(user);
 	(window as any).onClickCancel = () => onClickCancel(user);
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
 	(window as any).onClickNewCode = () => onClickNewCode(router, gameState, user);
+
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;
 	(window as any).onClickRefreshMessage = onClickRefreshMessage;
@@ -372,7 +375,7 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	
 	(window as any).startTournamentMatch = (matchId: string, p1: string, p2: string) => 
 		startTournamentMatch(matchId, p1, p2, router, gameState, user);
-	
+
 	document.addEventListener('click', (event) => {
 		const target = event.target as HTMLAnchorElement;
 		if (target.tagName === 'A' && target.hasAttribute('href')) {

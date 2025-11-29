@@ -857,6 +857,11 @@ button:disabled {
     max-width: 900px;
 }
 
+.friends-page-container h1 {
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
 .friends-page-container h2 {
     text-align: center;
     text-transform: uppercase;
@@ -876,18 +881,25 @@ button:disabled {
     gap: 15px;
     margin-bottom: 30px;
     padding: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-#username-input {
-    flex-grow: 1;
+
+#username-add-input {
+    width: 63%;
     padding: 10px;
-    background: black;
-    color: var(--neon-yellow);
-    border: 1px solid var(--border-color);
-    box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.3);
-    font-size: 16px;
-    font-family: inherit;
+    border-radius: 6px;
+    border: 1px solid #aaa;
+    background: #333;
+    color: #fff;
+    font-family: 'monospace', sans-serif;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+#add-friend-button {
+    font-size: 15px;
+    padding: 12px 12px;
+    margin-top: 0px;
 }
 
 /* ---------------------------------------------------------------- */
@@ -896,38 +908,44 @@ button:disabled {
 
 .neon-button {
     background: transparent;
-    border: 1px solid var(--neon-yellow);
-    color: var(--neon-yellow);
+    border: 1px solid #FF0;
+    color: #FF0;
     padding: 8px 15px;
     text-transform: uppercase;
     cursor: pointer;
     font-weight: bold;
-    box-shadow: 0 0 5px var(--neon-yellow);
+    box-shadow: 0 0 5px #FF0;
     transition: all 0.2s;
 }
 
 .neon-button:hover {
     color: black;
-    background: var(--neon-yellow);
-    box-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow);
+    background: #FF0;
+    box-shadow: 0 0 10px #FF0, 0 0 20px #FF0;
 }
 
 .accept-button {
-    border-color: var(--neon-green);
-    color: var(--neon-green);
-    box-shadow: 0 0 5px var(--neon-green);
+    border-color: #0F0;
+    color: #0F0;
+    box-shadow: 0 0 5px #0F0;
 }
+
 .accept-button:hover {
-    background: var(--neon-green);
+    color: black;
+    background: #0F0;
+    box-shadow: 0 0 10px #0F0, 0 0 20px #0F0;
 }
 
 .ignore-button {
-    border-color: var(--neon-red);
-    color: var(--neon-red);
-    box-shadow: 0 0 5px var(--neon-red);
+    border-color: #F00;
+    color: #F00;
+    box-shadow: 0 0 5px #F00;
 }
+
 .ignore-button:hover {
-    background: var(--neon-red);
+    color: black;
+    background: #F00;
+    box-shadow: 0 0 10px #F00, 0 0 20px #F00;
 }
 
 /* ---------------------------------------------------------------- */
@@ -943,7 +961,6 @@ button:disabled {
     align-items: center;
     justify-content: space-between;
     padding: 10px 0;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
 .friend-entry:last-child {
@@ -955,22 +972,32 @@ button:disabled {
     height: 8px;
     border-radius: 50%;
     margin-right: 15px;
-    background: gray; /* Hors ligne par défaut */
+    background: gray;
 }
 
 /* Statuts spécifiques */
 .online .status-dot {
-    background: var(--neon-green);
-    box-shadow: 0 0 5px var(--neon-green);
+    background: #0F0;
+    box-shadow: 0 0 5px #0F0;
 }
 
 .playing .status-dot {
-    background: var(--neon-yellow);
-    box-shadow: 0 0 5px var(--neon-yellow);
+    background: #FF0;
+    box-shadow: 0 0 5px #FF0;
 }
 
 .username {
-    flex-basis: 300px; /* Donne de l'espace au nom */
+    flex-basis: 66%;
+    font-weight: bold;
+}
+
+.empty-message {
+    flex-basis: 100%;
+    font-weight: bold;
+}
+
+.error-message {
+    flex-basis: 100%;
     font-weight: bold;
 }
 
@@ -981,7 +1008,7 @@ button:disabled {
 }
 
 .playing-status {
-    color: var(--neon-yellow);
+    color: #FF0;
 }
 
 /* Boutons d'action */
@@ -1000,23 +1027,24 @@ button:disabled {
 }
 
 .remove-button:hover {
-    color: var(--neon-red);
-    text-shadow: 0 0 5px var(--neon-red);
+    color: #F00;
+    text-shadow: 0 0 5px #F00;
 }
 
 .challenge-button {
+    width: 100%;
     padding: 5px 10px;
     font-size: 14px;
-    /* Style du bouton néon vert/jaune */
-    border-color: var(--neon-green);
-    color: var(--neon-green);
-    box-shadow: 0 0 5px var(--neon-green);
+    border-color: #666;
+    color: #666;
+    box-shadow: 0 0 5px #666;
 }
 .challenge-button:hover {
-    background: var(--neon-green);
     color: black;
+    background: #666;
+    box-shadow: 0 0 10px #666, 0 0 20px #666;
 }
 
 .pending-request .username {
-    color: var(--neon-yellow);
+    color: #FFF;
 }

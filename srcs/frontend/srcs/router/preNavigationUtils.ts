@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   loadHandler.ts                                     :+:      :+:    :+:   */
+/*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:00:01 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/29 16:02:11 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// CONTAINS FUNCTION THAT HANDLE THE LOAD OF THE PAGE
+// ALL UTILS TO PRE NAVIGATION ARE LOCATED HERE
 
 
 /* ====================== IMPORTS ====================== */
@@ -20,14 +20,22 @@ import { sendRequest }	from "../utils/sendRequest.js"
 import { User }			from "../user/user.js"
 
 import type { GameState }	from "../index.js"
+import type { Router }		from "./router.js"
 
 
-/* ====================== FUNCTIONS ====================== */
+/* ====================== FUNCTION ====================== */
 
-async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
-	document.addEventListener("DOMContentLoaded", async (event: Event) => {
-		console.log("DOMContentLoaded");
+export async function	preNavigation(router: Router, currentPath: string, gameState: GameState, user: User): Promise<void> {
+	const	respToken: Response = await sendRequest('/api/jwt/validate', 'GET', null);
+	if (!respToken.ok)
+		console.error((await respToken.json()).error);														//	AXEL: A VERIFIER
 
+	redirections(router, currentPath, gameState, user);
+}
+
+export async function	redirections(router: Router, currentPath: string, gameState: GameState, user: User): Promise<void> {
+	if (['/friends', '/user'].includes(currentPath))
+	{
 		const	response: Response = await sendRequest('/api/jwt/validate', 'GET', null);
 
 		if (!response.ok)
@@ -54,18 +62,5 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 				<a href="/about">About</a>`;
 
 		router.navigate('/', gameState, user);
-	});
-}
-
-function handleUnload() {
-	window.addEventListener("beforeunload", async (event: Event) => {
-		if (location.pathname !== "/2fa")
-			return;
-		event.preventDefault();
-	});
-}
-
-export async function	setupLoadHandler(gameState: GameState, user: User): Promise<void> {
-	handleLoadPage(gameState, user);
-	handleUnload();
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:49:12 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:05:09 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 import { router }	from "../index.js"
 import { User }		from "../user/user.js"
 import { sendRequest }	from "../utils/sendRequest.js"
+import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
 
 import type { GameState }	from "../index.js"
 
@@ -209,6 +210,39 @@ async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameStat
 	location.reload();
 }
 
+async function	handleAddFriendForm(form: HTMLFormElement, gameState: GameState, user: User) {
+	console.log("add friend form");
+
+	const targetName: string = (document.getElementById("username-add-input") as HTMLInputElement).value;
+	if (!targetName)
+		return ;
+	form.reset();
+
+	const	respTargetId: Response = await sendRequest(`/api/user/lookup/${targetName}`, "get", null);
+	if (!respTargetId.ok)
+	{
+		console.log((await respTargetId.json() as any).error)
+		return ;																					//	AXEL: AFFICHER BULLE ERREUR
+	}
+	const	targetId: number = (await respTargetId.json() as any).id;
+
+	const	response: Response = await sendRequest(`/api/user/friends/request/${targetId}`, "post", {});
+	if (!response.ok)
+	{
+		console.log(await response.json())
+		return ;																					//	AXEL: AFFICHER BULLE ERREUR
+	}
+
+	const	friendship: any = await response.json();
+
+	if (friendship.status === "PENDING")
+		console.log(`Request sended to ${targetName}.`);
+	if (friendship.status === "ACCEPTED")
+		console.log(`You are now friend with ${targetName}.`);
+
+	await getAndRenderFriends();
+}
+
 export function	setupSubmitHandler(gameState: GameState, user: User): void {
 	document.addEventListener('submit', async (event: SubmitEvent) => {
 		event.preventDefault();
@@ -226,5 +260,8 @@ export function	setupSubmitHandler(gameState: GameState, user: User): void {
 
 		if (form.id === "user-settings-form")
 			await handleUserSettingsForm(form, gameState, user);
+
+		if (form.id === "add-friend-form")
+			await handleAddFriendForm(form, gameState, user);
 	});
 }

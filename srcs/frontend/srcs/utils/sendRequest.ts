@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sendRequest.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:23:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 14:51:47 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:06:00 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 async function	sendMainRequest(path: string, requestMethod: string, body: Object | null): Promise<Response> {
 	let	response: Response;
+
 	if (body === null)
 	{
 		response = await fetch(path, {
@@ -35,6 +36,7 @@ async function	sendMainRequest(path: string, requestMethod: string, body: Object
 			body: JSON.stringify(body)
 		});
 	}
+
 	return response;
 }
 

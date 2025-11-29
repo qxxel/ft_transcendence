@@ -1,50 +1,18 @@
 <div class="friends-page-container">
     <div class="add-friend-module">
-        <input type="text" placeholder="Entrer le nom d'utilisateur à ajouter..." id="username-input">
-        <button class="neon-button add-button">
-            <span>[ ADD FRIEND ]</span>
-        </button>
-    </div>
-    
-    <div class="requests-list">
-        <h2>[ PENDING REQUEST ]</h2>
-        <div class="friend-entry pending-request">
-            <span class="username">user_waiting_44</span>
-            <div class="actions">
-                <button class="neon-button accept-button">ACCEPTER</button>
-                <button class="neon-button ignore-button">IGNORER</button>
-            </div>
-        </div>
+        <form id="add-friend-form">
+            <input type="text" placeholder="Enter player name..." id="username-add-input">
+            <button type="submit" class="btn-yellow" id="add-friend-button">
+                <span>ADD FRIEND</span>
+            </button>
+        </form>
     </div>
 
-    <div class="friends-list">
-        <h1>[ FRIENDS LIST ]</h1>
-        <div class="friend-entry online">
-            <span class="status-dot green-glow"></span>
-            <span class="username">user_name_001</span>
-            <span class="status-text">(En ligne)</span>
-            <div class="actions">
-                <button class="neon-button challenge-button">Défier ⚔️</button>
-                <button class="remove-button">✕</button>
-            </div>
-        </div>
-        
-        <div class="friend-entry playing">
-            <span class="status-dot yellow-glow"></span>
-            <span class="username">opponent_slayer_42</span>
-            <span class="status-text playing-status">(En jeu Pong)</span>
-            <div class="actions">
-                <button class="remove-button">✕</button>
-            </div>
-        </div>
-        
-        <div class="friend-entry offline">
-            <span class="status-dot"></span>
-            <span class="username">silent_ghost_99</span>
-            <span class="status-text">(Hors ligne)</span>
-            <div class="actions">
-                <button class="remove-button">✕</button>
-            </div>
-        </div>
+    <div class="requests-list" id="requests-list">
+        <h2>PENDING REQUEST</h2>
+    </div>
+
+    <div class="friends-list" id="friends-list">
+        <h1>FRIENDS LIST</h1>
 	</div>
 </div>

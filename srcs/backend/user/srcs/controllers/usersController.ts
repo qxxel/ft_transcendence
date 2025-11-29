@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 12:02:35 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:58:55 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,14 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 
 	// GET A USER WITH AN IDENTIFIER (EMAIL OR USERNAME)
 	userFastify.get('/lookup/:identifier', async (request: FastifyRequest, reply: FastifyReply) => {
-		const	{ identifier } = request.params as { identifier: string };
-
 		try {
+			const	{ identifier } = request.params as { identifier: string };
+
+			let	user: usersRespDto;
 			if (!identifier.includes("@"))
-				var	user: usersRespDto = await usersServ.getUserByUsername(identifier);
+				user = await usersServ.getUserByUsername(identifier);
 			else
-				var	user: usersRespDto = await usersServ.getUserByEmail(identifier);
+				user = await usersServ.getUserByEmail(identifier);
 
 			return reply.code(200).send(user);
 		}
