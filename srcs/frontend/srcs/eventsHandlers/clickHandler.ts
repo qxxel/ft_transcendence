@@ -16,6 +16,7 @@
 
 import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
 import { PongGame }				from "../Pong/Pong.js"
+import { TankGame } 			from "../v3/tank.js"
 import { TournamentController } from "../tournament.js"
 import { Router }		from "../router/router.js"
 import { sendRequest }	from "../utils/sendRequest.js"
@@ -24,6 +25,7 @@ import { DisplayDate }	from "../utils/displayDate.js"
 import { btnCooldown }	from "../utils/buttonCooldown.js"
 
 import type { GameState }   from "../index.js"
+import { Tank } from "../v3/class_tank.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -278,14 +280,21 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', router: Router, g
   router.navigate("/pong", gameState, user);
 }
 
-function onClickPlayPVP(router: Router, gameState: GameState, user: User) {
+function onClickPlayPVP(game: 'tank' | 'pong', router: Router, gameState: GameState, user: User) {
   const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
   const winningScore = parseInt(maxPointsInput.value, 10);
 //   user.setUsername("Test");
-  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'pvp');
-  gameState.currentGame.setWinningScore(winningScore);
-  
-  router.navigate("/pong", gameState, user);
+	if (game == 'pong') {
+    gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'pvp');
+    gameState.currentGame.setWinningScore(winningScore);
+    router.navigate("/pong", gameState, user);
+  }
+  else
+  {  
+    gameState.currentGame = new TankGame('tank-canvas', 'desertfox', router, user);
+    gameState.currentGame.setWinningScore(winningScore);
+    router.navigate("/tank", gameState, user);
+  }
 }
 
 function onStartTournament(router: Router, gameState: GameState, user: User) {
@@ -318,7 +327,7 @@ function startTournamentMatch(matchId: string, p1: string, p2: string, router: R
   }
 }
 
-function onClickStartFeatured(mode: 'ai' | 'pvp',router: Router, gameState: GameState, user: User) {
+function onClickStartFeatured(game: 'pong' | 'tank', mode: 'ai' | 'pvp',router: Router, gameState: GameState, user: User) {
     const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
     const aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
 
@@ -337,8 +346,14 @@ function onClickStartFeatured(mode: 'ai' | 'pvp',router: Router, gameState: Game
 
     console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Diff=${difficulty}, Stars=[${star1},${star2},${star3}]`);
 
-    gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3);
-    
+
+	// if (game == 'pong')
+	// {
+    	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3);
+	// }
+	// else 
+    // 	gameState.currentGame = new TankGame('tank-canvas', 'desertfox', router, user, star1, star2, star3);
+
     gameState.currentGame.setWinningScore(winningScore);
 
     router.navigate("/pong", gameState, user);
@@ -364,13 +379,13 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	(window as any).hideDifficultyMenu = hideDifficultyMenu;
 
     (window as any).switchGameMode = switchGameMode;
-    (window as any).onClickStartFeatured = (mode: 'ai' | 'pvp') => onClickStartFeatured(mode, router, gameState, user);
+    (window as any).onClickStartFeatured = (game: 'pong' | 'tank', mode: 'ai' | 'pvp') => onClickStartFeatured(game, mode, router, gameState, user);
     (window as any).selectFeaturedDifficulty = selectFeaturedDifficulty;
 
     (window as any).onClickPlayAI = (difficulty: 'easy' | 'medium' | 'hard') => 
         onClickPlayAI(difficulty, router, gameState, user);
 
-	(window as any).onClickPlayPVP = () => onClickPlayPVP(router, gameState, user);
+	(window as any).onClickPlayPVP = (game: 'pong' | 'tank') => onClickPlayPVP(game, router, gameState, user);
 	(window as any).onStartTournament = () => onStartTournament(router, gameState, user);
 	
 	(window as any).startTournamentMatch = (matchId: string, p1: string, p2: string) => 

@@ -32,7 +32,7 @@ export class	Ball extends Actor {
 	speed: number = 5;
 	damage: number = 1;
 	bounce_count: number = 5;
-	SCOTCH_DIRECTION_IMPACT: string = "";
+	direction_impact: string = "";
 
 	constructor(
 		x:number,
@@ -61,34 +61,13 @@ export class	Ball extends Actor {
 			ctx.fill();
 	 }
 
-	// move(dx:number,dy:number) {
-	//   if (this.collide(new Rect2D(this.x + dx, this.y + dy, this.w, this.h)))
-	//       return;
-	//   this.x += dx;
-	//   this.y += dy;
-	//   this.rect.x += dx;
-	//   this.rect.y += dy;
-	// }
-
 	move(): void {
 	const future: Rect2D = new Rect2D(this.x + this.dx, this.y + this.dy, this.w, this.h);
 
 	if (this.collide(future)) {
-		// console.log(this.SCOTCH_DIRECTION_IMPACT);
-		if      (this.SCOTCH_DIRECTION_IMPACT == "vertical") this.dy = -this.dy;
-		else if (this.SCOTCH_DIRECTION_IMPACT == "horizontal") this.dx = -this.dx;
-
-		// const reboundFuture = new Rect2D(this.x + this.dx, this.y + this.dy, this.w, this.h);
-
-		// if (!this.collide(reboundFuture)) {
-			// this.x += this.dx;
-			// this.y += this.dy;
-			// this.rect.x += this.dx;
-			// this.rect.y += this.dy;
-		// }
-		// return;
+		if      (this.direction_impact == "vertical") this.dy = -this.dy;
+		else if (this.direction_impact == "horizontal") this.dx = -this.dx;
 	}
-
 		this.x += this.dx;
 		this.y += this.dy;
 		this.rect.x += this.dx;
@@ -115,7 +94,7 @@ export class	Ball extends Actor {
 				this.bounce_count--;
 				if (this.bounce_count <= 0)
 					this.destroy();
-				this.SCOTCH_DIRECTION_IMPACT = this.getBounce(a.getRect());
+				this.direction_impact = this.getBounce(a.getRect());
 				return true;
 			}
 		}
@@ -130,9 +109,6 @@ export class	Ball extends Actor {
 
 		const overlapX = (this.w / 2 + other.w / 2) - Math.abs(dx);
 		const overlapY = (this.h / 2 + other.h / 2) - Math.abs(dy);
-
-
-		// console.log(dx, dy, overlapX, overlapY);
 		return overlapX < overlapY ? "horizontal" : "vertical";
 	}
 }

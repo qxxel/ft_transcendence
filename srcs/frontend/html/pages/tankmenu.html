@@ -1,5 +1,101 @@
-<div class="game-container">
-	<h1>About</h1>
-		<p>TANK GAME MENU</p>
-		<a href="/tank" class="txt">Tank</a>
-</div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menu du jeu</title>
+</head>
+<body>
+  <div class="game-container">
+    <div class="menu-content">
+      
+      <h1>Tank 🚀</h1>
+
+      <div id="default-mode-content" style="width: 80%;">
+          
+          <div class="control-group" style="width: 100%;">
+            <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
+            <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
+          </div>
+
+          <div id="main-menu-btns" class="button-group" style="width: 100%; gap: 15px; margin-bottom: 15px;">
+            <button onclick="onClickPlayTank('tank');" class="btn-yellow" style="flex: 1;">
+              Play 1v1
+            </button>
+          </div>
+
+          <button onclick="switchGameMode('featured')" class="btn-purple" style="width: 100%;">
+            ✨ Featured Mode
+          </button>
+
+      </div>
+
+      <div id="featured-mode-content" class="menu-content hidden" style="width: 100%;">
+          <div class="control-group" style="width: 100%;">
+              <label for="featuredMaxPoints">
+                  Points to Win: 
+                  <span id="featured-points-display" style="color: #FFFF00;">5</span>
+              </label>
+              <input type="range" id="featuredMaxPoints" min="1" max="10" value="5" step="1"/>
+          </div>
+          <div class="control-group" style="width: 100%;">
+              <label for="powerupFreq">
+                  Power-up Frequency:
+                  <span id="powerup-freq-display" style="color: #FFFF00;">5 sec</span>
+              </label>
+              <input type="range" id="powerupFreq" min="1" max="10" value="5" step="1"/>
+          </div>
+
+          <p class="diff-title" style="width: 90%;">ALLOWED POWER-UPS</p>
+          
+          <div class="checkbox-group">
+              <label class="checkbox-btn"><input type="checkbox" id="chk-1star" checked><span>★</span></label>
+              <label class="checkbox-btn"><input type="checkbox" id="chk-2star" checked><span>★★</span></label>
+              <label class="checkbox-btn"><input type="checkbox" id="chk-3star" checked><span>★★★</span></label>
+          </div>
+
+          <div style="width: 90%; margin-top: 25px; display: flex; flex-direction: column; gap: 10px;">
+            <button onclick="onClickStartFeatured('pvp');" class="btn-yellow" style="flex: 1;">
+              Play 1v1
+            </button>
+            <button onclick="switchGameMode('default')" class="btn-cancel" style="width: 100%;">
+              Back to Default
+            </button>
+          </div>
+          <div class="legend-container" style="top: 20px;"> <div class="legend-title">Power-Up Guide</div>
+          
+          <div class="legend-subtitle">★ BALL SIZE</div>
+          <div class="legend-item">
+            <div class="legend-bubble" style="background-color: #FFFF00; border-color: #0000FF;"></div>
+            <span>Bigger</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-bubble" style="background-color: #FFFF00; border-color: #FF0000;"></div>
+            <span>Smaller</span>
+          </div>
+          
+          <div class="legend-subtitle">★★ PADDLE SIZE</div>
+          <div class="legend-item">
+            <div class="legend-bubble" style="background-color: #00FFFF; border-color: #0000FF;"></div>
+            <span>Bigger</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-bubble" style="background-color: #00FFFF; border-color: #FF0000;"></div>
+            <span>Smaller</span>
+          </div>
+          
+          <div class="legend-subtitle">★★★ CHAOS</div>
+          <div class="legend-item">
+            <div class="legend-bubble" style="background-color: #FF00FF; border-color: #FFFF00;"></div>
+            <span>Deflect</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-bubble" style="background-color: #888888; border-color: #FFFF00;"></div>
+            <span>Speed Up</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

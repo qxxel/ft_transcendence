@@ -142,13 +142,13 @@ export class	Tank extends Actor {
 			GSTATE.TANKS -= 1;
 			if (this.id == 0)
 			{
-				GSTATE.STATS1.win += 1;
-				GSTATE.STATS2.lose += 1;
+				GSTATE.STATS1.lose += 1;
+				GSTATE.STATS2.win += 1;
 			}
 			else
 			{
-				GSTATE.STATS1.lose += 1;
-				GSTATE.STATS2.win += 1;
+				GSTATE.STATS1.win += 1;
+				GSTATE.STATS2.lose += 1;
 			}
 			this.destroy();
 		}
