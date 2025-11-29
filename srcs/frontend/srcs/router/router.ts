@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 16:27:52 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 12:36:49 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ export class	Router {
 		const	route: Route | undefined = this.routes.find(r => r.path === currentPath);
 
 		if (route) {
-			const	contentDiv: HTMLElement | null = document.getElementById('app');
+			const	contentDiv: HTMLElement | null = document.getElementById('page-content');
 			if (contentDiv) {
 				const	html: string = await route.component();
 				contentDiv.innerHTML = html;

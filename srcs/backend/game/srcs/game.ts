@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 21:51:28 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 11:38:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 import cors					from '@fastify/cors'
 import Fastify				from 'fastify'
 import fs					from 'fs'
+import { Server }			from 'socket.io'
 import sqlite3Pkg			from 'sqlite3'
 import { pongController }	from "./controllers/pongController.js"
 import { pongService }		from "./services/pongService.js"
@@ -62,18 +63,39 @@ gameFastify.register(cors, {
 	credentials: true
 });
 
-gameFastify.get('/', (request, reply) => {						//
-	return reply.code(200).send({ message: "Hello World !" });	//	/!\ TEST: HAVE TO REMOVE /!\
-});																//
-
 gameFastify.register(pongController, { prefix: '/pong' });
 gameFastify.register(tankController, { prefix: '/tank' });
 
 const	start = async () => {
 	try {
+		// Listen
 		await gameFastify.listen({ port: 3000, host: '0.0.0.0' });
-		console.log(`Server started on https://game:3000`);
+		gameFastify.log.info("Server started on https://game:3000");
+		console.log("Server started on https://game:3000");
 
+		// Socket.io
+		const io = new Server(gameFastify.server, {
+			path: "/socket.io",
+			cors: {
+				origin: "https://frontend:443", 
+				methods: ["GET", "POST"]
+			}
+		});
+
+		io.on("connection", (socket) => {
+			gameFastify.log.info(`Joueur connecté au Game Service : ${socket.id}`);
+
+			socket.on("disconnect", () => {
+				gameFastify.log.info(`Joueur déconnecté : ${socket.id}`);
+				console.log(`Joueur déconnecté : ${socket.id}`);
+			});
+
+			socket.on("ping", () => {
+				socket.emit("pong", "Hello from Fastify Game Service");
+			});
+		});
+
+		// SIGTERM
 		process.on('SIGTERM', () => {
 			console.log('SIGTERM received, server shutdown...');
 			gameFastify.server.close(() => {

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:20:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/23 00:54:32 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 11:42:57 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { NotExistError }		from "../utils/throwErrors.js";
 import { usersAddDto }			from "../dtos/usersAddDto.js"
 import { usersRespDto }			from "../dtos/usersRespDto.js"
 import { usersTableBuilder }	from "../tableBuilders/usersTableBuilder.js"
@@ -82,7 +83,7 @@ export class	usersRepository {
 
 				if (!row) {
 					console.error(`error: user ${userId} doesn't exist`);
-					return reject(new Error(`The user ${userId} doesn't exist`));
+					return reject(new NotExistError(`The user ${userId} doesn't exist`));
 				}
 
 				resolve(new usersRespDto(row));
@@ -101,7 +102,7 @@ export class	usersRepository {
 
 				if (!row) {
 					console.error(`error: user ${username} doesn't exist.`);
-					return reject(new Error(`The user ${username} doesn't exist.`));
+					return reject(new NotExistError(`The user ${username} doesn't exist.`));
 				}
 
 				resolve(new usersRespDto(row));
@@ -120,7 +121,7 @@ export class	usersRepository {
 
 				if (!row) {
 					console.error(`error: user ${email} doesn't exist.`);
-					return reject(new Error(`The user ${email} doesn't exist.`));
+					return reject(new NotExistError(`The user ${email} doesn't exist.`));
 				}
 
 				resolve(new usersRespDto(row));

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:33:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/23 07:11:07 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 12:01:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ export class	usersRespDto {
 		return this.id;
 	}
 
-	getUsername(): string {
-		return this.username;
-	}
-
 	getEmail(): string {
 		return this.email;
+	}
+
+	getUsername(): string {
+		return this.username;
 	}
 
 	getAvatar(): string {

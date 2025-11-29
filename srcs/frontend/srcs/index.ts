@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 10:35:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 11:47:57 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 /* ====================== IMPORTS ====================== */
 
 import { addRoutes }			from "./router/addRoutes.js"
-import { Game } 				from './game/class_game.js'
+import { Game } 				from './Pong/GameClass.js'
+import { TournamentController } from "./tournament.js"
 import { Router }				from "./router/router.js"
 import { setupClickHandlers }	from "./eventsHandlers/clickHandler.js"
 import { setupLoadHandler }		from "./eventsHandlers/loadHandler.js"
@@ -23,17 +24,23 @@ import { setupSubmitHandler }	from "./eventsHandlers/submitHandler.js"
 import { User }					from "./user/user.js"
 
 
-/* ====================== interface	====================== */
+/* ====================== INTERFACE ====================== */
 
 export interface	GameState {
 	currentGame: Game | null;
+	currentTournament: TournamentController | null;
 };
+
+
+/* ====================== INTERFACE ====================== */
+
 
 
 /* ====================== GLOBAL VARIABLES ====================== */
 
 var	gameState: GameState = {
-	currentGame: null
+	currentGame: null,
+	currentTournament: null
 };
 
 var	user: User = new User();

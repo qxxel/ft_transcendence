@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/28 15:39:57 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 11:48:56 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 		var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)
 			menu.innerHTML =
-				`<nav>
-					<a href="/">Home</a> | 
-					<a href="/about">About</a> | 
-					<a href="/settings">Settings</a> |
-					<a href="/user">${user.getUsername()}</a> |
-					<button onclick="onClickLogout();" id="logout">Logout</button> |
-					<a href="/games">Play</a>
-				</nav>`;
+				`<a href="/">Home</a>
+				<a href="/games">Play</a>
+				<a href="/tournament-setup">Tournament</a>
+				<a href="/user">${user.getUsername()}</a>
+				<a href="/friends">Friends</a>
+				<button onclick="onClickLogout();" id="logout">Logout</button>
+				<a href="/settings">Settings</a>
+				<a href="/about">About</a>`;
 
 		router.navigate("/", gameState, user);
 	});

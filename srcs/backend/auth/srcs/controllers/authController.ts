@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 05:30:18 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 11:58:42 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
 
-		await authAxios.delete(`https://user:3000/${payload.data.id}`);
+		await authAxios.delete(`https://user:3000/${payload.data.id}`); // https://user:3000/me ????
 
 		await authServ.deleteClient(payload.data.id);
 		

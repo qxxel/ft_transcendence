@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   requestErrors.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 18:37:41 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 19:45:58 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 11:34:04 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import axios from 'axios'
+import axios	from 'axios'
 
 import type { FastifyInstance, FastifyReply }	from 'fastify'
 

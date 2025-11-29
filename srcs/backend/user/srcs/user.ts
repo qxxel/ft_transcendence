@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/22 19:00:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 11:39:06 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,9 @@ userFastify.register(cors, {
 
 
 userFastify.register(usersController);
-userFastify.register(userStatsController, { prefix: '/user-stats' } ); // A VERIFIER SI C'EST A GARDER
-userFastify.register(friendshipsController, { prefix: '/friendships' } ); // A VERIFIER SI C'EST A GARDER
+userFastify.register(userStatsController, { prefix: '/stats' } ); //	A VERIFIER SI C'EST A GARDER
+userFastify.register(friendshipsController, { prefix: '/friends' } ); //	A VERIFIER SI C'EST A GARDER
 
-userFastify.get('/', async (request, reply) => {	//
-	return { message: "Hello User!" };				// A ENLEVER (TEST CONNECTION)
-});													//
 
 const	start = async () => {
 	try {

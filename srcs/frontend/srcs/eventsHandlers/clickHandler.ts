@@ -6,16 +6,15 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 16:28:22 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 11:48:27 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // CONTAINS FUNCTION THAT HANDLE EVERY CLICKS
 
-
 /* ====================== IMPORTS ====================== */
 
-import { PongGame } from "../game/game.js";
+import { PongGame } from "../Pong/Pong.js";
 import { TournamentController } from "../tournament.js";
 import { Router }		from "../router/router.js"
 import { sendRequest }	from "../utils/sendRequest.js"
@@ -23,37 +22,36 @@ import { User }			from "../user/user.js"
 import { DisplayDate }	from "../utils/displayDate.js"
 import { btnCooldown }	from "../utils/buttonCooldown.js"
 
-import type { GameState }	from "../index.js"
+import type { GameState }   from "../index.js"
 
 
 /* ====================== FUNCTIONS ====================== */
 
 function onClickPlay(router: Router, gameState: GameState, user: User): void {
-	const	maxPointsInput: HTMLInputElement = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+	const   maxPointsInput: HTMLInputElement = document.getElementById("choosenMaxPoints") as HTMLInputElement;
 	gameState.currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
 
 	router.navigate("/pong", gameState, user);
 }
 
-async function	onClickLogout(router: Router, gameState: GameState, user: User): Promise<void> {
-	const	response: Response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
+async function  onClickLogout(router: Router, gameState: GameState, user: User): Promise<void> {
+	const   response: Response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
 
 	if (!response.ok)
 		throw new Error('Logout failed');
 
 	user.logout();
 
-	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	var menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
 		menu.innerHTML =
-			`<nav>
-				<a href="/">Home</a> | 
-				<a href="/about">About</a> | 
-				<a href="/settings">Settings</a> |
-				<a href="/sign-in">Sign in</a> |
-				<a href="/sign-up">Sign up</a> |
-				<a href="/games">Play</a>
-			</nav>`;
+			`<a href="/">Home</a>
+			<a href="/games">Play</a>
+			<a href="/tournament-setup">Tournament</a>
+			<a href="/sign-in">Sign in</a>
+			<a href="/sign-up">Sign up</a>
+			<a href="/settings">Settings</a>
+			<a href="/about">About</a>`;
 
 	router.navigate("/", gameState, user);
 }
@@ -139,7 +137,7 @@ async function	onClickNewCode(router: Router, gameState: GameState, user: User):
 }
 
 async function onClickGetMessage(): Promise<void> {
-	const	res: Response = await fetch('/api/jwt', {
+	const   res: Response = await fetch('/api/jwt', {
 		method: "post",
 		credentials: "include",
 		headers: {
@@ -148,12 +146,12 @@ async function onClickGetMessage(): Promise<void> {
 		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
 	});
 
-	const	data: unknown = await res.json();
+	const   data: unknown = await res.json();
 	console.log(data);
 }
 
 async function onClickValidateMessage(): Promise<void> {
-	const	res: Response = await fetch('/api/jwt/validate', {
+	const   res: Response = await fetch('/api/jwt/validate', {
 		method: "post",
 		credentials: "include",
 		headers: {
@@ -162,12 +160,50 @@ async function onClickValidateMessage(): Promise<void> {
 		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
 	});
 
-	const	data: unknown = await res.json();
+	const   data: unknown = await res.json();
+	console.log(data);
+}
+
+async function onClickBlockMessage(): Promise<void> {
+	const   res: Response = await fetch('/api/user/friends/block', {
+		method: "post",
+		credentials: "include",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({ receiverId: 2 })
+	});
+
+	if (!res.ok) {
+		const   errorText = await res.text();
+		console.error(`Échec du blocage. Statut : ${res.status}. Message : ${errorText}`);
+		return ;
+	}
+
+	let data: unknown;
+	
+	// Si le statut est 204 (No Content), on laisse le corps vide.
+	// Si Content-Length est absent ou égal à 0, on considère qu'il n'y a pas de corps à lire.
+	const contentLength = res.headers.get('Content-Length');
+	
+	if (res.status === 204 || contentLength === '0' || contentLength === null) {
+		data = { message: `Action réussie. (Statut ${res.status})` }; 
+	} else {
+		// Le serveur a indiqué qu'il y a du contenu (200, 201), on lit le JSON.
+		try {
+			 data = await res.json();
+		} catch (e) {
+			// Sécurité supplémentaire : s'il y a un corps mais que ce n'est pas du JSON valide
+			console.error("Erreur de parsing JSON malgré le statut de succès:", e);
+			data = { error: "Réponse du serveur invalide (Non-JSON)." };
+		}
+	}
+	
 	console.log(data);
 }
 
 async function onClickRefreshMessage(): Promise<void> {
-	const	res: Response = await fetch('/api/jwt/refresh', {
+	const   res: Response = await fetch('/api/jwt/refresh', {
 		method: "post",
 		credentials: "include",
 		headers: {
@@ -176,18 +212,66 @@ async function onClickRefreshMessage(): Promise<void> {
 		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
 	});
 
-	const	data: unknown = await res.json();
+	const   data: unknown = await res.json();
 	console.log(data);
 }
-/////////////////////
 
-var currentTournament: TournamentController | null = null;
 
-function onClickPlayAI(router: Router, gameState: GameState, user: User) {
+/* ====================== UI TOGGLE HELPERS ====================== */
+
+function showDifficultyMenu() {
+	const mainBtns = document.getElementById('main-menu-btns');
+	const diffBtns = document.getElementById('difficulty-btns');
+	
+	if (mainBtns && diffBtns) {
+		mainBtns.classList.add('hidden');
+		diffBtns.classList.remove('hidden');
+	}
+}
+
+function hideDifficultyMenu() {
+	const mainBtns = document.getElementById('main-menu-btns');
+	const diffBtns = document.getElementById('difficulty-btns');
+	
+	if (mainBtns && diffBtns) {
+		mainBtns.classList.remove('hidden');
+		diffBtns.classList.add('hidden');
+	}
+}
+
+function switchGameMode(mode: 'default' | 'featured') {
+    const defDiv = document.getElementById('default-mode-content');
+    const featDiv = document.getElementById('featured-mode-content');
+
+    if (mode === 'default') {
+        defDiv?.classList.remove('hidden');
+        featDiv?.classList.add('hidden');
+    } else {
+        defDiv?.classList.add('hidden');
+        featDiv?.classList.remove('hidden');
+    }
+}
+
+function selectFeaturedDifficulty(level: number) {
+    const input = document.getElementById('aiHardcore') as HTMLInputElement;
+    if (input) {
+        input.value = level.toString();
+    }
+
+    for (let i = 1; i <= 4; i++) {
+        document.getElementById(`btn-feat-${i}`)?.classList.remove('active');
+    }
+
+    document.getElementById(`btn-feat-${level}`)?.classList.add('active');
+}
+
+/* ====================== GAME & TOURNAMENT HANDLERS ====================== */
+
+function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', router: Router, gameState: GameState, user: User) {
   const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
   const winningScore = parseInt(maxPointsInput.value, 10);
   
-  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', 'ai');
+  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'ai', difficulty);
   gameState.currentGame.setWinningScore(winningScore);
   
   router.navigate("/pong", gameState, user);
@@ -196,8 +280,8 @@ function onClickPlayAI(router: Router, gameState: GameState, user: User) {
 function onClickPlayPVP(router: Router, gameState: GameState, user: User) {
   const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
   const winningScore = parseInt(maxPointsInput.value, 10);
-  
-  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', 'pvp');
+//   user.setUsername("Test");
+  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'pvp');
   gameState.currentGame.setWinningScore(winningScore);
   
   router.navigate("/pong", gameState, user);
@@ -208,32 +292,60 @@ function onStartTournament(router: Router, gameState: GameState, user: User) {
   const playerNames: string[] = [];
   
   inputs.forEach(input => {
-    if (input.value.trim() !== '') {
-      playerNames.push(input.value.trim());
-    }
+	if (input.value.trim() !== '') {
+	  playerNames.push(input.value.trim());
+	}
   });
 
   if (playerNames.length < 4) {
-    alert("You need at least 4 players to start a tournament.");
-    return;
+	alert("You need at least 4 players to start a tournament.");
+	return;
   }
 
   const scoreInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
   const winningScore = parseInt(scoreInput.value, 10);
 
-  currentTournament = new TournamentController(playerNames, winningScore);
+  gameState.currentTournament = new TournamentController(playerNames, winningScore);
   
   router.navigate("/tournament-bracket", gameState, user);
 }
 
-// function startTournamentMatch(matchId: string, p1: string, p2: string) {
-//   if (currentTournament) {
-//     currentTournament.startMatch(matchId, p1, p2);
-//     router.navigate('/pong');
-//   }
-// }
-////////////////
-export async function	setupClickHandlers(router: Router, user: User, gameState: GameState): Promise<void> {
+function startTournamentMatch(matchId: string, p1: string, p2: string, router: Router, gameState: GameState, user: User) {
+  if (gameState.currentTournament) {
+	gameState.currentTournament.startMatch(matchId, p1, p2);
+	router.navigate('/pong', gameState, user);
+  }
+}
+
+function onClickStartFeatured(mode: 'ai' | 'pvp',router: Router, gameState: GameState, user: User) {
+    const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
+    const aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
+
+    const pointsInput = document.getElementById("featuredMaxPoints") as HTMLInputElement;
+    const winningScore = parseInt(pointsInput.value, 10);
+    
+    const star1 = (document.getElementById("chk-1star") as HTMLInputElement).checked;
+    const star2 = (document.getElementById("chk-2star") as HTMLInputElement).checked;
+    const star3 = (document.getElementById("chk-3star") as HTMLInputElement).checked;
+
+    const aiVal = parseInt(aiInput.value);
+    let difficulty: any = 'medium'; 
+    if (aiVal === 1) difficulty = 'easy';
+    if (aiVal === 3) difficulty = 'hard';
+    if (aiVal === 4) difficulty = 'boris';
+
+    console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Diff=${difficulty}, Stars=[${star1},${star2},${star3}]`);
+
+    gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3);
+    
+    gameState.currentGame.setWinningScore(winningScore);
+
+    router.navigate("/pong", gameState, user);
+}
+
+/* ====================== SETUP ====================== */
+
+export async function   setupClickHandlers(router: Router, user: User, gameState: GameState): Promise<void> {
 	(window as any).onClickPlay = () => onClickPlay(router, gameState, user);
 	(window as any).onClickLogout = () => onClickLogout(router, gameState, user);
 	(window as any).onClickEdit = () => onClickEdit(user);
@@ -243,10 +355,23 @@ export async function	setupClickHandlers(router: Router, user: User, gameState: 
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;
 	(window as any).onClickRefreshMessage = onClickRefreshMessage;
-	(window as any).onClickPlayAI = () => onClickPlayAI(router, gameState, user);
+	(window as any).onClickBlockMessage = onClickBlockMessage;
+	
+	(window as any).showDifficultyMenu = showDifficultyMenu;
+	(window as any).hideDifficultyMenu = hideDifficultyMenu;
+
+    (window as any).switchGameMode = switchGameMode;
+    (window as any).onClickStartFeatured = (mode: 'ai' | 'pvp') => onClickStartFeatured(mode, router, gameState, user);
+    (window as any).selectFeaturedDifficulty = selectFeaturedDifficulty;
+
+    (window as any).onClickPlayAI = (difficulty: 'easy' | 'medium' | 'hard') => 
+        onClickPlayAI(difficulty, router, gameState, user);
+
 	(window as any).onClickPlayPVP = () => onClickPlayPVP(router, gameState, user);
 	(window as any).onStartTournament = () => onStartTournament(router, gameState, user);
-	// (window as any).startTournamentMatch = () => startTournamentMatch(router, gameState, user);
+	
+	(window as any).startTournamentMatch = (matchId: string, p1: string, p2: string) => 
+		startTournamentMatch(matchId, p1, p2, router, gameState, user);
 	
 	document.addEventListener('click', (event) => {
 		const target = event.target as HTMLAnchorElement;
@@ -257,7 +382,32 @@ export async function	setupClickHandlers(router: Router, user: User, gameState: 
 		}
 	});
 
-	// HANDLE BACK/FORWARD NAVIGATION
+    document.addEventListener('input', (event) => {
+        const target = event.target as HTMLInputElement;
+        if (!target) return;
+
+        if (target.id === 'choosenMaxPoints') {
+            const display = document.getElementById('points-display');
+            if (display) {
+                display.innerText = target.value;
+            }
+        }
+        
+        if (target.id === 'powerupFreq') {
+            const display = document.getElementById('powerup-freq-display');
+            if (display) {
+                display.innerText = target.value + " sec";
+            }
+        }
+
+        if (target.id === 'featuredMaxPoints') {
+            const display = document.getElementById('featured-points-display');
+            if (display) {
+                display.innerText = target.value;
+            }
+        }
+    });
+
 	window.addEventListener('popstate', () => {
 		if (!router.canLeave) {
 			if (!confirm("This page is asking you to confirm that you want to leave — information you’ve entered may not be saved.")) {

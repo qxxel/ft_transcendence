@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   friendshipsAddDto.ts                               :+:      :+:    :+:   */
+/*   friendshipsUpdateDto.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/21 17:48:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:40:52 by mreynaud         ###   ########.fr       */
+/*   Created: 2025/11/24 13:43:27 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/26 22:58:41 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-// WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW FRIENDSHIPS
+// WILL BE THE DTO TO TRANSFERT DATA FROM DB TO REPOSITORY FOR UPDATES OF USER STATS
 
 
 /* ====================== IMPORT ====================== */
@@ -21,14 +20,14 @@ import { SelfFriendRequestError }	from "../utils/throwErrors.js";
 
 /* ====================== CLASS ====================== */
 
-export class	friendshipsAddDto {
+export class	friendshipsUpdateDto {
 	private	requesterId: number;
 	private	receiverId: number;
 
 
-	constructor(targetId: number, userId: number) {
+	constructor(userId: number, targetId: number) {
 		if (userId === targetId)
-			throw new SelfFriendRequestError("You cannot add yourself as a friend");
+			throw new SelfFriendRequestError("You cannot change the status of a request form yourself to yourself.");
 
 		this.requesterId = userId;
 		this.receiverId = targetId;
@@ -49,13 +48,5 @@ export class	friendshipsAddDto {
 			this.receiverId,
 			this.requesterId
 		];
-	}
-
-	getRequesterId(): number {
-		return this.requesterId;
-	}
-
-	getReceiverId(): number {
-		return this.receiverId;
 	}
 }

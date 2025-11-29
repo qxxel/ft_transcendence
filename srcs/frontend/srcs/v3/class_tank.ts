@@ -23,6 +23,7 @@ import { Hud }		from "./class_hud.js"
 import { Rect2D }	from "./class_rect.js"
 
 import type { Color, Keys }	from "./interface.js"
+import { Collectible } from "./class_collectible.js"
 
 
 /* ============================= CLASS ============================= */
@@ -31,7 +32,6 @@ export class	Tank extends Actor {
 
 	rect: Rect2D;
 	cannon: Cannon;
-	redraw: boolean = true;
 	speed: number = 0.75;
 	rot_speed: number = 0.05;
 	health: number = 5;
@@ -58,6 +58,7 @@ export class	Tank extends Actor {
 		this.listen(input);
 		if (Date.now() - this.fire_last < this.fire_rate)
 			GSTATE.REDRAW = true;
+		
 	}
 
 	draw(ctx: CanvasRenderingContext2D): void {
@@ -75,6 +76,7 @@ export class	Tank extends Actor {
 
 	listen(input: string[]): void {
 		for (let inp of input) {
+			// console.log("INPUT =", inp);
 			if (inp == this.keys.up)        { this.move(0,-this.speed); GSTATE.REDRAW = true; }
 			if (inp == this.keys.down)      { this.move(0,+this.speed); GSTATE.REDRAW = true; }
 			if (inp == this.keys.left)      { this.move(-this.speed,0); GSTATE.REDRAW = true; }
@@ -122,7 +124,7 @@ export class	Tank extends Actor {
 	collide(rect1: Rect2D): boolean {
 
 		for (let a of GSTATE.ACTORS) {
-			if (a == this || a instanceof Ball ) continue;
+			if (a == this || a instanceof Ball || a instanceof Collectible) continue;
 			if (a.getRect().collide(rect1))
 			{
 				return true;
@@ -138,7 +140,10 @@ export class	Tank extends Actor {
 		this.color.r += 50;
 		this.color.g -= 50;
 		console.log("health():",this.health);
-		if (this.health == 0) this.destroy();
+		if (this.health == 0) {
+			GSTATE.TANKS -= 1;
+			this.destroy();
+		}
 	}
 
 	canFire(): boolean {

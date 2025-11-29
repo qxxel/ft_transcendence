@@ -1,48 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   class_wall.ts                                      :+:      :+:    :+:   */
+/*   class_tank.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 17:33:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:34:40 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/11/19 17:32:29 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/19 17:33:43 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// /!\ DESCRIBE THE FILE /!\
-
 
 /* ============================= IMPORTS ============================= */
 
 import { Actor }	from "./class_actor.js"
+import { Tank }		from "./class_tank.js"
+import { Ball }		from "./class_ball.js"
+import { GSTATE }	from "./global.js"
 import { Rect2D }	from "./class_rect.js"
 
-import type { Color }	from "./interface.js"
-
+import type { Color, Keys }	from "./interface.js"
+import { Collectible } from "./class_collectible.js"
 
 /* ============================= CLASS ============================= */
 
-export class	Wall extends Actor {
+export class	HealthPack extends Collectible {
 
 	rect: Rect2D;
+
 	constructor(
 		x:number,
 		y:number,
-		public	w:number,
-		public	h:number,
-		public	color:Color) {
-		super(x,y)
+		w:number,
+		h:number,
+		color:Color) {
+		super(x,y,w,h,color);
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
-		console.log("C Wall at x:", x, "y:", y);
+		console.log("C HealthPack at x:", x, "y:", y);
 	}
 
-	update(input: string[]): void {}
-
-	draw(ctx: CanvasRenderingContext2D): void {
-		this.rect.draw(ctx, this.color)
-	 }
-
 	getRect(): Rect2D { return this.rect; };
+
+	effect(a: Tank) { a.addHealth(+1); }
 
 }
