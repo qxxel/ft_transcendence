@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:05:09 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 23:07:58 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,13 @@ import type { GameState }	from "../index.js"
 
 function	getMenu(username: string | undefined): string {
 	return `<a href="/">Home</a>
-				<a href="/games">Play</a>
-				<a href="/tournament-setup">Tournament</a>
-				<a href="/user">${username}</a>
-				<button onclick="onClickLogout();" id="logout">Logout</button>
-				<a href="/settings">Settings</a>
-				<a href="/about">About</a>`;
+			<a href="/games">Play</a>
+			<a href="/tournament-setup">Tournament</a>
+			<a href="/user">${username}</a>
+			<a href="/friends">Friends</a>
+			<a onclick="onClickLogout();" id="logout">Logout</a>
+			<a href="/settings">Settings</a>
+			<a href="/about">About</a>`;
 }
 
 async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {

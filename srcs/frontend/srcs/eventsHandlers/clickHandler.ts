@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:03:05 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 23:09:01 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ async function  onClickLogout(router: Router, gameState: GameState, user: User):
 
 	user.logout();
 
-	var menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
 		menu.innerHTML =
 			`<a href="/">Home</a>
