@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 14:38:21 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/29 10:40:29 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', router: Router, g
 function onClickPlayPVP(router: Router, gameState: GameState, user: User) {
   const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
   const winningScore = parseInt(maxPointsInput.value, 10);
-  
+//   user.setUsername("Test");
   gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'pvp');
   gameState.currentGame.setWinningScore(winningScore);
   

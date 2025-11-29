@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/28 15:22:57 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/29 10:36:29 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ export class PongGame extends Game {
   private star3: boolean = false;
 
   // Data
-  private player1Name: string = "Player 1";
-  private player2Name: string = "Player 2";
+  private player1Name: string | undefined = "Player 1";
+  private player2Name: string | undefined = "Player 2";
   private score1: number = 0;
   private score2: number = 0;
   private scoreElements: { winScore: HTMLElement; p1: HTMLElement; p2: HTMLElement } | null = null;
@@ -148,7 +148,8 @@ export class PongGame extends Game {
     this.lastCollectibleSpawn = Date.now();
 
     if (!this.isTournamentMatch) {
-        this.player1Name = "Player 1";
+        this.player1Name = this.user.getUsername() == undefined ? "Player 1" : this.user.getUsername();
+        // this.player1Name = "Player 1";
         this.player2Name = (this.gameMode === 'ai') ? "AI" : "Player 2";
     }
 
@@ -392,7 +393,7 @@ export class PongGame extends Game {
     }
 
     if (this.isGameOver) {
-        const winner = this.score1 >= this.winningScore ? this.player1Name : this.player2Name;
+        const winner = this.score1 >= this.winningScore ? this.player1Name! : this.player2Name!;
         this.renderer.drawGameOver(winner, this.isTournamentMatch);
     }
   }
@@ -442,7 +443,7 @@ export class PongGame extends Game {
     if (!this.isGameOver && (this.score1 >= this.winningScore || this.score2 >= this.winningScore)) {
       this.isGameOver = true;
       if (this.isTournamentMatch && this.gameState.currentTournament) {
-        const winnerName = this.score1 >= this.winningScore ? this.player1Name : this.player2Name;
+        const winnerName = this.score1 >= this.winningScore ? this.player1Name! : this.player2Name!;
         this.gameState.currentTournament.reportMatchWinner(winnerName);
       }
       this.showEndGameDashboard();

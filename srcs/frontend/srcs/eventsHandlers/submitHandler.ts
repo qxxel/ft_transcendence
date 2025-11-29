@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:53:01 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 10:45:01 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,13 @@ import type { GameState }	from "../index.js"
 /* ====================== FUNCTIONS ====================== */
 
 function	getMenu(username: string | undefined): string {
-	return `<nav>
-				<a href="/">Home</a> | 
-				<a href="/about">About</a> | 
-				<a href="/settings">Settings</a> |
-				<a href="/user">${username}</a> |
-				<button onclick="onClickLogout();" id="logout">Logout</button> |
+	return `<a href="/">Home</a>
 				<a href="/games">Play</a>
-			</nav>`
+				<a href="/tournament-setup">Tournament</a>
+				<a href="/user">${username}</a>
+				<button onclick="onClickLogout();" id="logout">Logout</button>
+				<a href="/settings">Settings</a>
+				<a href="/about">About</a>`;
 }
 
 async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
