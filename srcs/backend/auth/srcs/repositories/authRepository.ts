@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/22 16:35:35 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ import { authTableBuilder }	from "../tableBuilders/authTableBuilder.js"
 import type { Database }	from 'sqlite3'
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
 export class	authRepository {
 	private	db: Database;
@@ -89,10 +89,5 @@ export class	authRepository {
 				return resolve();
 			});
 		});
-	}
-
-	// GETTER
-	getDb(): Database {
-		return this.db;
 	}
 }

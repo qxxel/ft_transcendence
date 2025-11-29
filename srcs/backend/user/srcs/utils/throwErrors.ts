@@ -6,14 +6,14 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:49:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 17:45:30 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // FILE TO DEFINE ALL THROW ERRORS FOR USER SERVICE
 
 
-/* ====================== class	====================== */
+/* ====================== CLASSES ====================== */
 
 export class	IsTakenError extends Error {
 	constructor(message: string) {
@@ -33,5 +33,54 @@ export class	NotExistError extends Error {
 	constructor(message: string) {
 		super(message);
 		this.name = "NotExistError";
+	}
+}
+
+export class	GameNotFoundError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "GameNotFoundError";
+	}
+}
+
+export class	AlreadyRelatedError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "AlreadyRelatedError";
+	}
+}
+
+export class	AlreadyAcceptedError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "AlreadyAcceptedError";
+	}
+}
+
+export class	NoRelationError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "NoRelationError";
+	}
+}
+
+export class	BlockedError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "BlockedError";
+	}
+}
+
+export class	SelfFriendRequestError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "SelfFriendRequestError";
+	}
+}
+
+export class	MissingHeaderError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "MissingHeaderError";
 	}
 }

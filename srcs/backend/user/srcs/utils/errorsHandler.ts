@@ -6,14 +6,15 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 18:49:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:49:29 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/26 17:46:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 /* ====================== IMPORTS ====================== */
 
-import { IsTakenError, NotExistError } from "./throwErrors.js"
+import { IsTakenError, NotExistError, GameNotFoundError, AlreadyRelatedError, MissingHeaderError }	from "./throwErrors.js"
+import { AlreadyAcceptedError, NoRelationError, BlockedError, SelfFriendRequestError } from "./throwErrors.js"
 
 import type { FastifyInstance, FastifyReply } from "fastify"
 
@@ -25,21 +26,70 @@ export function	errorsHandler(userFastify: FastifyInstance, reply: FastifyReply,
 	{
 		userFastify.log.error(err.message);
 		console.error(err.message);
-		return reply.code(409).send({ error: err.message });
+		return reply.code(409).send({ errorType: err.name, error: err.message });
 	}
 
 	if (err instanceof NotExistError)
 	{
 		userFastify.log.error(err.message);
 		console.error(err.message);
-		return reply.code(404).send({ error: err.message });
+		return reply.code(404).send({ errorType: err.name, error: err.message });
+	}
+
+	if (err instanceof GameNotFoundError)
+	{
+		userFastify.log.error(err.message);
+		console.error(err.message);
+		return reply.code(404).send({ errorType: err.name, error: err.message });
+	}
+
+	if (err instanceof AlreadyRelatedError)
+	{
+		userFastify.log.error(err.message);
+		console.error(err.message);
+		return reply.code(404).send({ errorType: err.name, error: err.message });
+	}
+
+	if (err instanceof AlreadyAcceptedError)
+	{
+		userFastify.log.error(err.message);
+		console.error(err.message);
+		return reply.code(404).send({ errorType: err.name, error: err.message });
+	}
+
+	if (err instanceof NoRelationError)
+	{
+		userFastify.log.error(err.message);
+		console.error(err.message);
+		return reply.code(404).send({ errorType: err.name, error: err.message });
+	}
+
+	if (err instanceof BlockedError)
+	{
+		userFastify.log.error(err.message);
+		console.error(err.message);
+		return reply.code(404).send({ errorType: err.name, error: err.message });
+	}
+
+	if (err instanceof SelfFriendRequestError)
+	{
+		userFastify.log.error(err.message);
+		console.error(err.message);
+		return reply.code(404).send({ errorType: err.name, error: err.message });
+	}
+
+	if (err instanceof MissingHeaderError)
+	{
+		userFastify.log.error(err.message);
+		console.error(err.message);
+		return reply.code(401).send({ errorType: err.name, error: err.message });
 	}
 
 	if (err instanceof Error)
 	{
 		userFastify.log.error(err.message);
 		console.error(err.message);
-		return reply.code(400).send({ error: err.message });
+		return reply.code(400).send({ errorType: err.name, error: err.message });
 	}
 
 	userFastify.log.error(err);

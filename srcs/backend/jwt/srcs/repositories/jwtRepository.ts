@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:30 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:07:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/22 16:35:27 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ interface	StatementWithLastID {
 };
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
 export class	jwtRepository {
 	private	db: Database;
@@ -132,10 +132,5 @@ export class	jwtRepository {
 				resolve();
 			});
 		});
-	}
-
-	// GETTER
-	getDb(): Database {
-		return this.db;
 	}
 }

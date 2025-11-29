@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 10:45:01 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/29 10:56:02 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,6 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 	const	email: string = (document.getElementById("sign-up-email") as HTMLInputElement).value;
 	const	password: string = (document.getElementById("sign-up-password") as HTMLInputElement).value;
 	form.reset();
-
-	console.log("username: " + username);
-	console.log("email: " + email);
-	console.log("password: " + password);
-	console.log(JSON.stringify({ username, email, password }));
 
 	const	response: Response = await fetch('/api/auth/sign-up', {
 		method: "post",

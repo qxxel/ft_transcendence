@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   index.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 23:15:13 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/26 18:17:14 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,16 @@ import { setupSubmitHandler }	from "./eventsHandlers/submitHandler.js"
 import { User }					from "./user/user.js"
 
 
-/* ====================== interface	====================== */
+/* ====================== INTERFACE ====================== */
 
 export interface	GameState {
 	currentGame: Game | null;
 	currentTournament: TournamentController | null;
 };
+
+
+/* ====================== INTERFACE ====================== */
+
 
 
 /* ====================== GLOBAL VARIABLES ====================== */

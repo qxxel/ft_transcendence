@@ -1,0 +1,87 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pongAddDto.ts                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 19:04:52 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW PONG GAMES
+
+
+/* ====================== IMPORTS ====================== */
+
+// import { isValidName, isValidEmail }	from "../utils/validation.js"
+// import { ValidationError }				from "../utils/throwErrors.js"
+
+// import type { validationResult }	from "../utils/validation.js"
+
+
+/* ====================== CLASS ====================== */
+
+export class	pongAddDto {
+	private	winner: number;
+	private	p1: number;
+	private	p2: number;
+	private	p1score: number;
+	private	p2score: number;
+	private	start: number;
+	private	duration: number;
+
+	constructor(row: any) {
+		this.winner = row.winner;
+		this.p1 = row.p1;
+		this.p2 = row.p2;
+		this.p1score = row.p1score;
+		this.p2score = row.p2score;
+		this.start = row.start;
+		this.duration = row.duration;
+	}
+
+
+	getTable(): number[] {
+		return [
+			this.winner,
+			this.p1,
+			this.p1score,
+			this.p2,
+			this.p2score,
+			this.start,
+			this.duration
+		]
+	}
+
+
+	// GETTERS
+	getWinner(): number {
+		return this.winner;
+	}
+
+	getP1(): number {
+		return this.p1;
+	}
+
+	getP2(): number {
+		return this.p2;
+	}
+
+	getP1Score(): number {
+		return this.p1score;
+	}
+
+	getP2Score(): number {
+		return this.p2score;
+	}
+
+	getStart(): number {
+		return this.start;
+	}
+
+	getDuration(): number {
+		return this.duration;
+	}
+}

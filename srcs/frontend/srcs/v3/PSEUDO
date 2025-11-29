@@ -22,3 +22,8 @@ class	Ball : GameObject {}
 class	Collision {}
 
 }
+
+
+
+YELLOW  = SPEED
+BROWN   = MINE

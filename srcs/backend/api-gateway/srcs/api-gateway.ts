@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:50:05 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/19 18:08:22 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,17 @@
 
 /* ====================== IMPORT ====================== */
 
-import axios	from 'axios'
-import cors		from '@fastify/cors'
-import Fastify, { type FastifyInstance }	from 'fastify'
-import fs		from 'fs'
-import https	from 'https'
-
+import axios						from 'axios'
+import cors							from '@fastify/cors'
+import Fastify						from 'fastify'
+import fs							from 'fs'
+import https						from 'https'
 import { gatewayAuthController }	from "./controllers/gatewayAuthController.js"
+import { gatewayGameController }	from "./controllers/gatewayGameController.js"
 import { gatewayJwtController }		from "./controllers/gatewayJwtController.js"
 import { gatewayUserController }	from "./controllers/gatewayUserController.js"
 
+import type { FastifyInstance }	from 'fastify'
 
 /* ====================== AXIOS VARIABLES ====================== */
 
@@ -51,10 +52,10 @@ gatewayFastify.register(cors, {
 	credentials: true
 });
 
-
-gatewayFastify.register(gatewayUserController, { prefix: '/api/user' });
-gatewayFastify.register(gatewayJwtController, { prefix: '/api/jwt' });
 gatewayFastify.register(gatewayAuthController, { prefix: '/api/auth' });
+gatewayFastify.register(gatewayGameController, { prefix: '/api/game' });
+gatewayFastify.register(gatewayJwtController, { prefix: '/api/jwt' });
+gatewayFastify.register(gatewayUserController, { prefix: '/api/user' });
 
 const	start = async () => {
 	try {

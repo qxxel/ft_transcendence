@@ -809,4 +809,189 @@ input[type=range]::-moz-range-thumb {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+
+
+
+
+
+/* ==========================================================================
+   10. FRIENDS CSS
+   ========================================================================== */
+
+/* STYLE GLOBAL DU CONTENEUR DE PAGE */
+/* ---------------------------------------------------------------- */
+
+.friends-page-container {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #fff;
+    padding: 20px; 
+    width: 100%;
+    max-width: 900px;
+}
+
+.friends-page-container h2 {
+    text-align: center;
+    text-transform: uppercase;
+    color: #FFFF00;
+    text-shadow: 0 0 10px #FFFF00;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* ---------------------------------------------------------------- */
+/* MODULE AJOUTER AMI */
+/* ---------------------------------------------------------------- */
+
+.add-friend-module {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+#username-input {
+    flex-grow: 1;
+    padding: 10px;
+    background: black;
+    color: var(--neon-yellow);
+    border: 1px solid var(--border-color);
+    box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.3);
+    font-size: 16px;
+    font-family: inherit;
+}
+
+/* ---------------------------------------------------------------- */
+/* BOUTONS NEON (réutilisable pour la barre de navigation) */
+/* ---------------------------------------------------------------- */
+
+.neon-button {
+    background: transparent;
+    border: 1px solid var(--neon-yellow);
+    color: var(--neon-yellow);
+    padding: 8px 15px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 0 5px var(--neon-yellow);
+    transition: all 0.2s;
+}
+
+.neon-button:hover {
+    color: black;
+    background: var(--neon-yellow);
+    box-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow);
+}
+
+.accept-button {
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+    box-shadow: 0 0 5px var(--neon-green);
+}
+.accept-button:hover {
+    background: var(--neon-green);
+}
+
+.ignore-button {
+    border-color: var(--neon-red);
+    color: var(--neon-red);
+    box-shadow: 0 0 5px var(--neon-red);
+}
+.ignore-button:hover {
+    background: var(--neon-red);
+}
+
+/* ---------------------------------------------------------------- */
+/* LISTE DES AMIS (ENTRÉES) */
+/* ---------------------------------------------------------------- */
+
+.friends-list, .requests-list {
+    margin-top: 20px;
+}
+
+.friend-entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.friend-entry:last-child {
+    border-bottom: none;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 15px;
+    background: gray; /* Hors ligne par défaut */
+}
+
+/* Statuts spécifiques */
+.online .status-dot {
+    background: var(--neon-green);
+    box-shadow: 0 0 5px var(--neon-green);
+}
+
+.playing .status-dot {
+    background: var(--neon-yellow);
+    box-shadow: 0 0 5px var(--neon-yellow);
+}
+
+.username {
+    flex-basis: 300px; /* Donne de l'espace au nom */
+    font-weight: bold;
+}
+
+.status-text {
+    flex-grow: 1;
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+}
+
+.playing-status {
+    color: var(--neon-yellow);
+}
+
+/* Boutons d'action */
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.remove-button {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 18px;
+    transition: color 0.2s;
+}
+
+.remove-button:hover {
+    color: var(--neon-red);
+    text-shadow: 0 0 5px var(--neon-red);
+}
+
+.challenge-button {
+    padding: 5px 10px;
+    font-size: 14px;
+    /* Style du bouton néon vert/jaune */
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+    box-shadow: 0 0 5px var(--neon-green);
+}
+.challenge-button:hover {
+    background: var(--neon-green);
+    color: black;
+}
+
+.pending-request .username {
+    color: var(--neon-yellow);
 }

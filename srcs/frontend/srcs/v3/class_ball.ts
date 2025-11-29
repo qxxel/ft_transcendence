@@ -89,11 +89,11 @@ export class	Ball extends Actor {
 		// return;
 	}
 
-	this.x += this.dx;
-	this.y += this.dy;
-	this.rect.x += this.dx;
-	this.rect.y += this.dy;
-}
+		this.x += this.dx;
+		this.y += this.dy;
+		this.rect.x += this.dx;
+		this.rect.y += this.dy;
+	}
 
 	collide(rect1: Rect2D): boolean {
 

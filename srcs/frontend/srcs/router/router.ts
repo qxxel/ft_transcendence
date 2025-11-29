@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   router.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 04:37:34 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/26 17:55:33 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// class	WHO ROUTE FOR THE SINGLE PAGE APPLICATION (SPA)
+// CLASS WHO ROUTE FOR THE SINGLE PAGE APPLICATION (SPA)
 
 
 /* ====================== IMPORTS ====================== */
@@ -29,7 +29,7 @@ interface	Route {
 }
 
 
-/* ====================== class	====================== */
+/* ====================== CLASS ====================== */
 
 export class	Router {
 	private	routes: Route[] = [];

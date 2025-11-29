@@ -32,7 +32,7 @@ export class	Wall extends Actor {
 		public	w:number,
 		public	h:number,
 		public	color:Color) {
-		super(x,y,false)
+		super(x,y)
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 		console.log("C Wall at x:", x, "y:", y);
 	}
