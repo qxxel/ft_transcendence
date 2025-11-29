@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:01:02 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:02:11 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { router }		from "../index.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 import { User }			from "../user/user.js"
 
