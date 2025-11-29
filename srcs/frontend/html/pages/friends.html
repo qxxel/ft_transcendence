@@ -1,9 +1,11 @@
 <div class="friends-page-container">
     <div class="add-friend-module">
-        <input type="text" placeholder="Enter player name..." id="username-add-input">
-        <button class="btn-yellow" onclick="onClickSendRequest();" id="add-button">
-            <span>ADD FRIEND</span>
-        </button>
+        <form id="add-friend-form">
+            <input type="text" placeholder="Enter player name..." id="username-add-input">
+            <button type="submit" class="btn-yellow" id="add-friend-button">
+                <span>ADD FRIEND</span>
+            </button>
+        </form>
     </div>
 
     <div class="requests-list" id="requests-list">

@@ -885,7 +885,7 @@ button:disabled {
 
 
 #username-add-input {
-    width: 65%;
+    width: 63%;
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #aaa;
@@ -896,7 +896,7 @@ button:disabled {
     box-sizing: border-box;
 }
 
-#add-button {
+#add-friend-button {
     font-size: 15px;
     padding: 12px 12px;
     margin-top: 0px;
