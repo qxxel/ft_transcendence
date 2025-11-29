@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 16:02:19 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 16:28:22 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,7 @@ export async function	setupClickHandlers(router: Router, user: User, gameState: 
 				history.pushState({}, "", router.Path);
 				return ;
 			}
+			router.canLeave = true;
 		}
 		router.render(gameState, user);
 	});
