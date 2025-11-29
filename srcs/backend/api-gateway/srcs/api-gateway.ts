@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 18:08:22 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 11:32:15 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ import { gatewayAuthController }	from "./controllers/gatewayAuthController.js"
 import { gatewayGameController }	from "./controllers/gatewayGameController.js"
 import { gatewayJwtController }		from "./controllers/gatewayJwtController.js"
 import { gatewayUserController }	from "./controllers/gatewayUserController.js"
+import { gatewaytwofaController }		from "./controllers/gatewaytwofaController.js"
 
 import type { FastifyInstance }	from 'fastify'
 
@@ -53,6 +54,7 @@ gatewayFastify.register(cors, {
 });
 
 gatewayFastify.register(gatewayAuthController, { prefix: '/api/auth' });
+gatewayFastify.register(gatewaytwofaController, { prefix: '/api/twofa' });
 gatewayFastify.register(gatewayGameController, { prefix: '/api/game' });
 gatewayFastify.register(gatewayJwtController, { prefix: '/api/jwt' });
 gatewayFastify.register(gatewayUserController, { prefix: '/api/user' });

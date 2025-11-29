@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
+#    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/26 18:36:31 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/11/29 11:31:24 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ AUTH_DB	= srcs/backend/auth/db
 GAME_DB	= srcs/backend/game/db
 USER_DB	= srcs/backend/user/db
 JWT_DB	= srcs/backend/jwt/db
+TWOFA_DB	= srcs/backend/twofa/db
 
 
 # ----------------------------    key and cert    ---------------------------- #
@@ -69,8 +70,8 @@ CMD_OPENSSL	= openssl req -x509 -newkey rsa:2048 \
 
 
 # --------------------------    build directory    -------------------------- #
-
-BUILD_DIR		= $(SECRET_DIR) $(AUTH_DB) $(GAME_DB) $(USER_DB) $(JWT_DB)
+DB_DIR		= $(AUTH_DB) $(GAME_DB) $(USER_DB) $(JWT_DB) $(TWOFA_DB)
+BUILD_DIR	= $(SECRET_DIR) $(DB_DIR)
 
 
 # -------------------------------    colors    ------------------------------- #

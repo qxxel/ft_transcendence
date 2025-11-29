@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:04:46 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/21 04:55:01 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/27 15:13:58 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ interface AIState {
 export class AIController {
     private lastDecisionTime: number = 0;
     private targetY: number = 0;
-    private difficulty: 'easy' | 'medium' | 'hard';
+    private difficulty: 'easy' | 'medium' | 'hard' | 'boris';
 
-    constructor(difficulty: 'easy' | 'medium' | 'hard') {
+    constructor(difficulty: 'easy' | 'medium' | 'hard' | 'boris') {
         this.difficulty = difficulty;
     }
 
@@ -36,16 +36,16 @@ export class AIController {
         const now = Date.now();
         const keys = { up: false, down: false };
 
-        if (now - this.lastDecisionTime > 1000) {
+        
+        if (now - this.lastDecisionTime > 1000 || this.difficulty == 'boris') {
             this.lastDecisionTime = now;
-            
             if (state.ball.dx > 0) {
                 let predictedY = this.predictBallLandingY(state);
-                if (this.difficulty == 'hard'){
+                if (this.difficulty == 'hard' || this.difficulty == 'boris'){
                     this.targetY = this.calculateOptimalPaddlePosition(predictedY, state);
                 }
                 else {
-                    const errorMargin = (this.difficulty === 'easy') ? 7 : 60;
+                    const errorMargin = (this.difficulty === 'easy') ? state.paddle.height / 10 : state.paddle.height / 2;
                     const randomOffset = (Math.random() * errorMargin * 2) - errorMargin;
                     this.targetY = predictedY + randomOffset;
                 }
@@ -125,6 +125,7 @@ export class AIController {
             return predictedY + maxOffset;
         }
     }
+
     private calculateOptimalPaddlePosition(predictedY: number, state: AIState): number {
         if (Math.random() > 0.5){
             return this.hardBounce(predictedY, state);

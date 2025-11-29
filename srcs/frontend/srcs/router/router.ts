@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 17:55:33 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:01:07 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { pathActions }	from "./navigationUtils.js"
+import { pathActions }	from "./postNavigationUtils.js"
 import { User }			from "../user/user.js"
 
-import type { GameState }	from "../index.js"
+import type { GameState }					from "../index.js"
 
 
 /* ====================== INTERFACE ====================== */
@@ -32,13 +32,20 @@ interface	Route {
 /* ====================== CLASS ====================== */
 
 export class	Router {
+	private	currentPath: string = window.location.pathname;
 	private	routes: Route[] = [];
+	public	canLeave = true;
 
 	addRoute(path: string, component: () => string | Promise<string>): void {
 		this.routes.push({ path, component });
 	}
 
 	navigate(path: string, gameState: GameState, user: User): void {
+		if (!this.canLeave) {
+			if (!confirm("This page is asking you to confirm that you want to leave — information you’ve entered may not be saved."))
+				return ;
+			this.canLeave = true;
+		}
 		history.pushState({}, '', path);
 		this.render(gameState, user);
 	}
@@ -47,15 +54,22 @@ export class	Router {
 		const	currentPath: string = window.location.pathname;
 		const	route: Route | undefined = this.routes.find(r => r.path === currentPath);
 
-		if (route) {
+		if (route)
+		{
 			const	contentDiv: HTMLElement | null = document.getElementById('page-content');
-			if (contentDiv) {
+			if (contentDiv)
+			{
 				const	html: string = await route.component();
 				contentDiv.innerHTML = html;
 			}
-
+			this.currentPath = currentPath;
 			pathActions(currentPath, gameState, user);
 		}
 
 	}
+	
+	public get Path(): string {
+		return this.currentPath;
+	}
+	
 }

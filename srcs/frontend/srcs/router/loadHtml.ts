@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:01:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:16:05 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:03:23 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 
 /* ====================== FUNCTION ====================== */
-
 
 export async function	loadHtml(path: string): Promise<string> {
 	const	response: Response = await fetch(path);

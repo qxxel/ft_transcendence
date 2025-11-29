@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersRespDto.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:33:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 14:00:56 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 12:01:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,23 @@ export class	usersRespDto {
 		];
 	}
 
-	// getId(): number {
-	// 	return this.id;
-	// }
+	getId(): number {
+		return this.id;
+	}
 
-	// getName(): string {
-	// 	return this.username;
-	// }
+	getEmail(): string {
+		return this.email;
+	}
 
-	// getEmail(): string {
-	// 	return this.email;
-	// }
+	getUsername(): string {
+		return this.username;
+	}
 
-	// getElo(): number {
-	// 	return this.elo;
-	// }
+	getAvatar(): string {
+		return this.avatar;
+	}
+
+	getIs2faEnable(): boolean {
+		return this.is2faEnable;
+	}
 }

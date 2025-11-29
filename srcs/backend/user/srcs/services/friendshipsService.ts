@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 14:02:53 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 23:00:18 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:59:31 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ import { friendshipsUpdateDto }		from "../dtos/friendshipsUpdateDto.js";
 
 import { AlreadyRelatedError, BlockedError, NoRelationError }	from "../utils/throwErrors.js"
 import type { FriendUser } from "../objects/friendUser.js";
-import { stat } from "fs";
+// import { stat } from "fs";
 
 
 /* ====================== CLASS ====================== */
@@ -52,10 +52,33 @@ export class	friendshipsService {
 				return await this.friendshipsRepo.acceptFriendRequest(swapDto);
 			}
 
-			throw new Error("You already send a friend request.");
+			throw new Error("You already sent a friend request.");
 		}
 
 		return await this.friendshipsRepo.addFriendRequest(friendship);
+	}
+
+	async addFriend(friendship: friendshipsAddDto): Promise<friendshipsRespDto> {
+		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus(friendship.getCheckTable());
+
+		if (relation && relation.status)
+		{
+			if (relation.status === "BLOCKED")
+				throw new BlockedError("This user blocked you or you blocked him.");
+			if (relation.status === "ACCEPTED")
+				throw new AlreadyRelatedError("You are already friends.");
+
+			if (Number(relation.requester_id as unknown) !== friendship.getRequesterId())															//	AXEL: A ENLEVER
+			{
+				const	swapDto: friendshipsUpdateDto = new friendshipsUpdateDto(Number(relation.requester_id), friendship.getRequesterId());
+
+				return await this.friendshipsRepo.acceptFriendRequest(swapDto);
+			}
+
+			throw new Error("You already sent a friend request.");
+		}
+
+		return await this.friendshipsRepo.addFriend(friendship);
 	}
 
 	async acceptRequest(friendship: friendshipsUpdateDto): Promise<friendshipsRespDto> {

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 14:46:16 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:58:55 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,14 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 
 	// GET A USER WITH AN IDENTIFIER (EMAIL OR USERNAME)
 	userFastify.get('/lookup/:identifier', async (request: FastifyRequest, reply: FastifyReply) => {
-		const	{ identifier } = request.params as { identifier: string };
-
 		try {
+			const	{ identifier } = request.params as { identifier: string };
+
+			let	user: usersRespDto;
 			if (!identifier.includes("@"))
-				var	user: usersRespDto = await usersServ.getUserByUsername(identifier);
+				user = await usersServ.getUserByUsername(identifier);
 			else
-				var	user: usersRespDto = await usersServ.getUserByEmail(identifier);
+				user = await usersServ.getUserByEmail(identifier);
 
 			return reply.code(200).send(user);
 		}
@@ -96,18 +97,22 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 		const	parseId: number = parseInt(id, 10);
 	
 		try {
+			const	oldUser: usersRespDto = await usersServ.getUserById(parseId);
 			const	userUpdate: userUpdate = request.body;
 
-			if (userUpdate.username)
+			if (userUpdate.username && userUpdate.username !== oldUser.getUsername())
 				await usersServ.updateUsernameById(parseId, userUpdate.username);
-			if (userUpdate.email)
+
+			if (userUpdate.email && userUpdate.email !== oldUser.getEmail())
 				await usersServ.updateEmailById(parseId, userUpdate.email);
-			if (userUpdate.avatar)
+
+			if (userUpdate.avatar && userUpdate.avatar !== oldUser.getAvatar())
 				await usersServ.updateAvatarById(parseId, userUpdate.avatar);
-			if (userUpdate.is2faEnable)
+			
+			if (userUpdate.is2faEnable && userUpdate.is2faEnable !== oldUser.getIs2faEnable())
 				await usersServ.update2faById(parseId, userUpdate.is2faEnable);
 
-			return reply.code(201).send();
+			return reply.code(201).send(parseId);
 		}
 		catch (err: unknown) {
 			return errorsHandler(userFastify, reply, err);

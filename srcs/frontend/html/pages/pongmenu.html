@@ -10,35 +10,120 @@
     <div class="menu-content">
       
       <h1>Pong 🏓</h1>
-      
-      <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
-      <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
 
-      <div id="main-menu-btns" class="button-group">
-        <button onclick="showDifficultyMenu();" id="startAiGame" class="btn-yellow">
-          Play vs. AI
-        </button>
-        <button onclick="onClickPlayPVP();" id="startPvpGame" class="btn-yellow">
-          Play 1v1
-        </button>
+      <div id="default-mode-content" style="width: 80%;">
+          
+          <div class="control-group" style="width: 100%;">
+            <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
+            <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
+          </div>
+
+          <div id="main-menu-btns" class="button-group" style="width: 100%; gap: 15px; margin-bottom: 15px;">
+            <button onclick="showDifficultyMenu();" class="btn-yellow" style="flex: 1;">
+              Play vs. AI
+            </button>
+            <button onclick="onClickPlayPVP();" class="btn-yellow" style="flex: 1;">
+              Play 1v1
+            </button>
+          </div>
+
+          <button onclick="switchGameMode('featured')" class="btn-purple" style="width: 100%;">
+            ✨ Featured Mode
+          </button>
+
+          <div id="difficulty-btns" class="difficulty-menu hidden">
+            <p class="diff-title">Select Difficulty</p>
+            <div class="difficulty-row">
+                <button onclick="onClickPlayAI('easy');" class="btn-green">Easy</button>
+                <button onclick="onClickPlayAI('medium');" class="btn-yellow-ai">Medium</button>
+                <button onclick="onClickPlayAI('hard');" class="btn-red">Hard</button>
+            </div>
+            <div class="cancel-row">
+                <button onclick="hideDifficultyMenu();" class="btn-cancel">Cancel</button>
+            </div>
+          </div>
       </div>
 
-      <div id="difficulty-btns" class="difficulty-menu hidden">
-        
-        <p class="diff-title">Select Difficulty</p>
+      <div id="featured-mode-content" class="menu-content hidden" style="width: 100%;">
+          <div class="control-group" style="width: 100%;">
+              <label for="featuredMaxPoints">
+                  Points to Win: 
+                  <span id="featured-points-display" style="color: #FFFF00;">5</span>
+              </label>
+              <input type="range" id="featuredMaxPoints" min="1" max="10" value="5" step="1"/>
+          </div>
+          <div class="control-group" style="width: 100%;">
+              <label for="powerupFreq">
+                  Power-up Frequency:
+                  <span id="powerup-freq-display" style="color: #FFFF00;">5 sec</span>
+              </label>
+              <input type="range" id="powerupFreq" min="1" max="10" value="5" step="1"/>
+          </div>
 
-        <div class="difficulty-row">
-            <button onclick="onClickPlayAI('easy');" class="btn-green">Easy</button>
-            <button onclick="onClickPlayAI('medium');" class="btn-yellow-ai">Medium</button>
-            <button onclick="onClickPlayAI('hard');" class="btn-red">Hard</button>
-        </div>
-        
-        <div class="cancel-row">
-            <button onclick="hideDifficultyMenu();" class="btn-cancel">Cancel</button>
-        </div>
+          <div class="control-group" style="width: 90%;">
+              <label>AI Difficulty</label>
+              
+              <input type="hidden" id="aiHardcore" value="2">
+              <div class="difficulty-selector">
+                  <button id="btn-feat-1" onclick="selectFeaturedDifficulty(1)" class="btn-select btn-select-green">Easy</button>
+                  <button id="btn-feat-2" onclick="selectFeaturedDifficulty(2)" class="btn-select btn-select-yellow active">Medium</button>
+                  <button id="btn-feat-3" onclick="selectFeaturedDifficulty(3)" class="btn-select btn-select-red">Hard</button>
+                  <button id="btn-feat-4" onclick="selectFeaturedDifficulty(4)" class="btn-select btn-select-purple">Boris</button>
+              </div>
+          </div>
 
+          <p class="diff-title" style="width: 90%;">ALLOWED POWER-UPS</p>
+          
+          <div class="checkbox-group">
+              <label class="checkbox-btn"><input type="checkbox" id="chk-1star" checked><span>★</span></label>
+              <label class="checkbox-btn"><input type="checkbox" id="chk-2star" checked><span>★★</span></label>
+              <label class="checkbox-btn"><input type="checkbox" id="chk-3star" checked><span>★★★</span></label>
+          </div>
+
+          <div style="width: 90%; margin-top: 25px; display: flex; flex-direction: column; gap: 10px;">
+            <button onclick="onClickStartFeatured('ai');" class="btn-yellow" style="flex: 1;">
+              Play vs. AI
+            </button>
+            <button onclick="onClickStartFeatured('pvp');" class="btn-yellow" style="flex: 1;">
+              Play 1v1
+            </button>
+            <button onclick="switchGameMode('default')" class="btn-cancel" style="width: 100%;">
+              Back to Default
+            </button>
+          </div>
+          <div class="legend-container" style="top: 20px;"> <div class="legend-title">Power-Up Guide</div>
+          
+          <div class="legend-subtitle">★ BALL SIZE</div>
+          <div class="legend-item">
+            <div class="legend-bubble" style="background-color: #FFFF00; border-color: #0000FF;"></div>
+            <span>Bigger</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-bubble" style="background-color: #FFFF00; border-color: #FF0000;"></div>
+            <span>Smaller</span>
+          </div>
+          
+          <div class="legend-subtitle">★★ PADDLE SIZE</div>
+          <div class="legend-item">
+            <div class="legend-bubble" style="background-color: #00FFFF; border-color: #0000FF;"></div>
+            <span>Bigger</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-bubble" style="background-color: #00FFFF; border-color: #FF0000;"></div>
+            <span>Smaller</span>
+          </div>
+          
+          <div class="legend-subtitle">★★★ CHAOS</div>
+          <div class="legend-item">
+            <div class="legend-bubble" style="background-color: #FF00FF; border-color: #FFFF00;"></div>
+            <span>Deflect</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-bubble" style="background-color: #888888; border-color: #FFFF00;"></div>
+            <span>Speed Up</span>
+          </div>
+        </div>
       </div>
-
     </div>
   </div>
 </body>

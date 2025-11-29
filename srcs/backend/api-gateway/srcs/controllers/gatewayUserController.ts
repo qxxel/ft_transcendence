@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 23:24:39 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:58:44 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		const	parseId: number = parseInt(id, 10);																		//
 																														//
 		try {																											//
-			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/${parseId}`, request.body);	// MATHIS: A ENLEVER
+			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/${parseId}`, request.body);	//	MATHIS: A ENLEVER
 																														//
 			return reply.send(response.data);																			//
 		} catch (err: unknown) {																						//
@@ -90,6 +90,19 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		}
 	});
 
+	gatewayFastify.get('/lookup/:identifier', async (request: FastifyRequest, reply: FastifyReply) => {
+
+		try {
+			const	{ identifier } = request.params as { identifier: string };
+
+			const	response: AxiosResponse = await gatewayAxios.get(`https://user:3000/lookup/${identifier}`);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
 	// DELETE USER
 	gatewayFastify.delete('/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
@@ -105,10 +118,6 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		}
 	});
 
-
-	/* =========== STATS ROUTE =========== */
-
-	// STATS UPDATES
 	gatewayFastify.patch('/stats/:id', async (request: FastifyRequest, reply: FastifyReply) => {							//
 		const	{ id } = request.params as { id: string };																	//
 		const	parseId: number = parseInt(id, 10);																			//
@@ -120,7 +129,13 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		} catch (err: unknown) {																							//
 			return requestErrorsHandler(gatewayFastify, reply, err);														//
 		}																													//
-	});																														//
+	});	
+
+
+	/* =========== STATS ROUTE =========== */
+
+	// STATS UPDATES
+																														//
 
 	// STATS GETTER
 	gatewayFastify.get('/stats/:id', async (request: FastifyRequest, reply: FastifyReply) => {
@@ -150,6 +165,21 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/friends/request/${parseTargetId}`, request.body,
 				{ headers: { 'user-id': userId } }
 			);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+
+	gatewayFastify.post('/friends/:idA/:idB', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const { idA, idB } = request.params as { idA: string, idB: string };
+			const parseIdA = parseInt(idA, 10);
+			const parseIdB = parseInt(idB, 10);
+
+			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/friends/${parseIdA}/${parseIdB}`, request.body);	//	AXEL: A ENLEVER
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
@@ -267,4 +297,17 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
 	});
+
+	gatewayFastify.patch('/user-stats/:id', async (request: FastifyRequest, reply: FastifyReply) => {								//
+		const	{ id } = request.params as { id: string };																			//
+		const	parseId: number = parseInt(id, 10);																					//
+																																	//
+		try {																														//
+			const	response: AxiosResponse = await gatewayAxios.patch(`https://user:3000/user-stats/${parseId}`, request.body);	// A ENLEVER
+																																	//
+			return reply.send(response.data);																						//
+		} catch (err: unknown) {																									//
+			return requestErrorsHandler(gatewayFastify, reply, err);																//
+		}																															//
+	});																																//
 }

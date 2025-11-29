@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:48:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 22:36:24 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:59:00 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ export class	friendshipsAddDto {
 	private	receiverId: number;
 
 
-	constructor(targetId: number, userId: number) {
+	constructor(userId: number, targetId: number) {
 		if (userId === targetId)
 			throw new SelfFriendRequestError("You cannot add yourself as a friend");
 

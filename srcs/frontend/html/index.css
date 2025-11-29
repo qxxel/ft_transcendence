@@ -1,3 +1,7 @@
+/* ************************************************************************** */
+/* index.css                                                                  */
+/* ************************************************************************** */
+
 /* ==========================================================================
    1. GLOBAL & BACKGROUND
    ========================================================================== */
@@ -17,6 +21,10 @@ body {
     background-attachment: fixed;
     color: white;
     min-height: 100vh;
+}
+
+[hidden] {
+    display: none !important;
 }
 
 /* ==========================================================================
@@ -79,12 +87,12 @@ nav a:hover {
     transform: translateY(-2px);
 }
 
-nav {
-    font-size: 1rem;
-    color: transparent;
+p#msg-error {
+    color: red;
 }
-nav a {
-    color: #ccc; 
+
+.tab {
+    width: 100%;
 }
 
 /* ==========================================================================
@@ -96,9 +104,18 @@ nav a {
     border: 2px solid #fff;
     border-radius: 12px;
     box-shadow: 0 0 15px #fff;
-    padding: 20px;
-    width: 100%;
-    max-width: 900px;
+    padding: 40px;
+
+
+    width: 90%;
+    /* max-width: 1000px;
+
+    width: 100%; */
+    min-width: 350px;
+    max-width: 1000px;
+
+
+    margin: 0 auto;
 }
 
 #pong-canvas {
@@ -159,7 +176,6 @@ nav a {
    ========================================================================== */
 .dashboard {
     display: none;
-    
     position: absolute;
     top: 50%;
     left: 50%;
@@ -257,60 +273,21 @@ nav a {
     box-shadow: 0 0 10px #fff;
 }
 
-.difficulty-menu {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin-top: 10px;
-    animation: fadeIn 0.3s ease;
+span.disable, span.enable {
+    padding-left: 10px;
+    margin-left: 20px;
+    padding-right: 10px;
 }
 
-.diff-title {
-    color: #aaa;
-    font-size: 0.9em;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+span.disable {
+    background-color: red;
 }
 
-.difficulty-row {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    width: 100%;
-    margin-bottom: 15px;
+span.enable {
+    background-color: green;
 }
 
-.cancel-row {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.btn-cancel {
-    background: transparent;
-    border: 1px solid #777;
-    color: #ccc;
-    font-family: 'monospace', sans-serif;
-    font-size: 0.9em;
-    padding: 8px 25px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-cancel:hover {
-    border-color: #fff;
-    color: #fff;
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
+/* --- 5. CLEANUP YOUR OLD STYLES --- */
 .btn-green {
     background-color: #00FF00;
     color: #000;
@@ -353,20 +330,61 @@ nav a {
 }
 .btn-red:hover { background-color: #fff; color: #000; box-shadow: 0 0 10px #FF0000; }
 
-.btn-small {
-    background-color: transparent;
-    border: 1px solid #ccc;
-    color: #ccc;
-    border-radius: 6px;
-    padding: 5px 10px;
-    cursor: pointer;
-    margin-left: 10px;
+.btn-purple {
+    background-color: #D900FF;
+    color: #fff;
     font-family: 'monospace', sans-serif;
+    font-weight: bold;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px rgba(217, 0, 255, 0.4);
 }
-.btn-small:hover { background-color: #333; }
+.btn-purple:hover {
+    background-color: #fff;
+    color: #D900FF;
+    box-shadow: 0 0 15px #D900FF;
+}
 
-.hidden {
-    display: none !important;
+.btn-cancel {
+    background: transparent;
+    border: 1px solid #777;
+    color: #ccc;
+    font-family: 'monospace', sans-serif;
+    font-size: 0.9em;
+    padding: 8px 25px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-cancel:hover {
+    border-color: #fff;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-leave {
+    background: transparent;
+    border: 1px solid #FF0000;
+    color: #FF0000;
+    font-family: 'monospace', sans-serif;
+    font-weight: bold;
+    font-size: 1em;
+    padding: 8px 40px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.btn-leave:hover {
+    background-color: #FF0000;
+    color: white;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+    transform: translateY(-2px);
 }
 
 h1 {
@@ -380,6 +398,17 @@ p {
     color: white;
     font-size: 1.1em;
     text-align: center;
+}
+
+.game-footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.hidden {
+    display: none !important;
 }
 
 /* ==========================================================================
@@ -458,6 +487,24 @@ input[type=range]::-moz-range-thumb {
   margin-top: 20px;
 }
 
+button:disabled {
+  opacity: 0.9;
+  cursor: not-allowed;
+}
+
+.button-group-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.button-group-vertical button {
+    width: 80%;
+}
+
 .game-choice-menu {
   display: flex;
   flex-direction: column;
@@ -471,6 +518,181 @@ input[type=range]::-moz-range-thumb {
   max-width: 400px;
   margin: 10px 0;
   font-size: 1.5em;
+}
+
+.mode-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 15px;
+    width: 100%;
+}
+
+.btn-tab {
+    background: transparent;
+    color: #888;
+    border: 1px solid transparent;
+    font-family: 'monospace', sans-serif;
+    font-size: 1.1em;
+    padding: 8px 20px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-tab:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-tab.active {
+    color: #000;
+    background-color: #FFFF00;
+    box-shadow: 0 0 10px #FFFF00;
+    font-weight: bold;
+}
+
+.checkbox-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.checkbox-btn input {
+    display: none;
+}
+
+.checkbox-btn span {
+    display: inline-block;
+    padding: 10px 15px;
+    border: 1px solid #555;
+    background: rgba(0,0,0,0.5);
+    color: #555;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: all 0.2s ease;
+}
+
+.checkbox-btn input:checked + span {
+    border-color: #FFFF00;
+    color: #FFFF00;
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+    background: rgba(255, 255, 0, 0.1);
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.control-group label {
+    font-size: 1.1em;
+    color: #aaa;
+    margin-bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.control-group span {
+    color: #FFFF00;
+    font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    display: inline-block;
+    width: 80px;
+    text-align: right;
+}
+
+.control-group input[type=range] {
+    width: 100%;
+    margin: 5px 0;
+}
+
+.diff-title {
+    color: #fff;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+    width: 100%;
+    border-bottom: 1px solid #333;
+    padding-bottom: 5px;
+}
+
+.difficulty-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+    animation: fadeIn 0.3s ease;
+}
+
+.difficulty-row {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.cancel-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.difficulty-selector {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.btn-select {
+    flex: 1;
+    background: transparent;
+    border: 2px solid;
+    padding: 8px 0;
+    border-radius: 8px;
+    font-family: 'monospace', sans-serif;
+    font-weight: bold;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #aaa;
+}
+
+.btn-select-green { border-color: #00FF00; }
+.btn-select-yellow { border-color: #FFFF00; }
+.btn-select-red { border-color: #FF0000; }
+.btn-select-purple { border-color: #FF00FF; }
+
+.btn-select-green:hover { color: #00FF00; box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); }
+.btn-select-yellow:hover { color: #FFFF00; box-shadow: 0 0 10px rgba(255, 255, 0, 0.2); }
+.btn-select-red:hover { color: #FF0000; box-shadow: 0 0 10px rgba(255, 0, 0, 0.2); }
+.btn-select-purple:hover { color: #FF00FF; box-shadow: 0 0 10px rgba(255, 0, 255, 0.2); }
+
+.btn-select-green.active { background-color: #00FF00; color: #000; box-shadow: 0 0 15px #00FF00; }
+.btn-select-yellow.active { background-color: #FFFF00; color: #000; box-shadow: 0 0 15px #FFFF00; }
+.btn-select-red.active { background-color: #FF0000; color: #fff; box-shadow: 0 0 15px #FF0000; }
+.btn-select-purple.active { background-color: #FF00FF; color: #fff; box-shadow: 0 0 15px #FF00FF; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* ==========================================================================
@@ -544,6 +766,74 @@ input[type=range]::-moz-range-thumb {
   font-size: 0.9em;
 }
 
+/* ==========================================================================
+   10. LEGEND (Side Menu)
+   ========================================================================== */
+.legend-container {
+    position: absolute;
+    top: 80px;
+    right: -290px;
+    width: 240px;
+    
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #555;
+    border-radius: 12px;
+    padding: 15px;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.legend-title {
+    color: #FFFF00;
+    text-align: center;
+    font-size: 1.6em;
+    font-weight: bold;
+    border-bottom: 2px solid #555;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.4);
+}
+
+.legend-subtitle {
+    color: #FFFF00;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #555;
+    padding-bottom: 3px;
+    text-shadow: none;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ccc;
+    font-size: 0.9em;
+    font-family: 'monospace', sans-serif;
+}
+
+.legend-bubble {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border-width: 4px;
+    border-style: solid;
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   12. PAGE CONTENT WRAPPER (Fixes Centering)
+   ========================================================================== */
+#page-content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 
 
 
@@ -567,6 +857,11 @@ input[type=range]::-moz-range-thumb {
     max-width: 900px;
 }
 
+.friends-page-container h1 {
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
 .friends-page-container h2 {
     text-align: center;
     text-transform: uppercase;
@@ -586,18 +881,25 @@ input[type=range]::-moz-range-thumb {
     gap: 15px;
     margin-bottom: 30px;
     padding: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-#username-input {
-    flex-grow: 1;
+
+#username-add-input {
+    width: 63%;
     padding: 10px;
-    background: black;
-    color: var(--neon-yellow);
-    border: 1px solid var(--border-color);
-    box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.3);
-    font-size: 16px;
-    font-family: inherit;
+    border-radius: 6px;
+    border: 1px solid #aaa;
+    background: #333;
+    color: #fff;
+    font-family: 'monospace', sans-serif;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+#add-friend-button {
+    font-size: 15px;
+    padding: 12px 12px;
+    margin-top: 0px;
 }
 
 /* ---------------------------------------------------------------- */
@@ -606,38 +908,44 @@ input[type=range]::-moz-range-thumb {
 
 .neon-button {
     background: transparent;
-    border: 1px solid var(--neon-yellow);
-    color: var(--neon-yellow);
+    border: 1px solid #FF0;
+    color: #FF0;
     padding: 8px 15px;
     text-transform: uppercase;
     cursor: pointer;
     font-weight: bold;
-    box-shadow: 0 0 5px var(--neon-yellow);
+    box-shadow: 0 0 5px #FF0;
     transition: all 0.2s;
 }
 
 .neon-button:hover {
     color: black;
-    background: var(--neon-yellow);
-    box-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow);
+    background: #FF0;
+    box-shadow: 0 0 10px #FF0, 0 0 20px #FF0;
 }
 
 .accept-button {
-    border-color: var(--neon-green);
-    color: var(--neon-green);
-    box-shadow: 0 0 5px var(--neon-green);
+    border-color: #0F0;
+    color: #0F0;
+    box-shadow: 0 0 5px #0F0;
 }
+
 .accept-button:hover {
-    background: var(--neon-green);
+    color: black;
+    background: #0F0;
+    box-shadow: 0 0 10px #0F0, 0 0 20px #0F0;
 }
 
 .ignore-button {
-    border-color: var(--neon-red);
-    color: var(--neon-red);
-    box-shadow: 0 0 5px var(--neon-red);
+    border-color: #F00;
+    color: #F00;
+    box-shadow: 0 0 5px #F00;
 }
+
 .ignore-button:hover {
-    background: var(--neon-red);
+    color: black;
+    background: #F00;
+    box-shadow: 0 0 10px #F00, 0 0 20px #F00;
 }
 
 /* ---------------------------------------------------------------- */
@@ -653,7 +961,6 @@ input[type=range]::-moz-range-thumb {
     align-items: center;
     justify-content: space-between;
     padding: 10px 0;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
 .friend-entry:last-child {
@@ -665,22 +972,32 @@ input[type=range]::-moz-range-thumb {
     height: 8px;
     border-radius: 50%;
     margin-right: 15px;
-    background: gray; /* Hors ligne par défaut */
+    background: gray;
 }
 
 /* Statuts spécifiques */
 .online .status-dot {
-    background: var(--neon-green);
-    box-shadow: 0 0 5px var(--neon-green);
+    background: #0F0;
+    box-shadow: 0 0 5px #0F0;
 }
 
 .playing .status-dot {
-    background: var(--neon-yellow);
-    box-shadow: 0 0 5px var(--neon-yellow);
+    background: #FF0;
+    box-shadow: 0 0 5px #FF0;
 }
 
 .username {
-    flex-basis: 300px; /* Donne de l'espace au nom */
+    flex-basis: 66%;
+    font-weight: bold;
+}
+
+.empty-message {
+    flex-basis: 100%;
+    font-weight: bold;
+}
+
+.error-message {
+    flex-basis: 100%;
     font-weight: bold;
 }
 
@@ -691,7 +1008,7 @@ input[type=range]::-moz-range-thumb {
 }
 
 .playing-status {
-    color: var(--neon-yellow);
+    color: #FF0;
 }
 
 /* Boutons d'action */
@@ -710,23 +1027,24 @@ input[type=range]::-moz-range-thumb {
 }
 
 .remove-button:hover {
-    color: var(--neon-red);
-    text-shadow: 0 0 5px var(--neon-red);
+    color: #F00;
+    text-shadow: 0 0 5px #F00;
 }
 
 .challenge-button {
+    width: 100%;
     padding: 5px 10px;
     font-size: 14px;
-    /* Style du bouton néon vert/jaune */
-    border-color: var(--neon-green);
-    color: var(--neon-green);
-    box-shadow: 0 0 5px var(--neon-green);
+    border-color: #666;
+    color: #666;
+    box-shadow: 0 0 5px #666;
 }
 .challenge-button:hover {
-    background: var(--neon-green);
     color: black;
+    background: #666;
+    box-shadow: 0 0 10px #666, 0 0 20px #666;
 }
 
 .pending-request .username {
-    color: var(--neon-yellow);
+    color: #FFF;
 }

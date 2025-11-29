@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/27 14:02:40 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:00:01 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 		user.setUsername(result.username);
 		user.setSigned(true);
 
+		const baseHref = window.location.origin;
+
 		var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)
 			menu.innerHTML =
@@ -51,10 +53,19 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 				<a href="/settings">Settings</a>
 				<a href="/about">About</a>`;
 
-		router.navigate("/", gameState, user);
+		router.navigate('/', gameState, user);
 	});
 }
 
-export function	setupLoadHandler(gameState: GameState, user: User): void {
-	handleLoadPage(gameState, user)
+function handleUnload() {
+	window.addEventListener("beforeunload", async (event: Event) => {
+		if (location.pathname !== "/2fa")
+			return;
+		event.preventDefault();
+	});
+}
+
+export async function	setupLoadHandler(gameState: GameState, user: User): Promise<void> {
+	handleLoadPage(gameState, user);
+	handleUnload();
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cookies.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:06:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:22:03 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/24 07:45:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORT ====================== */
 
-import { expAccess, expRefresh }	from "../jwt.js"
+import { expAccess, expRefresh, expTwofa }	from "../jwt.js"
 
 import type { FastifyRequest, FastifyReply }	from "fastify"
 
@@ -34,6 +34,13 @@ export function	setCookiesRefreshToken(reply: FastifyReply, jwtRefresh: string):
 	reply.header(
 		"Set-Cookie",
 		`jwtRefresh=${jwtRefresh}; SameSite=strict; HttpOnly; secure; Max-Age=${expRefresh.slice(0, -1)}; path=/api/jwt/refresh`
+	);
+}
+
+export function	setCookiesTwofaToken(reply: FastifyReply, jwtTwofa: string): void {
+	reply.header(
+		"Set-Cookie",
+		`jwtTwofa=${jwtTwofa}; SameSite=strict; HttpOnly; secure; Max-Age=${expTwofa.slice(0, -1)}; path=/api`
 	);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayJwtController.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:00:05 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 13:59:57 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 11:33:10 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,40 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 		}
 	});
 
-	gatewayFastify.post('/validate', async (request: FastifyRequest, reply: FastifyReply) => {
+	gatewayFastify.get('/twofa', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.get('https://jwt:3000/validate',
+			const	response: AxiosResponse = await gatewayAxios.get('https://jwt:3000/twofa',
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+
+			if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);
+
+			reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+	gatewayFastify.post('/twofa/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await gatewayAxios.post('https://jwt:3000/twofa/refresh',
+				request.body,
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+
+			if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);
+
+			reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+	gatewayFastify.get('/twofa/validate', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await gatewayAxios.get('https://jwt:3000/twofa/validate',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 

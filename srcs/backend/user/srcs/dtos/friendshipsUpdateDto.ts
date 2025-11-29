@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 13:43:27 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 22:58:41 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/28 16:42:30 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ export class	friendshipsUpdateDto {
 		if (userId === targetId)
 			throw new SelfFriendRequestError("You cannot change the status of a request form yourself to yourself.");
 
-		this.requesterId = userId;
-		this.receiverId = targetId;
+		this.requesterId = targetId;
+		this.receiverId = userId;
 	}
 
 

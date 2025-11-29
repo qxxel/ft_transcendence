@@ -1,1 +1,36 @@
 <h1>User</h1>
+<div class="settings">
+  <h2>Settings</h2>
+  <form id="user-settings-form" class="user-settings-form">
+    <button type="button" onclick="onClickEdit();" id="edit-submit" class="view-mode">edit profile</button>
+    <h3>User</h3>
+
+    <div class="form-group">
+      <label for="edit-username">Username:</label>
+      <input type="text" id="edit-username" class="edit-mode" name="username" hidden>
+      <span id="user-username" class="view-mode"></span>
+    </div>
+    
+    <div class="form-group">
+      <label for="edit-email">Email:</label>
+      <input type="email" id="edit-email" class="edit-mode" name="email" hidden>
+      <span id="user-email" class="view-mode"></span>
+    </div>
+    <p id="msg-error" class="edit-mode" hidden></p>
+
+    <h3>Authentication</h3>
+
+    <div class="form-group">
+      <span>2FA:</span>
+      <span id="switch-span" class="view-mode disable">Disable</span> <!-- switch Enable Disable in js -->
+      <label for="edit-2fa" class="edit-mode" hidden>Enable/Disable</label>
+      <input type="checkbox" id="edit-2fa" class="edit-mode" hidden>
+    </div>
+
+    <h3>Account</h3>
+    <button type="button" onclick="onClickDeleteAccount();" id="delete-account">Delete Account</button>
+    <br />
+    <button type="submit" id="save-settings-submit" class="btn-yellow edit-mode" hidden>Save Settings</button>
+    <button type="button" onclick="onClickCancel();" id="do-not-save-settings-submit" class="btn-yellow edit-mode" hidden>Don't Save Settings</button>
+  </form>
+</div>

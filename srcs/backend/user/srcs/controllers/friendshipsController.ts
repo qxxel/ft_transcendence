@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:38:43 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 23:05:45 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:57:38 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,29 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 			const	friendship: friendshipsAddDto = new friendshipsAddDto(userId, parseTargetId);
 
 			return reply.code(201).send(await friendshipsServ.addFriendRequest(friendship));
+		} catch (err: unknown) {
+			errorsHandler(userFastify, reply, err);
+		}
+	});
+
+	userFastify.post('/:idA/:idB', async (request: FastifyRequest, reply: FastifyReply) => {
+		if (!request.body)
+		{
+			userFastify.log.error("The request is empty");
+			console.error("The request is empty");
+			return reply.code(400).send({ error: "The request is empty" });
+		}
+
+		try {
+			const	{ idA, idB } = request.params as { idA: string, idB: string };
+			const	parseIdA = parseInt(idA, 10);
+			const	parseIdB = parseInt(idB, 10);
+			if (isNaN(parseIdA) || isNaN(parseIdB))
+				return reply.code(400).send({ error: "Invalid IDs provided." });						//	AXEL: A ENLEVER
+
+			const	friendship: friendshipsAddDto = new friendshipsAddDto(parseIdA, parseIdB);
+
+			return reply.code(201).send(await friendshipsServ.addFriend(friendship));
 		} catch (err: unknown) {
 			errorsHandler(userFastify, reply, err);
 		}
@@ -96,7 +119,6 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 	userFastify.get('/me', async (request: FastifyRequest, reply: FastifyReply) => {			
 		try {
 			const	userId: number = extractUserId(request);
-
 			return reply.code(201).send(await friendshipsServ.getFriendsList(userId));
 		} catch (err: unknown) {
 			errorsHandler(userFastify, reply, err);

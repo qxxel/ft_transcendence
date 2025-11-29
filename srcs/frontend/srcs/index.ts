@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 18:17:14 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:01:48 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ var	gameState: GameState = {
 	currentTournament: null
 };
 
-var	user: User = new User();
+export var	user: User = new User();
 
 export const	router: Router = new Router();
 
@@ -52,7 +52,7 @@ export const	router: Router = new Router();
 
 setupClickHandlers(router, user, gameState);
 setupSubmitHandler(gameState, user);
-setupLoadHandler(gameState, user);
+await setupLoadHandler(gameState, user);
 
 
 /* ============================= SETUP ROUTES ============================= */

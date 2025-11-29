@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwt.ts                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:26:37 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/27 10:43:42 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 import cors					from '@fastify/cors'
 import Fastify, { type FastifyInstance }				from 'fastify'
 import fs					from 'fs'
+import axios				from 'axios'
+import https				from 'https'
 import sqlite3Pkg			from 'sqlite3'
 import { jwtController }	from "./controllers/jwtController.js"
 import { jwtService }		from "./services/jwtService.js"
@@ -28,6 +30,7 @@ import { jwtRepository }	from "./repositories/jwtRepository.js"
 
 export const	expAccess: string = "1000s";
 export const	expRefresh: string = "10000s";
+export const	expTwofa: string = "300s"; // 300s = 5min
 
 export const	jwtSecret: Uint8Array<ArrayBuffer> = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -45,6 +48,14 @@ const	db = new Database(dbname, (err: Error | null) => {
 });
 
 export const	jwtServ: jwtService = new jwtService(new jwtRepository(db));
+
+
+/* ====================== AXIOS VARIABLES ====================== */
+
+export const	jwtAxios = axios.create({
+	httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+	timeout: 1000
+});
 
 
 /* ====================== SERVER ====================== */

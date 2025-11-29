@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersRepository.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:20:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 17:59:21 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 11:42:57 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
