@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:52:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:57:45 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ export class	friendshipsRepository {
 	async addFriend(friendship: friendshipsAddDto): Promise<friendshipsRespDto> {
 		return new Promise((resolve, reject) => {
 			const	query = `INSERT INTO friendships (requester_id, receiver_id, status) 
-					VALUES (?, ?, 'ACCEPTED')
+					VALUES (?, ?, 'ACCEPT')
 				RETURNING *;`;
 			const	elements: number[] = friendship.getTable();
-
+																								//	AXEL: A ENLEVER
 			this.db.get(query, elements, (err: unknown, row: any) => {
 				if (err)
 					return reject(err);
@@ -189,16 +189,16 @@ export class	friendshipsRepository {
 
 	async getFriendsList(userId: number): Promise<FriendUser[]> {
 		return new Promise((resolve, reject) => {
-			const query = `SELECT u.id, u.username, u.avatar, u.email
+			const query = `SELECT u.id, u.username, u.avatar, u.email, f.status
 				FROM friendships f
 				INNER JOIN users u ON u.id = CASE
-					WHEN f.requester_id = ? THEN f.receiver_id -- Si je suis requester, je veux le receiver
-					ELSE f.requester_id                        -- Sinon, je veux le requester
+					WHEN f.requester_id = ? THEN f.receiver_id
+					ELSE f.requester_id
 				END
 				WHERE (f.requester_id = ? OR f.receiver_id = ?)
-				AND f.status = 'ACCEPTED';`;
+				AND (f.status = 'ACCEPTED' OR f.status = 'PENDING');`;
 			const elements = [userId, userId, userId];
-		
+
 			this.db.all(query, elements, (err: unknown, rows: FriendUser[]) => {
 				if (err)
 					return reject(err);

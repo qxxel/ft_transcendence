@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:38:43 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:52:29 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:57:38 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 	userFastify.get('/me', async (request: FastifyRequest, reply: FastifyReply) => {			
 		try {
 			const	userId: number = extractUserId(request);
-
 			return reply.code(201).send(await friendshipsServ.getFriendsList(userId));
 		} catch (err: unknown) {
 			errorsHandler(userFastify, reply, err);
