@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:05:33 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/29 16:53:45 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/11/29 17:15:32 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,10 @@ export class PongPhysics {
         if (ball.y + ball.radius > this.height) {
             ball.y = this.height - ball.radius;
             ball.dy *= -1;
-            // if (Math.abs(ball.dx) < minDx) {
-            //     console.log("11111111111");
-            //     if (ball.dx > 0) ball.dx = minDx;
-            //         else ball.dx = -minDx;
-            // }
         } 
         else if (ball.y - ball.radius < 0) {
             ball.y = ball.radius;
             ball.dy *= -1;
-            // if (Math.abs(ball.dx) < minDx) {
-            //     console.log("2222222222");
-            //     if (ball.dx > 0) ball.dx = minDx;
-            //         else ball.dx = -minDx;
-            // }
         }
 
         if (ball.x - ball.radius < p1.x + p1.width &&
