@@ -3,24 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   navigationUtils.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 12:36:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:55:48 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // ALL UTILS TO NAVIGATION ARE LOCATED HERE
 
+
 /* ====================== IMPORTS ====================== */
 
-import { PongGame }	from "../Pong/Pong.js";
-import { router }	from "../index.js";
-import { TankGame }	from "../v3/tank.js";
-import { User }		from "../user/user.js";
-import { sendRequest }	from "../utils/sendRequest.js"
-import { DisplayDate }	from "../utils/displayDate.js"
-import { btnCooldown }	from "../utils/buttonCooldown.js"
+import { btnCooldown }			from "../utils/buttonCooldown.js"
+import { DisplayDate }			from "../utils/displayDate.js"
+import { getAndRenderFriends }  from  "../friends/getAndRenderFriends.js"
+import { PongGame }				from "../Pong/Pong.js"
+import { router }				from "../index.js"
+import { sendRequest }			from "../utils/sendRequest.js"
+import { TankGame }				from "../v3/tank.js"
+import { User }					from "../user/user.js"
 
 import type { GameState }   from "../index.js"
 
@@ -121,6 +123,11 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 		gameState.currentGame.start();
 		console.log("Loading the new game...");
 	}
+
+	if (['/friends'].includes(currentPath)) {
+        getAndRenderFriends();
+        console.log("Loading the friends...");
+    }
 }
 
 async function loadUser(user: User) {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsRepository.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:42:44 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:52:48 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,22 @@ export class	friendshipsRepository {
 		return new Promise((resolve, reject) => {
 			const	query = `INSERT INTO friendships (requester_id, receiver_id) 
 					VALUES (?, ?)
+				RETURNING *;`;
+			const	elements: number[] = friendship.getTable();
+
+			this.db.get(query, elements, (err: unknown, row: any) => {
+				if (err)
+					return reject(err);
+
+				resolve(new friendshipsRespDto(row));
+			});
+		});
+	}
+
+	async addFriend(friendship: friendshipsAddDto): Promise<friendshipsRespDto> {
+		return new Promise((resolve, reject) => {
+			const	query = `INSERT INTO friendships (requester_id, receiver_id, status) 
+					VALUES (?, ?, 'ACCEPTED')
 				RETURNING *;`;
 			const	elements: number[] = friendship.getTable();
 

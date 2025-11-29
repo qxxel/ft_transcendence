@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayUserController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 12:24:01 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:52:12 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		const	parseId: number = parseInt(id, 10);																		//
 																														//
 		try {																											//
-			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/${parseId}`, request.body);	// MATHIS: A ENLEVER
+			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/${parseId}`, request.body);	//	MATHIS: A ENLEVER
 																														//
 			return reply.send(response.data);																			//
 		} catch (err: unknown) {																						//
@@ -152,6 +152,21 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/friends/request/${parseTargetId}`, request.body,
 				{ headers: { 'user-id': userId } }
 			);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+
+	gatewayFastify.post('/friends/:idA/:idB', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const { idA, idB } = request.params as { idA: string, idB: string };
+			const parseIdA = parseInt(idA, 10);
+			const parseIdB = parseInt(idB, 10);
+
+			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/friends/${parseIdA}/${parseIdB}`, request.body);	//	AXEL: A ENLEVER
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
