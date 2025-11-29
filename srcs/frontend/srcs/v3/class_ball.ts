@@ -105,6 +105,13 @@ export class	Ball extends Actor {
 					a.addHealth(-this.damage);
 					this.destroy();
 				}
+				else
+				{
+					if (this.author!.id == 0)
+						GSTATE.STATS1.bounce += 1;
+					else
+						GSTATE.STATS2.bounce += 1;
+				}
 				this.bounce_count--;
 				if (this.bounce_count <= 0)
 					this.destroy();

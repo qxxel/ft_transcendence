@@ -47,7 +47,8 @@ export class	Tank extends Actor {
 		public	h:number,
 		public	color:Color,
 		public	fire_color:Color,
-		public	keys:Keys) {
+		public	keys:Keys,
+		public  id:number) {
 		super(x,y)
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 		this.cannon = new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),3,0,fire_color);
@@ -59,7 +60,6 @@ export class	Tank extends Actor {
 		this.listen(input);
 		if (Date.now() - this.fire_last < this.fire_rate)
 			GSTATE.REDRAW = true;
-		
 	}
 
 	draw(ctx: CanvasRenderingContext2D): void {
@@ -85,10 +85,9 @@ export class	Tank extends Actor {
 		if (input.isPressed(this.keys.fire))	{ this.fire(); }
 	}
 
-
 	move(dx:number,dy:number): void {
 		if (this.collide(new Rect2D(this.x + dx, this.y + dy, this.w, this.h)))
-				return;
+			return;
 		this.x += dx;
 		this.y += dy;
 		this.rect.x += dx;
@@ -118,7 +117,7 @@ export class	Tank extends Actor {
 				new Ball(this.cannon.getEnd().x - 10/2 ,this.cannon.getEnd().y - 10/2 ,10,10, Math.cos(this.cannon.geometry.angle) * 3, Math.sin(this.cannon.geometry.angle) * 3,
 					this.fire_color, this));
 
-	 }
+	}
 
 	collide(rect1: Rect2D): boolean {
 
@@ -141,6 +140,16 @@ export class	Tank extends Actor {
 		console.log("health():",this.health);
 		if (this.health == 0) {
 			GSTATE.TANKS -= 1;
+			if (this.id == 0)
+			{
+				GSTATE.STATS1.win += 1;
+				GSTATE.STATS2.lose += 1;
+			}
+			else
+			{
+				GSTATE.STATS1.lose += 1;
+				GSTATE.STATS2.win += 1;
+			}
 			this.destroy();
 		}
 	}

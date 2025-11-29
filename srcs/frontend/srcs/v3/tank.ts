@@ -17,7 +17,9 @@
 
 import { Game }		from "../Pong/GameClass.js"
 import { GSTATE }	from "./global.js"
+import { Router } from "../router/router.js"
 import { Input }	from "./class_input.js"
+import { User } from "../user/user.js"
 import { Map }		from "./class_map.js"
 import { Tank }		from "./class_tank.js"
 import { Ball }		from "./class_ball.js"
@@ -30,7 +32,7 @@ import type { publicDecrypt } from "crypto"
 
 /* ============================= CLASS ============================= */
 
-export class	TankGame extends Game { // TODO some throw ig
+export class	TankGame extends Game {
 
 	private	canvas: HTMLCanvasElement;
 	private	ctx: CanvasRenderingContext2D;
@@ -40,8 +42,9 @@ export class	TankGame extends Game { // TODO some throw ig
 	private	input: Input;
 	private	map: Map;
 	private	isPaused: boolean = false;
-	// private	isGameOver: boolean = false;
 
+	// 	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3); 
+	
 	constructor(
 		canvasId: string, 
 		map_name: string,
@@ -58,9 +61,6 @@ export class	TankGame extends Game { // TODO some throw ig
 		this.input.start();
 		this.map = new Map(this.canvas.width, this.canvas.height, 2, map_name);
 
-
-
-
 		GSTATE.REDRAW = true;
 		this.setup_tanks();
 		this.setup_collectible();
@@ -72,6 +72,7 @@ export class	TankGame extends Game { // TODO some throw ig
 		GSTATE.TANKS = 0;
 		let tank_width:number = 25;
 		let tank_height:number = 25;
+		let tank_id:number = 0;
 		let colors: Color[] = [];
 		colors.push( {r:255,g:255,b:0} );
 		colors.push( {r:255,g:0,b:255} );
@@ -81,14 +82,12 @@ export class	TankGame extends Game { // TODO some throw ig
 		let keys: Keys[] = [];
 		keys.push( {up:'w',down:'s',left:'a',right:'d',rot_left:'q',rot_right:'e',fire:' '} );
 		keys.push( {up:'i',down:'k',left:'j',right:'l',rot_left:'u',rot_right:'o',fire:'z'} );
-		keys.push( {up:'', down:'', left:'', right:'', rot_left:'', rot_right:'', fire:'x'} );
-		keys.push( {up:'', down:'', left:'', right:'', rot_left:'', rot_right:'', fire:'c'} );
 
 		if (this.map.name == 'desertfox')
 		{
-			for (let i = 0; i < this.nplayer; ++i) {
+			for (let i = 0; i < 2; ++i) {
 				if (this.map.spawns_tank && this.map.spawns_tank[i]) { // SCOTCH
-					const tank: Tank = new Tank(this.map.spawns_tank[i]!.x, this.map.spawns_tank[i]!.y, tank_width, tank_height, {r:0,g:255,b:0}, colors[i]!, keys[i]!);
+					const tank: Tank = new Tank(this.map.spawns_tank[i]!.x, this.map.spawns_tank[i]!.y, tank_width, tank_height, {r:0,g:255,b:0}, colors[i]!, keys[i]!,tank_id++);
 					GSTATE.ACTORS.push(tank);
 					GSTATE.TANKS += 1;
 				}
@@ -97,9 +96,10 @@ export class	TankGame extends Game { // TODO some throw ig
 		else {
 				GSTATE.ACTORS.push(
 					new Tank(16,16,25,25, {r:0,g:255,b:0},{r:0,g:255,b:0},
-						{up:"w",down:"s",left:"a",right:"d",rot_left:"q",rot_right:"e",fire:" "}));
+						{up:"w",down:"s",left:"a",right:"d",rot_left:"q",rot_right:"e",fire:" "},tank_id++));
 				GSTATE.TANKS += 1;
 		}
+
 	}
 
 	private setup_collectible() : void 
@@ -109,7 +109,7 @@ export class	TankGame extends Game { // TODO some throw ig
 
 		if (this.map.name == 'desertfox')
 		{
-			for (let i = 0; i < this.nplayer; ++i) {
+			for (let i = 0; i < 2; ++i) {
 				if (this.map.spawns_collectible && this.map.spawns_collectible[i]) { // SCOTCH
 					GSTATE.ACTORS.push(
 						new HealthPack(this.map.spawns_collectible[i]!.x, this.map.spawns_collectible[i]!.y, collectible_width, collectible_height, {r:150,g:150,b:0}));
@@ -148,6 +148,9 @@ export class	TankGame extends Game { // TODO some throw ig
 				this.setup_collectible();
 				this.hideEndGameDashboard();
 				this.isPaused = false;
+				// console.log("LOSE1", GSTATE.STATS1.lose, "LOSE2", GSTATE.STATS2.lose);
+				// console.log("WIN1", GSTATE.STATS1.win, "WIN2", GSTATE.STATS2.win);
+				console.log("BOUNCE1", GSTATE.STATS1.bounce, "BOUNCE2", GSTATE.STATS2.bounce);
 			}
 		}
 	}
@@ -181,6 +184,7 @@ export class	TankGame extends Game { // TODO some throw ig
 
 		if (!this.isPaused && GSTATE.TANKS == 1) {
 			let winner: Tank;
+			
 			this.showEndGameDashboard()
 			this.isPaused = true;
 		}
@@ -202,11 +206,12 @@ export class	TankGame extends Game { // TODO some throw ig
 
     document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
     
-    document.getElementById('p1-stat-name')!.innerText = 'DATA2:';
-    document.getElementById('stat-p1-hits')!.innerText = 'X';
+    document.getElementById('p1-stat-name')!.innerText = 'BOUNCE1:';
+    document.getElementById('stat-p1-hits')!.innerText = `${GSTATE.STATS1.bounce}`;
+    // document.getElementById('stat-p1-hits')!.innerText = 'X';
 
-    document.getElementById('p2-stat-name')!.innerText = 'DATA3:';
-    document.getElementById('stat-p2-hits')!.innerText = 'X';
+    document.getElementById('p2-stat-name')!.innerText = 'BOUNCE2:';
+    document.getElementById('stat-p2-hits')!.innerText = `${GSTATE.STATS2.bounce}`;
     
     document.getElementById('stat-rally')!.innerText = 'X';
 
