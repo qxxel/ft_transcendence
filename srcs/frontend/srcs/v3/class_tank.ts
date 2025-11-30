@@ -53,10 +53,10 @@ export class	Tank extends Actor {
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 		this.cannon = new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),3,0,fire_color);
 		this.hud = new Hud(this.x,this.y,this.x + this.w, this.y,fire_color);
-		console.log("C Tank at x:", x, "y:", y);
 	}
 
 	update(input: Input): void {
+		console.log("H:", this.health);
 		this.listen(input);
 		if (Date.now() - this.fire_last < this.fire_rate)
 			GSTATE.REDRAW = true;

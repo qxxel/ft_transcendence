@@ -21,6 +21,7 @@ import { Rect2D }	from "./class_rect.js"
 import { Tank }		from "./class_tank.js"
 import { Input }	from "./class_input.js"
 import type { Color }	from "./interface.js"
+import { Collectible } from "./class_collectible.js"
 
 
 /* ============================= CLASS ============================= */
@@ -45,7 +46,6 @@ export class	Ball extends Actor {
 		public	author?:Tank) {
 		super(x,y)
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
-		console.log("C Ball at x:", x, "y:", y);
 	}
 
 	update(input: Input): void {
@@ -83,14 +83,18 @@ export class	Ball extends Actor {
 				if (a instanceof Tank) {
 					a.addHealth(-this.damage);
 					this.destroy();
+					return true;
 				}
+				if (a instanceof Collectible) {
+					if (this.author)
+						a.effect(this.author);
+					return true;
+				}
+				if (this.author!.id == 0)
+					GSTATE.STATS1.bounce += 1;
 				else
-				{
-					if (this.author!.id == 0)
-						GSTATE.STATS1.bounce += 1;
-					else
-						GSTATE.STATS2.bounce += 1;
-				}
+					GSTATE.STATS2.bounce += 1;
+
 				this.bounce_count--;
 				if (this.bounce_count <= 0)
 					this.destroy();

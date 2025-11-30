@@ -35,7 +35,6 @@ export class	HealthPack extends Collectible {
 		color:Color) {
 		super(x,y,w,h,color);
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
-		console.log("C HealthPack at x:", x, "y:", y);
 	}
 
 	getRect(): Rect2D { return this.rect; };

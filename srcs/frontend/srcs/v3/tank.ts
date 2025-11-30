@@ -27,57 +27,60 @@ import { Collectible } from "./class_collectible.js"
 import { HealthPack } from "./class_collectible_health.js"
 
 import type { Color, Keys }	from "./interface.js"
-import type { publicDecrypt } from "crypto"
 
 
 /* ============================= CLASS ============================= */
 
 export class	TankGame extends Game {
 
-	private	canvas: HTMLCanvasElement;
-	private	ctx: CanvasRenderingContext2D;
+	private	canvas: HTMLCanvasElement | null = null;
+	private	ctx: CanvasRenderingContext2D | null = null;
 	private	animationFrameId: number | null = null;
 
 	private	startTime: number = 0;
-	private	input: Input;
-	private	map: Map;
+	private	input: Input = new Input();
+	private	map: Map | null = null;
 	private	isPaused: boolean = false;
   	private player1Name: string | undefined = "Player 1";
   	private player2Name: string | undefined = "Player 2";
-	private lastCollectibleSpawn: number;
-	private powerupFrequency: number = 5;
-	// 	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3); 
+	private lastCollectibleSpawn: number = 0;
 
+
+	// 	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3); 
 	constructor(
-		canvasId: string, 
-		map_name: string,
+		private canvasId: string, 
+		private map_name: string,
 		private router: Router,
 		private user: User,
+		private powerupFrequency: number = 0,
 		private star1: boolean = true,
       	private star2: boolean = false,
       	private star3: boolean = false
 	) {
 		super();
-		this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+	}
+
+	public setCtx(): void {
+		this.canvas = document.getElementById(this.canvasId) as HTMLCanvasElement;
 		this.ctx = this.canvas.getContext('2d')!;
 
 		this.input = new Input();
 		this.input.start();
-		this.map = new Map(this.canvas.width, this.canvas.height, 2, map_name);
+		this.map = new Map(this.canvas.width, this.canvas.height, 2, this.map_name);
         this.player1Name = this.user.getUsername() == undefined ? "Player 1" : this.user.getUsername();
         this.player2Name = "Player 2";
     	this.lastCollectibleSpawn = Date.now();
 		GSTATE.REDRAW = true;
 		this.updateNameDisplay()
 		this.setup_tanks();
-
 	}
 
 	private setup_tanks() : void 
 	{
+		if (!this.map) return;
 		GSTATE.TANKS = 0;
-		let tank_width:number = 25;
-		let tank_height:number = 25;
+		let tank_width:number = 48;
+		let tank_height:number = 48;
 		let colors: Color[] = [];
 		colors.push( {r:0,g:255,b:255} );
 		colors.push( {r:255,g:0,b:255} );
@@ -85,6 +88,7 @@ export class	TankGame extends Game {
 		let keys: Keys[] = [];
 		keys.push( {up:'w',down:'s',left:'a',right:'d',rot_left:'q',rot_right:'e',fire:' '} );
 		keys.push( {up:'i',down:'k',left:'j',right:'l',rot_left:'u',rot_right:'o',fire:'z'} );
+
 
 		if (this.map.name == 'desertfox')
 		{
@@ -102,16 +106,19 @@ export class	TankGame extends Game {
 
 	private spawn_collectible() : void 
 	{
+		if (!this.map || this.powerupFrequency == 0) return;
 		let collectible_width:number = 10;
 		let collectible_height:number = 10;
+
 
 		if (this.map.name == 'desertfox')
 		{
 			for (let i = 0; i < 2; ++i) {
 				if (this.map.spawns_collectible && this.map.spawns_collectible[i]) { // SCOTCH
+					console.log("SPAWNTHEM");
 					// here we need some randomness for type + pos
-					// GSTATE.ACTORS.push(
-						// new HealthPack(this.map.spawns_collectible[i]!.x, this.map.spawns_collectible[i]!.y, collectible_width, collectible_height, {r:150,g:150,b:0}));
+					GSTATE.ACTORS.push(
+						new HealthPack(this.map.spawns_collectible[i]!.x, this.map.spawns_collectible[i]!.y, collectible_width, collectible_height, {r:150,g:150,b:0}));
 				}
 			}
 		}
@@ -119,6 +126,7 @@ export class	TankGame extends Game {
 	}
 
 	private	gameLoop(): void {
+
 		this.listen();
 		this.update();
 		this.input.update(); // CURRENT SAVED INTO PREVIOUS
@@ -147,6 +155,7 @@ export class	TankGame extends Game {
 				this.setup_tanks();
 				this.hideEndGameDashboard();
 				this.isPaused = false;
+				this.startTime = Date.now();
 				GSTATE.REDRAW = true;
 			}
 		}
@@ -154,6 +163,7 @@ export class	TankGame extends Game {
 
 	private	update(): void {
 
+		if (!this.map || !this.ctx || !this.canvas) return;
 		if (GSTATE.REDRAW) {
 			this.map.drawBackground(this.ctx);
 			for (let a of GSTATE.ACTORS) {
@@ -194,7 +204,6 @@ export class	TankGame extends Game {
 	}
   private showEndGameDashboard() {
 	this.updateNameDisplay()
-	console.log("ECHO");
     const dashboard = document.getElementById('game-over-dashboard');
     if (!dashboard) return;
 

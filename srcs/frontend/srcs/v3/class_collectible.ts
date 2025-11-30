@@ -35,7 +35,6 @@ export class	Collectible extends Actor {
 		public	color:Color) {
 		super(x,y)
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
-		console.log("C Ball at x:", x, "y:", y);
 	}
 
 	update(input: Input): void {
