@@ -16,7 +16,7 @@
 /* ============================= IMPORTS ============================= */
 
 import { Actor }	from "./class_actor.js"
-import { Ball }		from "./class_ball.js"
+import { Ball, Collectible }		from "./class_ball.js"
 import { Cannon }	from "./class_cannon.js"
 import { GSTATE }	from "./global.js"
 import { Hud }		from "./class_hud.js"
@@ -24,7 +24,7 @@ import { Rect2D }	from "./class_rect.js"
 import { Input } 	from "./class_input.js";
 
 import type { Color, Keys }	from "./interface.js"
-import { Collectible } from "./class_collectible.js"
+// import { Collectible } from "./class_collectible.js"
 
 
 /* ============================= CLASS ============================= */
@@ -56,7 +56,6 @@ export class	Tank extends Actor {
 	}
 
 	update(input: Input): void {
-		console.log("H:", this.health);
 		this.listen(input);
 		if (Date.now() - this.fire_last < this.fire_rate)
 			GSTATE.REDRAW = true;

@@ -16,17 +16,17 @@
 /* ============================= IMPORTS ============================= */
 
 import { Game }		from "../Pong/GameClass.js"
-import { GSTATE }	from "./global.js"
+import { GSTATE, type Spawn }	from "./global.js"
 import { Router } from "../router/router.js"
 import { Input }	from "./class_input.js"
 import { User } from "../user/user.js"
 import { Map }		from "./class_map.js"
 import { Tank }		from "./class_tank.js"
-import { Ball }		from "./class_ball.js"
-import { Collectible } from "./class_collectible.js"
-import { HealthPack } from "./class_collectible_health.js"
+import { Ball, Collectible }		from "./class_ball.js"
 
 import type { Color, Keys }	from "./interface.js"
+import { Wall } from "./class_wall.js"
+import { Rect2D } from "./class_rect.js"
 
 
 /* ============================= CLASS ============================= */
@@ -107,20 +107,79 @@ export class	TankGame extends Game {
 	private spawn_collectible() : void 
 	{
 		if (!this.map || this.powerupFrequency == 0) return;
-		let collectible_width:number = 10;
-		let collectible_height:number = 10;
-
-
+		let c_width:number = 25;
+		let c_height:number = 25;
+		let attempt: number = 0;
+		let nope: boolean;
 		if (this.map.name == 'desertfox')
 		{
-			for (let i = 0; i < 2; ++i) {
-				if (this.map.spawns_collectible && this.map.spawns_collectible[i]) { // SCOTCH
-					console.log("SPAWNTHEM");
-					// here we need some randomness for type + pos
-					GSTATE.ACTORS.push(
-						new HealthPack(this.map.spawns_collectible[i]!.x, this.map.spawns_collectible[i]!.y, collectible_width, collectible_height, {r:150,g:150,b:0}));
+			// while(attempt++ < 2000)
+			// {
+			// 	nope = false;
+			// 	let c_x: number;
+			// 	let c_y: number;
+				
+			// 	c_x = Math.floor(Math.random() * this.canvas!.width);
+ 			// 	c_y = Math.floor(Math.random() * this.canvas!.height);
+				
+			// 	let collec: Rect2D;
+			// 	// collec = new Rect2D(c_x-c_width/2,c_y-c_height/2,c_width,c_height);
+			// 	collec = new Rect2D(c_x,c_y,c_width,c_height);
+
+			// 	// if (a.getRect().collide(collec))
+				
+			// 	for (let a of GSTATE.ACTORS)
+			// 	{
+			// 		if (a.getRect().collide(collec))
+			// 		{
+			// 			if (a instanceof Wall || a instanceof Collectible)
+			// 			{
+			// 				nope = true;
+			// 				break;
+			// 			}
+			// 		}
+			// 	}
+			// 	if (nope)
+			// 		continue;
+			// 	// GSTATE.ACTORS.push(new HealthPack(c_x-c_width/2,c_y- c_height/2,c_width,c_height,{r:150,g:150,b:0}));
+			// 	console.log("AT", Date.now() * 1000);
+
+			// 	const effects: string[] = ["heal", "speed"]
+			// 	const index = Math.floor(Math.random() * effects.length);
+			// 	GSTATE.ACTORS.push(new Collectible(c_x,c_y,c_width,c_height, effects[index]!));
+			// 	break;
+			// }
+
+
+			for (let s of this.map.spawns_collectible)
+			{
+				nope = false;
+				
+				let collec: Rect2D;
+				collec = new Rect2D(s.x,s.y,c_width,c_height);
+
+				for (let a of GSTATE.ACTORS)
+				{
+					if (a.getRect().collide(collec))
+					{
+						if (a instanceof Collectible)
+						{
+							nope = true;
+							break;
+						}
+					}
 				}
+				if (nope)
+					continue;
+				console.log("AT", Date.now() * 1000);
+
+				const effects: string[] = ["heal", "speed"]
+				const index = Math.floor(Math.random() * effects.length);
+				GSTATE.ACTORS.push(new Collectible(s.x,s.y,c_width,c_height, effects[index]!));
+				break;
 			}
+
+
 		}
 		GSTATE.REDRAW = true;
 	}

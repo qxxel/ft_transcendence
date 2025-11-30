@@ -15,11 +15,10 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { Actor }	from "./class_actor.js"
-import { GSTATE }	from "./global.js"
-import { Wall }		from "./class_wall.js"
-
-import type { Spawn } from "./class_spawn.js"
+import { Actor }		from "./class_actor.js"
+import { GSTATE }		from "./global.js"
+import { Wall }			from "./class_wall.js"
+import type { Spawn }	from "./global.js"
 
 
 /* ============================= CLASS ============================= */
@@ -33,7 +32,7 @@ export class	Map {
 		public	map_width:number,
 		public	map_height:number,
 		public	wall_width: number, // TODO
-		public	name: string = "default"
+		public	name: string = "default",
 	) {
 		if      (this.name == "fy_snow")   { this.generate_fy_snow(); }
 		else if (this.name == "desertfox") { this.generate_desertfox(); }
@@ -77,7 +76,7 @@ export class	Map {
 		}
 	}
 
-		generate_desertfox(): void {
+	generate_desertfox(): void {
 		console.log("generate_desertfox()");
 
 		// const c_ext  = {r:165,g:136,b:122};675645
