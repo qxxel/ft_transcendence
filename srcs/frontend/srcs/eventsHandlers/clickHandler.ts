@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/30 14:17:19 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/30 17:29:58 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -442,4 +442,14 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 		}
 		router.render(gameState, user);
 	});
+
+	window.addEventListener('keydown', (event: KeyboardEvent) => {
+  	const keysToBlock = [
+  	  "ArrowUp", 
+  	  "ArrowDown",
+  	];
+  	if (keysToBlock.includes(event.code)) {
+  	  event.preventDefault();
+  	}
+})	;
 }
