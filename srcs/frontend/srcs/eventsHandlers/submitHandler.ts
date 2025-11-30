@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 23:07:58 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 23:14:56 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 	}
 	user.setSigned(true);
 
-	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
 		menu.innerHTML = getMenu(user.getUsername());
 
@@ -129,7 +129,7 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 	user.setUsername(username);
 	user.setSigned(true);
 
-	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
 		menu.innerHTML = getMenu(user.getUsername());
 
@@ -160,7 +160,7 @@ async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: 
 
 	user.setSigned(true);
 
-	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
 		menu.innerHTML = getMenu(user.getUsername());
 

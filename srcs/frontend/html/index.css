@@ -87,6 +87,28 @@ nav a:hover {
     transform: translateY(-2px);
 }
 
+nav button {
+    color: #ccc;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+nav button:hover {
+    background-color: #FFFF00;
+    color: #000;
+    box-shadow: 0 0 15px #FFFF00;
+    transform: translateY(-2px);
+}
+
+#logout {
+    cursor: pointer;
+}
+
 p#msg-error {
     color: red;
 }
@@ -834,7 +856,7 @@ button:disabled {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-
+}
 
 
 

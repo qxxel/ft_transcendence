@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:02:11 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 23:14:08 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ export async function	redirections(router: Router, currentPath: string, gameStat
 
 		const baseHref = window.location.origin;
 
-		var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+		const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)
 			menu.innerHTML =
 				`<a href="/">Home</a>
@@ -57,7 +57,7 @@ export async function	redirections(router: Router, currentPath: string, gameStat
 				<a href="/tournament-setup">Tournament</a>
 				<a href="/user">${user.getUsername()}</a>
 				<a href="/friends">Friends</a>
-				<button onclick="onClickLogout();" id="logout">Logout</button>
+				<a onclick="onClickLogout();" id="logout">Logout</a>
 				<a href="/settings">Settings</a>
 				<a href="/about">About</a>`;
 
