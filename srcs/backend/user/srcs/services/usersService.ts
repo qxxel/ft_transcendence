@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/23 00:55:15 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/30 18:20:38 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ export class	usersService {
 		if (await this.usersRepo.isTaken(query, [username]))
 			return await this.usersRepo.getUserByUsername(username);
 
-		throw new NotExistError(`The user with username ${username} does not exist`);
+		throw new NotExistError(`This user does not exist`);
 	}
 
 	async getUserByEmail(userEmail: string): Promise<usersRespDto> {
@@ -65,7 +65,7 @@ export class	usersService {
 		if (await this.usersRepo.isTaken(query, [userEmail]))
 			return await this.usersRepo.getUserByEmail(userEmail);
 
-		throw new NotExistError(`The user with email ${userEmail} does not exist`);
+		throw new NotExistError(`This user does not exist`);
 	}
 
 	async updateUsernameById(userId: number, username: string): Promise<void> {

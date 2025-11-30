@@ -379,3 +379,128 @@ input[type=range]::-moz-range-thumb {
     box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
     background: rgba(255, 255, 0, 0.1);
 }
+
+/* ==========================================================================
+   8. FORMS & AUTH (New Section)
+   ========================================================================== */
+
+/* .settings-form, 
+#sign-in-form, 
+#sign-up-form, 
+#2fa-form, */
+.user-settings-form {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Form Groups */
+.form-group {
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #FFFF00;
+    text-shadow: 0 0 5px rgba(255, 255, 0, 0.3);
+    font-size: 1.1em;
+}
+
+/* Standard Inputs */
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"],
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #aaa;
+    background: #222;
+    color: #fff;
+    font-family: 'monospace', sans-serif;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #FFFF00;
+    box-shadow: 0 0 8px rgba(255, 255, 0, 0.5);
+    background: #000;
+}
+
+/* Auth Page Links */
+.auth-link-container {
+    margin-top: 20px;
+}
+
+.auth-link {
+    background: transparent;
+    border: 1px solid #777;
+    color: #ccc;
+    font-family: 'monospace', sans-serif;
+    font-size: 0.9em;
+    padding: 8px 25px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.auth-link-button {
+    background-color: #FFFF00;
+    color: #000;
+    font-family: 'monospace', sans-serif;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-decoration: none;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.2s ease;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+/* 2FA Special Button */
+#btnSend2faCode {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: transparent;
+    border: 1px solid #FFFF00;
+    color: #FFFF00;
+    padding: 10px 20px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    transition: all 0.2s;
+}
+
+#btnSend2faCode:hover:not(:disabled) {
+    background-color: rgba(255, 255, 0, 0.1);
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+}
+
+#btnCooldown {
+    color: #FF8800;
+}
+
+#date-with-offset {
+    color: #00FF00;
+    font-weight: bold;
+}

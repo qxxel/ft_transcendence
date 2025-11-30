@@ -1,27 +1,26 @@
-<h1>Sign up</h1>
+<div class="game-container">
+    <h1>Sign up</h1>
 
-<form id="sign-up-form">
-	<input type="hidden" id="sign-up-user-id" name="user-id">
+    <form id="sign-up-form">
+        <div class="form-group">
+            <input type="text" id="sign-up-username" placeholder="Enter your username">
+        </div>
+        
+        <div class="form-group">
+            <input type="email" id="sign-up-email" placeholder="Enter your email">
+        </div>
 
-	<div class="form-group">
-		<label for="sign-up-username">Username:</label>
-		<input type="text" id="sign-up-username" name="username">
-	</div>
-	
-	<div class="form-group">
-		<label for="sign-up-email">Email:</label>
-		<input type="email" id="sign-up-email" name="email">
-	</div>
+        <div class="form-group">
+            <input type="password" id="sign-up-password" placeholder="Enter your password">
+        </div>
 
-	<div class="form-group">
-		<label for="sign-up-password">Password:</label>
-		<input type="password" id="sign-up-password" name="password">
-	</div>
+        <p id="msg-error"></p>
 
-	<p id="msg-error"></p>
+        <button type="submit" id="sign-up-submit" class="auth-link-button">Sign up</button>
 
-	<button type="submit" id="sign-up-submit">Sign up</button>
+    </form>
 
-</form>
-
-<a href="/sign-in">Already have an account</a>
+    <div class="auth-link-container">
+        <a href="/sign-in" class="auth-link">Already have an account</a>
+    </div>
+</div>
