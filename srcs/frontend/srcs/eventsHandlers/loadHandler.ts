@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:00:01 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 23:14:31 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 
 		const baseHref = window.location.origin;
 
-		var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+		const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)
 			menu.innerHTML =
 				`<a href="/">Home</a>
@@ -49,7 +49,7 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 				<a href="/tournament-setup">Tournament</a>
 				<a href="/user">${user.getUsername()}</a>
 				<a href="/friends">Friends</a>
-				<button onclick="onClickLogout();" id="logout">Logout</button>
+				<a onclick="onClickLogout();" id="logout">Logout</a>
 				<a href="/settings">Settings</a>
 				<a href="/about">About</a>`;
 
