@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:03:05 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/30 13:37:45 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,6 +359,10 @@ function onClickStartFeatured(mode: 'ai' | 'pvp', router: Router, gameState: Gam
 
 }
 
+function onClickHomeBtn(router: Router, gameState: GameState, user: User) {
+    router.navigate('/games', gameState, user);
+}
+
 /* ====================== SETUP ====================== */
 
 export async function   setupClickHandlers(router: Router, user: User, gameState: GameState): Promise<void> {
@@ -377,6 +381,8 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	
 	(window as any).showDifficultyMenu = showDifficultyMenu;
 	(window as any).hideDifficultyMenu = hideDifficultyMenu;
+
+	(window as any).onClickHomeBtn = () => onClickHomeBtn(router, gameState, user);
 
 	(window as any).switchGameMode = switchGameMode;
 	(window as any).onClickStartFeatured = (mode: 'ai' | 'pvp') => onClickStartFeatured(mode, router, gameState, user);
