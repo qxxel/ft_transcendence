@@ -19,7 +19,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 15px;
+    /* margin-top: 15px; */
 }
 
 /* ==========================================================================
@@ -78,7 +78,7 @@
 .menu-content label {
   font-size: 1.2em;
   color: white;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 #points-display {
@@ -137,7 +137,7 @@
     flex-direction: column;
     align-items: flex-start;
     width: 80%;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .control-group label {
