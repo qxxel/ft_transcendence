@@ -301,6 +301,8 @@ button:disabled {
    ========================================================================== */
 input[type=range] {
   -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   width: 80%;
   margin: 25px 0;
   background: transparent;
