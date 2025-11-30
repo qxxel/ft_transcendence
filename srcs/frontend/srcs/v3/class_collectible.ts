@@ -17,6 +17,7 @@ import { Tank }		from "./class_tank.js"
 import { Ball }		from "./class_ball.js"
 import { GSTATE }	from "./global.js"
 import { Rect2D }	from "./class_rect.js"
+import { Input } 	from "./class_input.js";
 
 import type { Color, Keys }	from "./interface.js"
 
@@ -34,10 +35,9 @@ export class	Collectible extends Actor {
 		public	color:Color) {
 		super(x,y)
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
-		console.log("C Ball at x:", x, "y:", y);
 	}
 
-	update(input: string[]): void {
+	update(input: Input): void {
 		if (this.collide(this.rect))
 			GSTATE.REDRAW = true;
 	}

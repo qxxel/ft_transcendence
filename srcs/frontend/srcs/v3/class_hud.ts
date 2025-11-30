@@ -16,6 +16,7 @@
 /* ============================= IMPORTS ============================= */
 
 import { Actor }	from "./class_actor.js"
+import { Input } 	from "./class_input.js";
 
 import type { Color }	from "./interface.js"
 
@@ -34,7 +35,7 @@ export class	Hud extends Actor {
 
 	}
 
-	update(input: string[]): void {
+	update(input: Input): void {
 		
 	}
 

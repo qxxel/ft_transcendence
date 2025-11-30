@@ -17,144 +17,153 @@
 
 import { Game }		from "../Pong/GameClass.js"
 import { GSTATE }	from "./global.js"
+import { Router } from "../router/router.js"
 import { Input }	from "./class_input.js"
+import { User } from "../user/user.js"
 import { Map }		from "./class_map.js"
 import { Tank }		from "./class_tank.js"
+import { Ball }		from "./class_ball.js"
 import { Collectible } from "./class_collectible.js"
 import { HealthPack } from "./class_collectible_health.js"
 
 import type { Color, Keys }	from "./interface.js"
-import type { publicDecrypt } from "crypto"
 
 
 /* ============================= CLASS ============================= */
 
 export class	TankGame extends Game {
 
-	private	canvas: HTMLCanvasElement;
-	private	ctx: CanvasRenderingContext2D;
+	private	canvas: HTMLCanvasElement | null = null;
+	private	ctx: CanvasRenderingContext2D | null = null;
 	private	animationFrameId: number | null = null;
 
 	private	startTime: number = 0;
-	private	input: Input;
-	private	map: Map;
+	private	input: Input = new Input();
+	private	map: Map | null = null;
 	private	isPaused: boolean = false;
-	// private	isGameOver: boolean = false;
+  	private player1Name: string | undefined = "Player 1";
+  	private player2Name: string | undefined = "Player 2";
+	private lastCollectibleSpawn: number = 0;
 
+
+	// 	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3); 
 	constructor(
-		canvasId: string, 
-		map_name: string,
-		public nplayer: number,
-		private	gameMode: 'pvp' | 'ai' = 'ai',
-		public p_p1name: string,
-		public p_p2name: string,
+		private canvasId: string, 
+		private map_name: string,
+		private router: Router,
+		private user: User,
+		private powerupFrequency: number = 0,
+		private star1: boolean = true,
+      	private star2: boolean = false,
+      	private star3: boolean = false
 	) {
 		super();
-		this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+	}
+
+	public setCtx(): void {
+		this.canvas = document.getElementById(this.canvasId) as HTMLCanvasElement;
 		this.ctx = this.canvas.getContext('2d')!;
 
 		this.input = new Input();
-		this.map = new Map(this.canvas.width, this.canvas.height, 2, map_name);
-
-
-
-
-
+		this.input.start();
+		this.map = new Map(this.canvas.width, this.canvas.height, 2, this.map_name);
+        this.player1Name = this.user.getUsername() == undefined ? "Player 1" : this.user.getUsername();
+        this.player2Name = "Player 2";
+    	this.lastCollectibleSpawn = Date.now();
+		GSTATE.REDRAW = true;
+		this.updateNameDisplay()
 		this.setup_tanks();
-		this.setup_collectible();
-
 	}
 
 	private setup_tanks() : void 
 	{
+		if (!this.map) return;
 		GSTATE.TANKS = 0;
-		let tank_width:number = 25;
-		let tank_height:number = 25;
+		let tank_width:number = 48;
+		let tank_height:number = 48;
 		let colors: Color[] = [];
-		colors.push( {r:255,g:255,b:0} );
-		colors.push( {r:255,g:0,b:255} );
 		colors.push( {r:0,g:255,b:255} );
-		colors.push( {r:255,g:255,b:255} );
+		colors.push( {r:255,g:0,b:255} );
 
 		let keys: Keys[] = [];
 		keys.push( {up:'w',down:'s',left:'a',right:'d',rot_left:'q',rot_right:'e',fire:' '} );
 		keys.push( {up:'i',down:'k',left:'j',right:'l',rot_left:'u',rot_right:'o',fire:'z'} );
-		keys.push( {up:'', down:'', left:'', right:'', rot_left:'', rot_right:'', fire:'x'} );
-		keys.push( {up:'', down:'', left:'', right:'', rot_left:'', rot_right:'', fire:'c'} );
+
 
 		if (this.map.name == 'desertfox')
 		{
-			for (let i = 0; i < this.nplayer; ++i) {
+			for (let i = 0; i < 2; ++i) {
 				if (this.map.spawns_tank && this.map.spawns_tank[i]) { // SCOTCH
-					const tank: Tank = new Tank(this.map.spawns_tank[i]!.x, this.map.spawns_tank[i]!.y, tank_width, tank_height, {r:0,g:0,b:255}, colors[i]!, keys[i]!);
+					const tank: Tank = new Tank(this.map.spawns_tank[i]!.x, this.map.spawns_tank[i]!.y, tank_width, tank_height, {r:0,g:255,b:0}, colors[i]!, keys[i]!,i);
 					GSTATE.ACTORS.push(tank);
 					GSTATE.TANKS += 1;
 				}
 			}
 		}
-		else {
-				GSTATE.ACTORS.push(
-					new Tank(16,16,25,25, {r:0,g:255,b:0},{r:0,g:255,b:0},
-						{up:"w",down:"s",left:"a",right:"d",rot_left:"q",rot_right:"e",fire:" "}));
-				GSTATE.TANKS += 1;
-		}
+		else { console.log("Unknown map :", this.map.name) }
+
 	}
 
-	private setup_collectible() : void 
+	private spawn_collectible() : void 
 	{
+		if (!this.map || this.powerupFrequency == 0) return;
 		let collectible_width:number = 10;
 		let collectible_height:number = 10;
 
+
 		if (this.map.name == 'desertfox')
 		{
-			for (let i = 0; i < this.nplayer; ++i) {
+			for (let i = 0; i < 2; ++i) {
 				if (this.map.spawns_collectible && this.map.spawns_collectible[i]) { // SCOTCH
+					console.log("SPAWNTHEM");
+					// here we need some randomness for type + pos
 					GSTATE.ACTORS.push(
 						new HealthPack(this.map.spawns_collectible[i]!.x, this.map.spawns_collectible[i]!.y, collectible_width, collectible_height, {r:150,g:150,b:0}));
 				}
 			}
 		}
+		GSTATE.REDRAW = true;
 	}
 
 	private	gameLoop(): void {
+
 		this.listen();
 		this.update();
+		this.input.update(); // CURRENT SAVED INTO PREVIOUS
+
 		this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
 	}
 
 	private listen() : void {
-		for (let inp of this.input.getPressedKeys()) {
 
-			if (inp == 'Escape') {
-
-				if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA QUIT
-
-				}
-				else if (GSTATE.TANKS != 1) { // SWITCH PAUSE UNPAUSE
-					this.isPaused = !this.isPaused;
-					GSTATE.REDRAW = true;
-				}
-				// if 		(this.isPaused == false) this.isPaused = true;
-				// else if (this.isPaused == true) { this.isPaused = false; GSTATE.REDRAW = true; }
+		if (this.input.isPressed('Escape')) {
+			if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA QUIT
 			}
-			else if (this.isPaused && inp == 'r')
-			{
-				if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA RESTART
-					for (let a of GSTATE.ACTORS)
-					{
-						if (a instanceof Tank)
-							a.destroy();
-					}
-					this.setup_tanks();
-					this.setup_collectible();
-					this.isPaused = false;
+			else if (GSTATE.TANKS != 1) { // SWITCH PAUSE UNPAUSE
+				this.isPaused = !this.isPaused;
+				GSTATE.REDRAW = true;
+			}
+		}
+		else if (this.isPaused && this.input.isPressed('r'))
+		{
+			if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA RESTART
+				for (let a of GSTATE.ACTORS)
+				{
+					if (a instanceof Tank || a instanceof Ball || a instanceof Collectible)
+						a.destroy();
 				}
+				this.setup_tanks();
+				this.hideEndGameDashboard();
+				this.isPaused = false;
+				this.startTime = Date.now();
+				GSTATE.REDRAW = true;
 			}
 		}
 	}
 
 	private	update(): void {
 
+		if (!this.map || !this.ctx || !this.canvas) return;
 		if (GSTATE.REDRAW) {
 			this.map.drawBackground(this.ctx);
 			for (let a of GSTATE.ACTORS) {
@@ -176,19 +185,25 @@ export class	TankGame extends Game {
 
 		if (!this.isPaused) {
 			for (let a of GSTATE.ACTORS) {
-				a.update(this.input.getPressedKeys());
+				a.update(this.input);
 			}
+			if (this.star1 || this.star2 || this.star3){
+    		  	const now = Date.now();
+    		  	if (now - this.lastCollectibleSpawn > (this.powerupFrequency * 1000)) {
+					this.spawn_collectible();
+	    	  		this.lastCollectibleSpawn = now;
+    		  	}
+    		}
 		}
-
 		if (!this.isPaused && GSTATE.TANKS == 1) {
 			let winner: Tank;
+			
 			this.showEndGameDashboard()
 			this.isPaused = true;
 		}
 	}
   private showEndGameDashboard() {
-
-	console.log("ECHO");
+	this.updateNameDisplay()
     const dashboard = document.getElementById('game-over-dashboard');
     if (!dashboard) return;
 
@@ -203,12 +218,13 @@ export class	TankGame extends Game {
 
     document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
     
-    document.getElementById('p1-stat-name')!.innerText = 'DATA2:';
-    document.getElementById('stat-p1-hits')!.innerText = 'X';
+    document.getElementById('p1-stat-name')!.innerText = 'BOUNCE1:';
+    document.getElementById('stat-p1-hits')!.innerText = `${GSTATE.STATS1.bounce}`;
+    // document.getElementById('stat-p1-hits')!.innerText = 'X';
 
-    document.getElementById('p2-stat-name')!.innerText = 'DATA3:';
-    document.getElementById('stat-p2-hits')!.innerText = 'X';
-    
+    document.getElementById('p2-stat-name')!.innerText = 'BOUNCE2:';
+    document.getElementById('stat-p2-hits')!.innerText = `${GSTATE.STATS2.bounce}`;
+
     document.getElementById('stat-rally')!.innerText = 'X';
 
     const restartMsg = document.getElementById('restart-msg');
@@ -220,6 +236,19 @@ export class	TankGame extends Game {
 
     dashboard.style.display = 'block';
   }
+
+	private hideEndGameDashboard() {
+		const dashboard = document.getElementById('game-over-dashboard');
+    	if (!dashboard) return;
+    	dashboard.style.display = 'none';
+	}
+  
+	private updateNameDisplay() {
+    const p1Span = document.getElementById('p1-name');
+    const p2Span = document.getElementById('p2-name');
+    if (p1Span) p1Span.innerText = this.player1Name + ": " + GSTATE.STATS1.win;
+    if (p2Span) p2Span.innerText = this.player2Name + ": " + GSTATE.STATS2.win;
+  	}
 
 	public	start(): void {
 		if (!this.animationFrameId) {

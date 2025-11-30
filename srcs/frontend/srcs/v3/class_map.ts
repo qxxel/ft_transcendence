@@ -53,9 +53,9 @@ export class	Map {
 		}
 	}
 		drawBackground(ctx: CanvasRenderingContext2D): void {
-		if      (this.name == "fy_snow") ctx.fillStyle = '#040031ff';
-		else if (this.name == "desertfox") ctx.fillStyle = '#675645'; //'#f3b48b';
-		else ctx.fillStyle = '#040031ff';
+		// if      (this.name == "fy_snow") ctx.fillStyle = '#040031ff';
+		// else if (this.name == "desertfox") ctx.fillStyle = '#675645'; //'#f3b48b';
+		ctx.fillStyle = '#000000ff';
 		ctx.fillRect(0, 0, this.map_width, this.map_height);
 	}
 
@@ -80,9 +80,12 @@ export class	Map {
 		generate_desertfox(): void {
 		console.log("generate_desertfox()");
 
-		const c_ext  = {r:165,g:136,b:122};675645
-		const c_blk1 = {r:84,g:60,b:44};
-		const c_blk2 = {r:223,g:145,b:94};
+		// const c_ext  = {r:165,g:136,b:122};675645
+		// const c_blk1 = {r:84,g:60,b:44};
+		// const c_blk2 = {r:223,g:145,b:94};
+		const c_ext  = {r:0,g:0,b:0};//675645
+		const c_blk1 = {r:110,g:110,b:110};
+		const c_blk2 = {r:160,g:160,b:160};
 
 		const ext_width = 16;
 		const cell =  this.map_height/10; // IDK AM I DUMB

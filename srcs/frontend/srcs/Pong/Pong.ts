@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Pong.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/29 12:56:31 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 17:01:42 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,7 @@ export class PongGame extends Game {
     const p1Up = !!(this.keysPressed['w'] || this.keysPressed['z']);
     const p1Down = !!this.keysPressed['s'];
     
-    this.physics.movePaddle(this.paddle1!, p1Up, p1Down);
+    this.physics.movePaddle(this.paddle1!, this.ball!, p1Up, p1Down);
     
     if (this.gameMode === 'ai') {
         const aiInput = { 
@@ -277,7 +277,7 @@ export class PongGame extends Game {
     const p2Up = !!this.keysPressed['ArrowUp'];
     const p2Down = !!this.keysPressed['ArrowDown'];
     
-    this.physics.movePaddle(this.paddle2!, p2Up, p2Down);
+    this.physics.movePaddle(this.paddle2!, this.ball!, p2Up, p2Down);
 
     if (this.star1 || this.star2 || this.star3){
       this.physics.updateCollectibles(this.collectibles);
@@ -316,10 +316,10 @@ export class PongGame extends Game {
 
     switch (type) {
         case 'IncreaseBallSize':
-            this.ball!.radius = Math.min(this.ball!.radius + 5, 30);
+            this.ball!.radius = Math.min(this.ball!.radius + 5, 25);
             break;
         case 'DecreaseBallSize':
-            this.ball!.radius = Math.max(this.ball!.radius - 2, 5);
+            this.ball!.radius = Math.max(this.ball!.radius - 3, 4);
             break;
         case 'IncreasePaddleSize':
             targetPaddle.height = Math.min(targetPaddle.height + 30, 200);

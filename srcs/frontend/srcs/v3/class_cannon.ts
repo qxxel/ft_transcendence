@@ -17,6 +17,7 @@
 
 import { Actor }	from "./class_actor.js"
 import { Line2D }	from "./class_line.js"
+import { Input } 	from "./class_input.js";
 
 import type { Color, Keys } from "./interface.js"
 
@@ -40,7 +41,7 @@ export class	Cannon extends Actor {
 		this.geometry = new Line2D(this.x1, this.y1, this.x2, this.y2, this.w, 0);
 	}
 
-	update(input: string[]): void {
+	update(input: Input): void {
 	}
 
 	draw(ctx: CanvasRenderingContext2D): void {

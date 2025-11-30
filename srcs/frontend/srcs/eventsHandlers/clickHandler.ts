@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 23:09:01 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/30 14:17:19 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
 import { PongGame }				from "../Pong/Pong.js"
+import { TankGame } 			from "../v3/tank.js"
 import { TournamentController } from "../tournament.js"
 import { Router }		from "../router/router.js"
 import { sendRequest }	from "../utils/sendRequest.js"
@@ -24,6 +25,7 @@ import { DisplayDate }	from "../utils/displayDate.js"
 import { btnCooldown }	from "../utils/buttonCooldown.js"
 
 import type { GameState }   from "../index.js"
+import { Tank } from "../v3/class_tank.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -241,29 +243,29 @@ function hideDifficultyMenu() {
 }
 
 function switchGameMode(mode: 'default' | 'featured') {
-    const defDiv = document.getElementById('default-mode-content');
-    const featDiv = document.getElementById('featured-mode-content');
+	const defDiv = document.getElementById('default-mode-content');
+	const featDiv = document.getElementById('featured-mode-content');
 
-    if (mode === 'default') {
-        defDiv?.classList.remove('hidden');
-        featDiv?.classList.add('hidden');
-    } else {
-        defDiv?.classList.add('hidden');
-        featDiv?.classList.remove('hidden');
-    }
+	if (mode === 'default') {
+		defDiv?.classList.remove('hidden');
+		featDiv?.classList.add('hidden');
+	} else {
+		defDiv?.classList.add('hidden');
+		featDiv?.classList.remove('hidden');
+	}
 }
 
 function selectFeaturedDifficulty(level: number) {
-    const input = document.getElementById('aiHardcore') as HTMLInputElement;
-    if (input) {
-        input.value = level.toString();
-    }
+	const input = document.getElementById('aiHardcore') as HTMLInputElement;
+	if (input) {
+		input.value = level.toString();
+	}
 
-    for (let i = 1; i <= 4; i++) {
-        document.getElementById(`btn-feat-${i}`)?.classList.remove('active');
-    }
+	for (let i = 1; i <= 4; i++) {
+		document.getElementById(`btn-feat-${i}`)?.classList.remove('active');
+	}
 
-    document.getElementById(`btn-feat-${level}`)?.classList.add('active');
+	document.getElementById(`btn-feat-${level}`)?.classList.add('active');
 }
 
 /* ====================== GAME & TOURNAMENT HANDLERS ====================== */
@@ -279,13 +281,20 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', router: Router, g
 }
 
 function onClickPlayPVP(router: Router, gameState: GameState, user: User) {
-  const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-  const winningScore = parseInt(maxPointsInput.value, 10);
+
 //   user.setUsername("Test");
-  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'pvp');
-  gameState.currentGame.setWinningScore(winningScore);
-  
-  router.navigate("/pong", gameState, user);
+	if (router.Path === '/pongmenu') {
+		const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+  		const winningScore = parseInt(maxPointsInput.value, 10);
+	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'pvp');
+	gameState.currentGame.setWinningScore(winningScore);
+	router.navigate("/pong", gameState, user);
+  }
+  else if (router.Path === '/tankmenu')
+  {
+	gameState.currentGame = new TankGame('tank-canvas', 'desertfox', router, user);
+	router.navigate("/tank", gameState, user);
+  }
 }
 
 function onStartTournament(router: Router, gameState: GameState, user: User) {
@@ -318,30 +327,40 @@ function startTournamentMatch(matchId: string, p1: string, p2: string, router: R
   }
 }
 
-function onClickStartFeatured(mode: 'ai' | 'pvp',router: Router, gameState: GameState, user: User) {
-    const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
-    const aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
+function onClickStartFeatured(mode: 'ai' | 'pvp', router: Router, gameState: GameState, user: User) {
+	const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
+	const aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
+	const pointsInput = document.getElementById("featuredMaxPoints") as HTMLInputElement;
+	const star1 = (document.getElementById("chk-1star") as HTMLInputElement).checked;
+	const star2 = (document.getElementById("chk-2star") as HTMLInputElement).checked;
+	const star3 = (document.getElementById("chk-3star") as HTMLInputElement).checked;
 
-    const pointsInput = document.getElementById("featuredMaxPoints") as HTMLInputElement;
-    const winningScore = parseInt(pointsInput.value, 10);
-    
-    const star1 = (document.getElementById("chk-1star") as HTMLInputElement).checked;
-    const star2 = (document.getElementById("chk-2star") as HTMLInputElement).checked;
-    const star3 = (document.getElementById("chk-3star") as HTMLInputElement).checked;
+	if (router.Path === '/pongmenu')
+	{
+		const winningScore = parseInt(pointsInput.value, 10);
+		const aiVal = parseInt(aiInput.value);
+		let difficulty: any = 'medium'; 
+		if (aiVal === 1) difficulty = 'easy';
+		if (aiVal === 3) difficulty = 'hard';
+		if (aiVal === 4) difficulty = 'boris';
+		console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Diff=${difficulty}, Stars=[${star1},${star2},${star3}]`);
+		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3);
+		router.navigate("/pong", gameState, user);
 
-    const aiVal = parseInt(aiInput.value);
-    let difficulty: any = 'medium'; 
-    if (aiVal === 1) difficulty = 'easy';
-    if (aiVal === 3) difficulty = 'hard';
-    if (aiVal === 4) difficulty = 'boris';
+	}
+	else if (router.Path === '/tankmenu')
+	{
+		console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Stars=[${star1},${star2},${star3}]`);
+		const freq = parseInt(freqInput.value,10);
+		gameState.currentGame = new TankGame('tank-canvas', 'desertfox', router, user, freq, star1, star2, star3);
+		router.navigate("/tank", gameState, user);
+	}
 
-    console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Diff=${difficulty}, Stars=[${star1},${star2},${star3}]`);
 
-    gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3);
-    
-    gameState.currentGame.setWinningScore(winningScore);
+}
 
-    router.navigate("/pong", gameState, user);
+function onClickHomeBtn(router: Router, gameState: GameState, user: User) {
+    router.navigate('/games', gameState, user);
 }
 
 /* ====================== SETUP ====================== */
@@ -363,12 +382,14 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	(window as any).showDifficultyMenu = showDifficultyMenu;
 	(window as any).hideDifficultyMenu = hideDifficultyMenu;
 
-    (window as any).switchGameMode = switchGameMode;
-    (window as any).onClickStartFeatured = (mode: 'ai' | 'pvp') => onClickStartFeatured(mode, router, gameState, user);
-    (window as any).selectFeaturedDifficulty = selectFeaturedDifficulty;
+	(window as any).onClickHomeBtn = () => onClickHomeBtn(router, gameState, user);
 
-    (window as any).onClickPlayAI = (difficulty: 'easy' | 'medium' | 'hard') => 
-        onClickPlayAI(difficulty, router, gameState, user);
+	(window as any).switchGameMode = switchGameMode;
+	(window as any).onClickStartFeatured = (mode: 'ai' | 'pvp') => onClickStartFeatured(mode, router, gameState, user);
+	(window as any).selectFeaturedDifficulty = selectFeaturedDifficulty;
+
+	(window as any).onClickPlayAI = (difficulty: 'easy' | 'medium' | 'hard') => 
+		onClickPlayAI(difficulty, router, gameState, user);
 
 	(window as any).onClickPlayPVP = () => onClickPlayPVP(router, gameState, user);
 	(window as any).onStartTournament = () => onStartTournament(router, gameState, user);
@@ -385,31 +406,31 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 		}
 	});
 
-    document.addEventListener('input', (event) => {
-        const target = event.target as HTMLInputElement;
-        if (!target) return;
+	document.addEventListener('input', (event) => {
+		const target = event.target as HTMLInputElement;
+		if (!target) return;
 
-        if (target.id === 'choosenMaxPoints') {
-            const display = document.getElementById('points-display');
-            if (display) {
-                display.innerText = target.value;
-            }
-        }
-        
-        if (target.id === 'powerupFreq') {
-            const display = document.getElementById('powerup-freq-display');
-            if (display) {
-                display.innerText = target.value + " sec";
-            }
-        }
+		if (target.id === 'choosenMaxPoints') {
+			const display = document.getElementById('points-display');
+			if (display) {
+				display.innerText = target.value;
+			}
+		}
+		
+		if (target.id === 'powerupFreq') {
+			const display = document.getElementById('powerup-freq-display');
+			if (display) {
+				display.innerText = target.value + " sec";
+			}
+		}
 
-        if (target.id === 'featuredMaxPoints') {
-            const display = document.getElementById('featured-points-display');
-            if (display) {
-                display.innerText = target.value;
-            }
-        }
-    });
+		if (target.id === 'featuredMaxPoints') {
+			const display = document.getElementById('featured-points-display');
+			if (display) {
+				display.innerText = target.value;
+			}
+		}
+	});
 
 	window.addEventListener('popstate', () => {
 		if (!router.canLeave) {

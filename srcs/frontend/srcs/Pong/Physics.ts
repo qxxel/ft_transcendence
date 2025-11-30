@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Physics.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:05:33 by kiparis           #+#    #+#             */
-/*   Updated: 2025/11/29 12:56:01 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 17:15:32 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,13 @@ export class PongPhysics {
         this.height = height;
     }
 
-    public update(ball: Ball, p1: Paddle, p2: Paddle): number {
-        const prevBallX = ball.x - ball.dx;
+   public update(ball: Ball, p1: Paddle, p2: Paddle): number {
+        const prevBallY = ball.y - ball.dy;
+
         ball.x += ball.dx;
         ball.y += ball.dy;
+
+        const minDx = 2.0;
 
         if (ball.y + ball.radius > this.height) {
             ball.y = this.height - ball.radius;
@@ -42,32 +45,49 @@ export class PongPhysics {
             ball.dy *= -1;
         }
 
-        if (ball.dx < 0 && 
-            ball.x - ball.radius <= p1.x + p1.width && 
-            prevBallX - ball.radius >= p1.x + p1.width && 
+        if (ball.x - ball.radius < p1.x + p1.width &&
+            ball.x + ball.radius > p1.x &&
             ball.y + ball.radius > p1.y &&
             ball.y - ball.radius < p1.y + p1.height) {
             
-            ball.x = p1.x + p1.width + ball.radius; 
-            
-            this.calculateDeflection(p1, ball, 1);
-            this.increaseBallSpeed(ball);
+            if (prevBallY + ball.radius <= p1.y) {
+                ball.y = p1.y - ball.radius - 1;
+                ball.dy = -Math.abs(ball.dy);
+            }
+            else if (prevBallY - ball.radius >= p1.y + p1.height) {
+                ball.y = p1.y + p1.height + ball.radius + 1;
+                ball.dy = Math.abs(ball.dy);
+            }
+            else if (ball.dx < 0) {
+                ball.x = p1.x + p1.width + ball.radius;
+                this.calculateDeflection(p1, ball, 1);
+                this.increaseBallSpeed(ball);
+            }
         }
 
-        if (ball.dx > 0 && 
-            ball.x + ball.radius >= p2.x && 
-            prevBallX + ball.radius <= p2.x && 
+        if (ball.x + ball.radius > p2.x &&
+            ball.x - ball.radius < p2.x + p2.width &&
             ball.y + ball.radius > p2.y &&
             ball.y - ball.radius < p2.y + p2.height) {
             
-            ball.x = p2.x - ball.radius; 
-            
-            this.calculateDeflection(p2, ball, 2);
-            this.increaseBallSpeed(ball);
+            if (prevBallY + ball.radius <= p2.y) {
+                ball.y = p2.y - ball.radius - 1; 
+                ball.dy = -Math.abs(ball.dy);
+            }
+            else if (prevBallY - ball.radius >= p2.y + p2.height) {
+                ball.y = p2.y + p2.height + ball.radius + 1;
+                ball.dy = Math.abs(ball.dy);
+            }
+            else if (ball.dx > 0) {
+                ball.x = p2.x - ball.radius;
+                this.calculateDeflection(p2, ball, 2);
+                this.increaseBallSpeed(ball);
+            }
         }
-        let x = 1.5;
-        if (ball.dx < x && ball.dx > -x){
-            ball.dx = 1.5;
+
+        if (Math.abs(ball.dx) < minDx) {
+            if (ball.dx > 0) ball.dx = minDx;
+            else ball.dx = -minDx;
         }
         if (ball.x + ball.radius < 0) return 2;
         if (ball.x - ball.radius > this.width) return 1;
@@ -99,12 +119,37 @@ export class PongPhysics {
         }
     }
     
-    public movePaddle(paddle: Paddle, up: boolean, down: boolean) {
-        if (up && paddle.y > 0) {
-            paddle.y -= paddle.speed;
+    public movePaddle(paddle: Paddle, ball: Ball, up: boolean, down: boolean) {
+        const isHorizontalOverlap = 
+            ball.x + ball.radius > paddle.x && 
+            ball.x - ball.radius < paddle.x + paddle.width;
+
+        if (up) {
+            const nextY = paddle.y - paddle.speed;
+            if (isHorizontalOverlap && 
+                paddle.y >= ball.y + ball.radius && 
+                nextY < ball.y + ball.radius) {
+                paddle.y = ball.y + ball.radius + 1; 
+            } 
+            else if (nextY > 0) {
+                paddle.y = nextY;
+            } else {
+                paddle.y = 0;
+            }
         }
-        if (down && paddle.y < this.height - paddle.height) {
-            paddle.y += paddle.speed;
+
+        if (down) {
+            const nextY = paddle.y + paddle.speed;
+            if (isHorizontalOverlap && 
+                paddle.y + paddle.height <= ball.y - ball.radius && 
+                nextY + paddle.height > ball.y - ball.radius) {
+                paddle.y = ball.y - ball.radius - paddle.height - 1;
+            } 
+            else if (nextY < this.height - paddle.height) {
+                paddle.y = nextY;
+            } else {
+                paddle.y = this.height - paddle.height;
+            }
         }
     }
 
