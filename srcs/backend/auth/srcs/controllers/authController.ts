@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authController.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:58:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 11:17:28 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		const	pwdHash: string = await authServ.getPasswordByIdClient(user.id);
 
 		if (!await argon2.verify(pwdHash, password))
-			throw new Error("Wrong password or username.");
+			throw new Error("Wrong password.");
 
 		const	jwtRes: AxiosResponse = await authAxios.post('https://jwt:3000', user, { withCredentials: true } );
 		
