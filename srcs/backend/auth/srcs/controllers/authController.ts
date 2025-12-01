@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 11:17:28 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/01 12:02:59 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		const	user: any = userRes.data;
 
 		if (!user)
-			throw new Error("Wrong password or username.");
+			throw new Error("Wrong password or username."); // mreynaud : a voir quand ce message est utilise car peut etre que le contenu est pas juste -> "Wrong password."
 		
 		const	pwdHash: string = await authServ.getPasswordByIdClient(user.id);
 
