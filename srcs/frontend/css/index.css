@@ -120,6 +120,18 @@ nav a:hover {
     transform: translateY(-2px);
 }
 
+nav a#logout {
+    cursor: pointer;
+}
+
+nav a#logout:hover {
+    background-color: #FF0000;
+    color: #fff;
+    box-shadow: 0 0 15px #FF0000;
+    border-color: #FF0000;
+    transform: translateY(-2px);
+}
+
 /* ==========================================================================
    5. UI COMPONENTS: BUTTONS (Global)
    ========================================================================== */
@@ -390,14 +402,13 @@ input[type=range]::-moz-range-thumb {
 #2fa-form, */
 .user-settings-form {
     width: 100%;
-    max-width: 400px;
+    max-width: 600px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
 }
 
-/* Form Groups */
 .form-group {
     width: 100%;
     margin-bottom: 20px;
@@ -413,7 +424,6 @@ input[type=range]::-moz-range-thumb {
     font-size: 1.1em;
 }
 
-/* Standard Inputs */
 .form-group input[type="text"],
 .form-group input[type="password"],
 .form-group input[type="email"],
@@ -437,7 +447,6 @@ input[type=range]::-moz-range-thumb {
     background: #000;
 }
 
-/* Auth Page Links */
 .auth-link-container {
     margin-top: 20px;
 }
@@ -476,7 +485,6 @@ input[type=range]::-moz-range-thumb {
     margin: 0 auto;
 }
 
-/* 2FA Special Button */
 #btnSend2faCode {
     display: flex;
     align-items: center;
@@ -503,4 +511,204 @@ input[type=range]::-moz-range-thumb {
 #date-with-offset {
     color: #00FF00;
     font-weight: bold;
+}
+
+/* ==========================================================================
+   9. PROFILE SPECIFIC
+   ========================================================================== */
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 10px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+.section-header h3 {
+    margin: 0;
+    border: none;
+    color: #FFFF00;
+    font-size: 1.2em;
+}
+
+.btn-icon {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ccc;
+    font-family: 'monospace', sans-serif;
+    font-size: 0.8em;
+    padding: 6px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+    border-color: #FFFF00;
+    color: #FFFF00;
+    box-shadow: 0 0 8px rgba(255, 255, 0, 0.2);
+}
+
+.row-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.row-layout label {
+    margin-bottom: 0;
+    margin-right: 15px;
+    white-space: nowrap;
+}
+
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    margin: 0;
+}
+
+.custom-checkbox span {
+    font-size: 0.9em;
+    color: #FFFF00;
+}
+
+.styled-input {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid #555;
+    color: white;
+    padding: 12px;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-family: 'monospace', sans-serif;
+}
+
+.styled-input:focus {
+    border-color: #FFFF00;
+    outline: none;
+}
+
+.data-display {
+    padding: 12px;
+    font-size: 1.1em;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid #FFFF00;
+    border-radius: 0 4px 4px 0;
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 0.85em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-disabled {
+    background-color: rgba(255, 0, 0, 0.15);
+    color: #FF5555;
+    border: 1px solid #FF5555;
+}
+
+.status-enabled {
+    background-color: rgba(0, 255, 0, 0.15);
+    color: #55FF55;
+    border: 1px solid #55FF55;
+}
+
+.danger-zone {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.warning-text {
+    color: #888;
+    font-size: 0.9em;
+    font-style: italic;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.account-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.button-row {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.button-row button {
+    flex: 1;
+}
+
+.btn-primary {
+    background-color: #FFFF00;
+    color: #000;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'monospace', sans-serif;
+    font-size: 1em;
+}
+
+.btn-primary:hover {
+    background-color: #fff;
+    box-shadow: 0 0 15px #FFFF00;
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 1px solid #777;
+    color: #ccc;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'monospace', sans-serif;
+    font-size: 1em;
+}
+
+.btn-ghost:hover {
+    border-color: #fff;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-danger {
+    background: transparent;
+    border: 1px solid #ff4444;
+    color: #ff4444;
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'monospace', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.btn-danger:hover {
+    background-color: #ff4444;
+    color: white;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
 }
