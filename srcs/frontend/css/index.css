@@ -163,10 +163,16 @@ button:disabled {
     margin-top: 10px;
 }
 
-.btn-yellow:hover, .btn-yellow-ai:hover {
+.btn-yellow:hover {
     background-color: #fff;
     color: #000;
     box-shadow: 0 0 10px #fff;
+}
+
+.btn-yellow-ai:hover {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 0 10px #ff0;
 }
 
 .btn-green {
