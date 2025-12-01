@@ -52,6 +52,27 @@ export class	Hud extends Actor {
 		ctx.stroke();
 	}
 
+	healthbar_draw(ctx: CanvasRenderingContext2D, health:number, maxHealth:number): void {
+		const barWidth = 40;
+		const barHeight = 6;
+		const offsetY = -20;
+	
+		const x = this.x - barWidth / 2;
+		const y = this.y + offsetY;
+	
+		const ratio = Math.max(0, Math.min(1, health / maxHealth));
+	
+		ctx.fillStyle = "#444";
+		ctx.fillRect(x, y, barWidth, barHeight);
+	
+		ctx.fillStyle = "#00cc00";
+		ctx.fillRect(x, y, barWidth * ratio, barHeight);
+	
+		// ctx.strokeStyle = "#000";
+		// ctx.lineWidth = 1;
+		// ctx.strokeRect(x, y, barWidth, barHeight);
+	}
+
 	move(dx:number,dy:number) {
 		this.x += dx;
 		this.y += dy;

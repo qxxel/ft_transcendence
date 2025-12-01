@@ -26,7 +26,8 @@ import type { Spawn }	from "./global.js"
 export class	Map {
 
 		public	walls: Actor[] = [];
-		public	spawns_tank: Spawn[] = [];
+		public	spawns_tank1: Spawn[] = [];
+		public	spawns_tank2: Spawn[] = [];
 		public	spawns_collectible: Spawn[] = [];
 	constructor(
 		public	map_width:number,
@@ -127,11 +128,11 @@ export class	Map {
 			GSTATE.ACTORS.push(w);
 		}
 
-			this.spawns_tank.push({x:cell*2.5 - 16/2,y:cell*1.5- 16/2}); // a
-			// this.spawns_tank.push({x:cell*1.5 - 16/2,y:cell*7.5- 16/2}); // b
-			// this.spawns_tank.push({x:cell*8.5 - 16/2,y:cell*2.5- 16/2}); // c
-			// this.spawns_tank.push({x:cell*7.5 - 16/2,y:cell*8.5- 16/2}); // d
-			this.spawns_tank.push({x:cell*3.5 - 16/2,y:cell*1.5- 16/2}); // e
+			this.spawns_tank1.push({x:cell*2.5 - 16/2,y:cell*1.5- 16/2}); // a
+			this.spawns_tank1.push({x:cell*1.5 - 16/2,y:cell*7.5- 16/2}); // b
+			this.spawns_tank2.push({x:cell*8.5 - 16/2,y:cell*2.5- 16/2}); // c
+			this.spawns_tank2.push({x:cell*7.5 - 16/2,y:cell*8.5- 16/2}); // d
+			// this.spawns_tank2.push({x:cell*3.5 - 16/2,y:cell*1.5- 16/2}); // e
 
 			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*3.5- 16/2});   // w
 			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*3.5- 16/2});   // x

@@ -37,7 +37,7 @@ export class	Line2D {
 
 
 	draw(ctx : CanvasRenderingContext2D, color: Color): void {
-		ctx.strokeStyle = '#e100ffaa';
+		ctx.strokeStyle = `#${((color.r << 16) | (color.g << 8) | color.b).toString(16).padStart(6,'0')}`; // HUH;
 		ctx.lineWidth = this.w; //ctx.lineWidth = stickWidth;
 		ctx.lineCap = 'round';
 		ctx.beginPath();

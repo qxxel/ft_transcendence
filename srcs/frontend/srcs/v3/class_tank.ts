@@ -35,7 +35,8 @@ export class	Tank extends Actor {
 	cannon: Cannon;
 	speed: number = 0.75;
 	rot_speed: number = 0.05;
-	health: number = 1;
+	health: number = 5;
+	maxHealth: number = this.health;
 	fire_rate: number = 2000; // ms
 	fire_last: number = 0;
 	fire_speed: number = 3;
@@ -71,7 +72,9 @@ export class	Tank extends Actor {
 				const start = -Math.PI / 2;
 				const end = start + progress * Math.PI * 2;
 				this.hud.wheel_draw(ctx,start,end);
-		}
+			}
+			if (this.health < this.maxHealth)
+				this.hud.healthbar_draw(ctx,this.health,this.maxHealth);
 	}
 
 	listen(input: Input): void {
@@ -132,12 +135,10 @@ export class	Tank extends Actor {
 
 	getRect(): Rect2D { return this.rect; };
 
-	addHealth(amount:number): void { // TODO parceque la c'est un peu hardcode quoi
+	addHealth(amount:number): void {
+		if (this.health + amount > this.maxHealth) return; 
 		this.health += amount;
-		this.color.r += 50;
-		this.color.g -= 50;
-		console.log("health():",this.health);
-		if (this.health == 0) {
+		if (this.health <= 0) {
 			GSTATE.TANKS -= 1;
 			if (this.id == 0)
 			{

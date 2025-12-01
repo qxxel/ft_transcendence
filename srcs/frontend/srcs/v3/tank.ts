@@ -81,24 +81,19 @@ export class	TankGame extends Game {
 		GSTATE.TANKS = 0;
 		let tank_width:number = 48;
 		let tank_height:number = 48;
-		let colors: Color[] = [];
-		colors.push( {r:0,g:255,b:255} );
-		colors.push( {r:255,g:0,b:255} );
-
-		let keys: Keys[] = [];
-		keys.push( {up:'w',down:'s',left:'a',right:'d',rot_left:'q',rot_right:'e',fire:' '} );
-		keys.push( {up:'i',down:'k',left:'j',right:'l',rot_left:'u',rot_right:'o',fire:'z'} );
-
 
 		if (this.map.name == 'desertfox')
 		{
-			for (let i = 0; i < 2; ++i) {
-				if (this.map.spawns_tank && this.map.spawns_tank[i]) { // SCOTCH
-					const tank: Tank = new Tank(this.map.spawns_tank[i]!.x, this.map.spawns_tank[i]!.y, tank_width, tank_height, {r:0,g:255,b:0}, colors[i]!, keys[i]!,i);
-					GSTATE.ACTORS.push(tank);
-					GSTATE.TANKS += 1;
-				}
-			}
+			let s1 = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
+			let s2 = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];
+
+			GSTATE.ACTORS.push(new Tank(s1!.x, s1!.y, tank_width, tank_height,
+				{r:50,g:200,b:30}, {r:0,g:255,b:255},
+				{up:'w',down:'s',left:'a',right:'d',rot_left:'q',rot_right:'e',fire:' '},0));
+			GSTATE.ACTORS.push(new Tank(s2!.x, s2!.y, tank_width, tank_height,
+				{r:50,g:200,b:30}, {r:255,g:0,b:255},
+				{up:'i',down:'k',left:'j',right:'l',rot_left:'u',rot_right:'o',fire:'.'},1));
+			GSTATE.TANKS += 2;
 		}
 		else { console.log("Unknown map :", this.map.name) }
 

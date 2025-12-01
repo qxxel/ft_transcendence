@@ -19,7 +19,7 @@ import { Actor }	from "./class_actor.js"
 import { Line2D }	from "./class_line.js"
 import { Input } 	from "./class_input.js";
 
-import type { Color, Keys } from "./interface.js"
+import type { Color } from "./interface.js"
 
 
 /* ============================= CLASS ============================= */
