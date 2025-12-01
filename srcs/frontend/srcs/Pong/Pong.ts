@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/01 17:26:58 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:45:19 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,7 +277,7 @@ export class PongGame extends Game {
 		// if (e.key === 'Escape' && !this.isGameOver) {
 		// 	this.isPaused = !this.isPaused;
 		// }
-
+console.log("input: " + e.key);
 		// SENDING KEY AND PRESSED
 		socket.emit('input', { key: e.key, isPressed: true });
 	}

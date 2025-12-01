@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 17:23:59 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 18:41:17 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,19 @@ export function	setupPongSocket(io: Server, socket: Socket, pService: PongServic
 
 	socket.on('join-game', (opts: GameOptions) => {
 		try {
+			if (activeGames.has(socket.id)) {
+            const	oldGame: PongInstance | undefined = activeGames.get(socket.id);
+            oldGame?.stopGame();
+            activeGames.delete(socket.id);
+        }
+
+        // Sécurité options
+        if (!opts)
+		{
+			console.error("No options !");
+			return;
+		}
+
 			const	roomId: string = socket.id; 
 	
 			const	game: PongInstance = new PongInstance(io, roomId, pService, opts);
@@ -41,20 +54,31 @@ export function	setupPongSocket(io: Server, socket: Socket, pService: PongServic
 			game.startGame();
 			console.log(`✅ Partie démarrée pour ${socket.id}`);
 		} catch (err: unknown) {
-            console.error("❌ CRASH lors de la création de la partie :", err);
+			console.error("❌ CRASH lors de la création de la partie :", err);
 		}
 	});
 
 	socket.on('input', (data) => {
 		const	game: PongInstance | undefined = activeGames.get(socket.id);
 		if (game)
-			game.handleInput(1, data.key, data.isPressed);
+		{
+			let	player: 1 | 2 = 1;
+
+			if (['ArrowUp', 'ArrowDown'].includes(data.key))
+				player = 2;
+
+			console.log(data.key + " => " + player);
+			game.handleInput(player, data.key, data.isPressed);
+		}
 	});
 
 	socket.on('disconnect', () => {
-		const	game: PongInstance | undefined = activeGames.get(socket.id);
-		if (game)
-			// game.stop();
+		if (activeGames.has(socket.id))
+		{
+			const	game: PongInstance | undefined = activeGames.get(socket.id);
+
+			game?.stopGame();
 			activeGames.delete(socket.id);
+		}
 	});
 }

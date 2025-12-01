@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 17:27:39 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:53:22 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,10 @@ export class	PongInstance {
 	}
 
 	// --- GESTION INPUTS (Appelé par le socket) ---
-	public handleInput(player: 1 | 2, key: string, isPressed: boolean) {
+	public handleInput(player: 1 | 2, key: string, isPressed: boolean) {		
+		if (player === 2 && this.ai)
+			return ;
+		
 		const keys = player === 1 ? this.keyState.p1 : this.keyState.p2;
 
 		if (key === 'ArrowUp' || key === 'w' || key === 'z') keys.up = isPressed;
@@ -296,5 +299,16 @@ export class	PongInstance {
 				this.physics.increaseBallSpeed(this.gameState.ball, 16);
 				break;
 		}
+	}
+
+	public	stopGame(): void {
+		if (this.gameLoopInterval)
+		{
+			clearInterval(this.gameLoopInterval);
+			this.gameLoopInterval = null;
+		}
+
+		this.gameState.status = 'finished';
+		console.log(`[PongInstance] Game stopped manually for room ${this.roomId}`);
 	}
 }
