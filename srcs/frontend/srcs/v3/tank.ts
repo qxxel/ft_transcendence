@@ -113,50 +113,15 @@ export class	TankGame extends Game {
 		let nope: boolean;
 		if (this.map.name == 'desertfox')
 		{
-			// while(attempt++ < 2000)
-			// {
-			// 	nope = false;
-			// 	let c_x: number;
-			// 	let c_y: number;
-				
-			// 	c_x = Math.floor(Math.random() * this.canvas!.width);
- 			// 	c_y = Math.floor(Math.random() * this.canvas!.height);
-				
-			// 	let collec: Rect2D;
-			// 	// collec = new Rect2D(c_x-c_width/2,c_y-c_height/2,c_width,c_height);
-			// 	collec = new Rect2D(c_x,c_y,c_width,c_height);
-
-			// 	// if (a.getRect().collide(collec))
-				
-			// 	for (let a of GSTATE.ACTORS)
-			// 	{
-			// 		if (a.getRect().collide(collec))
-			// 		{
-			// 			if (a instanceof Wall || a instanceof Collectible)
-			// 			{
-			// 				nope = true;
-			// 				break;
-			// 			}
-			// 		}
-			// 	}
-			// 	if (nope)
-			// 		continue;
-			// 	// GSTATE.ACTORS.push(new HealthPack(c_x-c_width/2,c_y- c_height/2,c_width,c_height,{r:150,g:150,b:0}));
-			// 	console.log("AT", Date.now() * 1000);
-
-			// 	const effects: string[] = ["heal", "speed"]
-			// 	const index = Math.floor(Math.random() * effects.length);
-			// 	GSTATE.ACTORS.push(new Collectible(c_x,c_y,c_width,c_height, effects[index]!));
-			// 	break;
-			// }
-
-
-			for (let s of this.map.spawns_collectible)
+			const effects: string[] = ["heal", "speed"];
+			while (attempt++ < 2000)
 			{
+				let s = this.map.spawns_collectible[Math.floor(Math.random() * this.map.spawns_collectible.length)];
 				nope = false;
-				
 				let collec: Rect2D;
-				collec = new Rect2D(s.x,s.y,c_width,c_height);
+				if (!s) continue;
+				collec = new Rect2D(s!.x,s!.y,c_width,c_height);
+
 
 				for (let a of GSTATE.ACTORS)
 				{
@@ -171,14 +136,12 @@ export class	TankGame extends Game {
 				}
 				if (nope)
 					continue;
-				console.log("AT", Date.now() * 1000);
 
-				const effects: string[] = ["heal", "speed"]
-				const index = Math.floor(Math.random() * effects.length);
-				GSTATE.ACTORS.push(new Collectible(s.x,s.y,c_width,c_height, effects[index]!));
+				let index: number;
+				index = Math.floor(Math.random() * effects.length);
+				GSTATE.ACTORS.push(new Collectible(s!.x,s!.y,c_width,c_height, effects[index]!));
 				break;
 			}
-
 
 		}
 		GSTATE.REDRAW = true;
