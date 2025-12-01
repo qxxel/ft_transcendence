@@ -1,0 +1,382 @@
+/* ************************************************************************** */
+/* index.css - Global Styles, Layout, Navigation & Utilities                  */
+/* ************************************************************************** */
+
+/* ==========================================================================
+   1. GLOBAL & TYPOGRAPHY
+   ========================================================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'monospace', sans-serif;
+}
+
+body {
+    background-image: url('back.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
+    min-height: 100vh;
+}
+
+h1 {
+    color: #FFFF00;
+    text-align: center;
+    font-size: 50px;
+    text-shadow: 0 0 10px #FFFF00;
+}
+
+p {
+    color: white;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+/* ==========================================================================
+   2. UTILITIES & HELPER CLASSES
+   ========================================================================== */
+[hidden] {
+    display: none !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+p#msg-error {
+    color: red;
+}
+
+span.disable, span.enable {
+    padding-left: 10px;
+    margin-left: 20px;
+    padding-right: 10px;
+}
+
+span.disable {
+    background-color: red;
+}
+
+span.enable {
+    background-color: green;
+}
+
+/* ==========================================================================
+   3. MAIN LAYOUT
+   ========================================================================== */
+#app {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.tab {
+    width: 100%;
+}
+
+/* ==========================================================================
+   4. NAVIGATION BAR
+   ========================================================================== */
+nav {
+    width: auto;
+    max-width: 95%;
+    padding: 15px 30px;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 0, 0.3);
+    border-radius: 50px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+nav a {
+    color: #ccc;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+nav a:hover {
+    background-color: #FFFF00;
+    color: #000;
+    box-shadow: 0 0 15px #FFFF00;
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   5. UI COMPONENTS: BUTTONS (Global)
+   ========================================================================== */
+body input, button {
+    color: black;
+}
+
+button:disabled {
+    opacity: 0.9;
+    cursor: not-allowed;
+}
+
+.btn-yellow, .btn-yellow-ai {
+    background-color: #FFFF00;
+    color: #000;
+    font-family: 'monospace', sans-serif;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-decoration: none;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.2s ease;
+}
+
+.btn-yellow {
+    margin-top: 10px;
+}
+
+.btn-yellow:hover, .btn-yellow-ai:hover {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 0 10px #fff;
+}
+
+.btn-green {
+    background-color: #00FF00;
+    color: #000;
+    font-family: 'monospace', sans-serif;
+    font-weight: bold;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-green:hover { 
+    background-color: #fff; 
+    box-shadow: 0 0 10px #00FF00; 
+}
+
+.btn-red {
+    background-color: #FF0000;
+    color: #fff;
+    font-family: 'monospace', sans-serif;
+    font-weight: bold;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-red:hover { 
+    background-color: #fff; 
+    color: #000; 
+    box-shadow: 0 0 10px #FF0000; 
+}
+
+.btn-purple {
+    background-color: #D900FF;
+    color: #fff;
+    font-family: 'monospace', sans-serif;
+    font-weight: bold;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px rgba(217, 0, 255, 0.4);
+}
+
+.btn-purple:hover {
+    background-color: #fff;
+    color: #D900FF;
+    box-shadow: 0 0 15px #D900FF;
+}
+
+.btn-tab {
+    background: transparent;
+    color: #888;
+    border: 1px solid transparent;
+    font-family: 'monospace', sans-serif;
+    font-size: 1.1em;
+    padding: 8px 20px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-tab:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-tab.active {
+    color: #000;
+    background-color: #FFFF00;
+    box-shadow: 0 0 10px #FFFF00;
+    font-weight: bold;
+}
+
+.btn-cancel {
+    background: transparent;
+    border: 1px solid #777;
+    color: #ccc;
+    font-family: 'monospace', sans-serif;
+    font-size: 0.9em;
+    padding: 8px 25px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+    border-color: #fff;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-leave {
+    background: transparent;
+    border: 1px solid #FF0000;
+    color: #FF0000;
+    font-family: 'monospace', sans-serif;
+    font-weight: bold;
+    font-size: 1em;
+    padding: 8px 40px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-leave:hover {
+    background-color: #FF0000;
+    color: white;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   6. GLOBAL COMPONENT: MAIN CONTAINER
+   ========================================================================== */
+/* Used in Games, Settings, About, and Tournament Pages */
+.game-container {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #fff;
+    padding: 40px;
+    padding-bottom: 20px;
+    width: 90%;
+    min-width: 350px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   7. UI COMPONENTS: INPUTS & SLIDERS
+   ========================================================================== */
+input[type=range] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 80%;
+  margin: 25px 0;
+  background: transparent;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 10px;
+  cursor: pointer;
+  background: #FFFF00;
+  border-radius: 5px;
+  border: 1px solid #a0a000;
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 10px;
+  cursor: pointer;
+  background: #FFFF00;
+  border-radius: 5px;
+  border: 1px solid #a0a000;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  margin-top: -8px;
+  border: 2px solid #FFFF00;
+}
+
+input[type=range]::-moz-range-thumb {
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  border: 2px solid #FFFF00;
+}
+
+.checkbox-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.checkbox-btn input {
+    display: none;
+}
+
+.checkbox-btn span {
+    display: inline-block;
+    padding: 10px 15px;
+    border: 1px solid #555;
+    background: rgba(0,0,0,0.5);
+    color: #555;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: all 0.2s ease;
+}
+
+.checkbox-btn input:checked + span {
+    border-color: #FFFF00;
+    color: #FFFF00;
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+    background: rgba(255, 255, 0, 0.1);
+}
