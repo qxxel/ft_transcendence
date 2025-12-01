@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 17:12:07 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:17:40 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ import sqlite3Pkg			from 'sqlite3'
 import { pongController }	from "./controllers/pongController.js"
 import { PongService }		from "./services/pongService.js"
 import { pongRepository }	from "./repositories/pongRepository.js"
+import { setupPongSocket }	from "./socket/pongSocket.js"
 import { tankController }	from "./controllers/tankController.js"
 import { tankService }		from "./services/tankService.js"
 import { tankRepository }	from "./repositories/tankRepository.js"
@@ -75,16 +76,11 @@ const	io = new Server(gameFastify.server, {
 	}
 });
 
-// io.on('connection', (socket) => {
-// 	gameFastify.log.info(`Service Game: Client connecté ${socket.id}`);
+io.on('connection', (socket) => {
+	console.log(`[Main] Nouvelle connexion Socket : ${socket.id}`);
 
-// 	socket.on('touche_appuyee', (data) => {
-// 		gameFastify.log.info(`Service Game: Touche reçue -> ${data.key}`);
-		
-// 		// Renvoyer un accusé de réception
-// 		socket.emit('message_recu', { msg: `Bravo, tu as appuyé sur ${data.key}` });
-// 	});
-// });
+	setupPongSocket(io, socket, pongServ);
+});
 
 const	start = async () => {
 	try {
