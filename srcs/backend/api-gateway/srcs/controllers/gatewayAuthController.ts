@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayAuthController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:48:51 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 15:32:17 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,23 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.post(
 				'https://auth:3000/sign-in',
+				request.body,
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+			
+			if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+	gatewayFastify.post('/validateUser', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await gatewayAxios.post(
+				'https://auth:3000/validateUser',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   auth.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:50:09 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:31:16 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,12 @@ authFastify.register(cors, {
 });
 
 authFastify.register(authController);
+
+authFastify.addHook('onReady', async () => {
+	console.log("Running cleanup...");
+	await authServ.cleanup();
+	console.log("Cleanup done.");
+});
 
 const	start = async () => {
 	try {

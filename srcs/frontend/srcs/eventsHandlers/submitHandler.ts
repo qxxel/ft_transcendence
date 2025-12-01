@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 13:02:56 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:29:46 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,9 +153,8 @@ async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: GameState
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
 	form.reset();
 	
-	const response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
+	const response: Response = await sendRequest('/api/auth/validateUser', 'post', { otp });
 
-	
 	if (!response.ok) {
 		const	p = document.getElementById("verify-email-msg-error");
 		if (!p)
