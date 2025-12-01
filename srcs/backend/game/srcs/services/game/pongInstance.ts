@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 16:42:35 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:27:39 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,6 @@ export class	PongInstance {
 			this.checkWinCondition();
 		}
 
-console.log("📤 Envoi update", this.gameState.ball.x);
 		this.io.to(this.roomId).volatile.emit('game-update', this.gameState);
 	}
 

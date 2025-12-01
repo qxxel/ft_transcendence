@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/01 16:32:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:26:58 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,9 +189,8 @@ export class PongGame extends Game {
 
 		// Écouter les mises à jour du serveur (60 fois/sec)
 		socket.on('game-update', (newState: PongState) => {
-			console.log("📦 Reçu un update !", newState.ball.x);
 			this.serverState = newState;
-			// On met à jour le score UI directement quand on reçoit l'info
+
 			this.updateScoresUI();
 		});
 
@@ -202,9 +201,8 @@ export class PongGame extends Game {
 
 		// ENVOYER LE START AVEC LES OPTIONS
 		if (this.appState.pendingOptions) {
-			console.log("🚀 Envoi des options au serveur...", this.appState.pendingOptions);
 			socket.emit('join-game', this.appState.pendingOptions);
-			// On vide pour ne pas relancer par erreur
+
 			this.appState.pendingOptions = undefined; 
 		}
 	}
@@ -219,8 +217,7 @@ export class PongGame extends Game {
 		if (!this.animationFrameId) {
 			window.addEventListener('keydown', this.handleKeyDown);
 			window.addEventListener('keyup', this.handleKeyUp);
-			this.renderLoop(); // On lance la boucle de DESSIN uniquement
-			console.log('Client Render Loop Started');
+			this.renderLoop();
 		}
 	}
 
@@ -282,12 +279,12 @@ export class PongGame extends Game {
 		// }
 
 		// SENDING KEY AND PRESSED
-		socket.emit('input', { key: e.key, pressed: true });
+		socket.emit('input', { key: e.key, isPressed: true });
 	}
 
 	private handleKeyUp(e: KeyboardEvent) {
 		// SENDING KEY AND UNPRESSED
-		socket.emit('input', { key: e.key, pressed: false });
+		socket.emit('input', { key: e.key, isPressed: false });
 	}
 
 	// --- UI HELPERS ---
