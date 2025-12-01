@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:58:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 12:59:10 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ interface	SignUpBody {
 };
 
 interface	SignInBody {
-	identifier: string;
+	identifier: number;
 	password: string;
 }
 
@@ -92,7 +92,7 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 		const	user: any = userRes.data;
 
 		try {
-			const	jwtRes: AxiosResponse = await authAxios.post('https://jwt:3000', user, { withCredentials: true } );
+			const	jwtRes: AxiosResponse = await authAxios.post('https://jwt:3000/verifyEmail', user);
 
 			const	hash: string = await argon2.hash(request.body.password);
 			await authServ.addClient(user.id, hash);
@@ -133,6 +133,10 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 
 		if (!user)
 			throw new Error("Wrong password or username.");
+
+		const expires_at: string | undefined = await authServ.getExpiresByIdClient(user.id)
+		if (expires_at !== "null" && expires_at !== undefined)
+			throw new Error("Wrong password or username.");
 		
 		const	pwdHash: string = await authServ.getPasswordByIdClient(user.id);
 
@@ -158,6 +162,31 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 	}
 }
 
+async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		if (!request.body)
+			throw new Error("The request is empty");
+
+		const	otp = request.body;
+
+		const jwtRes: AxiosResponse = await authAxios.post('https://twofa:3000/validate', { otp }, { withCredentials: true } );
+		
+		if (jwtRes.headers['set-cookie'])
+			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
+
+		await authServ.updateExpiresByIdClient(jwtRes.data.id, "null");
+
+
+		return reply.status(201).send(jwtRes.data.id);
+	} catch (err: unknown) {
+		const	msgError = errorsHandler(err);
+
+		console.error(msgError);
+
+		return reply.code(400).send({ error: msgError });
+	}
+}
+
 async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
 		const	{ jwtAccess } = getCookies(request);
@@ -172,7 +201,7 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
 
-		await authAxios.delete(`https://user:3000/${payload.data.id}`); // https://user:3000/me ????
+		await authAxios.delete(`https://user:3000/${payload.data.id}`);
 
 		await authServ.deleteClient(payload.data.id);
 		
@@ -189,5 +218,6 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 export async function	authController(authFastify: FastifyInstance): Promise<void> {
 	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
 	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
+	authFastify.post<{ Body: { otp: string } }>('/validateUser', validateUser);
 	authFastify.delete('/me', deleteClient);
 }

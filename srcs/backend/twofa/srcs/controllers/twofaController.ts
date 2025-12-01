@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/27 16:21:52 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 14:22:41 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,10 @@ async function sendMailMessage(mail: any) {
 		auth: {
 			user: emailName,
 			pass: emailPass
-		}
+		},
+		connectionTimeout: 2000,
+		greetingTimeout: 2000,
+		socketTimeout: 4000,
 	});
 	try {
 		await transporter.sendMail(mail);
@@ -104,8 +107,8 @@ async function	generateMailCode(request: FastifyRequest, reply: FastifyReply): P
 		await twofaServ.deleteOtpByIdClient(payload.data.id);
 		await twofaServ.addOtp(payload.data.id, otpSecretKey, otp);
 
-		const	dataMail = MailCodeMessage(payload.data.username, otp, payload.data.email)
-		await sendMailMessage(dataMail)
+		const	dataMail = MailCodeMessage(payload.data.username, otp, payload.data.email);
+		await sendMailMessage(dataMail);
 
 		return reply.status(200).send(otp);
 	} catch (err: unknown) {
@@ -148,7 +151,25 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 	}
 }
 
+async function	deleteCodeOtp(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	const	{ id } = request.params as { id: string };
+	const	parseId: number = parseInt(id, 10);
+	try {
+
+		await twofaServ.deleteOtpByIdClient(parseId);
+		
+		return reply.status(204).send({ result: "deleted." });
+	} catch (err: unknown) {
+		const	msgError: string = errorsHandler(err);
+
+		console.error(msgError);
+
+		return reply.code(400).send({ error: msgError });
+	}
+}
+
 export async function	twofaController(authFastify: FastifyInstance): Promise<void> {
 	authFastify.get('/otp', generateMailCode);
 	authFastify.post<{ Body: { otp: string } }>('/validate', validateCodeOtp);
+	authFastify.delete('/:id', deleteCodeOtp);
 }

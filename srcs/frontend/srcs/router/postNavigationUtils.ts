@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:00:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 20:42:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { btnCooldown }			from "../utils/buttonCooldown.js"
-import { DisplayDate }			from "../utils/displayDate.js"
+import { displayDate }			from "../utils/displayDate.js"
 import { getAndRenderFriends }  from  "../friends/getAndRenderFriends.js"
 import { PongGame }				from "../Pong/Pong.js"
 import { router }				from "../index.js"
@@ -72,7 +72,7 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 	if (['/2fa'].includes(currentPath)) {
 		router.canLeave = false;
 		btnCooldown();
-		DisplayDate(5);
+		displayDate(5);
 	}
 
 	if (['/sign-in', '/sign-up'].includes(currentPath)) {

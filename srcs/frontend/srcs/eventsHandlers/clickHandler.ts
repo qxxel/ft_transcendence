@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:03:05 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 20:42:20 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ import { TournamentController } from "../tournament.js"
 import { Router }		from "../router/router.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 import { User }			from "../user/user.js"
-import { DisplayDate }	from "../utils/displayDate.js"
+import { displayDate }	from "../utils/displayDate.js"
 import { btnCooldown }	from "../utils/buttonCooldown.js"
 
 import type { GameState }   from "../index.js"
@@ -134,7 +134,7 @@ async function	onClickNewCode(router: Router, gameState: GameState, user: User):
 	}
 
 	btnCooldown();
-	DisplayDate(5);
+	displayDate(5);
 }
 
 async function onClickGetMessage(): Promise<void> {
