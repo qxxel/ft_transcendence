@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authTableBuilder.ts                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:03:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:50:14 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 12:55:00 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ export function	authTableBuilder(db: Database): void {
 	db.exec(`CREATE TABLE IF NOT EXISTS auth (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		id_client INT NOT NULL UNIQUE,
-		password TEXT NOT NULL
+		password TEXT NOT NULL,
+		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		expires_at DATETIME DEFAULT (datetime('now', '+5 minutes'))
 	);`);
 }

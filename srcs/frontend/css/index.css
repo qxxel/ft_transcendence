@@ -47,7 +47,7 @@ p {
     display: none !important;
 }
 
-p#msg-error {
+p.msg-error {
     color: red;
 }
 

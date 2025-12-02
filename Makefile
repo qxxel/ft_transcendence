@@ -6,7 +6,7 @@
 #    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/29 11:31:24 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/12/01 13:03:35 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,12 +45,13 @@ DC_RESTART	= $(CMD_DC) restart
 
 # ----------------------------    databases    ---------------------------- #
 
-AUTH_DB	= srcs/backend/auth/db
-GAME_DB	= srcs/backend/game/db
-USER_DB	= srcs/backend/user/db
-JWT_DB	= srcs/backend/jwt/db
-TWOFA_DB	= srcs/backend/twofa/db
-
+DB_BASE_DIR	= srcs/backend
+AUTH_DB		= $(DB_BASE_DIR)/auth/db
+GAME_DB		= $(DB_BASE_DIR)/game/db
+USER_DB		= $(DB_BASE_DIR)/user/db
+JWT_DB		= $(DB_BASE_DIR)/jwt/db
+TWOFA_DB	= $(DB_BASE_DIR)/twofa/db
+DB_DIR		= $(AUTH_DB) $(GAME_DB) $(USER_DB) $(JWT_DB) $(TWOFA_DB)
 
 # ----------------------------    key and cert    ---------------------------- #
 
@@ -70,7 +71,7 @@ CMD_OPENSSL	= openssl req -x509 -newkey rsa:2048 \
 
 
 # --------------------------    build directory    -------------------------- #
-DB_DIR		= $(AUTH_DB) $(GAME_DB) $(USER_DB) $(JWT_DB) $(TWOFA_DB)
+
 BUILD_DIR	= $(SECRET_DIR) $(DB_DIR)
 
 

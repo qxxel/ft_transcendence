@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:38:20 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/30 10:42:04 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,6 @@ import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 import type { AxiosResponse }									from 'axios'
 import type { userDto }											from "../dtos/userDto.js"
 
-interface JwtTwofaPayload {
-	id: number;
-	email: string;
-	username: string;
-}
 
 /* ====================== FUNCTION ====================== */
 
@@ -50,6 +45,29 @@ export async function	jwtController(jwtFastify: FastifyInstance) {
 
 			const	lastId: number = await jwtServ.addToken(refreshToken, user.id)
 			return reply.status(201).send(lastId);
+		} catch (err: unknown) {
+			removeJWT(reply);
+
+			if (err instanceof MissingIdError) {
+				console.error(err.message);
+				reply.status(401).send(err.message);
+			}
+
+			console.error(err);
+			reply.status(500).send(err);
+		}
+	});
+
+	jwtFastify.post('/verifyEmail', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	user: userDto = request.body as userDto;
+
+			if (!user.id)
+				throw new MissingIdError("Id of the user is missing !")
+
+			await addTwofaJWT(reply, user);
+				
+			return reply.status(201).send(user.id);
 		} catch (err: unknown) {
 			removeJWT(reply);
 

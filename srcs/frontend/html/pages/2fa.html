@@ -1,7 +1,6 @@
 <h1>Two-factor authentication</h1>
 
 <form id="2fa-form">
-	<input type="hidden" id="sign-in-user-id" name="user-id">
 
 	<p>Open your email and enter the code.</p>
 
@@ -16,7 +15,7 @@
 		<span>send a new code</span>
 	</button>
 	<p>The verification code is valid until : <span id="date-with-offset"></span></p>
-	<p id="msg-error"></p>
+	<p id="2fa-msg-error" class="msg-error"></p>
 
 	<button type="submit" id="verify-submit">Verify</button>
 

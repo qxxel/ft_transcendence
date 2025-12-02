@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/30 14:17:19 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 20:14:33 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ import { TournamentController } from "../tournament.js"
 import { Router }		from "../router/router.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 import { User }			from "../user/user.js"
-import { DisplayDate }	from "../utils/displayDate.js"
+import { displayDate }	from "../utils/displayDate.js"
 import { btnCooldown }	from "../utils/buttonCooldown.js"
 
 import type { GameState }   from "../index.js"
@@ -115,6 +115,54 @@ async function	onClickDeleteAccount(router: Router, gameState: GameState, user: 
 	await onClickLogout(router, gameState, user);
 }
 
+async function	onClickDeleteTwofa(router: Router, gameState: GameState, user: User): Promise<void> {
+	console.log("DeleteTwofa");
+	
+	if (!confirm("Are you sure you want to go back?"))
+		return ;
+
+	const	response: Response = await sendRequest(`/api/auth/twofa/me`, 'delete', null);
+	if (!response.ok) {
+		console.log(response.statusText);
+		return ;
+	}
+	router.canLeave = true;
+	await onClickLogout(router, gameState, user);
+}
+
+async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GameState, user: User): Promise<void> {
+	console.log("VerifyEmail");
+	
+	const response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
+
+	if (!response.ok) {
+		const	p = document.getElementById("verify-email-msg-error");
+		if (!p)
+			console.error("No HTMLElement named \`msg-error\`.");
+		else {
+			const	result = await response.json();
+			p.textContent = result?.error || "An unexpected error has occurred";
+		}
+		return ;
+	}
+
+	user.setSigned(true);
+	
+	var menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	if (menu)
+		menu.innerHTML =
+			`<a href="/">Home</a>
+			<a href="/games">Play</a>
+			<a href="/tournament-setup">Tournament</a>
+			<a href="/user">${user.getUsername()}</a>
+			<button onclick="onClickLogout();" id="logout">Logout</button>
+			<a href="/settings">Settings</a>
+			<a href="/about">About</a>`;
+
+	router.canLeave = true;
+	router.navigate("/", gameState, user);
+}
+
 async function	onClickNewCode(router: Router, gameState: GameState, user: User): Promise<void> {
 	const btn = document.getElementById("btnCooldown");
 	if (btn) {
@@ -136,7 +184,7 @@ async function	onClickNewCode(router: Router, gameState: GameState, user: User):
 	}
 
 	btnCooldown();
-	DisplayDate(5);
+	displayDate(5);
 }
 
 async function onClickGetMessage(): Promise<void> {
@@ -372,7 +420,9 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	(window as any).onClickEdit = () => onClickEdit(user);
 	(window as any).onClickCancel = () => onClickCancel(user);
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
+	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa(router, gameState, user);
 	(window as any).onClickNewCode = () => onClickNewCode(router, gameState, user);
+	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(router, gameState, user);
 
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;
