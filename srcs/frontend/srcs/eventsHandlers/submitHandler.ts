@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 16:29:46 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 22:06:20 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 	if (divVerifyEmail)
 		divVerifyEmail.hidden = false;
 
+	router.canLeave = false;
+
 	sendRequest('/api/twofa/otp', 'GET', null)
 		.then(async (res) => {
 			if (!res.ok) {
@@ -143,8 +145,6 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 			}
 		});
 	displayDate(5);
-	
-	router.canLeave = false;
 }
 
 async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {

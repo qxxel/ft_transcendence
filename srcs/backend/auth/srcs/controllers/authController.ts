@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 18:48:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 19:16:15 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 
 /* ====================== IMPORTS ====================== */
 
-import argon2			from 'argon2'
-import axios			from 'axios'
-import { authAxios } 	from "../auth.js"
-import { authServ } 	from "../auth.js"
+import argon2					from 'argon2'
+import axios					from 'axios'
+import { authAxios } 			from "../auth.js"
+import { authServ } 			from "../auth.js"
+import { deleteClientExpires }	from "../services/authService.js"
 
 import type	{ AxiosResponse }									from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
@@ -215,9 +216,35 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 	}
 }
 
+async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		const	{ jwtTwofa } = getCookies(request);
+		if (!jwtTwofa)
+			return reply.status(204).send();
+		
+		const	payload: AxiosResponse = await authAxios.get("https://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		
+		deleteClientExpires(authServ, payload.data.id);
+		
+		const	response: AxiosResponse = await authAxios.delete(`https://jwt:3000/${payload.data.id}`);
+		
+		if (response.headers['set-cookie'])
+			reply.header('Set-Cookie', response.headers['set-cookie']);
+		
+		return reply.status(204).send(payload.data.id);	
+	} catch (err: unknown) {
+		const	msgError: string = errorsHandler(err);
+
+		console.error(msgError);
+
+		return reply.code(400).send({ error: msgError });
+	}
+}
+
 export async function	authController(authFastify: FastifyInstance): Promise<void> {
 	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
 	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
 	authFastify.post<{ Body: { otp: string } }>('/validateUser', validateUser);
 	authFastify.delete('/me', deleteClient);
+	authFastify.delete('/twofa/me', deleteTwofaClient);
 }

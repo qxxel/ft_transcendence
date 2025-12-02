@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 20:42:20 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 18:45:35 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,22 @@ async function	onClickDeleteAccount(router: Router, gameState: GameState, user: 
 	}
 	await onClickLogout(router, gameState, user);
 }
+
+async function	onClickDeleteTwofa(router: Router, gameState: GameState, user: User): Promise<void> {
+	console.log("DeleteTwofa");
+	
+	if (!confirm("Are you sure you want to go back?"))
+		return ;
+
+	const	response: Response = await sendRequest(`/api/auth/twofa/me`, 'delete', null);
+	if (!response.ok) {
+		console.log(response.statusText);
+		return ;
+	}
+	router.canLeave = true;
+	await onClickLogout(router, gameState, user);
+}
+
 
 async function	onClickNewCode(router: Router, gameState: GameState, user: User): Promise<void> {
 	const btn = document.getElementById("btnCooldown");
@@ -353,6 +369,7 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	(window as any).onClickEdit = () => onClickEdit(user);
 	(window as any).onClickCancel = () => onClickCancel(user);
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
+	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa(router, gameState, user);
 	(window as any).onClickNewCode = () => onClickNewCode(router, gameState, user);
 
 	(window as any).onClickGetMessage = onClickGetMessage;

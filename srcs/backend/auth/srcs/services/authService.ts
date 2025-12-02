@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 19:11:55 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 19:16:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 
 import { authRepository }	from "../repositories/authRepository.js"
 import { authAxios } 	from "../auth.js"
-
-import type	{ AxiosResponse }	from 'axios'
 
 /* ====================== FUNCTION ====================== */
 
@@ -47,7 +45,7 @@ async function deleteClient(authServ: authService, id: number) {
 	}
 }
 
-async function deleteClientIfExpires(authServ: authService, id: number) {
+export async function deleteClientExpires(authServ: authService, id: number) {
 	const expires_at = await authServ.getExpiresByIdClient(id)
 	if (expires_at !== null && expires_at !== undefined)
 		deleteClient(authServ, id);
@@ -76,12 +74,12 @@ export class	authService {
 			if (delay <= 0)
 				deleteClient(this, client);
 			else
-				runIn(() => deleteClientIfExpires(this, client), 0, 0, delay);
+				runIn(() => deleteClientExpires(this, client), 0, 0, delay);
 		}
 	}
 
 	async addClient(id: number, password: string): Promise<void> {
-		runIn(() => deleteClientIfExpires(this, id), 5, 0, 0);
+		runIn(() => deleteClientExpires(this, id), 5, 0, 0);
 		return await this.authRepo.addClient(id, password);
 	}
 
