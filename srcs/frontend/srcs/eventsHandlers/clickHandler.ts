@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 18:45:35 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 20:08:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,38 @@ async function	onClickDeleteTwofa(router: Router, gameState: GameState, user: Us
 	await onClickLogout(router, gameState, user);
 }
 
+async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GameState, user: User): Promise<void> {
+	console.log("VerifyEmail");
+	
+	const response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
+
+	if (!response.ok) {
+		const	p = document.getElementById("verify-email-msg-error");
+		if (!p)
+			console.error("No HTMLElement named \`msg-error\`.");
+		else {
+			const	result = await response.json();
+			p.textContent = result?.error || "An unexpected error has occurred";
+		}
+		return ;
+	}
+
+	user.setSigned(true);
+	
+	var menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	if (menu)
+		menu.innerHTML =
+			`<a href="/">Home</a>
+			<a href="/games">Play</a>
+			<a href="/tournament-setup">Tournament</a>
+			<a href="/user">${user.getUsername()}</a>
+			<button onclick="onClickLogout();" id="logout">Logout</button>
+			<a href="/settings">Settings</a>
+			<a href="/about">About</a>`;
+
+	router.canLeave = true;
+	router.navigate("/", gameState, user);
+}
 
 async function	onClickNewCode(router: Router, gameState: GameState, user: User): Promise<void> {
 	const btn = document.getElementById("btnCooldown");
@@ -371,6 +403,7 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa(router, gameState, user);
 	(window as any).onClickNewCode = () => onClickNewCode(router, gameState, user);
+	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(router, gameState, user);
 
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;

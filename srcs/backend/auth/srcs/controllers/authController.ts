@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 19:16:15 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 20:04:17 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,10 +241,33 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 	}
 }
 
+async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		const	jwtRes = await authAxios.get("https://jwt:3000/twofa/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+
+		if (jwtRes.headers['set-cookie'])
+			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
+
+		const id: number = jwtRes.data;
+
+		await authServ.updateExpiresByIdClient(id, null);
+
+		return reply.status(201).send(id);
+	} catch (err: unknown) {
+		const	msgError = errorsHandler(err);
+
+		console.error(msgError);
+
+		return reply.code(400).send({ error: msgError });
+	}
+}
+
 export async function	authController(authFastify: FastifyInstance): Promise<void> {
 	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
 	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
 	authFastify.post<{ Body: { otp: string } }>('/validateUser', validateUser);
 	authFastify.delete('/me', deleteClient);
 	authFastify.delete('/twofa/me', deleteTwofaClient);
+
+	authFastify.post('/dev/validate', devValidate);
 }
