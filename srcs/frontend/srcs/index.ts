@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 19:52:44 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 10:55:21 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 
 import { addRoutes }					from "./router/addRoutes.js"
 import { connectSocket }				from "./socket/socket.js"
-import { Game } 						from "./Pong/GameClass.js"
-import { TournamentController } 		from "./tournament.js"
+import { Game } 						from "./Pong/gameClass.js"
+import { TournamentController } 		from "./Pong/tournament.js"
 import { Router }						from "./router/router.js"
 import { setupClickHandlers }			from "./eventsHandlers/clickHandler.js"
 import { setupLoadHandler }				from "./eventsHandlers/loadHandler.js"

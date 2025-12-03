@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tank.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 23:15:13 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 17:55:16 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { Game }		from "../Pong/GameClass.js"
-import { GSTATE, type Spawn }	from "./global.js"
+import { Game }		from "../Pong/gameClass.js"
+import { GSTATE }	from "./global.js"
 import { Router } from "../router/router.js"
 import { Input }	from "./class_input.js"
 import { User } from "../user/user.js"
@@ -74,6 +74,8 @@ export class	TankGame extends Game {
 		this.updateNameDisplay()
 		this.setup_tanks();
 	}
+
+	setWinningScore(newWinningScore: number) {}
 
 	private setup_tanks() : void 
 	{

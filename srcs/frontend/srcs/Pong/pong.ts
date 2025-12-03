@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Pong.ts                                            :+:      :+:    :+:   */
+/*   pong.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/02 00:16:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:53:15 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 /* ====================== IMPORTS ====================== */
 
 import { connectSocket, socket }	from "../socket/socket.js"
-import { Game }						from "./GameClass.js"
+import { Game }						from "./gameClass.js"
 import { linearInterpolation }		from "./utils/lerp.js"
 import { Router }					from "../router/router.js"
 import { User }						from "../user/user.js"
-import { PongRenderer }				from "./Renderer.js"
+import { PongRenderer }				from "./renderer.js"
 
-import type { AppState }	from "../index.js"
-import type { PongState }	from "./objects/gameState.js"
-import type { PowerUps }	from "./objects/gameOptions.js"
-import type { GameResume }	from "./objects/gameResume.js"
+import type { AppState }				from "../index.js"
+import type { PongState }				from "./objects/gameState.js"
+import type { GameOptions, PowerUps }	from "./objects/gameOptions.js"
+import type { GameResume }				from "./objects/gameResume.js"
 
 
 /* ====================== CLASS ====================== */
@@ -35,9 +35,11 @@ export class PongGame extends Game {
 
 	private renderer: PongRenderer | null = null;
 
+	private	lastOptions: GameOptions | null = null;
 	private serverState: PongState | null = null;
 	private displayState: PongState | null = null;
 	private	isGameOver: boolean = false;
+	private	isTournament: boolean = false;
 
 	private player1Name: string = "Player 1";
 	private player2Name: string = "Player 2";
@@ -75,6 +77,14 @@ export class PongGame extends Game {
 			p2: document.getElementById(this.ids.score2)!
 		};
 
+		if (this.appState.pendingOptions)
+			this.lastOptions = JSON.parse(JSON.stringify(this.appState.pendingOptions));
+		else if (this.lastOptions)
+			this.appState.pendingOptions = this.lastOptions;
+
+		if (this.appState.pendingOptions)
+			this.lastOptions = JSON.parse(JSON.stringify(this.appState.pendingOptions));
+
 		this.serverState = {
 			width: this.canvas.width,
 			height: this.canvas.height,
@@ -87,7 +97,12 @@ export class PongGame extends Game {
 			status: 'playing'
 		};
 
-		if (this.appState.pendingOptions?.mode === 'ai')
+		if (this.appState.pendingOptions?.isTournament)
+		{
+			this.player1Name = this.appState.currentTournament?.currentMatch?.p1 || "Player 1";
+			this.player2Name = this.appState.currentTournament?.currentMatch?.p2 || "Player 2";
+		}
+		else if (this.appState.pendingOptions?.mode === 'ai')
 		{
 			this.player1Name = this.user.getUsername() || "Player 1";
 			this.player2Name = "AI (" + this.appState.pendingOptions.difficulty + ")";
@@ -101,6 +116,7 @@ export class PongGame extends Game {
 
 		if (this.appState.pendingOptions)
 		{
+			this.isTournament = this.appState.pendingOptions.isTournament;
 			this.scoreElements.winScore.innerText = this.appState.pendingOptions.winningScore.toString();
 			this.generateLegend(this.appState.pendingOptions.activePowerUps);
 		}
@@ -118,34 +134,64 @@ export class PongGame extends Game {
 		socket.off('game-update');
 		socket.off('game-over');
 
+		this.isGameOver = false;
+		this.serverState = null;
+
+		const dashboard = document.getElementById('game-over-dashboard');
+        if (dashboard)
+			dashboard.style.display = "none";
+
 		socket.on('game-update', (newState: PongState) => {
 			this.serverState = newState;
-
+			
 			if (!this.displayState)
 				this.displayState = JSON.parse(JSON.stringify(newState));
-
+			
 			this.updateScoresUI();
 		});
 
 		socket.on('game-over', (data: GameResume) => {
+			this.isGameOver = true;
+
+			if (this.animationFrameId)
+			{
+				cancelAnimationFrame(this.animationFrameId);
+
+				socket.off('game-update');
+				socket.off('game-over');
+
+				this.animationFrameId = null;
+			}
 			this.showEndGameDashboard(data);
 		});
 
-		if (this.appState.pendingOptions) {
-			socket.emit('join-game', this.appState.pendingOptions);
+		this.isGameOver = false;
 
-			this.appState.pendingOptions = undefined; 
+		const	optionsToSend: GameOptions | null = this.appState.pendingOptions || this.lastOptions;
+
+		if (optionsToSend)
+		{
+			if (!this.lastOptions)
+				this.lastOptions = JSON.parse(JSON.stringify(optionsToSend));
+
+
+			socket.emit('join-game', optionsToSend);
+
+			this.appState.pendingOptions = undefined;
 		}
 	}
 
 	private quitGame() {
-		this.stop(); 
+		this.stop();
+		this.isGameOver = false; 
 		socket.emit('leave-game');
 		this.router.navigate('/games', this.appState, this.user);
 	}
 
 	public start() {
-		if (!this.animationFrameId) {
+		if (!this.animationFrameId)
+		{
+			this.isGameOver = false;
 			window.addEventListener('keydown', this.handleKeyDown);
 			window.addEventListener('keyup', this.handleKeyUp);
 			this.renderLoop();
@@ -155,14 +201,14 @@ export class PongGame extends Game {
 	public stop() {
 		if (this.animationFrameId) {
 			cancelAnimationFrame(this.animationFrameId);
-			window.removeEventListener('keydown', this.handleKeyDown);
-			window.removeEventListener('keyup', this.handleKeyUp);
-
-			socket.off('game-update');
-			socket.off('game-over');
-			
 			this.animationFrameId = null;
 		}
+
+		window.removeEventListener('keydown', this.handleKeyDown);
+		window.removeEventListener('keyup', this.handleKeyUp);
+
+		socket.off('game-update');
+		socket.off('game-over');
 	}
 
 	private renderLoop() {
@@ -205,10 +251,8 @@ export class PongGame extends Game {
 			this.displayState.collectibles
 		);
 
-		console.log(this.displayState?.status);
-		if (this.displayState.status === "paused") {
+		if (this.displayState.status === "paused")
 			this.renderer.drawPaused();
-		}
 	}
 
 	private handleKeyDown(e: KeyboardEvent) {
@@ -216,13 +260,31 @@ export class PongGame extends Game {
 			return;
 
 		if (this.isGameOver) {
-			if (e.key === ' ') {
+			if (this.isTournament)
+			{
+				if (e.key === ' ')
+				{
+					this.stop();
+					this.router.navigate("/tournament-bracket", this.appState, this.user)
+					return;
+				}
+			}
+			else
+			{
+				if (e.key === ' ')
+				{
+					this.stop();
+					this.isGameOver = false;
 					this.router.navigate("/pong", this.appState, this.user)
 					return;
-			}
-			if (e.key === 'Escape' /*&& !this.isTournamentMatch*/) {
+				}
+				if (e.key === 'Escape')
+				{
+					this.stop();
+					this.isGameOver = false;
 					this.router.navigate('/games', this.appState, this.user);
 					return;
+				}
 			}
 		}
 
@@ -255,6 +317,9 @@ export class PongGame extends Game {
 		const winnerDisplay = document.getElementById('winner-display');
 		if (winnerDisplay)
 			winnerDisplay.innerText = `${winnerName} Wins!`;
+		if (this.isTournament && this.appState.currentTournament)
+			this.appState.currentTournament.reportMatchWinner(winnerName);
+
 
 		const	gameDurationSec: number = (gameResume.duration / 1000)
 		const	minutes: string = (gameDurationSec / 60).toFixed(0);
@@ -269,7 +334,12 @@ export class PongGame extends Game {
 
 		const	restartMsg = document.getElementById('restart-msg');
 		if (restartMsg)
-			restartMsg.innerText = "Press 'Space' to Restart or 'Esc' to Quit";
+		{
+			if (this.isTournament)
+				restartMsg.innerText = "Press 'Space' to Continue";
+			else
+				restartMsg.innerText = "Press 'Space' to Restart or 'Esc' to Quit";
+		}
 
 		dashboard.style.display = 'block';
 	}
@@ -294,11 +364,11 @@ export class PongGame extends Game {
 		let html = '<div class="legend-title">Power-Ups</div>';
 
 		const createRow = (text: string, fill: string, stroke: string) => {
-				return `
-				<div class="legend-item">
-						<div class="legend-bubble" style="background-color: ${fill}; border-color: ${stroke};"></div>
-						<span>${text}</span>
-				</div>`;
+			return `
+			<div class="legend-item">
+					<div class="legend-bubble" style="background-color: ${fill}; border-color: ${stroke};"></div>
+					<span>${text}</span>
+			</div>`;
 		};
 
 		if (activePowerUps.star1) {

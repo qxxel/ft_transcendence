@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:49:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:55:33 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 import { btnCooldown }			from "../utils/buttonCooldown.js"
 import { displayDate }			from "../utils/displayDate.js"
 import { getAndRenderFriends }  from  "../friends/getAndRenderFriends.js"
-import { PongGame }				from "../Pong/Pong.js"
+import { PongGame }				from "../Pong/pong.js"
 import { router }				from "../index.js"
 import { sendRequest }			from "../utils/sendRequest.js"
 import { TankGame }				from "../v3/tank.js"
@@ -35,9 +35,10 @@ export async function  pathActions(currentPath: string, gameState: AppState, use
 		if (gameState.currentGame) 
 			gameState.currentGame.stop();
 	}
-	
+
 	if (!['/tournament-setup', '/tournament-bracket', '/pong'].includes(currentPath)) {
 		gameState.currentTournament = null;
+		gameState.pendingOptions = undefined;
 	}
 
 	if (['/pong'].includes(currentPath)) {
@@ -133,7 +134,7 @@ export async function  pathActions(currentPath: string, gameState: AppState, use
     }
 }
 
-async function loadTwofa(gameState: GameState, user: User) {
+async function loadTwofa(gameState: AppState, user: User) {
 	const	Response: Response = await sendRequest(`/api/jwt/twofa`, 'get', null);
 	if (!Response.ok) {
 		console.log(Response.statusText);

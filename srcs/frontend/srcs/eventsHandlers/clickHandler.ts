@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:51:22 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:51:44 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 /* ====================== IMPORTS ====================== */
 
 import { GameOptions }			from "../Pong/objects/gameOptions.js"
-import { PongGame }				from "../Pong/Pong.js"
+import { PongGame }				from "../Pong/pong.js"
 import { TankGame } 			from "../v3/tank.js"
-import { TournamentController }	from "../tournament.js"
+import { TournamentController } from "../Pong/tournament.js"
 import { Router }				from "../router/router.js"
 import { sendRequest }			from "../utils/sendRequest.js"
 import { User }					from "../user/user.js"
@@ -320,6 +320,7 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', router: Router, g
 	const	options: GameOptions = {
 		width: 800,
 		height: 600,
+		isTournament: false,
 		mode: 'ai',
 		difficulty: difficulty || 'medium',
 		winningScore: parseInt(maxPointsInput.value, 10) || 5,
@@ -349,6 +350,7 @@ function onClickPlayPVP(router: Router, gameState: AppState, user: User) {
 		const	options: GameOptions = {
 			width: 800,
 			height: 600,
+			isTournament: false,
 			mode: 'pvp',
 			difficulty: "medium",
 			winningScore: parseInt(maxPointsInput.value, 10) || 5,
@@ -373,7 +375,7 @@ function onClickPlayPVP(router: Router, gameState: AppState, user: User) {
 	}
 }
 
-function onStartTournament(router: Router, gameState: AppState, user: User) {
+function	onStartTournament(router: Router, gameState: AppState, user: User) {
 	const inputs = document.querySelectorAll('.player-name-input') as NodeListOf<HTMLInputElement>;
 	const playerNames: string[] = [];
 	
@@ -392,14 +394,30 @@ function onStartTournament(router: Router, gameState: AppState, user: User) {
 	const winningScore = parseInt(scoreInput.value, 10);
 
 	gameState.currentTournament = new TournamentController(playerNames, winningScore);
-	
+
 	router.navigate("/tournament-bracket", gameState, user);
 }
 
 function startTournamentMatch(matchId: string, p1: string, p2: string, router: Router, gameState: AppState, user: User) {
 	if (gameState.currentTournament) {
-	gameState.currentTournament.startMatch(matchId, p1, p2);
-	router.navigate('/pong', gameState, user);
+		const	options: GameOptions = {
+			width: 800,
+			height: 600,
+			isTournament: true,
+			mode: "pvp",
+			difficulty: "medium",
+			winningScore: gameState.currentTournament.winningScore,
+			powerUpFreq: 0,
+			activePowerUps: { star1: false, star2: false, star3: false }
+		};
+
+		gameState.pendingOptions = options;
+
+		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
+
+		gameState.currentTournament.startMatch(matchId, p1, p2);
+
+		router.navigate('/pong', gameState, user);
 	}
 }
 
@@ -429,6 +447,7 @@ function onClickStartFeatured(mode: 'ai' | 'pvp', router: Router, gameState: App
 		const	options: GameOptions = {
 			width: 800,
 			height: 600,
+			isTournament: false,
 			mode: mode,
 			difficulty: difficulty || "medium",
 			winningScore: winningScore || 5,
