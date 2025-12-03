@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:57:45 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 18:00:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ import { TankGame } 			from "../v3/tank.js"
 import { TournamentController } from "../Pong/tournament.js"
 import { Router }				from "../router/router.js"
 import { sendRequest }			from "../utils/sendRequest.js"
+import { socket }				from "../socket/socket.js"
 import { User }					from "../user/user.js"
 import { displayDate }			from "../utils/displayDate.js"
 import { btnCooldown }			from "../utils/buttonCooldown.js"
@@ -54,6 +55,9 @@ async function  onClickLogout(router: Router, gameState: AppState, user: User): 
 			<a href="/sign-in">Sign in</a>
 			<a href="/sign-up">Sign up</a>
 			<a href="/about">About</a>`;
+			
+	if (socket && socket.connected)
+		socket.disconnect();
 
 	router.navigate("/", gameState, user);
 }

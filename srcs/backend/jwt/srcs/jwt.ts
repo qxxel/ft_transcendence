@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/30 19:16:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 23:02:02 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ export const	jwtAxios = axios.create({
 /* ====================== SERVER ====================== */
 
 const	jwtFastify: FastifyInstance = Fastify({
-	logger: true
+	logger: true,
+	trustProxy: true
 });
 
 jwtFastify.register(formBody);

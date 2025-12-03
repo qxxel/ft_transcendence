@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/30 19:17:34 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 23:02:20 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ export const	friendshipsServ = new friendshipsService(new friendshipsRepository(
 /* ====================== SERVER ====================== */
 
 const	userFastify = Fastify({
-	logger: true
+	logger: true,
+	trustProxy: true
 });
 
 userFastify.register(formBody);

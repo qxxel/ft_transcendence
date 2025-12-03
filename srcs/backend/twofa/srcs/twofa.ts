@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:21 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:42:34 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:59:43 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ export const	twofaAxios = axios.create({
 /* ====================== SERVER ====================== */
 
 const	twofaFastify: FastifyInstance = Fastify({
-	logger: true
+	logger: true,
+	trustProxy: true
 });
 
 twofaFastify.register(formBody);

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:54:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 13:41:55 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 23:24:07 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ export class	pongRepository {
 
 	async addPongGame(pongAddDto: pongAddDto): Promise<number> {
 		return new Promise((resolve, reject) => {
-			const	query: string = "INSERT INTO pong (id_client, winner, p1, p1score, p2, p2score, mode, powerup, start, duration) VALUES(?, ?, ?, ?, ?, ?)";
+			const	query: string = "INSERT INTO pong (id_client, winner, p1, p1score, p2, p2score, mode, powerup, start, duration) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			const	elements = pongAddDto.getTable();
 
 			this.db.run(query, elements, function (this: StatementWithLastID, err: unknown) {

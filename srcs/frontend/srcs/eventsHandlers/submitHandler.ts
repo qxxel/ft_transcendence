@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:49:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 18:01:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { router }	from "../index.js"
-import { User }		from "../user/user.js"
-import { sendRequest }	from "../utils/sendRequest.js"
-import { displayDate }	from "../utils/displayDate.js"
+import { displayDate }			from "../utils/displayDate.js"
 import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
+import { router }				from "../index.js"
+import { socket }				from "../socket/socket.js"
+import { sendRequest }			from "../utils/sendRequest.js"
+import { User }					from "../user/user.js"
 
 import type { AppState }	from "../index.js"
 
@@ -66,6 +67,9 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: AppState, user
 			p.textContent = result?.error || "An unexpected error has occurred";
 		return ;
 	}
+
+	if (socket && socket.connected)
+		socket.disconnect();
 
 	user.setId(result.id as number);
 	user.setUsername(result.username);
@@ -117,6 +121,9 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: AppState, user
 			p.textContent = result?.error || "An unexpected error has occurred";
 		return ;
 	}
+
+	if (socket && socket.connected)
+		socket.disconnect();
 
 	user.setId(result.id as number);
 	user.setUsername(username);

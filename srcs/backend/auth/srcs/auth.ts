@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:40:46 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:58:33 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ export const	authServ = new authService(new authRepository(db));
 /* ====================== SERVER ====================== */
 
 const	authFastify: FastifyInstance = Fastify({
-	logger: true
+	logger: true,
+	trustProxy: true
 });
 
 authFastify.register(formBody);
