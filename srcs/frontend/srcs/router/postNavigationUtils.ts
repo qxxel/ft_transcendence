@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 11:00:42 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 13:09:35 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ async function loadUser(user: User) {
 
 		const	userRes = await Response.json();
 
-		if (userRes.is2faEnable === 'true') {
+		if (userRes.is2faEnable == true) {
 			const	switchSpan = document.getElementById("switch-span") as HTMLInputElement;
 			if (switchSpan) {
 				switchSpan.textContent = "Enable";
