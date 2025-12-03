@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:40:43 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 21:19:48 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 	gatewayFastify.post('/validateUser', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.post(
-				'https://auth:3000/validateUser',
+				'http://auth:3000/validateUser',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
@@ -95,7 +95,7 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 	gatewayFastify.delete('/twofa/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.delete(
-				'https://auth:3000/twofa/me',
+				'http://auth:3000/twofa/me',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 			
@@ -113,7 +113,7 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 	gatewayFastify.post('/dev/validate', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.post(
-				'https://auth:3000/dev/validate',
+				'http://auth:3000/dev/validate',
 				{},
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);

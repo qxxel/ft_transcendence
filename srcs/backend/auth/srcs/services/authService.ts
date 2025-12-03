@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authService.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 19:16:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 21:20:13 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ async function deleteClient(authServ: authService, id: number) {
 
 	while (maxAttempts < 5) {
 		try {
-			await authAxios.delete(`https://user:3000/${id}`);
-			await authAxios.delete(`https://twofa:3000/${id}`);
+			await authAxios.delete(`http://user:3000/${id}`);
+			await authAxios.delete(`http://twofa:3000/${id}`);
 			await authServ.deleteClient(id);
 			
 			break;
