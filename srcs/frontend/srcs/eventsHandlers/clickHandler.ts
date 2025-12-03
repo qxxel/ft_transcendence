@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 13:17:38 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 15:46:10 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,12 @@ async function	onClickEdit(user: User): Promise<void> {
 	mail.value = userRes.email ?? "";
 }
 
+async function	onClickHistory(router: Router, gameState: GameState, user: User): Promise<void> {
+	console.log("Empty History"); /////////////////////
+	// TODO: secure l'acces a la page si on est pas connecte
+	router.navigate("/history", gameState, user);
+}
+
 function	onClickCancel(user: User): void {
 	console.log("Cancel");
 
@@ -153,7 +159,7 @@ async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GameState, 
 			`<a href="/">Home</a>
 			<a href="/games">Play</a>
 			<a href="/tournament-setup">Tournament</a>
-			<a href="/user">${user.getUsername()}</a>
+			<a href="/user">Profile</a>
 			<a onclick="onClickLogout();" id="logout">Logout</a>
 			<a href="/about">About</a>`;
 
@@ -414,6 +420,7 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	(window as any).onClickLogout = () => onClickLogout(router, gameState, user);
 
 	(window as any).onClickEdit = () => onClickEdit(user);
+	(window as any).onClickHistory = () => onClickHistory(router, gameState, user);
 	(window as any).onClickCancel = () => onClickCancel(user);
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa(router, gameState, user);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 13:27:54 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 14:44:48 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ function	getMenu(username: string | undefined): string {
 	return `<a href="/">Home</a>
 			<a href="/games">Play</a>
 			<a href="/tournament-setup">Tournament</a>
-			<a href="/user">${username}</a>
+			<a href="/user">Profile</a>
 			<a href="/friends">Friends</a>
 			<a onclick="onClickLogout();" id="logout">Logout</a>
 			<a href="/about">About</a>`;

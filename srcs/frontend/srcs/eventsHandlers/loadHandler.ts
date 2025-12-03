@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/03 13:17:52 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 14:43:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 				`<a href="/">Home</a>
 				<a href="/games">Play</a>
 				<a href="/tournament-setup">Tournament</a>
-				<a href="/user">${user.getUsername()}</a>
+				<a href="/user">Profile</a>
 				<a href="/friends">Friends</a>
 				<a onclick="onClickLogout();" id="logout">Logout</a>
 				<a href="/about">About</a>`;

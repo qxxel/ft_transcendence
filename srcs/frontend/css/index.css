@@ -636,7 +636,7 @@ input[type=range]::-moz-range-thumb {
 }
 
 .danger-zone {
-    margin-top: 40px;
+    margin-top: 20px;
     padding-top: 20px;
     border-top: 1px dashed rgba(255, 255, 255, 0.2);
 }
@@ -717,4 +717,28 @@ input[type=range]::-moz-range-thumb {
     background-color: #ff4444;
     color: white;
     box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+}
+
+.btn-history {
+    background-color: #FFFF00;
+    color: #000;
+    font-family: 'monospace', sans-serif;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-decoration: none;
+    width: 100%;
+    padding: 10px 0px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.btn-history:hover {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 0 10px #fff;
 }
