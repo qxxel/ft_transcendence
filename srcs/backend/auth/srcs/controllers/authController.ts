@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 20:04:17 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 12:18:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promis
 		if (jwtRes.headers['set-cookie'])
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
 
-		const id: number = jwtRes.data;
+		const { id } = jwtRes.data;
 
 		await authServ.updateExpiresByIdClient(id, null);
 
