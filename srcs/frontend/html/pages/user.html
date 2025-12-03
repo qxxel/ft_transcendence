@@ -1,36 +1,67 @@
-<h1>User</h1>
-<div class="settings">
-  <h2>Settings</h2>
-  <form id="user-settings-form" class="user-settings-form">
-    <button type="button" onclick="onClickEdit();" id="edit-submit" class="view-mode">edit profile</button>
-    <h3>User</h3>
+<div class="game-container">
+    <h1>User Profile</h1>
 
-    <div class="form-group">
-      <label for="edit-username">Username:</label>
-      <input type="text" id="edit-username" class="edit-mode" name="username" hidden>
-      <span id="user-username" class="view-mode"></span>
-    </div>
-    
-    <div class="form-group">
-      <label for="edit-email">Email:</label>
-      <input type="email" id="edit-email" class="edit-mode" name="email" hidden>
-      <span id="user-email" class="view-mode"></span>
-    </div>
-    <p id="user-setting-msg-error" class="msg-error edit-mode" hidden></p>
+    <form id="user-settings-form" class="user-settings-form">
+        
+        <div class="section-header">
+            <h3>User Info</h3>
+            <button type="button" onclick="onClickEdit();" id="edit-submit" class="btn-icon view-mode">
+                ✎ Edit Profile
+            </button>
+        </div>
 
-    <h3>Authentication</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="edit-username">Username</label>
+                <input type="text" id="edit-username" class="edit-mode styled-input" name="username" hidden>
+                <div id="user-username" class="view-mode data-display"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="edit-email">Email</label>
+                <input type="email" id="edit-email" class="edit-mode styled-input" name="email" hidden>
+                <div id="user-email" class="view-mode data-display"></div>
+            </div>
+        </div>
 
-    <div class="form-group">
-      <span>2FA:</span>
-      <span id="switch-span" class="view-mode disable">Disable</span> <!-- switch Enable Disable in js -->
-      <label for="edit-2fa" class="edit-mode" hidden>Enable/Disable</label>
-      <input type="checkbox" id="edit-2fa" class="edit-mode" hidden>
-    </div>
+        <p id="user-setting-msg-error" class="edit-mode" hidden style="color: #ff4444; text-align: center; margin-top: 10px;"></p>
 
-    <h3>Account</h3>
-    <button type="button" onclick="onClickDeleteAccount();" id="delete-account">Delete Account</button>
-    <br />
-    <button type="submit" id="save-settings-submit" class="btn-yellow edit-mode" hidden>Save Settings</button>
-    <button type="button" onclick="onClickCancel();" id="do-not-save-settings-submit" class="btn-yellow edit-mode" hidden>Don't Save Settings</button>
-  </form>
+        <div class="section-header">
+            <h3>Security</h3>
+        </div>
+
+        <div class="form-group row-layout">
+            <label>Two-Factor Auth</label>
+            
+            <div class="security-controls">
+                <div class="view-mode">
+                    <span id="switch-span" class="badge status-disabled">Disabled</span>
+                </div>
+
+                <div class="edit-mode" hidden>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="edit-2fa">
+                        <span>Enable 2FA</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="danger-zone">
+            <h3>Account Zone</h3>
+            <p class="warning-text">Once you delete your account, there is no going back.</p>
+            
+            <div class="account-actions">
+                <button type="button" onclick="onClickDeleteAccount();" id="delete-account" class="btn-danger">
+                    Delete Account
+                </button>
+                
+                <div class="edit-mode button-row" hidden>
+                    <button type="button" onclick="onClickCancel();" class="btn-ghost">Cancel</button>
+                    <button type="submit" id="save-settings-submit" class="btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
 </div>

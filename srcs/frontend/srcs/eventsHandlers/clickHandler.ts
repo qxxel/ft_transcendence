@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 20:14:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 11:55:20 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GameState, 
 			<a href="/games">Play</a>
 			<a href="/tournament-setup">Tournament</a>
 			<a href="/user">${user.getUsername()}</a>
-			<button onclick="onClickLogout();" id="logout">Logout</button>
+			<a onclick="onClickLogout();" id="logout">Logout</a>
 			<a href="/settings">Settings</a>
 			<a href="/about">About</a>`;
 
@@ -164,27 +164,25 @@ async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GameState, 
 }
 
 async function	onClickNewCode(router: Router, gameState: GameState, user: User): Promise<void> {
-	const btn = document.getElementById("btnCooldown");
-	if (btn) {
-		btn.textContent = "(5s)";
-		const btnSend2faCode = document.getElementById("btnSend2faCode") as HTMLButtonElement;
-		const lock = document.querySelectorAll(".lock");
-		lock.forEach(e => {
-			(e as HTMLElement).hidden = false;
-		});
-		if (btnSend2faCode)
-			btnSend2faCode.disabled = true;
-	}
+	const btnSend = document.getElementById("btnSend2faCode") as HTMLButtonElement;
+    const spanCooldown = document.getElementById("btnCooldown");
+    const locks = document.querySelectorAll(".lock");
 
-	await sendRequest('/api/jwt/twofa/refresh', 'post', user);
-	const response = await sendRequest('/api/twofa/otp', 'GET', null);
-	if (!response.ok) {
-		console.log(response.statusText)
-		return;
-	}
+    if (spanCooldown) spanCooldown.textContent = "(5s)";
+    locks.forEach(e => (e as HTMLElement).hidden = false);
+    if (btnSend) btnSend.disabled = true;
 
-	btnCooldown();
-	displayDate(5);
+    const response = await sendRequest('/api/twofa/otp', 'GET', null);
+
+    if (!response.ok) {
+        console.error("Erreur API:", response.statusText);
+        if (btnSend) btnSend.disabled = false;
+        if (spanCooldown) spanCooldown.textContent = "";
+        locks.forEach(e => (e as HTMLElement).hidden = true);
+        return;
+    }
+    btnCooldown(); 
+    displayDate(5);
 }
 
 async function onClickGetMessage(): Promise<void> {
@@ -492,4 +490,14 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 		}
 		router.render(gameState, user);
 	});
+
+	window.addEventListener('keydown', (event: KeyboardEvent) => {
+  	const keysToBlock = [
+  	  "ArrowUp", 
+  	  "ArrowDown",
+  	];
+  	if (keysToBlock.includes(event.code)) {
+  	  event.preventDefault();
+  	}
+})	;
 }

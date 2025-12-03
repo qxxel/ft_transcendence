@@ -3,35 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   buttonCooldown.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 17:39:14 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/28 10:12:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/30 18:37:42 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 export async function btnCooldown() {
-	let Cooldown = 5;
-	const btnCooldown = document.getElementById("btnCooldown");
+	let timeLeft = 5;
+    const spanCooldown = document.getElementById("btnCooldown");
+    const btnSend = document.getElementById("btnSend2faCode") as HTMLButtonElement;
+    const locks = document.querySelectorAll(".lock");
 
-	const interval = setInterval(() => {
-		Cooldown--;
-		if (!btnCooldown) {
-			clearInterval(interval);
-			return ;
-		}
-		btnCooldown.textContent = `(${Cooldown}s)`;
+    const interval = setInterval(() => {
+        timeLeft--;
 
-		if (Cooldown <= 0) {
-			clearInterval(interval);
-			btnCooldown.textContent = "";
-			const btnSend2faCode = document.getElementById("btnSend2faCode") as HTMLButtonElement;
-			const lock = document.querySelectorAll(".lock");
-			lock.forEach(e => {
-				(e as HTMLElement).hidden = true;
-			});
-			if (btnSend2faCode)
-				btnSend2faCode.disabled = false;
-		}
-	}, 1000);
+        if (!spanCooldown) {
+            clearInterval(interval);
+            return;
+        }
+
+        spanCooldown.textContent = `(${timeLeft}s)`;
+
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            
+            spanCooldown.textContent = "";
+            locks.forEach(e => (e as HTMLElement).hidden = true);
+            
+            if (btnSend) {
+                btnSend.disabled = false;
+            }
+        }
+    }, 1000);
 }

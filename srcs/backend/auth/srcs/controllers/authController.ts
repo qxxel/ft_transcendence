@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 12:18:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 12:24:41 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		const	user: any = userRes.data;
 
 		if (!user)
-			throw new Error("Wrong password or username.");
+			throw new Error("Wrong password or username."); // mreynaud : a voir quand ce message est utilise car peut etre que le contenu est pas juste -> "Wrong password."
 
 		const expires_at: number | undefined | null = await authServ.getExpiresByIdClient(user.id);
 		if (expires_at !== null && expires_at !== undefined)
@@ -142,7 +142,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		const	pwdHash: string = await authServ.getPasswordByIdClient(user.id);
 
 		if (!await argon2.verify(pwdHash, password))
-			throw new Error("Wrong password or username.");
+			throw new Error("Wrong password.");
 
 		const	jwtRes: AxiosResponse = await authAxios.post('https://jwt:3000', user, { withCredentials: true } );
 		

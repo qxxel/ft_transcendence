@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 20:42:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 11:00:42 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,15 +141,17 @@ async function loadUser(user: User) {
 			console.log(Response.statusText)
 			return ;
 		}
+
 		const	userRes = await Response.json();
-		
+
 		if (userRes.is2faEnable === 'true') {
 			const	switchSpan = document.getElementById("switch-span") as HTMLInputElement;
 			if (switchSpan) {
 				switchSpan.textContent = "Enable";
-				switchSpan.classList.add('enable');
-				switchSpan.classList.remove('disable');
+				switchSpan.classList.add('status-enabled');
+				switchSpan.classList.remove('status-disabled');
 			}
+
 			const	checkbox2fa = document.getElementById("edit-2fa") as HTMLInputElement;
 			if (checkbox2fa)
 				checkbox2fa.checked = true;
