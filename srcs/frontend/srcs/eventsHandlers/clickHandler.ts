@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/30 14:17:19 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 13:17:38 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ import { TournamentController } from "../tournament.js"
 import { Router }		from "../router/router.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 import { User }			from "../user/user.js"
-import { DisplayDate }	from "../utils/displayDate.js"
+import { displayDate }	from "../utils/displayDate.js"
 import { btnCooldown }	from "../utils/buttonCooldown.js"
 
 import type { GameState }   from "../index.js"
@@ -53,7 +53,6 @@ async function  onClickLogout(router: Router, gameState: GameState, user: User):
 			<a href="/tournament-setup">Tournament</a>
 			<a href="/sign-in">Sign in</a>
 			<a href="/sign-up">Sign up</a>
-			<a href="/settings">Settings</a>
 			<a href="/about">About</a>`;
 
 	router.navigate("/", gameState, user);
@@ -115,28 +114,73 @@ async function	onClickDeleteAccount(router: Router, gameState: GameState, user: 
 	await onClickLogout(router, gameState, user);
 }
 
-async function	onClickNewCode(router: Router, gameState: GameState, user: User): Promise<void> {
-	const btn = document.getElementById("btnCooldown");
-	if (btn) {
-		btn.textContent = "(5s)";
-		const btnSend2faCode = document.getElementById("btnSend2faCode") as HTMLButtonElement;
-		const lock = document.querySelectorAll(".lock");
-		lock.forEach(e => {
-			(e as HTMLElement).hidden = false;
-		});
-		if (btnSend2faCode)
-			btnSend2faCode.disabled = true;
-	}
+async function	onClickDeleteTwofa(router: Router, gameState: GameState, user: User): Promise<void> {
+	console.log("DeleteTwofa");
+	
+	if (!confirm("Are you sure you want to go back?"))
+		return ;
 
-	await sendRequest('/api/jwt/twofa/refresh', 'post', user);
-	const response = await sendRequest('/api/twofa/otp', 'GET', null);
+	const	response: Response = await sendRequest(`/api/auth/twofa/me`, 'delete', null);
 	if (!response.ok) {
-		console.log(response.statusText)
-		return;
+		console.log(response.statusText);
+		return ;
+	}
+	router.canLeave = true;
+	await onClickLogout(router, gameState, user);
+}
+
+async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GameState, user: User): Promise<void> {
+	console.log("VerifyEmail");
+	
+	const response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
+
+	if (!response.ok) {
+		const	p = document.getElementById("verify-email-msg-error");
+		if (!p)
+			console.error("No HTMLElement named \`msg-error\`.");
+		else {
+			const	result = await response.json();
+			p.textContent = result?.error || "An unexpected error has occurred";
+		}
+		return ;
 	}
 
-	btnCooldown();
-	DisplayDate(5);
+	user.setSigned(true);
+	
+	var menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	if (menu)
+		menu.innerHTML =
+			`<a href="/">Home</a>
+			<a href="/games">Play</a>
+			<a href="/tournament-setup">Tournament</a>
+			<a href="/user">${user.getUsername()}</a>
+			<a onclick="onClickLogout();" id="logout">Logout</a>
+			<a href="/about">About</a>`;
+
+	router.canLeave = true;
+	router.navigate("/", gameState, user);
+}
+
+async function	onClickNewCode(router: Router, gameState: GameState, user: User): Promise<void> {
+	const btnSend = document.getElementById("btnSend2faCode") as HTMLButtonElement;
+    const spanCooldown = document.getElementById("btnCooldown");
+    const locks = document.querySelectorAll(".lock");
+
+    if (spanCooldown) spanCooldown.textContent = "(5s)";
+    locks.forEach(e => (e as HTMLElement).hidden = false);
+    if (btnSend) btnSend.disabled = true;
+
+    const response = await sendRequest('/api/twofa/otp', 'GET', null);
+
+    if (!response.ok) {
+        console.error("Erreur API:", response.statusText);
+        if (btnSend) btnSend.disabled = false;
+        if (spanCooldown) spanCooldown.textContent = "";
+        locks.forEach(e => (e as HTMLElement).hidden = true);
+        return;
+    }
+    btnCooldown(); 
+    displayDate(5);
 }
 
 async function onClickGetMessage(): Promise<void> {
@@ -372,7 +416,9 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	(window as any).onClickEdit = () => onClickEdit(user);
 	(window as any).onClickCancel = () => onClickCancel(user);
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
+	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa(router, gameState, user);
 	(window as any).onClickNewCode = () => onClickNewCode(router, gameState, user);
+	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(router, gameState, user);
 
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;
@@ -442,4 +488,14 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 		}
 		router.render(gameState, user);
 	});
+
+	window.addEventListener('keydown', (event: KeyboardEvent) => {
+  	const keysToBlock = [
+  	  "ArrowUp", 
+  	  "ArrowDown",
+  	];
+  	if (keysToBlock.includes(event.code)) {
+  	  event.preventDefault();
+  	}
+})	;
 }

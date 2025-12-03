@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/23 00:55:15 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 10:59:05 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ export class	usersService {
 		if (await this.usersRepo.isTaken(query, [username]))
 			return await this.usersRepo.getUserByUsername(username);
 
-		throw new NotExistError(`The user with username ${username} does not exist`);
+		throw new NotExistError(`This user does not exist`);
 	}
 
 	async getUserByEmail(userEmail: string): Promise<usersRespDto> {
@@ -65,7 +65,7 @@ export class	usersService {
 		if (await this.usersRepo.isTaken(query, [userEmail]))
 			return await this.usersRepo.getUserByEmail(userEmail);
 
-		throw new NotExistError(`The user with email ${userEmail} does not exist`);
+		throw new NotExistError(`This user does not exist`);
 	}
 
 	async updateUsernameById(userId: number, username: string): Promise<void> {
@@ -77,7 +77,7 @@ export class	usersService {
 		if (await this.usersRepo.isTaken(nameQuery, [username]))
 			throw new IsTakenError(`The name ${username} is already taken. Try another one !`);
 	
-		return this.usersRepo.updateUsernameById(userId, username);
+		return await this.usersRepo.updateUsernameById(userId, username);
 	}
 
 	async updateEmailById(userId: number, email: string): Promise<void> {
@@ -89,7 +89,7 @@ export class	usersService {
 		if (await this.usersRepo.isTaken(nameQuery, [email]))
 			throw new IsTakenError(`The name ${email} is already taken. Try another one !`);
 	
-		return this.usersRepo.updateEmailById(userId, email);
+		return await this.usersRepo.updateEmailById(userId, email);
 	}
 
 	async updateAvatarById(userId: number, avatar: string): Promise<void> {
@@ -97,7 +97,7 @@ export class	usersService {
 		if (!(await this.usersRepo.isTaken(query, [userId.toString()])))
 			throw new NotExistError(`The user ${userId} does not exist`);
 	
-		return this.usersRepo.updateAvatarById(userId, avatar);
+		return await this.usersRepo.updateAvatarById(userId, avatar);
 	}
 
 	async update2faById(userId: number, is2faEnable: boolean): Promise<void> {
@@ -105,7 +105,7 @@ export class	usersService {
 		if (!(await this.usersRepo.isTaken(query, [userId.toString()])))
 			throw new NotExistError(`The user ${userId} does not exist`);
 	
-		return this.usersRepo.update2faById(userId, is2faEnable);
+		return await this.usersRepo.update2faById(userId, is2faEnable);
 	}
 
 	async deleteUser(userId: number): Promise<void> {

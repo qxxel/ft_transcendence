@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 23:14:08 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 13:18:30 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ export async function	redirections(router: Router, currentPath: string, gameStat
 				<a href="/user">${user.getUsername()}</a>
 				<a href="/friends">Friends</a>
 				<a onclick="onClickLogout();" id="logout">Logout</a>
-				<a href="/settings">Settings</a>
 				<a href="/about">About</a>`;
 
 		router.navigate('/', gameState, user);

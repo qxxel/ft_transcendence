@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:21 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/26 10:13:47 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 11:49:36 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,15 @@ export const	twofaServ: twofaService = new twofaService(new twofaRepository(db))
 
 /* ====================== VARIABLES ====================== */
 
-export const	emailName: string = process.env.EMAIL || "";
-export const	emailPass: string = process.env.APP_PASS_EMAIL || "";
+export const	emailName: string = process.env.EMAIL!;
+export const	emailPass: string = process.env.APP_PASS_EMAIL!;
 
 
 /* ====================== AXIOS VARIABLES ====================== */
 
 export const	twofaAxios = axios.create({
 	httpsAgent: new https.Agent({ rejectUnauthorized: false }),
-	timeout: 1000
+	timeout: 10000
 });
 
 /* ====================== SERVER ====================== */

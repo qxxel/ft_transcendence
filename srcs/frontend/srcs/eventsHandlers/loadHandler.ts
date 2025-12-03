@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/29 23:14:31 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 13:17:52 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 				<a href="/user">${user.getUsername()}</a>
 				<a href="/friends">Friends</a>
 				<a onclick="onClickLogout();" id="logout">Logout</a>
-				<a href="/settings">Settings</a>
 				<a href="/about">About</a>`;
 
 		router.navigate('/', gameState, user);
@@ -59,9 +58,9 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 
 function handleUnload() {
 	window.addEventListener("beforeunload", async (event: Event) => {
-		if (location.pathname !== "/2fa")
-			return;
-		event.preventDefault();
+		if (!router.canLeave)
+			event.preventDefault();
+		return;
 	});
 }
 

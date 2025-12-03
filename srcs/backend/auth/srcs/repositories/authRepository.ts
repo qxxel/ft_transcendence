@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authRepository.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 16:35:35 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 12:20:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ export class	authRepository {
 		}
 	}
 
-	async addClient(id: string, password: string): Promise<void> {
+	async addClient(id: number, password: string): Promise<void> {
 		return new Promise((resolve, reject) => {
 			const	query: string = "INSERT INTO auth (id_client, password) VALUES(?, ?)";
-			const	elements: string[] = [id, password];
+			const	elements: [number, string] = [id, password];
 
 			this.db.run(query, elements, function (err: unknown) {
 				if (err)
@@ -63,10 +63,10 @@ export class	authRepository {
 		});
 	}
 
-	async getPasswordByIdClient(id: string): Promise<string>{
+	async getPasswordByIdClient(id: number): Promise<string>{
 		return new Promise((resolve, reject) => {
 			const	query: string = "SELECT password FROM auth WHERE id_client = ?";
-			const	elements: string[] = [id];
+			const	elements: number[] = [id];
 
 			this.db.get(query, elements, (err: unknown, row: { password: string }) => {
 				if (err)
@@ -77,10 +77,59 @@ export class	authRepository {
 		});
 	}
 
-	async deleteClient(id: string): Promise<void>{
+	getExpiredClients(): Promise<number[]> {
 		return new Promise((resolve, reject) => {
-			const	query: string = "DELETE FROM auth WHERE id = ?";
-			const	elements: string[] = [id];
+			const	query: string = "SELECT id_client FROM auth WHERE expires_at IS NOT NULL";
+
+			this.db.all( query, (err: unknown, rows: { id_client: number }[]) => {
+				if (err)
+					return reject(err);
+				resolve(rows.map(r => r.id_client));
+			});
+		});
+	}
+	
+	async getExpiresByIdClient(id: number): Promise<number | undefined | null>{
+		return new Promise((resolve, reject) => {
+			const	query: string = "SELECT expires_at FROM auth WHERE id_client = ?";
+			const	elements: number[] = [id];
+
+			this.db.get(query, elements, (err: unknown, row: { expires_at: string } | undefined) => {
+				if (err)
+					return reject(err);
+				if (!row)
+					return resolve(undefined);
+				if (row.expires_at === null)
+					return resolve(null);
+				return resolve((new Date(row.expires_at)).getTime());
+			});
+		});
+	}
+
+	async updateExpiresByIdClient(userId: number, expires_at: string | null): Promise<void> {
+		return new Promise((resolve, reject) => {
+			let	query: string;
+			let	elements: [string, number] | [number];
+			if (expires_at === null) {
+				query = "UPDATE auth SET expires_at = NULL WHERE id_client = ?";
+				elements = [userId];
+			} else {
+				query = "UPDATE auth SET expires_at = ? WHERE id_client = ?";
+				elements = [expires_at, userId];
+			}
+			this.db.run(query, elements, (err: unknown, row: unknown) => {
+				if (err)
+					return reject(err);
+
+				resolve();
+			});
+		});
+	}
+
+	async deleteClient(id: number): Promise<void>{
+		return new Promise((resolve, reject) => {
+			const	query: string = "DELETE FROM auth WHERE id_client = ?";
+			const	elements: number[] = [id];
 
 			this.db.run(query, elements, function(err: unknown) {
 				if (err)

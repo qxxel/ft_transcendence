@@ -6,11 +6,11 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/26 10:58:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/29 20:42:49 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-export function DisplayDate(min: number) {
+export function displayDate(min: number) {
 	const localeClient = navigator.language;
 	
 	const maintenant = new Date();

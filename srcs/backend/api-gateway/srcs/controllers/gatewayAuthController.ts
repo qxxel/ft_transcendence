@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayAuthController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/19 15:48:51 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 20:06:49 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,62 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 		}
 	});
 
+	gatewayFastify.post('/validateUser', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await gatewayAxios.post(
+				'https://auth:3000/validateUser',
+				request.body,
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+			
+			if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
 	gatewayFastify.delete('/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.delete(
 				'https://auth:3000/me',
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+			
+			if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+	gatewayFastify.delete('/twofa/me', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await gatewayAxios.delete(
+				'https://auth:3000/twofa/me',
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+			
+			if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+
+	/// /!\ dev
+	gatewayFastify.post('/dev/validate', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await gatewayAxios.post(
+				'https://auth:3000/dev/validate',
+				{},
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 			

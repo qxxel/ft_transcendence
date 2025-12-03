@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:00:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 13:47:15 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { btnCooldown }			from "../utils/buttonCooldown.js"
-import { DisplayDate }			from "../utils/displayDate.js"
+import { displayDate }			from "../utils/displayDate.js"
 import { getAndRenderFriends }  from  "../friends/getAndRenderFriends.js"
 import { PongGame }				from "../Pong/Pong.js"
 import { router }				from "../index.js"
@@ -29,7 +29,7 @@ import type { GameState }   from "../index.js"
 
 /* ====================== FUNCTION ====================== */
 
-export function  pathActions(currentPath: string, gameState: GameState, user: User): void {
+export async function  pathActions(currentPath: string, gameState: GameState, user: User): Promise<void> {
 	
 	if (!['/pong', '/tank'].includes(currentPath)) {
 		if (gameState.currentGame) 
@@ -66,13 +66,11 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 	}
 
 	if (['/user'].includes(currentPath)) {
-		loadUser(user);
+		await loadUser(user);
 	}
 
 	if (['/2fa'].includes(currentPath)) {
-		router.canLeave = false;
-		btnCooldown();
-		DisplayDate(5);
+		await loadTwofa(gameState, user);
 	}
 
 	if (['/sign-in', '/sign-up'].includes(currentPath)) {
@@ -135,21 +133,35 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
     }
 }
 
+async function loadTwofa(gameState: GameState, user: User) {
+	const	Response: Response = await sendRequest(`/api/jwt/twofa`, 'get', null);
+	if (!Response.ok) {
+		console.log(Response.statusText);
+		router.navigate("/sign-in", gameState, user);
+		return ;
+	}
+	router.canLeave = false;
+	btnCooldown();
+	displayDate(5);
+}
+
 async function loadUser(user: User) {
 	const	Response: Response = await sendRequest(`/api/user/${user.getId()}`, 'get', null);
 		if (!Response.ok) {
 			console.log(Response.statusText)
 			return ;
 		}
+
 		const	userRes = await Response.json();
-		
-		if (userRes.is2faEnable === 'true') {
+
+		if (userRes.is2faEnable == true) {
 			const	switchSpan = document.getElementById("switch-span") as HTMLInputElement;
 			if (switchSpan) {
-				switchSpan.textContent = "Enable";
-				switchSpan.classList.add('enable');
-				switchSpan.classList.remove('disable');
+				switchSpan.textContent = "Enabled";
+				switchSpan.classList.add('status-enabled');
+				switchSpan.classList.remove('status-disabled');
 			}
+
 			const	checkbox2fa = document.getElementById("edit-2fa") as HTMLInputElement;
 			if (checkbox2fa)
 				checkbox2fa.checked = true;

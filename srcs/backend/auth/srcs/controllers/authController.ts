@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:58:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 12:24:41 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 
 /* ====================== IMPORTS ====================== */
 
-import argon2			from 'argon2'
-import axios			from 'axios'
-import { authAxios } 	from "../auth.js"
-import { authServ } 	from "../auth.js"
+import argon2					from 'argon2'
+import axios					from 'axios'
+import { authAxios } 			from "../auth.js"
+import { authServ } 			from "../auth.js"
+import { deleteClientExpires }	from "../services/authService.js"
 
 import type	{ AxiosResponse }									from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
@@ -33,7 +34,7 @@ interface	SignUpBody {
 };
 
 interface	SignInBody {
-	identifier: string;
+	identifier: number;
 	password: string;
 }
 
@@ -92,7 +93,7 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 		const	user: any = userRes.data;
 
 		try {
-			const	jwtRes: AxiosResponse = await authAxios.post('https://jwt:3000', user, { withCredentials: true } );
+			const	jwtRes: AxiosResponse = await authAxios.post('https://jwt:3000/verifyEmail', user);
 
 			const	hash: string = await argon2.hash(request.body.password);
 			await authServ.addClient(user.id, hash);
@@ -132,12 +133,16 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		const	user: any = userRes.data;
 
 		if (!user)
+			throw new Error("Wrong password or username."); // mreynaud : a voir quand ce message est utilise car peut etre que le contenu est pas juste -> "Wrong password."
+
+		const expires_at: number | undefined | null = await authServ.getExpiresByIdClient(user.id);
+		if (expires_at !== null && expires_at !== undefined)
 			throw new Error("Wrong password or username.");
 		
 		const	pwdHash: string = await authServ.getPasswordByIdClient(user.id);
 
 		if (!await argon2.verify(pwdHash, password))
-			throw new Error("Wrong password or username.");
+			throw new Error("Wrong password.");
 
 		const	jwtRes: AxiosResponse = await authAxios.post('https://jwt:3000', user, { withCredentials: true } );
 		
@@ -149,6 +154,31 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 			username: user.username,
 			is2faEnable: user.is2faEnable
 		});
+	} catch (err: unknown) {
+		const	msgError = errorsHandler(err);
+
+		console.error(msgError);
+
+		return reply.code(400).send({ error: msgError });
+	}
+}
+
+async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		if (!request.body)
+			throw new Error("The request is empty");
+
+		const	otp: string = request.body.otp;
+		const	jwtRes: AxiosResponse = await authAxios.post('https://twofa:3000/validate', { otp }, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } } );
+
+		if (jwtRes.headers['set-cookie'])
+			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
+
+		const id: number = jwtRes.data;
+
+		await authServ.updateExpiresByIdClient(id, null);
+
+		return reply.status(201).send(id);
 	} catch (err: unknown) {
 		const	msgError = errorsHandler(err);
 
@@ -172,7 +202,7 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
 
-		await authAxios.delete(`https://user:3000/${payload.data.id}`); // https://user:3000/me ????
+		await authAxios.delete(`https://user:3000/${payload.data.id}`);
 
 		await authServ.deleteClient(payload.data.id);
 		
@@ -186,8 +216,58 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 	}
 }
 
+async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		const	{ jwtTwofa } = getCookies(request);
+		if (!jwtTwofa)
+			return reply.status(204).send();
+		
+		const	payload: AxiosResponse = await authAxios.get("https://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		
+		deleteClientExpires(authServ, payload.data.id);
+		
+		const	response: AxiosResponse = await authAxios.delete(`https://jwt:3000/${payload.data.id}`);
+		
+		if (response.headers['set-cookie'])
+			reply.header('Set-Cookie', response.headers['set-cookie']);
+		
+		return reply.status(204).send(payload.data.id);	
+	} catch (err: unknown) {
+		const	msgError: string = errorsHandler(err);
+
+		console.error(msgError);
+
+		return reply.code(400).send({ error: msgError });
+	}
+}
+
+async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		const	jwtRes = await authAxios.get("https://jwt:3000/twofa/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+
+		if (jwtRes.headers['set-cookie'])
+			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
+
+		const { id } = jwtRes.data;
+
+		await authServ.updateExpiresByIdClient(id, null);
+
+		return reply.status(201).send(id);
+	} catch (err: unknown) {
+		const	msgError = errorsHandler(err);
+
+		console.error(msgError);
+
+		return reply.code(400).send({ error: msgError });
+	}
+}
+
 export async function	authController(authFastify: FastifyInstance): Promise<void> {
 	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
 	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
+	authFastify.post<{ Body: { otp: string } }>('/validateUser', validateUser);
 	authFastify.delete('/me', deleteClient);
+	authFastify.delete('/twofa/me', deleteTwofaClient);
+
+	authFastify.post('/dev/validate', devValidate);
 }
