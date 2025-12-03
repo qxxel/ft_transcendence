@@ -308,7 +308,7 @@ button:disabled {
     box-shadow: 0 0 15px #fff;
     padding: 40px;
     padding-bottom: 30px;
-    width: 90%;
+    /* width: 90%; */
     min-width: 350px;
     max-width: 1000px;
     margin: 0 auto;
@@ -402,10 +402,10 @@ input[type=range]::-moz-range-thumb {
    8. FORMS & AUTH (New Section)
    ========================================================================== */
 
-/* .settings-form, 
+.settings-form, 
 #sign-in-form, 
 #sign-up-form, 
-#2fa-form, */
+#\2fa-form,
 .user-settings-form {
     width: 100%;
     max-width: 600px;
