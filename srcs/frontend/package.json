@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build": "tsc"
+    "dev": "vite",
+    "build": "vite build"
   },
   "type": "module",
   "dependencies": {
@@ -8,6 +9,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "^6.0.0"
   }
 }
