@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 16:13:32 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/30 17:11:24 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 21:00:14 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ export default defineConfig({
         		about: path.resolve(__dirname, 'pages/about.html'),
         		friends: path.resolve(__dirname, 'pages/friends.html'),
         		games: path.resolve(__dirname, 'pages/games.html'),
+        		history: path.resolve(__dirname, 'pages/history.html'),
         		home: path.resolve(__dirname, 'pages/home.html'),
         		pong: path.resolve(__dirname, 'pages/pong.html'),
         		pongmenu: path.resolve(__dirname, 'pages/pongmenu.html'),
         		rperrot: path.resolve(__dirname, 'pages/rperrot.html'),
-        		settings: path.resolve(__dirname, 'pages/settings.html'),
         		"sign-in": path.resolve(__dirname, 'pages/sign-in.html'),
         		"sign-up": path.resolve(__dirname, 'pages/sign-up.html'),
         		tank: path.resolve(__dirname, 'pages/tank.html'),
