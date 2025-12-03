@@ -1,26 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   friendUser.ts                                      :+:      :+:    :+:   */
+/*   gameUser.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/24 14:54:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 16:09:19 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/12/03 16:09:57 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/12/03 16:12:29 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// OBJECT THAT CONTAINS FRIEND USER INTERFACE
+// OBJECT THAT CONTAINS GAME USER INTERFACE
 
 
 /* ====================== INTERFACE ====================== */
 
-export interface	FriendUser {
+export interface	GameUser {
 	id: number;
-	username: string;
-	avatar: string;
-	email: string;
-	status: string; 
-	receiver_id: number;
-	// status: string; //	A METTRE SI ON MET ONLINE OU OFFLINE EN DB
+	id_client: number;
+	winner: number;
+	p1: string;
+	p1score: number;
+	p2: string; 
+	p2score: number;
+	mode: string;
+	powerup: number;
+	start: number;
+	duration: number;
 }

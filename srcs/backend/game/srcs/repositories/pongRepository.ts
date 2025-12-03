@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:54:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 23:24:07 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:27:24 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,13 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { resolve } from "path";
+import { NotExistError }	from "../utils/throwErrors.js"
 import { pongAddDto }		from "../dtos/pongAddDto.js"
 import { pongRespDto }		from "../dtos/pongRespDto.js"
 import { pongTableBuilder }	from "../tableBuilders/pongTableBuilder.js"
 
 import type { Database }	from 'sqlite3'
+import type { GameUser }	from "../objects/gameUser.js"
 
 /* ====================== interface	====================== */
 
@@ -82,7 +83,8 @@ export class	pongRepository {
 				if (err)
 					return reject(err);
 
-				if (!row) {
+				if (!row)
+				{
 					console.error(`error: pong game ${gameId} doesn't exist`);
 					return reject(new Error(`The pong game ${gameId} doesn't exist`));
 				}
@@ -92,7 +94,27 @@ export class	pongRepository {
 		});
 	}
 
-	async isTaken(query: string, elements: Array<string>): Promise<boolean> {
+	async getPongHistoryByClientId(userId: number): Promise<GameUser[]> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "SELECT * FROM pong WHERE id_client = ?";
+			const	elements: number[] = [userId];
+
+			this.db.all(query, elements, (err: unknown, rows: GameUser[]) => {
+				if (err)
+					return reject(err);
+
+				if (!rows.length)
+				{
+					console.error(`error: user ${userId} hasn't play any game`);
+					return reject(new NotExistError(`The user ${userId} hasn't play any game`));
+				}
+
+				resolve(rows);
+			});
+		});
+	}
+
+	async isTaken(query: string, elements: string[]): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			this.db.get(query, elements, (err: unknown, row: unknown) => {
 				if (err)

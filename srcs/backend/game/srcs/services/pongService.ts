@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:48:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 13:38:47 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:27:27 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ import { NotExistError }	from "../utils/throwErrors.js"
 import { pongAddDto }		from "../dtos/pongAddDto.js"
 import { pongRespDto }		from "../dtos/pongRespDto.js"
 import { pongRepository }	from "../repositories/pongRepository.js"
+
+import type { GameUser } from "../objects/gameUser.js"
 
 
 /* ====================== CLASS ====================== */
@@ -41,6 +43,14 @@ export class	PongService {
 			throw new NotExistError(`The pong game ${gameId} does not exist`);
 
 		return await this.pongRepo.getPongGameById(gameId);
+	}
+
+	async getPongHistoryByClientId(userId: number): Promise<GameUser[]> {
+		const	query: string = "SELECT 1 FROM pong WHERE id_client = ? LIMIT 1";
+		if (!(await this.pongRepo.isTaken(query, [userId.toString()])))
+			throw new NotExistError(`The user ${userId} hasn't play any games`);
+
+		return await this.pongRepo.getPongHistoryByClientId(userId);
 	}
 
 	async deletePongGame(gameId: number): Promise<void> {
