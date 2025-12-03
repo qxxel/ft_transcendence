@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:58:55 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 13:29:23 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,16 +100,16 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 			const	oldUser: usersRespDto = await usersServ.getUserById(parseId);
 			const	userUpdate: userUpdate = request.body;
 
-			if (userUpdate.username && userUpdate.username !== oldUser.getUsername())
+			if (userUpdate.username !== undefined && userUpdate.username !== oldUser.getUsername())
 				await usersServ.updateUsernameById(parseId, userUpdate.username);
 
-			if (userUpdate.email && userUpdate.email !== oldUser.getEmail())
+			if (userUpdate.email !== undefined && userUpdate.email !== oldUser.getEmail())
 				await usersServ.updateEmailById(parseId, userUpdate.email);
 
-			if (userUpdate.avatar && userUpdate.avatar !== oldUser.getAvatar())
+			if (userUpdate.avatar !== undefined && userUpdate.avatar !== oldUser.getAvatar())
 				await usersServ.updateAvatarById(parseId, userUpdate.avatar);
 			
-			if (userUpdate.is2faEnable && userUpdate.is2faEnable !== oldUser.getIs2faEnable())
+			if (userUpdate.is2faEnable !== undefined && userUpdate.is2faEnable !== oldUser.getIs2faEnable())
 				await usersServ.update2faById(parseId, userUpdate.is2faEnable);
 
 			return reply.code(201).send(parseId);

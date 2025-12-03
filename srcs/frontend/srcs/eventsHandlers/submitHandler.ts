@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 13:17:55 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 13:27:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameStat
 	const	newEmail: string = (document.getElementById("edit-email") as HTMLInputElement).value;
 	const	new2fa: boolean = (document.getElementById("edit-2fa") as HTMLInputElement).checked;
 
-	console.log(newUsername, newEmail);
+	console.log(newUsername, newEmail, new2fa);
 	const response: Response = await sendRequest(`/api/user/${user.getId()}`, 'post', {
 		username: newUsername,
 		email: newEmail,
