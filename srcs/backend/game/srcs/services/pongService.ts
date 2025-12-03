@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:48:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 21:46:46 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 00:50:51 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ import { pongRepository }	from "../repositories/pongRepository.js"
 
 /* ====================== CLASS ====================== */
 
-export class	pongService {
+export class	PongService {
 	private	pongRepo: pongRepository;
 
 	constructor(pongRepo: pongRepository) {

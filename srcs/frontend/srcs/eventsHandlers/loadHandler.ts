@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/03 14:43:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 17:49:24 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ import { router }		from "../index.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 import { User }			from "../user/user.js"
 
-import type { GameState }	from "../index.js"
+import type { AppState }	from "../index.js"
 
 
 /* ====================== FUNCTIONS ====================== */
 
-async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
+async function	handleLoadPage(gameState: AppState, user: User): Promise<void> {
 	document.addEventListener("DOMContentLoaded", async (event: Event) => {
 		console.log("DOMContentLoaded");
 
@@ -64,7 +64,7 @@ function handleUnload() {
 	});
 }
 
-export async function	setupLoadHandler(gameState: GameState, user: User): Promise<void> {
+export async function	setupLoadHandler(gameState: AppState, user: User): Promise<void> {
 	handleLoadPage(gameState, user);
 	handleUnload();
 }

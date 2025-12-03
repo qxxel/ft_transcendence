@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:42:16 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:42:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,10 @@ export async function	jwtController(jwtFastify: FastifyInstance) {
 	jwtFastify.get('/validate', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	cookies: any = getCookies(request);
+
+			if (!cookies || !cookies.jwtAccess)
+				throw new jose.errors.JOSEError("Access token missing");
+
 			const	{ payload, protectedHeader } = await jose.jwtVerify(cookies.jwtAccess, jwtSecret) as { payload: string, protectedHeader: jose.JWTHeaderParameters }; // BIG LINE (MAYBE SEARCH SOLUTION)
 
 			return reply.status(200).send(payload);
@@ -171,11 +175,10 @@ export async function	jwtController(jwtFastify: FastifyInstance) {
 
 	jwtFastify.post('/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
 		const	cookies: any = getCookies(request);
-		if (!cookies)
-			return reply.status(401).send({ error: "Can't get the refresh token in cookies." });
+		if (!cookies || !cookies.jwtRefresh)
+			throw new jose.errors.JOSEError("Can't get the refresh token in cookies.");
 
 		try {
-			
 			const	{ payload, protectedHeader } = await jose.jwtVerify(cookies.jwtRefresh, jwtSecret) as { payload: string, protectedHeader: jose.JWTHeaderParameters }; // BIG LINE (MAYBE SEARCH SOLUTION)
 
 			if (await jwtServ.isValidToken(cookies.jwtRefresh))

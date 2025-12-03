@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/30 19:48:32 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:12:07 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ import fs					from 'fs'
 import { Server }			from 'socket.io'
 import sqlite3Pkg			from 'sqlite3'
 import { pongController }	from "./controllers/pongController.js"
-import { pongService }		from "./services/pongService.js"
+import { PongService }		from "./services/pongService.js"
 import { pongRepository }	from "./repositories/pongRepository.js"
 import { tankController }	from "./controllers/tankController.js"
 import { tankService }		from "./services/tankService.js"
@@ -43,7 +43,7 @@ const	db = new Database(dbname, (err: Error | null) => {
 	console.log(`Database started on ${dbname}`);
 });
 
-export const	pongServ: pongService = new pongService(new pongRepository(db));
+export const	pongServ: PongService = new PongService(new pongRepository(db));
 export const	tankServ: tankService = new tankService(new tankRepository(db));
 
 
@@ -75,16 +75,16 @@ const	io = new Server(gameFastify.server, {
 	}
 });
 
-io.on('connection', (socket) => {
-	gameFastify.log.info(`Service Game: Client connecté ${socket.id}`);
+// io.on('connection', (socket) => {
+// 	gameFastify.log.info(`Service Game: Client connecté ${socket.id}`);
 
-	socket.on('touche_appuyee', (data) => {
-		gameFastify.log.info(`Service Game: Touche reçue -> ${data.key}`);
+// 	socket.on('touche_appuyee', (data) => {
+// 		gameFastify.log.info(`Service Game: Touche reçue -> ${data.key}`);
 		
-		// Renvoyer un accusé de réception
-		socket.emit('message_recu', { msg: `Bravo, tu as appuyé sur ${data.key}` });
-	});
-});
+// 		// Renvoyer un accusé de réception
+// 		socket.emit('message_recu', { msg: `Bravo, tu as appuyé sur ${data.key}` });
+// 	});
+// });
 
 const	start = async () => {
 	try {

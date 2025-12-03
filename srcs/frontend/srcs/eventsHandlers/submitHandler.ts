@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 14:44:48 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 17:49:27 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ import { sendRequest }	from "../utils/sendRequest.js"
 import { displayDate }	from "../utils/displayDate.js"
 import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
 
-import type { GameState }	from "../index.js"
+import type { AppState }	from "../index.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -36,7 +36,7 @@ function	getMenu(username: string | undefined): string {
 			<a href="/about">About</a>`;
 }
 
-async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
+async function	handleSignInForm(form: HTMLFormElement, gameState: AppState, user: User): Promise<void> {
 	console.log("Sign in");
 	const	identifier: string = (document.getElementById("sign-in-username") as HTMLInputElement).value;
 	const	password: string = (document.getElementById("sign-in-password") as HTMLInputElement).value;
@@ -90,7 +90,7 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 	router.navigate("/", gameState, user);
 }
 
-async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
+async function	handleSignUpForm(form: HTMLFormElement, gameState: AppState, user: User): Promise<void> {
 	console.log("Sign up");
 
 	const	username: string = (document.getElementById("sign-up-username") as HTMLInputElement).value;
@@ -176,7 +176,7 @@ async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: GameState
 	router.navigate("/", gameState, user);
 }
 
-async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
+async function	handle2faForm(form: HTMLFormElement, gameState: AppState, user: User): Promise<void> {
 	console.log("2fa");
 
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
@@ -206,7 +206,7 @@ async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: 
 	router.navigate("/", gameState, user);
 }
 
-async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
+async function	handleUserSettingsForm(form: HTMLFormElement, gameState: AppState, user: User): Promise<void> {
 	console.log("Save Settings");
 	
 	const	newUsername: string = (document.getElementById("edit-username") as HTMLInputElement).value;
@@ -249,7 +249,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameStat
 	location.reload();
 }
 
-async function	handleAddFriendForm(form: HTMLFormElement, gameState: GameState, user: User) {
+async function	handleAddFriendForm(form: HTMLFormElement, gameState: AppState, user: User) {
 	console.log("add friend form");
 
 	const targetName: string = (document.getElementById("username-add-input") as HTMLInputElement).value;
@@ -282,7 +282,7 @@ async function	handleAddFriendForm(form: HTMLFormElement, gameState: GameState, 
 	await getAndRenderFriends();
 }
 
-export function	setupSubmitHandler(gameState: GameState, user: User): void {
+export function	setupSubmitHandler(gameState: AppState, user: User): void {
 	document.addEventListener('submit', async (event: SubmitEvent) => {
 		event.preventDefault();
 

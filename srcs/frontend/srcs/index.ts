@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/30 19:41:04 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 15:54:01 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { addRoutes }					from "./router/addRoutes.js"
-import { connectSocket, sendKeyPress }	from "./socket/socket.js"
+import { connectSocket }				from "./socket/socket.js"
 import { Game } 						from "./Pong/GameClass.js"
 import { TournamentController } 		from "./tournament.js"
 import { Router }						from "./router/router.js"
@@ -24,24 +24,20 @@ import { setupLoadHandler }				from "./eventsHandlers/loadHandler.js"
 import { setupSubmitHandler }			from "./eventsHandlers/submitHandler.js"
 import { User }							from "./user/user.js"
 
+import type { GameOptions }	from "./Pong/Pong.js"
+
 /* ====================== INTERFACE ====================== */
 
-export interface	GameState {
+export interface	AppState {
 	currentGame: Game | null;
 	currentTournament: TournamentController | null;
+	pendingOptions?: GameOptions
 };
 
 
-/* ====================== INTERFACE ====================== */
-
-connectSocket();
-document.addEventListener('keydown', (event) => {
-	sendKeyPress(event.key);
-});
-
 /* ====================== GLOBAL VARIABLES ====================== */
 
-var	gameState: GameState = {
+var	gameState: AppState = {
 	currentGame: null,
 	currentTournament: null
 };

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 17:53:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/30 21:13:49 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 15:53:13 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,9 @@ import { io, Socket }	from 'socket.io-client'
 
 /* ============================= SETUP WEBSOCKET ============================= */
 
+export let	socket: Socket;
 
-// const URL = "https://localhost:8080/"; 
-
-let socket: Socket;
-
-export const	connectSocket = () => {
+export function	connectSocket() {
 	socket = io('/', {
 		path: '/socket.io',
 		transports: ["websocket"],
@@ -50,10 +47,10 @@ export const	connectSocket = () => {
 	});
 };
 
-export const	sendKeyPress = (key: string) => {
-	if (socket && socket.connected) {
-		socket.emit("touche_appuyee", { key });
-	} else {
-		console.log("⏳ Attente de connexion pour envoyer :", key);
-	}
-};
+// export function	sendKeyPress(key: string) {
+// 	if (socket && socket.connected) {
+// 		socket.emit("touche_appuyee", { key });
+// 	} else {
+// 		console.log("⏳ Attente de connexion pour envoyer :", key);
+// 	}
+// };

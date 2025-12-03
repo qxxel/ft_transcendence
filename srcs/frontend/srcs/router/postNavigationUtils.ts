@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 13:47:15 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:49:48 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ import { sendRequest }			from "../utils/sendRequest.js"
 import { TankGame }				from "../v3/tank.js"
 import { User }					from "../user/user.js"
 
-import type { GameState }   from "../index.js"
+import type { AppState }	from "../index.js"
 
 
 /* ====================== FUNCTION ====================== */
 
-export async function  pathActions(currentPath: string, gameState: GameState, user: User): Promise<void> {
+export async function  pathActions(currentPath: string, gameState: AppState, user: User): Promise<void> {
 	
 	if (!['/pong', '/tank'].includes(currentPath)) {
 		if (gameState.currentGame) 
@@ -42,20 +42,20 @@ export async function  pathActions(currentPath: string, gameState: GameState, us
 
 	if (['/pong'].includes(currentPath)) {
 		
-	   if (gameState.currentTournament && gameState.currentTournament.currentMatch) {
-			const match = gameState.currentTournament.currentMatch;
+	//    if (gameState.currentTournament && gameState.currentTournament.currentMatch) {
+	// 		const match = gameState.currentTournament.currentMatch;
 			
-			const tournamentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
+	// 		const tournamentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
 			
-			tournamentGame.setCtx();
+	// 		tournamentGame.setCtx();
 			
-			tournamentGame.setWinningScore(gameState.currentTournament.winningScore);
-			tournamentGame.setPlayerNames(match.p1, match.p2);
+	// 		tournamentGame.setWinningScore(gameState.currentTournament.winningScore);
+	// 		tournamentGame.setPlayerNames(match.p1, match.p2);
 			
-			tournamentGame.start();
-			gameState.currentGame = tournamentGame;
-		}
-		else if (gameState.currentGame) {
+	// 		tournamentGame.start();
+	// 		gameState.currentGame = tournamentGame;
+	// 	}
+		/*else*/ if (gameState.currentGame) {
 			gameState.currentGame.setCtx();
 			gameState.currentGame.start();
 		}
@@ -85,10 +85,10 @@ export async function  pathActions(currentPath: string, gameState: GameState, us
 		const display = document.getElementById('points-display') as HTMLSpanElement;
 		
 		if (slider && display) {
-		  display.innerHTML = slider.value;
-		  slider.addEventListener('input', () => {
 			display.innerHTML = slider.value;
-		  });
+			slider.addEventListener('input', () => {
+				display.innerHTML = slider.value;
+			});
 		}
 	}
 
