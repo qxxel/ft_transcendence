@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:49:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 18:02:48 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ export class	Router {
 	}
 
 	navigate(path: string, gameState: AppState, user: User): void {
-		if (!this.canLeave) {
+		if (!this.canLeave)
+		{
 			if (!confirm("This page is asking you to confirm that you want to leave — information you’ve entered may not be saved."))
 				return ;
 			this.canLeave = true;

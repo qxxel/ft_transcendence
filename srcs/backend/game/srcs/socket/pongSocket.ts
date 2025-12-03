@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 22:29:25 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 14:59:23 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ export function	setupPongSocket(io: Server, socket: Socket, pongService: PongSer
 				oldGame?.stopGame();
 				activeGames.delete(socket.id);
 			}
-console.log("join id: " + userId);
+
 			if (!opts)
 			{
 				console.error("No options.");

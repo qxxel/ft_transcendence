@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:55:33 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 18:02:45 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,22 @@ export async function  pathActions(currentPath: string, gameState: AppState, use
 
 	if (['/pong'].includes(currentPath)) {
 		
-	//    if (gameState.currentTournament && gameState.currentTournament.currentMatch) {
-	// 		const match = gameState.currentTournament.currentMatch;
+		/*if (gameState.currentTournament && gameState.currentTournament.currentMatch)
+		{
+			const match = gameState.currentTournament.currentMatch;
 			
-	// 		const tournamentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
+			const tournamentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
 			
-	// 		tournamentGame.setCtx();
+			tournamentGame.setCtx();
 			
-	// 		tournamentGame.setWinningScore(gameState.currentTournament.winningScore);
-	// 		tournamentGame.setPlayerNames(match.p1, match.p2);
+			tournamentGame.setWinningScore(gameState.currentTournament.winningScore);
+			tournamentGame.setPlayerNames(match.p1, match.p2);
 			
-	// 		tournamentGame.start();
-	// 		gameState.currentGame = tournamentGame;
-	// 	}
-		/*else*/ if (gameState.currentGame) {
+			tournamentGame.start();
+			gameState.currentGame = tournamentGame;
+		}
+		else */if (gameState.currentGame)
+		{
 			gameState.currentGame.setCtx();
 			gameState.currentGame.start();
 		}

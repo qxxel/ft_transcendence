@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 18:00:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 18:01:53 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,7 +325,7 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', router: Router, g
 		height: 600,
 		isTournament: false,
 		p1name: user.getUsername() || "Player 1",
-		p2name: "AI (" + difficulty + ")",
+		p2name: difficulty,
 		mode: 'ai',
 		difficulty: difficulty || 'medium',
 		winningScore: parseInt(maxPointsInput.value, 10) || 5,

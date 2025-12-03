@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 23:23:17 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 14:18:25 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ export class	PongInstance {
 
 		if (opts.mode === 'ai')
 			this.ai = new AIController(opts.difficulty);
-
+		
 		this.p1name = opts.p1name;
 		this.p2name = opts.p2name;
 
