@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 13:21:24 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 13:47:15 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ import type { GameState }   from "../index.js"
 
 /* ====================== FUNCTION ====================== */
 
-export function  pathActions(currentPath: string, gameState: GameState, user: User): void {
+export async function  pathActions(currentPath: string, gameState: GameState, user: User): Promise<void> {
 	
 	if (!['/pong', '/tank'].includes(currentPath)) {
 		if (gameState.currentGame) 
@@ -66,13 +66,11 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
 	}
 
 	if (['/user'].includes(currentPath)) {
-		loadUser(user);
+		await loadUser(user);
 	}
 
 	if (['/2fa'].includes(currentPath)) {
-		router.canLeave = false;
-		btnCooldown();
-		displayDate(5);
+		await loadTwofa(gameState, user);
 	}
 
 	if (['/sign-in', '/sign-up'].includes(currentPath)) {
@@ -133,6 +131,18 @@ export function  pathActions(currentPath: string, gameState: GameState, user: Us
         getAndRenderFriends();
         console.log("Loading the friends...");
     }
+}
+
+async function loadTwofa(gameState: GameState, user: User) {
+	const	Response: Response = await sendRequest(`/api/jwt/twofa`, 'get', null);
+	if (!Response.ok) {
+		console.log(Response.statusText);
+		router.navigate("/sign-in", gameState, user);
+		return ;
+	}
+	router.canLeave = false;
+	btnCooldown();
+	displayDate(5);
 }
 
 async function loadUser(user: User) {

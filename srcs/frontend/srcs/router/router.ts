@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   router.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:01:07 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 13:44:25 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ export class	Router {
 				contentDiv.innerHTML = html;
 			}
 			this.currentPath = currentPath;
-			pathActions(currentPath, gameState, user);
+			await pathActions(currentPath, gameState, user);
 		}
 
 	}
