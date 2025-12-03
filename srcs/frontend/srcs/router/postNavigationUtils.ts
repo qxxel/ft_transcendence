@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 18:02:45 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 21:41:47 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,9 +131,9 @@ export async function  pathActions(currentPath: string, gameState: AppState, use
 	}
 
 	if (['/friends'].includes(currentPath)) {
-        getAndRenderFriends();
-        console.log("Loading the friends...");
-    }
+		getAndRenderFriends();
+		console.log("Loading the friends...");
+	}
 }
 
 async function loadTwofa(gameState: AppState, user: User) {

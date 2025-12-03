@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:54:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:27:24 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 23:37:46 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,11 +103,11 @@ export class	pongRepository {
 				if (err)
 					return reject(err);
 
-				if (!rows.length)
-				{
-					console.error(`error: user ${userId} hasn't play any game`);
-					return reject(new NotExistError(`The user ${userId} hasn't play any game`));
-				}
+				// if (!rows.length)
+				// {
+				// 	console.error(`error: user ${userId} hasn't play any game`);
+				// 	return reject(new NotExistError(`The user ${userId} hasn't play any game`));
+				// }
 
 				resolve(rows);
 			});

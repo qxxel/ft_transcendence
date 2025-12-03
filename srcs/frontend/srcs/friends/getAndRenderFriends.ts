@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 16:54:41 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 21:59:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ import { user }							from "../index.js"
 /* ====================== INTERFACE ====================== */
 
 interface	UserObject {
-	id: number,
-	username: string,
-	avatar: string | null,
-	email: string,
-	status: string,
-	receiver_id: string
+	id: number;
+	username: string;
+	avatar: string | null;
+	email: string;
+	status: string;
+	receiver_id: string;
 }
 
 
@@ -143,7 +143,7 @@ function	addFriendInList(friendsListDiv: HTMLDivElement, friend: UserObject): vo
 	const	challengeButton: HTMLSpanElement = document.createElement("button");
 	challengeButton.classList.add("neon-button");
 	challengeButton.classList.add("challenge-button");
-	challengeButton.textContent = "FIGHT ⚔️";
+	challengeButton.textContent = "History";
 	challengeButton.dataset.targetId = friend.id.toString();
 	challengeButton.dataset.targetUsername = friend.username;
 
@@ -205,4 +205,3 @@ function	displayErrors(): void {
 	requestsListDiv.appendChild(requestsErrorParagraph);
 	friendsListDiv.appendChild(friendsErrorParagraph);
 }
-

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 18:01:53 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 23:34:05 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { GameOptions }			from "../Pong/objects/gameOptions.js"
+import { getAndRenderHistory }	from "../history/getAndRenderHistory.js"
 import { PongGame }				from "../Pong/pong.js"
 import { TankGame } 			from "../v3/tank.js"
 import { TournamentController } from "../Pong/tournament.js"
@@ -89,10 +90,13 @@ async function	onClickEdit(user: User): Promise<void> {
 	mail.value = userRes.email ?? "";
 }
 
-async function	onClickHistory(router: Router, gameState: AppState, user: User): Promise<void> {
+async function	onClickHistory(targetName: string | null, router: Router, gameState: AppState, user: User): Promise<void> {
 	console.log("Empty History"); /////////////////////
 	// TODO: secure l'acces a la page si on est pas connecte
+
 	router.navigate("/history", gameState, user);
+
+	getAndRenderHistory(targetName);	//	ADD BOOLEAN FOR FILTERS ('ai' OR 'pvp')
 }
 
 function	onClickCancel(user: User): void {
@@ -501,7 +505,7 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	(window as any).onClickLogout = () => onClickLogout(router, gameState, user);
 
 	(window as any).onClickEdit = () => onClickEdit(user);
-	(window as any).onClickHistory = () => onClickHistory(router, gameState, user);
+	(window as any).onClickHistory = (targetName: string | null = null) => onClickHistory(targetName, router, gameState, user);
 	(window as any).onClickCancel = () => onClickCancel(user);
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa(router, gameState, user);
@@ -530,6 +534,7 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	
 	(window as any).startTournamentMatch = (matchId: string, p1: string, p2: string) => 
 		startTournamentMatch(matchId, p1, p2, router, gameState, user);
+
 
 	document.addEventListener('click', (event) => {
 		const target = event.target as HTMLAnchorElement;

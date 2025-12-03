@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:48:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:27:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 23:37:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ export class	PongService {
 	}
 
 	async getPongHistoryByClientId(userId: number): Promise<GameUser[]> {
-		const	query: string = "SELECT 1 FROM pong WHERE id_client = ? LIMIT 1";
-		if (!(await this.pongRepo.isTaken(query, [userId.toString()])))
-			throw new NotExistError(`The user ${userId} hasn't play any games`);
+		// const	query: string = "SELECT 1 FROM pong WHERE id_client = ? LIMIT 1";
+		// if (!(await this.pongRepo.isTaken(query, [userId.toString()])))
+		// 	throw new NotExistError(`The user ${userId} hasn't play any games`);
 
 		return await this.pongRepo.getPongHistoryByClientId(userId);
 	}

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:05:35 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:05:29 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 23:48:17 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ export async function	gatewayGameController(gatewayFastify: FastifyInstance) {
 		}
 	});
 
-	gatewayFastify.get('pong/me', async (request: FastifyRequest, reply: FastifyReply) => {
+	gatewayFastify.get('/pong/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 		
