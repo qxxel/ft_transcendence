@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validation.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:58:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 16:06:51 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/30 18:07:07 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ export function	isValidName(name: string): validationResult {
 export function	isValidEmail(email: string): validationResult {
 	const	rules: rule[] = [
 		{ test: v => typeof v === "string", message: "Email must be a valid string" },
-		{ test: v => v.length >= 6, message: "Username must be at least 6 characters long" },
+		{ test: v => v.length >= 6, message: "Email must be at least 6 characters long" },
 		{ test: v => v.length <= 320, message: "Email must not exceed 320 characters" },
 		{ test: v => /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/.test(v), message: "Email must be valid" }
 	];
