@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:00:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 13:18:09 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 15:04:38 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,11 @@ export function	addRoutes(): void {
 
 	router.addRoute("/tankmenu", async () => {
 	  const html = await loadHtml("pages/tankmenu.html");
+	  return html;
+	});
+
+	router.addRoute("/history", async () => {
+	  const html = await loadHtml("pages/history.html");
 	  return html;
 	});
 

@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 13:17:38 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 15:32:25 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GameState, 
 			`<a href="/">Home</a>
 			<a href="/games">Play</a>
 			<a href="/tournament-setup">Tournament</a>
-			<a href="/user">${user.getUsername()}</a>
+			<a href="/user">Profile</a>
 			<a onclick="onClickLogout();" id="logout">Logout</a>
 			<a href="/about">About</a>`;
 
