@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 15:32:25 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 15:40:10 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,11 @@ async function	onClickEdit(user: User): Promise<void> {
 	username.value = userRes.username ?? "";
 	const mail = document.getElementById("edit-email") as HTMLInputElement;
 	mail.value = userRes.email ?? "";
+}
+
+async function	onClickHistory(router: Router, gameState: GameState, user: User): Promise<void> {
+	console.log("Empty History"); /////////////////////
+	router.navigate("/history", gameState, user);
 }
 
 function	onClickCancel(user: User): void {
@@ -414,6 +419,7 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	(window as any).onClickLogout = () => onClickLogout(router, gameState, user);
 
 	(window as any).onClickEdit = () => onClickEdit(user);
+	(window as any).onClickHistory = () => onClickHistory(router, gameState, user);
 	(window as any).onClickCancel = () => onClickCancel(user);
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa(router, gameState, user);
