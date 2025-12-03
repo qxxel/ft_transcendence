@@ -5,15 +5,15 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/30 23:58:03 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 21:24:30 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/12/01 19:53:58 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/12/01 19:54:19 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// ALL THE INTERFACE THAT CONTAIN THE PONG GAME (SAME AS THE FRONTEND)
+// ALL THE OBJECTS THAT CONTAINS GAME STATE
 
 
-/* ====================== GAME INTERFACES ====================== */
+/* ====================== INTERFACES ====================== */
 
 export interface	Ball {
 	x: number;
@@ -44,7 +44,7 @@ export interface	Collectible {
 	type: string;
 }
 
-export interface	GameState {
+export interface	PongState {
 	width: number;
 	height: number;
 	ball: Ball;
@@ -54,36 +54,4 @@ export interface	GameState {
 	score1: number;
 	score2: number;
 	status: "playing" | "paused" | "finished";
-}
-
-
-/* ====================== OPTIONS INTERFACES ====================== */
-
-export interface	PowerUps {
-	star1: boolean;
-	star2: boolean;
-	star3: boolean;
-}
-
-export interface	GameOptions {
-	width: number;
-	height: number;
-	mode: 'ai' | 'pvp';
-	difficulty: "easy" | "medium" | "hard" | "boris";
-	winningScore: number;
-	powerUpFreq: number;
-	activePowerUps: PowerUps;
-}
-
-
-/* ====================== RESUME INTERFACES ====================== */
-
-export interface	GameResume {
-	winner: number;
-	player1Hits: number;
-	player2Hits: number;
-	score1: number;
-	score2: number;
-	duration: number;
-	longestRally: number;
 }

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/01 17:45:19 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 00:16:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,103 +14,37 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { Game } from "./GameClass.js"
-import { Router } from "../router/router.js";
-import { User } from "../user/user.js";
-import { AIController } from "./AI.js";
-import { PongRenderer } from "./Renderer.js";
-import { PongPhysics } from "./Physics.js";
+import { connectSocket, socket }	from "../socket/socket.js"
+import { Game }						from "./GameClass.js"
+import { linearInterpolation }		from "./utils/lerp.js"
+import { Router }					from "../router/router.js"
+import { User }						from "../user/user.js"
+import { PongRenderer }				from "./Renderer.js"
 
-import type { AppState } from "../index.js";
-import { connectSocket, socket } from "../socket/socket.js";
+import type { AppState }	from "../index.js"
+import type { PongState }	from "./objects/gameState.js"
+import type { PowerUps }	from "./objects/gameOptions.js"
+import type { GameResume }	from "./objects/gameResume.js"
 
-/* ====================== GAME INTERFACES ====================== */
-
-export interface	Ball {
-	x: number;
-	y: number;
-	radius: number;
-	dx: number;
-	dy: number;
-	speed: number;
-	lastHitter: number;
-}
-
-export interface	Paddle {
-	x: number;
-	y: number;
-	width: number;
-	height: number;
-	speed: number;
-	hits: number;
-}
-
-export interface	Collectible {
-	id: number;
-	x: number;
-	y: number;
-	radius: number;
-	dy: number;
-	active: boolean;
-	type: string;
-}
-
-export interface	PongState {
-	width: number;
-	height: number;
-	ball: Ball;
-	paddle1: Paddle;
-	paddle2: Paddle;
-	collectibles: Collectible[];
-	score1: number;
-	score2: number;
-	status: "playing" | "paused" | "finished";
-}
-
-
-/* ====================== OPTIONS INTERFACES ====================== */
-
-export interface	PowerUps {
-	star1: boolean;
-	star2: boolean;
-	star3: boolean;
-}
-
-export interface	GameOptions {
-	width: number;
-	height: number;
-	mode: 'ai' | 'pvp';
-	difficulty: "easy" | "medium" | "hard" | "boris";
-	winningScore: number;
-	powerUpFreq: number;
-	activePowerUps: PowerUps;
-}
 
 /* ====================== CLASS ====================== */
-
-
-
 
 export class PongGame extends Game {
 	private canvas: HTMLCanvasElement | null = null;
 	private animationFrameId: number | null = null;
 
-	// RENDER SYSTEM
 	private renderer: PongRenderer | null = null;
 
-	// GAME STATE
 	private serverState: PongState | null = null;
+	private displayState: PongState | null = null;
 	private	isGameOver: boolean = false;
 
-	// GAME DATA
 	private player1Name: string = "Player 1";
 	private player2Name: string = "Player 2";
 	private scoreElements: { winScore: HTMLElement; p1: HTMLElement; p2: HTMLElement } | null = null;
-	
-	// UI IDS
+
 	private ids: { canvas: string; score1: string; score2: string; winScore: string };
-	
-	// ROUTER AND USER
+
 	private router: Router;
 	private appState: AppState;
 	private user: User;
@@ -130,8 +64,7 @@ export class PongGame extends Game {
 
 		(window as any).quitGame = () => this.quitGame();
 	}
-	
-	// CALL WHEN `/pong` IS LOADED
+
 	public setCtx() {
 		this.canvas = document.getElementById(this.ids.canvas) as HTMLCanvasElement;
 		this.renderer = new PongRenderer(this.canvas);
@@ -145,61 +78,59 @@ export class PongGame extends Game {
 		this.serverState = {
 			width: this.canvas.width,
 			height: this.canvas.height,
-			ball: { x: this.canvas.width/2, y: this.canvas.height/2, radius: 7, dx:0, dy:0, speed:0, lastHitter:0 },
-			paddle1: { x: 10, y: 250, width: 10, height: 100, speed:0, hits:0 },
-			paddle2: { x: 780, y: 250, width: 10, height: 100, speed:0, hits:0 },
+			ball: { x: this.canvas.width / 2, y: this.canvas.height / 2, radius: 7, dx: 0, dy: 0, speed: 0, lastHitter: 0 },
+			paddle1: { x: 10, y: 250, width: 10, height: 100, speed: 0, hits: 0 },
+			paddle2: { x: 780, y: 250, width: 10, height: 100, speed: 0, hits: 0 },
 			collectibles: [],
-			score1: 0, score2: 0,
+			score1: 0,
+			score2: 0,
 			status: 'playing'
 		};
 
-		// 1. INIT PLAYERS NAMES
-		if (this.appState.pendingOptions?.mode === 'ai') {
+		if (this.appState.pendingOptions?.mode === 'ai')
+		{
 			this.player1Name = this.user.getUsername() || "Player 1";
 			this.player2Name = "AI (" + this.appState.pendingOptions.difficulty + ")";
-		} else {
+		}
+		else
+		{
 			this.player1Name = "Player 1";
 			this.player2Name = "Player 2";
 		}
 		this.updateNameDisplay();
 
-		// 2. DISPLAY POWER UPS LEGENDS IF ACTIVE
-		if (this.appState.pendingOptions) {
+		if (this.appState.pendingOptions)
+		{
 			this.scoreElements.winScore.innerText = this.appState.pendingOptions.winningScore.toString();
 			this.generateLegend(this.appState.pendingOptions.activePowerUps);
 		}
 
-		// 3. SERVER CONNECTION
 		this.connectToServer();
 
-		// 4. BINDING INPUTS
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 	}
 
 	private connectToServer() {
-		// Connexion Socket si fermée
-		if (!socket || !socket.connected) {
-			connectSocket(); 
-		}
+		if (!socket || !socket.connected)
+			connectSocket();
 
-		// Nettoyage des anciens écouteurs pour éviter les doublons
 		socket.off('game-update');
 		socket.off('game-over');
 
-		// Écouter les mises à jour du serveur (60 fois/sec)
 		socket.on('game-update', (newState: PongState) => {
 			this.serverState = newState;
+
+			if (!this.displayState)
+				this.displayState = JSON.parse(JSON.stringify(newState));
 
 			this.updateScoresUI();
 		});
 
-		// Écouter la fin de partie
-		socket.on('game-over', (data: { winner: number }) => {
-			this.showEndGameDashboard(data.winner);
+		socket.on('game-over', (data: GameResume) => {
+			this.showEndGameDashboard(data);
 		});
 
-		// ENVOYER LE START AVEC LES OPTIONS
 		if (this.appState.pendingOptions) {
 			socket.emit('join-game', this.appState.pendingOptions);
 
@@ -209,7 +140,7 @@ export class PongGame extends Game {
 
 	private quitGame() {
 		this.stop(); 
-		socket.emit('leave-game'); // Préviens le serveur
+		socket.emit('leave-game');
 		this.router.navigate('/games', this.appState, this.user);
 	}
 
@@ -226,8 +157,7 @@ export class PongGame extends Game {
 			cancelAnimationFrame(this.animationFrameId);
 			window.removeEventListener('keydown', this.handleKeyDown);
 			window.removeEventListener('keyup', this.handleKeyUp);
-			
-			// On arrête d'écouter le socket
+
 			socket.off('game-update');
 			socket.off('game-over');
 			
@@ -235,30 +165,52 @@ export class PongGame extends Game {
 		}
 	}
 
-	// Boucle d'affichage (interpolée par requestAnimationFrame)
 	private renderLoop() {
+		this.smoothState();
+
 		this.draw();
 		this.animationFrameId = requestAnimationFrame(() => this.renderLoop());
 	}
 
-	private draw() {
-		if (!this.renderer || !this.serverState) return;
+	private smoothState() {
+		if (!this.serverState || !this.displayState)
+			return;
 
-		// On délègue tout au renderer, en lui passant l'état reçu du serveur
+		const	smoothing = 1;
+
+		this.displayState.ball.x = linearInterpolation(this.displayState.ball.x, this.serverState.ball.x, smoothing);
+		this.displayState.ball.y = linearInterpolation(this.displayState.ball.y, this.serverState.ball.y, smoothing);
+
+		this.displayState.paddle1.y = linearInterpolation(this.displayState.paddle1.y, this.serverState.paddle1.y, smoothing);
+		this.displayState.paddle2.y = linearInterpolation(this.displayState.paddle2.y, this.serverState.paddle2.y, smoothing);
+
+		this.displayState.collectibles = this.serverState.collectibles;
+		this.displayState.score1 = this.serverState.score1;
+		this.displayState.score2 = this.serverState.score2;
+		this.displayState.ball.radius = this.serverState.ball.radius;
+		this.displayState.paddle1.height = this.serverState.paddle1.height;
+		this.displayState.paddle2.height = this.serverState.paddle2.height;
+
+		this.displayState.status = this.serverState.status;
+	}
+
+	private draw() {
+		if (!this.renderer || !this.displayState)
+			return;
+
 		this.renderer.draw(
-			this.serverState.paddle1, 
-			this.serverState.paddle2, 
-			this.serverState.ball, 
-			this.serverState.collectibles
+			this.displayState.paddle1, 
+			this.displayState.paddle2, 
+			this.displayState.ball, 
+			this.displayState.collectibles
 		);
 
-		if (this.serverState.status === 'paused') {
+		console.log(this.displayState?.status);
+		if (this.displayState.status === "paused") {
 			this.renderer.drawPaused();
 		}
 	}
 
-	// --- INPUTS ---
-	// On n'applique plus la logique ici, on envoie juste au serveur
 	private handleKeyDown(e: KeyboardEvent) {
 		if (e.repeat)
 			return;
@@ -268,48 +220,52 @@ export class PongGame extends Game {
 					this.router.navigate("/pong", this.appState, this.user)
 					return;
 			}
-			// if (e.key === 'Escape' && !this.isTournamentMatch) {
-			// 		this.router.navigate('/games', this.appState, this.user);
-			// 		return;
-			// }
+			if (e.key === 'Escape' /*&& !this.isTournamentMatch*/) {
+					this.router.navigate('/games', this.appState, this.user);
+					return;
+			}
 		}
 
-		// if (e.key === 'Escape' && !this.isGameOver) {
-		// 	this.isPaused = !this.isPaused;
-		// }
-console.log("input: " + e.key);
-		// SENDING KEY AND PRESSED
 		socket.emit('input', { key: e.key, isPressed: true });
 	}
 
 	private handleKeyUp(e: KeyboardEvent) {
-		// SENDING KEY AND UNPRESSED
 		socket.emit('input', { key: e.key, isPressed: false });
 	}
 
-	// --- UI HELPERS ---
-
 	private updateScoresUI() {
-		if (!this.scoreElements || !this.serverState) return;
+		if (!this.scoreElements || !this.serverState)
+			return;
 		this.scoreElements.p1.innerText = this.serverState.score1.toString();
 		this.scoreElements.p2.innerText = this.serverState.score2.toString();
 	}
 
-	private showEndGameDashboard(winnerId: number) {
+	private showEndGameDashboard(gameResume: GameResume) {
+		if (this.scoreElements)
+		{
+			this.scoreElements.p1.innerText = gameResume.score1.toString();
+			this.scoreElements.p2.innerText = gameResume.score2.toString();
+		}
+
 		const dashboard = document.getElementById('game-over-dashboard');
 		if (!dashboard)
 			return;
 
-		const winnerName = winnerId === 1 ? this.player1Name : this.player2Name;
+		const winnerName = gameResume.winner === 1 ? this.player1Name : this.player2Name;
 		const winnerDisplay = document.getElementById('winner-display');
 		if (winnerDisplay)
 			winnerDisplay.innerText = `${winnerName} Wins!`;
 
-		if (this.serverState)
-		{
-			document.getElementById('stat-p1-hits')!.innerText = this.serverState.paddle1.hits.toString();
-			document.getElementById('stat-p2-hits')!.innerText = this.serverState.paddle2.hits.toString();
-		}
+		const	gameDurationSec: number = (gameResume.duration / 1000)
+		const	minutes: string = (gameDurationSec / 60).toFixed(0);
+		const	minutesText: string = minutes === "0" ? "" : minutes + "m ";
+		const	seconds: string = (gameDurationSec % 60).toFixed(0);
+		const	secondsText: string = seconds + "s"
+
+		document.getElementById('stat-duration')!.innerText = minutesText + secondsText;
+		document.getElementById('stat-p1-hits')!.innerText = gameResume.player1Hits.toString();
+		document.getElementById('stat-p2-hits')!.innerText = gameResume.player2Hits.toString();
+		document.getElementById('stat-rally')!.innerText = gameResume.longestRally.toString();
 
 		const	restartMsg = document.getElementById('restart-msg');
 		if (restartMsg)

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:49:20 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:51:22 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
-import { GameOptions, PongGame }				from "../Pong/Pong.js"
+import { GameOptions }			from "../Pong/objects/gameOptions.js"
+import { PongGame }				from "../Pong/Pong.js"
 import { TankGame } 			from "../v3/tank.js"
-import { TournamentController } from "../tournament.js"
-import { Router }		from "../router/router.js"
-import { sendRequest }	from "../utils/sendRequest.js"
-import { User }			from "../user/user.js"
-import { displayDate }	from "../utils/displayDate.js"
-import { btnCooldown }	from "../utils/buttonCooldown.js"
+import { TournamentController }	from "../tournament.js"
+import { Router }				from "../router/router.js"
+import { sendRequest }			from "../utils/sendRequest.js"
+import { User }					from "../user/user.js"
+import { displayDate }			from "../utils/displayDate.js"
+import { btnCooldown }			from "../utils/buttonCooldown.js"
 
-import type { AppState }   from "../index.js"
-import { Tank } from "../v3/class_tank.js"
+import type { AppState }	from "../index.js"
+import { Tank }				from "../v3/class_tank.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -378,9 +378,9 @@ function onStartTournament(router: Router, gameState: AppState, user: User) {
 	const playerNames: string[] = [];
 	
 	inputs.forEach(input => {
-	if (input.value.trim() !== '') {
-		playerNames.push(input.value.trim());
-	}
+		if (input.value.trim() !== '') {
+			playerNames.push(input.value.trim());
+		}
 	});
 
 	if (playerNames.length < 4) {
@@ -411,20 +411,43 @@ function onClickStartFeatured(mode: 'ai' | 'pvp', router: Router, gameState: App
 	const star2 = (document.getElementById("chk-2star") as HTMLInputElement).checked;
 	const star3 = (document.getElementById("chk-3star") as HTMLInputElement).checked;
 
-	// if (router.Path === '/pongmenu')
-	// {
-	// 	const winningScore = parseInt(pointsInput.value, 10);
-	// 	const aiVal = parseInt(aiInput.value);
-	// 	let difficulty: any = 'medium'; 
-	// 	if (aiVal === 1) difficulty = 'easy';
-	// 	if (aiVal === 3) difficulty = 'hard';
-	// 	if (aiVal === 4) difficulty = 'boris';
-	// 	console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Diff=${difficulty}, Stars=[${star1},${star2},${star3}]`);
-	// 	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3);
-	// 	router.navigate("/pong", gameState, user);
+	if (router.Path === '/pongmenu')
+	{
+		const	winningScore = parseInt(pointsInput.value, 10);
 
-	// }
-	/*else*/ if (router.Path === '/tankmenu')
+		const	aiVal = parseInt(aiInput.value);
+		let		difficulty: "easy" | "medium" | "hard" | "boris" = "medium";
+		if (aiVal === 1)
+			difficulty = "easy";
+		if (aiVal === 3)
+			difficulty = "hard";
+		if (aiVal === 4)
+			difficulty = "boris";
+
+		const	powerUpFrequency: number = parseInt(freqInput.value, 10) * 1000;
+
+		const	options: GameOptions = {
+			width: 800,
+			height: 600,
+			mode: mode,
+			difficulty: difficulty || "medium",
+			winningScore: winningScore || 5,
+			powerUpFreq: powerUpFrequency,
+			activePowerUps: {
+				star1: star1,
+				star2: star2,
+				star3: star3
+			}
+		};
+
+		gameState.pendingOptions = options;
+
+		console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Diff=${difficulty}, Stars=[${star1},${star2},${star3}]`);
+		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
+		router.navigate("/pong", gameState, user);
+
+	}
+	else if (router.Path === '/tankmenu')
 	{
 		console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Stars=[${star1},${star2},${star3}]`);
 		const freq = parseInt(freqInput.value,10);

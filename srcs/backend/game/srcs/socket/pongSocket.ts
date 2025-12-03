@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 18:41:17 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 00:21:33 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,32 +29,31 @@ const	activeGames = new Map<string, PongInstance>();
 
 /* ====================== FUNCTION ====================== */
 
-export function	setupPongSocket(io: Server, socket: Socket, pService: PongService) {
+export function	setupPongSocket(io: Server, socket: Socket, pongService: PongService) {
 
 	socket.on('join-game', (opts: GameOptions) => {
 		try {
-			if (activeGames.has(socket.id)) {
-            const	oldGame: PongInstance | undefined = activeGames.get(socket.id);
-            oldGame?.stopGame();
-            activeGames.delete(socket.id);
-        }
+			if (activeGames.has(socket.id))
+			{
+				const	oldGame: PongInstance | undefined = activeGames.get(socket.id);
+				oldGame?.stopGame();
+				activeGames.delete(socket.id);
+			}
 
-        // Sécurité options
-        if (!opts)
-		{
-			console.error("No options !");
-			return;
-		}
+			if (!opts)
+			{
+				console.error("No options.");
+				return;
+			}
 
 			const	roomId: string = socket.id; 
 	
-			const	game: PongInstance = new PongInstance(io, roomId, pService, opts);
+			const	game: PongInstance = new PongInstance(io, roomId, pongService, opts);
 			activeGames.set(socket.id, game);
 	
 			game.startGame();
-			console.log(`✅ Partie démarrée pour ${socket.id}`);
 		} catch (err: unknown) {
-			console.error("❌ CRASH lors de la création de la partie :", err);
+			console.error("Error while game creation: ", err);
 		}
 	});
 

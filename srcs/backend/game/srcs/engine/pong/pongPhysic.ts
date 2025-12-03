@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:58:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 12:59:53 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 00:20:38 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ import type { Ball, Paddle, Collectible }	from "./gameState.js"
 export class PongPhysics {
 	private width: number;
 	private height: number;
+	private	rally: number = 0;
 	private readonly maxBallSpeed = 12;
 	private readonly ballSpeedIncrease = 0.5;
 
@@ -63,6 +64,7 @@ export class PongPhysics {
 			}
 			else if (ball.dx < 0) {
 				ball.x = p1.x + p1.width + ball.radius;
+				this.rally++;
 				this.calculateDeflection(p1, ball, 1);
 				this.increaseBallSpeed(ball);
 			}
@@ -83,6 +85,7 @@ export class PongPhysics {
 			}
 			else if (ball.dx > 0) {
 				ball.x = p2.x - ball.radius;
+				this.rally++;
 				this.calculateDeflection(p2, ball, 2);
 				this.increaseBallSpeed(ball);
 			}
@@ -92,8 +95,18 @@ export class PongPhysics {
 			if (ball.dx > 0) ball.dx = minDx;
 			else ball.dx = -minDx;
 		}
-		if (ball.x + ball.radius < 0) return 2;
-		if (ball.x - ball.radius > this.width) return 1;
+		if (ball.x + ball.radius < 0)
+		{
+			// SEND LONGEST RALLY
+			this.rally = 0;
+			return 2;
+		}
+		if (ball.x - ball.radius > this.width)
+		{
+			// SEND LONGEST RALLY
+			this.rally = 0;
+			return 1;
+		}
 		
 		return 0;
 	}
@@ -179,7 +192,6 @@ export class PongPhysics {
 
 	public checkCollectibleCollision(ball: Ball, collectibles: Collectible[]): number {
 		for (const c of collectibles) {
-			// Formula: sqrt((x2-x1)^2 + (y2-y1)^2)
 			const dx = ball.x - c.x;
 			const dy = ball.y - c.y;
 			const distance = Math.sqrt(dx * dx + dy * dy);

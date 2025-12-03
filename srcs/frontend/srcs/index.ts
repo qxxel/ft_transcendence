@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 15:54:01 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/01 19:52:44 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ import { setupLoadHandler }				from "./eventsHandlers/loadHandler.js"
 import { setupSubmitHandler }			from "./eventsHandlers/submitHandler.js"
 import { User }							from "./user/user.js"
 
-import type { GameOptions }	from "./Pong/Pong.js"
+import type { GameOptions }	from "./Pong/objects/gameOptions.js"
 
 /* ====================== INTERFACE ====================== */
 

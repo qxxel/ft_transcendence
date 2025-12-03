@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 17:53:22 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 00:21:24 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { Server }			from 'socket.io';
+import { Server }			from 'socket.io'
 import { PongPhysics }		from "../../engine/pong/pongPhysic.js"
 import { AIController }		from "../../engine/pong/pongAi.js"
 import { PongService }		from "../pongService.js"
-import type { GameOptions, Collectible, GameState, Paddle, PowerUps }	from "../../engine/pong/gameState.js"
-import { pongAddDto } from '../../dtos/pongAddDto.js';
+
+import type { GameOptions, Collectible, GameState, PowerUps, GameResume }	from "../../engine/pong/gameState.js"
 
 
 /* ====================== CLASS ====================== */
@@ -30,24 +30,26 @@ export class	PongInstance {
 	
 	private	io: Server;
 	private	roomId: string;
-	private	pService: PongService;
+	private	pongService: PongService;
 
-	// ENGINES
 	private	physics: PongPhysics;
 	private	ai?: AIController;
 
-	// LOOP GESTION
 	private	gameLoopInterval: NodeJS.Timeout | null = null;
 	private	isGameFinished: boolean = false;
-	private	readonly WINNING_SCORE = 5;
+	private	winningScore: number = 5;
 
-	// INPUTS GESTIONS
+	private	gameStart: number = Date.now();
+	private	pauseStart: number = 0;
+	private	pauseDuration: number = 0;
+
+	private	longestRally: number = 0;
+
 	private	keyState = {
 		p1: { up: false, down: false },
 		p2: { up: false, down: false }
 	};
-	
-	// POWER UPS
+
 	private	powerUpsActive: PowerUps; 
 	private	powerUpFrequency: number;
 
@@ -55,29 +57,32 @@ export class	PongInstance {
 	private	nextCollectibleId: number = 0;
 
 
-	constructor(io: Server, roomId: string, pService: PongService, opts: GameOptions) {
+	constructor(io: Server, roomId: string, pongService: PongService, opts: GameOptions) {
 		this.io = io;
 		this.roomId = roomId;
-		this.pService = pService;
+		this.pongService = pongService;
 
 		const width = 800;
 		const height = 600;
+
+		this.winningScore = opts.winningScore;
+
+		this.gameStart = Date.now();
 
 		this.powerUpsActive = opts.activePowerUps || { star1: false, star2: false, star3: false };
 		this.powerUpFrequency = opts.powerUpFreq;
 
 		this.physics = new PongPhysics(width, height);
-		
-		if (opts.mode === 'ai') {
+
+		if (opts.mode === 'ai')
 			this.ai = new AIController(opts.difficulty);
-		}
 
 		this.gameState = {
 			width: width,
 			height: height,
 			score1: 0,
 			score2: 0,
-			status: 'playing',
+			status: "playing",
 			collectibles: [],
 
 			ball: { 
@@ -94,8 +99,7 @@ export class	PongInstance {
 				y: height / 2 - 50,
 				width: 10,
 				height: 100, 
-				speed:
-				6,
+				speed: 6,
 				hits: 0 
 			},
 			paddle2: { 
@@ -107,7 +111,7 @@ export class	PongInstance {
 				hits: 0 
 			}
 		};
-		
+
 		this.resetRound(true);
 	}
 
@@ -121,7 +125,8 @@ export class	PongInstance {
 	}
 
 	private update() {
-		if (this.isGameFinished || this.gameState.status !== 'playing') return;
+		if (this.isGameFinished || this.gameState.status !== "playing")
+			return;
 
 		if (this.ai) {
 			const aiMove = this.ai.update(this.gameState);
@@ -151,11 +156,14 @@ export class	PongInstance {
 
 		const scoreResult = this.physics.update(this.gameState.ball, this.gameState.paddle1, this.gameState.paddle2);
 		
-		if (scoreResult === 1) {
+		if (scoreResult === 1)
+		{
 			this.gameState.score1++;
 			this.resetRound();
 			this.checkWinCondition();
-		} else if (scoreResult === 2) {
+		}
+		else if (scoreResult === 2)
+		{
 			this.gameState.score2++;
 			this.resetRound();
 			this.checkWinCondition();
@@ -164,41 +172,78 @@ export class	PongInstance {
 		this.io.to(this.roomId).volatile.emit('game-update', this.gameState);
 	}
 
-	// --- GESTION INPUTS (Appelé par le socket) ---
 	public handleInput(player: 1 | 2, key: string, isPressed: boolean) {		
 		if (player === 2 && this.ai)
 			return ;
-		
+
 		const keys = player === 1 ? this.keyState.p1 : this.keyState.p2;
 
-		if (key === 'ArrowUp' || key === 'w' || key === 'z') keys.up = isPressed;
-		if (key === 'ArrowDown' || key === 's') keys.down = isPressed;
+		if (key === 'ArrowUp' || key === 'w' || key === 'z')
+			keys.up = isPressed;
+
+		if (key === 'ArrowDown' || key === 's')
+			keys.down = isPressed;
+
+		if (key === 'Escape' && this.gameState.status !== "finished" && isPressed)
+		{
+			console.log("escape");
+			if (this.gameState.status === "playing")
+			{
+				this.gameState.status = "paused";
+				this.pauseStart = Date.now();
+			}
+			else if (this.gameState.status === "paused")
+			{
+				this.gameState.status = "playing";
+				this.pauseDuration += Date.now() - this.pauseStart;
+				this.lastCollectibleSpawn += (Date.now() - this.pauseStart);
+			}
+			
+			this.io.to(this.roomId).volatile.emit('game-update', this.gameState);
+		}
 	}
 
 	private resolveDirection(keys: { up: boolean, down: boolean }): 'up' | 'down' | 'none' {
-		if (keys.up && keys.down) return 'none'; // Annulation
-		if (keys.up) return 'up';
-		if (keys.down) return 'down';
+		if (keys.up && keys.down)
+			return 'none';
+
+		if (keys.up)
+			return 'up';
+
+		if (keys.down)
+			return 'down';
+
 		return 'none';
 	}
-
-	// --- LOGIQUE JEU ---
 
 	private resetRound(firstServe: boolean = false) {
 		const width = this.gameState.width;
 		const height = this.gameState.height;
 
+
+		this.longestRally = 0;
+
 		this.gameState.ball.x = width / 2;
 		this.gameState.ball.y = height / 2;
-		this.gameState.ball.speed = 5; // Vitesse initiale
+		this.gameState.ball.speed = 5;
 		this.gameState.ball.radius = 7;
 		this.gameState.ball.lastHitter = 0;
 
-		// Reset paddles (Optionnel, selon tes règles)
+
+		this.gameState.paddle1.width = 10;
+		this.gameState.paddle1.height = 100;
+		this.gameState.paddle1.speed = 6;
 		this.gameState.paddle1.y = height / 2 - this.gameState.paddle1.height / 2;
+
+		this.gameState.paddle2.width = 10;
+		this.gameState.paddle2.height = 100;
+		this.gameState.paddle2.speed = 6;
 		this.gameState.paddle2.y = height / 2 - this.gameState.paddle2.height / 2;
-		
-		// Reset direction random
+
+
+		this.gameState.collectibles = [];
+
+
 		const currentDirectionX = Math.sign(this.gameState.ball.dx);
 		let directionX = firstServe ? (Math.random() < 0.5 ? 1 : -1) : currentDirectionX * -1;
 		const angle = (Math.random() * Math.PI / 4) - (Math.PI / 8);
@@ -208,21 +253,24 @@ export class	PongInstance {
 	}
 
 	private async checkWinCondition() {
-		if (this.gameState.score1 >= this.WINNING_SCORE || this.gameState.score2 >= this.WINNING_SCORE) {
+		if (this.gameState.score1 >= this.winningScore || this.gameState.score2 >= this.winningScore) {
 			this.isGameFinished = true;
-			this.gameState.status = 'finished';
+			this.gameState.status = "finished";
 			
 			if (this.gameLoopInterval) clearInterval(this.gameLoopInterval);
 
-			// Notifier la fin
-			const winner = this.gameState.score1 >= this.WINNING_SCORE ? 1 : 2;
-			this.io.to(this.roomId).emit('game-over', { 
-				winner: winner,
+			const	gameResume: GameResume = {
+				winner: this.gameState.score1 >= this.winningScore ? 1 : 2,
+				player1Hits: this.gameState.paddle1.hits,
+				player2Hits: this.gameState.paddle2.hits,
 				score1: this.gameState.score1,
-				score2: this.gameState.score2
-			});
+				score2: this.gameState.score2,
+				duration: Date.now() - this.gameStart - this.pauseDuration,
+				longestRally: this.longestRally,
+			}
 
-			// Sauvegarde DB
+			this.io.to(this.roomId).emit('game-over', gameResume);
+
 			console.log("Fin de partie. Sauvegarde en cours...");
 			try {
 				// const	pongGame: pongAddDto = new pongAddDto();
@@ -233,12 +281,10 @@ export class	PongInstance {
 		}
 	}
 
-	// --- POWER UPS ---
-
 	private handleCollectiblesSpawn() {
 		if (!this.powerUpFrequency)
 			return ;
-		
+
 		const now = Date.now();
 		if (now - this.lastCollectibleSpawn > this.powerUpFrequency) {
 			this.spawnCollectible();
@@ -256,7 +302,7 @@ export class	PongInstance {
 
 		const type = availableTypes[Math.floor(Math.random() * availableTypes.length)]!;
 		const radius = 15;
-		// Zone sûre (milieu du terrain)
+
 		const safeZoneX = this.gameState.width * 0.2;
 		const x = safeZoneX + (Math.random() * (this.gameState.width - safeZoneX * 2));
 		const y = radius + (Math.random() * (this.gameState.height - radius * 2));
@@ -272,7 +318,8 @@ export class	PongInstance {
 	}
 
 	private applyPowerUp(type: string) {
-		if (this.gameState.ball.lastHitter === 0) return;
+		if (this.gameState.ball.lastHitter === 0)
+			return;
 
 		const targetPaddle = (this.gameState.ball.lastHitter === 1) 
 			? this.gameState.paddle1 
