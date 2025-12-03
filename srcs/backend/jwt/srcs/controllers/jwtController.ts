@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/30 10:42:04 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 18:42:25 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,217 +28,230 @@ import type { userDto }											from "../dtos/userDto.js"
 
 /* ====================== FUNCTION ====================== */
 
-export async function	jwtController(jwtFastify: FastifyInstance) {
-	jwtFastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			const	user: userDto = request.body as userDto;
+async function	createdToken(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		const	user: userDto = request.body as userDto;
 
-			if (!user.id)
-				throw new MissingIdError("Id of the user is missing !")
+		if (!user.id)
+			throw new MissingIdError("Id of the user is missing !")
 
-			if (user.is2faEnable) {
-				await addTwofaJWT(reply, user);
-				
-				return reply.status(201).send(user.id);
-			}
-			const	refreshToken: string = await addJWT(reply, user);
-
-			const	lastId: number = await jwtServ.addToken(refreshToken, user.id)
-			return reply.status(201).send(lastId);
-		} catch (err: unknown) {
-			removeJWT(reply);
-
-			if (err instanceof MissingIdError) {
-				console.error(err.message);
-				reply.status(401).send(err.message);
-			}
-
-			console.error(err);
-			reply.status(500).send(err);
-		}
-	});
-
-	jwtFastify.post('/verifyEmail', async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			const	user: userDto = request.body as userDto;
-
-			if (!user.id)
-				throw new MissingIdError("Id of the user is missing !")
-
+		if (user.is2faEnable) {
 			await addTwofaJWT(reply, user);
-				
-			return reply.status(201).send(user.id);
-		} catch (err: unknown) {
-			removeJWT(reply);
-
-			if (err instanceof MissingIdError) {
-				console.error(err.message);
-				reply.status(401).send(err.message);
-			}
-
-			console.error(err);
-			reply.status(500).send(err);
-		}
-	});
-
-	jwtFastify.post('/twofa/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			const	payload: AxiosResponse = await jwtAxios.get("https://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 			
-			const	user: userDto = payload.data as userDto;
-
-			if (!user.id)
-				throw new MissingIdError("Id of the user is missing !")
-
-			await addTwofaJWT(reply, user);
 			return reply.status(201).send(user.id);
-		} catch (err: unknown) {
-			removeJWT(reply);
-
-			if (err instanceof MissingIdError) {
-				console.error(err.message);
-				reply.status(401).send(err.message);
-			}
-
-			console.error(err);
-			reply.status(500).send(err);
 		}
-	});
+		const	refreshToken: string = await addJWT(reply, user);
 
-	jwtFastify.get('/twofa', async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			const	cookies: any = getCookies(request);
-			const	{ payload } = await jose.jwtVerify(cookies.jwtTwofa, jwtSecret);
+		const	lastId: number = await jwtServ.addToken(refreshToken, user.id)
+		return reply.status(201).send(lastId);
+	} catch (err: unknown) {
+		removeJWT(reply);
 
-			return reply.status(201).send(payload);
-		} catch (err: unknown) {
-			if (err instanceof jose.errors.JOSEError)
-			{
-				console.error(err.message);	
-				return reply.status(401).send(err.message);
-			}
-
-			console.log(err);
-			reply.status(500).send(err);
+		if (err instanceof MissingIdError) {
+			console.error(err.message);
+			reply.status(401).send(err.message);
 		}
-	});
 
-	jwtFastify.get('/twofa/validate', async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			const	cookies: any = getCookies(request);
-			const	{ payload } = await jose.jwtVerify(cookies.jwtTwofa, jwtSecret);
+		console.error(err);
+		return reply.status(500).send(err);
+	}
+}
 
-			const user: userDto = payload as any as userDto;
+async function	createdTokenForEmailVerfication(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		const	user: userDto = request.body as userDto;
 
-			if (!user.id)
-				throw new MissingIdError("Id of the user is missing !")
+		if (!user.id)
+			throw new MissingIdError("Id of the user is missing !")
 
-			removeCookies(reply, "jwtTwofa", "/api");
+		await addTwofaJWT(reply, user);
+			
+		return reply.status(201).send(user.id);
+	} catch (err: unknown) {
+		removeJWT(reply);
 
-			const	refreshToken: string = await addJWT(reply, user);
-
-			const	lastId: number = await jwtServ.addToken(refreshToken, user.id)
-			return reply.status(201).send(payload);
-		} catch (err: unknown) {
-			if (err instanceof jose.errors.JOSEError)
-			{
-				console.error(err.message);	
-				return reply.status(401).send(err.message);
-			}
-
-			console.log(err);
-			reply.status(500).send(err);
+		if (err instanceof MissingIdError) {
+			console.error(err.message);
+			reply.status(401).send(err.message);
 		}
-	});
 
-	jwtFastify.get('/validate', async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			const	cookies: any = getCookies(request);
-			const	{ payload, protectedHeader } = await jose.jwtVerify(cookies.jwtAccess, jwtSecret) as { payload: string, protectedHeader: jose.JWTHeaderParameters }; // BIG LINE (MAYBE SEARCH SOLUTION)
+		console.error(err);
+		return reply.status(500).send(err);
+	}
+}
 
-			return reply.status(200).send(payload);
-		} catch (err: unknown) {
-			if (err instanceof jose.errors.JOSEError)
-			{
-				console.error(err.message);	
-				return reply.status(401).send(err.message);
-			}
+async function	recreatedTokenTwofa(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		const	payload: AxiosResponse = await jwtAxios.get("https://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		
+		const	user: userDto = payload.data as userDto;
 
-			console.log(err);
-			reply.status(500).send(err);
+		if (!user.id)
+			throw new MissingIdError("Id of the user is missing !")
+
+		await addTwofaJWT(reply, user);
+		return reply.status(201).send(user.id);
+	} catch (err: unknown) {
+		removeJWT(reply);
+
+		if (err instanceof MissingIdError) {
+			console.error(err.message);
+			reply.status(401).send(err.message);
 		}
-	});
 
-	jwtFastify.post('/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
+		console.error(err);
+		return reply.status(500).send(err);
+	}
+}
+
+async function	getPayloadTokenTwofa(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	try {
 		const	cookies: any = getCookies(request);
-		if (!cookies)
-			return reply.status(401).send({ error: "Can't get the refresh token in cookies." });
+		const	{ payload } = await jose.jwtVerify(cookies.jwtTwofa, jwtSecret);
 
-		try {
-			
-			const	{ payload, protectedHeader } = await jose.jwtVerify(cookies.jwtRefresh, jwtSecret) as { payload: string, protectedHeader: jose.JWTHeaderParameters }; // BIG LINE (MAYBE SEARCH SOLUTION)
-
-			if (await jwtServ.isValidToken(cookies.jwtRefresh))
-				throw jose.errors.JOSEError;
-			
-			const	user: userDto = request.body as userDto;
-			const	jwtAccess: string = await jwtGenerate(user, expAccess);
-			setCookiesAccessToken(reply, jwtAccess);
-
-			return reply.status(201).send({ result: "ok" });
-		} catch (err: unknown) {
-			if (err instanceof jose.errors.JOSEError)
-			{
-				await jwtServ.deleteToken(cookies.jwtRefresh);
-				console.error(err.message);
-				return reply.status(401).send(err.message);
-			}
-
-			console.log(err);
-			reply.status(500).send(err);
+		return reply.status(201).send(payload);
+	} catch (err: unknown) {
+		if (err instanceof jose.errors.JOSEError)
+		{
+			console.error(err.message);	
+			return reply.status(401).send(err.message);
 		}
-	});
 
-	jwtFastify.delete('/refresh/logout', async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			const	cookies: any = getCookies(request);
+		console.log(err);
+		return reply.status(500).send(err);
+	}
+}
 
-			removeJWT(reply);
+async function	removeTokenTwofaCreatedToken(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		const	cookies: any = getCookies(request);
+		const	{ payload } = await jose.jwtVerify(cookies.jwtTwofa, jwtSecret);
 
+		const user: userDto = payload as any as userDto;
+
+		if (!user.id)
+			throw new MissingIdError("Id of the user is missing !")
+
+		removeCookies(reply, "jwtTwofa", "/api");
+
+		const	refreshToken: string = await addJWT(reply, user);
+
+		const	lastId: number = await jwtServ.addToken(refreshToken, user.id)
+		return reply.status(201).send(payload);
+	} catch (err: unknown) {
+		if (err instanceof jose.errors.JOSEError)
+		{
+			console.error(err.message);	
+			return reply.status(401).send(err.message);
+		}
+
+		console.log(err);
+		return reply.status(500).send(err);
+	}
+}
+
+async function	getPayloadTokenAccess(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		const	cookies: any = getCookies(request);
+		const	{ payload, protectedHeader } = await jose.jwtVerify(cookies.jwtAccess, jwtSecret) as { payload: string, protectedHeader: jose.JWTHeaderParameters }; // BIG LINE (MAYBE SEARCH SOLUTION)
+
+		return reply.status(200).send(payload);
+	} catch (err: unknown) {
+		if (err instanceof jose.errors.JOSEError)
+		{
+			console.error(err.message);	
+			return reply.status(401).send(err.message);
+		}
+
+		console.log(err);
+		return reply.status(500).send(err);
+	}
+}
+
+async function	refreshTokenAccess(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	const	cookies: any = getCookies(request);
+	if (!cookies)
+		return reply.status(401).send({ error: "Can't get the refresh token in cookies." });
+
+	try {
+		
+		const	{ payload, protectedHeader } = await jose.jwtVerify(cookies.jwtRefresh, jwtSecret) as { payload: string, protectedHeader: jose.JWTHeaderParameters }; // BIG LINE (MAYBE SEARCH SOLUTION)
+
+		if (await jwtServ.isValidToken(cookies.jwtRefresh))
+			throw jose.errors.JOSEError;
+		
+		const	user: userDto = request.body as userDto;
+		const	jwtAccess: string = await jwtGenerate(user, expAccess);
+		setCookiesAccessToken(reply, jwtAccess);
+
+		return reply.status(201).send({ result: "ok" });
+	} catch (err: unknown) {
+		if (err instanceof jose.errors.JOSEError)
+		{
 			await jwtServ.deleteToken(cookies.jwtRefresh);
-
-			return reply.status(204).send({ result: "deleted." });
-		} catch (err: unknown) {
-			if (err instanceof jose.errors.JOSEError)
-			{
-				console.error(err.message);
-				return reply.status(401).send(err.message);
-			}
-
-			console.log(err);
-			reply.status(500).send(err);
+			console.error(err.message);
+			return reply.status(401).send(err.message);
 		}
-	});
 
-	jwtFastify.delete('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
-		const	{ id } = request.params as { id: string };
-		const	parseId: number = parseInt(id, 10);
-	
-		try {
-			removeJWT(reply);
+		console.log(err);
+		return reply.status(500).send(err);
+	}
+}
 
-			await jwtServ.deleteTokenById(parseId);
+async function	deleteSessionToken(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		const	cookies: any = getCookies(request);
 
-			return reply.status(204).send({ result: "deleted." });
-		} catch (err: unknown) {
-			if (err instanceof jose.errors.JOSEError)
-			{
-				console.error(err.message)
-				return reply.status(401).send(err.message);
-			}
+		removeJWT(reply);
 
-			console.log(err);
-			reply.status(500).send(err);
+		await jwtServ.deleteToken(cookies.jwtRefresh);
+
+		return reply.status(204).send({ result: "deleted." });
+	} catch (err: unknown) {
+		if (err instanceof jose.errors.JOSEError)
+		{
+			console.error(err.message);
+			return reply.status(401).send(err.message);
 		}
-	});
+
+		console.log(err);
+		return reply.status(500).send(err);
+	}
+}
+
+async function	deleteUserToken(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+	const	{ id } = request.params as { id: string };
+	const	parseId: number = parseInt(id, 10);
+
+	try {
+		removeJWT(reply);
+
+		await jwtServ.deleteTokenById(parseId);
+
+		return reply.status(204).send({ result: "deleted." });
+	} catch (err: unknown) {
+		if (err instanceof jose.errors.JOSEError)
+		{
+			console.error(err.message)
+			return reply.status(401).send(err.message);
+		}
+
+		console.log(err);
+		return reply.status(500).send(err);
+	}
+}
+
+export async function	jwtController(jwtFastify: FastifyInstance) {
+	// order get / post / delete
+	jwtFastify.post('/', createdToken);
+	jwtFastify.post('/verifyEmail', createdTokenForEmailVerfication);
+	jwtFastify.post('/twofa/refresh', recreatedTokenTwofa);
+
+	jwtFastify.get('/twofa', getPayloadTokenTwofa);
+	jwtFastify.get('/twofa/validate', removeTokenTwofaCreatedToken); // post ???
+	jwtFastify.get('/validate', getPayloadTokenAccess);
+	jwtFastify.post('/refresh', refreshTokenAccess);
+
+	jwtFastify.delete('/refresh/logout', deleteSessionToken);
+	jwtFastify.delete('/:id', deleteUserToken); // replace with /me ???
 }

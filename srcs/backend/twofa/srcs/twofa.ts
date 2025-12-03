@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:21 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/01 11:49:36 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 21:40:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ export const	twofaAxios = axios.create({
 
 /* ====================== SERVER ====================== */
 
-const	twofaFastify: FastifyInstance = Fastify({
+export const	twofaFastify: FastifyInstance = Fastify({
 	https: {
 		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
 		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
