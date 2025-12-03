@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 15:40:10 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 15:46:10 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ async function	onClickEdit(user: User): Promise<void> {
 
 async function	onClickHistory(router: Router, gameState: GameState, user: User): Promise<void> {
 	console.log("Empty History"); /////////////////////
+	// TODO: secure l'acces a la page si on est pas connecte
 	router.navigate("/history", gameState, user);
 }
 
