@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 18:01:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 18:03:49 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: AppState, user
 	displayDate(5);
 }
 
-async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
+async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: AppState, user: User): Promise<void> {
 	console.log("VerifyEmail");
 
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
