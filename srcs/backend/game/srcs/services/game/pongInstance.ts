@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 14:18:25 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 15:15:28 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ export class	PongInstance {
 				this.lastCollectibleSpawn += (Date.now() - this.pauseStart);
 			}
 			
-			this.io.to(this.roomId).volatile.emit('game-update', this.gameState);
+			this.io.to(this.roomId).emit('game-update', this.gameState);
 		}
 	}
 

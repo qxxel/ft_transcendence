@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/03 18:02:33 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 18:03:04 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,7 @@ export class PongGame extends Game {
 	private handleKeyDown(e: KeyboardEvent) {
 		if (e.repeat)
 			return;
-console.log(this.isGameOver)
+
 		if (this.isGameOver) {
 			if (this.isTournament)
 			{
