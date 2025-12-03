@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/02 20:14:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 13:17:52 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 				<a href="/user">${user.getUsername()}</a>
 				<a href="/friends">Friends</a>
 				<a onclick="onClickLogout();" id="logout">Logout</a>
-				<a href="/settings">Settings</a>
 				<a href="/about">About</a>`;
 
 		router.navigate('/', gameState, user);

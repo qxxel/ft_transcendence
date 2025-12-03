@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 13:09:35 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 13:21:24 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ async function loadUser(user: User) {
 		if (userRes.is2faEnable == true) {
 			const	switchSpan = document.getElementById("switch-span") as HTMLInputElement;
 			if (switchSpan) {
-				switchSpan.textContent = "Enable";
+				switchSpan.textContent = "Enabled";
 				switchSpan.classList.add('status-enabled');
 				switchSpan.classList.remove('status-disabled');
 			}

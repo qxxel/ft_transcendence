@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 11:55:20 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/03 13:17:38 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ async function  onClickLogout(router: Router, gameState: GameState, user: User):
 			<a href="/tournament-setup">Tournament</a>
 			<a href="/sign-in">Sign in</a>
 			<a href="/sign-up">Sign up</a>
-			<a href="/settings">Settings</a>
 			<a href="/about">About</a>`;
 
 	router.navigate("/", gameState, user);
@@ -156,7 +155,6 @@ async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GameState, 
 			<a href="/tournament-setup">Tournament</a>
 			<a href="/user">${user.getUsername()}</a>
 			<a onclick="onClickLogout();" id="logout">Logout</a>
-			<a href="/settings">Settings</a>
 			<a href="/about">About</a>`;
 
 	router.canLeave = true;

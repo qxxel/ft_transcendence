@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   addRoutes.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:00:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:51:10 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 13:18:09 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,6 @@ export function	addRoutes(): void {
 
 	router.addRoute('/about', async () => {
 		const	html: string = await loadHtml("pages/about.html");
-		return html;
-	});
-	
-	router.addRoute('/settings', async () => {
-		const	html: string = await loadHtml("pages/settings.html");
 		return html;
 	});
 
