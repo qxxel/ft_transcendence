@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:48:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 00:50:51 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 13:38:47 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,13 @@ export class	PongService {
 			throw new NotExistError(`The pong game ${gameId} does not exist`);
 
 		return await this.pongRepo.deletePongGame(gameId);
+	}
+
+	async deleteClientPongGame(userId: number): Promise<void> {
+		const	query: string = "SELECT 1 FROM pong WHERE id_client = ? LIMIT 1";
+		if (!(await this.pongRepo.isTaken(query, [userId.toString()])))
+			throw new NotExistError(`User ${userId} hasn't play any game.`);
+
+		return await this.pongRepo.deletePongGame(userId);
 	}
 }

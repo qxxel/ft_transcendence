@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 17:53:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 15:53:13 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 12:41:49 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ export function	connectSocket() {
 		path: '/socket.io',
 		transports: ["websocket"],
 		secure: true,
+		withCredentials: true,
 		reconnection: true,
 	});
 

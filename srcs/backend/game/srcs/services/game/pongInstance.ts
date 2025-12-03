@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 00:21:24 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 14:52:30 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { Server }			from 'socket.io'
-import { PongPhysics }		from "../../engine/pong/pongPhysic.js"
-import { AIController }		from "../../engine/pong/pongAi.js"
-import { PongService }		from "../pongService.js"
+import { AIController }	from "../../engine/pong/pongAi.js"
+import { pongAddDto }	from "../../dtos/pongAddDto.js"
+import { PongPhysics }	from "../../engine/pong/pongPhysic.js"
+import { PongService }	from "../pongService.js"
+import { Server }		from 'socket.io'
 
 import type { GameOptions, Collectible, GameState, PowerUps, GameResume }	from "../../engine/pong/gameState.js"
 
@@ -29,8 +30,10 @@ export class	PongInstance {
 	public	gameState: GameState;
 	
 	private	io: Server;
+	private	userId: number | undefined;
 	private	roomId: string;
 	private	pongService: PongService;
+	private	isTournament: boolean;
 
 	private	physics: PongPhysics;
 	private	ai?: AIController;
@@ -38,6 +41,7 @@ export class	PongInstance {
 	private	gameLoopInterval: NodeJS.Timeout | null = null;
 	private	isGameFinished: boolean = false;
 	private	winningScore: number = 5;
+	
 
 	private	gameStart: number = Date.now();
 	private	pauseStart: number = 0;
@@ -56,11 +60,15 @@ export class	PongInstance {
 	private	lastCollectibleSpawn: number = 0;
 	private	nextCollectibleId: number = 0;
 
+	private	p1name: string;
+	private	p2name: string | undefined;
 
-	constructor(io: Server, roomId: string, pongService: PongService, opts: GameOptions) {
+	constructor(io: Server, roomId: string, pongService: PongService, userId: number | undefined, opts: GameOptions) {
 		this.io = io;
+		this.userId = userId;
 		this.roomId = roomId;
 		this.pongService = pongService;
+		this.isTournament = opts.isTournament;
 
 		const width = 800;
 		const height = 600;
@@ -76,6 +84,9 @@ export class	PongInstance {
 
 		if (opts.mode === 'ai')
 			this.ai = new AIController(opts.difficulty);
+
+		this.p1name = opts.p1name;
+		this.p2name = opts.p2name;
 
 		this.gameState = {
 			width: width,
@@ -271,10 +282,29 @@ export class	PongInstance {
 
 			this.io.to(this.roomId).emit('game-over', gameResume);
 
-			console.log("Fin de partie. Sauvegarde en cours...");
+			console.log("userId = " + this.userId);
+			console.log("isTournament = " + this.isTournament);
+
+			if (this.userId === undefined || this.isTournament)
+				return ;
+
+			console.log("here");
 			try {
-				// const	pongGame: pongAddDto = new pongAddDto();
-				// this.pService.addPongGame(pongGame)
+				const	gameDatabase = {
+					idClient: this.userId,
+					winner: gameResume.winner,
+					p1: this.p1name,
+					p2: this.p2name,
+					p1score: gameResume.score1,
+					p2score: gameResume.score2,
+					mode: this.ai ? "ai" : "pvp",
+					powerup: this.powerUpFrequency ? true : false,
+					start: this.gameStart,
+					duration: gameResume.duration
+				};
+
+				const	pongGame: pongAddDto = new pongAddDto(gameDatabase);
+				this.pongService.addPongGame(pongGame)
 			} catch (e) {
 				console.error("Error while saving the match:", e);
 			}

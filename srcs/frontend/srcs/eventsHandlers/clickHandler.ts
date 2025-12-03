@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:51:44 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:57:45 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,12 +197,11 @@ async function onClickGetMessage(): Promise<void> {
 
 async function onClickValidateMessage(): Promise<void> {
 	const   res: Response = await fetch('/api/jwt/validate', {
-		method: "post",
+		method: "get",
 		credentials: "include",
 		headers: {
 			"Content-Type": "application/json"
 		},
-		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
 	});
 
 	const   data: unknown = await res.json();
@@ -321,6 +320,8 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', router: Router, g
 		width: 800,
 		height: 600,
 		isTournament: false,
+		p1name: user.getUsername() || "Player 1",
+		p2name: "AI (" + difficulty + ")",
 		mode: 'ai',
 		difficulty: difficulty || 'medium',
 		winningScore: parseInt(maxPointsInput.value, 10) || 5,
@@ -331,6 +332,8 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', router: Router, g
 			star3: false
 		}
 	};
+	// this.player1Name = this.user.getUsername() || "Player 1";
+	// 		this.player2Name = ;
 
 	gameState.pendingOptions = options;
 
@@ -351,6 +354,8 @@ function onClickPlayPVP(router: Router, gameState: AppState, user: User) {
 			width: 800,
 			height: 600,
 			isTournament: false,
+			p1name: user.getUsername() || "Player 1",
+			p2name: "Player 2",
 			mode: 'pvp',
 			difficulty: "medium",
 			winningScore: parseInt(maxPointsInput.value, 10) || 5,
@@ -404,6 +409,8 @@ function startTournamentMatch(matchId: string, p1: string, p2: string, router: R
 			width: 800,
 			height: 600,
 			isTournament: true,
+			p1name: p1,
+			p2name: p2,
 			mode: "pvp",
 			difficulty: "medium",
 			winningScore: gameState.currentTournament.winningScore,
@@ -448,6 +455,8 @@ function onClickStartFeatured(mode: 'ai' | 'pvp', router: Router, gameState: App
 			width: 800,
 			height: 600,
 			isTournament: false,
+			p1name: user.getUsername() || "Player 1",
+			p2name: mode === "ai" ? "AI (" + difficulty + ")" : "Player 2",
 			mode: mode,
 			difficulty: difficulty || "medium",
 			winningScore: winningScore || 5,

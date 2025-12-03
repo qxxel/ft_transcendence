@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:58:03 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 21:24:30 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 13:19:07 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,10 @@ export interface	PowerUps {
 export interface	GameOptions {
 	width: number;
 	height: number;
+	isTournament: boolean;
 	mode: 'ai' | 'pvp';
+	p1name: string;
+	p2name: string;
 	difficulty: "easy" | "medium" | "hard" | "boris";
 	winningScore: number;
 	powerUpFreq: number;

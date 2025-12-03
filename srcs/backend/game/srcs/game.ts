@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 17:17:40 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 22:34:53 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 /* ====================== IMPORTS ====================== */
 
+import axios, { isAxiosError, type AxiosResponse }				from 'axios'
 import cors					from '@fastify/cors'
 import Fastify				from 'fastify'
 import formBody				from '@fastify/formbody'
@@ -30,6 +31,13 @@ import { tankService }		from "./services/tankService.js"
 import { tankRepository }	from "./repositories/tankRepository.js"
 
 import type { FastifyInstance }	from 'fastify'
+
+
+/* ====================== AXIOS VARIABLES ====================== */
+
+export const	gameAxios = axios.create({
+	timeout: 1000
+});
 
 
 /* ====================== DATABASE ====================== */
@@ -72,7 +80,32 @@ const	io = new Server(gameFastify.server, {
 	cors: {
 		origin: "https://localhost:8080",
 		methods: ["GET", "POST"],
-        credentials: true
+		credentials: true
+	}
+});
+
+io.use(async (socket, next) => {
+	try {
+		const	cookieHeader: string | undefined = socket.request.headers.cookie;
+		console.log("cookies: " + cookieHeader);
+		if (!cookieHeader)
+			throw new Error();
+
+
+		const	response: AxiosResponse = await gameAxios.get('http://jwt:3000/validate', 
+			{ withCredentials: true, headers: { Cookie: cookieHeader || "" } }
+		);
+
+		console.log("resp: " + response.data);
+
+		socket.data.user = response.data;
+
+		console.log("user: " + socket.data.user);
+
+		return next();
+	} catch (err: unknown) {
+		socket.data.user = null;
+		return next();
 	}
 });
 

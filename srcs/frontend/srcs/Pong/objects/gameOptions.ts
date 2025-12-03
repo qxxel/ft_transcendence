@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 19:49:30 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 11:53:29 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 13:17:43 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ export interface	GameOptions {
 	width: number;
 	height: number;
 	isTournament: boolean;
+	p1name: string;
+	p2name: string | undefined;
 	mode: 'ai' | 'pvp';
 	difficulty: "easy" | "medium" | "hard" | "boris";
 	winningScore: number;
