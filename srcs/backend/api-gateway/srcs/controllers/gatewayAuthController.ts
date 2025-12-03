@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayAuthController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/02 20:06:49 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:40:43 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 	gatewayFastify.post('/sign-up', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.post(
-				'https://auth:3000/sign-up',
+				'http://auth:3000/sign-up',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
@@ -45,7 +45,7 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 	gatewayFastify.post('/sign-in', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.post(
-				'https://auth:3000/sign-in',
+				'http://auth:3000/sign-in',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
@@ -79,7 +79,7 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 	gatewayFastify.delete('/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.delete(
-				'https://auth:3000/me',
+				'http://auth:3000/me',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 			

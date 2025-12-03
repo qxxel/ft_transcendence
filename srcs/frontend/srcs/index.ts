@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:01:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/30 19:41:04 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { addRoutes }			from "./router/addRoutes.js"
-import { Game } 				from './Pong/GameClass.js'
-import { TournamentController } from "./tournament.js"
-import { Router }				from "./router/router.js"
-import { setupClickHandlers }	from "./eventsHandlers/clickHandler.js"
-import { setupLoadHandler }		from "./eventsHandlers/loadHandler.js"
-import { setupSubmitHandler }	from "./eventsHandlers/submitHandler.js"
-import { User }					from "./user/user.js"
-
+import { addRoutes }					from "./router/addRoutes.js"
+import { connectSocket, sendKeyPress }	from "./socket/socket.js"
+import { Game } 						from "./Pong/GameClass.js"
+import { TournamentController } 		from "./tournament.js"
+import { Router }						from "./router/router.js"
+import { setupClickHandlers }			from "./eventsHandlers/clickHandler.js"
+import { setupLoadHandler }				from "./eventsHandlers/loadHandler.js"
+import { setupSubmitHandler }			from "./eventsHandlers/submitHandler.js"
+import { User }							from "./user/user.js"
 
 /* ====================== INTERFACE ====================== */
 
@@ -34,7 +34,10 @@ export interface	GameState {
 
 /* ====================== INTERFACE ====================== */
 
-
+connectSocket();
+document.addEventListener('keydown', (event) => {
+	sendKeyPress(event.key);
+});
 
 /* ====================== GLOBAL VARIABLES ====================== */
 

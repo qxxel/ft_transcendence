@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/30 21:48:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:40:59 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 import axios						from 'axios'
 import cors							from '@fastify/cors'
 import Fastify						from 'fastify'
-import fs							from 'fs'
-import https						from 'https'
+import formBody						from '@fastify/formbody'
+import proxy						from '@fastify/http-proxy'
 import { gatewayAuthController }	from "./controllers/gatewayAuthController.js"
 import { gatewayGameController }	from "./controllers/gatewayGameController.js"
 import { gatewayJwtController }		from "./controllers/gatewayJwtController.js"
@@ -31,7 +31,6 @@ import type { FastifyInstance }	from 'fastify'
 /* ====================== AXIOS VARIABLES ====================== */
 
 export const	gatewayAxios = axios.create({
-	httpsAgent: new https.Agent({ rejectUnauthorized: false }),
 	timeout: 15000
 });
 
@@ -39,18 +38,24 @@ export const	gatewayAxios = axios.create({
 /* ====================== SERVER ====================== */
 
 const	gatewayFastify: FastifyInstance = Fastify({
-	https: {
-		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
-		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
-	},
-	logger: true
+	logger: true,
+	trustProxy: true
 });
 
+gatewayFastify.register(formBody);
+
 gatewayFastify.register(cors, {
-	origin: 'https://nginx:443',
+	origin: 'https://localhost:8080',
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
+});
+
+gatewayFastify.register(proxy, {
+	upstream: 'http://game:3000',
+	prefix: '/socket.io',
+	websocket: true,
+	rewritePrefix: '/socket.io'
 });
 
 gatewayFastify.register(gatewayAuthController, { prefix: '/api/auth' });
@@ -59,10 +64,11 @@ gatewayFastify.register(gatewayGameController, { prefix: '/api/game' });
 gatewayFastify.register(gatewayJwtController, { prefix: '/api/jwt' });
 gatewayFastify.register(gatewayUserController, { prefix: '/api/user' });
 
+
 const	start = async () => {
 	try {
 		await gatewayFastify.listen({ port: 3000, host: '0.0.0.0' });
-		console.log(`Server started on https://localhost:3000`);
+		console.log(`Server started on http://gateway:3000`);
 
 		process.on('SIGTERM', () => {
 			console.log('SIGTERM received, server shutdown...');

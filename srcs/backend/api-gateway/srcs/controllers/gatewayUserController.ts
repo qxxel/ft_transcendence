@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:58:44 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/11/30 18:23:42 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 	// USERS MANAGEMENT
 	gatewayFastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {						//
 		try {																								//
-			const	response: AxiosResponse = await gatewayAxios.post('https://user:3000/', request.body);	//
+			const	response: AxiosResponse = await gatewayAxios.post('http://user:3000/', request.body);	//
 																											//
 			return reply.send(response.data);																//	A ENLEVER POUR LEXTERIEUR
 		} catch (err: unknown) {																			//
@@ -43,7 +43,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		try {
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 
-			const	response: AxiosResponse = await gatewayAxios.patch(`https://user:3000/me`, request.body,
+			const	response: AxiosResponse = await gatewayAxios.patch(`http://user:3000/me`, request.body,
 				{ headers: { 'user-id': userId } }
 			);
 
@@ -58,7 +58,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		const	parseId: number = parseInt(id, 10);																		//
 																														//
 		try {																											//
-			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/${parseId}`, request.body);	//	MATHIS: A ENLEVER
+			const	response: AxiosResponse = await gatewayAxios.post(`http://user:3000/${parseId}`, request.body);	//	MATHIS: A ENLEVER
 																														//
 			return reply.send(response.data);																			//
 		} catch (err: unknown) {																						//
@@ -69,7 +69,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 	// USERS GETTERS
 	gatewayFastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.get('https://user:3000/');
+			const	response: AxiosResponse = await gatewayAxios.get('http://user:3000/');
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
@@ -82,7 +82,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		const	parseId: number = parseInt(id, 10);
 
 		try {
-			const	response: AxiosResponse = await gatewayAxios.get(`https://user:3000/${parseId}`);
+			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/${parseId}`);
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
@@ -95,7 +95,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		try {
 			const	{ identifier } = request.params as { identifier: string };
 
-			const	response: AxiosResponse = await gatewayAxios.get(`https://user:3000/lookup/${identifier}`);
+			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/lookup/${identifier}`);
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
@@ -108,7 +108,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		try {
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 
-			const	response: AxiosResponse = await gatewayAxios.delete(`https://user:3000/me`,
+			const	response: AxiosResponse = await gatewayAxios.delete(`http://user:3000/me`,
 				{ headers: { 'user-id': userId } }
 			);
 
@@ -123,7 +123,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		const	parseId: number = parseInt(id, 10);																			//
 																															//
 		try {																												//
-			const	response: AxiosResponse = await gatewayAxios.patch(`https://user:3000/stats/${parseId}`, request.body);	//	A ENLEVER
+			const	response: AxiosResponse = await gatewayAxios.patch(`http://user:3000/stats/${parseId}`, request.body);	//	A ENLEVER
 																															//
 			return reply.send(response.data);																				//
 		} catch (err: unknown) {																							//
@@ -143,7 +143,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		const	parseId: number = parseInt(id, 10);
 
 		try {
-			const	response: AxiosResponse = await gatewayAxios.get(`https://user:3000/stats/${parseId}`);
+			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/stats/${parseId}`);
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
@@ -162,7 +162,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 
-			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/friends/request/${parseTargetId}`, request.body,
+			const	response: AxiosResponse = await gatewayAxios.post(`http://user:3000/friends/request/${parseTargetId}`, request.body,
 				{ headers: { 'user-id': userId } }
 			);
 
@@ -179,7 +179,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const parseIdA = parseInt(idA, 10);
 			const parseIdB = parseInt(idB, 10);
 
-			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/friends/${parseIdA}/${parseIdB}`, request.body);	//	AXEL: A ENLEVER
+			const	response: AxiosResponse = await gatewayAxios.post(`http://user:3000/friends/${parseIdA}/${parseIdB}`, request.body);	//	AXEL: A ENLEVER
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
@@ -194,7 +194,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 
-			const	response: AxiosResponse = await gatewayAxios.patch(`https://user:3000/friends/accept/${parseTargetId}`, request.body,
+			const	response: AxiosResponse = await gatewayAxios.patch(`http://user:3000/friends/accept/${parseTargetId}`, request.body,
 				{ headers: { 'user-id': userId } }
 			);
 
@@ -211,7 +211,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 
-			const	response: AxiosResponse = await gatewayAxios.delete(`https://user:3000/friends/${parseTargetId}`,
+			const	response: AxiosResponse = await gatewayAxios.delete(`http://user:3000/friends/${parseTargetId}`,
 				{ headers: { 'user-id': userId } }
 			);
 			
@@ -226,7 +226,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		try {
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 
-			const	response: AxiosResponse = await gatewayAxios.get(`https://user:3000/friends/me`,
+			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/friends/me`,
 				{ headers: { 'user-id': userId } }
 			);
 
@@ -241,7 +241,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	{ id } = request.params as { id: string };
 			const	parseId: number = parseInt(id, 10);
 
-			const	response: AxiosResponse = await gatewayAxios.get(`https://user:3000/friends/${parseId}`);
+			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/friends/${parseId}`);
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
@@ -255,7 +255,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const parseIdA = parseInt(idA, 10);
 			const parseIdB = parseInt(idB, 10);
 
-			const	response: AxiosResponse = await gatewayAxios.get(`https://user:3000/friends/${parseIdA}/${parseIdB}`);
+			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/friends/${parseIdA}/${parseIdB}`);
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
@@ -271,7 +271,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 
-			const	response: AxiosResponse = await gatewayAxios.post(`https://user:3000/friends/block/${parseTargetId}`, request.body,
+			const	response: AxiosResponse = await gatewayAxios.post(`http://user:3000/friends/block/${parseTargetId}`, request.body,
 				{ headers: { 'user-id': userId } }
 			);
 
@@ -288,7 +288,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 
-			const	response: AxiosResponse = await gatewayAxios.delete(`https://user:3000/friends/unblock/${parseTargetId}`,
+			const	response: AxiosResponse = await gatewayAxios.delete(`http://user:3000/friends/unblock/${parseTargetId}`,
 				{ headers: { 'user-id': userId } }
 			);
 
@@ -303,7 +303,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		const	parseId: number = parseInt(id, 10);																					//
 																																	//
 		try {																														//
-			const	response: AxiosResponse = await gatewayAxios.patch(`https://user:3000/user-stats/${parseId}`, request.body);	// A ENLEVER
+			const	response: AxiosResponse = await gatewayAxios.patch(`http://user:3000/user-stats/${parseId}`, request.body);	// A ENLEVER
 																																	//
 			return reply.send(response.data);																						//
 		} catch (err: unknown) {																									//

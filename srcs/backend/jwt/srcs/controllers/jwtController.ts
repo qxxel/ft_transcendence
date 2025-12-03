@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtController.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/30 10:42:04 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:42:16 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ export async function	jwtController(jwtFastify: FastifyInstance) {
 
 	jwtFastify.post('/twofa/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	payload: AxiosResponse = await jwtAxios.get("https://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+			const	payload: AxiosResponse = await jwtAxios.get("http://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 			
 			const	user: userDto = payload.data as userDto;
 

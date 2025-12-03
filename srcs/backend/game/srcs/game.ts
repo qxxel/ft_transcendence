@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:38:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/30 19:48:32 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 import cors					from '@fastify/cors'
 import Fastify				from 'fastify'
+import formBody				from '@fastify/formbody'
 import fs					from 'fs'
 import { Server }			from 'socket.io'
 import sqlite3Pkg			from 'sqlite3'
@@ -49,15 +50,14 @@ export const	tankServ: tankService = new tankService(new tankRepository(db));
 /* ====================== SERVER ====================== */
 
 const	gameFastify: FastifyInstance = Fastify({
-	https: {
-		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
-		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
-	},
-	logger: true
+	logger: true,
+	trustProxy: true
 });
 
+gameFastify.register(formBody);
+
 gameFastify.register(cors, {
-	origin: 'https://gateway:3000',
+	origin: 'https://localhost:8080',
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
@@ -66,34 +66,54 @@ gameFastify.register(cors, {
 gameFastify.register(pongController, { prefix: '/pong' });
 gameFastify.register(tankController, { prefix: '/tank' });
 
+const	io = new Server(gameFastify.server, {
+	path: '/socket.io',
+	cors: {
+		origin: "https://localhost:8080",
+		methods: ["GET", "POST"],
+        credentials: true
+	}
+});
+
+io.on('connection', (socket) => {
+	gameFastify.log.info(`Service Game: Client connecté ${socket.id}`);
+
+	socket.on('touche_appuyee', (data) => {
+		gameFastify.log.info(`Service Game: Touche reçue -> ${data.key}`);
+		
+		// Renvoyer un accusé de réception
+		socket.emit('message_recu', { msg: `Bravo, tu as appuyé sur ${data.key}` });
+	});
+});
+
 const	start = async () => {
 	try {
 		// Listen
 		await gameFastify.listen({ port: 3000, host: '0.0.0.0' });
-		gameFastify.log.info("Server started on https://game:3000");
-		console.log("Server started on https://game:3000");
+		gameFastify.log.info("Server started on http://game:3000");
+		console.log("Server started on http://game:3000");
 
 		// Socket.io
-		const io = new Server(gameFastify.server, {
-			path: "/socket.io",
-			cors: {
-				origin: "https://frontend:443", 
-				methods: ["GET", "POST"]
-			}
-		});
+		// const io = new Server(gameFastify.server, {
+		// 	path: "/socket.io",
+		// 	cors: {
+		// 		origin: "https://frontend:443", 
+		// 		methods: ["GET", "POST"]
+		// 	}
+		// });
 
-		io.on("connection", (socket) => {
-			gameFastify.log.info(`Joueur connecté au Game Service : ${socket.id}`);
+		// io.on("connection", (socket) => {
+		// 	gameFastify.log.info(`Joueur connecté au Game Service : ${socket.id}`);
 
-			socket.on("disconnect", () => {
-				gameFastify.log.info(`Joueur déconnecté : ${socket.id}`);
-				console.log(`Joueur déconnecté : ${socket.id}`);
-			});
+		// 	socket.on("disconnect", () => {
+		// 		gameFastify.log.info(`Joueur déconnecté : ${socket.id}`);
+		// 		console.log(`Joueur déconnecté : ${socket.id}`);
+		// 	});
 
-			socket.on("ping", () => {
-				socket.emit("pong", "Hello from Fastify Game Service");
-			});
-		});
+		// 	socket.on("ping", () => {
+		// 		socket.emit("pong", "Hello from Fastify Game Service");
+		// 	});
+		// });
 
 		// SIGTERM
 		process.on('SIGTERM', () => {

@@ -8,6 +8,8 @@ services:
     secrets:
       - ssl_key_back
       - ssl_crt_back
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
     ports:
       - "5000:3000"
     networks:
