@@ -87,7 +87,7 @@ export class	Map {
 		const c_blk1 = {r:110,g:110,b:110};
 		const c_blk2 = {r:160,g:160,b:160};
 
-		const ext_width = 16;
+		const ext_width = 1;
 		const cell =  this.map_height/10; // IDK AM I DUMB
 
 
@@ -98,10 +98,10 @@ export class	Map {
 		this.walls.push(new Wall(0, 0, this.map_width, ext_width, c_ext));                            // EXTERIOR TOP
 		this.walls.push(new Wall(0, this.map_height - ext_width, this.map_width, ext_width, c_ext));  // EXTERIOR BOT
 
-		this.walls.push(new Wall(45, 0, ext_width, this.map_height, c_ext));                          // SCOTCH EXTERIOR LEFT
-		this.walls.push(new Wall(cell*9, 0, ext_width, this.map_height, c_ext));                      // SCOTCH EXTERIOR RIGHT
-		this.walls.push(new Wall(0, 30, this.map_width, ext_width, c_ext));                           // SCOTCH EXTERIOR TOP
-		this.walls.push(new Wall(0, this.map_height - 30 - ext_width, this.map_width, ext_width, c_ext));  // SCOTCH EXTERIOR BOT
+		// this.walls.push(new Wall(45, 0, ext_width, this.map_height, c_ext));                          // SCOTCH EXTERIOR LEFT
+		// this.walls.push(new Wall(cell*9, 0, ext_width, this.map_height, c_ext));                      // SCOTCH EXTERIOR RIGHT
+		// this.walls.push(new Wall(0, 30, this.map_width, ext_width, c_ext));                           // SCOTCH EXTERIOR TOP
+		// this.walls.push(new Wall(0, this.map_height - 30 - ext_width, this.map_width, ext_width, c_ext));  // SCOTCH EXTERIOR BOT
 
 // XXXXXXXXXX
 // X a e    X

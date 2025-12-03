@@ -28,6 +28,8 @@ export interface	Spawn {
 export interface	Stats {
 	win:number;
 	lose:number;
+	fire:number;
+	hit:number;
 	bounce:number;
 }
 
@@ -52,13 +54,15 @@ export const	GSTATE: GlobalState = {
 	CANVAS: undefined as unknown as HTMLCanvasElement,
 	CTX: undefined as unknown as CanvasRenderingContext2D,
 	REDRAW: true as boolean,
-	STATS1: {win:0,lose:0,bounce:0} as Stats,
-	STATS2: {win:0,lose:0,bounce:0} as Stats,
+	STATS1: {win:0,lose:0,fire:0,hit:0,bounce:0} as Stats,
+	STATS2: {win:0,lose:0,fire:0,hit:0,bounce:0} as Stats,
 };
 
 export const	Stats: Stats = {
 	win: 0 as number,
 	lose: 0 as number,
+	fire: 0 as number,
+	hit: 0 as number,
 	bounce: 0 as number,
 }
 /*

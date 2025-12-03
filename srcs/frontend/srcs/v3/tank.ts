@@ -233,14 +233,17 @@ export class	TankGame extends Game {
 
 	if (winnerDisplay) winnerDisplay.innerText = `${winnerName} Wins!`;
 
+	const accuracy1:number = GSTATE.STATS1.fire > 0 ? ((GSTATE.STATS1.hit / GSTATE.STATS1.fire * 100)) : 0;
+	const accuracy2:number = GSTATE.STATS2.fire > 0 ? ((GSTATE.STATS2.hit / GSTATE.STATS2.fire * 100)) : 0;
+
     document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
     
     document.getElementById('p1-stat-name')!.innerText = 'BOUNCE1:';
-    document.getElementById('stat-p1-hits')!.innerText = `${GSTATE.STATS1.bounce}`;
+    document.getElementById('stat-p1-hits')!.innerText = accuracy1.toFixed(1) + `% (${GSTATE.STATS1.fire}/${GSTATE.STATS1.hit}/${GSTATE.STATS1.bounce})`;
     // document.getElementById('stat-p1-hits')!.innerText = 'X';
 
     document.getElementById('p2-stat-name')!.innerText = 'BOUNCE2:';
-    document.getElementById('stat-p2-hits')!.innerText = `${GSTATE.STATS2.bounce}`;
+    document.getElementById('stat-p2-hits')!.innerText = accuracy2.toFixed(1) + `% (${GSTATE.STATS2.fire}/${GSTATE.STATS2.hit}/${GSTATE.STATS2.bounce})`;
 
     document.getElementById('stat-rally')!.innerText = 'X';
 

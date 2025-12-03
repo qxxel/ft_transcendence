@@ -115,6 +115,11 @@ export class	Tank extends Actor {
 
 		this.fire_last = now;
 
+		if (this.id == 0)
+			GSTATE.STATS1.fire += 1;
+		else
+			GSTATE.STATS2.fire += 1;
+
 		GSTATE.ACTORS.push(
 				new Ball(this.cannon.getEnd().x - 10/2 ,this.cannon.getEnd().y - 10/2 ,10,10, Math.cos(this.cannon.geometry.angle) * 3, Math.sin(this.cannon.geometry.angle) * 3,
 					this.fire_color, this));

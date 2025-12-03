@@ -82,6 +82,10 @@ export class	Ball extends Actor {
 			{
 				if (a instanceof Tank) {
 					a.addHealth(-this.damage);
+					if (a.id == 0)
+						GSTATE.STATS1.hit += 1;
+					else (a.id == 1)
+						GSTATE.STATS2.hit += 1;
 					this.destroy();
 					return true;
 				}
