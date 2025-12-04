@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 15:40:16 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 16:38:34 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,14 @@ async function	onClickEdit(): Promise<void> {
 	mail.value = userRes.email ?? "";
 }
 
-async function	onClickHistory(targetName: string | null): Promise<void> {
-	console.log("History");
+export async function	onClickHistory(targetId: number | null, targetName: string | null): Promise<void> {
+	console.log("History => " + targetId + " - " + targetName);
 	// TODO: SECURE IF NOT AUTH
 
 	router.navigate("/history");
+
 	setTimeout(() => {
-		initHistoryListeners(targetName);
+		initHistoryListeners(targetId, targetName);
 	}, 50);
 }
 
@@ -614,7 +615,7 @@ export async function   setupClickHandlers(): Promise<void> {
 	(window as any).onClickLogout = () => onClickLogout();
 
 	(window as any).onClickEdit = () => onClickEdit();
-	(window as any).onClickHistory = (targetName: string | null = null) => onClickHistory(targetName);
+	(window as any).onClickHistory = (targetId: number | null = null, targetName: string | null = null) => onClickHistory(targetId, targetName);
 	(window as any).onClickCancel = () => onClickCancel();
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount();
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa();

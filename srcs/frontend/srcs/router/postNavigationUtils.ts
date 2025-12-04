@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 15:42:14 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 16:25:58 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ export async function  pathActions(currentPath: string): Promise<void> {
 	const	user: UserState = state.user;
 	const	currentGame: Game | null = state.game.currentGame;
 	const	currentTournament: TournamentController | null = state.game.currentTournament;
-	const	pendingOptions: GameOptions | null = state.game.pendingOptions;
 
 	if (!['/pong', '/tank'].includes(currentPath))
 	{

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 15:41:17 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 16:31:20 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 import { attachDelegationListeners }	from "./friendsEvents.js"
 import { sendRequest }					from "../utils/sendRequest.js"
 import { AppState, appStore, UserState } from "../objects/store.js";
+import { onClickHistory } from "../eventsHandlers/clickHandler.js";
 
 
 /* ====================== INTERFACE ====================== */
@@ -144,18 +145,19 @@ function	addFriendInList(friendsListDiv: HTMLDivElement, friend: UserObject): vo
 	usernameSpan.classList.add("username");
 	usernameSpan.textContent = friend.username;
 
-	const	historyButton: HTMLSpanElement = document.createElement("button");
+	const	historyButton: HTMLButtonElement = document.createElement("button");
 	historyButton.classList.add("neon-button");
 	historyButton.classList.add("history-button");
-	historyButton.textContent = "History";
 	historyButton.dataset.targetId = friend.id.toString();
 	historyButton.dataset.targetUsername = friend.username;
+	historyButton.onclick = () => onClickHistory(friend.id, friend.username);
+	historyButton.textContent = "History";
 
-	const	removeButton: HTMLSpanElement = document.createElement("button");
+	const	removeButton: HTMLButtonElement = document.createElement("button");
 	removeButton.classList.add("remove-button");
-	removeButton.textContent = "✕";
 	removeButton.dataset.targetId = friend.id.toString();
 	removeButton.dataset.targetUsername = friend.username;
+	removeButton.textContent = "✕";
 
 
 	newActionDiv.appendChild(historyButton);
