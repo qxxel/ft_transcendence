@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/04 12:44:13 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 15:37:27 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,14 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { appStore }		from "../objects/store.js"
 import { router }		from "../index.js"
 import { sendRequest }	from "../utils/sendRequest.js"
-import { User }			from "../user/user.js"
-
-import type { GamesState }	from "../index.js"
 
 
 /* ====================== FUNCTIONS ====================== */
 
-async function	handleLoadPage(gameState: GamesState, user: User): Promise<void> {
+async function	handleLoadPage(): Promise<void> {
 	document.addEventListener("DOMContentLoaded", async (event: Event) => {
 		console.log("DOMContentLoaded");
 
@@ -35,9 +33,20 @@ async function	handleLoadPage(gameState: GamesState, user: User): Promise<void> 
 
 		const	result: any = await response.json();
 
-		user.setId(result.id as number);
-		user.setUsername(result.username);
-		user.setSigned(true);
+		appStore.setState((state) => ({
+			...state,
+			user: {
+				...state.user,
+				id: result.id as number,
+				username: result.username,
+				isAuth: true
+			}
+		}));
+
+			// OLD
+		// user.setId(result.id as number);
+		// user.setUsername(result.username);
+		// user.setSigned(true);
 
 		const baseHref = window.location.origin;
 
@@ -52,7 +61,7 @@ async function	handleLoadPage(gameState: GamesState, user: User): Promise<void> 
 				<a onclick="onClickLogout();" id="logout">Logout</a>
 				<a href="/about">About</a>`;
 
-		router.navigate('/', gameState, user);
+		router.navigate('/');
 	});
 }
 
@@ -64,7 +73,7 @@ function handleUnload() {
 	});
 }
 
-export async function	setupLoadHandler(gameState: GamesState, user: User): Promise<void> {
-	handleLoadPage(gameState, user);
+export async function	setupLoadHandler(): Promise<void> {
+	handleLoadPage();
 	handleUnload();
 }

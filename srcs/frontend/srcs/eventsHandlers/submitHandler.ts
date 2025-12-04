@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 12:44:13 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 15:40:23 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,13 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { AppState, appStore, UserState }				from "../objects/store.js"
 import { displayDate }			from "../utils/displayDate.js"
 import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
 import { router }				from "../index.js"
 import { socket }				from "../socket/socket.js"
 import { sendRequest }			from "../utils/sendRequest.js"
-import { User }					from "../user/user.js"
 
-import type { GamesState }	from "../index.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -37,7 +36,7 @@ function	getMenu(username: string | undefined): string {
 			<a href="/about">About</a>`;
 }
 
-async function	handleSignInForm(form: HTMLFormElement, gameState: GamesState, user: User): Promise<void> {
+async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 	console.log("Sign in");
 	const	identifier: string = (document.getElementById("sign-in-username") as HTMLInputElement).value;
 	const	password: string = (document.getElementById("sign-in-password") as HTMLInputElement).value;
@@ -71,12 +70,22 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GamesState, us
 	if (socket && socket.connected)
 		socket.disconnect();
 
-	user.setId(result.id as number);
-	user.setUsername(result.username);
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			...state.user,
+			id: result.id as number,
+			username: result.username
+		}
+	}));
+
+		// OLD
+	// user.setId(result.id as number);
+	// user.setUsername(result.username);
 
 	if (result.is2faEnable) {
-		router.navigate("/2fa", gameState, user);
-		
+		router.navigate("/2fa");
+
 		sendRequest('/api/twofa/otp', 'GET', null)
 			.then((response) => {
 				if (!response.ok)
@@ -85,16 +94,29 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GamesState, us
 		
 		return ;
 	}
-	user.setSigned(true);
+
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			...state.user,
+			isAuth: true
+		}
+	}));
+
+		// OLD
+	// user.setSigned(true);
+
+	const	state: AppState = appStore.getState();
+	const	user: UserState = state.user;
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenu(user.getUsername());
+		menu.innerHTML = getMenu(user.username!);	// SUR QUIL EXISTE (20 LIGNES PLUS HAUT) ??
 
-	router.navigate("/", gameState, user);
+	router.navigate("/");
 }
 
-async function	handleSignUpForm(form: HTMLFormElement, gameState: GamesState, user: User): Promise<void> {
+async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 	console.log("Sign up");
 
 	const	username: string = (document.getElementById("sign-up-username") as HTMLInputElement).value;
@@ -125,8 +147,18 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GamesState, us
 	if (socket && socket.connected)
 		socket.disconnect();
 
-	user.setId(result.id as number);
-	user.setUsername(username);
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			...state.user,
+			id: result.id as number,
+			username: username
+		}
+	}));
+
+		// OLD
+	// user.setId(result.id as number);
+	// user.setUsername(username);
 
 	const	divSignUp = document.getElementById("sign-up");
 	if (divSignUp)
@@ -154,7 +186,7 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GamesState, us
 	displayDate(5);
 }
 
-async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: GamesState, user: User): Promise<void> {
+async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 	console.log("VerifyEmail");
 
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
@@ -173,17 +205,29 @@ async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: GamesStat
 		return ;
 	}
 
-	user.setSigned(true);
-	
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			...state.user,
+			isAuth: true
+		}
+	}));
+
+		// OLD
+	// user.setSigned(true);
+
+	const	state: AppState = appStore.getState();
+	const	user: UserState = state.user;
+
 	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenu(user.getUsername());
+		menu.innerHTML = getMenu(user.username!);	// SUR QUIL EXISTE (20 LIGNES PLUS HAUT) ??
 
 	router.canLeave = true;
-	router.navigate("/", gameState, user);
+	router.navigate("/");
 }
 
-async function	handle2faForm(form: HTMLFormElement, gameState: GamesState, user: User): Promise<void> {
+async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 	console.log("2fa");
 
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
@@ -203,30 +247,45 @@ async function	handle2faForm(form: HTMLFormElement, gameState: GamesState, user:
 		return ;
 	}
 
-	user.setSigned(true);
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			...state.user,
+			isAuth: true
+		}
+	}));
+
+		// OLD
+	// user.setSigned(true);
+
+	const	state: AppState = appStore.getState();
+	const	user: UserState = state.user;
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenu(user.getUsername());
+		menu.innerHTML = getMenu(user.username!);	// SUR QUIL EXISTE (20 LIGNES PLUS HAUT) ??
 
 	router.canLeave = true;
-	router.navigate("/", gameState, user);
+	router.navigate("/");
 }
 
-async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GamesState, user: User): Promise<void> {
+async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	console.log("Save Settings");
 	
 	const	newUsername: string = (document.getElementById("edit-username") as HTMLInputElement).value;
 	const	newEmail: string = (document.getElementById("edit-email") as HTMLInputElement).value;
 	const	new2fa: boolean = (document.getElementById("edit-2fa") as HTMLInputElement).checked;
 
+	const	state: AppState = appStore.getState();
+	const	user: UserState = state.user;
+
 	console.log(newUsername, newEmail, new2fa);
-	const response: Response = await sendRequest(`/api/user/${user.getId()}`, 'post', {
+	const response: Response = await sendRequest(`/api/user/${user.id}`, 'post', {	// MATHIS: REQUETE /me
 		username: newUsername,
 		email: newEmail,
 		is2faEnable: new2fa
 	});
-	
+
 	if (!response.ok) {
 		const	p = document.getElementById("user-setting-msg-error");
 		if (!p)
@@ -238,7 +297,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GamesSta
 		return ;
 	}
 
-	const res: Response = await sendRequest(`/api/jwt/${user.getId()}`, 'delete', null);
+	const res: Response = await sendRequest(`/api/jwt/${user.id}`, 'delete', null);	// MATHIS: REQUETE /me
 
 	if (!res.ok) {
 		const	p = document.getElementById("user-setting-msg-error");
@@ -250,13 +309,25 @@ async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GamesSta
 		}
 		return ;
 	}
-	
-	user.logout();
-	router.navigate("/", gameState, user);
-	location.reload();
+
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			id: null,
+			username: null,
+			avatar: null,
+			isAuth: false
+		}
+	}));
+
+		// OLD
+	// user.logout();
+
+	router.navigate("/");
+	location.reload();	//	MATHIS: SURTOUT PAS => SPA
 }
 
-async function	handleAddFriendForm(form: HTMLFormElement, gameState: GamesState, user: User) {
+async function	handleAddFriendForm(form: HTMLFormElement) {
 	console.log("add friend form");
 
 	const targetName: string = (document.getElementById("username-add-input") as HTMLInputElement).value;
@@ -268,7 +339,7 @@ async function	handleAddFriendForm(form: HTMLFormElement, gameState: GamesState,
 	if (!respTargetId.ok)
 	{
 		console.log((await respTargetId.json() as any).error)
-		return ;																					//	AXEL: AFFICHER BULLE ERREUR
+		return ;											//	AXEL: AFFICHER BULLE ERREUR
 	}
 	const	targetId: number = (await respTargetId.json() as any).id;
 
@@ -276,7 +347,7 @@ async function	handleAddFriendForm(form: HTMLFormElement, gameState: GamesState,
 	if (!response.ok)
 	{
 		console.log(await response.json())
-		return ;																					//	AXEL: AFFICHER BULLE ERREUR
+		return ;											//	AXEL: AFFICHER BULLE ERREUR
 	}
 
 	const	friendship: any = await response.json();
@@ -289,28 +360,28 @@ async function	handleAddFriendForm(form: HTMLFormElement, gameState: GamesState,
 	await getAndRenderFriends();
 }
 
-export function	setupSubmitHandler(gameState: GamesState, user: User): void {
+export function	setupSubmitHandler(): void {
 	document.addEventListener('submit', async (event: SubmitEvent) => {
 		event.preventDefault();
 
 		const	form: HTMLFormElement = event.target as HTMLFormElement;
 
 		if (form.id === "sign-in-form")
-			await handleSignInForm(form, gameState, user);
+			await handleSignInForm(form);
 
 		if (form.id === "sign-up-form")
-			await handleSignUpForm(form, gameState, user);
+			await handleSignUpForm(form);
 
 		if (form.id === "verify-email-form")
-			await handleVerifyEmailForm(form, gameState, user);
+			await handleVerifyEmailForm(form);
 
 		if (form.id === "2fa-form")
-			await handle2faForm(form, gameState, user);
+			await handle2faForm(form);
 
 		if (form.id === "user-settings-form")
-			await handleUserSettingsForm(form, gameState, user);
+			await handleUserSettingsForm(form);
 
 		if (form.id === "add-friend-form")
-			await handleAddFriendForm(form, gameState, user);
+			await handleAddFriendForm(form);
 	});
 }
