@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile.front
     restart: on-failure
     volumes:
-      - "frontend_assets:/app/dist"
+      - "shared_uploads:/usr/share/nginx/html/uploads"
     env_file:
       - .env
     secrets:
@@ -25,7 +25,7 @@ include:
 
 
 volumes:
-  frontend_assets:
+  shared_uploads:
   authDB:
     driver: local
     driver_opts:

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 16:25:58 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 21:56:00 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ import { TankGame }				from "../v3/tank.js"
 import { TournamentController }	from "../Pong/tournament.js"
 
 import type { AppState, UserState }	from "../objects/store.js"
+import { attachAvatarUploadListener } from "../eventsHandlers/changeListener.js"
 
 
 /* ====================== FUNCTION ====================== */
@@ -144,6 +145,11 @@ export async function  pathActions(currentPath: string): Promise<void> {
 		getAndRenderFriends();
 		console.log("Loading the friends...");
 	}
+
+	if (['/user'].includes(currentPath)) {
+		if (user.id)
+			attachAvatarUploadListener(user.id);
+	}
 }
 
 async function loadTwofa() {
@@ -166,6 +172,15 @@ async function loadUser(user: UserState) {
 		}
 
 		const	userRes = await Response.json();
+
+		const imgElement: HTMLImageElement = document.getElementById("user-avatar") as HTMLImageElement;
+		if (imgElement)
+		{
+			if (userRes.avatar)
+				imgElement.src = "/uploads/" + userRes.avatar;
+			else
+				imgElement.src = "/assets/default_avatar.png";
+		}
 
 		if (userRes.is2faEnable == true) {
 			const	switchSpan = document.getElementById("switch-span") as HTMLInputElement;

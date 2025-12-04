@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:23:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 16:06:00 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 22:31:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== FUNCTION ====================== */
 
-async function	sendMainRequest(path: string, requestMethod: string, body: Object | null): Promise<Response> {
+async function	sendMainRequest(path: string, requestMethod: string, body: any | null): Promise<Response> {
 	let	response: Response;
 
 	if (body === null)
@@ -25,6 +25,14 @@ async function	sendMainRequest(path: string, requestMethod: string, body: Object
 			credentials: "include"
 		});
 	}
+	else if (body instanceof FormData)
+    {
+        response = await fetch(path, {
+			method: requestMethod,
+			credentials: "include",
+            body: body 
+		});
+    }
 	else
 	{
 		response = await fetch(path, {
