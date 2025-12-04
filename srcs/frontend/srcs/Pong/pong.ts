@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/03 18:03:04 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:44:13 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ import { Router }					from "../router/router.js"
 import { User }						from "../user/user.js"
 import { PongRenderer }				from "./renderer.js"
 
-import type { AppState }				from "../index.js"
-import type { PongState }				from "./objects/gameState.js"
+import type { GamesState }				from "../index.js"
+import type { PongState }				from "./objects/pongState.js"
 import type { GameOptions, PowerUps }	from "./objects/gameOptions.js"
-import type { GameResume }				from "./objects/gameResume.js"
+import type { PongResume }				from "./objects/pongResume.js"
 
 
 /* ====================== CLASS ====================== */
@@ -48,7 +48,7 @@ export class PongGame extends Game {
 	private ids: { canvas: string; score1: string; score2: string; winScore: string };
 
 	private router: Router;
-	private appState: AppState;
+	private appState: GamesState;
 	private user: User;
 
 	constructor(canvasId: string,
@@ -56,7 +56,7 @@ export class PongGame extends Game {
 			score2Id: string,
 			winScoreId: string,
 			router: Router,
-			appState: AppState,
+			appState: GamesState,
 			user: User) {
 		super();
 		this.ids = { canvas: canvasId, score1: score1Id, score2: score2Id, winScore: winScoreId };
@@ -150,7 +150,7 @@ export class PongGame extends Game {
 			this.updateScoresUI();
 		});
 
-		socket.on('game-over', (data: GameResume) => {
+		socket.on('game-over', (data: PongResume) => {
 			this.isGameOver = true;
 
 			if (this.animationFrameId)
@@ -302,18 +302,18 @@ export class PongGame extends Game {
 		this.scoreElements.p2.innerText = this.serverState.score2.toString();
 	}
 
-	private showEndGameDashboard(gameResume: GameResume) {
+	private showEndGameDashboard(pongResume: PongResume) {
 		if (this.scoreElements)
 		{
-			this.scoreElements.p1.innerText = gameResume.score1.toString();
-			this.scoreElements.p2.innerText = gameResume.score2.toString();
+			this.scoreElements.p1.innerText = pongResume.score1.toString();
+			this.scoreElements.p2.innerText = pongResume.score2.toString();
 		}
 
 		const dashboard = document.getElementById('game-over-dashboard');
 		if (!dashboard)
 			return;
 
-		const winnerName = gameResume.winner === 1 ? this.player1Name : this.player2Name;
+		const winnerName = pongResume.winner === 1 ? this.player1Name : this.player2Name;
 		const winnerDisplay = document.getElementById('winner-display');
 		if (winnerDisplay)
 			winnerDisplay.innerText = `${winnerName} Wins!`;
@@ -321,16 +321,16 @@ export class PongGame extends Game {
 			this.appState.currentTournament.reportMatchWinner(winnerName);
 
 
-		const	gameDurationSec: number = (gameResume.duration / 1000)
+		const	gameDurationSec: number = (pongResume.duration / 1000)
 		const	minutes: string = (gameDurationSec / 60).toFixed(0);
 		const	minutesText: string = minutes === "0" ? "" : minutes + "m ";
 		const	seconds: string = (gameDurationSec % 60).toFixed(0);
 		const	secondsText: string = seconds + "s"
 
 		document.getElementById('stat-duration')!.innerText = minutesText + secondsText;
-		document.getElementById('stat-p1-hits')!.innerText = gameResume.player1Hits.toString();
-		document.getElementById('stat-p2-hits')!.innerText = gameResume.player2Hits.toString();
-		document.getElementById('stat-rally')!.innerText = gameResume.longestRally.toString();
+		document.getElementById('stat-p1-hits')!.innerText = pongResume.player1Hits.toString();
+		document.getElementById('stat-p2-hits')!.innerText = pongResume.player2Hits.toString();
+		document.getElementById('stat-rally')!.innerText = pongResume.longestRally.toString();
 
 		const	restartMsg = document.getElementById('restart-msg');
 		if (restartMsg)

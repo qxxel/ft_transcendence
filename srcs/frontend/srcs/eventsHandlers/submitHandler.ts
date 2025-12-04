@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 18:03:49 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:44:13 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ import { socket }				from "../socket/socket.js"
 import { sendRequest }			from "../utils/sendRequest.js"
 import { User }					from "../user/user.js"
 
-import type { AppState }	from "../index.js"
+import type { GamesState }	from "../index.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -37,7 +37,7 @@ function	getMenu(username: string | undefined): string {
 			<a href="/about">About</a>`;
 }
 
-async function	handleSignInForm(form: HTMLFormElement, gameState: AppState, user: User): Promise<void> {
+async function	handleSignInForm(form: HTMLFormElement, gameState: GamesState, user: User): Promise<void> {
 	console.log("Sign in");
 	const	identifier: string = (document.getElementById("sign-in-username") as HTMLInputElement).value;
 	const	password: string = (document.getElementById("sign-in-password") as HTMLInputElement).value;
@@ -94,7 +94,7 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: AppState, user
 	router.navigate("/", gameState, user);
 }
 
-async function	handleSignUpForm(form: HTMLFormElement, gameState: AppState, user: User): Promise<void> {
+async function	handleSignUpForm(form: HTMLFormElement, gameState: GamesState, user: User): Promise<void> {
 	console.log("Sign up");
 
 	const	username: string = (document.getElementById("sign-up-username") as HTMLInputElement).value;
@@ -154,7 +154,7 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: AppState, user
 	displayDate(5);
 }
 
-async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: AppState, user: User): Promise<void> {
+async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: GamesState, user: User): Promise<void> {
 	console.log("VerifyEmail");
 
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
@@ -183,7 +183,7 @@ async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: AppState,
 	router.navigate("/", gameState, user);
 }
 
-async function	handle2faForm(form: HTMLFormElement, gameState: AppState, user: User): Promise<void> {
+async function	handle2faForm(form: HTMLFormElement, gameState: GamesState, user: User): Promise<void> {
 	console.log("2fa");
 
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
@@ -213,7 +213,7 @@ async function	handle2faForm(form: HTMLFormElement, gameState: AppState, user: U
 	router.navigate("/", gameState, user);
 }
 
-async function	handleUserSettingsForm(form: HTMLFormElement, gameState: AppState, user: User): Promise<void> {
+async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GamesState, user: User): Promise<void> {
 	console.log("Save Settings");
 	
 	const	newUsername: string = (document.getElementById("edit-username") as HTMLInputElement).value;
@@ -256,7 +256,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement, gameState: AppState
 	location.reload();
 }
 
-async function	handleAddFriendForm(form: HTMLFormElement, gameState: AppState, user: User) {
+async function	handleAddFriendForm(form: HTMLFormElement, gameState: GamesState, user: User) {
 	console.log("add friend form");
 
 	const targetName: string = (document.getElementById("username-add-input") as HTMLInputElement).value;
@@ -289,7 +289,7 @@ async function	handleAddFriendForm(form: HTMLFormElement, gameState: AppState, u
 	await getAndRenderFriends();
 }
 
-export function	setupSubmitHandler(gameState: AppState, user: User): void {
+export function	setupSubmitHandler(gameState: GamesState, user: User): void {
 	document.addEventListener('submit', async (event: SubmitEvent) => {
 		event.preventDefault();
 

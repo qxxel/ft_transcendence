@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 18:02:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:44:13 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 import { pathActions }	from "./postNavigationUtils.js"
 import { User }			from "../user/user.js"
 
-import type { AppState }					from "../index.js"
+import type { GamesState }					from "../index.js"
 
 
 /* ====================== INTERFACE ====================== */
@@ -40,7 +40,7 @@ export class	Router {
 		this.routes.push({ path, component });
 	}
 
-	navigate(path: string, gameState: AppState, user: User): void {
+	navigate(path: string, gameState: GamesState, user: User): void {
 		if (!this.canLeave)
 		{
 			if (!confirm("This page is asking you to confirm that you want to leave — information you’ve entered may not be saved."))
@@ -51,7 +51,7 @@ export class	Router {
 		this.render(gameState, user);
 	}
 
-	async render(gameState: AppState, user: User): Promise<void> {
+	async render(gameState: GamesState, user: User): Promise<void> {
 		const	currentPath: string = window.location.pathname;
 		const	route: Route | undefined = this.routes.find(r => r.path === currentPath);
 

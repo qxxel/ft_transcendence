@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 22:43:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:44:13 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ import type { GameOptions }	from "./Pong/objects/gameOptions.js"
 
 /* ====================== INTERFACE ====================== */
 
-export interface	AppState {
+export interface	GamesState {
 	currentGame: Game | null;
 	currentTournament: TournamentController | null;
 	pendingOptions?: GameOptions
@@ -36,7 +36,7 @@ export interface	AppState {
 
 /* ====================== GLOBAL VARIABLES ====================== */
 
-var	gameState: AppState = {
+var	gameState: GamesState = {
 	currentGame: null,
 	currentTournament: null
 };

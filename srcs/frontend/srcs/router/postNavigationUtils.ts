@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 21:41:47 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:44:13 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ import { sendRequest }			from "../utils/sendRequest.js"
 import { TankGame }				from "../v3/tank.js"
 import { User }					from "../user/user.js"
 
-import type { AppState }	from "../index.js"
+import type { GamesState }	from "../index.js"
 
 
 /* ====================== FUNCTION ====================== */
 
-export async function  pathActions(currentPath: string, gameState: AppState, user: User): Promise<void> {
+export async function  pathActions(currentPath: string, gameState: GamesState, user: User): Promise<void> {
 	
 	if (!['/pong', '/tank'].includes(currentPath)) {
 		if (gameState.currentGame) 
@@ -136,7 +136,7 @@ export async function  pathActions(currentPath: string, gameState: AppState, use
 	}
 }
 
-async function loadTwofa(gameState: AppState, user: User) {
+async function loadTwofa(gameState: GamesState, user: User) {
 	const	Response: Response = await sendRequest(`/api/jwt/twofa`, 'get', null);
 	if (!Response.ok) {
 		console.log(Response.statusText);

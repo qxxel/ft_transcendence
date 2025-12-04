@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 21:10:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 21:24:40 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:41:22 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== INTERFACES ====================== */
 
-export interface	GameResume {
+export interface	PongResume {
 	winner: number;
 	player1Hits: number;
 	player2Hits: number;
