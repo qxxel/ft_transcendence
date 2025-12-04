@@ -1,5 +1,29 @@
-<div class="history-container">
-  <div class="history-list" id="history-list">
-    <h1>History</h1>
-  </div>
+<div class="user-settings-form history-layout">
+    <div class="history-container">
+        
+        <div class="history-internal-header">
+            <h1 class="history-title">HISTORY</h1>
+            
+            <div class="history-controls">
+                <label class="filter-toggle">
+                    <input type="checkbox" id="filter-ai" checked>
+                    <span class="toggle-btn">AI</span>
+                </label>
+
+                <label class="filter-toggle">
+                    <input type="checkbox" id="filter-pvp" checked>
+                    <span class="toggle-btn">PVP</span>
+                </label>
+
+                <button id="refresh-history" class="btn-refresh-inline" title="Reload">
+                    ↻
+                </button>
+            </div>
+        </div>
+
+        <div id="history-entries">
+            <p class="empty-message">Loading data...</p>
+        </div>
+
+    </div>
 </div>
