@@ -200,44 +200,40 @@ function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): vo
 	historyListDiv.appendChild(gameRow);
 }
 
-function	displayErrors(targetName: string | null): void {
-	const	historyListDiv: HTMLDivElement = document.getElementById("history-list") as HTMLDivElement;
-	historyListDiv.innerHTML = "<h1>History</h1>";
+function displayErrors(targetName: string | null): void {
+    const historyEntriesDiv: HTMLDivElement = document.getElementById("history-entries") as HTMLDivElement;
+    if (!historyEntriesDiv) return;
 
-	const	historyErrorParagraph: HTMLParagraphElement = document.createElement("p");
-	historyErrorParagraph.classList.add("error-message");
-	historyErrorParagraph.classList.add("history-error");
-	if (targetName)
-		historyErrorParagraph.textContent = `Error while getting history of ${targetName}.`;
-	else
-		historyErrorParagraph.textContent = `Error while getting your history.`;
+    historyEntriesDiv.innerHTML = ""; 
 
+    const historyErrorParagraph: HTMLParagraphElement = document.createElement("p");
+    historyErrorParagraph.classList.add("error-message");
+    historyErrorParagraph.classList.add("history-error");
+    
+    if (targetName)
+        historyErrorParagraph.textContent = `Error while getting history of ${targetName}.`;
+    else
+        historyErrorParagraph.textContent = `Error while getting your history.`;
 
-	historyListDiv.appendChild(historyErrorParagraph);
+    historyEntriesDiv.appendChild(historyErrorParagraph);
 }
 
-function	displayNoGame(filter: boolean): void {
-	const	historyListDiv: HTMLDivElement = document.getElementById("history-list") as HTMLDivElement;
-	historyListDiv.innerHTML = "<h1>History</h1>";
-console.log(filter)
-	if (filter)
-	{
-		const	historyEmptyParagraph: HTMLParagraphElement = document.createElement("p");
-		historyEmptyParagraph.classList.add("empty-message");
-		historyEmptyParagraph.classList.add("history-empty");
-		historyEmptyParagraph.textContent = "No results with current filters, try adjusting or resetting your filters.";
-		
-		historyListDiv.appendChild(historyEmptyParagraph);
+function displayNoGame(filter: boolean): void {
+    const historyEntriesDiv: HTMLDivElement = document.getElementById("history-entries") as HTMLDivElement;
+    if (!historyEntriesDiv) return;
+    historyEntriesDiv.innerHTML = "";
 
-		return ;
-	}
+    const historyEmptyParagraph: HTMLParagraphElement = document.createElement("p");
+    historyEmptyParagraph.classList.add("empty-message");
+    historyEmptyParagraph.classList.add("history-empty");
 
-	const	historyEmptyParagraph: HTMLParagraphElement = document.createElement("p");
-	historyEmptyParagraph.classList.add("empty-message");
-	historyEmptyParagraph.classList.add("history-empty");
-	historyEmptyParagraph.textContent = "Empty match history.";
+    if (filter) {
+        historyEmptyParagraph.textContent = "No results with current filters, try adjusting or resetting your filters.";
+    } else {
+        historyEmptyParagraph.textContent = "Empty match history.";
+    }
 
-	historyListDiv.appendChild(historyEmptyParagraph);
+    historyEntriesDiv.appendChild(historyEmptyParagraph);
 }
 
 export function initHistoryListeners(targetId: number | null, targetName: string | null = null, attempt: number = 0): void {
