@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 14:43:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/04 12:54:13 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,20 @@ import { router }		from "../index.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 import { User }			from "../user/user.js"
 
-import type { GameState }	from "../index.js"
-import type { Router }		from "./router.js"
+import type { GamesState }	from "../index.js"
 
 
 /* ====================== FUNCTION ====================== */
 
-export async function	preNavigation(router: Router, currentPath: string, gameState: GameState, user: User): Promise<void> {
+export async function	preNavigation(currentPath: string, gameState: GamesState, user: User): Promise<void> {
 	const	respToken: Response = await sendRequest('/api/jwt/validate', 'GET', null);
 	if (!respToken.ok)
 		console.error((await respToken.json()).error);														//	AXEL: A VERIFIER
 
-	redirections(router, currentPath, gameState, user);
+	redirections(currentPath, gameState, user);
 }
 
-export async function	redirections(router: Router, currentPath: string, gameState: GameState, user: User): Promise<void> {
+export async function	redirections(currentPath: string, gameState: GamesState, user: User): Promise<void> {
 	if (['/friends', '/user'].includes(currentPath))
 	{
 		const	response: Response = await sendRequest('/api/jwt/validate', 'GET', null);

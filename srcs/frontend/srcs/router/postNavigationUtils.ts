@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 12:44:13 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:53:25 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ export async function  pathActions(currentPath: string, gameState: GamesState, u
 		{
 			const match = gameState.currentTournament.currentMatch;
 			
-			const tournamentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
+			const tournamentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
 			
 			tournamentGame.setCtx();
 			
@@ -82,7 +82,7 @@ export async function  pathActions(currentPath: string, gameState: GamesState, u
 	}
 
 	if (['/pongmenu'].includes(currentPath)) {
-		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
+		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
 		
 		const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
 		const display = document.getElementById('points-display') as HTMLSpanElement;

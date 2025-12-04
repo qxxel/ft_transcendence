@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 12:44:13 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:55:30 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ import { getAndRenderHistory }	from "../history/getAndRenderHistory.js"
 import { PongGame }				from "../Pong/pong.js"
 import { TankGame } 			from "../v3/tank.js"
 import { TournamentController } from "../Pong/tournament.js"
-import { Router }				from "../router/router.js"
+import { router }				from "../index.js"
 import { sendRequest }			from "../utils/sendRequest.js"
 import { socket }				from "../socket/socket.js"
 import { User }					from "../user/user.js"
@@ -32,14 +32,14 @@ import { Tank }				from "../v3/class_tank.js"
 
 /* ====================== FUNCTIONS ====================== */
 
-function onClickPlay(router: Router, gameState: GamesState, user: User): void {
+function onClickPlay(gameState: GamesState, user: User): void {
 	const	maxPointsInput: HTMLInputElement = document.getElementById("choosenMaxPoints") as HTMLInputElement;
 	gameState.currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
 
 	router.navigate("/pong", gameState, user);
 }
 
-async function  onClickLogout(router: Router, gameState: GamesState, user: User): Promise<void> {
+async function  onClickLogout(gameState: GamesState, user: User): Promise<void> {
 	const   response: Response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
 
 	if (!response.ok)
@@ -90,7 +90,7 @@ async function	onClickEdit(user: User): Promise<void> {
 	mail.value = userRes.email ?? "";
 }
 
-async function	onClickHistory(targetName: string | null, router: Router, gameState: GamesState, user: User): Promise<void> {
+async function	onClickHistory(targetName: string | null, gameState: GamesState, user: User): Promise<void> {
 	console.log("Empty History"); /////////////////////
 	// TODO: secure l'acces a la page si on est pas connecte
 
@@ -114,7 +114,7 @@ function	onClickCancel(user: User): void {
 	});
 }
 
-async function	onClickDeleteAccount(router: Router, gameState: GamesState, user: User): Promise<void> {
+async function	onClickDeleteAccount(gameState: GamesState, user: User): Promise<void> {
 	console.log("DeleteAccount");
 	
 	if (!confirm("Are you sure you want to delete your account?"))
@@ -125,17 +125,17 @@ async function	onClickDeleteAccount(router: Router, gameState: GamesState, user:
 		console.log(response.statusText);
 		return ;
 	}
-	await onClickLogout(router, gameState, user);
+	await onClickLogout(gameState, user);
 }
 
-async function	onClickDeleteTwofa(router: Router, gameState: GamesState, user: User): Promise<void> {
+async function	onClickDeleteTwofa(gameState: GamesState, user: User): Promise<void> {
 	console.log("DeleteTwofa");
 	
 	if (!confirm("Are you sure you want to go back?"))
 		return ;
 }
 
-async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GamesState, user: User): Promise<void> {
+async function	onClickSkipeVerifyEmailDev(gameState: GamesState, user: User): Promise<void> {
 	console.log("VerifyEmail");
 	
 	const response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
@@ -167,7 +167,7 @@ async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GamesState,
 	router.navigate("/", gameState, user);
 }
 
-async function	onClickNewCode(router: Router, gameState: GamesState, user: User): Promise<void> {
+async function	onClickNewCode(gameState: GamesState, user: User): Promise<void> {
 	const btnSend = document.getElementById("btnSend2faCode") as HTMLButtonElement;
 	const spanCooldown = document.getElementById("btnCooldown");
 	const locks = document.querySelectorAll(".lock");
@@ -319,7 +319,7 @@ function selectFeaturedDifficulty(level: number) {
 
 /* ====================== GAME & TOURNAMENT HANDLERS ====================== */
 
-function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', router: Router, gameState: GamesState, user: User) {
+function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', gameState: GamesState, user: User) {
 	const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
 	const winningScore = parseInt(maxPointsInput.value, 10);
 	
@@ -345,13 +345,13 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', router: Router, g
 
 	gameState.pendingOptions = options;
 
-	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
+	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
 	gameState.currentGame.setWinningScore(winningScore);
 	
 	router.navigate("/pong", gameState, user);
 }
 
-function onClickPlayPVP(router: Router, gameState: GamesState, user: User) {
+function onClickPlayPVP(gameState: GamesState, user: User) {
 
 	if (router.Path === '/pongmenu') {
 		const	maxPointsInput: HTMLInputElement = document.getElementById("choosenMaxPoints") as HTMLInputElement;
@@ -377,18 +377,18 @@ function onClickPlayPVP(router: Router, gameState: GamesState, user: User) {
 
 		gameState.pendingOptions = options;
 
-		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
+		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
 		gameState.currentGame.setWinningScore(winningScore);
 		router.navigate("/pong", gameState, user);
 	}
 	else if (router.Path === '/tankmenu')
 	{
-		gameState.currentGame = new TankGame('tank-canvas', 'desertfox', router, user);
+		gameState.currentGame = new TankGame('tank-canvas', 'desertfox', user);
 		router.navigate("/tank", gameState, user);
 	}
 }
 
-function	onStartTournament(router: Router, gameState: GamesState, user: User) {
+function	onStartTournament(gameState: GamesState, user: User) {
 	const inputs = document.querySelectorAll('.player-name-input') as NodeListOf<HTMLInputElement>;
 	const playerNames: string[] = [];
 	
@@ -411,7 +411,7 @@ function	onStartTournament(router: Router, gameState: GamesState, user: User) {
 	router.navigate("/tournament-bracket", gameState, user);
 }
 
-function startTournamentMatch(matchId: string, p1: string, p2: string, router: Router, gameState: GamesState, user: User) {
+function startTournamentMatch(matchId: string, p1: string, p2: string, gameState: GamesState, user: User) {
 	if (gameState.currentTournament) {
 		const	options: GameOptions = {
 			width: 800,
@@ -428,7 +428,7 @@ function startTournamentMatch(matchId: string, p1: string, p2: string, router: R
 
 		gameState.pendingOptions = options;
 
-		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
+		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
 
 		gameState.currentTournament.startMatch(matchId, p1, p2);
 
@@ -436,7 +436,7 @@ function startTournamentMatch(matchId: string, p1: string, p2: string, router: R
 	}
 }
 
-function onClickStartFeatured(mode: 'ai' | 'pvp', router: Router, gameState: GamesState, user: User) {
+function onClickStartFeatured(mode: 'ai' | 'pvp', gameState: GamesState, user: User) {
 	const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
 	const aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
 	const pointsInput = document.getElementById("featuredMaxPoints") as HTMLInputElement;
@@ -479,7 +479,7 @@ function onClickStartFeatured(mode: 'ai' | 'pvp', router: Router, gameState: Gam
 		gameState.pendingOptions = options;
 
 		console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Diff=${difficulty}, Stars=[${star1},${star2},${star3}]`);
-		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
+		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
 		router.navigate("/pong", gameState, user);
 
 	}
@@ -487,30 +487,30 @@ function onClickStartFeatured(mode: 'ai' | 'pvp', router: Router, gameState: Gam
 	{
 		console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Stars=[${star1},${star2},${star3}]`);
 		const freq = parseInt(freqInput.value,10);
-		gameState.currentGame = new TankGame('tank-canvas', 'desertfox', router, user, freq, star1, star2, star3);
+		gameState.currentGame = new TankGame('tank-canvas', 'desertfox', user, freq, star1, star2, star3);
 		router.navigate("/tank", gameState, user);
 	}
 
 
 }
 
-function onClickHomeBtn(router: Router, gameState: GamesState, user: User) {
+function onClickHomeBtn(gameState: GamesState, user: User) {
 	router.navigate('/games', gameState, user);
 }
 
 /* ====================== SETUP ====================== */
 
-export async function   setupClickHandlers(router: Router, user: User, gameState: GamesState): Promise<void> {
-	(window as any).onClickPlay = () => onClickPlay(router, gameState, user);
-	(window as any).onClickLogout = () => onClickLogout(router, gameState, user);
+export async function   setupClickHandlers(user: User, gameState: GamesState): Promise<void> {
+	(window as any).onClickPlay = () => onClickPlay(gameState, user);
+	(window as any).onClickLogout = () => onClickLogout(gameState, user);
 
 	(window as any).onClickEdit = () => onClickEdit(user);
-	(window as any).onClickHistory = (targetName: string | null = null) => onClickHistory(targetName, router, gameState, user);
+	(window as any).onClickHistory = (targetName: string | null = null) => onClickHistory(targetName, gameState, user);
 	(window as any).onClickCancel = () => onClickCancel(user);
-	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
-	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa(router, gameState, user);
-	(window as any).onClickNewCode = () => onClickNewCode(router, gameState, user);
-	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(router, gameState, user);
+	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(gameState, user);
+	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa(gameState, user);
+	(window as any).onClickNewCode = () => onClickNewCode(gameState, user);
+	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(gameState, user);
 
 	(window as any).onClickGetMessage = onClickGetMessage;
 	(window as any).onClickValidateMessage = onClickValidateMessage;
@@ -520,20 +520,20 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 	(window as any).showDifficultyMenu = showDifficultyMenu;
 	(window as any).hideDifficultyMenu = hideDifficultyMenu;
 
-	(window as any).onClickHomeBtn = () => onClickHomeBtn(router, gameState, user);
+	(window as any).onClickHomeBtn = () => onClickHomeBtn(gameState, user);
 
 	(window as any).switchGameMode = switchGameMode;
-	(window as any).onClickStartFeatured = (mode: 'ai' | 'pvp') => onClickStartFeatured(mode, router, gameState, user);
+	(window as any).onClickStartFeatured = (mode: 'ai' | 'pvp') => onClickStartFeatured(mode, gameState, user);
 	(window as any).selectFeaturedDifficulty = selectFeaturedDifficulty;
 
 	(window as any).onClickPlayAI = (difficulty: 'easy' | 'medium' | 'hard') => 
-		onClickPlayAI(difficulty, router, gameState, user);
+		onClickPlayAI(difficulty, gameState, user);
 
-	(window as any).onClickPlayPVP = () => onClickPlayPVP(router, gameState, user);
-	(window as any).onStartTournament = () => onStartTournament(router, gameState, user);
+	(window as any).onClickPlayPVP = () => onClickPlayPVP(gameState, user);
+	(window as any).onStartTournament = () => onStartTournament(gameState, user);
 	
 	(window as any).startTournamentMatch = (matchId: string, p1: string, p2: string) => 
-		startTournamentMatch(matchId, p1, p2, router, gameState, user);
+		startTournamentMatch(matchId, p1, p2, gameState, user);
 
 
 	document.addEventListener('click', (event) => {
@@ -590,5 +590,5 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
   	if (keysToBlock.includes(event.code)) {
   	  event.preventDefault();
   	}
-})	;
+});
 }

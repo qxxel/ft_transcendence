@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:55:16 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:55:08 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 import { Game }		from "../Pong/gameClass.js"
 import { GSTATE }	from "./global.js"
-import { Router } from "../router/router.js"
+import { router }	from "../index.js"
 import { Input }	from "./class_input.js"
 import { User } from "../user/user.js"
 import { Map }		from "./class_map.js"
@@ -46,11 +46,10 @@ export class	TankGame extends Game {
 	private lastCollectibleSpawn: number = 0;
 
 
-	// 	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3); 
+	// 	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user, mode, difficulty, star1, star2, star3); 
 	constructor(
 		private canvasId: string, 
 		private map_name: string,
-		private router: Router,
 		private user: User,
 		private powerupFrequency: number = 0,
 		private star1: boolean = true,

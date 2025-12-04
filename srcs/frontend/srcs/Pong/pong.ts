@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/04 12:44:13 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:52:24 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 import { connectSocket, socket }	from "../socket/socket.js"
 import { Game }						from "./gameClass.js"
 import { linearInterpolation }		from "./utils/lerp.js"
-import { Router }					from "../router/router.js"
+import { router }					from "../index.js"
 import { User }						from "../user/user.js"
 import { PongRenderer }				from "./renderer.js"
 
@@ -47,7 +47,6 @@ export class PongGame extends Game {
 
 	private ids: { canvas: string; score1: string; score2: string; winScore: string };
 
-	private router: Router;
 	private appState: GamesState;
 	private user: User;
 
@@ -55,12 +54,10 @@ export class PongGame extends Game {
 			score1Id: string,
 			score2Id: string,
 			winScoreId: string,
-			router: Router,
 			appState: GamesState,
 			user: User) {
 		super();
 		this.ids = { canvas: canvasId, score1: score1Id, score2: score2Id, winScore: winScoreId };
-		this.router = router;
 		this.appState = appState;
 		this.user = user;
 
@@ -185,7 +182,7 @@ export class PongGame extends Game {
 		this.stop();
 		this.isGameOver = false; 
 		socket.emit('leave-game');
-		this.router.navigate('/games', this.appState, this.user);
+		router.navigate('/games', this.appState, this.user);
 	}
 
 	public start() {
@@ -265,7 +262,7 @@ export class PongGame extends Game {
 				if (e.key === ' ')
 				{
 					this.stop();
-					this.router.navigate("/tournament-bracket", this.appState, this.user)
+					router.navigate("/tournament-bracket", this.appState, this.user)
 					return;
 				}
 			}
@@ -275,14 +272,14 @@ export class PongGame extends Game {
 				{
 					this.stop();
 					this.isGameOver = false;
-					this.router.navigate("/pong", this.appState, this.user)
+					router.navigate("/pong", this.appState, this.user)
 					return;
 				}
 				if (e.key === 'Escape')
 				{
 					this.stop();
 					this.isGameOver = false;
-					this.router.navigate('/games', this.appState, this.user);
+					router.navigate('/games', this.appState, this.user);
 					return;
 				}
 			}
