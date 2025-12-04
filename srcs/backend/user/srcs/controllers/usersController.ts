@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 18:44:02 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 19:45:57 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 import { errorsHandler }	from "../utils/errorsHandler.js"
 import { usersAddDto }		from "../dtos/usersAddDto.js"
 import { usersRespDto }		from "../dtos/usersRespDto.js"
+import { usersUpdateDto }	from "../dtos/usersUpdateDto.js"
 import { usersServ, userStatsServ } 		from "../user.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
@@ -95,22 +96,12 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 		}
 		const	{ id } = request.params as { id: string };
 		const	parseId: number = parseInt(id, 10);
-	
+
 		try {
 			const	oldUser: usersRespDto = await usersServ.getUserById(parseId);
-			const	userUpdate: userUpdate = request.body;
+			const	userUpdate: usersUpdateDto = await new usersUpdateDto(request.body, oldUser);
 
-			if (userUpdate.username !== undefined && userUpdate.username !== oldUser.getUsername())
-				await usersServ.updateUsernameById(parseId, userUpdate.username);
-
-			if (userUpdate.email !== undefined && userUpdate.email !== oldUser.getEmail())
-				await usersServ.updateEmailById(parseId, userUpdate.email);
-
-			if (userUpdate.avatar !== undefined && userUpdate.avatar !== oldUser.getAvatar())
-				await usersServ.updateAvatarById(parseId, userUpdate.avatar);
-			
-			if (userUpdate.is2faEnable !== undefined && userUpdate.is2faEnable !== oldUser.getIs2faEnable())
-				await usersServ.update2faById(parseId, userUpdate.is2faEnable);
+			await usersServ.updateUserById(parseId, userUpdate);
 
 			return reply.code(201).send(parseId);
 		}

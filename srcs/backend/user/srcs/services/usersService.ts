@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 10:59:05 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/04 19:56:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 import { usersAddDto }		from "../dtos/usersAddDto.js"
 import { usersRepository }	from "../repositories/usersRepository.js"
 import { usersRespDto }		from "../dtos/usersRespDto.js"
+import { usersUpdateDto }		from "../dtos/usersUpdateDto.js"
 
 import { IsTakenError, NotExistError }	from "../utils/throwErrors.js"
 
@@ -66,6 +67,22 @@ export class	usersService {
 			return await this.usersRepo.getUserByEmail(userEmail);
 
 		throw new NotExistError(`This user does not exist`);
+	}
+
+	async updateUserById(userId: number, user: usersUpdateDto): Promise<void> {
+		if (user.getUsername() !== undefined)
+			await this.updateUsernameById(userId, user.getUsername()!);
+		
+		if (user.getEmail() !== undefined)
+			await this.updateEmailById(userId, user.getEmail()!);
+
+		if (user.getAvatar() !== undefined)
+			await this.updateAvatarById(userId, user.getAvatar()!);
+
+		if (user.getIs2faEnable() !== undefined)
+			await this.update2faById(userId, user.getIs2faEnable()!);
+
+		return ;
 	}
 
 	async updateUsernameById(userId: number, username: string): Promise<void> {
