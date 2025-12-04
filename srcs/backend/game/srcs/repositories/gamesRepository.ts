@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:54:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:33:29 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 18:42:34 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,20 @@ export class	gamesRepository {
 			const	elements: number[] = [gameId];
 
 			this.db.run(query, elements, function(err: unknown) {
+				if (err)
+					return reject(err);
+
+				resolve();
+			});
+		});
+	}
+
+	async deleteClientGames(userId: number): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
+			const	query: string = "DELETE FROM games WHERE id_client = ?";
+			const	elements: number[] = [userId];
+
+			this.db.run(query, elements, function(err: unknown) {				//	MATHIS: DELETE GAMES WHEN DELETE CLIENTS
 				if (err)
 					return reject(err);
 

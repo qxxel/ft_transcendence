@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:36:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:35:02 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 18:49:19 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,21 @@ export async function	gamesController(gameFastify: FastifyInstance) {
 
 		try {
 			await gamesServ.deleteGame(parseId);
+
+			return reply.code(204).send();
+		}
+		catch (err: unknown) {
+			return errorsHandler(gameFastify, reply, err);
+		}
+	});
+
+	// DELETE GAMES WITH CLIENT ID
+	gameFastify.delete('/user/:targetd', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	{ targetd } = request.params as { targetd: string };
+			const	parseTargetd: number = parseInt(targetd, 10);
+
+			await gamesServ.deleteClientGames(parseTargetd);
 
 			return reply.code(204).send();
 		}
