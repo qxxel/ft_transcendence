@@ -12,7 +12,6 @@
 
 // /!\ DESCRIBE THE FILE /!\
 
-
 /* ============================= IMPORTS ============================= */
 
 import { Actor }	from "./class_actor.js"
@@ -24,8 +23,6 @@ import { Rect2D }	from "./class_rect.js"
 import { Input } 	from "./class_input.js";
 
 import type { Color, Keys }	from "./interface.js"
-// import { Collectible } from "./class_collectible.js"
-
 
 /* ============================= CLASS ============================= */
 
@@ -33,8 +30,8 @@ export class	Tank extends Actor {
 
 	rect: Rect2D;
 	cannon: Cannon;
-	speed: number = 0.75;
-	rot_speed: number = 0.05;
+	speed: number = 0.85;
+	rot_speed: number = 0.1;
 	health: number = 5;
 	maxHealth: number = this.health;
 	fire_rate: number = 2000; // ms
@@ -53,7 +50,7 @@ export class	Tank extends Actor {
 		super(x,y)
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 		this.cannon = new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),3,0,fire_color);
-		this.hud = new Hud(this.x,this.y,this.x + this.w, this.y,fire_color);
+		this.hud = new Hud(this.x,this.y,this.x + this.w, this.y, this.x + this.w/2,this.y,fire_color);
 	}
 
 	update(input: Input): void {

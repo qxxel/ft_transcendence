@@ -107,9 +107,16 @@ export class	TankGame extends Game {
 		let c_height:number = 25;
 		let attempt: number = 0;
 		let nope: boolean;
+		let effects: string[] = [];
+		if (this.star1)
+			effects.push("heal");
+		if (this.star2)
+			effects.push("speed");
+		if (this.star3)
+			effects.push("haste");
+
 		if (this.map.name == 'desertfox')
 		{
-			const effects: string[] = ["heal", "speed"];
 			while (attempt++ < 2000)
 			{
 				let s = this.map.spawns_collectible[Math.floor(Math.random() * this.map.spawns_collectible.length)];
@@ -234,25 +241,26 @@ export class	TankGame extends Game {
 
 	if (winnerDisplay) winnerDisplay.innerText = `${winnerName} Wins!`;
 
-	const accuracy1:number = GSTATE.STATS1.fire > 0 ? ((GSTATE.STATS1.hit / GSTATE.STATS1.fire * 100)) : 0;
-	const accuracy2:number = GSTATE.STATS2.fire > 0 ? ((GSTATE.STATS2.hit / GSTATE.STATS2.fire * 100)) : 0;
+	const accuracy1 = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit / GSTATE.STATS1.fire) * 100 : 0;
+	const accuracy2 = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit / GSTATE.STATS2.fire) * 100 : 0;
 
-    document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
-    
-    document.getElementById('p1-stat-name')!.innerText = 'BOUNCE1:';
-    document.getElementById('stat-p1-hits')!.innerText = accuracy1.toFixed(1) + `% (${GSTATE.STATS1.fire}/${GSTATE.STATS1.hit}/${GSTATE.STATS1.bounce})`;
-    // document.getElementById('stat-p1-hits')!.innerText = 'X';
+	document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
+	document.getElementById('p1-stat-name')!.innerText = 'Player 1:';
+	document.getElementById('stat-p1-accuracy')!.innerText = `${accuracy1.toFixed(1)}%`;
+	document.getElementById('stat-p1-fire')!.innerText = `${GSTATE.STATS1.fire}`;
+	document.getElementById('stat-p1-hit')!.innerText = `${GSTATE.STATS1.hit}`;
+	document.getElementById('stat-p1-bounce')!.innerText = `${GSTATE.STATS1.bounce}`;
 
-    document.getElementById('p2-stat-name')!.innerText = 'BOUNCE2:';
-    document.getElementById('stat-p2-hits')!.innerText = accuracy2.toFixed(1) + `% (${GSTATE.STATS2.fire}/${GSTATE.STATS2.hit}/${GSTATE.STATS2.bounce})`;
+	document.getElementById('p2-stat-name')!.innerText = 'Player 2:';
+	document.getElementById('stat-p2-accuracy')!.innerText = `${accuracy2.toFixed(1)}%`;
+	document.getElementById('stat-p2-fire')!.innerText = `${GSTATE.STATS2.fire}`;
+	document.getElementById('stat-p2-hit')!.innerText = `${GSTATE.STATS2.hit}`;
+	document.getElementById('stat-p2-bounce')!.innerText = `${GSTATE.STATS2.bounce}`;
 
-    document.getElementById('stat-rally')!.innerText = 'X';
 
     const restartMsg = document.getElementById('restart-msg');
     if (restartMsg) {
-        // const baseMsg = this.isTournamentMatch ? "Press 'Space' to Continue" : "Press 'Space' to Restart";
-        // const escMsg = this.isTournamentMatch ? "" : " or 'Esc' to Quit";
-        restartMsg.innerText = "Press 'R' to Restart or 'Esc' to Quit" //baseMsg + escMsg;
+        restartMsg.innerText = "Press 'R' to Restart or 'Esc' to Quit";
     }
 
     dashboard.style.display = 'block';
@@ -263,7 +271,7 @@ export class	TankGame extends Game {
     	if (!dashboard) return;
     	dashboard.style.display = 'none';
 	}
-  
+
 	private updateNameDisplay() {
     const p1Span = document.getElementById('p1-name');
     const p2Span = document.getElementById('p2-name');

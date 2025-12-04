@@ -96,7 +96,16 @@ export class	Ball extends Actor {
 
 				this.bounce_count--;
 				if (this.bounce_count <= 0)
+				{
+					if (this.author)
+					{
+						if (this.author.id == 0)
+							GSTATE.STATS1.miss += 1;
+						else (this.author.id == 1)
+							GSTATE.STATS2.miss += 1;
+					}
 					this.destroy();
+				}
 				this.direction_impact = this.getBounce(a.getRect());
 				return true;
 			}
@@ -127,14 +136,17 @@ export class	Collectible extends Ball {
 		h:number,
 		public type:string) {
 
-		super(x,y,w,h,0,0, {r:50,g:170,b:40}); //{r:50,g:170,b:40}
+		super(x,y,w,h,0,0, {r:50,g:170,b:40});
 
 		switch (this.type) {
         	case 'heal':
-        		this.color = {r:50,g:170,b:40};    
+        		this.color = {r:50,g:170,b:40};
 				break;
 			case 'speed':
-        		this.color = {r:0,g:100,b:150};    
+        		this.color = {r:0,g:100,b:150};
+        	    break;
+			case 'haste':
+        		this.color = {r:100,g:50,b:150};
         	    break;
     	}
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
@@ -145,15 +157,19 @@ export class	Collectible extends Ball {
 	effect(a: Tank) {
 
 		const b = new Actor(0,0);
-    switch (this.type) {
-        case 'heal':
-			a.addHealth(+1);
-            break;
-		case 'speed':
-			a.speed = Math.min(a.speed+1, 10);
-            break;
-    	}
+		switch (this.type) {
+			case 'heal':
+				a.addHealth(+1);
+				break;
+			case 'speed':
+				a.speed = Math.min(a.speed+1, 10);
+				break;
+			case 'haste':
+				a.fire_rate = Math.max(a.fire_rate-250, 500);
+				break;
+		}
 	}
+
 	collide(rect1: Rect2D): boolean {
 
 		for (let a of GSTATE.ACTORS) {
@@ -178,10 +194,7 @@ export class	Collectible extends Ball {
 		ctx.beginPath();
 		ctx.fillStyle = `#${((this.color.r << 16) | (this.color.g << 8) | this.color.b).toString(16).padStart(6,'0')}`; // HUH
 		
-		if (this.type == 'heal' || this.type == 'speed')
-            ctx.strokeStyle = '#0000FF';
-		else
-            ctx.strokeStyle = '#FF0000';
+        ctx.strokeStyle = '#0000FF';
 		ctx.arc(this.x + this.w/2, this.y + this.h/2, this.w/2, 0, Math.PI * 2);
 		ctx.fill();
 		ctx.stroke();

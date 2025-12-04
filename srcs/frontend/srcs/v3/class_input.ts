@@ -20,12 +20,26 @@ export class Input {
     private current = new Set<string>();
     private previous = new Set<string>();
 
+
+    private blocked = new Set([
+        " ",
+        "arrowup",
+        "arrowdown",
+        "arrowleft",
+        "arrowright",
+    ]);
+
     private onKeyDown = (e: KeyboardEvent) => {
         this.current.add(e.key.toLowerCase());
+        if (this.blocked.has(e.key.toLowerCase()))
+            e.preventDefault();
     };
 
     private onKeyUp = (e: KeyboardEvent) => {
         this.current.delete(e.key.toLowerCase());
+        if (this.blocked.has(e.key.toLowerCase()))
+            e.preventDefault();
+
     };
 
     start(): void {

@@ -29,6 +29,8 @@ export class	Hud extends Actor {
 	constructor(x:number,y:number,
 		public	wheel_x:number,
 		public	wheel_y:number,
+		public	healthbar_x:number,
+		public	healthbar_y:number,
 		public	wheel_color:Color
 	) {
 		super(x,y);
@@ -57,20 +59,14 @@ export class	Hud extends Actor {
 		const barHeight = 6;
 		const offsetY = -20;
 	
-		const x = this.x - barWidth / 2;
-		const y = this.y + offsetY;
-	
 		const ratio = Math.max(0, Math.min(1, health / maxHealth));
 	
 		ctx.fillStyle = "#444";
-		ctx.fillRect(x, y, barWidth, barHeight);
+		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth, barHeight);
 	
 		ctx.fillStyle = "#00cc00";
-		ctx.fillRect(x, y, barWidth * ratio, barHeight);
+		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth * ratio, barHeight);
 	
-		// ctx.strokeStyle = "#000";
-		// ctx.lineWidth = 1;
-		// ctx.strokeRect(x, y, barWidth, barHeight);
 	}
 
 	move(dx:number,dy:number) {
@@ -78,5 +74,7 @@ export class	Hud extends Actor {
 		this.y += dy;
 		this.wheel_x += dx;
 		this.wheel_y += dy;
+		this.healthbar_x += dx;
+		this.healthbar_y += dy;
 	}
 }
