@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 21:27:33 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:26:55 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ async function	handleDelegatedFriendAction(event: Event): Promise<void> {
 			return await handleFriendAction(`/api/user/friends/${targetId}`, "DELETE", null, "You are not friend with " + targetUsername + " anymore.");
 	}
 
-	if (target.classList.contains('challenge-button'))
+	if (target.classList.contains('history-button'))
 		return ;																						//	AXEL: A ENLEVER
 }

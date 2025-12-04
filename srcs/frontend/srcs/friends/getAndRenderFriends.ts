@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 21:59:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:38:37 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,12 +140,12 @@ function	addFriendInList(friendsListDiv: HTMLDivElement, friend: UserObject): vo
 	usernameSpan.classList.add("username");
 	usernameSpan.textContent = friend.username;
 
-	const	challengeButton: HTMLSpanElement = document.createElement("button");
-	challengeButton.classList.add("neon-button");
-	challengeButton.classList.add("challenge-button");
-	challengeButton.textContent = "History";
-	challengeButton.dataset.targetId = friend.id.toString();
-	challengeButton.dataset.targetUsername = friend.username;
+	const	historyButton: HTMLSpanElement = document.createElement("button");
+	historyButton.classList.add("neon-button");
+	historyButton.classList.add("history-button");
+	historyButton.textContent = "History";
+	historyButton.dataset.targetId = friend.id.toString();
+	historyButton.dataset.targetUsername = friend.username;
 
 	const	removeButton: HTMLSpanElement = document.createElement("button");
 	removeButton.classList.add("remove-button");
@@ -154,7 +154,7 @@ function	addFriendInList(friendsListDiv: HTMLDivElement, friend: UserObject): vo
 	removeButton.dataset.targetUsername = friend.username;
 
 
-	newActionDiv.appendChild(challengeButton);
+	newActionDiv.appendChild(historyButton);
 	newActionDiv.appendChild(removeButton);
 
 	newDiv.appendChild(statusSpan);
