@@ -3,18 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   displayDate.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/29 20:42:49 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 13:17:45 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// THE FUNCTION THAT DISPLAY A DATE WITH TIMESTAMP
+
+
+/* ====================== FUNCTION ====================== */
 
 export function displayDate(min: number) {
 	const localeClient = navigator.language;
 	
-	const maintenant = new Date();
-	maintenant.setMinutes(maintenant.getMinutes() + min);
+	const	now = new Date();
+	now.setMinutes(now.getMinutes() + min);
 
 	const options: Intl.DateTimeFormatOptions = {
 		year: 'numeric',
@@ -27,5 +32,5 @@ export function displayDate(min: number) {
 
 	const el = document.getElementById("date-with-offset");
 	if (el)
-		el.textContent = maintenant.toLocaleString(localeClient, options);
+		el.textContent = now.toLocaleString(localeClient, options);
 }

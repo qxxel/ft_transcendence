@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 12:53:25 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 14:08:34 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ import type { GamesState }	from "../index.js"
 /* ====================== FUNCTION ====================== */
 
 export async function  pathActions(currentPath: string, gameState: GamesState, user: User): Promise<void> {
-	
+
 	if (!['/pong', '/tank'].includes(currentPath)) {
 		if (gameState.currentGame) 
 			gameState.currentGame.stop();
