@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:58:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 00:20:38 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:27:12 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import type { Ball, Paddle, Collectible }	from "./gameState.js"
+import type { Ball, Paddle, Collectible }	from "./pongState.js"
 
 
 /* ====================== CLASS ====================== */

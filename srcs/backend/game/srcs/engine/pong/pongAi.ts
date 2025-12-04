@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:59:46 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 12:59:46 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:27:12 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORT ====================== */
 
-import type { GameState }	from "./gameState.js"
+import type { PongState }	from "./pongState.js"
 
 
 /* ====================== CLASS ====================== */
@@ -29,7 +29,7 @@ export class AIController {
 		this.difficulty = difficulty;
 	}
 
-	public update(state: GameState): { up: boolean, down: boolean } {
+	public update(state: PongState): { up: boolean, down: boolean } {
 		const now = Date.now();
 		const keys = { up: false, down: false };
 
@@ -65,7 +65,7 @@ export class AIController {
 		return keys;
 	}
 
-	private predictBallLandingY(state: GameState): number {
+	private predictBallLandingY(state: PongState): number {
 		const targetX = state.paddle2.x - state.ball.radius;
 		const timeToImpact = (targetX - state.ball.x) / state.ball.dx;
 		let predictedY = state.ball.y + (state.ball.dy * timeToImpact);
@@ -83,7 +83,7 @@ export class AIController {
 		return predictedY;
 	}
 
-	private offensiveBounce(predictedY: number, state: GameState): number {
+	private offensiveBounce(predictedY: number, state: PongState): number {
 
 		const opponentCenterY = state.paddle1.y + (state.paddle1.height / 2);
 		let targetY = 0;
@@ -109,7 +109,7 @@ export class AIController {
 		return predictedY - offset;
 	}
 
-	private hardBounce(predictedY: number, state: GameState): number{
+	private hardBounce(predictedY: number, state: PongState): number{
 		const opponentCenterY = state.paddle1.y + (state.paddle1.height / 2);
 		const center = state.height / 2;
 
@@ -123,7 +123,7 @@ export class AIController {
 		}
 	}
 
-	private calculateOptimalPaddlePosition(predictedY: number, state: GameState): number {
+	private calculateOptimalPaddlePosition(predictedY: number, state: PongState): number {
 		if (Math.random() > 0.5){
 			return this.hardBounce(predictedY, state);
 		}

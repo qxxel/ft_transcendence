@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tankAddDto.ts                                      :+:      :+:    :+:   */
+/*   gamesRespDto.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 20:43:37 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/11/19 19:20:29 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/12/04 17:35:46 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW TANK GAMES
+// WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW GAMES
 
 
 /* ====================== IMPORTS ====================== */
@@ -23,52 +23,45 @@
 
 /* ====================== CLASS ====================== */
 
-export class	tankAddDto {
+export class	gamesRespDto {
+	private id: number;
+	private	idClient: number;
+	private	gameType: number;
 	private	winner: number;
 	private	p1: number;
 	private	p2: number;
-	private	p3: number;
-	private	p4: number;
-	private	p1kill: number;
-	private	p2kill: number;
-	private	p3kill: number;
-	private	p4kill: number;
+	private	p1score: number;
+	private	p2score: number;
 	private	start: number;
 	private	duration: number;
 
 	constructor(row: any) {
+		this.id = row.id;
+		this.idClient = row.id_client;
+		this.gameType = row.game_type;
 		this.winner = row.winner;
 		this.p1 = row.p1;
 		this.p2 = row.p2;
-		this.p3 = row.p3;
-		this.p4 = row.p4;
-		this.p1kill = row.p1score;
-		this.p2kill = row.p2score;
-		this.p3kill = row.p3score;
-		this.p4kill = row.p4score;
+		this.p1score = row.p1score;
+		this.p2score = row.p2score;
 		this.start = row.start;
 		this.duration = row.duration;
 	}
 
 
-	getTable(): number[] {
-		return [
-			this.winner,
-			this.p1,
-			this.p1kill,
-			this.p2,
-			this.p2kill,
-			this.p3,
-			this.p3kill,
-			this.p4,
-			this.p4kill,
-			this.start,
-			this.duration
-		]
+	// GETTERS
+	getId(): number {
+		return this.id;
 	}
 
+	getIdClient(): number {
+		return this.idClient;
+	}
 
-	// GETTERS
+	getGameType(): number {
+		return this.gameType;
+	}
+
 	getWinner(): number {
 		return this.winner;
 	}
@@ -81,28 +74,12 @@ export class	tankAddDto {
 		return this.p2;
 	}
 
-	getP3(): number {
-		return this.p3;
+	getP1Score(): number {
+		return this.p1score;
 	}
 
-	getP4(): number {
-		return this.p4;
-	}
-
-	getP1Kill(): number {
-		return this.p1kill;
-	}
-
-	getP2Kill(): number {
-		return this.p2kill;
-	}
-
-	getP3Kill(): number {
-		return this.p3kill;
-	}
-
-	getP4Kill(): number {
-		return this.p4kill;
+	getP2Score(): number {
+		return this.p2score;
 	}
 
 	getStart(): number {

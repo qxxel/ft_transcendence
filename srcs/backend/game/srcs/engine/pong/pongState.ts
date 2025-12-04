@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gameState.ts                                       :+:      :+:    :+:   */
+/*   pongState.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:58:03 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 13:19:07 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:27:41 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ export interface	Collectible {
 	type: string;
 }
 
-export interface	GameState {
+export interface	PongState {
 	width: number;
 	height: number;
 	ball: Ball;
@@ -65,7 +65,7 @@ export interface	PowerUps {
 	star3: boolean;
 }
 
-export interface	GameOptions {
+export interface	PongOptions {
 	width: number;
 	height: number;
 	isTournament: boolean;
@@ -81,7 +81,7 @@ export interface	GameOptions {
 
 /* ====================== RESUME INTERFACES ====================== */
 
-export interface	GameResume {
+export interface	PongResume {
 	winner: number;
 	player1Hits: number;
 	player2Hits: number;

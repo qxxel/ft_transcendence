@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:03:32 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:38:18 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ import { sendRequest }	from "../utils/sendRequest"
 interface	GameObject {
 	id: number;
 	id_client: number;
+	game_type: number;
 	winner: number;
 	p1: string;
 	p1score: number;
@@ -40,9 +41,9 @@ interface	GameObject {
 export async function	getAndRenderHistory(targetId: number | null, targetName: string | null, aiFilter: boolean = true, pvpFilter: boolean = true): Promise<void> {
 	let	response: Response;
 	if (!targetId)
-		response = await sendRequest('/api/game/pong/me', "get", null);
+		response = await sendRequest('/api/game/me', "get", null);
 	else
-		response = await sendRequest(`/api/game/pong/${targetId}`, "get", null);
+		response = await sendRequest(`/api/game/${targetId}`, "get", null);
 	if (!response.ok)
 	{
 		const errorData: Object = await response.json();

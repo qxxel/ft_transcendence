@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tankRepository.ts                                  :+:      :+:    :+:   */
+/*   gamesRepository.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 20:32:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 16:35:30 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/11/19 18:54:55 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/12/04 17:33:29 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// WILL BE THE STORAGE OF TANK DB AND HANDLE CLASSIC METHODS OF THIS DB
+// WILL BE THE STORAGE OF GAMES DB AND HANDLE CLASSIC METHODS OF THIS DB
 
 
 /* =================== SQLITE METHODS =================== /*
@@ -28,29 +28,30 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { tankAddDto }		from "../dtos/tankAddDto.js"
-import { tankRespDto }		from "../dtos/tankRespDto.js"
-import { tankTableBuilder }	from "../tableBuilders/tankTableBuilder.js"
+import { gamesAddDto }		from "../dtos/gamesAddDto.js"
+import { gamesRespDto }		from "../dtos/gamesRespDto.js"
+import { gamesTableBuilder }	from "../tableBuilders/gamesTableBuilder.js"
 
 import type { Database }	from 'sqlite3'
+import type { GameUser }	from "../objects/gameUser.js"
 
-/* ====================== INTERFACE	====================== */
+/* ====================== interface	====================== */
 
 // BECAUSE TYPESCRIPT DON'T ACCEPT `this.lastID` BUT IT APPEARS WITH THE COMPILATION
 interface	StatementWithLastID {
-	lastID: number;
+    lastID: number;
 }
 
 
 /* ====================== CLASS ====================== */
 
-export class	tankRepository {
+export class	gamesRepository {
 	private	db: Database;
 
 	constructor(db: Database) {
 		try {
 			this.db = db;
-			tankTableBuilder(db);
+			gamesTableBuilder(db);
 		}
 		catch (err: unknown) {
 			console.error(err);
@@ -58,10 +59,10 @@ export class	tankRepository {
 		}
 	}
 
-	async addTankGame(tankAddDto: tankAddDto): Promise<number> {
+	async addGame(gameAddDto: gamesAddDto): Promise<number> {
 		return new Promise((resolve, reject) => {
-			const	query: string = "INSERT INTO tank (winner, p1, p1kill, p2, p2kill, p3, p3kill, p4, p4kill, start) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			const	elements: number[] = tankAddDto.getTable();
+			const	query: string = "INSERT INTO games (id_client, game_type, winner, p1, p1score, p2, p2score, mode, powerup, start, duration) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			const	elements = gameAddDto.getTable();
 
 			this.db.run(query, elements, function (this: StatementWithLastID, err: unknown) {
 				if (err)
@@ -72,26 +73,41 @@ export class	tankRepository {
 		});
 	}
 
-	async getTankGameById(gameId: number): Promise<tankRespDto> {
+	async getGameById(gameId: number): Promise<gamesRespDto> {
 		return new Promise((resolve, reject) => {
-			const	query: string = "SELECT * FROM tank WHERE id = ?";
+			const	query: string = "SELECT * FROM games WHERE id = ?";
 			const	elements: number[] = [gameId];
 
 			this.db.get(query, elements, (err: unknown, row: unknown) => {
 				if (err)
 					return reject(err);
 
-				if (!row) {
-					console.error(`error: tank game ${gameId} doesn't exist`);
-					return reject(new Error(`The tank game ${gameId} doesn't exist`));
+				if (!row)
+				{
+					console.error(`error: game ${gameId} doesn't exist`);
+					return reject(new Error(`The game ${gameId} doesn't exist`));
 				}
 
-				resolve(new tankRespDto(row));
+				resolve(new gamesRespDto(row));
 			});
 		});
 	}
 
-	async isTaken(query: string, elements: Array<string>): Promise<boolean> {
+	async getHistoryByClientId(userId: number): Promise<GameUser[]> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "SELECT * FROM games WHERE id_client = ?";
+			const	elements: number[] = [userId];
+
+			this.db.all(query, elements, (err: unknown, rows: GameUser[]) => {
+				if (err)
+					return reject(err);
+
+				resolve(rows);
+			});
+		});
+	}
+
+	async isTaken(query: string, elements: string[]): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			this.db.get(query, elements, (err: unknown, row: unknown) => {
 				if (err)
@@ -102,9 +118,9 @@ export class	tankRepository {
 		});
 	}
 
-	async deleteTankGame(gameId: number): Promise<void> {
+	async deleteGame(gameId: number): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
-			const	query: string = "DELETE FROM tank WHERE id = ?";
+			const	query: string = "DELETE FROM games WHERE id = ?";
 			const	elements: number[] = [gameId];
 
 			this.db.run(query, elements, function(err: unknown) {

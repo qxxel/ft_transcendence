@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 14:59:23 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:30:40 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 /* ====================== IMPORTS ====================== */
 
 import { PongInstance }		from "../services/game/pongInstance.js"
-import { PongService }		from "../services/pongService.js"
+import { GamesService }		from "../services/gamesService.js"
 import { Server, Socket }	from 'socket.io'
 
-import type { GameOptions }	from "../engine/pong/gameState.js"
+import type { PongOptions }	from "../engine/pong/pongState.js"
 
 
 /* ====================== CONST ACTIVE GAMES ====================== */
@@ -29,11 +29,11 @@ const	activeGames = new Map<string, PongInstance>();
 
 /* ====================== FUNCTION ====================== */
 
-export function	setupPongSocket(io: Server, socket: Socket, pongService: PongService) {
+export function	setupPongSocket(io: Server, socket: Socket, pongService: GamesService) {
 
 	const userId: number | undefined = socket.data.user?.id;
 
-	socket.on('join-game', (opts: GameOptions) => {
+	socket.on('join-game', (opts: PongOptions) => {
 		try {
 			if (activeGames.has(socket.id))
 			{
