@@ -854,13 +854,15 @@ input[type=range]::-moz-range-thumb {
 }
 
 .history-container {
+    position: relative;
     width: 100%;
     max-width: 900px;
     margin: 30px auto;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid #333;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid #FFF;
+    box-shadow: 0 0 15px #fff;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 12px;
 }
 
 .history-controls {
