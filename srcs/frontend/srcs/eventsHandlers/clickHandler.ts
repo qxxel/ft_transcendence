@@ -15,7 +15,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { GameOptions }			from "../Pong/objects/gameOptions.js"
-import { getAndRenderHistory }	from "../history/getAndRenderHistory.js"
+import { initHistoryListeners } from "../history/getAndRenderHistory.js"
 import { PongGame }				from "../Pong/pong.js"
 import { TankGame } 			from "../v3/tank.js"
 import { TournamentController } from "../Pong/tournament.js"
@@ -91,12 +91,13 @@ async function	onClickEdit(user: User): Promise<void> {
 }
 
 async function	onClickHistory(targetName: string | null, gameState: GamesState, user: User): Promise<void> {
-	console.log("Empty History"); /////////////////////
-	// TODO: secure l'acces a la page si on est pas connecte
+	console.log("History");
+    // TODO: secure l'acces a la page si on est pas connecte
 
-	router.navigate("/history", gameState, user);
-
-	getAndRenderHistory(targetName);	//	ADD BOOLEAN FOR FILTERS ('ai' OR 'pvp')
+    router.navigate("/history", gameState, user);
+	setTimeout(() => {
+        initHistoryListeners(targetName);
+    }, 50);
 }
 
 function	onClickCancel(user: User): void {

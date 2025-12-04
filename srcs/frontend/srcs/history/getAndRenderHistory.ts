@@ -62,83 +62,138 @@ export async function	getAndRenderHistory(targetName: string | null, aiFilter: b
 	renderGames(gamesData, aiFilter, pvpFilter);
 }
 
-function	renderGames(gamesData: GameObject[], aiFilter: boolean, pvpFilter: boolean): void {
-	const	historyListDiv: HTMLDivElement = document.getElementById("history-list") as HTMLDivElement;
-	historyListDiv.innerHTML = "<h1>History</h1>";
+/* ====================== UTILS ====================== */
 
-	if (!aiFilter && !pvpFilter)
-		displayNoGame(true);
-	
-	let	games: GameObject[] = [];
-	if (aiFilter)
-		games = games.concat(gamesData.filter((value: GameObject) => { return value.mode === "ai"; }));
-	if (pvpFilter)
-		games = games.concat(gamesData.filter((value: GameObject) => { return value.mode === "pvp"; }));
+function formatTimeAgo(timestamp: number): string {
+    const now = Date.now();
+    const diffSeconds = Math.floor((now - timestamp) / 1000);
 
-	if (!games.length)
-		displayNoGame(true);
-
-	gamesData.forEach((value: GameObject) => {
-		createGameElement(historyListDiv, value);
-	});
+    if (diffSeconds < 60) return `${diffSeconds}s ago`;
+    
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    if (diffMinutes < 60) return `${diffMinutes}m ago`;
+    
+    const diffHours = Math.floor(diffMinutes / 60);
+    if (diffHours < 24) return `${diffHours}h ago`;
+    
+    const diffDays = Math.floor(diffHours / 24);
+    return `${diffDays}d ago`;
 }
 
-function	createGameElement(historyListDiv: HTMLDivElement, game: GameObject): void {
-	const	gameIdSpan: HTMLSpanElement = document.createElement("span");
-	gameIdSpan.classList.add("game-id");
-	gameIdSpan.textContent = game.id.toString();
+function formatDuration(ms: number): string {
+	const seconds = Math.floor(ms / 1000);
+    if (seconds < 60) return `${seconds}s`;
+    
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    
+    if (minutes < 60) return `${minutes}m ${remainingSeconds}s`;
+    
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    
+    return `${hours}h ${remainingMinutes}m`;
+}
 
-	const	clientIdSpan: HTMLSpanElement = document.createElement("span");
-	clientIdSpan.classList.add("client-id");
-	clientIdSpan.textContent = game.id_client.toString();
+/* ====================== RENDER FUNCTIONS ====================== */
 
-	const	gameWinnerSpan: HTMLSpanElement = document.createElement("span");
-	gameWinnerSpan.classList.add("game-winner");
-	gameWinnerSpan.textContent = game.winner.toString();
+function renderGames(gamesData: GameObject[], aiFilter: boolean, pvpFilter: boolean): void {
+    const historyEntriesDiv = document.getElementById("history-entries") as HTMLDivElement;
+    
+    if (historyEntriesDiv) historyEntriesDiv.innerHTML = ""; 
 
-	const	p1NameSpan: HTMLSpanElement = document.createElement("span");
-	p1NameSpan.classList.add("p1-name");
-	p1NameSpan.textContent = game.p1;
+    let games: GameObject[] = [];
 
-	const	p1ScoreSpan: HTMLSpanElement = document.createElement("span");
-	p1ScoreSpan.classList.add("p1-score");
-	p1ScoreSpan.textContent = game.p1score.toString();
+    if (aiFilter)
+        games = games.concat(gamesData.filter((value) => value.mode === "ai"));
+    if (pvpFilter)
+        games = games.concat(gamesData.filter((value) => value.mode === "pvp"));
 
-	const	p2NameSpan: HTMLSpanElement = document.createElement("span");
-	p2NameSpan.classList.add("p2-name");
-	p2NameSpan.textContent = game.p2;
+    if (games.length === 0) {
+        if (historyEntriesDiv) {
+            historyEntriesDiv.innerHTML = '<p class="empty-message">No matches found.</p>';
+        }
+        return;
+    }
 
-	const	p2ScoreSpan: HTMLSpanElement = document.createElement("span");
-	p2ScoreSpan.classList.add("p2-score");
-	p2ScoreSpan.textContent = game.p2score.toString();
+    games.sort((a, b) => b.start - a.start);
 
-	const	gameModeSpan: HTMLSpanElement = document.createElement("span");
-	gameModeSpan.classList.add("game-mode");
-	gameModeSpan.textContent = game.mode;
+    games.forEach((value: GameObject) => {
+        if (historyEntriesDiv) createGameElement(historyEntriesDiv, value);
+    });
+}
 
-	const	powerupSpan: HTMLSpanElement = document.createElement("span");
-	powerupSpan.classList.add("powerup");
-	powerupSpan.textContent = game.powerup.toString();
+function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): void {
+    const gameRow: HTMLDivElement = document.createElement("div");
+    gameRow.classList.add("game-row");
 
-	const	gameStartSpan: HTMLSpanElement = document.createElement("span");
-	gameStartSpan.classList.add("game-start");
-	gameStartSpan.textContent = game.start.toString();
+    const isVictory = game.winner === game.id_client;
+    gameRow.classList.add(isVictory ? "row-victory" : "row-defeat");
 
-	const	gameDurationSpan: HTMLSpanElement = document.createElement("span");
-	gameDurationSpan.classList.add("game-duration");
-	gameDurationSpan.textContent = game.duration.toString();
+    const resultSpan = document.createElement("span");
+    resultSpan.classList.add("col-result");
+    resultSpan.textContent = isVictory ? "VICTORY" : "DEFEAT";
+    resultSpan.classList.add(isVictory ? "text-victory" : "text-defeat");
 
-	historyListDiv.appendChild(gameIdSpan);
-	historyListDiv.appendChild(clientIdSpan);
-	historyListDiv.appendChild(gameWinnerSpan);
-	historyListDiv.appendChild(p1NameSpan);
-	historyListDiv.appendChild(p1ScoreSpan);
-	historyListDiv.appendChild(p2NameSpan);
-	historyListDiv.appendChild(p2ScoreSpan);
-	historyListDiv.appendChild(gameModeSpan);
-	historyListDiv.appendChild(powerupSpan);
-	historyListDiv.appendChild(gameStartSpan);
-	historyListDiv.appendChild(gameDurationSpan);
+    const timeAgoSpan = document.createElement("span");
+    timeAgoSpan.classList.add("col-ago");
+    timeAgoSpan.textContent = formatTimeAgo(game.start);
+
+    const durationSpan = document.createElement("span");
+    durationSpan.classList.add("col-duration");
+    
+    durationSpan.textContent = formatDuration(game.duration);
+    durationSpan.textContent = `Duration ${formatDuration(game.duration)}`;
+
+    const modeSpan = document.createElement("span");
+    modeSpan.classList.add("col-mode");
+    modeSpan.textContent = game.mode;
+
+    const p1NameSpan = document.createElement("span");
+    p1NameSpan.classList.add("col-p1");
+    p1NameSpan.textContent = game.p1;
+    
+    const p2NameSpan = document.createElement("span");
+    p2NameSpan.classList.add("col-p2");
+
+    if (game.mode === "ai") {
+        const rawName = (game.p2 || "").toLowerCase();
+        
+        let difficultyClass = "diff-medium";
+
+        if (rawName.includes("boris")) {
+            difficultyClass = "diff-boris";
+        } else if (rawName.includes("hard")) {
+            difficultyClass = "diff-hard";
+        } else if (rawName.includes("easy")) {
+            difficultyClass = "diff-easy";
+        }
+
+        let displayName = (game.p2 || "AI").replace(/AI\s*-\s*/i, '').replace(/[()]/g, '').trim().toUpperCase();
+
+        p2NameSpan.classList.add("is-ai");
+        p2NameSpan.classList.add(difficultyClass);
+
+        p2NameSpan.innerHTML = `<span class="bot-tag">BOT</span> ${displayName}`;
+    } else {
+        p2NameSpan.textContent = game.p2 || "Player 2";
+    }
+
+    const scoreSpan = document.createElement("span");
+    scoreSpan.classList.add("col-score");
+    const p1Score = game.p1score ?? (game as any).plscore ?? 0;
+    const p2Score = game.p2score ?? 0;
+    scoreSpan.textContent = `${p1Score} - ${p2Score}`;
+
+    gameRow.appendChild(resultSpan);
+    gameRow.appendChild(timeAgoSpan);
+    gameRow.appendChild(modeSpan);
+    gameRow.appendChild(p1NameSpan);
+    gameRow.appendChild(scoreSpan);
+    gameRow.appendChild(p2NameSpan);
+    gameRow.appendChild(durationSpan);
+
+    historyListDiv.appendChild(gameRow);
 }
 
 function	displayErrors(targetName: string | null): void {
@@ -179,4 +234,42 @@ console.log(filter)
 	historyEmptyParagraph.textContent = "Empty match history.";
 
 	historyListDiv.appendChild(historyEmptyParagraph);
+}
+
+export function initHistoryListeners(targetName: string | null = null, attempt: number = 0): void {
+    const aiCheckbox = document.getElementById('filter-ai') as HTMLInputElement;
+    const pvpCheckbox = document.getElementById('filter-pvp') as HTMLInputElement;
+    const refreshBtn = document.getElementById('refresh-history') as HTMLButtonElement;
+
+    if (!aiCheckbox || !pvpCheckbox) {
+        if (attempt > 20) {
+            console.error("Critical Error: Impossible de trouver les checkboxes dans le DOM après attente.");
+            return;
+        }
+        requestAnimationFrame(() => initHistoryListeners(targetName, attempt + 1));
+        return;
+    }
+
+    console.log("History DOM ready! Initializing...");
+
+    const refreshList = () => {
+        const list = document.getElementById('history-entries');
+		if (list) list.style.opacity = "0.5";
+
+        getAndRenderHistory(targetName, aiCheckbox.checked, pvpCheckbox.checked).then(() => {
+            if (list) list.style.opacity = "1";
+        });
+    };
+
+    aiCheckbox.onchange = refreshList;
+    pvpCheckbox.onchange = refreshList;
+
+    if (refreshBtn) {
+        refreshBtn.onclick = () => {
+            refreshBtn.style.transform = "rotate(360deg)";
+            setTimeout(() => refreshBtn.style.transform = "none", 500);
+            refreshList();
+        };
+    }
+    refreshList();
 }
