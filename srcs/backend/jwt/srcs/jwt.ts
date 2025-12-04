@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/27 10:43:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 18:21:00 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ export const	jwtAxios = axios.create({
 
 /* ====================== SERVER ====================== */
 
-const	jwtFastify: FastifyInstance = Fastify({
+export const	jwtFastify: FastifyInstance = Fastify({
 	https: {
 		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
 		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),

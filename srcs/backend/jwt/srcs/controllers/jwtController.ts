@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 18:42:25 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 18:23:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 
 /* ====================== IMPORTS ====================== */
 
-import * as jose											from 'jose'
-import { getCookies, setCookiesAccessToken, removeCookies }	from "../utils/cookies.js"
-import { jwtGenerate, addJWT, addTwofaJWT, removeJWT }		from "../utils/jwtManagement.js"
-import { jwtServ, jwtSecret, expAccess, jwtAxios }			from "../jwt.js"
-import { MissingIdError }									from "../utils/throwErrors.js"
+import * as jose												from 'jose'
+import { getCookies, setCookiesAccessToken, removeCookies }		from "../utils/cookies.js"
+import { jwtGenerate, addJWT, addTwofaJWT, removeJWT }			from "../utils/jwtManagement.js"
+import { jwtServ, jwtSecret, expAccess, jwtAxios, jwtFastify }	from "../jwt.js"
+import { MissingIdError }										from "../utils/throwErrors.js"
+import { errorsHandler }										from "../utils/errorsHandler.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 import type { AxiosResponse }									from 'axios'
@@ -46,14 +47,7 @@ async function	createdToken(request: FastifyRequest, reply: FastifyReply): Promi
 		return reply.status(201).send(lastId);
 	} catch (err: unknown) {
 		removeJWT(reply);
-
-		if (err instanceof MissingIdError) {
-			console.error(err.message);
-			reply.status(401).send(err.message);
-		}
-
-		console.error(err);
-		return reply.status(500).send(err);
+		return errorsHandler(jwtFastify, reply, err);
 	}
 }
 
@@ -69,14 +63,7 @@ async function	createdTokenForEmailVerfication(request: FastifyRequest, reply: F
 		return reply.status(201).send(user.id);
 	} catch (err: unknown) {
 		removeJWT(reply);
-
-		if (err instanceof MissingIdError) {
-			console.error(err.message);
-			reply.status(401).send(err.message);
-		}
-
-		console.error(err);
-		return reply.status(500).send(err);
+		return errorsHandler(jwtFastify, reply, err);
 	}
 }
 
@@ -93,14 +80,7 @@ async function	recreatedTokenTwofa(request: FastifyRequest, reply: FastifyReply)
 		return reply.status(201).send(user.id);
 	} catch (err: unknown) {
 		removeJWT(reply);
-
-		if (err instanceof MissingIdError) {
-			console.error(err.message);
-			reply.status(401).send(err.message);
-		}
-
-		console.error(err);
-		return reply.status(500).send(err);
+		return errorsHandler(jwtFastify, reply, err);
 	}
 }
 
@@ -111,14 +91,7 @@ async function	getPayloadTokenTwofa(request: FastifyRequest, reply: FastifyReply
 
 		return reply.status(201).send(payload);
 	} catch (err: unknown) {
-		if (err instanceof jose.errors.JOSEError)
-		{
-			console.error(err.message);	
-			return reply.status(401).send(err.message);
-		}
-
-		console.log(err);
-		return reply.status(500).send(err);
+		return errorsHandler(jwtFastify, reply, err);
 	}
 }
 
@@ -139,14 +112,7 @@ async function	removeTokenTwofaCreatedToken(request: FastifyRequest, reply: Fast
 		const	lastId: number = await jwtServ.addToken(refreshToken, user.id)
 		return reply.status(201).send(payload);
 	} catch (err: unknown) {
-		if (err instanceof jose.errors.JOSEError)
-		{
-			console.error(err.message);	
-			return reply.status(401).send(err.message);
-		}
-
-		console.log(err);
-		return reply.status(500).send(err);
+		return errorsHandler(jwtFastify, reply, err);
 	}
 }
 
@@ -157,14 +123,7 @@ async function	getPayloadTokenAccess(request: FastifyRequest, reply: FastifyRepl
 
 		return reply.status(200).send(payload);
 	} catch (err: unknown) {
-		if (err instanceof jose.errors.JOSEError)
-		{
-			console.error(err.message);	
-			return reply.status(401).send(err.message);
-		}
-
-		console.log(err);
-		return reply.status(500).send(err);
+		return errorsHandler(jwtFastify, reply, err);
 	}
 }
 
@@ -186,15 +145,7 @@ async function	refreshTokenAccess(request: FastifyRequest, reply: FastifyReply):
 
 		return reply.status(201).send({ result: "ok" });
 	} catch (err: unknown) {
-		if (err instanceof jose.errors.JOSEError)
-		{
-			await jwtServ.deleteToken(cookies.jwtRefresh);
-			console.error(err.message);
-			return reply.status(401).send(err.message);
-		}
-
-		console.log(err);
-		return reply.status(500).send(err);
+		return errorsHandler(jwtFastify, reply, err);
 	}
 }
 
@@ -208,14 +159,7 @@ async function	deleteSessionToken(request: FastifyRequest, reply: FastifyReply):
 
 		return reply.status(204).send({ result: "deleted." });
 	} catch (err: unknown) {
-		if (err instanceof jose.errors.JOSEError)
-		{
-			console.error(err.message);
-			return reply.status(401).send(err.message);
-		}
-
-		console.log(err);
-		return reply.status(500).send(err);
+		return errorsHandler(jwtFastify, reply, err);
 	}
 }
 
@@ -230,14 +174,7 @@ async function	deleteUserToken(request: FastifyRequest, reply: FastifyReply): Pr
 
 		return reply.status(204).send({ result: "deleted." });
 	} catch (err: unknown) {
-		if (err instanceof jose.errors.JOSEError)
-		{
-			console.error(err.message)
-			return reply.status(401).send(err.message);
-		}
-
-		console.log(err);
-		return reply.status(500).send(err);
+		return errorsHandler(jwtFastify, reply, err);
 	}
 }
 

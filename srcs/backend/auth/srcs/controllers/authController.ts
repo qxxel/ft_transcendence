@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 12:24:41 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 18:39:59 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 /* ====================== IMPORTS ====================== */
 
-import argon2					from 'argon2'
-import axios					from 'axios'
-import { authAxios } 			from "../auth.js"
-import { authServ } 			from "../auth.js"
-import { deleteClientExpires }	from "../services/authService.js"
+import argon2								from 'argon2'
+import { authAxios, authServ, authFastify }	from "../auth.js"
+import { deleteClientExpires }				from "../services/authService.js"
+import { errorsHandler }					from "../utils/errorsHandler.js"
+import * as twofaError						from "../utils/throwErrors.js"
 
 import type	{ AxiosResponse }									from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
@@ -67,27 +67,13 @@ async function isLoggedIn(cookie: string | undefined): Promise<boolean> {
 	}
 }
 
-function errorsHandler(err: unknown): string {
-	if (axios.isAxiosError(err)) {
-		if (err.response?.data?.error)
-			return err.response.data.error;
-
-		return err.message;
-	}
-
-	if (err instanceof Error)
-		return err.message;
-
-	return "Unknown error";
-}
-
 async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: FastifyReply): Promise<FastifyReply> {
 	try {
 		if (!request.body)
-			throw new Error("The request is empty");
+			throw new twofaError.RequestEmptyError("The request is empty");
 
 		if (await isLoggedIn(request.headers.cookie))
-			throw new Error("You are already connected");
+			throw new twofaError.AlreadyConnectedError("You are already connected");
 
 		const	userRes: AxiosResponse = await authAxios.post('https://user:3000', request.body);
 		const	user: any = userRes.data;
@@ -111,38 +97,34 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 			throw err;
 		}
 	} catch (err: unknown) {
-		const	msgError = errorsHandler(err);
-
-		console.error(msgError);
-
-		return reply.code(400).send({ error: msgError });
+		return errorsHandler(authFastify, reply , err);
 	}
 }
 
 async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: FastifyReply): Promise<FastifyReply> {
 	try {
 		if (!request.body)
-			throw new Error("The request is empty");
+			throw new twofaError.RequestEmptyError("The request is empty");
 
 		const	{ identifier, password } = request.body;
 
 		if (await isLoggedIn(request.headers.cookie))
-			throw new Error("You are already connected");
+			throw new twofaError.AlreadyConnectedError("You are already connected");
 
 		const	userRes: AxiosResponse = await authAxios.get(`https://user:3000/lookup/${identifier}`);
 		const	user: any = userRes.data;
 
 		if (!user)
-			throw new Error("Wrong password or username."); // mreynaud : a voir quand ce message est utilise car peut etre que le contenu est pas juste -> "Wrong password."
+			throw new twofaError.WrongCredentialsError("Wrong password or username."); // mreynaud : a voir quand ce message est utilise car peut etre que le contenu est pas juste -> "Wrong password."
 
 		const expires_at: number | undefined | null = await authServ.getExpiresByIdClient(user.id);
 		if (expires_at !== null && expires_at !== undefined)
-			throw new Error("Wrong password or username.");
+			throw new twofaError.WrongCredentialsError("Wrong password or username.");
 		
 		const	pwdHash: string = await authServ.getPasswordByIdClient(user.id);
 
 		if (!await argon2.verify(pwdHash, password))
-			throw new Error("Wrong password.");
+			throw new twofaError.WrongCredentialsError("Wrong password or username.");
 
 		const	jwtRes: AxiosResponse = await authAxios.post('https://jwt:3000', user, { withCredentials: true } );
 		
@@ -155,11 +137,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 			is2faEnable: user.is2faEnable
 		});
 	} catch (err: unknown) {
-		const	msgError = errorsHandler(err);
-
-		console.error(msgError);
-
-		return reply.code(400).send({ error: msgError });
+		return errorsHandler(authFastify, reply , err);
 	}
 }
 
@@ -180,11 +158,7 @@ async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, 
 
 		return reply.status(201).send(id);
 	} catch (err: unknown) {
-		const	msgError = errorsHandler(err);
-
-		console.error(msgError);
-
-		return reply.code(400).send({ error: msgError });
+		return errorsHandler(authFastify, reply , err);
 	}
 }
 
@@ -208,11 +182,7 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 		
 		return reply.status(204).send(payload.data.id);
 	} catch (err: unknown) {
-		const	msgError: string = errorsHandler(err);
-
-		console.error(msgError);
-
-		return reply.code(400).send({ error: msgError });
+		return errorsHandler(authFastify, reply , err);
 	}
 }
 
@@ -233,11 +203,7 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 		
 		return reply.status(204).send(payload.data.id);	
 	} catch (err: unknown) {
-		const	msgError: string = errorsHandler(err);
-
-		console.error(msgError);
-
-		return reply.code(400).send({ error: msgError });
+		return errorsHandler(authFastify, reply , err);
 	}
 }
 
@@ -254,11 +220,7 @@ async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promis
 
 		return reply.status(201).send(id);
 	} catch (err: unknown) {
-		const	msgError = errorsHandler(err);
-
-		console.error(msgError);
-
-		return reply.code(400).send({ error: msgError });
+		return errorsHandler(authFastify, reply , err);
 	}
 }
 

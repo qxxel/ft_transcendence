@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/01 16:31:16 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 18:26:31 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ export const	authServ = new authService(new authRepository(db));
 
 /* ====================== SERVER ====================== */
 
-const	authFastify: FastifyInstance = Fastify({
+export const	authFastify: FastifyInstance = Fastify({
 	https: {
 		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
 		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
