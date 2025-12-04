@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 15:40:23 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:04:21 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,17 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { AppState, appStore, UserState }				from "../objects/store.js"
-import { displayDate }			from "../utils/displayDate.js"
-import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
-import { router }				from "../index.js"
-import { socket }				from "../socket/socket.js"
-import { sendRequest }			from "../utils/sendRequest.js"
+import { AppState, appStore, UserState }	from "../objects/store.js"
+import { displayDate }						from "../utils/displayDate.js"
+import { getAndRenderFriends }				from "../friends/getAndRenderFriends.js"
+import { getMenu }							from "../utils/getMenu.js"
+import { router }							from "../index.js"
+import { socket }							from "../socket/socket.js"
+import { sendRequest }						from "../utils/sendRequest.js"
 
 
 
 /* ====================== FUNCTIONS ====================== */
-
-function	getMenu(username: string | undefined): string {
-	return `<a href="/">Home</a>
-			<a href="/games">Play</a>
-			<a href="/tournament-setup">Tournament</a>
-			<a href="/user">Profile</a>
-			<a href="/friends">Friends</a>
-			<a onclick="onClickLogout();" id="logout">Logout</a>
-			<a href="/about">About</a>`;
-}
 
 async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 	console.log("Sign in");
@@ -79,10 +70,6 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-		// OLD
-	// user.setId(result.id as number);
-	// user.setUsername(result.username);
-
 	if (result.is2faEnable) {
 		router.navigate("/2fa");
 
@@ -103,15 +90,12 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-		// OLD
-	// user.setSigned(true);
-
 	const	state: AppState = appStore.getState();
 	const	user: UserState = state.user;
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenu(user.username!);	// SUR QUIL EXISTE (20 LIGNES PLUS HAUT) ??
+		menu.innerHTML = getMenu(true);
 
 	router.navigate("/");
 }
@@ -155,10 +139,6 @@ async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 			username: username
 		}
 	}));
-
-		// OLD
-	// user.setId(result.id as number);
-	// user.setUsername(username);
 
 	const	divSignUp = document.getElementById("sign-up");
 	if (divSignUp)
@@ -213,15 +193,12 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-		// OLD
-	// user.setSigned(true);
-
 	const	state: AppState = appStore.getState();
 	const	user: UserState = state.user;
 
 	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenu(user.username!);	// SUR QUIL EXISTE (20 LIGNES PLUS HAUT) ??
+		menu.innerHTML = getMenu(true);
 
 	router.canLeave = true;
 	router.navigate("/");
@@ -255,15 +232,12 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-		// OLD
-	// user.setSigned(true);
-
 	const	state: AppState = appStore.getState();
 	const	user: UserState = state.user;
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenu(user.username!);	// SUR QUIL EXISTE (20 LIGNES PLUS HAUT) ??
+		menu.innerHTML = getMenu(true);
 
 	router.canLeave = true;
 	router.navigate("/");
@@ -319,9 +293,6 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 			isAuth: false
 		}
 	}));
-
-		// OLD
-	// user.logout();
 
 	router.navigate("/");
 	location.reload();	//	MATHIS: SURTOUT PAS => SPA

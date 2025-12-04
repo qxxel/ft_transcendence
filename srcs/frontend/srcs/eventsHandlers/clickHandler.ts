@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 16:38:34 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:05:08 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,21 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { AppState, appStore, UserState }				from "../objects/store.js"
-import { GameOptions }			from "../Pong/objects/gameOptions.js"
-import { initHistoryListeners } from "../history/getAndRenderHistory.js"
-import { PongGame }				from "../Pong/pong.js"
-import { TankGame } 			from "../v3/tank.js"
-import { TournamentController } from "../Pong/tournament.js"
-import { router }				from "../index.js"
-import { sendRequest }			from "../utils/sendRequest.js"
-import { socket }				from "../socket/socket.js"
-import { displayDate }			from "../utils/displayDate.js"
-import { btnCooldown }			from "../utils/buttonCooldown.js"
+import { AppState, appStore, UserState }	from "../objects/store.js"
+import { GameOptions }						from "../Pong/objects/gameOptions.js"
+import { getMenu }							from "../utils/getMenu.js"
+import { initHistoryListeners } 			from "../history/getAndRenderHistory.js"
+import { PongGame }							from "../Pong/pong.js"
+import { TankGame } 						from "../v3/tank.js"
+import { TournamentController } 			from "../Pong/tournament.js"
+import { router }							from "../index.js"
+import { sendRequest }						from "../utils/sendRequest.js"
+import { socket }							from "../socket/socket.js"
+import { displayDate }						from "../utils/displayDate.js"
+import { btnCooldown }						from "../utils/buttonCooldown.js"
 
-import { Tank }				from "../v3/class_tank.js"
-import { Game } from "../Pong/gameClass.js"
+import { Tank }	from "../v3/class_tank.js"
+import { Game }	from "../Pong/gameClass.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -58,18 +59,9 @@ async function  onClickLogout(): Promise<void> {
 		}
 	}));
 
-		// OLD
-	// user.logout();
-
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML =
-			`<a href="/">Home</a>
-			<a href="/games">Play</a>
-			<a href="/tournament-setup">Tournament</a>
-			<a href="/sign-in">Sign in</a>
-			<a href="/sign-up">Sign up</a>
-			<a href="/about">About</a>`;
+		menu.innerHTML = getMenu(false);
 			
 	if (socket && socket.connected)
 		socket.disconnect();
@@ -178,19 +170,10 @@ async function	onClickSkipeVerifyEmailDev(): Promise<void> {
 			isAuth: true
 		}
 	}));
-
-		// OLD
-	// user.setSigned(true);
 	
 	var menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML =
-			`<a href="/">Home</a>
-			<a href="/games">Play</a>
-			<a href="/tournament-setup">Tournament</a>
-			<a href="/user">Profile</a>
-			<a onclick="onClickLogout();" id="logout">Logout</a>
-			<a href="/about">About</a>`;
+		menu.innerHTML = getMenu(true);
 
 	router.canLeave = true;
 	router.navigate("/");
@@ -378,10 +361,6 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard') {
 		}
 	}));
 
-		// OLD
-	// gameState.pendingOptions = options;
-	// gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
-
 	currentGame!.setWinningScore(winningScore);	// SUR QUIL EXISTE (2 LIGNES AU DESSUS) ??
 
 	router.navigate('/pong');
@@ -423,10 +402,6 @@ function onClickPlayPVP() {
 			}
 		}));
 
-			// OLD
-		// gameState.pendingOptions = options;
-		// gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
-
 		currentGame!.setWinningScore(winningScore);	// SUR QUIL EXISTE (2 LIGNES AU DESSUS) ??
 
 		router.navigate('/pong');
@@ -441,8 +416,6 @@ function onClickPlayPVP() {
 			}
 		}));
 
-			// OLD
-		// gameState.currentGame = new TankGame('tank-canvas', 'desertfox', user);
 		router.navigate('/tank');
 	}
 }
@@ -473,9 +446,6 @@ function	onStartTournament() {
 		}
 	}));
 
-		// OLD
-	// gameState.currentTournament = new TournamentController(playerNames, winningScore);
-
 	router.navigate("/tournament-bracket");
 }
 
@@ -505,10 +475,6 @@ function startTournamentMatch(matchId: string, p1: string, p2: string) {
 				pendingOptions: options
 			}
 		}));
-
-			// OLD
-		// gameState.pendingOptions = options;
-		// gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
 
 		currentTournament.startMatch(matchId, p1, p2);
 
@@ -570,10 +536,6 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 			}
 		}));
 
-			// OLD
-		// gameState.pendingOptions = options;
-		// gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
-
 		router.navigate("/pong");
 
 	}
@@ -590,9 +552,6 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 			}
 		}));
 
-			// OLD
-		// gameState.currentGame = new TankGame('tank-canvas', 'desertfox', user, freq, star1, star2, star3);
-
 		router.navigate("/tank");
 	}
 
@@ -606,11 +565,6 @@ function onClickHomeBtn() {
 /* ====================== SETUP ====================== */
 
 export async function   setupClickHandlers(): Promise<void> {
-	const	state: AppState = appStore.getState();
-	const	user: UserState | null = state.user;
-	const	currentGame: Game | null = state.game.currentGame;
-	const	currentTournament: TournamentController | null = state.game.currentTournament;
-
 	(window as any).onClickPlay = () => onClickPlay();
 	(window as any).onClickLogout = () => onClickLogout();
 

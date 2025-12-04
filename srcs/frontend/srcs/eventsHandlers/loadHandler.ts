@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/04 15:37:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:05:21 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { appStore }		from "../objects/store.js"
+import { getMenu }		from "../utils/getMenu.js"
 import { router }		from "../index.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 
@@ -43,23 +44,11 @@ async function	handleLoadPage(): Promise<void> {
 			}
 		}));
 
-			// OLD
-		// user.setId(result.id as number);
-		// user.setUsername(result.username);
-		// user.setSigned(true);
-
 		const baseHref = window.location.origin;
 
 		const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)
-			menu.innerHTML =
-				`<a href="/">Home</a>
-				<a href="/games">Play</a>
-				<a href="/tournament-setup">Tournament</a>
-				<a href="/user">Profile</a>
-				<a href="/friends">Friends</a>
-				<a onclick="onClickLogout();" id="logout">Logout</a>
-				<a href="/about">About</a>`;
+			menu.innerHTML = getMenu(true);
 
 		router.navigate('/');
 	});

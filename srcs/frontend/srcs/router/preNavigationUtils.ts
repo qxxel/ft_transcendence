@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 15:43:31 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:04:36 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 /* ====================== IMPORTS ====================== */
 
 import { router }		from "../index.js"
-import { appStore } from "../objects/store.js";
+import { appStore }		from "../objects/store.js"
+import { getMenu }		from "../utils/getMenu.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 
 
@@ -59,14 +60,7 @@ export async function	redirections(currentPath: string): Promise<void> {
 
 		const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)
-			menu.innerHTML =
-				`<a href="/">Home</a>
-				<a href="/games">Play</a>
-				<a href="/tournament-setup">Tournament</a>
-				<a href="/user">Profile</a>
-				<a href="/friends">Friends</a>
-				<a onclick="onClickLogout();" id="logout">Logout</a>
-				<a href="/about">About</a>`;
+			menu.innerHTML = getMenu(true);
 
 		router.navigate('/');
 	}

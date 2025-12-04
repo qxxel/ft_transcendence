@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 16:30:30 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:03:32 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 /* ====================== FUNCTIONS ====================== */
 
-import { Game } from "../Pong/gameClass";
 import { sendRequest }	from "../utils/sendRequest"
 
 
