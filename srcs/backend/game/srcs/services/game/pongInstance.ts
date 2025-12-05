@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 15:15:28 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:31:02 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,23 @@
 /* ====================== IMPORTS ====================== */
 
 import { AIController }	from "../../engine/pong/pongAi.js"
-import { pongAddDto }	from "../../dtos/pongAddDto.js"
+import { gamesAddDto }	from "../../dtos/gamesAddDto.js"
 import { PongPhysics }	from "../../engine/pong/pongPhysic.js"
-import { PongService }	from "../pongService.js"
+import { GamesService }	from "../gamesService.js"
 import { Server }		from 'socket.io'
 
-import type { GameOptions, Collectible, GameState, PowerUps, GameResume }	from "../../engine/pong/gameState.js"
+import type { PongOptions, Collectible, PongState, PowerUps, PongResume }	from "../../engine/pong/pongState.js"
 
 
 /* ====================== CLASS ====================== */
 
 export class	PongInstance {
-	public	gameState: GameState;
+	public	gameState: PongState;
 	
 	private	io: Server;
 	private	userId: number | undefined;
 	private	roomId: string;
-	private	pongService: PongService;
+	private	pongService: GamesService;
 	private	isTournament: boolean;
 
 	private	physics: PongPhysics;
@@ -63,7 +63,7 @@ export class	PongInstance {
 	private	p1name: string;
 	private	p2name: string | undefined;
 
-	constructor(io: Server, roomId: string, pongService: PongService, userId: number | undefined, opts: GameOptions) {
+	constructor(io: Server, roomId: string, pongService: GamesService, userId: number | undefined, opts: PongOptions) {
 		this.io = io;
 		this.userId = userId;
 		this.roomId = roomId;
@@ -270,7 +270,7 @@ export class	PongInstance {
 			
 			if (this.gameLoopInterval) clearInterval(this.gameLoopInterval);
 
-			const	gameResume: GameResume = {
+			const	gameResume: PongResume = {
 				winner: this.gameState.score1 >= this.winningScore ? 1 : 2,
 				player1Hits: this.gameState.paddle1.hits,
 				player2Hits: this.gameState.paddle2.hits,
@@ -293,6 +293,7 @@ export class	PongInstance {
 				const	gameDatabase = {
 					idClient: this.userId,
 					winner: gameResume.winner,
+					gameType: 1,
 					p1: this.p1name,
 					p2: this.p2name,
 					p1score: gameResume.score1,
@@ -303,8 +304,8 @@ export class	PongInstance {
 					duration: gameResume.duration
 				};
 
-				const	pongGame: pongAddDto = new pongAddDto(gameDatabase);
-				this.pongService.addPongGame(pongGame)
+				const	pongGame: gamesAddDto = new gamesAddDto(gameDatabase);
+				this.pongService.addGame(pongGame)
 			} catch (e) {
 				console.error("Error while saving the match:", e);
 			}

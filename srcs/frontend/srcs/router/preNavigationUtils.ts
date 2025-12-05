@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 12:54:13 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:04:36 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,22 @@
 /* ====================== IMPORTS ====================== */
 
 import { router }		from "../index.js"
+import { appStore }		from "../objects/store.js"
+import { getMenu }		from "../utils/getMenu.js"
 import { sendRequest }	from "../utils/sendRequest.js"
-import { User }			from "../user/user.js"
-
-import type { GamesState }	from "../index.js"
 
 
 /* ====================== FUNCTION ====================== */
 
-export async function	preNavigation(currentPath: string, gameState: GamesState, user: User): Promise<void> {
+export async function	preNavigation(currentPath: string): Promise<void> {
 	const	respToken: Response = await sendRequest('/api/jwt/validate', 'GET', null);
 	if (!respToken.ok)
 		console.error((await respToken.json()).error);														//	AXEL: A VERIFIER
 
-	redirections(currentPath, gameState, user);
+	redirections(currentPath);
 }
 
-export async function	redirections(currentPath: string, gameState: GamesState, user: User): Promise<void> {
+export async function	redirections(currentPath: string): Promise<void> {
 	if (['/friends', '/user'].includes(currentPath))
 	{
 		const	response: Response = await sendRequest('/api/jwt/validate', 'GET', null);
@@ -42,23 +41,27 @@ export async function	redirections(currentPath: string, gameState: GamesState, u
 
 		const	result: any = await response.json();
 
-		user.setId(result.id as number);
-		user.setUsername(result.username);
-		user.setSigned(true);
+		appStore.setState((state) => ({
+			...state,
+			user: {
+				...state.user,
+				id: result.id as number,
+				username: result.username,
+				isAuth: true
+			}
+		}));
+
+			// OLD
+		// user.setId(result.id as number);
+		// user.setUsername(result.username);
+		// user.setSigned(true);
 
 		const baseHref = window.location.origin;
 
 		const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)
-			menu.innerHTML =
-				`<a href="/">Home</a>
-				<a href="/games">Play</a>
-				<a href="/tournament-setup">Tournament</a>
-				<a href="/user">Profile</a>
-				<a href="/friends">Friends</a>
-				<a onclick="onClickLogout();" id="logout">Logout</a>
-				<a href="/about">About</a>`;
+			menu.innerHTML = getMenu(true);
 
-		router.navigate('/', gameState, user);
+		router.navigate('/');
 	}
 }

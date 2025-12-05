@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/04 12:52:24 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 15:41:59 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { connectSocket, socket }	from "../socket/socket.js"
-import { Game }						from "./gameClass.js"
-import { linearInterpolation }		from "./utils/lerp.js"
-import { router }					from "../index.js"
-import { User }						from "../user/user.js"
-import { PongRenderer }				from "./renderer.js"
+import { AppState, appStore, UserState }	from "../objects/store.js"
+import { connectSocket, socket }			from "../socket/socket.js"
+import { Game }								from "./gameClass.js"
+import { linearInterpolation }				from "./utils/lerp.js"
+import { router }							from "../index.js"
+import { PongRenderer }						from "./renderer.js"
 
-import type { GamesState }				from "../index.js"
 import type { PongState }				from "./objects/pongState.js"
 import type { GameOptions, PowerUps }	from "./objects/gameOptions.js"
 import type { PongResume }				from "./objects/pongResume.js"
+import { TournamentController } from "./tournament.js"
 
 
 /* ====================== CLASS ====================== */
@@ -47,19 +47,14 @@ export class PongGame extends Game {
 
 	private ids: { canvas: string; score1: string; score2: string; winScore: string };
 
-	private appState: GamesState;
-	private user: User;
+	// private user: User;
 
 	constructor(canvasId: string,
 			score1Id: string,
 			score2Id: string,
-			winScoreId: string,
-			appState: GamesState,
-			user: User) {
+			winScoreId: string,) {
 		super();
 		this.ids = { canvas: canvasId, score1: score1Id, score2: score2Id, winScore: winScoreId };
-		this.appState = appState;
-		this.user = user;
 
 		(window as any).quitGame = () => this.quitGame();
 	}
@@ -74,13 +69,27 @@ export class PongGame extends Game {
 			p2: document.getElementById(this.ids.score2)!
 		};
 
-		if (this.appState.pendingOptions)
-			this.lastOptions = JSON.parse(JSON.stringify(this.appState.pendingOptions));
+		const	state: AppState = appStore.getState();
+		let	pendingOptions: GameOptions | null = state.game.pendingOptions;
+		if (pendingOptions)
+			this.lastOptions = JSON.parse(JSON.stringify(pendingOptions));
 		else if (this.lastOptions)
-			this.appState.pendingOptions = this.lastOptions;
+		{
+			appStore.setState((state) => ({
+				...state,
+				game: {
+					...state.game,
+					pendingOptions: this.lastOptions
+				}
+			}));
 
-		if (this.appState.pendingOptions)
-			this.lastOptions = JSON.parse(JSON.stringify(this.appState.pendingOptions));
+				//OLD
+			// this.appState.pendingOptions = this.lastOptions;
+		}
+
+		pendingOptions = state.game.pendingOptions;
+		if (pendingOptions)
+			this.lastOptions = JSON.parse(JSON.stringify(pendingOptions));
 
 		this.serverState = {
 			width: this.canvas.width,
@@ -94,15 +103,17 @@ export class PongGame extends Game {
 			status: 'playing'
 		};
 
-		if (this.appState.pendingOptions?.isTournament)
+		if (pendingOptions?.isTournament)
 		{
-			this.player1Name = this.appState.currentTournament?.currentMatch?.p1 || "Player 1";
-			this.player2Name = this.appState.currentTournament?.currentMatch?.p2 || "Player 2";
+			const	currentTournament: TournamentController | null = state.game.currentTournament;
+			this.player1Name = currentTournament?.currentMatch?.p1 || "Player 1";
+			this.player2Name = currentTournament?.currentMatch?.p2 || "Player 2";
 		}
-		else if (this.appState.pendingOptions?.mode === 'ai')
+		else if (pendingOptions?.mode === 'ai')
 		{
-			this.player1Name = this.user.getUsername() || "Player 1";
-			this.player2Name = "AI (" + this.appState.pendingOptions.difficulty + ")";
+			const	user: UserState = state.user;
+			this.player1Name = user.username || "Player 1";
+			this.player2Name = "AI (" + pendingOptions.difficulty + ")";
 		}
 		else
 		{
@@ -111,11 +122,11 @@ export class PongGame extends Game {
 		}
 		this.updateNameDisplay();
 
-		if (this.appState.pendingOptions)
+		if (pendingOptions)
 		{
-			this.isTournament = this.appState.pendingOptions.isTournament;
-			this.scoreElements.winScore.innerText = this.appState.pendingOptions.winningScore.toString();
-			this.generateLegend(this.appState.pendingOptions.activePowerUps);
+			this.isTournament = pendingOptions.isTournament;
+			this.scoreElements.winScore.innerText = pendingOptions.winningScore.toString();
+			this.generateLegend(pendingOptions.activePowerUps);
 		}
 
 		this.connectToServer();
@@ -164,7 +175,9 @@ export class PongGame extends Game {
 
 		this.isGameOver = false;
 
-		const	optionsToSend: GameOptions | null = this.appState.pendingOptions || this.lastOptions;
+		const	state: AppState = appStore.getState();
+		const	pendingOptions: GameOptions | null = state.game.pendingOptions;
+		const	optionsToSend: GameOptions | null = pendingOptions || this.lastOptions;
 
 		if (optionsToSend)
 		{
@@ -174,7 +187,16 @@ export class PongGame extends Game {
 
 			socket.emit('join-game', optionsToSend);
 
-			this.appState.pendingOptions = undefined;
+			appStore.setState((state) => ({
+				...state,
+				game: {
+					...state.game,
+					pendingOptions: null
+				}
+			}));
+
+				// OLD
+			// this.appState.pendingOptions = undefined;
 		}
 	}
 
@@ -182,7 +204,7 @@ export class PongGame extends Game {
 		this.stop();
 		this.isGameOver = false; 
 		socket.emit('leave-game');
-		router.navigate('/games', this.appState, this.user);
+		router.navigate('/games');
 	}
 
 	public start() {
@@ -262,7 +284,7 @@ export class PongGame extends Game {
 				if (e.key === ' ')
 				{
 					this.stop();
-					router.navigate("/tournament-bracket", this.appState, this.user)
+					router.navigate("/tournament-bracket")
 					return;
 				}
 			}
@@ -272,14 +294,14 @@ export class PongGame extends Game {
 				{
 					this.stop();
 					this.isGameOver = false;
-					router.navigate("/pong", this.appState, this.user)
+					router.navigate("/pong")
 					return;
 				}
 				if (e.key === 'Escape')
 				{
 					this.stop();
 					this.isGameOver = false;
-					router.navigate('/games', this.appState, this.user);
+					router.navigate('/games');
 					return;
 				}
 			}
@@ -314,8 +336,11 @@ export class PongGame extends Game {
 		const winnerDisplay = document.getElementById('winner-display');
 		if (winnerDisplay)
 			winnerDisplay.innerText = `${winnerName} Wins!`;
-		if (this.isTournament && this.appState.currentTournament)
-			this.appState.currentTournament.reportMatchWinner(winnerName);
+
+		const	state: AppState = appStore.getState();
+		const	currentTournament: TournamentController | null = state.game.currentTournament;
+		if (this.isTournament && currentTournament)
+			currentTournament.reportMatchWinner(winnerName);
 
 
 		const	gameDurationSec: number = (pongResume.duration / 1000)

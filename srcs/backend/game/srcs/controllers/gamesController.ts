@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pongController.ts                                  :+:      :+:    :+:   */
+/*   gamesController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:36:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 16:59:06 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 18:49:19 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// HANDLE THE ALL THE REQUEST THAT GAME SERVICE RECEIVE (WITH PONG GAME)
+// HANDLE THE ALL THE REQUEST THAT GAME SERVICE RECEIVE
 
 
 /* ====================== IMPORTS ====================== */
 
 import { errorsHandler }	from "../utils/errorsHandler.js"
-import { pongAddDto }		from "../dtos/pongAddDto.js"
-import { pongRespDto }		from "../dtos/pongRespDto.js"
-import { pongServ }			from "../game.js"
+import { extractUserId }	from "../utils/extractHeaders.js"
+import { gamesAddDto }		from "../dtos/gamesAddDto.js"
+import { gamesRespDto }		from "../dtos/gamesRespDto.js"
+import { gamesServ }			from "../game.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 import type { GameUser }										from "../objects/gameUser.js"
-import { extractUserId } from "../utils/extractHeaders.js"
 
 
 /* ====================== FUNCTION ====================== */
 
-export async function	pongController(gameFastify: FastifyInstance) {
+export async function	gamesController(gameFastify: FastifyInstance) {
 	// ADD A GAME
 	gameFastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
 		if (!request.body)
@@ -38,39 +38,24 @@ export async function	pongController(gameFastify: FastifyInstance) {
 		}
 
 		try {
-			const	newPongGame: pongAddDto = new pongAddDto(request.body);
-			const	pongGame: pongRespDto = await pongServ.addPongGame(newPongGame);
+			const	newGame: gamesAddDto = new gamesAddDto(request.body);
+			const	game: gamesRespDto = await gamesServ.addGame(newGame);
 
-			return reply.code(201).send(pongGame);
+			return reply.code(201).send(game);
 		}
 		catch (err: unknown) {
 			return errorsHandler(gameFastify, reply, err);
 		}
 	});
 
-	// GET A PONG GAME WITH HIS ID
-	// gameFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
-	// 	const	{ id } = request.params as { id: string };
-	// 	const	parseId: number = parseInt(id, 10);
-
-	// 	try {
-	// 		const	pongGame: pongRespDto = await pongServ.getPongGameById(parseId);
-
-	// 		return reply.code(200).send(pongGame);
-	// 	}
-	// 	catch (err: unknown) {
-	// 		return errorsHandler(gameFastify, reply, err);
-	// 	}
-	// });
-
 	// GET MY GAME HISTORY
 	gameFastify.get('/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	userId: number = extractUserId(request);
 
-			const	pongGame: GameUser[] = await pongServ.getPongHistoryByClientId(userId);
+			const	game: GameUser[] = await gamesServ.getHistoryByClientId(userId);
 
-			return reply.code(200).send(pongGame);
+			return reply.code(200).send(game);
 		}
 		catch (err: unknown) {
 			return errorsHandler(gameFastify, reply, err);
@@ -83,22 +68,37 @@ export async function	pongController(gameFastify: FastifyInstance) {
 			const	{ targetId } = request.params as { targetId: string };
 			const	parseTargetId: number = parseInt(targetId, 10);
 
-			const	pongGame: GameUser[] = await pongServ.getPongHistoryByClientId(parseTargetId);
+			const	game: GameUser[] = await gamesServ.getHistoryByClientId(parseTargetId);
 
-			return reply.code(200).send(pongGame);
+			return reply.code(200).send(game);
 		}
 		catch (err: unknown) {
 			return errorsHandler(gameFastify, reply, err);
 		}
 	});
 
-	// DELETE A PONG GAME WITH ITS ID
+	// DELETE A GAME WITH ITS ID
 	gameFastify.delete('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const	{ id } = request.params as { id: string };
 		const	parseId: number = parseInt(id, 10);
 
 		try {
-			await pongServ.deletePongGame(parseId);
+			await gamesServ.deleteGame(parseId);
+
+			return reply.code(204).send();
+		}
+		catch (err: unknown) {
+			return errorsHandler(gameFastify, reply, err);
+		}
+	});
+
+	// DELETE GAMES WITH CLIENT ID
+	gameFastify.delete('/user/:targetd', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	{ targetd } = request.params as { targetd: string };
+			const	parseTargetd: number = parseInt(targetd, 10);
+
+			await gamesServ.deleteClientGames(parseTargetd);
 
 			return reply.code(204).send();
 		}

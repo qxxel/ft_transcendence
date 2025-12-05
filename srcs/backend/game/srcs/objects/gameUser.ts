@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 16:09:57 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 16:12:29 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:13:15 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 export interface	GameUser {
 	id: number;
 	id_client: number;
+	game_type: number;
 	winner: number;
 	p1: string;
 	p1score: number;

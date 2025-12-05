@@ -854,13 +854,15 @@ input[type=range]::-moz-range-thumb {
 }
 
 .history-container {
+    position: relative;
     width: 100%;
     max-width: 900px;
     margin: 30px auto;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid #333;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid #FFF;
+    box-shadow: 0 0 15px #fff;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 12px;
 }
 
 .history-controls {
@@ -879,7 +881,7 @@ input[type=range]::-moz-range-thumb {
 
 .game-row {
     display: grid;
-    grid-template-columns: 70px 100px 60px 180px 90px 180px 1fr;
+    grid-template-columns: 70px 90px 80px 60px 100px 90px 170px 1fr;
     
     gap: 10px;
     align-items: center;
@@ -888,6 +890,28 @@ input[type=range]::-moz-range-thumb {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     background: rgba(0, 0, 0, 0.4);
     transition: all 0.2s ease;
+}
+
+.col-game-type {
+    text-align: center;
+    font-size: 0.8em;
+    font-weight: bold;
+    padding: 3px 0;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.type-pong {
+    color: #00ffff;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    background: rgba(0, 255, 255, 0.05);
+}
+
+.type-tank {
+    color: #ffaa00; 
+    border: 1px solid rgba(255, 170, 0, 0.3);
+    background: rgba(255, 170, 0, 0.05);
 }
 
 .row-victory {
@@ -939,6 +963,22 @@ input[type=range]::-moz-range-thumb {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.powerup-icon {
+    display: inline-block;
+    color: #FFFF00;
+    font-size: 1.2em;
+    margin-right: 6px;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.6);
+    vertical-align: middle;
+    animation: pulse-powerup 2s infinite;
+}
+
+@keyframes pulse-powerup {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 12px rgba(255, 255, 0, 0.9); }
+    100% { transform: scale(1); opacity: 0.8; }
 }
 
 .col-p2 { 
