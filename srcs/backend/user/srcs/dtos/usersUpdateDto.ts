@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:51:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 20:58:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/05 21:18:40 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ export class	usersUpdateDto {
 
 	constructor(row: any, oldUser: usersRespDto) {
 		this.id = oldUser.getId();
-		if (row.username !== oldUser.getUsername())
+		if (row.username != oldUser.getUsername())
 			this.username = row.username;
-		if (row.username !== oldUser.getEmail())
+		if (row.email != oldUser.getEmail())
 			this.email = row.email;
-		if (row.username !== oldUser.getAvatar())
+		if (row.avatar != oldUser.getAvatar())
 			this.avatar = row.avatar;
-		if (row.username !== oldUser.getIs2faEnable())
+		if (row.is2faEnable != oldUser.getIs2faEnable())
 			this.is2faEnable = row.is2faEnable;
 
 		var	validation: validationResult = this.isValid()
