@@ -38,7 +38,14 @@ interface	GameObject {
 
 /* ====================== FUNCTIONS ====================== */
 
-export async function	getAndRenderHistory(targetId: number | null, targetName: string | null, aiFilter: boolean = true, pvpFilter: boolean = true): Promise<void> {
+export async function	getAndRenderHistory(targetId: number | null,
+		targetName: string | null,
+		aiFilter: boolean = true,
+		pvpFilter: boolean = true,
+    	pongFilter: boolean = true,
+    	tankFilter: boolean = true
+	): Promise<void> {
+
 	let	response: Response;
 	if (!targetId)
 		response = await sendRequest('/api/game/me', "get", null);
@@ -63,7 +70,7 @@ export async function	getAndRenderHistory(targetId: number | null, targetName: s
 
 	console.log(gamesData) // ICI LE PRINT DU TABLEAU
 
-	renderGames(gamesData, aiFilter, pvpFilter);
+	renderGames(gamesData, aiFilter, pvpFilter, pongFilter, tankFilter);
 }
 
 /* ====================== UTILS ====================== */
@@ -101,30 +108,35 @@ function formatDuration(ms: number): string {
 
 /* ====================== RENDER FUNCTIONS ====================== */
 
-function renderGames(gamesData: GameObject[], aiFilter: boolean, pvpFilter: boolean): void {
-	const historyEntriesDiv = document.getElementById("history-entries") as HTMLDivElement;
-	
-	if (historyEntriesDiv) historyEntriesDiv.innerHTML = ""; 
+function renderGames(
+    	gamesData: GameObject[], 
+    	aiFilter: boolean, 
+    	pvpFilter: boolean,
+    	pongFilter: boolean,
+    	tankFilter: boolean
+	): void {
+    const historyEntriesDiv = document.getElementById("history-entries") as HTMLDivElement;
+    if (historyEntriesDiv) historyEntriesDiv.innerHTML = ""; 
 
-	let games: GameObject[] = [];
+    const games = gamesData.filter((game) => {
+        const modeMatch = (aiFilter && game.mode === "ai") || (pvpFilter && game.mode === "pvp");
+        
+        const typeMatch = (pongFilter && (game.game_type === 1 || game.game_type === 0)) || 
+                          (tankFilter && game.game_type === 2);
 
-	if (aiFilter)
-		games = games.concat(gamesData.filter((value) => value.mode === "ai"));
-	if (pvpFilter)
-		games = games.concat(gamesData.filter((value) => value.mode === "pvp"));
+        return modeMatch && typeMatch;
+    });
 
-	if (games.length === 0) {
-		if (historyEntriesDiv) {
-			historyEntriesDiv.innerHTML = '<p class="empty-message">No matches found.</p>';
-		}
-		return;
-	}
+    if (games.length === 0) {
+        displayNoGame(true);
+        return;
+    }
 
-	games.sort((a, b) => b.start - a.start);
+    games.sort((a, b) => b.start - a.start);
 
-	games.forEach((value: GameObject) => {
-		if (historyEntriesDiv) createGameElement(historyEntriesDiv, value);
-	});
+    games.forEach((value: GameObject) => {
+        if (historyEntriesDiv) createGameElement(historyEntriesDiv, value);
+    });
 }
 
 function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): void {
@@ -142,6 +154,16 @@ function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): vo
 	const timeAgoSpan = document.createElement("span");
 	timeAgoSpan.classList.add("col-ago");
 	timeAgoSpan.textContent = formatTimeAgo(game.start);
+
+	const gameTypeSpan = document.createElement("span");
+    gameTypeSpan.classList.add("col-game-type");
+    if (game.game_type === 2) {
+        gameTypeSpan.textContent = "TANK";
+        gameTypeSpan.classList.add("type-tank");
+    } else {
+        gameTypeSpan.textContent = "PONG";
+        gameTypeSpan.classList.add("type-pong");
+    }
 
 	const durationSpan = document.createElement("span");
 	durationSpan.classList.add("col-duration");
@@ -191,6 +213,7 @@ function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): vo
 
 	gameRow.appendChild(resultSpan);
 	gameRow.appendChild(timeAgoSpan);
+	gameRow.appendChild(gameTypeSpan);
 	gameRow.appendChild(modeSpan);
 	gameRow.appendChild(p1NameSpan);
 	gameRow.appendChild(scoreSpan);
@@ -237,41 +260,45 @@ function displayNoGame(filter: boolean): void {
 }
 
 export function initHistoryListeners(targetId: number | null, targetName: string | null = null, attempt: number = 0): void {
-	const aiCheckbox = document.getElementById('filter-ai') as HTMLInputElement;
-	const pvpCheckbox = document.getElementById('filter-pvp') as HTMLInputElement;
-	const refreshBtn = document.getElementById('refresh-history') as HTMLButtonElement;
+    const aiCheckbox = document.getElementById('filter-ai') as HTMLInputElement;
+    const pvpCheckbox = document.getElementById('filter-pvp') as HTMLInputElement;
+    const pongCheckbox = document.getElementById('filter-pong') as HTMLInputElement;
+    const tankCheckbox = document.getElementById('filter-tank') as HTMLInputElement;
+    const refreshBtn = document.getElementById('refresh-history') as HTMLButtonElement;
 
-	if (!aiCheckbox || !pvpCheckbox)
-	{
-		if (attempt > 20)
-		{
-			console.error("Critical Error: Impossible de trouver les checkboxes dans le DOM après attente.");
-			return;
-		}
-		requestAnimationFrame(() => initHistoryListeners(targetId, targetName, attempt + 1));
-		return;
-	}
+    if (!aiCheckbox || !pvpCheckbox || !pongCheckbox || !tankCheckbox) {
+        if (attempt > 20) return;
+        requestAnimationFrame(() => initHistoryListeners(targetId, targetName, attempt + 1));
+        return;
+    }
 
-	console.log("History DOM ready! Initializing...");
+    const refreshList = () => {
+        const list = document.getElementById('history-entries');
+        if (list) list.style.opacity = "0.5";
 
-	const refreshList = () => {
-		const list = document.getElementById('history-entries');
-		if (list) list.style.opacity = "0.5";
+        getAndRenderHistory(
+            targetId, 
+            targetName, 
+            aiCheckbox.checked, 
+            pvpCheckbox.checked, 
+            pongCheckbox.checked, 
+            tankCheckbox.checked
+        ).then(() => {
+            if (list) list.style.opacity = "1";
+        });
+    };
 
-		getAndRenderHistory(targetId, targetName, aiCheckbox.checked, pvpCheckbox.checked).then(() => {
-			if (list) list.style.opacity = "1";
-		});
-	};
+    aiCheckbox.onchange = refreshList;
+    pvpCheckbox.onchange = refreshList;
+    pongCheckbox.onchange = refreshList;
+    tankCheckbox.onchange = refreshList;
 
-	aiCheckbox.onchange = refreshList;
-	pvpCheckbox.onchange = refreshList;
-
-	if (refreshBtn) {
-		refreshBtn.onclick = () => {
-			refreshBtn.style.transform = "rotate(360deg)";
-			setTimeout(() => refreshBtn.style.transform = "none", 500);
-			refreshList();
-		};
-	}
-	refreshList();
+    if (refreshBtn) {
+        refreshBtn.onclick = () => {
+            refreshBtn.style.transform = "rotate(360deg)";
+            setTimeout(() => refreshBtn.style.transform = "none", 500);
+            refreshList();
+        };
+    }
+    refreshList();
 }
