@@ -182,6 +182,8 @@ function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): vo
 	const p2NameSpan = document.createElement("span");
 	p2NameSpan.classList.add("col-p2");
 
+	const powerupHtml = game.powerup ? '<span class="powerup-icon" title="Powerups Enabled">⚡</span>' : '';
+
 	if (game.mode === "ai") {
 		const rawName = (game.p2 || "").toLowerCase();
 		
@@ -195,14 +197,18 @@ function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): vo
 			difficultyClass = "diff-easy";
 		}
 
-		let displayName = (game.p2 || "AI").replace(/AI\s*-\s*/i, '').replace(/[()]/g, '').trim().toUpperCase();
-
+		let displayName = (game.p2 || "AI")
+    	.replace(/^AI\s*[-_]?\s*/i, '')
+    	.replace(/[()]/g, '')
+    	.trim()
+    	.toUpperCase();
 		p2NameSpan.classList.add("is-ai");
 		p2NameSpan.classList.add(difficultyClass);
 
-		p2NameSpan.innerHTML = `<span class="bot-tag">BOT</span> ${displayName}`;
+		p2NameSpan.innerHTML = `<span class="bot-tag">BOT</span> ${powerupHtml}${displayName}`;
 	} else {
-		p2NameSpan.textContent = game.p2 || "Player 2";
+		const p2Name = game.p2 || "Player 2";
+        p2NameSpan.innerHTML = `${powerupHtml}${p2Name}`;
 	}
 
 	const scoreSpan = document.createElement("span");
