@@ -222,7 +222,7 @@ export class	TankGame extends Game {
 		}
 		if (!this.isPaused && GSTATE.TANKS == 1) {
 			let winner: Tank;
-			
+
 			this.showEndGameDashboard()
 			this.isPaused = true;
 		}
