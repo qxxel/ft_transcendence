@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 19:56:01 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/05 21:37:50 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,30 @@ export class	usersService {
 	}
 
 	async updateUserById(userId: number, user: usersUpdateDto): Promise<void> {
-		if (user.getUsername() !== undefined)
-			await this.updateUsernameById(userId, user.getUsername()!);
+		const	query: string = "SELECT 1 FROM users WHERE id = ? LIMIT 1";
+		if (!(await this.usersRepo.isTaken(query, [userId.toString()])))
+			throw new NotExistError(`The user ${userId} does not exist`);
+
+		const username = user.getUsername();
+		if (username !== undefined) {
+			const	nameQuery: string = "SELECT 1 FROM users WHERE username = ? LIMIT 1";
+			if (await this.usersRepo.isTaken(nameQuery, [username]))
+				throw new IsTakenError(`The name ${username} is already taken. Try another one !`);
+		}
+
+		const email = user.getEmail();
+		if (email !== undefined)
+		{
+			const	nameQuery: string = "SELECT 1 FROM users WHERE email = ? LIMIT 1";
+			if (await this.usersRepo.isTaken(nameQuery, [email]))
+				throw new IsTakenError(`The name ${email} is already taken. Try another one !`);
+		}
 		
-		if (user.getEmail() !== undefined)
-			await this.updateEmailById(userId, user.getEmail()!);
+		if (username !== undefined)
+			await this.usersRepo.updateUsernameById(userId, username);
+		
+		if (email !== undefined)
+			await this.usersRepo.updateEmailById(userId, email);
 
 		if (user.getAvatar() !== undefined)
 			await this.updateAvatarById(userId, user.getAvatar()!);
