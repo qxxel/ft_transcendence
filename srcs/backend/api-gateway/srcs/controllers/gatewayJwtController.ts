@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:00:05 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 20:47:16 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 21:49:39 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 	
 	gatewayFastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.post('https://jwt:3000',
+			const	response: AxiosResponse = await gatewayAxios.post('http://jwt:3000',
 				request.body
 			);
 
@@ -69,7 +69,7 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 
 	gatewayFastify.post('/twofa/validate', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.post('https://jwt:3000/twofa/validate',
+			const	response: AxiosResponse = await gatewayAxios.post('http://jwt:3000/twofa/validate',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
@@ -82,7 +82,7 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 
 	gatewayFastify.patch('/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.patch('https://jwt:3000/refresh',
+			const	response: AxiosResponse = await gatewayAxios.patch('http://jwt:3000/refresh',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
@@ -98,7 +98,7 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 
 	gatewayFastify.patch('/twofa/recreat', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.patch('https://jwt:3000/twofa/recreat',
+			const	response: AxiosResponse = await gatewayAxios.patch('http://jwt:3000/twofa/recreat',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
@@ -114,7 +114,7 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 
 	gatewayFastify.patch('/refresh/access', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.patch('https://jwt:3000/refresh/access',
+			const	response: AxiosResponse = await gatewayAxios.patch('http://jwt:3000/refresh/access',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
@@ -130,7 +130,7 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 
 	gatewayFastify.patch('/refresh/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.patch('https://jwt:3000/refresh/refresh',
+			const	response: AxiosResponse = await gatewayAxios.patch('http://jwt:3000/refresh/refresh',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
@@ -146,7 +146,7 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 
 	gatewayFastify.delete('/refresh/logout', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.delete('https://jwt:3000/refresh/logout',
+			const	response: AxiosResponse = await gatewayAxios.delete('http://jwt:3000/refresh/logout',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 
@@ -161,7 +161,7 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 
 	gatewayFastify.delete('/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.delete('https://jwt:3000/me',
+			const	response: AxiosResponse = await gatewayAxios.delete('http://jwt:3000/me',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 

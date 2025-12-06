@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   user.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:39:06 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/02 23:02:20 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORT ====================== */
 
-import Fastify		from 'fastify'
 import cors			from '@fastify/cors'
+import Fastify		from 'fastify'
+import formBody				from '@fastify/formbody'
 import fs			from 'fs'
 import sqlite3Pkg from 'sqlite3'
 
@@ -52,16 +53,14 @@ export const	friendshipsServ = new friendshipsService(new friendshipsRepository(
 /* ====================== SERVER ====================== */
 
 const	userFastify = Fastify({
-	https: {
-		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
-		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
-	},
-	logger: true
+	logger: true,
+	trustProxy: true
 });
 
+userFastify.register(formBody);
 
 userFastify.register(cors, {
-	origin: 'https://gateway:3000',
+	origin: 'https://localhost:8080',
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
@@ -76,7 +75,7 @@ userFastify.register(friendshipsController, { prefix: '/friends' } ); //	A VERIF
 const	start = async () => {
 	try {
 		await userFastify.listen({ port: 3000, host: '0.0.0.0' });
-		console.log(`Server started on https://user:3000`);
+		console.log(`Server started on http://user:3000`);
 
 		process.on('SIGTERM', () => {
 			console.log('SIGTERM received, server shutdown...');

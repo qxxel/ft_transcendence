@@ -1,13 +1,16 @@
 {
   "scripts": {
-    "build": "tsc"
+    "dev": "vite",
+    "build": "vite build"
   },
   "type": "module",
   "dependencies": {
-    "axios": "^1.13.2"
+    "axios": "^1.13.2",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "^6.0.0"
   }
 }

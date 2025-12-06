@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewaytwofaController.ts                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 23:09:42 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/27 11:23:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/11/30 18:23:42 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ export async function	gatewaytwofaController(gatewayFastify: FastifyInstance) {
 	gatewayFastify.get('/otp', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.get(
-				'https://twofa:3000/otp',
+				'http://twofa:3000/otp',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 			
@@ -42,7 +42,7 @@ export async function	gatewaytwofaController(gatewayFastify: FastifyInstance) {
 	gatewayFastify.post('/validate', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.post(
-				'https://twofa:3000/validate',
+				'http://twofa:3000/validate',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);

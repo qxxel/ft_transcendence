@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/04 18:21:00 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 22:11:28 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 
 import cors					from '@fastify/cors'
 import Fastify, { type FastifyInstance }				from 'fastify'
+import formBody				from '@fastify/formbody'
 import fs					from 'fs'
 import axios				from 'axios'
-import https				from 'https'
 import sqlite3Pkg			from 'sqlite3'
 import { jwtController }	from "./controllers/jwtController.js"
 import { jwtService }		from "./services/jwtService.js"
@@ -53,7 +53,6 @@ export const	jwtServ: jwtService = new jwtService(new jwtRepository(db));
 /* ====================== AXIOS VARIABLES ====================== */
 
 export const	jwtAxios = axios.create({
-	httpsAgent: new https.Agent({ rejectUnauthorized: false }),
 	timeout: 1000
 });
 
@@ -61,15 +60,14 @@ export const	jwtAxios = axios.create({
 /* ====================== SERVER ====================== */
 
 export const	jwtFastify: FastifyInstance = Fastify({
-	https: {
-		key: fs.readFileSync('/run/secrets/ssl_key_back', 'utf8'),
-		cert: fs.readFileSync('/run/secrets/ssl_crt_back', 'utf8'),
-	},
-	logger: true
+	logger: true,
+	trustProxy: true
 });
 
+jwtFastify.register(formBody);
+
 jwtFastify.register(cors, {
-	origin: 'https://gateway:3000',
+	origin: 'https://localhost:8080',
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
@@ -80,7 +78,7 @@ jwtFastify.register(jwtController);
 const	start = async () => {
 	try {
 		await jwtFastify.listen({ port: 3000, host: '0.0.0.0' });
-		console.log(`Server started on https://jwt:3000`);
+		console.log(`Server started on http://jwt:3000`);
 
 		process.on('SIGTERM', () => {
 			console.log('SIGTERM received, server shutdown...');

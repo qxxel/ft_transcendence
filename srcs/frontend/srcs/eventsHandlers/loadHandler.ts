@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/06 20:35:07 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 21:46:36 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,15 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { appStore }		from "../objects/store.js"
+import { getMenu }		from "../utils/getMenu.js"
 import { router }		from "../index.js"
 import { sendRequest }	from "../utils/sendRequest.js"
-import { getMenuLog }			from "../utils/getMenu.js"
-import { User }			from "../user/user.js"
-
-import type { GameState }	from "../index.js"
 
 
 /* ====================== FUNCTIONS ====================== */
 
-async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
+async function	handleLoadPage(): Promise<void> {
 	document.addEventListener("DOMContentLoaded", async (event: Event) => {
 		console.log("DOMContentLoaded");
 
@@ -36,17 +34,23 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 
 		const	result: any = await response.json();
 
-		user.setId(result.id as number);
-		user.setUsername(result.username);
-		user.setSigned(true);
+		appStore.setState((state) => ({
+			...state,
+			user: {
+				...state.user,
+				id: result.id as number,
+				username: result.username,
+				isAuth: true
+			}
+		}));
 
 		const baseHref = window.location.origin;
 
 		const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)
-			menu.innerHTML = getMenuLog();
+			menu.innerHTML = getMenu(true);
 
-		router.navigate('/', gameState, user);
+		router.navigate('/');
 	});
 }
 
@@ -58,7 +62,7 @@ function handleUnload() {
 	});
 }
 
-export async function	setupLoadHandler(gameState: GameState, user: User): Promise<void> {
-	handleLoadPage(gameState, user);
+export async function	setupLoadHandler(): Promise<void> {
+	handleLoadPage();
 	handleUnload();
 }

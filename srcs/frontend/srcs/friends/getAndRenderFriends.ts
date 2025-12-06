@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 16:54:41 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 16:31:20 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,19 @@
 
 import { attachDelegationListeners }	from "./friendsEvents.js"
 import { sendRequest }					from "../utils/sendRequest.js"
-import { user }							from "../index.js"
+import { AppState, appStore, UserState } from "../objects/store.js";
+import { onClickHistory } from "../eventsHandlers/clickHandler.js";
 
 
 /* ====================== INTERFACE ====================== */
 
 interface	UserObject {
-	id: number,
-	username: string,
-	avatar: string | null,
-	email: string,
-	status: string,
-	receiver_id: string
+	id: number;
+	username: string;
+	avatar: string | null;
+	email: string;
+	status: string;
+	receiver_id: string;
 }
 
 
@@ -58,8 +59,10 @@ function	renderFriends(friendsData: UserObject[]): void {
 	const	friendsListDiv: HTMLDivElement = document.getElementById("friends-list") as HTMLDivElement;
 	friendsListDiv.innerHTML = "<h1>FRIENDS LIST</h1>";
 
+	const	state: AppState = appStore.getState();
+	const	user: UserState = state.user;
 
-	if (friendsData.filter((value: UserObject) => { return user.getId() === parseInt(value.receiver_id, 10) && value.status === "PENDING"; }).length === 0)
+	if (friendsData.filter((value: UserObject) => { return user.id === parseInt(value.receiver_id, 10) && value.status === "PENDING"; }).length === 0)
 		displayNoRequest(requestsListDiv);
 
 	if (friendsData.filter((value: UserObject) => { return value.status === "ACCEPTED"; }).length === 0)
@@ -74,8 +77,10 @@ function	renderFriends(friendsData: UserObject[]): void {
 }
 
 function	createFriendElement(requestsListDiv: HTMLDivElement, friendsListDiv: HTMLDivElement, friend: UserObject): void {
+	const	state: AppState = appStore.getState();
+	const	user: UserState = state.user;
 
-	if (user.getId() === parseInt(friend.receiver_id, 10) && friend.status === "PENDING")
+	if (user.id === parseInt(friend.receiver_id, 10) && friend.status === "PENDING")
 	{
 		addRequestInList(requestsListDiv, friend);
 		return ;
@@ -140,21 +145,22 @@ function	addFriendInList(friendsListDiv: HTMLDivElement, friend: UserObject): vo
 	usernameSpan.classList.add("username");
 	usernameSpan.textContent = friend.username;
 
-	const	challengeButton: HTMLSpanElement = document.createElement("button");
-	challengeButton.classList.add("neon-button");
-	challengeButton.classList.add("challenge-button");
-	challengeButton.textContent = "FIGHT ⚔️";
-	challengeButton.dataset.targetId = friend.id.toString();
-	challengeButton.dataset.targetUsername = friend.username;
+	const	historyButton: HTMLButtonElement = document.createElement("button");
+	historyButton.classList.add("neon-button");
+	historyButton.classList.add("history-button");
+	historyButton.dataset.targetId = friend.id.toString();
+	historyButton.dataset.targetUsername = friend.username;
+	historyButton.onclick = () => onClickHistory(friend.id, friend.username);
+	historyButton.textContent = "History";
 
-	const	removeButton: HTMLSpanElement = document.createElement("button");
+	const	removeButton: HTMLButtonElement = document.createElement("button");
 	removeButton.classList.add("remove-button");
-	removeButton.textContent = "✕";
 	removeButton.dataset.targetId = friend.id.toString();
 	removeButton.dataset.targetUsername = friend.username;
+	removeButton.textContent = "✕";
 
 
-	newActionDiv.appendChild(challengeButton);
+	newActionDiv.appendChild(historyButton);
 	newActionDiv.appendChild(removeButton);
 
 	newDiv.appendChild(statusSpan);
@@ -205,4 +211,3 @@ function	displayErrors(): void {
 	requestsListDiv.appendChild(requestsErrorParagraph);
 	friendsListDiv.appendChild(friendsErrorParagraph);
 }
-

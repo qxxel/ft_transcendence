@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 22:08:37 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 18:27:21 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 21:41:16 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ import type { FastifyRequest }					from 'fastify'
 /* ====================== FUNCTION ====================== */
 
 export async function	getValidUserId(request: FastifyRequest): Promise<AxiosHeaderValue> {
-	const	response: AxiosResponse = await gatewayAxios.get('https://jwt:3000/payload/access',
+	const	response: AxiosResponse = await gatewayAxios.get('http://jwt:3000/payload/access',
 		{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 	);
 

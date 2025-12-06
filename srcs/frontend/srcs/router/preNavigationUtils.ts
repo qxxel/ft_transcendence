@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 20:36:03 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 21:48:29 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,22 @@
 /* ====================== IMPORTS ====================== */
 
 import { router }		from "../index.js"
+import { appStore }		from "../objects/store.js"
+import { getMenu }		from "../utils/getMenu.js"
 import { sendRequest }	from "../utils/sendRequest.js"
-import { getMenuLog }			from "../utils/getMenu.js"
-import { User }			from "../user/user.js"
-
-import type { GameState }	from "../index.js"
-import type { Router }		from "./router.js"
 
 
 /* ====================== FUNCTION ====================== */
 
-export async function	preNavigation(router: Router, currentPath: string, gameState: GameState, user: User): Promise<void> {
+export async function	preNavigation(currentPath: string): Promise<void> {
 	const	respToken: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
 	if (!respToken.ok)
 		console.error((await respToken.json()).error);														//	AXEL: A VERIFIER
 
-	redirections(router, currentPath, gameState, user);
+	redirections(currentPath);
 }
 
-export async function	redirections(router: Router, currentPath: string, gameState: GameState, user: User): Promise<void> {
+export async function	redirections(currentPath: string): Promise<void> {
 	if (['/friends', '/user'].includes(currentPath))
 	{
 		const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
@@ -44,16 +41,27 @@ export async function	redirections(router: Router, currentPath: string, gameStat
 
 		const	result: any = await response.json();
 
-		user.setId(result.id as number);
-		user.setUsername(result.username);
-		user.setSigned(true);
+		appStore.setState((state) => ({
+			...state,
+			user: {
+				...state.user,
+				id: result.id as number,
+				username: result.username,
+				isAuth: true
+			}
+		}));
+
+			// OLD
+		// user.setId(result.id as number);
+		// user.setUsername(result.username);
+		// user.setSigned(true);
 
 		const baseHref = window.location.origin;
 
 		const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)
-			menu.innerHTML = getMenuLog();
+			menu.innerHTML = getMenu(true);
 
-		router.navigate('/', gameState, user);
+		router.navigate('/');
 	}
 }

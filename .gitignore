@@ -68,3 +68,6 @@ db/
 
 # other
 _old/
+src/
+v1/
+dummy.ts

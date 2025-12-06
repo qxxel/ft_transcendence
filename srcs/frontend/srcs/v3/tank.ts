@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tank.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 23:15:13 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/04 15:40:27 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { Game }		from "../Pong/GameClass.js"
-import { GSTATE, type Spawn }	from "./global.js"
-import { Router } from "../router/router.js"
-import { Input }	from "./class_input.js"
-import { User } from "../user/user.js"
-import { Map }		from "./class_map.js"
-import { Tank }		from "./class_tank.js"
-import { Ball, Collectible }		from "./class_ball.js"
+import { AppState, appStore, UserState }	from "../objects/store.js"
+import { Game }								from "../Pong/gameClass.js"
+import { GSTATE }							from "./global.js"
+import { router }							from "../index.js"
+import { Input }							from "./class_input.js"
+import { Map }								from "./class_map.js"
+import { Tank }								from "./class_tank.js"
+import { Ball, Collectible }				from "./class_ball.js"
 
 import type { Color, Keys }	from "./interface.js"
 import { Wall } from "./class_wall.js"
@@ -46,12 +46,10 @@ export class	TankGame extends Game {
 	private lastCollectibleSpawn: number = 0;
 
 
-	// 	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3); 
+	// 	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user, mode, difficulty, star1, star2, star3); 
 	constructor(
 		private canvasId: string, 
 		private map_name: string,
-		private router: Router,
-		private user: User,
 		private powerupFrequency: number = 0,
 		private star1: boolean = true,
       	private star2: boolean = false,
@@ -67,13 +65,18 @@ export class	TankGame extends Game {
 		this.input = new Input();
 		this.input.start();
 		this.map = new Map(this.canvas.width, this.canvas.height, 2, this.map_name);
-        this.player1Name = this.user.getUsername() == undefined ? "Player 1" : this.user.getUsername();
+
+		const	state: AppState = appStore.getState();
+		const	user: UserState = state.user;
+        this.player1Name = user.username ? user.username : "Player 1";
         this.player2Name = "Player 2";
     	this.lastCollectibleSpawn = Date.now();
 		GSTATE.REDRAW = true;
 		this.updateNameDisplay()
 		this.setup_tanks();
 	}
+
+	setWinningScore(newWinningScore: number) {}
 
 	private setup_tanks() : void 
 	{

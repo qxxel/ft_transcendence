@@ -6,10 +6,9 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 17:40:02 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 18:48:16 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/03 16:16:49 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 // ALL FUNCTIONS THAT EXTRACT ANY HEADERS
 

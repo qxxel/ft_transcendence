@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:23:17 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 22:06:17 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { router }				from "../index.js"
-import { User }					from "../user/user.js"
-import { sendRequest }			from "../utils/sendRequest.js"
-import { verifyEmail }			from "../utils/verifyEmail.js"
-import { getMenuLog }			from "../utils/getMenu.js"
-import { displayError }			from "../utils/display.js"
-import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
+import { verifyEmail }						from "../utils/verifyEmail.js"
+import { AppState, appStore, UserState }	from "../objects/store.js"
+import { displayError }						from "../utils/display.js"
+import { getAndRenderFriends }				from "../friends/getAndRenderFriends.js"
+import { getMenu }							from "../utils/getMenu.js"
+import { router }							from "../index.js"
+import { socket }							from "../socket/socket.js"
+import { sendRequest }						from "../utils/sendRequest.js"
 
-import type { GameState }	from "../index.js"
 
 
 /* ====================== FUNCTIONS ====================== */
 
-async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
+async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 	console.log("Sign in");
 	const	identifier: string = (document.getElementById("sign-in-username") as HTMLInputElement).value;
 	const	password: string = (document.getElementById("sign-in-password") as HTMLInputElement).value;
@@ -53,12 +53,21 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 
 	const	result: any = await response.json();
 
-	user.setId(result.id as number);
-	user.setUsername(result.username);
+	if (socket && socket.connected)
+		socket.disconnect();
+
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			...state.user,
+			id: result.id as number,
+			username: result.username
+		}
+	}));
 
 	if (result.is2faEnable) {
-		router.navigate("/2fa", gameState, user);
-		
+		router.navigate("/2fa");
+
 		sendRequest('/api/twofa/otp', 'GET', null)
 			.then((response) => {
 				if (!response.ok)
@@ -67,16 +76,26 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 		
 		return ;
 	}
-	user.setSigned(true);
+
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			...state.user,
+			isAuth: true
+		}
+	}));
+
+	const	state: AppState = appStore.getState();
+	const	user: UserState = state.user;
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenuLog();
+		menu.innerHTML = getMenu(true);
 
-	router.navigate("/", gameState, user);
+	router.navigate("/");
 }
 
-async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
+async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 	console.log("Sign up");
 
 	const	username: string = (document.getElementById("sign-up-username") as HTMLInputElement).value;
@@ -98,13 +117,22 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 	
 	const	result = await response.json();
 
-	user.setId(result.id as number);
-	user.setUsername(username);
+	if (socket && socket.connected)
+		socket.disconnect();
+
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			...state.user,
+			id: result.id as number,
+			username: username
+		}
+	}));
 
 	verifyEmail("sign-up");
 }
 
-async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
+async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 	console.log("VerifyEmail");
 
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
@@ -115,17 +143,26 @@ async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: GameState
 	if (!response.ok)
 		return displayError(response, "verify-email-msg-error");
 
-	user.setSigned(true);
-	
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			...state.user,
+			isAuth: true
+		}
+	}));
+
+	const	state: AppState = appStore.getState();
+	const	user: UserState = state.user;
+
 	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenuLog();
+		menu.innerHTML = getMenu(true);
 
 	router.canLeave = true;
-	router.navigate("/", gameState, user);
+	router.navigate("/");
 }
 
-async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
+async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 	console.log("2fa");
 
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
@@ -137,22 +174,34 @@ async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: 
 	if (!response.ok)
 		return displayError(response, "2fa-msg-error");
 
-	user.setSigned(true);
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			...state.user,
+			isAuth: true
+		}
+	}));
+
+	const	state: AppState = appStore.getState();
+	const	user: UserState = state.user;
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenuLog();
+		menu.innerHTML = getMenu(true);
 
 	router.canLeave = true;
-	router.navigate("/", gameState, user);
+	router.navigate("/");
 }
 
-async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
+async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	console.log("Save Settings");
 	
 	const	newUsername: string = (document.getElementById("edit-username") as HTMLInputElement).value;
 	const	newEmail: string = (document.getElementById("edit-email") as HTMLInputElement).value;
 	const	new2fa: boolean = (document.getElementById("edit-2fa") as HTMLInputElement).checked;
+
+	const	state: AppState = appStore.getState();
+	const	user: UserState = state.user;
 
 	console.log(newUsername, newEmail, new2fa);
 	
@@ -166,19 +215,26 @@ async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameStat
 	
 	if (!response.ok)
 		return displayError(response, "user-setting-msg-error");
-	
-	user.setUsername(newUsername);
+
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			...state.user,
+			username: newUsername,
+			isAuth: new2fa
+		}
+	}));
 
 	const res: Response = await sendRequest("/api/jwt/refresh", 'PATCH', {});
 
 	if (!res.ok)
 		return displayError(res, "user-setting-msg-error");
 	
-	// location.reload();
-	router.navigate("/", gameState, user);
+	// location.reload();	//	MATHIS: SURTOUT PAS => SPA
+	router.navigate("/");
 }
 
-async function	handleAddFriendForm(form: HTMLFormElement, gameState: GameState, user: User) {
+async function	handleAddFriendForm(form: HTMLFormElement) {
 	console.log("add friend form");
 
 	const targetName: string = (document.getElementById("username-add-input") as HTMLInputElement).value;
@@ -190,7 +246,7 @@ async function	handleAddFriendForm(form: HTMLFormElement, gameState: GameState, 
 	if (!respTargetId.ok)
 	{
 		console.log((await respTargetId.json() as any).error)
-		return ;																					//	AXEL: AFFICHER BULLE ERREUR
+		return ;											//	AXEL: AFFICHER BULLE ERREUR
 	}
 	const	targetId: number = (await respTargetId.json() as any).id;
 
@@ -198,7 +254,7 @@ async function	handleAddFriendForm(form: HTMLFormElement, gameState: GameState, 
 	if (!response.ok)
 	{
 		console.log(await response.json())
-		return ;																					//	AXEL: AFFICHER BULLE ERREUR
+		return ;											//	AXEL: AFFICHER BULLE ERREUR
 	}
 
 	const	friendship: any = await response.json();
@@ -211,28 +267,28 @@ async function	handleAddFriendForm(form: HTMLFormElement, gameState: GameState, 
 	await getAndRenderFriends();
 }
 
-export function	setupSubmitHandler(gameState: GameState, user: User): void {
+export function	setupSubmitHandler(): void {
 	document.addEventListener('submit', async (event: SubmitEvent) => {
 		event.preventDefault();
 
 		const	form: HTMLFormElement = event.target as HTMLFormElement;
 
 		if (form.id === "sign-in-form")
-			await handleSignInForm(form, gameState, user);
+			await handleSignInForm(form);
 
 		if (form.id === "sign-up-form")
-			await handleSignUpForm(form, gameState, user);
+			await handleSignUpForm(form);
 
 		if (form.id === "verify-email-form")
-			await handleVerifyEmailForm(form, gameState, user);
+			await handleVerifyEmailForm(form);
 
 		if (form.id === "2fa-form")
-			await handle2faForm(form, gameState, user);
+			await handle2faForm(form);
 
 		if (form.id === "user-settings-form")
-			await handleUserSettingsForm(form, gameState, user);
+			await handleUserSettingsForm(form);
 
 		if (form.id === "add-friend-form")
-			await handleAddFriendForm(form, gameState, user);
+			await handleAddFriendForm(form);
 	});
 }

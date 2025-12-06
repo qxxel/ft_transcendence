@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Dockerfile.front                                   :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+         #
+#    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/03 11:40:36 by agerbaud          #+#    #+#              #
-#    Updated: 2025/11/30 16:50:57 by kiparis          ###   ########.fr        #
+#    Updated: 2025/12/03 20:59:14 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,12 +22,21 @@ WORKDIR	/app
 # COPY CONFIG FILES
 COPY	package*.json	./
 COPY	tsconfig.json	./
+COPY	vite.config.ts	./
 
 # INSTALL DEPENDENCIES
 RUN		npm install
 
 # COPY SOURCE CODE
-COPY	srcs/ 	./srcs/
+COPY	srcs/				./src/
+COPY	html/index.html		./index.html
+COPY	css/friends.css		./friends.css
+COPY	css/tournament.css	./tournament.css
+COPY	css/game.css		./game.css
+COPY	css/home.css		./home.css
+COPY	css/index.css		./index.css
+COPY	html/assets			./assets
+COPY	html/pages			./pages
 
 # COMPILE TYPESCRIPT FILES
 RUN	npm run build
@@ -43,12 +52,6 @@ COPY	nginx/nginx_dev.conf /etc/nginx/nginx.conf
 
 # COPY THE JAVASCRIPT COMPILED FILES FROM BUILDER (STEP 1)
 COPY	--from=builder /app/dist /usr/share/nginx/html
-
-# COPY ALL HTML FILES
-COPY	html/index.html			/usr/share/nginx/html
-COPY	css/        			/usr/share/nginx/html
-COPY	html/assets/back.jpeg	/usr/share/nginx/html
-COPY	html/pages/				/usr/share/nginx/html/pages
 
 # EXPOSE PORT 443
 EXPOSE 443

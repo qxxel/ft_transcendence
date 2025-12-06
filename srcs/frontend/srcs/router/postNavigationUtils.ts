@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 18:09:39 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 21:47:24 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,80 +15,94 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { appStore }				from "../objects/store.js"
 import { btnCooldown }			from "../utils/buttonCooldown.js"
 import { displayDate }			from "../utils/display.js"
+import { Game }					from "../Pong/gameClass.js"
+import { GameOptions }			from "../Pong/objects/gameOptions.js"
 import { getAndRenderFriends }  from  "../friends/getAndRenderFriends.js"
-import { PongGame }				from "../Pong/Pong.js"
+import { PongGame }				from "../Pong/pong.js"
 import { router }				from "../index.js"
 import { sendRequest }			from "../utils/sendRequest.js"
 import { TankGame }				from "../v3/tank.js"
-import { User }					from "../user/user.js"
+import { TournamentController }	from "../Pong/tournament.js"
 
-import type { GameState }   from "../index.js"
+import type { AppState, UserState }	from "../objects/store.js"
 
 
 /* ====================== FUNCTION ====================== */
 
-export async function  pathActions(currentPath: string, gameState: GameState, user: User): Promise<void> {
-	
-	if (!['/pong', '/tank'].includes(currentPath)) {
-		if (gameState.currentGame) 
-			gameState.currentGame.stop();
-	}
-	
-	if (!['/tournament-setup', '/tournament-bracket', '/pong'].includes(currentPath)) {
-		gameState.currentTournament = null;
+export async function  pathActions(currentPath: string): Promise<void> {
+	const	state: AppState = appStore.getState();
+	const	user: UserState = state.user;
+	const	currentGame: Game | null = state.game.currentGame;
+	const	currentTournament: TournamentController | null = state.game.currentTournament;
+
+	if (!['/pong', '/tank'].includes(currentPath))
+	{
+		if (currentGame) 
+			currentGame.stop();
 	}
 
-	if (['/pong'].includes(currentPath)) {
-		
-	   if (gameState.currentTournament && gameState.currentTournament.currentMatch) {
-			const match = gameState.currentTournament.currentMatch;
-			
-			const tournamentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
-			
-			tournamentGame.setCtx();
-			
-			tournamentGame.setWinningScore(gameState.currentTournament.winningScore);
-			tournamentGame.setPlayerNames(match.p1, match.p2);
-			
-			tournamentGame.start();
-			gameState.currentGame = tournamentGame;
-		}
-		else if (gameState.currentGame) {
-			gameState.currentGame.setCtx();
-			gameState.currentGame.start();
-		}
-		
-		else {
-			router.navigate("/pongmenu", gameState, user);
-		}
+	if (!['/tournament-setup', '/tournament-bracket', '/pong'].includes(currentPath))
+	{
+		appStore.setState((state) => ({
+			...state,
+			game: {
+				...state.game,
+				currentTournament: null,
+				pendingOptions: null
+			}
+		}));
+
+			// OLD
+		// gameState.currentTournament = null;
+		// gameState.pendingOptions = undefined;
 	}
 
-	if (['/user'].includes(currentPath)) {
+	if (['/pong'].includes(currentPath))
+	{
+		if (currentGame)
+		{
+			currentGame.setCtx();
+			currentGame.start();
+		}
+		else
+			router.navigate("/pongmenu");
+	}
+
+	if (['/user'].includes(currentPath))
 		await loadUser(user);
-	}
 
-	if (['/2fa'].includes(currentPath)) {
-		await loadTwofa(gameState, user);
-	}
+	if (['/2fa'].includes(currentPath))
+		await loadTwofa();
 
-	if (['/sign-in', '/sign-up'].includes(currentPath)) {
-		if (user.isSignedIn())
-			router.navigate("/", gameState, user);
+	if (['/sign-in', '/sign-up'].includes(currentPath))
+	{
+		if (user.isAuth)
+			router.navigate("/");
 	}
 
 	if (['/pongmenu'].includes(currentPath)) {
-		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user);
+		appStore.setState((state) => ({
+			...state,
+			game: {
+				...state.game,
+				currentGame: new PongGame('pong-canvas', 'score1', 'score2', 'winning-points')
+			}
+		}));
+
+			// OLD
+		// gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
 		
 		const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
 		const display = document.getElementById('points-display') as HTMLSpanElement;
 		
 		if (slider && display) {
-		  display.innerHTML = slider.value;
-		  slider.addEventListener('input', () => {
 			display.innerHTML = slider.value;
-		  });
+			slider.addEventListener('input', () => {
+				display.innerHTML = slider.value;
+			});
 		}
 	}
 
@@ -105,39 +119,38 @@ export async function  pathActions(currentPath: string, gameState: GameState, us
 	}
 
 	if (['/tournament-bracket'].includes(currentPath)) {
-		if (!gameState.currentTournament) {
-			router.navigate("/tournament-setup", gameState, user);
+		if (!currentTournament) {
+			router.navigate("/tournament-setup");
 			return;
 		}
 
 		const container = document.getElementById('bracket-container');
-		if (container) {
-			container.innerHTML = gameState.currentTournament.renderBracket();
-		}
+		if (container)
+			container.innerHTML = currentTournament.renderBracket();
 	}
 
 	if (['/tank'].includes(currentPath)) {
-		if (gameState.currentGame) {
-			gameState.currentGame.setCtx();
-			gameState.currentGame.start();
+		if (currentGame) {
+			currentGame.setCtx();
+			currentGame.start();
 			console.log("Loading the new game...");
 		}
 		else {
-			router.navigate("/tankmenu", gameState, user);
+			router.navigate("/tankmenu");
 		}
 	}
 
 	if (['/friends'].includes(currentPath)) {
-        getAndRenderFriends();
-        console.log("Loading the friends...");
-    }
+		getAndRenderFriends();
+		console.log("Loading the friends...");
+	}
 }
 
-async function loadTwofa(gameState: GameState, user: User) {
+async function loadTwofa() {
 	const	Response: Response = await sendRequest(`/api/jwt/payload/twofa`, 'get', null);
 	if (!Response.ok) {
 		console.log(Response.statusText);
-		router.navigate("/sign-in", gameState, user);
+		router.navigate("/sign-in");
 		return ;
 	}
 	router.canLeave = false;
@@ -145,8 +158,8 @@ async function loadTwofa(gameState: GameState, user: User) {
 	displayDate(5);
 }
 
-async function loadUser(user: User) {
-	const	Response: Response = await sendRequest(`/api/user/${user.getId()}`, 'get', null);
+async function loadUser(user: UserState) {
+	const	Response: Response = await sendRequest(`/api/user/${user.id}`, 'get', null);		//	MATHIS: FAIRE UNE REQUETE `/me`
 		if (!Response.ok) {
 			console.log(Response.statusText)
 			return ;

@@ -3,12 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   buttonCooldown.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 17:39:14 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/30 18:37:42 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/04 13:18:18 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// FUNCTION THAT HANDLE THE COOLDOWN ON BUTTONS
+
+
+/* ====================== FUNCTION ====================== */
 
 export async function btnCooldown() {
 	let timeLeft = 5;

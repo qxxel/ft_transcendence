@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 19:50:54 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 21:43:04 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ function	getCookies(request: FastifyRequest): any {
 
 async function isLoggedIn(cookie: string | undefined): Promise<boolean> {
 	try {
-		const	res: AxiosResponse = await authAxios.get("https://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: cookie || "" } });
+		const	res: AxiosResponse = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: cookie || "" } });
 
 		return (res.status === 200);
 	} catch (err: any) {
@@ -75,11 +75,11 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 		if (await isLoggedIn(request.headers.cookie))
 			throw new twofaError.AlreadyConnectedError("You are already connected");
 
-		const	userRes: AxiosResponse = await authAxios.post('https://user:3000', request.body);
+		const	userRes: AxiosResponse = await authAxios.post('http://user:3000', request.body);
 		const	user: any = userRes.data;
 
 		try {
-			const	jwtRes: AxiosResponse = await authAxios.post('https://jwt:3000/twofa', user);
+			const	jwtRes: AxiosResponse = await authAxios.post('http://jwt:3000/twofa', user);
 
 			const	hash: string = await argon2.hash(request.body.password);
 			await authServ.addClient(user.id, hash);
@@ -92,7 +92,7 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 				username: user.username
 			});
 		} catch (err: unknown) {
-			await authAxios.delete(`https://user:3000/${user.id}`);
+			await authAxios.delete(`http://user:3000/${user.id}`);
 
 			throw err;
 		}
@@ -111,7 +111,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		if (await isLoggedIn(request.headers.cookie))
 			throw new twofaError.AlreadyConnectedError("You are already connected");
 
-		const	userRes: AxiosResponse = await authAxios.get(`https://user:3000/lookup/${identifier}`);
+		const	userRes: AxiosResponse = await authAxios.get(`http://user:3000/lookup/${identifier}`);
 		const	user: any = userRes.data;
 
 		if (!user)
@@ -126,7 +126,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		if (!await argon2.verify(pwdHash, password))
 			throw new twofaError.WrongCredentialsError("Wrong password or username.");
 
-		const	jwtRes: AxiosResponse = await authAxios.post('https://jwt:3000', user, { withCredentials: true } );
+		const	jwtRes: AxiosResponse = await authAxios.post('http://jwt:3000', user, { withCredentials: true } );
 		
 		if (jwtRes.headers['set-cookie'])
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
@@ -147,7 +147,7 @@ async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, 
 			throw new Error("The request is empty");
 
 		const	otp: string = request.body.otp;
-		const	jwtRes: AxiosResponse = await authAxios.post('https://twofa:3000/validate', { otp }, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } } );
+		const	jwtRes: AxiosResponse = await authAxios.post('http://twofa:3000/validate', { otp }, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } } );
 
 		if (jwtRes.headers['set-cookie'])
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
@@ -169,14 +169,14 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 		if (!jwtAccess)
 			throw new Error("You are not connected");
 
-		const	payload: AxiosResponse = await authAxios.get("https://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	payload: AxiosResponse = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
-		const	response: AxiosResponse = await authAxios.delete("https://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	response: AxiosResponse = await authAxios.delete("http://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
 
-		await authAxios.delete(`https://user:3000/${payload.data.id}`);
+		await authAxios.delete(`http://user:3000/${payload.data.id}`);
 
 		await authServ.deleteClient(payload.data.id);
 		
@@ -192,11 +192,11 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 		if (!jwtTwofa)
 			return reply.status(204).send();
 		
-		const	payload: AxiosResponse = await authAxios.get("https://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	payload: AxiosResponse = await authAxios.get("http://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		
 		deleteClientExpires(authServ, payload.data.id);
 		
-		const	response: AxiosResponse = await authAxios.delete("https://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	response: AxiosResponse = await authAxios.delete("http://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
@@ -209,7 +209,7 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 
 async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	jwtRes = await authAxios.post("https://jwt:3000/twofa/validate", request.body, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	jwtRes = await authAxios.post("http://jwt:3000/twofa/validate", request.body, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		if (jwtRes.headers['set-cookie'])
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);

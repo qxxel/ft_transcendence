@@ -3,22 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   router.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 13:44:25 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 15:43:41 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // CLASS WHO ROUTE FOR THE SINGLE PAGE APPLICATION (SPA)
 
 
-/* ====================== IMPORTS ====================== */
+/* ====================== IMPORT ====================== */
 
-import { pathActions }	from "./postNavigationUtils.js"
-import { User }			from "../user/user.js"
-
-import type { GameState }					from "../index.js"
+import { pathActions }			from "./postNavigationUtils.js"
 
 
 /* ====================== INTERFACE ====================== */
@@ -26,7 +23,7 @@ import type { GameState }					from "../index.js"
 interface	Route {
 	path: string;
 	component: () => string | Promise<string>;
-}
+};
 
 
 /* ====================== CLASS ====================== */
@@ -40,17 +37,18 @@ export class	Router {
 		this.routes.push({ path, component });
 	}
 
-	navigate(path: string, gameState: GameState, user: User): void {
-		if (!this.canLeave) {
+	navigate(path: string): void {
+		if (!this.canLeave)
+		{
 			if (!confirm("This page is asking you to confirm that you want to leave — information you’ve entered may not be saved."))
 				return ;
 			this.canLeave = true;
 		}
 		history.pushState({}, '', path);
-		this.render(gameState, user);
+		this.render();
 	}
 
-	async render(gameState: GameState, user: User): Promise<void> {
+	async render(): Promise<void> {
 		const	currentPath: string = window.location.pathname;
 		const	route: Route | undefined = this.routes.find(r => r.path === currentPath);
 
@@ -63,7 +61,7 @@ export class	Router {
 				contentDiv.innerHTML = html;
 			}
 			this.currentPath = currentPath;
-			await pathActions(currentPath, gameState, user);
+			await pathActions(currentPath);
 		}
 
 	}

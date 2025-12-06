@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pongTableBuilder.ts                                :+:      :+:    :+:   */
+/*   extractHeaders.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 18:44:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 19:17:49 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/12/03 16:17:02 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/12/03 16:17:04 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// WILL BUILD USER TABLE (CALLED IN 'pongRepository')
+// ALL FUNCTIONS THAT EXTRACT ANY HEADERS
 
 
 /* ====================== IMPORT ====================== */
 
-import type { Database }	from 'sqlite3'
+import { MissingHeaderError }	from "./throwErrors.js"
+
+import type { FastifyRequest }	from 'fastify'
 
 
 /* ====================== FUNCTION ====================== */
 
-export function	pongTableBuilder(db: Database): void {
-	db.exec(`CREATE TABLE IF NOT EXISTS pong (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		winner INTEGER NOT NULL UNIQUE,
-		p1 INTEGER NOT NULL,
-		p1score INTEGER NOT NULL,
-		p2 INTEGER,
-		p2score INTEGER NOT NULL,
-		start TIMESTAMP NOT NULL
-	);`);
+export function	extractUserId(request: FastifyRequest): number {
+	const	userIdHeader: string | string[] | undefined = request.headers['user-id'];
+	if (!userIdHeader)
+		throw new MissingHeaderError("Missing User ID header (Unauthorized)");
+
+	const	userId = parseInt(userIdHeader as string, 10);
+
+	return userId;
 }

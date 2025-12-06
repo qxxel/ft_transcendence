@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 20:34:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 21:58:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,49 +14,69 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { getAndRenderFriends }			from "../friends/getAndRenderFriends.js"
-import { PongGame }						from "../Pong/Pong.js"
-import { TankGame } 					from "../v3/tank.js"
-import { TournamentController } 		from "../tournament.js"
-import { Router }						from "../router/router.js"
-import { sendRequest }					from "../utils/sendRequest.js"
-import { getMenuLog, getMenuLogout }	from "../utils/getMenu.js"
-import { User }							from "../user/user.js"
-import { displayDate, displayError }	from "../utils/display.js"
-import { btnCooldown }					from "../utils/buttonCooldown.js"
+import { AppState, appStore, UserState }	from "../objects/store.js"
+import { GameOptions }						from "../Pong/objects/gameOptions.js"
+import { getMenu }							from "../utils/getMenu.js"
+import { initHistoryListeners } 			from "../history/getAndRenderHistory.js"
+import { PongGame }							from "../Pong/pong.js"
+import { TankGame } 						from "../v3/tank.js"
+import { TournamentController } 			from "../Pong/tournament.js"
+import { router }							from "../index.js"
+import { sendRequest }						from "../utils/sendRequest.js"
+import { socket }							from "../socket/socket.js"
+import { displayDate, displayError  }		from "../utils/display.js"
+import { btnCooldown }						from "../utils/buttonCooldown.js"
 
-import type { GameState }   from "../index.js"
-import { Tank } from "../v3/class_tank.js"
+import { Tank }	from "../v3/class_tank.js"
+import { Game }	from "../Pong/gameClass.js"
 
 /* ====================== FUNCTIONS ====================== */
 
-function onClickPlay(router: Router, gameState: GameState, user: User): void {
-	const   maxPointsInput: HTMLInputElement = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-	gameState.currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
+function onClickPlay(): void {
+	const	maxPointsInput: HTMLInputElement = document.getElementById("choosenMaxPoints") as HTMLInputElement;
 
-	router.navigate("/pong", gameState, user);
+	const	state: AppState = appStore.getState();
+	const	currentGame: Game | null = state.game.currentGame;
+	currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
+
+	router.navigate("/pong");
 }
 
-async function  onClickLogout(router: Router, gameState: GameState, user: User): Promise<void> {
+async function  onClickLogout(): Promise<void> {
 	const   response: Response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
 
 	if (!response.ok)
 		throw new Error('Logout failed');
 
-	user.logout();
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			id: null,
+			username: null,
+			avatar: null,
+			isAuth: false
+		}
+	}));
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenuLogout();
+		menu.innerHTML = getMenu(false);
+			
+	if (socket && socket.connected)
+		socket.disconnect();
 
-	router.navigate("/", gameState, user);
+	router.navigate("/");
 }
 	
-async function	onClickEdit(user: User): Promise<void> {
+async function	onClickEdit(): Promise<void> {
 	console.log("Edit");
 
-	const	response: Response = await sendRequest(`/api/user/${user.getId()}`, 'get', null);
-	if (!response.ok) {
+	const	state: AppState = appStore.getState();
+	const	user: UserState | null = state.user;
+
+	const	response: Response = await sendRequest(`/api/user/${user.id}`, 'get', null);	//	MATHIS: GET /me
+	if (!response.ok)
+	{
 		console.log(response.statusText);
 		return ;
 	}
@@ -64,7 +84,7 @@ async function	onClickEdit(user: User): Promise<void> {
 
 	const editElements = document.querySelectorAll(".edit-mode");
 	const viewElements = document.querySelectorAll(".view-mode");
-	
+
 	editElements.forEach(e => {
 		(e as HTMLElement).hidden = false;
 	});
@@ -79,10 +99,15 @@ async function	onClickEdit(user: User): Promise<void> {
 	mail.value = userRes.email ?? "";
 }
 
-async function	onClickHistory(router: Router, gameState: GameState, user: User): Promise<void> {
-	console.log("Empty History"); /////////////////////
-	// TODO: secure l'acces a la page si on est pas connecte
-	router.navigate("/history", gameState, user);
+export async function	onClickHistory(targetId: number | null, targetName: string | null): Promise<void> {
+	console.log("History => " + targetId + " - " + targetName);
+	// TODO: SECURE IF NOT AUTH
+
+	router.navigate("/history");
+
+	setTimeout(() => {
+		initHistoryListeners(targetId, targetName);
+	}, 50);
 }
 
 function	onClickCancel(): void {
@@ -108,7 +133,7 @@ function	onClickCancel(): void {
 	});
 }
 
-async function	onClickDeleteAccount(router: Router, gameState: GameState, user: User): Promise<void> {
+async function	onClickDeleteAccount(): Promise<void> {
 	console.log("DeleteAccount");
 	
 	if (!confirm("Are you sure you want to delete your account?"))
@@ -120,16 +145,27 @@ async function	onClickDeleteAccount(router: Router, gameState: GameState, user: 
 		return ;
 	}
 
-	user.logout();
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			id: null,
+			username: null,
+			avatar: null,
+			isAuth: false
+		}
+	}));
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenuLogout();
+		menu.innerHTML = getMenu(false);
+			
+	if (socket && socket.connected)
+		socket.disconnect();
 
-	router.navigate("/", gameState, user);
+	router.navigate("/");
 }
 
-async function	onClickDeleteTwofa(router: Router, gameState: GameState, user: User): Promise<void> {
+async function	onClickDeleteTwofa(): Promise<void> {
 	console.log("DeleteTwofa");
 	
 	if (!confirm("Are you sure you want to go back?"))
@@ -142,16 +178,27 @@ async function	onClickDeleteTwofa(router: Router, gameState: GameState, user: Us
 		return ;
 	}
 	
-	user.logout();
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			id: null,
+			username: null,
+			avatar: null,
+			isAuth: false
+		}
+	}));
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenuLogout();
+		menu.innerHTML = getMenu(false);
+			
+	if (socket && socket.connected)
+		socket.disconnect();
 
-	router.navigate("/sign-up", gameState, user);
+	router.navigate("/");
 }
 
-async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GameState, user: User): Promise<void> {
+async function	onClickSkipeVerifyEmailDev(): Promise<void> {
 	console.log("VerifyEmail");
 	
 	const response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
@@ -159,24 +206,30 @@ async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GameState, 
 	if (!response.ok)
 		return displayError(response, "verify-email-msg-error");
 
-	user.setSigned(true);
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			...state.user,
+			isAuth: true
+		}
+	}));
 	
 	var menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenuLog();
+		menu.innerHTML = getMenu(true);
 
 	router.canLeave = true;
-	router.navigate("/", gameState, user);
+	router.navigate("/");
 }
 
-async function	onClickNewCode(router: Router, gameState: GameState, user: User): Promise<void> {
+async function	onClickNewCode(): Promise<void> {
 	const btnSend = document.getElementById("btnSend2faCode") as HTMLButtonElement;
-    const spanCooldown = document.getElementById("btnCooldown");
-    const locks = document.querySelectorAll(".lock");
+	const spanCooldown = document.getElementById("btnCooldown");
+	const locks = document.querySelectorAll(".lock");
 
-    if (spanCooldown) spanCooldown.textContent = "(5s)";
-    locks.forEach(e => (e as HTMLElement).hidden = false);
-    if (btnSend) btnSend.disabled = true;
+	if (spanCooldown) spanCooldown.textContent = "(5s)";
+	locks.forEach(e => (e as HTMLElement).hidden = false);
+	if (btnSend) btnSend.disabled = true;
 
 	const res = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
 
@@ -190,15 +243,15 @@ async function	onClickNewCode(router: Router, gameState: GameState, user: User):
 
     const response = await sendRequest('/api/twofa/otp', 'GET', null);
 
-    if (!response.ok) {
-        console.error("Erreur API:", response.statusText);
-        if (btnSend) btnSend.disabled = false;
-        if (spanCooldown) spanCooldown.textContent = "";
-        locks.forEach(e => (e as HTMLElement).hidden = true);
-        return;
-    }
-    btnCooldown(); 
-    displayDate(5);
+	if (!response.ok) {
+		console.error("Erreur API:", response.statusText);
+		if (btnSend) btnSend.disabled = false;
+		if (spanCooldown) spanCooldown.textContent = "";
+		locks.forEach(e => (e as HTMLElement).hidden = true);
+		return;
+	}
+	btnCooldown(); 
+	displayDate(5);
 }
 
 async function onClickBlockMessage(): Promise<void> {
@@ -218,19 +271,15 @@ async function onClickBlockMessage(): Promise<void> {
 	}
 
 	let data: unknown;
-	
-	// Si le statut est 204 (No Content), on laisse le corps vide.
-	// Si Content-Length est absent ou égal à 0, on considère qu'il n'y a pas de corps à lire.
+
 	const contentLength = res.headers.get('Content-Length');
 	
 	if (res.status === 204 || contentLength === '0' || contentLength === null) {
 		data = { message: `Action réussie. (Statut ${res.status})` }; 
 	} else {
-		// Le serveur a indiqué qu'il y a du contenu (200, 201), on lit le JSON.
 		try {
 			 data = await res.json();
 		} catch (e) {
-			// Sécurité supplémentaire : s'il y a un corps mais que ce n'est pas du JSON valide
 			console.error("Erreur de parsing JSON malgré le statut de succès:", e);
 			data = { error: "Réponse du serveur invalide (Non-JSON)." };
 		}
@@ -290,64 +339,162 @@ function selectFeaturedDifficulty(level: number) {
 
 /* ====================== GAME & TOURNAMENT HANDLERS ====================== */
 
-function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard', router: Router, gameState: GameState, user: User) {
-  const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-  const winningScore = parseInt(maxPointsInput.value, 10);
-  
-  gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'ai', difficulty);
-  gameState.currentGame.setWinningScore(winningScore);
-  
-  router.navigate("/pong", gameState, user);
+function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard') {
+	const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+	const winningScore = parseInt(maxPointsInput.value, 10);
+	
+	const	state: AppState = appStore.getState();
+	const	user: UserState | null = state.user;
+	const	currentGame: Game | null = state.game.currentGame;
+
+	const	options: GameOptions = {
+		width: 800,
+		height: 600,
+		isTournament: false,
+		p1name: user.username || "Player 1",
+		p2name: difficulty,
+		mode: 'ai',
+		difficulty: difficulty || 'medium',
+		winningScore: parseInt(maxPointsInput.value, 10) || 5,
+		powerUpFreq: 0,
+		activePowerUps: {
+			star1: false,
+			star2: false,
+			star3: false
+		}
+	};
+
+	appStore.setState((state) => ({
+		...state,
+		game: {
+			...state.game,
+			currentGame: new PongGame('pong-canvas', 'score1', 'score2', 'winning-points'),
+			pendingOptions: options
+		}
+	}));
+
+	currentGame!.setWinningScore(winningScore);	// SUR QUIL EXISTE (2 LIGNES AU DESSUS) ??
+
+	router.navigate('/pong');
 }
 
-function onClickPlayPVP(router: Router, gameState: GameState, user: User) {
+function onClickPlayPVP() {
 
-//   user.setUsername("Test");
 	if (router.Path === '/pongmenu') {
-		const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-  		const winningScore = parseInt(maxPointsInput.value, 10);
-	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, 'pvp');
-	gameState.currentGame.setWinningScore(winningScore);
-	router.navigate("/pong", gameState, user);
-  }
-  else if (router.Path === '/tankmenu')
-  {
-	gameState.currentGame = new TankGame('tank-canvas', 'desertfox', router, user);
-	router.navigate("/tank", gameState, user);
-  }
-}
+		const	maxPointsInput: HTMLInputElement = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+		const	winningScore: number = parseInt(maxPointsInput.value, 10);
 
-function onStartTournament(router: Router, gameState: GameState, user: User) {
-  const inputs = document.querySelectorAll('.player-name-input') as NodeListOf<HTMLInputElement>;
-  const playerNames: string[] = [];
-  
-  inputs.forEach(input => {
-	if (input.value.trim() !== '') {
-	  playerNames.push(input.value.trim());
+		const	state: AppState = appStore.getState();
+		const	user: UserState | null = state.user;
+		const	currentGame: Game | null = state.game.currentGame;
+
+		const	options: GameOptions = {
+			width: 800,
+			height: 600,
+			isTournament: false,
+			p1name: user.username || "Player 1",
+			p2name: "Player 2",
+			mode: 'pvp',
+			difficulty: "medium",
+			winningScore: parseInt(maxPointsInput.value, 10) || 5,
+			powerUpFreq: 0,
+			activePowerUps: {
+				star1: false,
+				star2: false,
+				star3: false
+			}
+		};
+
+		appStore.setState((state) => ({
+			...state,
+			game: {
+				...state.game,
+				currentGame: new PongGame('pong-canvas', 'score1', 'score2', 'winning-points'),
+				pendingOptions: options
+			}
+		}));
+
+		currentGame!.setWinningScore(winningScore);	// SUR QUIL EXISTE (2 LIGNES AU DESSUS) ??
+
+		router.navigate('/pong');
 	}
-  });
+	else if (router.Path === '/tankmenu')
+	{
+		appStore.setState((state) => ({
+			...state,
+			game: {
+				...state.game,
+				currentGame: new TankGame('tank-canvas', 'desertfox')
+			}
+		}));
 
-  if (playerNames.length < 4) {
-	alert("You need at least 4 players to start a tournament.");
-	return;
-  }
-
-  const scoreInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-  const winningScore = parseInt(scoreInput.value, 10);
-
-  gameState.currentTournament = new TournamentController(playerNames, winningScore);
-  
-  router.navigate("/tournament-bracket", gameState, user);
+		router.navigate('/tank');
+	}
 }
 
-function startTournamentMatch(matchId: string, p1: string, p2: string, router: Router, gameState: GameState, user: User) {
-  if (gameState.currentTournament) {
-	gameState.currentTournament.startMatch(matchId, p1, p2);
-	router.navigate('/pong', gameState, user);
-  }
+function	onStartTournament() {
+	const inputs = document.querySelectorAll('.player-name-input') as NodeListOf<HTMLInputElement>;
+	const playerNames: string[] = [];
+	
+	inputs.forEach(input => {
+		if (input.value.trim() !== '') {
+			playerNames.push(input.value.trim());
+		}
+	});
+
+	if (playerNames.length < 4) {
+		alert("You need at least 4 players to start a tournament.");
+		return;
+	}
+
+	const scoreInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+	const winningScore = parseInt(scoreInput.value, 10);
+
+	appStore.setState((state) => ({
+		...state,
+		game: {
+			...state.game,
+			currentTournament: new TournamentController(playerNames, winningScore)
+		}
+	}));
+
+	router.navigate("/tournament-bracket");
 }
 
-function onClickStartFeatured(mode: 'ai' | 'pvp', router: Router, gameState: GameState, user: User) {
+function startTournamentMatch(matchId: string, p1: string, p2: string) {
+	const	state: AppState = appStore.getState();
+	const	currentTournament: TournamentController | null = state.game.currentTournament;
+
+	if (currentTournament) {
+		const	options: GameOptions = {
+			width: 800,
+			height: 600,
+			isTournament: true,
+			p1name: p1,
+			p2name: p2,
+			mode: "pvp",
+			difficulty: "medium",
+			winningScore: currentTournament.winningScore,
+			powerUpFreq: 0,
+			activePowerUps: { star1: false, star2: false, star3: false }
+		};
+
+		appStore.setState((state) => ({
+			...state,
+			game: {
+				...state.game,
+				currentGame: new PongGame('pong-canvas', 'score1', 'score2', 'winning-points'),
+				pendingOptions: options
+			}
+		}));
+
+		currentTournament.startMatch(matchId, p1, p2);
+
+		router.navigate('/pong');
+	}
+}
+
+function onClickStartFeatured(mode: 'ai' | 'pvp') {
 	const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
 	const aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
 	const pointsInput = document.getElementById("featuredMaxPoints") as HTMLInputElement;
@@ -355,76 +502,119 @@ function onClickStartFeatured(mode: 'ai' | 'pvp', router: Router, gameState: Gam
 	const star2 = (document.getElementById("chk-2star") as HTMLInputElement).checked;
 	const star3 = (document.getElementById("chk-3star") as HTMLInputElement).checked;
 
+	const	state: AppState = appStore.getState();
+	const	user: UserState | null = state.user;
+	const	currentGame: Game | null = state.game.currentGame;
+	const	currentTournament: TournamentController | null = state.game.currentTournament;
+
 	if (router.Path === '/pongmenu')
 	{
-		const winningScore = parseInt(pointsInput.value, 10);
-		const aiVal = parseInt(aiInput.value);
-		let difficulty: any = 'medium'; 
-		if (aiVal === 1) difficulty = 'easy';
-		if (aiVal === 3) difficulty = 'hard';
-		if (aiVal === 4) difficulty = 'boris';
-		console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Diff=${difficulty}, Stars=[${star1},${star2},${star3}]`);
-		gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', router, gameState, user, mode, difficulty, star1, star2, star3);
-		router.navigate("/pong", gameState, user);
+		const	winningScore = parseInt(pointsInput.value, 10);
+
+		const	aiVal = parseInt(aiInput.value);
+		let		difficulty: "easy" | "medium" | "hard" | "boris" = "medium";
+		if (aiVal === 1)
+			difficulty = "easy";
+		if (aiVal === 3)
+			difficulty = "hard";
+		if (aiVal === 4)
+			difficulty = "boris";
+
+		const	powerUpFrequency: number = parseInt(freqInput.value, 10) * 1000;
+
+		const	options: GameOptions = {
+			width: 800,
+			height: 600,
+			isTournament: false,
+			p1name: user.username || "Player 1",
+			p2name: mode === "ai" ? "AI (" + difficulty + ")" : "Player 2",
+			mode: mode,
+			difficulty: difficulty || "medium",
+			winningScore: winningScore || 5,
+			powerUpFreq: powerUpFrequency,
+			activePowerUps: {
+				star1: star1,
+				star2: star2,
+				star3: star3
+			}
+		};
+
+		appStore.setState((state) => ({
+			...state,
+			game: {
+				...state.game,
+				currentGame: new PongGame('pong-canvas', 'score1', 'score2', 'winning-points'),
+				pendingOptions: options
+			}
+		}));
+
+		router.navigate("/pong");
 
 	}
 	else if (router.Path === '/tankmenu')
 	{
 		console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Stars=[${star1},${star2},${star3}]`);
 		const freq = parseInt(freqInput.value,10);
-		gameState.currentGame = new TankGame('tank-canvas', 'desertfox', router, user, freq, star1, star2, star3);
-		router.navigate("/tank", gameState, user);
+
+		appStore.setState((state) => ({
+			...state,
+			game: {
+				...state.game,
+				currentGame: new TankGame('tank-canvas', 'desertfox', freq, star1, star2, star3)
+			}
+		}));
+
+		router.navigate("/tank");
 	}
 
 
 }
 
-function onClickHomeBtn(router: Router, gameState: GameState, user: User) {
-    router.navigate('/games', gameState, user);
+function onClickHomeBtn() {
+	router.navigate('/games');
 }
 
 /* ====================== SETUP ====================== */
 
-export async function   setupClickHandlers(router: Router, user: User, gameState: GameState): Promise<void> {
-	(window as any).onClickPlay = () => onClickPlay(router, gameState, user);
-	(window as any).onClickLogout = () => onClickLogout(router, gameState, user);
+export async function   setupClickHandlers(): Promise<void> {
+	(window as any).onClickPlay = () => onClickPlay();
+	(window as any).onClickLogout = () => onClickLogout();
 
-	(window as any).onClickEdit = () => onClickEdit(user);
-	(window as any).onClickHistory = () => onClickHistory(router, gameState, user);
-
+	(window as any).onClickEdit = () => onClickEdit();
+	(window as any).onClickHistory = (targetId: number | null = null, targetName: string | null = null) => onClickHistory(targetId, targetName);
 	(window as any).onClickCancel = () => onClickCancel();
-	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
-	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa(router, gameState, user);
-
-	(window as any).onClickNewCode = () => onClickNewCode(router, gameState, user);
-	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(router, gameState, user);
+	(window as any).onClickDeleteAccount = () => onClickDeleteAccount();
+	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa();
+	(window as any).onClickNewCode = () => onClickNewCode();
+	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(); // /!\ detete this ligne
 
 	(window as any).onClickBlockMessage = onClickBlockMessage;
 	
 	(window as any).showDifficultyMenu = showDifficultyMenu;
 	(window as any).hideDifficultyMenu = hideDifficultyMenu;
 
-	(window as any).onClickHomeBtn = () => onClickHomeBtn(router, gameState, user);
+	(window as any).onClickHomeBtn = () => onClickHomeBtn();
 
 	(window as any).switchGameMode = switchGameMode;
-	(window as any).onClickStartFeatured = (mode: 'ai' | 'pvp') => onClickStartFeatured(mode, router, gameState, user);
+	(window as any).onClickStartFeatured = (mode: 'ai' | 'pvp') => onClickStartFeatured(mode);
 	(window as any).selectFeaturedDifficulty = selectFeaturedDifficulty;
 
 	(window as any).onClickPlayAI = (difficulty: 'easy' | 'medium' | 'hard') => 
-		onClickPlayAI(difficulty, router, gameState, user);
+		onClickPlayAI(difficulty);
 
-	(window as any).onClickPlayPVP = () => onClickPlayPVP(router, gameState, user);
-	(window as any).onStartTournament = () => onStartTournament(router, gameState, user);
+	(window as any).onClickPlayPVP = () => onClickPlayPVP();
+	(window as any).onStartTournament = () => onStartTournament();
 	
 	(window as any).startTournamentMatch = (matchId: string, p1: string, p2: string) => 
-		startTournamentMatch(matchId, p1, p2, router, gameState, user);
+		startTournamentMatch(matchId, p1, p2);
+
 
 	document.addEventListener('click', (event) => {
 		const target = event.target as HTMLAnchorElement;
 		if (target.tagName === 'A' && target.hasAttribute('href')) {
 			event.preventDefault();
 			console.log(target.getAttribute('href')!);
-			router.navigate(target.getAttribute('href')!, gameState, user);
+			router.navigate(target.getAttribute('href')!);
 		}
 	});
 
@@ -462,7 +652,7 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 			}
 			router.canLeave = true;
 		}
-		router.render(gameState, user);
+		router.render();
 	});
 
 	window.addEventListener('keydown', (event: KeyboardEvent) => {
@@ -473,5 +663,5 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
   	if (keysToBlock.includes(event.code)) {
   	  event.preventDefault();
   	}
-})	;
+});
 }

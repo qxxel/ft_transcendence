@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayGameController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:05:35 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:32:51 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:37:27 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,55 @@
 /* ====================== IMPORTS ====================== */
 
 import { gatewayAxios }			from '../api-gateway.js'
+import { getValidUserId }		from '../utils/validateJwt.js'
 import { requestErrorsHandler }	from "../utils/requestErrors.js"
 
-import type { AxiosResponse }									from 'axios'
+import type { AxiosHeaderValue, AxiosResponse }					from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 
 
 /* ====================== FUNCTION ====================== */
 
 export async function	gatewayGameController(gatewayFastify: FastifyInstance) {
-	gatewayFastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
+	// gatewayFastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
+	// 	try {
+	// 		const	response: AxiosResponse = await gatewayAxios.post('http://game:3000/', request.body);
+			
+	// 		return reply.send(response.data);
+	// 	} catch (err: unknown) {
+	// 		return requestErrorsHandler(gatewayFastify, reply, err);
+	// 	}
+	// });
+
+	// gatewayFastify.post('/tank', async (request: FastifyRequest, reply: FastifyReply) => {
+	// 	try {
+	// 		const	response: AxiosResponse = await gatewayAxios.post('http://game:3000/tank', request.body);
+			
+	// 		return reply.send(response.data);
+	// 	} catch (err: unknown) {
+	// 		return requestErrorsHandler(gatewayFastify, reply, err);
+	// 	}
+	// });
+
+	// gatewayFastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
+	// 	try {
+	// 		const	response: AxiosResponse = await gatewayAxios.get(
+	// 			'http://game:3000/',
+	// 			{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+	// 		);
+
+	// 		return reply.send(response.data);
+	// 	} catch (err: unknown) {
+	// 		return requestErrorsHandler(gatewayFastify, reply, err);
+	// 	}
+	// });
+
+	gatewayFastify.get('/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.get(
-				'https://game:3000/',
-				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			const	userId: AxiosHeaderValue = await getValidUserId(request);
+		
+			const	response: AxiosResponse = await gatewayAxios.get('http://game:3000/me',
+				{ headers: { 'user-id': userId } }
 			);
 
 			return reply.send(response.data);
@@ -38,19 +73,14 @@ export async function	gatewayGameController(gatewayFastify: FastifyInstance) {
 		}
 	});
 
-	gatewayFastify.post('/pong', async (request: FastifyRequest, reply: FastifyReply) => {
+	gatewayFastify.get('/:targetId', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.post('https://game:3000/pong', request.body);
+			const	{ targetId } = request.params as { targetId: string };
+			const	parseTargetId: number = parseInt(targetId, 10);
 
-			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
-		}
-	});
-
-	gatewayFastify.post('/tank', async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			const	response: AxiosResponse = await gatewayAxios.post('https://game:3000/tank', request.body);
+			const	response: AxiosResponse = await gatewayAxios.get(`http://game:3000/${parseTargetId}`,
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
