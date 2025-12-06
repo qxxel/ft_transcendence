@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:43:04 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 22:32:16 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,12 +171,16 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 
 		const	payload: AxiosResponse = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
+		if (payload.data.id)
+			throw new Error("invalide id");
+
+		await authAxios.delete(`http://user:3000/${payload.data.id}`);
+		await authAxios.delete(`http://game:3000/${payload.data.id}`);
+
 		const	response: AxiosResponse = await authAxios.delete("http://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
-
-		await authAxios.delete(`http://user:3000/${payload.data.id}`);
 
 		await authServ.deleteClient(payload.data.id);
 		
