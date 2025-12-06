@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 19:45:57 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 21:20:26 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 	});
 
 	// UPDATE A USER WITH HIS ID
-	userFastify.post<{ Body: userUpdate }>('/:id', async (request: FastifyRequest, reply: FastifyReply) => { // /!\ replace with /me
+	userFastify.patch<{ Body: userUpdate }>('/me', async (request: FastifyRequest, reply: FastifyReply) => { // /!\ replace with /me
 		if (!request.body) {
 			userFastify.log.error("The request is empty");
 			console.error("The request is empty");

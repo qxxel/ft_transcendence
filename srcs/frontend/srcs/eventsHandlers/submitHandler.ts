@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:01:18 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 21:23:17 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameStat
 	
 	// verifyEmail("user-profile");
 	
-	const response: Response = await sendRequest(`/api/user/${user.getId()}`, 'post', { // transforme en me et en post
+	const response: Response = await sendRequest(`/api/user/me`, 'post', {
 		username: newUsername,
 		email: newEmail,
 		is2faEnable: new2fa
