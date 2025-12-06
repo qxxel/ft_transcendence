@@ -1,4 +1,4 @@
-<div class="game-container">
+<div id="user-profile" class="game-container">
     <h1>User Profile</h1>
 
     <form id="user-settings-form" class="user-settings-form">
@@ -67,6 +67,28 @@
                 </div>
             </div>
         </div>
+
+    </form>
+</div>
+
+<div id="verify-email" class="game-container" hidden>
+    <h1>Check your email</h1>
+
+    <form id="verify-email-form">
+
+        <p>Open your email and enter the code.</p>
+
+        <div class="form-group">
+            <input type="text" id="digit-code" name="digit-code" maxlength="4" placeholder="Enter 4 digit code" pattern="^[0-9]{4}$" required>
+        </div>
+
+        <p>The verification code is valid until : <span id="date-with-offset"></span></p>
+        <p id="verify-email-msg-error" class="msg-error"></p>
+
+        <button type="submit" id="verify-email-submit" class="auth-link-button">Verify</button>
+        
+        <button type="button" onclick="onClickCancel()" id="button-retour" class="auth-link-button"><- retour</button>
+        <button type="button" onclick="onClickSkipeVerifyEmailDev()" id="button-skip" class="auth-link-button">skip (dev)</button>
 
     </form>
 </div>
