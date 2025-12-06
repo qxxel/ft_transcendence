@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 14:44:48 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/06 21:01:18 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,18 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { router }	from "../index.js"
-import { User }		from "../user/user.js"
-import { sendRequest }	from "../utils/sendRequest.js"
-import { displayDate }	from "../utils/displayDate.js"
+import { router }				from "../index.js"
+import { User }					from "../user/user.js"
+import { sendRequest }			from "../utils/sendRequest.js"
+import { verifyEmail }			from "../utils/verifyEmail.js"
+import { getMenuLog }			from "../utils/getMenu.js"
+import { displayError }			from "../utils/display.js"
 import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
 
 import type { GameState }	from "../index.js"
 
 
 /* ====================== FUNCTIONS ====================== */
-
-function	getMenu(username: string | undefined): string {
-	return `<a href="/">Home</a>
-			<a href="/games">Play</a>
-			<a href="/tournament-setup">Tournament</a>
-			<a href="/user">Profile</a>
-			<a href="/friends">Friends</a>
-			<a onclick="onClickLogout();" id="logout">Logout</a>
-			<a href="/about">About</a>`;
-}
 
 async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
 	console.log("Sign in");
@@ -55,17 +47,11 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 		},
 		body: JSON.stringify({ identifier, password })
 	});
+	
+	if (!response.ok)
+			return displayError(response, "sign-in-msg-error");
 
 	const	result: any = await response.json();
-
-	if (!response.ok) {
-		const	p: HTMLElement | null = document.getElementById("sign-in-msg-error");
-		if (!p)
-			console.error("No HTMLElement named \`msg-error\`.");
-		else
-			p.textContent = result?.error || "An unexpected error has occurred";
-		return ;
-	}
 
 	user.setId(result.id as number);
 	user.setUsername(result.username);
@@ -85,7 +71,7 @@ async function	handleSignInForm(form: HTMLFormElement, gameState: GameState, use
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenu(user.getUsername());
+		menu.innerHTML = getMenuLog();
 
 	router.navigate("/", gameState, user);
 }
@@ -107,44 +93,15 @@ async function	handleSignUpForm(form: HTMLFormElement, gameState: GameState, use
 		body: JSON.stringify({ username, email, password })
 	});
 
+	if (!response.ok)
+		return displayError(response, "sign-up-msg-error");
+	
 	const	result = await response.json();
-
-	if (!response.ok) {
-		const	p = document.getElementById("sign-up-msg-error");
-		if (!p)
-			console.error("No HTMLElement named \`msg-error\`.");
-		else
-			p.textContent = result?.error || "An unexpected error has occurred";
-		return ;
-	}
 
 	user.setId(result.id as number);
 	user.setUsername(username);
 
-	const	divSignUp = document.getElementById("sign-up");
-	if (divSignUp)
-		divSignUp.hidden = true;
-
-	const	divVerifyEmail = document.getElementById("verify-email");
-	if (divVerifyEmail)
-		divVerifyEmail.hidden = false;
-
-	router.canLeave = false;
-
-	sendRequest('/api/twofa/otp', 'GET', null)
-		.then(async (res) => {
-			if (!res.ok) {
-				const	p = document.getElementById("verify-email-msg-error");
-				if (!p)
-					console.error("No HTMLElement named \`msg-error\`.");
-				else {
-					const	resJson = await res.json();
-					p.textContent = resJson?.error || "An unexpected error has occurred";
-				}
-				return ;
-			}
-		});
-	displayDate(5);
+	verifyEmail("sign-up");
 }
 
 async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: GameState, user: User): Promise<void> {
@@ -155,22 +112,14 @@ async function	handleVerifyEmailForm(form: HTMLFormElement, gameState: GameState
 	
 	const response: Response = await sendRequest('/api/auth/validateUser', 'post', { otp });
 
-	if (!response.ok) {
-		const	p = document.getElementById("verify-email-msg-error");
-		if (!p)
-			console.error("No HTMLElement named \`msg-error\`.");
-		else {
-			const	result = await response.json();
-			p.textContent = result?.error || "An unexpected error has occurred";
-		}
-		return ;
-	}
+	if (!response.ok)
+		return displayError(response, "verify-email-msg-error");
 
 	user.setSigned(true);
 	
 	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenu(user.getUsername());
+		menu.innerHTML = getMenuLog();
 
 	router.canLeave = true;
 	router.navigate("/", gameState, user);
@@ -185,22 +134,14 @@ async function	handle2faForm(form: HTMLFormElement, gameState: GameState, user: 
 	const response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
 
 	
-	if (!response.ok) {
-		const	p = document.getElementById("2fa-msg-error");
-		if (!p)
-			console.error("No HTMLElement named \`msg-error\`.");
-		else {
-			const	result = await response.json();
-			p.textContent = result?.error || "An unexpected error has occurred";
-		}
-		return ;
-	}
+	if (!response.ok)
+		return displayError(response, "2fa-msg-error");
 
 	user.setSigned(true);
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML = getMenu(user.getUsername());
+		menu.innerHTML = getMenuLog();
 
 	router.canLeave = true;
 	router.navigate("/", gameState, user);
@@ -214,39 +155,27 @@ async function	handleUserSettingsForm(form: HTMLFormElement, gameState: GameStat
 	const	new2fa: boolean = (document.getElementById("edit-2fa") as HTMLInputElement).checked;
 
 	console.log(newUsername, newEmail, new2fa);
-	const response: Response = await sendRequest(`/api/user/${user.getId()}`, 'post', {
+	
+	// verifyEmail("user-profile");
+	
+	const response: Response = await sendRequest(`/api/user/${user.getId()}`, 'post', { // transforme en me et en post
 		username: newUsername,
 		email: newEmail,
 		is2faEnable: new2fa
 	});
 	
-	if (!response.ok) {
-		const	p = document.getElementById("user-setting-msg-error");
-		if (!p)
-			console.error(response.statusText);
-		else {
-			const	result = await response.json();
-			p.textContent = result?.error || "An unexpected error has occurred";
-		}
-		return ;
-	}
-
-	const res: Response = await sendRequest(`/api/jwt/${user.getId()}`, 'delete', null);
-
-	if (!res.ok) {
-		const	p = document.getElementById("user-setting-msg-error");
-		if (!p)
-			console.error(response.statusText);
-		else {
-			const	result = await response.json();
-			p.textContent = (result?.error || "An unexpected error has occurred") + ". We recommend that you try logging out!";
-		}
-		return ;
-	}
+	if (!response.ok)
+		return displayError(response, "user-setting-msg-error");
 	
-	user.logout();
+	user.setUsername(newUsername);
+
+	const res: Response = await sendRequest("/api/jwt/refresh", 'PATCH', {});
+
+	if (!res.ok)
+		return displayError(res, "user-setting-msg-error");
+	
+	// location.reload();
 	router.navigate("/", gameState, user);
-	location.reload();
 }
 
 async function	handleAddFriendForm(form: HTMLFormElement, gameState: GameState, user: User) {

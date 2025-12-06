@@ -1,14 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   displayDate.ts                                     :+:      :+:    :+:   */
+/*   display.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/11/29 20:42:49 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/05 21:44:22 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+export async function displayError(response: Response, idMsgError: string) {
+	const	p = document.getElementById(idMsgError);
+	if (!p) {
+		console.error("No HTMLElement named \`msg-error\`.");
+		console.error(response.statusText);
+	} else {
+		try {
+			console.log("2")
+			const	result = await response.json();
+			console.log("3")
+			p.textContent = result?.error || "An unexpected error has occurred";
+		} catch (error) {
+			console.error(error);
+			console.error(response.statusText);
+		}
+	}
+}
 
 export function displayDate(min: number) {
 	const localeClient = navigator.language;

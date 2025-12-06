@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:00:05 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:33:10 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 20:47:16 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,33 @@ import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 /* ====================== FUNCTION ====================== */
 
 export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
+	gatewayFastify.get('/payload/twofa', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await gatewayAxios.get('https://jwt:3000/twofa/payload/twofa',
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+
+			if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+	gatewayFastify.get('/payload/access', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await gatewayAxios.get('https://jwt:3000/payload/access',
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+	
 	gatewayFastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.post('https://jwt:3000',
@@ -34,30 +61,60 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 			if (response.headers['set-cookie'])
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
-			reply.send(response.data);
+			return reply.send(response.data);
 		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
 	});
 
-	gatewayFastify.get('/twofa', async (request: FastifyRequest, reply: FastifyReply) => {
+	gatewayFastify.post('/twofa/validate', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.get('https://jwt:3000/twofa',
+			const	response: AxiosResponse = await gatewayAxios.post('https://jwt:3000/twofa/validate',
+				request.body,
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
+	gatewayFastify.patch('/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await gatewayAxios.patch('https://jwt:3000/refresh',
+				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 
 			if (response.headers['set-cookie'])
-				reply.header('Set-Cookie', response.headers['set-cookie']);
+				reply.header('Set-Cookie', response.headers['set-cookie']);	
 
-			reply.send(response.data);
+			return reply.send(response.data);
 		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);
-		}
+		}	
 	});
 
-	gatewayFastify.post('/twofa/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
+	gatewayFastify.patch('/twofa/recreat', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.post('https://jwt:3000/twofa/refresh',
+			const	response: AxiosResponse = await gatewayAxios.patch('https://jwt:3000/twofa/recreat',
+				request.body,
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+
+			if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);	
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}	
+	});	
+
+	gatewayFastify.patch('/refresh/access', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await gatewayAxios.patch('https://jwt:3000/refresh/access',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
@@ -65,39 +122,15 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 			if (response.headers['set-cookie'])
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
-			reply.send(response.data);
+			return reply.send(response.data);
 		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
 	});
 
-	gatewayFastify.get('/twofa/validate', async (request: FastifyRequest, reply: FastifyReply) => {
+	gatewayFastify.patch('/refresh/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.get('https://jwt:3000/twofa/validate',
-				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
-			);
-
-			reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
-		}
-	});
-
-	gatewayFastify.get('/validate', async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			const	response: AxiosResponse = await gatewayAxios.get('https://jwt:3000/validate',
-				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
-			);
-
-			reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
-		}
-	});
-
-	gatewayFastify.post('/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			const	response: AxiosResponse = await gatewayAxios.post('https://jwt:3000/refresh',
+			const	response: AxiosResponse = await gatewayAxios.patch('https://jwt:3000/refresh/refresh',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
@@ -105,7 +138,7 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 			if (response.headers['set-cookie'])
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
-			reply.send(response.data);
+			return reply.send(response.data);
 		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
@@ -120,22 +153,22 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 			if (response.headers['set-cookie'])
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
-			reply.send(response.data);
+			return reply.send(response.data);
 		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
 	});
 
-	gatewayFastify.delete('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
+	gatewayFastify.delete('/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.delete('https://jwt:3000/:id',
+			const	response: AxiosResponse = await gatewayAxios.delete('https://jwt:3000/me',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 
 			if (response.headers['set-cookie'])
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
-			reply.send(response.data);
+			return reply.send(response.data);
 		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}

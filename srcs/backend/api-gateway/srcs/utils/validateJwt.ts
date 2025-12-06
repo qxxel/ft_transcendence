@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validateJwt.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 22:08:37 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/26 22:15:59 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 18:27:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ import type { FastifyRequest }					from 'fastify'
 /* ====================== FUNCTION ====================== */
 
 export async function	getValidUserId(request: FastifyRequest): Promise<AxiosHeaderValue> {
-	const	response: AxiosResponse = await gatewayAxios.get('https://jwt:3000/validate',
+	const	response: AxiosResponse = await gatewayAxios.get('https://jwt:3000/payload/access',
 		{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 	);
 

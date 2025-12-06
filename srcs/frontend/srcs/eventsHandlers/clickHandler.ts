@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 15:46:10 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/06 20:34:33 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { getAndRenderFriends }	from "../friends/getAndRenderFriends.js"
-import { PongGame }				from "../Pong/Pong.js"
-import { TankGame } 			from "../v3/tank.js"
-import { TournamentController } from "../tournament.js"
-import { Router }		from "../router/router.js"
-import { sendRequest }	from "../utils/sendRequest.js"
-import { User }			from "../user/user.js"
-import { displayDate }	from "../utils/displayDate.js"
-import { btnCooldown }	from "../utils/buttonCooldown.js"
+import { getAndRenderFriends }			from "../friends/getAndRenderFriends.js"
+import { PongGame }						from "../Pong/Pong.js"
+import { TankGame } 					from "../v3/tank.js"
+import { TournamentController } 		from "../tournament.js"
+import { Router }						from "../router/router.js"
+import { sendRequest }					from "../utils/sendRequest.js"
+import { getMenuLog, getMenuLogout }	from "../utils/getMenu.js"
+import { User }							from "../user/user.js"
+import { displayDate, displayError }	from "../utils/display.js"
+import { btnCooldown }					from "../utils/buttonCooldown.js"
 
 import type { GameState }   from "../index.js"
 import { Tank } from "../v3/class_tank.js"
-
 
 /* ====================== FUNCTIONS ====================== */
 
@@ -47,13 +47,7 @@ async function  onClickLogout(router: Router, gameState: GameState, user: User):
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML =
-			`<a href="/">Home</a>
-			<a href="/games">Play</a>
-			<a href="/tournament-setup">Tournament</a>
-			<a href="/sign-in">Sign in</a>
-			<a href="/sign-up">Sign up</a>
-			<a href="/about">About</a>`;
+		menu.innerHTML = getMenuLogout();
 
 	router.navigate("/", gameState, user);
 }
@@ -91,8 +85,16 @@ async function	onClickHistory(router: Router, gameState: GameState, user: User):
 	router.navigate("/history", gameState, user);
 }
 
-function	onClickCancel(user: User): void {
+function	onClickCancel(): void {
 	console.log("Cancel");
+
+	const verifyEmail = document.getElementById("verify-email");
+	if (verifyEmail)
+		verifyEmail.hidden = true;
+
+	const userProfile = document.getElementById("user-profile");
+	if (userProfile)
+		userProfile.hidden = false;
 
 	const viewElements = document.querySelectorAll(".view-mode");
 	const editElements = document.querySelectorAll(".edit-mode");
@@ -117,7 +119,14 @@ async function	onClickDeleteAccount(router: Router, gameState: GameState, user: 
 		console.log(response.statusText);
 		return ;
 	}
-	await onClickLogout(router, gameState, user);
+
+	user.logout();
+
+	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	if (menu)
+		menu.innerHTML = getMenuLogout();
+
+	router.navigate("/", gameState, user);
 }
 
 async function	onClickDeleteTwofa(router: Router, gameState: GameState, user: User): Promise<void> {
@@ -125,14 +134,21 @@ async function	onClickDeleteTwofa(router: Router, gameState: GameState, user: Us
 	
 	if (!confirm("Are you sure you want to go back?"))
 		return ;
+	router.canLeave = true;
 
 	const	response: Response = await sendRequest(`/api/auth/twofa/me`, 'delete', null);
 	if (!response.ok) {
 		console.log(response.statusText);
 		return ;
 	}
-	router.canLeave = true;
-	await onClickLogout(router, gameState, user);
+	
+	user.logout();
+
+	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	if (menu)
+		menu.innerHTML = getMenuLogout();
+
+	router.navigate("/sign-up", gameState, user);
 }
 
 async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GameState, user: User): Promise<void> {
@@ -140,28 +156,14 @@ async function	onClickSkipeVerifyEmailDev(router: Router, gameState: GameState, 
 	
 	const response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
 
-	if (!response.ok) {
-		const	p = document.getElementById("verify-email-msg-error");
-		if (!p)
-			console.error("No HTMLElement named \`msg-error\`.");
-		else {
-			const	result = await response.json();
-			p.textContent = result?.error || "An unexpected error has occurred";
-		}
-		return ;
-	}
+	if (!response.ok)
+		return displayError(response, "verify-email-msg-error");
 
 	user.setSigned(true);
 	
 	var menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
-		menu.innerHTML =
-			`<a href="/">Home</a>
-			<a href="/games">Play</a>
-			<a href="/tournament-setup">Tournament</a>
-			<a href="/user">Profile</a>
-			<a onclick="onClickLogout();" id="logout">Logout</a>
-			<a href="/about">About</a>`;
+		menu.innerHTML = getMenuLog();
 
 	router.canLeave = true;
 	router.navigate("/", gameState, user);
@@ -176,6 +178,16 @@ async function	onClickNewCode(router: Router, gameState: GameState, user: User):
     locks.forEach(e => (e as HTMLElement).hidden = false);
     if (btnSend) btnSend.disabled = true;
 
+	const res = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
+
+    if (!res.ok) {
+        console.error("Erreur API:", res.statusText);
+        if (btnSend) btnSend.disabled = false;
+        if (spanCooldown) spanCooldown.textContent = "";
+        locks.forEach(e => (e as HTMLElement).hidden = true);
+        return;
+    }
+
     const response = await sendRequest('/api/twofa/otp', 'GET', null);
 
     if (!response.ok) {
@@ -187,34 +199,6 @@ async function	onClickNewCode(router: Router, gameState: GameState, user: User):
     }
     btnCooldown(); 
     displayDate(5);
-}
-
-async function onClickGetMessage(): Promise<void> {
-	const   res: Response = await fetch('/api/jwt', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
-	});
-
-	const   data: unknown = await res.json();
-	console.log(data);
-}
-
-async function onClickValidateMessage(): Promise<void> {
-	const   res: Response = await fetch('/api/jwt/validate', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
-	});
-
-	const   data: unknown = await res.json();
-	console.log(data);
 }
 
 async function onClickBlockMessage(): Promise<void> {
@@ -252,20 +236,6 @@ async function onClickBlockMessage(): Promise<void> {
 		}
 	}
 	
-	console.log(data);
-}
-
-async function onClickRefreshMessage(): Promise<void> {
-	const   res: Response = await fetch('/api/jwt/refresh', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
-	});
-
-	const   data: unknown = await res.json();
 	console.log(data);
 }
 
@@ -421,15 +391,14 @@ export async function   setupClickHandlers(router: Router, user: User, gameState
 
 	(window as any).onClickEdit = () => onClickEdit(user);
 	(window as any).onClickHistory = () => onClickHistory(router, gameState, user);
-	(window as any).onClickCancel = () => onClickCancel(user);
+
+	(window as any).onClickCancel = () => onClickCancel();
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount(router, gameState, user);
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa(router, gameState, user);
+
 	(window as any).onClickNewCode = () => onClickNewCode(router, gameState, user);
 	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(router, gameState, user);
 
-	(window as any).onClickGetMessage = onClickGetMessage;
-	(window as any).onClickValidateMessage = onClickValidateMessage;
-	(window as any).onClickRefreshMessage = onClickRefreshMessage;
 	(window as any).onClickBlockMessage = onClickBlockMessage;
 	
 	(window as any).showDifficultyMenu = showDifficultyMenu;

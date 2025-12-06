@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 18:39:59 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 19:50:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ function	getCookies(request: FastifyRequest): any {
 
 async function isLoggedIn(cookie: string | undefined): Promise<boolean> {
 	try {
-		const	res: AxiosResponse = await authAxios.get("https://jwt:3000/validate", { withCredentials: true, headers: { Cookie: cookie || "" } });
+		const	res: AxiosResponse = await authAxios.get("https://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: cookie || "" } });
 
 		return (res.status === 200);
 	} catch (err: any) {
@@ -79,7 +79,7 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 		const	user: any = userRes.data;
 
 		try {
-			const	jwtRes: AxiosResponse = await authAxios.post('https://jwt:3000/verifyEmail', user);
+			const	jwtRes: AxiosResponse = await authAxios.post('https://jwt:3000/twofa', user);
 
 			const	hash: string = await argon2.hash(request.body.password);
 			await authServ.addClient(user.id, hash);
@@ -169,9 +169,9 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 		if (!jwtAccess)
 			throw new Error("You are not connected");
 
-		const	payload: AxiosResponse = await authAxios.get("https://jwt:3000/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	payload: AxiosResponse = await authAxios.get("https://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
-		const	response: AxiosResponse = await authAxios.delete(`https://jwt:3000/${payload.data.id}`);
+		const	response: AxiosResponse = await authAxios.delete("https://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
@@ -192,11 +192,11 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 		if (!jwtTwofa)
 			return reply.status(204).send();
 		
-		const	payload: AxiosResponse = await authAxios.get("https://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	payload: AxiosResponse = await authAxios.get("https://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		
 		deleteClientExpires(authServ, payload.data.id);
 		
-		const	response: AxiosResponse = await authAxios.delete(`https://jwt:3000/${payload.data.id}`);
+		const	response: AxiosResponse = await authAxios.delete("https://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
@@ -209,7 +209,7 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 
 async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	jwtRes = await authAxios.get("https://jwt:3000/twofa/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	jwtRes = await authAxios.post("https://jwt:3000/twofa/validate", request.body, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		if (jwtRes.headers['set-cookie'])
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);

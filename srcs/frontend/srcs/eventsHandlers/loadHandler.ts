@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/03 14:43:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/06 20:35:07 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 import { router }		from "../index.js"
 import { sendRequest }	from "../utils/sendRequest.js"
+import { getMenuLog }			from "../utils/getMenu.js"
 import { User }			from "../user/user.js"
 
 import type { GameState }	from "../index.js"
@@ -28,7 +29,7 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 	document.addEventListener("DOMContentLoaded", async (event: Event) => {
 		console.log("DOMContentLoaded");
 
-		const	response: Response = await sendRequest('/api/jwt/validate', 'GET', null);
+		const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
 
 		if (!response.ok)
 			return;
@@ -43,14 +44,7 @@ async function	handleLoadPage(gameState: GameState, user: User): Promise<void> {
 
 		const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)
-			menu.innerHTML =
-				`<a href="/">Home</a>
-				<a href="/games">Play</a>
-				<a href="/tournament-setup">Tournament</a>
-				<a href="/user">Profile</a>
-				<a href="/friends">Friends</a>
-				<a onclick="onClickLogout();" id="logout">Logout</a>
-				<a href="/about">About</a>`;
+			menu.innerHTML = getMenuLog();
 
 		router.navigate('/', gameState, user);
 	});

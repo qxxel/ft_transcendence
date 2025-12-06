@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/03 21:55:32 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 18:43:05 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ async function sendMailMessage(mail: any) {
 
 async function	generateMailCode(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	payload: AxiosResponse = await twofaAxios.get("https://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	payload: AxiosResponse = await twofaAxios.get("https://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		const	otpSecretKey: string = generateOtpSecretKey();
 		const	otp: string = generateOtp(otpSecretKey);
 
@@ -101,7 +101,7 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 		if (!request.body)
 			throw new twofaError.RequestEmptyError("The request is empty");
 
-		const	payload: AxiosResponse = await twofaAxios.get("https://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	payload: AxiosResponse = await twofaAxios.get("https://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		const	otpSecretKey = await twofaServ.getOtpSecretKeyByIdClient(payload.data.id);
 
@@ -110,7 +110,7 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 		if (!isOtpValid)
 			throw new twofaError.BadCodeError("Bad code");
 
-		const	jwtRes = await twofaAxios.get("https://jwt:3000/twofa/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	jwtRes = await twofaAxios.post("https://jwt:3000/twofa/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
 		if (jwtRes.headers['set-cookie'])
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);

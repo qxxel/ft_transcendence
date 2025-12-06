@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 13:47:15 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 18:09:39 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { btnCooldown }			from "../utils/buttonCooldown.js"
-import { displayDate }			from "../utils/displayDate.js"
+import { displayDate }			from "../utils/display.js"
 import { getAndRenderFriends }  from  "../friends/getAndRenderFriends.js"
 import { PongGame }				from "../Pong/Pong.js"
 import { router }				from "../index.js"
@@ -134,7 +134,7 @@ export async function  pathActions(currentPath: string, gameState: GameState, us
 }
 
 async function loadTwofa(gameState: GameState, user: User) {
-	const	Response: Response = await sendRequest(`/api/jwt/twofa`, 'get', null);
+	const	Response: Response = await sendRequest(`/api/jwt/payload/twofa`, 'get', null);
 	if (!Response.ok) {
 		console.log(Response.statusText);
 		router.navigate("/sign-in", gameState, user);
