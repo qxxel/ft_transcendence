@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:50:08 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 22:16:40 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ async function	recreatedToken(request: FastifyRequest, reply: FastifyReply): Pro
 		if (!oldUser.id)
 			throw new MissingIdError("Id of the user is missing !");
 		
-		const	resUser: AxiosResponse = await jwtAxios.get(`https://user:3000/${oldUser.id}`, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	resUser: AxiosResponse = await jwtAxios.get(`http://user:3000/${oldUser.id}`, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		const	newUser: userDto = resUser.data as userDto;
 
 		if (!newUser.id)
