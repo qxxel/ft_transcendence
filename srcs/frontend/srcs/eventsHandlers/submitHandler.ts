@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 20:24:15 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 22:12:19 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,8 +199,20 @@ interface	userUpdate {
 	is2faEnable?: boolean;
 }
 
-async function verifyProfileStep(user: userUpdate): Promise<boolean> {
+async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Promise<boolean> {
 	return new Promise((resolve) => {
+		if (isChangeEmail) {
+			const twofaElements = document.querySelectorAll(".twofa");
+	
+			twofaElements.forEach(e => {
+				(e as HTMLElement).hidden = false;
+			});
+			const	digitCode = (document.getElementById("digit-code") as HTMLInputElement);
+	
+			if (digitCode) {
+				digitCode.required = true;
+			}
+		}
 
 		const verifyForm = document.getElementById("confirm-setting-form") as HTMLFormElement;
 
@@ -208,9 +220,10 @@ async function verifyProfileStep(user: userUpdate): Promise<boolean> {
 			event.preventDefault();
 			const form = event.target as HTMLFormElement;
 			const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
+			const	password: string = (document.getElementById("confirm-setting-password") as HTMLInputElement).value;
 			form.reset();
 
-			const response: Response = await sendRequest('/api/auth/updateUser', 'PATCH', { otp, user });
+			const response: Response = await sendRequest('/api/auth/updateUser', 'PATCH', { otp, password, user });
 			if (!response.ok) 
 				return displayError(response, "confirm-setting-msg-error");
 			router.canLeave = true;
@@ -241,7 +254,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	if (resultGetUser.username == newUsername
 		&& resultGetUser.email == newEmail
 		&& resultGetUser.is2faEnable == new2fa
-	) return ; // display erreur nothing has update
+	) return router.navigate("/user");
 	
 	const postUser: Response = await sendRequest(`/api/user/me/validate`, 'post', {
 		username: newUsername,
@@ -259,7 +272,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		is2faEnable: new2fa,
 	}
 
-	const verified = await verifyProfileStep(userUpdate);
+	const verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail));
 	if (!verified) 
 		return;
 

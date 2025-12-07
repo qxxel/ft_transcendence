@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 20:37:03 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 22:22:46 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ interface	user {
 }
 
 interface	updateUserBody {
-	otp: string;
+	otp?: string;
+	password: string;
 	user: user;
 }
 
@@ -182,41 +183,38 @@ async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, 
 
 async function	updateUser(request: FastifyRequest<{ Body: updateUserBody}>, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		console.log("1");
+		if (!request.body)
+			throw new Error("The request is empty");
+		
+		const	password: string = request.body.password;
+		const	otp: string | undefined = request.body.otp;
+		const	user: user = request.body.user;
+
 		const	{ jwtAccess } = getCookies(request);
 		
-		console.log("2");
 		if (!jwtAccess)
 			throw new Error("You are not connected");
 		
-		console.log("3");
 		const payload = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		
 		if (!payload.data.id)
 			throw new Error("invalide id");
 		
-		console.log("4");
-		if (!request.body)
-			throw new Error("The request is empty");
+		const	pwdHash: string = await authServ.getPasswordByIdClient(payload.data.id);
+		if (!await argon2.verify(pwdHash, password))
+			throw new twofaError.WrongCredentialsError("Invalid.");
+
+		const	oldUserRes: AxiosResponse = await authAxios.get(`http://user:3000/me`, {headers: { 'user-id': payload.data.id }});
+		if (user.email && oldUserRes.data.email !== user.email) {
+			await authAxios.post('http://twofa:3000/validate', { otp }, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } } );
+		}
+			
+		const	userRes: AxiosResponse = await authAxios.patch(`http://user:3000/me`, user, {headers: { 'user-id': payload.data.id }});
+		const	jwtRes: AxiosResponse= await authAxios.patch(`http://jwt:3000/refresh`, {}, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		
-		console.log("5");
-		const	otp: string = request.body.otp;
-		console.log("6");
-		const	jwtRes: AxiosResponse = await authAxios.post('http://twofa:3000/validate', { otp }, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } } );
-		
-		console.log("7");
 		if (jwtRes.headers['set-cookie'])
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
 		
-		console.log("8");
-		const	user: user = request.body.user;
-		
-		console.log("9");
-		const	userRes: AxiosResponse = await authAxios.patch(`http://user:3000/me`, user, {headers: { 'user-id': payload.data.id }});
-		console.log("10");
-		await authAxios.patch(`http://jwt:3000/refresh`, {}, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-		console.log("11");
-
 		return reply.status(201).send(userRes.data);
 	} catch (err: unknown) {
 		return errorsHandler(authFastify, reply , err);
