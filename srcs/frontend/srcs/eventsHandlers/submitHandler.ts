@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 19:03:28 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 20:24:15 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,26 +192,30 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 	router.navigate("/");
 }
 
-async function verifyProfileStep(): Promise<boolean> {
+interface	userUpdate {
+	username?: string;
+	email?: string;
+	avatar?: string;
+	is2faEnable?: boolean;
+}
+
+async function verifyProfileStep(user: userUpdate): Promise<boolean> {
 	return new Promise((resolve) => {
 
 		const verifyForm = document.getElementById("confirm-setting-form") as HTMLFormElement;
 
-		const onSubmit = async (event: Event) => {
+		verifyForm.addEventListener("submit", async (event: Event) => {
 			event.preventDefault();
 			const form = event.target as HTMLFormElement;
 			const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
 			form.reset();
 
-			const response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
+			const response: Response = await sendRequest('/api/auth/updateUser', 'PATCH', { otp, user });
 			if (!response.ok) 
 				return displayError(response, "confirm-setting-msg-error");
-			verifyForm.removeEventListener("submit", onSubmit);
 			router.canLeave = true;
 			resolve(true);
-		};
-
-		verifyForm.addEventListener("submit", onSubmit);
+		});
 	});
 }
 
@@ -249,18 +253,15 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	
 	verifyEmail("user-profile", "confirm-setting");
 
-	const verified = await verifyProfileStep();
-	if (!verified) 
-		return;
-
-	const response: Response = await sendRequest(`/api/user/me`, 'PATCH', {
+	const userUpdate: userUpdate = {
 		username: newUsername,
 		email: newEmail,
-		is2faEnable: new2fa
-	});
-	
-	if (!response.ok)
-		return displayError(response, "user-setting-msg-error");
+		is2faEnable: new2fa,
+	}
+
+	const verified = await verifyProfileStep(userUpdate);
+	if (!verified) 
+		return;
 
 	appStore.setState((state) => ({
 		...state,
@@ -271,11 +272,6 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-	const res: Response = await sendRequest("/api/jwt/refresh", 'PATCH', {});
-
-	if (!res.ok)
-		return displayError(res, "user-setting-msg-error");
-	
 	router.navigate("/user");
 }
 

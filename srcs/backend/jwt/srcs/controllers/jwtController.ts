@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 18:54:47 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 20:35:04 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,8 @@ async function	recreatedToken(request: FastifyRequest, reply: FastifyReply): Pro
 		
 		if (!oldUser.id)
 			throw new MissingIdError("Id of the user is missing !");
-		console.log("C4")
+
 		const	resUser: AxiosResponse = await jwtAxios.get(`http://user:3000/${oldUser.id}`, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-		console.log("C5")
 		const	newUser: userDto = resUser.data as userDto;
 
 		if (!newUser.id)
@@ -210,12 +209,9 @@ async function	refreshTokenRefresh(request: FastifyRequest, reply: FastifyReply)
 async function	deleteSessionToken(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
 		const	cookies: any = getCookies(request);
-		console.log("0: ", cookies);
 		try {
-			console.log("1: ", cookies.jwtAccess);
 			await jose.jwtVerify(cookies.jwtAccess, jwtSecret);
 		} catch (error) {
-			console.log("2: ", cookies.jwtTwofa);
 			await jose.jwtVerify(cookies.jwtTwofa, jwtSecret);	
 		}
 

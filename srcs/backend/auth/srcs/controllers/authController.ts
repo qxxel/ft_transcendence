@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 18:38:59 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 20:37:03 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,17 @@ interface	SignInBody {
 	password: string;
 }
 
+interface	user {
+	username?: string;
+	email?: string;
+	avatar?: string;
+	is2faEnable?: boolean;
+}
+
+interface	updateUserBody {
+	otp: string;
+	user: user;
+}
 
 /* ====================== FUNCTIONS ====================== */
 
@@ -169,6 +180,49 @@ async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, 
 	}
 }
 
+async function	updateUser(request: FastifyRequest<{ Body: updateUserBody}>, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		console.log("1");
+		const	{ jwtAccess } = getCookies(request);
+		
+		console.log("2");
+		if (!jwtAccess)
+			throw new Error("You are not connected");
+		
+		console.log("3");
+		const payload = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		
+		if (!payload.data.id)
+			throw new Error("invalide id");
+		
+		console.log("4");
+		if (!request.body)
+			throw new Error("The request is empty");
+		
+		console.log("5");
+		const	otp: string = request.body.otp;
+		console.log("6");
+		const	jwtRes: AxiosResponse = await authAxios.post('http://twofa:3000/validate', { otp }, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } } );
+		
+		console.log("7");
+		if (jwtRes.headers['set-cookie'])
+			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
+		
+		console.log("8");
+		const	user: user = request.body.user;
+		
+		console.log("9");
+		const	userRes: AxiosResponse = await authAxios.patch(`http://user:3000/me`, user, {headers: { 'user-id': payload.data.id }});
+		console.log("10");
+		await authAxios.patch(`http://jwt:3000/refresh`, {}, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		console.log("11");
+
+		return reply.status(201).send(userRes.data);
+	} catch (err: unknown) {
+		return errorsHandler(authFastify, reply , err);
+	}
+}
+
 async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
 		const	{ jwtAccess } = getCookies(request);
@@ -239,6 +293,9 @@ export async function	authController(authFastify: FastifyInstance): Promise<void
 	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
 	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
 	authFastify.post<{ Body: { otp: string } }>('/validateUser', validateUser);
+
+	authFastify.patch<{ Body: updateUserBody }>('/updateUser', updateUser);
+
 	authFastify.delete('/me', deleteClient);
 	authFastify.delete('/twofa/me', deleteTwofaClient);
 

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:58:55 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 19:42:42 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,24 +113,16 @@ export async function	onClickHistory(targetId: number | null, targetName: string
 function	onClickCancel(): void {
 	console.log("Cancel");
 
-	const verifyEmail = document.getElementById("verify-email");
-	if (verifyEmail)
-		verifyEmail.hidden = true;
+	const confirmSetting = document.getElementById("confirm-setting");
+	if (confirmSetting)
+	{
+		router.navigate("/user");
+		router.canLeave = true;
+		return ;
+	}
 
-	const userProfile = document.getElementById("user-profile");
-	if (userProfile)
-		userProfile.hidden = false;
-
-	const viewElements = document.querySelectorAll(".view-mode");
-	const editElements = document.querySelectorAll(".edit-mode");
-	
-	viewElements.forEach(e => {
-		(e as HTMLElement).hidden = false;
-	});
-	
-	editElements.forEach(e => {
-		(e as HTMLElement).hidden = true;
-	});
+	router.navigate("/")
+	router.canLeave = true;
 }
 
 async function	onClickDeleteAccount(): Promise<void> {
@@ -195,7 +187,7 @@ async function	onClickDeleteTwofa(): Promise<void> {
 	if (socket && socket.connected)
 		socket.disconnect();
 
-	router.navigate("/");
+	router.navigate(router.Path);
 }
 
 async function	onClickSkipeVerifyEmailDev(): Promise<void> {
@@ -586,7 +578,7 @@ export async function   setupClickHandlers(): Promise<void> {
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount();
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa();
 	(window as any).onClickNewCode = () => onClickNewCode();
-	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(); // /!\ detete this ligne
+	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(); // /!\ detete this
 
 	(window as any).onClickBlockMessage = onClickBlockMessage;
 	

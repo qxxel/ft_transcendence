@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:00:05 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 22:15:41 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 20:16:32 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 	gatewayFastify.get('/payload/twofa', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.get('http://jwt:3000/twofa/payload/twofa',
+			const	response: AxiosResponse = await gatewayAxios.get('http://jwt:3000/payload/twofa',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 
