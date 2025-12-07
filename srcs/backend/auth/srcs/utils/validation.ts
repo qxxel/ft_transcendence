@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:58:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 15:53:54 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 16:35:32 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ export function	isValidPassword(name: string): validationResult {
 		{ test: v => /[a-z]/.test(v), message: "Password must contain at least one lowercase letter" },
 		{ test: v => /[A-Z]/.test(v), message: "Password must contain at least one uppercase letter" },
 		{ test: v => /[0-9]/.test(v), message: "Password must contain at least one number" },
-		{ test: v => /[!@#$%^&*(),.?:{}|<>_\-+=~`[\]\\/]/.test(v), message: "Password must contain at least one special character" }
+		{ test: v => /[!-/:-@\[-`{-~]/.test(v), message: "Password must contain at least one special character" }
 	];
 
 	return validate(name, rules);
