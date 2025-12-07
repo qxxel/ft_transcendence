@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:20:26 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 14:01:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { errorsHandler }	from "../utils/errorsHandler.js"
+import { extractUserId }	from "../utils/extractHeaders.js"
 import { usersAddDto }		from "../dtos/usersAddDto.js"
 import { usersRespDto }		from "../dtos/usersRespDto.js"
 import { usersUpdateDto }	from "../dtos/usersUpdateDto.js"
@@ -35,6 +36,19 @@ interface	userUpdate {
 
 export async function	usersController(userFastify: FastifyInstance): Promise<void> {
 	// GET A USER WITH HIS ID
+	userFastify.get('/me', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	userId: number = extractUserId(request);
+
+			const	user: usersRespDto = await usersServ.getUserById(userId);
+
+			return reply.code(200).send(user);
+		}
+		catch (err: unknown) {
+			return errorsHandler(userFastify, reply, err);
+		}
+	});
+
 	userFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const	{ id } = request.params as { id: string };
 		const	parseId: number = parseInt(id, 10);
