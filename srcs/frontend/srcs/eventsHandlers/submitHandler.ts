@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 22:06:17 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 14:50:41 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,9 +205,30 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 
 	console.log(newUsername, newEmail, new2fa);
 	
-	// verifyEmail("user-profile");
+	const getUser: Response = await sendRequest(`/api/user/me`, 'get', null)
+	if (!getUser.ok)
+		return displayError(getUser, "user-setting-msg-error");
 	
-	const response: Response = await sendRequest(`/api/user/me`, 'post', {
+	const	resultGetUser = await getUser.json();
+	
+	console.log(resultGetUser.username, resultGetUser.email, resultGetUser.is2faEnable);
+	if (resultGetUser.username == newUsername
+		&& resultGetUser.email == newEmail
+		&& resultGetUser.is2faEnable == new2fa
+	) return ; // display erreur nothing has update
+	
+	const postUser: Response = await sendRequest(`/api/user/me/validate`, 'post', {
+		username: newUsername,
+		email: newEmail,
+		is2faEnable: new2fa
+	});
+	if (!postUser.ok)
+		return displayError(postUser, "user-setting-msg-error");
+	
+	if (resultGetUser.email != newEmail)
+		verifyEmail("user-profile");
+
+	const response: Response = await sendRequest(`/api/user/me`, 'patch', {
 		username: newUsername,
 		email: newEmail,
 		is2faEnable: new2fa
@@ -230,8 +251,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	if (!res.ok)
 		return displayError(res, "user-setting-msg-error");
 	
-	// location.reload();	//	MATHIS: SURTOUT PAS => SPA
-	router.navigate("/");
+	router.navigate("/user");
 }
 
 async function	handleAddFriendForm(form: HTMLFormElement) {
