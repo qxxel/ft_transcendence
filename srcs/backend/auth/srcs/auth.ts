@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/06 22:12:25 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ authFastify.register(formBody);
 
 authFastify.register(cors, {
 	origin: 'https://localhost:8080',
-	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
 });

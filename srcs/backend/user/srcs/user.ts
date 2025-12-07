@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/02 23:02:20 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ userFastify.register(formBody);
 
 userFastify.register(cors, {
 	origin: 'https://localhost:8080',
-	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
 });

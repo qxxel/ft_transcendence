@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:33:51 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ gameFastify.register(formBody);
 
 gameFastify.register(cors, {
 	origin: 'https://localhost:8080',
-	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
 });
