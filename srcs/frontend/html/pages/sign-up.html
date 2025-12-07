@@ -15,7 +15,11 @@
         
         <div class="form-group">
             <label for="sign-up-password">Password:</label>
-            <input type="password" id="sign-up-password" name="password" placeholder="Enter your password">
+            <input type="password" id="sign-up-password" name="password"
+                placeholder="Enter your password" required minlength="8" maxlength="64"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,64}$"
+                title="Password must contain at least 8 characters, including uppercase, lowercase, number and special character."
+            >  <!-- /!\ add special charactere -->
         </div>
         
         <p id="sign-up-msg-error" class="msg-error"></p>

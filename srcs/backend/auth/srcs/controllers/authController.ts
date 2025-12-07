@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:56:59 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 15:33:53 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@ import argon2								from 'argon2'
 import { authAxios, authServ, authFastify }	from "../auth.js"
 import { deleteClientExpires }				from "../services/authService.js"
 import { errorsHandler }					from "../utils/errorsHandler.js"
+import { isValidPassword }					from "../utils/validation.js"
 import * as twofaError						from "../utils/throwErrors.js"
 
 import type	{ AxiosResponse }									from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
+import type { validationResult }								from "../utils/validation.js"
 
 
 /* ====================== INTERFACES ====================== */
@@ -71,7 +73,13 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 	try {
 		if (!request.body)
 			throw new twofaError.RequestEmptyError("The request is empty");
+		
+		const	validation: validationResult = isValidPassword(request.body.password)
+		if (!validation.result)
+			throw new Error(validation.error);
 
+		const	hash: string = await argon2.hash(request.body.password);
+		
 		if (await isLoggedIn(request.headers.cookie))
 			throw new twofaError.AlreadyConnectedError("You are already connected");
 
@@ -81,7 +89,6 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 		try {
 			const	jwtRes: AxiosResponse = await authAxios.post('http://jwt:3000/twofa', user);
 
-			const	hash: string = await argon2.hash(request.body.password);
 			await authServ.addClient(user.id, hash);
 
 			if (jwtRes.headers['set-cookie'])

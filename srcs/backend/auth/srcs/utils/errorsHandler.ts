@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/04 20:00:19 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 16:31:32 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,11 @@ export function	errorsHandler(twofaFastify: FastifyInstance, reply: FastifyReply
 	if (axios.isAxiosError(err)) {
 		if (err.response?.data?.error)
 			return reply.code(418).send({ error: err.response.data.error });
-
 		return reply.code(418).send({ error: err.message })
 	} else if (err instanceof twofaError.RequestEmptyError) {
+		logError(twofaFastify, err.message);
+		return reply.code(418).send({ errorType: err.name, error: err.message });
+	} else if (err instanceof Error) {
 		logError(twofaFastify, err.message);
 		return reply.code(418).send({ errorType: err.name, error: err.message });
 	}
