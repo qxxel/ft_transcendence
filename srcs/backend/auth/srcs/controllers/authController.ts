@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 13:57:55 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 14:56:59 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,9 +175,7 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 			throw new Error("invalide id");
 
 		await authAxios.delete(`http://user:3000/${payload.data.id}`);
-		try {
-			await authAxios.delete(`http://game:3000/user/${payload.data.id}`);
-		} catch (e) {}
+		await authAxios.delete(`http://game:3000/user/${payload.data.id}`);
 
 		const	response: AxiosResponse = await authAxios.delete("http://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 

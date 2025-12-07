@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/05 21:37:50 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 14:21:17 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ export class	usersService {
 		throw new NotExistError(`This user does not exist`);
 	}
 
-	async updateUserById(userId: number, user: usersUpdateDto): Promise<void> {
+	async isPossibleUpdateUser(userId: number, user: usersUpdateDto): Promise<void> {
 		const	query: string = "SELECT 1 FROM users WHERE id = ? LIMIT 1";
 		if (!(await this.usersRepo.isTaken(query, [userId.toString()])))
 			throw new NotExistError(`The user ${userId} does not exist`);
@@ -88,12 +88,16 @@ export class	usersService {
 			if (await this.usersRepo.isTaken(nameQuery, [email]))
 				throw new IsTakenError(`The name ${email} is already taken. Try another one !`);
 		}
+	}
+
+	async updateUserById(userId: number, user: usersUpdateDto): Promise<void> {
+		 this.isPossibleUpdateUser(userId, user);
 		
-		if (username !== undefined)
-			await this.usersRepo.updateUsernameById(userId, username);
+		if (user.getUsername() !== undefined)
+			await this.usersRepo.updateUsernameById(userId, user.getUsername()!);
 		
-		if (email !== undefined)
-			await this.usersRepo.updateEmailById(userId, email);
+		if (user.getEmail() !== undefined)
+			await this.usersRepo.updateEmailById(userId, user.getEmail()!);
 
 		if (user.getAvatar() !== undefined)
 			await this.updateAvatarById(userId, user.getAvatar()!);

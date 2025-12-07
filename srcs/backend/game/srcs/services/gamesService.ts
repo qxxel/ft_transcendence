@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gamesService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:48:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:35:15 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 14:56:17 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ export class	GamesService {
 	async deleteGame(gameId: number): Promise<void> {
 		const	query: string = "SELECT 1 FROM games WHERE id = ? LIMIT 1";
 		if (!(await this.gamesRepo.isTaken(query, [gameId.toString()])))
-			throw new NotExistError(`The game ${gameId} does not exist`);
+			return ;	//	AXEL verify si j'ai bien fait
 
 		return await this.gamesRepo.deleteGame(gameId);
 	}
@@ -60,8 +60,8 @@ export class	GamesService {
 	async deleteClientGames(userId: number): Promise<void> {
 		const	query: string = "SELECT 1 FROM games WHERE id_client = ? LIMIT 1";
 		if (!(await this.gamesRepo.isTaken(query, [userId.toString()])))
-			throw new NotExistError(`User ${userId} hasn't play any game.`);
+			return ;	//	AXEL verify si j'ai pas tout casser
 
-		return await this.gamesRepo.deleteGame(userId);
+		return await this.gamesRepo.deleteClientGames(userId);
 	}
 }

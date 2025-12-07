@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 13:58:49 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 14:34:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,20 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			return requestErrorsHandler(gatewayFastify, reply, err);										//
 		}																									//
 	});																										//
+
+	gatewayFastify.post('/me/validate', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	userId: AxiosHeaderValue = await getValidUserId(request);
+
+			const	response: AxiosResponse = await gatewayAxios.post(`http://user:3000/me/validate`, request.body,
+				{ headers: { 'user-id': userId } }
+			);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
 
 	gatewayFastify.patch('/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
