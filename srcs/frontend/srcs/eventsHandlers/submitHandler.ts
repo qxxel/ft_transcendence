@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:50:41 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 19:03:28 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-	verifyEmail("sign-up");
+	verifyEmail("sign-up", "verify-email");
 }
 
 async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
@@ -170,7 +170,6 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 
 	const response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
 
-	
 	if (!response.ok)
 		return displayError(response, "2fa-msg-error");
 
@@ -191,6 +190,29 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 
 	router.canLeave = true;
 	router.navigate("/");
+}
+
+async function verifyProfileStep(): Promise<boolean> {
+	return new Promise((resolve) => {
+
+		const verifyForm = document.getElementById("confirm-setting-form") as HTMLFormElement;
+
+		const onSubmit = async (event: Event) => {
+			event.preventDefault();
+			const form = event.target as HTMLFormElement;
+			const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
+			form.reset();
+
+			const response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
+			if (!response.ok) 
+				return displayError(response, "confirm-setting-msg-error");
+			verifyForm.removeEventListener("submit", onSubmit);
+			router.canLeave = true;
+			resolve(true);
+		};
+
+		verifyForm.addEventListener("submit", onSubmit);
+	});
 }
 
 async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
@@ -225,10 +247,13 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	if (!postUser.ok)
 		return displayError(postUser, "user-setting-msg-error");
 	
-	if (resultGetUser.email != newEmail)
-		verifyEmail("user-profile");
+	verifyEmail("user-profile", "confirm-setting");
 
-	const response: Response = await sendRequest(`/api/user/me`, 'patch', {
+	const verified = await verifyProfileStep();
+	if (!verified) 
+		return;
+
+	const response: Response = await sendRequest(`/api/user/me`, 'PATCH', {
 		username: newUsername,
 		email: newEmail,
 		is2faEnable: new2fa

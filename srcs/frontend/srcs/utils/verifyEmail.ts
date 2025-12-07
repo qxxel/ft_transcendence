@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:11:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/05 20:06:58 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 18:22:30 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@ import { router }       from "../index.js"
 import { displayDate }	from "./display.js"
 import { sendRequest }	from "./sendRequest.js"
 
-export async function	verifyEmail(idDivHidden: string): Promise<void> {
+export async function	verifyEmail(idDivHidden: string, idDivVisible: string): Promise<void> {
 
 	const	divHidden = document.getElementById(idDivHidden);
 	if (divHidden)
 		divHidden.hidden = true;
 
-	const	divVerifyEmail = document.getElementById("verify-email");
+	const	divVerifyEmail = document.getElementById(idDivVisible);
 	if (divVerifyEmail)
 		divVerifyEmail.hidden = false;
 

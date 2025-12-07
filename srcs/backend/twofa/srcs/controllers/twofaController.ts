@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:44:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 18:41:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,12 @@ async function sendMailMessage(mail: any) {
 
 async function	generateMailCode(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	payload: AxiosResponse = await twofaAxios.get("http://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		let	payload: AxiosResponse;
+		try {
+			payload = await twofaAxios.get("http://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		} catch (error) {
+			payload = await twofaAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		}
 		const	otpSecretKey: string = generateOtpSecretKey();
 		const	otp: string = generateOtp(otpSecretKey);
 
@@ -101,22 +106,32 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 		if (!request.body)
 			throw new twofaError.RequestEmptyError("The request is empty");
 
-		const	payload: AxiosResponse = await twofaAxios.get("http://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-
+		let	payload: AxiosResponse;
+		let	isJwtTwofa: boolean;
+		try {
+			payload = await twofaAxios.get("http://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+			isJwtTwofa = true;
+		} catch (error) {
+			payload = await twofaAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+			isJwtTwofa = false;
+		}
+		
 		const	otpSecretKey = await twofaServ.getOtpSecretKeyByIdClient(payload.data.id);
-
+		
 		const	isOtpValid = verifyOtp(otpSecretKey, request.body.otp);
 		
 		if (!isOtpValid)
 			throw new twofaError.BadCodeError("Bad code");
-
-		const	jwtRes = await twofaAxios.post("http://jwt:3000/twofa/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-
-		if (jwtRes.headers['set-cookie'])
-			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
-
+		
+		if (isJwtTwofa) {
+			const	jwtRes = await twofaAxios.post("http://jwt:3000/twofa/validate", {}, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+			
+			if (jwtRes.headers['set-cookie'])
+				reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
+		}
+		
 		await twofaServ.deleteOtpByIdClient(payload.data.id);
-
+		
 		return reply.status(200).send(payload.data.id);
 	} catch (err: unknown) {
 		return errorsHandler(twofaFastify, reply, err);

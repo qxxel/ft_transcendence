@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:30:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 18:54:31 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,10 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 	userFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const	{ id } = request.params as { id: string };
 		const	parseId: number = parseInt(id, 10);
-
+		
 		try {
 			const	user: usersRespDto = await usersServ.getUserById(parseId);
+			console.log("B2")
 
 			return reply.code(200).send(user);
 		}
