@@ -24,7 +24,7 @@ import { getAndRenderFriends }  from  "../friends/getAndRenderFriends.js"
 import { PongGame }				from "../Pong/pong.js"
 import { router }				from "../index.js"
 import { sendRequest }			from "../utils/sendRequest.js"
-import { TankGame }				from "../v3/tank.js"
+import { TankGame }				from "../tank/tank.js"
 import { TournamentController }	from "../Pong/tournament.js"
 
 import type { AppState, UserState }	from "../objects/store.js"

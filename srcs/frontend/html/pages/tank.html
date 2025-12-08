@@ -9,7 +9,28 @@
     </div>
   </header>
 
-  <canvas id="tank-canvas" width="800" height="800"></canvas>
+
+	<div class="legend-controls-container" style="top: 20px;">
+	<div class="legend-title">Player 1</div>
+	<div class="legend-item"><span>Move :</span> W / A / S / D</div>
+	<div class="legend-item"><span>Rotate Cannon :</span> Q / E</div>
+	<div class="legend-item"><span>Fire :</span> Space</div>
+	<div class="legend-title">Player 2</div>
+	<div class="legend-item"><span>Move :</span> I / J / K / L</div>
+	<div class="legend-item"><span>Rotate Cannon :</span> U / O </div>
+	<div class="legend-item"><span>Fire :</span> . (period) </div>
+	</div>
+
+  <canvas id="tank-canvas" width="600" height="600"></canvas>
+
+  <div id="powerup-legend" class="legend-container">
+  </div>
+  
+  <div class="game-footer">
+      <button onclick="quitGame()" class="btn-leave">
+          Exit Game
+      </button>
+  </div>
 
   <div id="game-over-dashboard" class="dashboard">
     <div class="dashboard-header">

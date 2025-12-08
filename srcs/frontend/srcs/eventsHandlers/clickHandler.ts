@@ -19,7 +19,7 @@ import { GameOptions }						from "../Pong/objects/gameOptions.js"
 import { getMenu }							from "../utils/getMenu.js"
 import { initHistoryListeners } 			from "../history/getAndRenderHistory.js"
 import { PongGame }							from "../Pong/pong.js"
-import { TankGame } 						from "../v3/tank.js"
+import { TankGame } 						from "../tank/tank.js"
 import { TournamentController } 			from "../Pong/tournament.js"
 import { router }							from "../index.js"
 import { sendRequest }						from "../utils/sendRequest.js"
@@ -27,7 +27,7 @@ import { socket }							from "../socket/socket.js"
 import { displayDate, displayError  }		from "../utils/display.js"
 import { btnCooldown }						from "../utils/buttonCooldown.js"
 
-import { Tank }	from "../v3/class_tank.js"
+import { Tank }	from "../tank/class_tank.js"
 import { Game }	from "../Pong/gameClass.js"
 
 /* ====================== FUNCTIONS ====================== */

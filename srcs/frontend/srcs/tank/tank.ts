@@ -51,11 +51,12 @@ export class	TankGame extends Game {
 		private canvasId: string, 
 		private map_name: string,
 		private powerupFrequency: number = 0,
-		private star1: boolean = true,
+		private star1: boolean = false,
       	private star2: boolean = false,
       	private star3: boolean = false
 	) {
 		super();
+		(window as any).quitGame = () => this.quitGame();
 	}
 
 	public setCtx(): void {
@@ -75,6 +76,7 @@ export class	TankGame extends Game {
 		this.reset_state();
 		this.updateNameDisplay()
 		this.setup_tanks();
+		this.generateLegend();
 
 	}
 
@@ -284,6 +286,40 @@ export class	TankGame extends Game {
     	if (p2Span) p2Span.innerText = this.player2Name + "";// + ": " + GSTATE.STATS2.win;
   	}
 
+	private generateLegend(): void {
+		const legendContainer = document.getElementById('powerup-legend');
+		if (!legendContainer) return;
+
+		legendContainer.innerHTML = '';
+		legendContainer.style.display = 'none';
+
+		if (this.star1 == false && this.star2 == false && this.star3 == false) return;
+
+		legendContainer.style.display = 'flex';
+		let html = '<div class="legend-title">Power-Ups</div>';
+
+		const createRow = (text: string, fill: string, stroke: string) => {
+			return `
+			<div class="legend-item">
+					<div class="legend-bubble" style="background-color: ${fill}; border-color: ${stroke};"></div>
+					<span>${text}</span>
+			</div>`;
+		};
+
+		if (this.star1) {
+			html += createRow("Health", "#32AA28FF", "#0000FF");
+		}
+
+		if (this.star2) {
+			html += createRow("Speed", "#3296FFFF", "#0000FF");
+		}
+
+		if (this.star3) {
+			html += createRow("Haste", "#643296FF", "#0000FF");
+		}
+		legendContainer.innerHTML = html;
+	}
+
 	public	start(): void {
 		if (!this.animationFrameId) {
 			this.startTime = Date.now();
@@ -301,7 +337,12 @@ export class	TankGame extends Game {
 			GSTATE.ACTORS.splice(0,GSTATE.ACTORS.length)
 		console.log('TankGame Stopped');
 		}
+	}
 
+	private quitGame() {
+		this.stop();
+		// socket.emit('leave-game');
+		router.navigate('/games');
 	}
 
 	public reset_state():void {
