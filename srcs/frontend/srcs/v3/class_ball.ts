@@ -81,11 +81,15 @@ export class	Ball extends Actor {
 			if (a.getRect().collide(rect1))
 			{
 				if (a instanceof Tank) {
+					if (this.author)
+					{
+						console.log("THIS.AUTHOR.id ==", this.author.id);
+						if (this.author.id == 0)
+							GSTATE.STATS1.hit += 1;
+						else if (this.author.id == 1)
+							GSTATE.STATS2.hit += 1;
+					}
 					a.addHealth(-this.damage);
-					if (a.id == 0)
-						GSTATE.STATS1.hit += 1;
-					else (a.id == 1)
-						GSTATE.STATS2.hit += 1;
 					this.destroy();
 					return true;
 				}
@@ -143,7 +147,7 @@ export class	Collectible extends Ball {
         		this.color = {r:50,g:170,b:40};
 				break;
 			case 'speed':
-        		this.color = {r:0,g:100,b:150};
+        		this.color = {r:50,g:150,b:255};
         	    break;
 			case 'haste':
         		this.color = {r:100,g:50,b:150};
@@ -159,10 +163,10 @@ export class	Collectible extends Ball {
 		const b = new Actor(0,0);
 		switch (this.type) {
 			case 'heal':
-				a.addHealth(+1);
+				a.addHealth(1);
 				break;
 			case 'speed':
-				a.speed = Math.min(a.speed+1, 10);
+				a.speed = Math.min(a.speed+0.15, 2);
 				break;
 			case 'haste':
 				a.fire_rate = Math.max(a.fire_rate-250, 500);
@@ -193,7 +197,6 @@ export class	Collectible extends Ball {
 	draw(ctx: CanvasRenderingContext2D): void {
 		ctx.beginPath();
 		ctx.fillStyle = `#${((this.color.r << 16) | (this.color.g << 8) | this.color.b).toString(16).padStart(6,'0')}`; // HUH
-		
         ctx.strokeStyle = '#0000FF';
 		ctx.arc(this.x + this.w/2, this.y + this.h/2, this.w/2, 0, Math.PI * 2);
 		ctx.fill();

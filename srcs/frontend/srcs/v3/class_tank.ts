@@ -55,7 +55,7 @@ export class	Tank extends Actor {
 
 	update(input: Input): void {
 		this.listen(input);
-		if (Date.now() - this.fire_last < this.fire_rate)
+		if (Date.now() - this.fire_last <= this.fire_rate)
 			GSTATE.REDRAW = true;
 	}
 
@@ -106,7 +106,7 @@ export class	Tank extends Actor {
 		for (let a of GSTATE.ACTORS) {
 			if (a == this)
 				continue;
-			if (a.getRect().collide(spawnRect))
+			if (!(a instanceof Tank) && a.getRect().collide(spawnRect))
 				return;
 		}
 

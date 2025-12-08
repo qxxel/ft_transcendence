@@ -15,7 +15,7 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { AppState, appStore, UserState }	from "../objects/store.js"
+import { AppState, appStore, GamesState, UserState }	from "../objects/store.js"
 import { Game }								from "../Pong/gameClass.js"
 import { GSTATE }							from "./global.js"
 import { router }							from "../index.js"
@@ -72,8 +72,10 @@ export class	TankGame extends Game {
         this.player2Name = "Player 2";
     	this.lastCollectibleSpawn = Date.now();
 		GSTATE.REDRAW = true;
+		this.reset_state();
 		this.updateNameDisplay()
 		this.setup_tanks();
+
 	}
 
 	setWinningScore(newWinningScore: number) {}
@@ -153,7 +155,6 @@ export class	TankGame extends Game {
 	}
 
 	private	gameLoop(): void {
-
 		this.listen();
 		this.update();
 		this.input.update(); // CURRENT SAVED INTO PREVIOUS
@@ -180,6 +181,8 @@ export class	TankGame extends Game {
 						a.destroy();
 				}
 				this.setup_tanks();
+				this.reset_state();
+				this.updateNameDisplay()
 				this.hideEndGameDashboard();
 				this.isPaused = false;
 				this.startTime = Date.now();
@@ -238,25 +241,25 @@ export class	TankGame extends Game {
     const minutes = Math.floor(matchDurationSeconds / 60);
     const seconds = matchDurationSeconds % 60;
 
-    const winnerName = "WINNER HERE"; //this.score1 > this.score2 ? this.player1Name : this.player2Name;
+    const winnerName = GSTATE.STATS1.win == 1 ? this.player1Name : this.player2Name;
     const winnerDisplay = document.getElementById('winner-display');
 
 	if (winnerDisplay) winnerDisplay.innerText = `${winnerName} Wins!`;
 
-	const accuracy1 = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit / GSTATE.STATS1.fire) * 100 : 0;
-	const accuracy2 = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit / GSTATE.STATS2.fire) * 100 : 0;
+	const accuracy1: number = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit / GSTATE.STATS1.fire) * 100 : 0;
+	const accuracy2: number = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit / GSTATE.STATS2.fire) * 100 : 0;
 
 	document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
-	document.getElementById('p1-stat-name')!.innerText = 'Player 1:';
+	document.getElementById('p1-stat-name')!.innerText = 'Player 1';
 	document.getElementById('stat-p1-accuracy')!.innerText = `${accuracy1.toFixed(1)}%`;
 	document.getElementById('stat-p1-fire')!.innerText = `${GSTATE.STATS1.fire}`;
-	document.getElementById('stat-p1-hit')!.innerText = `${GSTATE.STATS1.hit}`;
+	document.getElementById('stat-p1-hit')!.innerText = `${GSTATE.STATS2.hit}`;
 	document.getElementById('stat-p1-bounce')!.innerText = `${GSTATE.STATS1.bounce}`;
 
-	document.getElementById('p2-stat-name')!.innerText = 'Player 2:';
+	document.getElementById('p2-stat-name')!.innerText = 'Player 2';
 	document.getElementById('stat-p2-accuracy')!.innerText = `${accuracy2.toFixed(1)}%`;
 	document.getElementById('stat-p2-fire')!.innerText = `${GSTATE.STATS2.fire}`;
-	document.getElementById('stat-p2-hit')!.innerText = `${GSTATE.STATS2.hit}`;
+	document.getElementById('stat-p2-hit')!.innerText = `${GSTATE.STATS1.hit}`;
 	document.getElementById('stat-p2-bounce')!.innerText = `${GSTATE.STATS2.bounce}`;
 
 
@@ -275,10 +278,10 @@ export class	TankGame extends Game {
 	}
 
 	private updateNameDisplay() {
-    const p1Span = document.getElementById('p1-name');
-    const p2Span = document.getElementById('p2-name');
-    if (p1Span) p1Span.innerText = this.player1Name + ": " + GSTATE.STATS1.win;
-    if (p2Span) p2Span.innerText = this.player2Name + ": " + GSTATE.STATS2.win;
+    	const p1Span = document.getElementById('p1-name');
+    	const p2Span = document.getElementById('p2-name');
+    	if (p1Span) p1Span.innerText = this.player1Name + "";// + ": " + GSTATE.STATS1.win;
+    	if (p2Span) p2Span.innerText = this.player2Name + "";// + ": " + GSTATE.STATS2.win;
   	}
 
 	public	start(): void {
@@ -301,6 +304,14 @@ export class	TankGame extends Game {
 
 	}
 
+	public reset_state():void {
+		GSTATE.STATS1.win = 0; 		GSTATE.STATS2.win = 0; 
+		GSTATE.STATS1.lose = 0;		GSTATE.STATS2.lose = 0;
+		GSTATE.STATS1.fire = 0;		GSTATE.STATS2.fire = 0;
+		GSTATE.STATS1.hit = 0;		GSTATE.STATS2.hit = 0;
+		GSTATE.STATS1.miss = 0;		GSTATE.STATS2.miss = 0;
+		GSTATE.STATS1.bounce = 0;	GSTATE.STATS2.bounce = 0;
+	}
 	private	draw(): void {}
 
 }
