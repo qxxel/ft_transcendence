@@ -250,13 +250,13 @@ export class	TankGame extends Game {
 	const accuracy2: number = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit / GSTATE.STATS2.fire) * 100 : 0;
 
 	document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
-	document.getElementById('p1-stat-name')!.innerText = 'Player 1';
+	document.getElementById('p1-stat-name')!.innerText = this.player1Name + "";
 	document.getElementById('stat-p1-accuracy')!.innerText = `${accuracy1.toFixed(1)}%`;
 	document.getElementById('stat-p1-fire')!.innerText = `${GSTATE.STATS1.fire}`;
 	document.getElementById('stat-p1-hit')!.innerText = `${GSTATE.STATS2.hit}`;
 	document.getElementById('stat-p1-bounce')!.innerText = `${GSTATE.STATS1.bounce}`;
 
-	document.getElementById('p2-stat-name')!.innerText = 'Player 2';
+	document.getElementById('p2-stat-name')!.innerText = this.player2Name + "";
 	document.getElementById('stat-p2-accuracy')!.innerText = `${accuracy2.toFixed(1)}%`;
 	document.getElementById('stat-p2-fire')!.innerText = `${GSTATE.STATS2.fire}`;
 	document.getElementById('stat-p2-hit')!.innerText = `${GSTATE.STATS1.hit}`;

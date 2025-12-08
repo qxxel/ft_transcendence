@@ -279,6 +279,16 @@
     font-weight: normal;
 }
 
+#dashboard-table {
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.stat-table {
+    color: #FFFF00;
+    font-weight: bold;
+}
+
 .stats-grid {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;

@@ -1,63 +1,54 @@
 <div class="game-container">
-  
-  <header class="game-header">
 
+  <header class="game-header">
     <div class="scoreboard">
       <span id="p1-name">Player1</span>
     </div>
-
     <div class="scoreboard">
       <span id="p2-name">Player2</span>
     </div>
-
   </header>
 
   <canvas id="tank-canvas" width="800" height="800"></canvas>
 
   <div id="game-over-dashboard" class="dashboard">
-    
     <div class="dashboard-header">
         <h1>GAME OVER</h1>
         <h2 id="winner-display">AI Wins!</h2>
     </div>
 
-        <table>
-  <thead>
-    <tr>
-      <th scope="col" id="stat-duration">--</th>
-      <th scope="col">Accuracy</th>
-      <th scope="col">Fire</th>
-      <th scope="col">Hit</th>
-      <th scope="col">Bounce</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row" id="p1-stat-name">Player 1</th>
-      <td id="stat-p1-accuracy">0.0%</td>
-      <td id="stat-p1-fire">--</span>
-      <td id="stat-p1-hit">--</span>
-      <td id="stat-p1-bounce">--</span>
-    </tr>
-    <tr>
-      <th scope="row" id="p2-stat-name">Player 2</th>
-      <td id="stat-p2-accuracy">0.0%</td>
-      <td id="stat-p2-fire">--</span>
-      <td id="stat-p2-hit">--</span>
-      <td id="stat-p2-bounce">--</span>
-    </tr>
-  </tbody>
-
+  <table id="dashboard-table" class="stats-grid">
+    <thead>
+      <tr>
+        <th scope="col" id="stat-duration">--</th>
+        <th scope="col">Accuracy</th>
+        <th scope="col">Fire</th>
+        <th scope="col">Hit</th>
+        <th scope="col">Bounce</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row" id="p1-stat-name">Player 1</th>
+        <td class="stat-table" id="stat-p1-accuracy">0.0%</td>
+        <td class="stat-table" id="stat-p1-fire">--</span>
+        <td class="stat-table" id="stat-p1-hit">--</span>
+        <td class="stat-table" id="stat-p1-bounce">--</span>
+      </tr>
+      <tr>
+        <th scope="row" id="p2-stat-name">Player 2</th>
+        <td class="stat-table" id="stat-p2-accuracy">0.0%</td>
+        <td class="stat-table" id="stat-p2-fire">--</span>
+        <td class="stat-table" id="stat-p2-hit">--</span>
+        <td class="stat-table" id="stat-p2-bounce">--</span>
+      </tr>
+    </tbody>
     <tfoot>
-    <tr>
-            <th scope="row" colspan="5" id="restart-msg" class="press-space">Restart</th>
-        <!-- <p id="restart-msg" class="press-space">Restart</p> -->
-    </tr>
-  </tfoot>
-
+      <tr>
+        <th scope="row" colspan="5" id="restart-msg" class="press-space">Restart</th>
+      </tr>
+    </tfoot>
   </table>
-
-
   </div>
 
 </div>
