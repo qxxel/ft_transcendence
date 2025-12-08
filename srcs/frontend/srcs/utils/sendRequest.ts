@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sendRequest.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:23:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 18:25:17 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 00:47:26 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== FUNCTION ====================== */
 
-async function	sendMainRequest(path: string, requestMethod: string, body: Object | null): Promise<Response> {
+async function	sendMainRequest(path: string, requestMethod: string, body: any | null): Promise<Response> {
 	let	response: Response;
 
 	if (body === null)
@@ -25,6 +25,14 @@ async function	sendMainRequest(path: string, requestMethod: string, body: Object
 			credentials: "include"
 		});
 	}
+	else if (body instanceof FormData)
+    {
+        response = await fetch(path, {
+			method: requestMethod,
+			credentials: "include",
+            body: body 
+		});
+    }
 	else
 	{
 		response = await fetch(path, {

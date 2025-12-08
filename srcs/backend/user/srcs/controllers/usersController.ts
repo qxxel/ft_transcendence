@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 23:18:02 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 00:47:18 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,17 @@
 
 import { errorsHandler }	from "../utils/errorsHandler.js"
 import { extractUserId }	from "../utils/extractHeaders.js"
+import { usersUpdateDto }	from "../dtos/usersUpdateDto.js"
+import fs					from 'fs'
+import { pipeline }			from 'stream/promises'
+import { unlink }			from 'fs/promises'
 import { usersAddDto }		from "../dtos/usersAddDto.js"
 import { usersRespDto }		from "../dtos/usersRespDto.js"
-import { usersUpdateDto }	from "../dtos/usersUpdateDto.js"
-import { usersServ, userStatsServ } 		from "../user.js"
+import { userAxios, usersServ, userStatsServ } 		from "../user.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
+import type { AxiosResponse } from "axios"
+import { InvalidFileError, NoFileError } from "../utils/throwErrors.js"
 
 
 interface	userUpdate {
@@ -140,6 +145,59 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 			await usersServ.updateUserById(userId, userUpdate);
 
 			return reply.code(201).send(userId);
+		}
+		catch (err: unknown) {
+			return errorsHandler(userFastify, reply, err);
+		}
+	});
+
+	// ADD A AVATAR
+	userFastify.post('/avatar', async (request: FastifyRequest, reply: FastifyReply) => {
+		if (!request.body)
+		{
+			userFastify.log.error("The request is empty");
+			console.error("The request is empty");
+			return reply.code(400).send({ error: "The request is empty" });
+		}
+
+		try {
+			const	response: AxiosResponse = await userAxios.get('http://jwt:3000/validate',
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+
+			const	userId: number = response.data.id;
+			
+			const data = await request.file();
+			if (!data)
+				throw new NoFileError("No file uploaded.");
+
+			const validMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+			if (!validMimeTypes.includes(data.mimetype))
+				throw new InvalidFileError("Invalid file type. Only JPG, PNG, WEBP allowed.");
+
+			try {
+				const currentUser = await usersServ.getUserById(userId);
+				const oldAvatar = currentUser.getAvatar();
+
+				if (oldAvatar) {
+					const oldPath = `/app/uploads/${oldAvatar}`;
+
+					await fs.promises.access(oldPath, fs.constants.F_OK);
+					await unlink(oldPath);
+				}
+			} catch (err) {
+				console.error("Error retrieving user for avatar deletion", err);
+			}
+
+			const extension = data.filename.split('.').pop();
+			const fileName = `avatar_${userId}_${Date.now()}.${extension}`;
+			const uploadPath = `/app/uploads/${fileName}`;
+
+			await pipeline(data.file, fs.createWriteStream(uploadPath));
+
+			await usersServ.updateAvatarById(userId, fileName);
+
+			return reply.code(200).send({ avatar: fileName });
 		}
 		catch (err: unknown) {
 			return errorsHandler(userFastify, reply, err);

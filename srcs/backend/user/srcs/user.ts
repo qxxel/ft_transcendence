@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   user.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 00:47:01 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORT ====================== */
 
+import axios		from 'axios'
 import cors			from '@fastify/cors'
 import Fastify		from 'fastify'
-import formBody				from '@fastify/formbody'
-import fs			from 'fs'
-import sqlite3Pkg from 'sqlite3'
+import formBody		from '@fastify/formbody'
+import multipart	from '@fastify/multipart'
+import sqlite3Pkg	from 'sqlite3'
 
 import { friendshipsController }	from "./controllers/friendshipsController.js"
 import { friendshipsService }		from "./services/friendshipsService.js"
@@ -27,6 +28,14 @@ import { usersRepository }			from "./repositories/usersRepository.js"
 import { userStatsController }		from "./controllers/userStatsController.js"
 import { userStatsService }			from "./services/userStatsService.js"
 import { userStatsRepository }		from "./repositories/userStatsRepository.js"
+
+
+/* ====================== AXIOS VARIABLES ====================== */
+
+export const	userAxios = axios.create({
+	timeout: 1000
+});
+
 
 /* ====================== DATABASE ====================== */
 
@@ -55,6 +64,12 @@ export const	friendshipsServ = new friendshipsService(new friendshipsRepository(
 const	userFastify = Fastify({
 	logger: true,
 	trustProxy: true
+});
+
+userFastify.register(multipart, {
+    limits: {
+        fileSize: 5 * 1024 * 1024,
+    }
 });
 
 userFastify.register(formBody);
