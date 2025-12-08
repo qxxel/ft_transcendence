@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 16:25:58 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 21:47:24 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 import { appStore }				from "../objects/store.js"
 import { btnCooldown }			from "../utils/buttonCooldown.js"
-import { displayDate }			from "../utils/displayDate.js"
+import { displayDate }			from "../utils/display.js"
 import { Game }					from "../Pong/gameClass.js"
 import { GameOptions }			from "../Pong/objects/gameOptions.js"
 import { getAndRenderFriends }  from  "../friends/getAndRenderFriends.js"
@@ -147,7 +147,7 @@ export async function  pathActions(currentPath: string): Promise<void> {
 }
 
 async function loadTwofa() {
-	const	Response: Response = await sendRequest(`/api/jwt/twofa`, 'get', null);
+	const	Response: Response = await sendRequest(`/api/jwt/payload/twofa`, 'get', null);
 	if (!Response.ok) {
 		console.log(Response.statusText);
 		router.navigate("/sign-in");

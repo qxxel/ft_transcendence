@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:04:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/06 21:48:29 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ import { sendRequest }	from "../utils/sendRequest.js"
 /* ====================== FUNCTION ====================== */
 
 export async function	preNavigation(currentPath: string): Promise<void> {
-	const	respToken: Response = await sendRequest('/api/jwt/validate', 'GET', null);
+	const	respToken: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
 	if (!respToken.ok)
 		console.error((await respToken.json()).error);														//	AXEL: A VERIFIER
 
@@ -34,7 +34,7 @@ export async function	preNavigation(currentPath: string): Promise<void> {
 export async function	redirections(currentPath: string): Promise<void> {
 	if (['/friends', '/user'].includes(currentPath))
 	{
-		const	response: Response = await sendRequest('/api/jwt/validate', 'GET', null);
+		const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
 
 		if (!response.ok)
 			return;

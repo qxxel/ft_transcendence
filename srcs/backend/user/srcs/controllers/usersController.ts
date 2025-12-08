@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 13:29:23 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 22:56:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@
 /* ====================== IMPORTS ====================== */
 
 import { errorsHandler }	from "../utils/errorsHandler.js"
+import { extractUserId }	from "../utils/extractHeaders.js"
 import { usersAddDto }		from "../dtos/usersAddDto.js"
 import { usersRespDto }		from "../dtos/usersRespDto.js"
+import { usersUpdateDto }	from "../dtos/usersUpdateDto.js"
 import { usersServ, userStatsServ } 		from "../user.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
@@ -34,12 +36,26 @@ interface	userUpdate {
 
 export async function	usersController(userFastify: FastifyInstance): Promise<void> {
 	// GET A USER WITH HIS ID
+	userFastify.get('/me', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	userId: number = extractUserId(request);
+
+			const	user: usersRespDto = await usersServ.getUserById(userId);
+
+			return reply.code(200).send(user);
+		}
+		catch (err: unknown) {
+			return errorsHandler(userFastify, reply, err);
+		}
+	});
+
 	userFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const	{ id } = request.params as { id: string };
 		const	parseId: number = parseInt(id, 10);
-
+		
 		try {
 			const	user: usersRespDto = await usersServ.getUserById(parseId);
+			console.log("B2")
 
 			return reply.code(200).send(user);
 		}
@@ -87,32 +103,43 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 	});
 
 	// UPDATE A USER WITH HIS ID
-	userFastify.post<{ Body: userUpdate }>('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
+	userFastify.post<{ Body: userUpdate }>('/me/validate', async (request: FastifyRequest, reply: FastifyReply) => {
 		if (!request.body) {
 			userFastify.log.error("The request is empty");
 			console.error("The request is empty");
 			return reply.code(400).send({ error: "The request is empty" });
 		}
-		const	{ id } = request.params as { id: string };
-		const	parseId: number = parseInt(id, 10);
-	
 		try {
-			const	oldUser: usersRespDto = await usersServ.getUserById(parseId);
-			const	userUpdate: userUpdate = request.body;
+			const	userId: number = extractUserId(request);
 
-			if (userUpdate.username !== undefined && userUpdate.username !== oldUser.getUsername())
-				await usersServ.updateUsernameById(parseId, userUpdate.username);
+			const	oldUser: usersRespDto = await usersServ.getUserById(userId);
+			const	userUpdate: usersUpdateDto = await new usersUpdateDto(request.body, oldUser);
 
-			if (userUpdate.email !== undefined && userUpdate.email !== oldUser.getEmail())
-				await usersServ.updateEmailById(parseId, userUpdate.email);
+			await usersServ.isPossibleUpdateUser(userId, userUpdate);
 
-			if (userUpdate.avatar !== undefined && userUpdate.avatar !== oldUser.getAvatar())
-				await usersServ.updateAvatarById(parseId, userUpdate.avatar);
-			
-			if (userUpdate.is2faEnable !== undefined && userUpdate.is2faEnable !== oldUser.getIs2faEnable())
-				await usersServ.update2faById(parseId, userUpdate.is2faEnable);
+			return reply.code(201).send({ valid: true });
+		}
+		catch (err: unknown) {
+			return errorsHandler(userFastify, reply, err);
+		}
+	});
 
-			return reply.code(201).send(parseId);
+	// UPDATE A USER WITH HIS ID
+	userFastify.patch<{ Body: userUpdate }>('/me', async (request: FastifyRequest, reply: FastifyReply) => {
+		if (!request.body) {
+			userFastify.log.error("The request is empty");
+			console.error("The request is empty");
+			return reply.code(400).send({ error: "The request is empty" });
+		}
+		try {
+			const	userId: number = extractUserId(request);
+
+			const	oldUser: usersRespDto = await usersServ.getUserById(userId);
+			const	userUpdate: usersUpdateDto = await new usersUpdateDto(request.body, oldUser);
+
+			await usersServ.updateUserById(userId, userUpdate);
+
+			return reply.code(201).send(userId);
 		}
 		catch (err: unknown) {
 			return errorsHandler(userFastify, reply, err);

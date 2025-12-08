@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   twofaController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:42:37 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 18:41:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORTS ====================== */
 
-import axios			from 'axios'
-import speakeasy		from 'speakeasy'
-import nodemailer		from 'nodemailer'
-import { twofaAxios, twofaServ, emailName, emailPass }	from "../twofa.js"
+import axios				from 'axios'
+import speakeasy			from 'speakeasy'
+import nodemailer			from 'nodemailer'
+import * as twofaError		from "../utils/throwErrors.js"
+import { errorsHandler }	from "../utils/errorsHandler.js"
+import { twofaAxios, twofaServ, emailName, emailPass, twofaFastify }	from "../twofa.js"
 
 import type { AxiosResponse }									from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
@@ -30,40 +32,22 @@ function generateOtpSecretKey() {
 }
 
 function generateOtp(secretKey: string) {
-	return speakeasy.totp(
-		{
+	return speakeasy.totp({
 		secret: secretKey,
 		encoding: 'base32',
 		digits: 4,
 		step: 3000,
-		}
-	);
+	});
 }
 
 function verifyOtp(secret: string, otp: string) {
-	return speakeasy.totp.verify(
-		{
+	return speakeasy.totp.verify( {
 		secret,
 		token: otp,
 		encoding: 'base32',
 		digits: 4,
 		step: 3000,
-		}
-	);
-}
-
-function errorsHandler(err: unknown): string {
-	if (axios.isAxiosError(err)) {
-		if (err.response?.data?.error)
-			return err.response.data.error;
-
-		return err.message;
-	}
-
-	if (err instanceof Error)
-		return err.message;
-
-	return "Unknown error";
+	});
 }
 
 function MailCodeMessage(user: string, otp: string, email: string) {
@@ -91,16 +75,17 @@ async function sendMailMessage(mail: any) {
 		greetingTimeout: 2000,
 		socketTimeout: 4000,
 	});
-	try {
-		await transporter.sendMail(mail);
-	} catch (error) {
-		throw error;
-	}
+	await transporter.sendMail(mail);
 }
 
 async function	generateMailCode(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	payload: AxiosResponse = await twofaAxios.get("http://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		let	payload: AxiosResponse;
+		try {
+			payload = await twofaAxios.get("http://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		} catch (error) {
+			payload = await twofaAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		}
 		const	otpSecretKey: string = generateOtpSecretKey();
 		const	otp: string = generateOtp(otpSecretKey);
 
@@ -112,59 +97,57 @@ async function	generateMailCode(request: FastifyRequest, reply: FastifyReply): P
 
 		return reply.status(200).send(otp);
 	} catch (err: unknown) {
-		const	msgError: string = errorsHandler(err);
-
-		console.error(msgError);
-
-		return reply.code(400).send({ error: msgError });
+		return errorsHandler(twofaFastify, reply, err);
 	}
 }
 
 async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }>, reply: FastifyReply): Promise<FastifyReply> {
 	try {
 		if (!request.body)
-			throw new Error("The request is empty");
+			throw new twofaError.RequestEmptyError("The request is empty");
 
-		const	payload: AxiosResponse = await twofaAxios.get("http://jwt:3000/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-
+		let	payload: AxiosResponse;
+		let	isJwtTwofa: boolean;
+		try {
+			payload = await twofaAxios.get("http://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+			isJwtTwofa = true;
+		} catch (error) {
+			payload = await twofaAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+			isJwtTwofa = false;
+		}
+		
 		const	otpSecretKey = await twofaServ.getOtpSecretKeyByIdClient(payload.data.id);
-
+		
 		const	isOtpValid = verifyOtp(otpSecretKey, request.body.otp);
 		
 		if (!isOtpValid)
-			throw new Error("Bad code");
-
-		const	jwtRes = await twofaAxios.get("http://jwt:3000/twofa/validate", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-
-		if (jwtRes.headers['set-cookie'])
-			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
-
+			throw new twofaError.BadCodeError("Bad code");
+		
+		if (isJwtTwofa) {
+			const	jwtRes = await twofaAxios.post("http://jwt:3000/twofa/validate", {}, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+			
+			if (jwtRes.headers['set-cookie'])
+				reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
+		}
+		
 		await twofaServ.deleteOtpByIdClient(payload.data.id);
-
+		
 		return reply.status(200).send(payload.data.id);
 	} catch (err: unknown) {
-		const	msgError: string = errorsHandler(err);
-
-		console.error(msgError);
-
-		return reply.code(400).send({ error: msgError });
+		return errorsHandler(twofaFastify, reply, err);
 	}
 }
 
 async function	deleteCodeOtp(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
-	const	{ id } = request.params as { id: string };
-	const	parseId: number = parseInt(id, 10);
 	try {
+		const	{ id } = request.params as { id: string };
+		const	parseId: number = parseInt(id, 10);
 
 		await twofaServ.deleteOtpByIdClient(parseId);
 		
 		return reply.status(204).send({ result: "deleted." });
 	} catch (err: unknown) {
-		const	msgError: string = errorsHandler(err);
-
-		console.error(msgError);
-
-		return reply.code(400).send({ error: msgError });
+		return errorsHandler(twofaFastify, reply, err);
 	}
 }
 

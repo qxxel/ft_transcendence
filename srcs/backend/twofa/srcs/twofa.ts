@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   twofa.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:21 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:59:43 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ export const	twofaAxios = axios.create({
 
 /* ====================== SERVER ====================== */
 
-const	twofaFastify: FastifyInstance = Fastify({
+export const	twofaFastify: FastifyInstance = Fastify({
 	logger: true,
 	trustProxy: true
 });
@@ -62,7 +62,7 @@ twofaFastify.register(formBody);
 
 twofaFastify.register(cors, {
 	origin: 'https://localhost:8080',
-	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
 });

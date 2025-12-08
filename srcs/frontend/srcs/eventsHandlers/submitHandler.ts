@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:04:21 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 22:12:19 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { verifyEmail }						from "../utils/verifyEmail.js"
 import { AppState, appStore, UserState }	from "../objects/store.js"
-import { displayDate }						from "../utils/displayDate.js"
+import { displayError }						from "../utils/display.js"
 import { getAndRenderFriends }				from "../friends/getAndRenderFriends.js"
 import { getMenu }							from "../utils/getMenu.js"
 import { router }							from "../index.js"
@@ -46,17 +47,11 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 		},
 		body: JSON.stringify({ identifier, password })
 	});
+	
+	if (!response.ok)
+			return displayError(response, "sign-in-msg-error");
 
 	const	result: any = await response.json();
-
-	if (!response.ok) {
-		const	p: HTMLElement | null = document.getElementById("sign-in-msg-error");
-		if (!p)
-			console.error("No HTMLElement named \`msg-error\`.");
-		else
-			p.textContent = result?.error || "An unexpected error has occurred";
-		return ;
-	}
 
 	if (socket && socket.connected)
 		socket.disconnect();
@@ -117,16 +112,10 @@ async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 		body: JSON.stringify({ username, email, password })
 	});
 
+	if (!response.ok)
+		return displayError(response, "sign-up-msg-error");
+	
 	const	result = await response.json();
-
-	if (!response.ok) {
-		const	p = document.getElementById("sign-up-msg-error");
-		if (!p)
-			console.error("No HTMLElement named \`msg-error\`.");
-		else
-			p.textContent = result?.error || "An unexpected error has occurred";
-		return ;
-	}
 
 	if (socket && socket.connected)
 		socket.disconnect();
@@ -140,30 +129,7 @@ async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-	const	divSignUp = document.getElementById("sign-up");
-	if (divSignUp)
-		divSignUp.hidden = true;
-
-	const	divVerifyEmail = document.getElementById("verify-email");
-	if (divVerifyEmail)
-		divVerifyEmail.hidden = false;
-
-	router.canLeave = false;
-
-	sendRequest('/api/twofa/otp', 'GET', null)
-		.then(async (res) => {
-			if (!res.ok) {
-				const	p = document.getElementById("verify-email-msg-error");
-				if (!p)
-					console.error("No HTMLElement named \`msg-error\`.");
-				else {
-					const	resJson = await res.json();
-					p.textContent = resJson?.error || "An unexpected error has occurred";
-				}
-				return ;
-			}
-		});
-	displayDate(5);
+	verifyEmail("sign-up", "verify-email");
 }
 
 async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
@@ -174,16 +140,8 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 	
 	const response: Response = await sendRequest('/api/auth/validateUser', 'post', { otp });
 
-	if (!response.ok) {
-		const	p = document.getElementById("verify-email-msg-error");
-		if (!p)
-			console.error("No HTMLElement named \`msg-error\`.");
-		else {
-			const	result = await response.json();
-			p.textContent = result?.error || "An unexpected error has occurred";
-		}
-		return ;
-	}
+	if (!response.ok)
+		return displayError(response, "verify-email-msg-error");
 
 	appStore.setState((state) => ({
 		...state,
@@ -212,17 +170,8 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 
 	const response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
 
-	
-	if (!response.ok) {
-		const	p = document.getElementById("2fa-msg-error");
-		if (!p)
-			console.error("No HTMLElement named \`msg-error\`.");
-		else {
-			const	result = await response.json();
-			p.textContent = result?.error || "An unexpected error has occurred";
-		}
-		return ;
-	}
+	if (!response.ok)
+		return displayError(response, "2fa-msg-error");
 
 	appStore.setState((state) => ({
 		...state,
@@ -243,6 +192,46 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 	router.navigate("/");
 }
 
+interface	userUpdate {
+	username?: string;
+	email?: string;
+	avatar?: string;
+	is2faEnable?: boolean;
+}
+
+async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Promise<boolean> {
+	return new Promise((resolve) => {
+		if (isChangeEmail) {
+			const twofaElements = document.querySelectorAll(".twofa");
+	
+			twofaElements.forEach(e => {
+				(e as HTMLElement).hidden = false;
+			});
+			const	digitCode = (document.getElementById("digit-code") as HTMLInputElement);
+	
+			if (digitCode) {
+				digitCode.required = true;
+			}
+		}
+
+		const verifyForm = document.getElementById("confirm-setting-form") as HTMLFormElement;
+
+		verifyForm.addEventListener("submit", async (event: Event) => {
+			event.preventDefault();
+			const form = event.target as HTMLFormElement;
+			const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
+			const	password: string = (document.getElementById("confirm-setting-password") as HTMLInputElement).value;
+			form.reset();
+
+			const response: Response = await sendRequest('/api/auth/updateUser', 'PATCH', { otp, password, user });
+			if (!response.ok) 
+				return displayError(response, "confirm-setting-msg-error");
+			router.canLeave = true;
+			resolve(true);
+		});
+	});
+}
+
 async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	console.log("Save Settings");
 	
@@ -254,48 +243,49 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	const	user: UserState = state.user;
 
 	console.log(newUsername, newEmail, new2fa);
-	const response: Response = await sendRequest(`/api/user/${user.id}`, 'post', {	// MATHIS: REQUETE /me
+	
+	const getUser: Response = await sendRequest(`/api/user/me`, 'get', null)
+	if (!getUser.ok)
+		return displayError(getUser, "user-setting-msg-error");
+	
+	const	resultGetUser = await getUser.json();
+	
+	console.log(resultGetUser.username, resultGetUser.email, resultGetUser.is2faEnable);
+	if (resultGetUser.username == newUsername
+		&& resultGetUser.email == newEmail
+		&& resultGetUser.is2faEnable == new2fa
+	) return router.navigate("/user");
+	
+	const postUser: Response = await sendRequest(`/api/user/me/validate`, 'post', {
 		username: newUsername,
 		email: newEmail,
 		is2faEnable: new2fa
 	});
+	if (!postUser.ok)
+		return displayError(postUser, "user-setting-msg-error");
+	
+	verifyEmail("user-profile", "confirm-setting");
 
-	if (!response.ok) {
-		const	p = document.getElementById("user-setting-msg-error");
-		if (!p)
-			console.error(response.statusText);
-		else {
-			const	result = await response.json();
-			p.textContent = result?.error || "An unexpected error has occurred";
-		}
-		return ;
+	const userUpdate: userUpdate = {
+		username: newUsername,
+		email: newEmail,
+		is2faEnable: new2fa,
 	}
 
-	const res: Response = await sendRequest(`/api/jwt/${user.id}`, 'delete', null);	// MATHIS: REQUETE /me
-
-	if (!res.ok) {
-		const	p = document.getElementById("user-setting-msg-error");
-		if (!p)
-			console.error(response.statusText);
-		else {
-			const	result = await response.json();
-			p.textContent = (result?.error || "An unexpected error has occurred") + ". We recommend that you try logging out!";
-		}
-		return ;
-	}
+	const verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail));
+	if (!verified) 
+		return;
 
 	appStore.setState((state) => ({
 		...state,
 		user: {
-			id: null,
-			username: null,
-			avatar: null,
-			isAuth: false
+			...state.user,
+			username: newUsername,
+			isAuth: new2fa
 		}
 	}));
 
-	router.navigate("/");
-	location.reload();	//	MATHIS: SURTOUT PAS => SPA
+	router.navigate("/user");
 }
 
 async function	handleAddFriendForm(form: HTMLFormElement) {

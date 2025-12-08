@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayAuthController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/03 21:19:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 20:26:20 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,23 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 		}
 	});
 
+	gatewayFastify.patch('/updateUser', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await gatewayAxios.patch(
+				'http://auth:3000/updateUser',
+				request.body,
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+			
+			if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
 	gatewayFastify.delete('/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.delete(
@@ -114,7 +131,7 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.post(
 				'http://auth:3000/dev/validate',
-				{},
+				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 			

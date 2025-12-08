@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwt.ts                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/02 23:02:02 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ export const	jwtAxios = axios.create({
 
 /* ====================== SERVER ====================== */
 
-const	jwtFastify: FastifyInstance = Fastify({
+export const	jwtFastify: FastifyInstance = Fastify({
 	logger: true,
 	trustProxy: true
 });
@@ -68,7 +68,7 @@ jwtFastify.register(formBody);
 
 jwtFastify.register(cors, {
 	origin: 'https://localhost:8080',
-	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
 });

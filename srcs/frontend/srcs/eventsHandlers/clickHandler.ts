@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:05:08 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 19:42:42 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,11 @@ import { TournamentController } 			from "../Pong/tournament.js"
 import { router }							from "../index.js"
 import { sendRequest }						from "../utils/sendRequest.js"
 import { socket }							from "../socket/socket.js"
-import { displayDate }						from "../utils/displayDate.js"
+import { displayDate, displayError  }		from "../utils/display.js"
 import { btnCooldown }						from "../utils/buttonCooldown.js"
 
 import { Tank }	from "../v3/class_tank.js"
 import { Game }	from "../Pong/gameClass.js"
-
 
 /* ====================== FUNCTIONS ====================== */
 
@@ -114,16 +113,16 @@ export async function	onClickHistory(targetId: number | null, targetName: string
 function	onClickCancel(): void {
 	console.log("Cancel");
 
-	const viewElements = document.querySelectorAll(".view-mode");
-	const editElements = document.querySelectorAll(".edit-mode");
-	
-	viewElements.forEach(e => {
-		(e as HTMLElement).hidden = false;
-	});
-	
-	editElements.forEach(e => {
-		(e as HTMLElement).hidden = true;
-	});
+	const confirmSetting = document.getElementById("confirm-setting");
+	if (confirmSetting)
+	{
+		router.navigate("/user");
+		router.canLeave = true;
+		return ;
+	}
+
+	router.navigate("/")
+	router.canLeave = true;
 }
 
 async function	onClickDeleteAccount(): Promise<void> {
@@ -137,7 +136,25 @@ async function	onClickDeleteAccount(): Promise<void> {
 		console.log(response.statusText);
 		return ;
 	}
-	await onClickLogout();
+
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			id: null,
+			username: null,
+			avatar: null,
+			isAuth: false
+		}
+	}));
+
+	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	if (menu)
+		menu.innerHTML = getMenu(false);
+			
+	if (socket && socket.connected)
+		socket.disconnect();
+
+	router.navigate("/");
 }
 
 async function	onClickDeleteTwofa(): Promise<void> {
@@ -145,6 +162,32 @@ async function	onClickDeleteTwofa(): Promise<void> {
 	
 	if (!confirm("Are you sure you want to go back?"))
 		return ;
+	router.canLeave = true;
+
+	const	response: Response = await sendRequest(`/api/auth/twofa/me`, 'delete', null);
+	if (!response.ok) {
+		console.log(response.statusText);
+		return ;
+	}
+	
+	appStore.setState((state) => ({
+		...state,
+		user: {
+			id: null,
+			username: null,
+			avatar: null,
+			isAuth: false
+		}
+	}));
+
+	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	if (menu)
+		menu.innerHTML = getMenu(false);
+			
+	if (socket && socket.connected)
+		socket.disconnect();
+
+	router.navigate(router.Path);
 }
 
 async function	onClickSkipeVerifyEmailDev(): Promise<void> {
@@ -152,16 +195,8 @@ async function	onClickSkipeVerifyEmailDev(): Promise<void> {
 	
 	const response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
 
-	if (!response.ok) {
-		const	p = document.getElementById("verify-email-msg-error");
-		if (!p)
-			console.error("No HTMLElement named \`msg-error\`.");
-		else {
-			const	result = await response.json();
-			p.textContent = result?.error || "An unexpected error has occurred";
-		}
-		return ;
-	}
+	if (!response.ok)
+		return displayError(response, "verify-email-msg-error");
 
 	appStore.setState((state) => ({
 		...state,
@@ -188,7 +223,17 @@ async function	onClickNewCode(): Promise<void> {
 	locks.forEach(e => (e as HTMLElement).hidden = false);
 	if (btnSend) btnSend.disabled = true;
 
-	const response = await sendRequest('/api/twofa/otp', 'GET', null);
+	const res = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
+
+    if (!res.ok) {
+        console.error("Erreur API:", res.statusText);
+        if (btnSend) btnSend.disabled = false;
+        if (spanCooldown) spanCooldown.textContent = "";
+        locks.forEach(e => (e as HTMLElement).hidden = true);
+        return;
+    }
+
+    const response = await sendRequest('/api/twofa/otp', 'GET', null);
 
 	if (!response.ok) {
 		console.error("Erreur API:", response.statusText);
@@ -199,33 +244,6 @@ async function	onClickNewCode(): Promise<void> {
 	}
 	btnCooldown(); 
 	displayDate(5);
-}
-
-async function onClickGetMessage(): Promise<void> {
-	const   res: Response = await fetch('/api/jwt', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
-	});
-
-	const   data: unknown = await res.json();
-	console.log(data);
-}
-
-async function onClickValidateMessage(): Promise<void> {
-	const   res: Response = await fetch('/api/jwt/validate', {
-		method: "get",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-	});
-
-	const   data: unknown = await res.json();
-	console.log(data);
 }
 
 async function onClickBlockMessage(): Promise<void> {
@@ -259,20 +277,6 @@ async function onClickBlockMessage(): Promise<void> {
 		}
 	}
 	
-	console.log(data);
-}
-
-async function onClickRefreshMessage(): Promise<void> {
-	const   res: Response = await fetch('/api/jwt/refresh', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ id: 1, username: "mreynaud", email: "mreynaud@42.fr" })
-	});
-
-	const   data: unknown = await res.json();
 	console.log(data);
 }
 
@@ -574,11 +578,8 @@ export async function   setupClickHandlers(): Promise<void> {
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount();
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa();
 	(window as any).onClickNewCode = () => onClickNewCode();
-	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev();
+	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(); // /!\ detete this
 
-	(window as any).onClickGetMessage = onClickGetMessage;
-	(window as any).onClickValidateMessage = onClickValidateMessage;
-	(window as any).onClickRefreshMessage = onClickRefreshMessage;
 	(window as any).onClickBlockMessage = onClickBlockMessage;
 	
 	(window as any).showDifficultyMenu = showDifficultyMenu;

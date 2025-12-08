@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayUserController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/30 18:23:42 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/07 20:41:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		}																									//
 	});																										//
 
-	gatewayFastify.patch('/me', async (request: FastifyRequest, reply: FastifyReply) => {
+	gatewayFastify.post('/me/validate', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 
-			const	response: AxiosResponse = await gatewayAxios.patch(`http://user:3000/me`, request.body,
+			const	response: AxiosResponse = await gatewayAxios.post(`http://user:3000/me/validate`, request.body,
 				{ headers: { 'user-id': userId } }
 			);
 
@@ -52,19 +52,6 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
 	});
-
-	gatewayFastify.post('/:id', async (request: FastifyRequest, reply: FastifyReply) => {								//
-		const	{ id } = request.params as { id: string };																//
-		const	parseId: number = parseInt(id, 10);																		//
-																														//
-		try {																											//
-			const	response: AxiosResponse = await gatewayAxios.post(`http://user:3000/${parseId}`, request.body);	//	MATHIS: A ENLEVER
-																														//
-			return reply.send(response.data);																			//
-		} catch (err: unknown) {																						//
-			return requestErrorsHandler(gatewayFastify, reply, err);													//
-		}																												//
-	});																													//
 
 	// USERS GETTERS
 	gatewayFastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
@@ -77,18 +64,32 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		}
 	});
 
-	gatewayFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
-		const	{ id } = request.params as { id: string };
-		const	parseId: number = parseInt(id, 10);
-
+	gatewayFastify.get('/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/${parseId}`);
+			const	userId: AxiosHeaderValue = await getValidUserId(request);
+			
+			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/me`,
+				{ headers: { 'user-id': userId } }
+			);
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
 	});
+
+	gatewayFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {				//
+		const	{ id } = request.params as { id: string };												//
+		const	parseId: number = parseInt(id, 10);														//
+																										//
+		try {																							//
+			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/${parseId}`);	//	A ENLEVER ???
+																										//
+			return reply.send(response.data);															//
+		} catch (err: unknown) {																		//
+			return requestErrorsHandler(gatewayFastify, reply, err);									//
+		}																								//
+	});																									//
 
 	gatewayFastify.get('/lookup/:identifier', async (request: FastifyRequest, reply: FastifyReply) => {
 
