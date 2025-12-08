@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 17:03:24 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ import { jwtRepository }	from "./repositories/jwtRepository.js"
 
 /* ====================== TOKENS VARIABLES ====================== */
 
-export const	expAccess: string = "1000s";
-export const	expRefresh: string = "10000s";
+export const	expAccess: string = "86400s"; // 86400s = 1day
+export const	expRefresh: string = "900s"; // 900s = 15min
 export const	expTwofa: string = "300s"; // 300s = 5min
 
 export const	jwtSecret: Uint8Array<ArrayBuffer> = new TextEncoder().encode(process.env.JWT_SECRET);
