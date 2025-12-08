@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 21:46:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 22:24:35 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 20:34:11 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ export function attachAvatarUploadListener(userId: number) {
 
 async function uploadAvatar(userId: number, file: File) {
 	const formData = new FormData();
-	formData.append('avatar', file); // 'avatar' doit correspondre au nom attendu par Fastify/Multer
+	formData.append('file', file);
 
 	try {
 		const	response = await sendRequest(`/api/user/avatar`, "POST", formData);

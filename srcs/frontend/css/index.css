@@ -1185,8 +1185,14 @@ input[type=range]::-moz-range-thumb {
     transition: all 0.3s ease;
 }
 
+.avatar-wrapper:hover {
+    transform: translateY(-2px);
+    /* background: #FF0; */
+    /* box-shadow: 0 0 10px #666, 0 0 20px #FF0; */
+    
+}
+
 #user-avatar:hover {
-    transform: translateY(-2px);;
     background: #FF0;
     box-shadow: 0 0 10px #666, 0 0 20px #FF0;
 }

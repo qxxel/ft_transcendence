@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 00:46:57 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 00:47:52 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ gatewayFastify.register(proxy, {
 
 gatewayFastify.register(proxy, {
 	upstream: 'http://user:3000',
-	prefix: '/user/avatar',
-	rewritePrefix: '/user/avatar',
+	prefix: '/api/user/avatar',
+	rewritePrefix: '/avatar',
 	http2: false
 });
 

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 00:47:18 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 00:47:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,13 +153,6 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 
 	// ADD A AVATAR
 	userFastify.post('/avatar', async (request: FastifyRequest, reply: FastifyReply) => {
-		if (!request.body)
-		{
-			userFastify.log.error("The request is empty");
-			console.error("The request is empty");
-			return reply.code(400).send({ error: "The request is empty" });
-		}
-
 		try {
 			const	response: AxiosResponse = await userAxios.get('http://jwt:3000/validate',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
