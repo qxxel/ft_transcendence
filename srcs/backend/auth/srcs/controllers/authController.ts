@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 21:28:02 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 00:21:02 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 			throw err;
 		}
 	} catch (err: unknown) {
-		return errorsHandler(authFastify, reply , err);
+		return await errorsHandler(authFastify, reply , err);
 	}
 }
 
@@ -130,11 +130,16 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		if (await isLoggedIn(request.headers.cookie))
 			throw new twofaError.AlreadyConnectedError("You are already connected");
 
-		const	userRes: AxiosResponse = await authAxios.get(`http://user:3000/lookup/${identifier}`);
-		const	user: any = userRes.data;
+		let	user;
+		try {
+			const	userRes: AxiosResponse = await authAxios.get(`http://user:3000/lookup/${identifier}`);
+			user = userRes.data;
+		} catch (error) {
+			throw new twofaError.WrongCredentialsError("Wrong password or username.");
+		}
 
 		if (!user)
-			throw new twofaError.WrongCredentialsError("Wrong password or username."); // mreynaud : a voir quand ce message est utilise car peut etre que le contenu est pas juste -> "Wrong password."
+			throw new twofaError.WrongCredentialsError("Wrong password or username.");
 
 		const expires_at: number | undefined | null = await authServ.getExpiresByIdClient(user.id);
 		if (expires_at !== null && expires_at !== undefined)
@@ -157,7 +162,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 			is2faEnable: user.is2faEnable
 		});
 	} catch (err: unknown) {
-		return errorsHandler(authFastify, reply , err);
+		return await errorsHandler(authFastify, reply , err);
 	}
 }
 
@@ -178,7 +183,7 @@ async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, 
 
 		return reply.status(201).send(id);
 	} catch (err: unknown) {
-		return errorsHandler(authFastify, reply , err);
+		return await errorsHandler(authFastify, reply , err);
 	}
 }
 
@@ -218,7 +223,7 @@ async function	updateUser(request: FastifyRequest<{ Body: updateUserBody}>, repl
 		
 		return reply.status(201).send(userRes.data);
 	} catch (err: unknown) {
-		return errorsHandler(authFastify, reply , err);
+		return await errorsHandler(authFastify, reply , err);
 	}
 }
 
@@ -246,7 +251,7 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 		
 		return reply.status(204).send(payload.data.id);
 	} catch (err: unknown) {
-		return errorsHandler(authFastify, reply , err);
+		return await errorsHandler(authFastify, reply , err);
 	}
 }
 
@@ -267,7 +272,7 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 		
 		return reply.status(204).send(payload.data.id);	
 	} catch (err: unknown) {
-		return errorsHandler(authFastify, reply , err);
+		return await errorsHandler(authFastify, reply , err);
 	}
 }
 
@@ -284,7 +289,7 @@ async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promis
 
 		return reply.status(201).send(id);
 	} catch (err: unknown) {
-		return errorsHandler(authFastify, reply , err);
+		return await errorsHandler(authFastify, reply , err);
 	}
 }
 

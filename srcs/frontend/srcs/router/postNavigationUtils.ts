@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:47:24 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 23:10:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ async function loadTwofa() {
 }
 
 async function loadUser(user: UserState) {
-	const	Response: Response = await sendRequest(`/api/user/${user.id}`, 'get', null);		//	MATHIS: FAIRE UNE REQUETE `/me`
+	const	Response: Response = await sendRequest(`/api/user/me`, 'get', null);
 		if (!Response.ok) {
 			console.log(Response.statusText)
 			return ;

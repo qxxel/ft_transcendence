@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 23:05:03 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 23:10:37 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ async function	onClickEdit(): Promise<void> {
 	const	state: AppState = appStore.getState();
 	const	user: UserState | null = state.user;
 
-	const	response: Response = await sendRequest(`/api/user/${user.id}`, 'get', null);	//	MATHIS: GET /me
+	const	response: Response = await sendRequest(`/api/user/me`, 'get', null);
 	if (!response.ok)
 	{
 		console.log(response.statusText);

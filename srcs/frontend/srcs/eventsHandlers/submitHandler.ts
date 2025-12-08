@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 22:53:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 00:28:25 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,11 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 	console.log("Sign in");
 	const	identifier: string = (document.getElementById("sign-in-username") as HTMLInputElement).value;
 	const	password: string = (document.getElementById("sign-in-password") as HTMLInputElement).value;
-	form.reset();
 
-	console.log("identifier: " + identifier);
-	console.log("password: " + password);
-
-	console.log(JSON.stringify({ identifier, password }));
-
+	const	signForm = document.getElementById("sign-in-form");
+	if (signForm)
+		signForm.classList.add("darken");
+	
 	const	response: Response = await fetch('/api/auth/sign-in', {
 		method: "post",
 		credentials: "include",
@@ -48,6 +46,10 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 		body: JSON.stringify({ identifier, password })
 	});
 	
+	form.reset();
+	if (signForm)
+		signForm.classList.remove("darken");
+
 	if (!response.ok)
 			return displayError(response, "sign-in-msg-error");
 
