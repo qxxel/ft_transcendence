@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/08 01:24:53 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 23:49:14 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ export async function displayPopError(response: Response | string | undefined) {
 	const span = document.createElement("span");
 	span.textContent = "x";
 	const div = document.createElement("div");
-	div.id = "error";
+	div.classList = "error";
 
 	div.addEventListener("click", (event) => {
 		const target =  event.currentTarget as HTMLElement;

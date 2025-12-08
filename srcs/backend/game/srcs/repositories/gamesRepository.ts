@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gamesRepository.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:54:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 18:42:34 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 23:14:28 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ export class	gamesRepository {
 			const	query: string = "DELETE FROM games WHERE id_client = ?";
 			const	elements: number[] = [userId];
 
-			this.db.run(query, elements, function(err: unknown) {				//	MATHIS: DELETE GAMES WHEN DELETE CLIENTS
+			this.db.run(query, elements, function(err: unknown) {
 				if (err)
 					return reject(err);
 

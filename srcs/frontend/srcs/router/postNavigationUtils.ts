@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 22:06:45 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/09 00:42:26 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ async function loadTwofa() {
 }
 
 async function loadUser(user: UserState) {
-	const	Response: Response = await sendRequest(`/api/user/${user.id}`, 'get', null);		//	MATHIS: FAIRE UNE REQUETE `/me`
+	const	Response: Response = await sendRequest(`/api/user/me`, 'get', null);
 		if (!Response.ok) {
 			console.log(Response.statusText)
 			return ;
