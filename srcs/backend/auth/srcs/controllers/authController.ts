@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 22:22:46 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 21:28:02 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		return reply.status(201).send({
 			id: user.id,
 			username: user.username,
+			email: user.email,
 			is2faEnable: user.is2faEnable
 		});
 	} catch (err: unknown) {

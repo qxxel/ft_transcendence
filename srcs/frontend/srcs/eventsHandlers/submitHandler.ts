@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 22:12:19 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 22:53:33 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 import { verifyEmail }						from "../utils/verifyEmail.js"
 import { AppState, appStore, UserState }	from "../objects/store.js"
-import { displayError }						from "../utils/display.js"
+import { displayError, displayPopError }	from "../utils/display.js"
 import { getAndRenderFriends }				from "../friends/getAndRenderFriends.js"
 import { getMenu }							from "../utils/getMenu.js"
 import { router }							from "../index.js"
@@ -68,10 +68,16 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 	if (result.is2faEnable) {
 		router.navigate("/2fa");
 
-		sendRequest('/api/twofa/otp', 'GET', null)
-			.then((response) => {
+		fetch('/api/twofa/otp', {
+			method: 'POST',
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ })
+		}).then((response) => {
 				if (!response.ok)
-					console.log(response.statusText)
+					displayPopError(response);
 			});
 		
 		return ;
@@ -129,7 +135,7 @@ async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-	verifyEmail("sign-up", "verify-email");
+	verifyEmail("sign-up", "verify-email", email);
 }
 
 async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
@@ -218,7 +224,7 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 
 		verifyForm.addEventListener("submit", async (event: Event) => {
 			event.preventDefault();
-			const form = event.target as HTMLFormElement;
+			const	form = event.target as HTMLFormElement;
 			const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
 			const	password: string = (document.getElementById("confirm-setting-password") as HTMLInputElement).value;
 			form.reset();
@@ -264,7 +270,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	if (!postUser.ok)
 		return displayError(postUser, "user-setting-msg-error");
 	
-	verifyEmail("user-profile", "confirm-setting");
+	verifyEmail("user-profile", "confirm-setting", newEmail);
 
 	const userUpdate: userUpdate = {
 		username: newUsername,

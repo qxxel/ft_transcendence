@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 19:42:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 23:05:03 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ import { TournamentController } 			from "../Pong/tournament.js"
 import { router }							from "../index.js"
 import { sendRequest }						from "../utils/sendRequest.js"
 import { socket }							from "../socket/socket.js"
-import { displayDate, displayError  }		from "../utils/display.js"
+import { displayDate }						from "../utils/display.js"
+import { displayError, displayPopError }	from "../utils/display.js"
 import { btnCooldown }						from "../utils/buttonCooldown.js"
 
 import { Tank }	from "../v3/class_tank.js"
@@ -233,15 +234,24 @@ async function	onClickNewCode(): Promise<void> {
         return;
     }
 
-    const response = await sendRequest('/api/twofa/otp', 'GET', null);
+    const response = await fetch('/api/twofa/otp', {
+			method: 'POST',
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ })
+		}).then(async (response) => {
+			if (!response.ok) {
+				console.error("Erreur API:", response.statusText);
+				if (btnSend) btnSend.disabled = false;
+				if (spanCooldown) spanCooldown.textContent = "";
+				locks.forEach(e => (e as HTMLElement).hidden = true);
+				displayPopError(response);
+				return;
+			}
+		});
 
-	if (!response.ok) {
-		console.error("Erreur API:", response.statusText);
-		if (btnSend) btnSend.disabled = false;
-		if (spanCooldown) spanCooldown.textContent = "";
-		locks.forEach(e => (e as HTMLElement).hidden = true);
-		return;
-	}
 	btnCooldown(); 
 	displayDate(5);
 }
