@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:47:24 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 22:06:45 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,12 @@ export async function  pathActions(currentPath: string): Promise<void> {
 	if (['/sign-in', '/sign-up'].includes(currentPath))
 	{
 		if (user.isAuth)
+			router.navigate("/");
+	}
+
+	if (['/history', '/user'].includes(currentPath))
+	{
+		if (!user.isAuth)
 			router.navigate("/");
 	}
 
