@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pong.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/04 15:41:59 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 21:35:24 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,6 @@ export class PongGame extends Game {
 
 		socket.on('game-over', (data: PongResume) => {
 			this.isGameOver = true;
-
 			if (this.animationFrameId)
 			{
 				cancelAnimationFrame(this.animationFrameId);
@@ -226,8 +225,11 @@ export class PongGame extends Game {
 		window.removeEventListener('keydown', this.handleKeyDown);
 		window.removeEventListener('keyup', this.handleKeyUp);
 
-		socket.off('game-update');
-		socket.off('game-over');
+		if (socket)
+		{
+			socket.off('game-update');
+			socket.off('game-over');
+		}
 	}
 
 	private renderLoop() {
