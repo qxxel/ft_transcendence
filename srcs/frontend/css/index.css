@@ -47,6 +47,37 @@ p {
     display: none !important;
 }
 
+div#div-errors {
+    height: 100%;
+    width: 20%;
+    position: fixed;
+    padding: 10px;
+}
+
+div#error {
+    max-height: 20%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 12px;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: rgba(255, 69, 69, 0.774);
+}
+
+div#error > p {
+    max-height: 100%;
+    margin: 0;
+    color: black;
+}
+
+div#error > span {
+    vertical-align: middle;
+    margin-left: auto;
+    text-align: left;
+    color: black;
+}
+
 p.msg-error {
     color: red;
 }
