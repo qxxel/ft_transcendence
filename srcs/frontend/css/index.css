@@ -1124,6 +1124,13 @@ input[type=range]::-moz-range-thumb {
 }
 
 
+/* ===== PROFILE ===== */
+
+#profile-header {
+    display: flex;
+}
+
+
 
 /* ===== AVATAR ===== */
 
@@ -1166,7 +1173,8 @@ input[type=range]::-moz-range-thumb {
 }
 
 #avatar-container {
-    padding-top: 10%;
+    padding-top: 5%;
+    padding-left: 5%;
     margin: auto;
     display: flex;
 }
@@ -1179,7 +1187,7 @@ input[type=range]::-moz-range-thumb {
     /* box-shadow: 0 4px 8px rgba(0,0,0,0.2); */
 }
 
-#user-avatar {
+.user-avatar {
     width: 150px;
     height: 150px;
     transition: all 0.3s ease;

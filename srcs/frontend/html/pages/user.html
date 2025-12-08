@@ -1,41 +1,49 @@
 <div id="user-profile" class="game-container">
     <h1>User Profile</h1>
 
-    <form id="user-settings-form" class="user-settings-form">
-        
-        <div class="profile-navigation">
-            <button type="button" onclick="onClickHistory();" id="profile-history" class="btn-history">
-                History
-            </button>
+    <div class="profile-header" id="profile-header">
+        <div class="profile-header-header">
+            <h1>User Profile</h1>
+            <div class="profile-navigation">
+                <button type="button" onclick="onClickHistory();" id="profile-history" class="btn-history">
+                    History
+                </button>
+            </div>
         </div>
-
-
+    
+    
         <div id="avatar-container">
-            <label for="avatar-upload" class="avatar-wrapper" title="Change avatar">
-        
-                <img id="user-avatar" class="avatar-image" src="/assets/default_avatar.png" alt="User avatar">
-        
+            <img id="display-user-avatar" class="avatar-image view-mode user-avatar" src="/assets/default_avatar.png" alt="User avatar">
+
+            <label for="avatar-upload" class="avatar-wrapper edit-mode" title="Edit avatar" hidden>
+
+                <img id="user-avatar" class="avatar-image user-avatar" src="/assets/default_avatar.png" alt="User avatar">
+
                 <div class="avatar-overlay">
-                    <span>Change</span>
+                    <span>Edit</span>
                 </div>
 
                 <input type="file" id="avatar-upload" accept="image/*">
 
             </label>
         </div>
+    </div>
+    
 
-        <div class="section-header">
-            <h3>User Info</h3>
-            <button type="button" onclick="onClickEdit();" id="edit-submit" class="btn-icon view-mode">
-                ✎ Edit Profile
-            </button>
-        </div>
+    <div class="section-header">
+        <h3>User Info</h3>
+        <button type="button" onclick="onClickEdit();" id="edit-submit" class="btn-icon view-mode">
+            ✎ Edit Profile
+        </button>
+    </div>
 
-        <div class="form-grid">
-            <div class="form-group">
-                <label for="edit-username">Username</label>
-                <input type="text" id="edit-username" class="edit-mode styled-input" name="username" hidden>
-                <div id="user-username" class="view-mode data-display"></div>
+    <form id="user-settings-form" class="user-settings-form">
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="edit-username">Username</label>
+            <input type="text" id="edit-username" class="edit-mode styled-input" name="username" hidden>
+            <div id="user-username" class="view-mode data-display"></div>
             </div>
             
             <div class="form-group">

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 21:46:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 20:34:11 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 23:23:31 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ async function uploadAvatar(userId: number, file: File) {
 		{
 			console.error('Upload error:', await response.text());
 			console.error(response);					//	A CHANGER
+			return ;
 		}
 
 		const data = await response.json();
