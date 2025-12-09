@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 00:21:02 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:54:31 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 import argon2								from 'argon2'
 import { authAxios, authServ, authFastify }	from "../auth.js"
-import { deleteClientExpires }				from "../services/authService.js"
 import { errorsHandler }					from "../utils/errorsHandler.js"
 import { isValidPassword }					from "../utils/validation.js"
 import * as twofaError						from "../utils/throwErrors.js"
@@ -262,8 +261,6 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 			return reply.status(204).send();
 		
 		const	payload: AxiosResponse = await authAxios.get("http://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-		
-		deleteClientExpires(authServ, payload.data.id);
 		
 		const	response: AxiosResponse = await authAxios.delete("http://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		

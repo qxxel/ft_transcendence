@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 19:05:33 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 /* ====================== IMPORT ====================== */
 
 import axios				from 'axios'
+import cron					from "node-cron";
 import cors					from '@fastify/cors'
 import Fastify, { type FastifyInstance }				from 'fastify'
 import formBody				from '@fastify/formbody'
@@ -47,6 +48,13 @@ const	db = new Database(dbname, (err: Error | null) => {
 
 export const	authServ = new authService(new authRepository(db));
 
+cron.schedule("0 * * * * *", () => {
+	console.log("Cron: Running cleanup...");
+	authServ.cleanup();
+	console.log("Cron: Cleanup done.");
+});
+
+
 /* ====================== SERVER ====================== */
 
 export const	authFastify: FastifyInstance = Fastify({
@@ -65,11 +73,6 @@ authFastify.register(cors, {
 
 authFastify.register(authController);
 
-authFastify.addHook('onReady', async () => {
-	console.log("Running cleanup...");
-	await authServ.cleanup();
-	console.log("Cleanup done.");
-});
 
 const	start = async () => {
 	try {

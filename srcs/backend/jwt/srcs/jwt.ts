@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/08 17:03:24 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 19:05:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 /* ====================== IMPORTS ====================== */
 
+import cron					from "node-cron";
 import cors					from '@fastify/cors'
 import Fastify, { type FastifyInstance }				from 'fastify'
 import formBody				from '@fastify/formbody'
@@ -48,6 +49,12 @@ const	db = new Database(dbname, (err: Error | null) => {
 });
 
 export const	jwtServ: jwtService = new jwtService(new jwtRepository(db));
+
+cron.schedule("0 */10 * * * *", () => {
+	console.log("Cron: Running cleanup...");
+	jwtServ.cleanup();
+	console.log("Cron: Cleanup done.");
+});
 
 
 /* ====================== AXIOS VARIABLES ====================== */

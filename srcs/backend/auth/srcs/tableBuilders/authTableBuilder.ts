@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:03:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 12:55:00 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:41:48 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ export function	authTableBuilder(db: Database): void {
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		id_client INT NOT NULL UNIQUE,
 		password TEXT NOT NULL,
-		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
 		expires_at DATETIME DEFAULT (datetime('now', '+5 minutes'))
 	);`);
 }

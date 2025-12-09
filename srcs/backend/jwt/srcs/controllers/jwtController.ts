@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 23:12:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:24:14 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,10 +230,8 @@ async function	deleteUserToken(request: FastifyRequest, reply: FastifyReply): Pr
 		const	cookies: any = getCookies(request);
 		let		payload;
 		try {
-			console.log("1: ", cookies.jwtAccess);
 			({ payload } = await jose.jwtVerify(cookies.jwtAccess, jwtSecret));
 		} catch (error) {
-			console.log("2: ", cookies.jwtTwofa);
 			({ payload } = await jose.jwtVerify(cookies.jwtTwofa, jwtSecret));	
 		}
 
