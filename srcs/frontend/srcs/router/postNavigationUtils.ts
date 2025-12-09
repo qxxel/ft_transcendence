@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 00:47:22 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:16:38 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,6 @@ export async function  pathActions(currentPath: string): Promise<void> {
 				pendingOptions: null
 			}
 		}));
-
-			// OLD
-		// gameState.currentTournament = null;
-		// gameState.pendingOptions = undefined;
 	}
 
 	if (['/pong'].includes(currentPath))
@@ -99,9 +95,6 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			}
 		}));
 
-			// OLD
-		// gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
-		
 		const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
 		const display = document.getElementById('points-display') as HTMLSpanElement;
 		
@@ -180,12 +173,19 @@ async function loadUser(user: UserState) {
 		const	userRes = await Response.json();
 
 		const imgElement: HTMLImageElement = document.getElementById("user-avatar") as HTMLImageElement;
+		const displayImgElement: HTMLImageElement = document.getElementById("display-user-avatar") as HTMLImageElement;
 		if (imgElement)
 		{
 			if (userRes.avatar)
+			{
 				imgElement.src = "/uploads/" + userRes.avatar;
+				displayImgElement.src = "/uploads/" + userRes.avatar;
+			}
 			else
+			{	
 				imgElement.src = "/assets/default_avatar.png";
+				displayImgElement.src = "/assets/default_avatar.png";
+			}
 		}
 
 		if (userRes.is2faEnable == true) {

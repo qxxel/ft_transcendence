@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 00:59:37 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:20:30 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,22 +154,19 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 	// ADD A AVATAR
 	userFastify.post('/avatar', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-console.log("hello !!");
 			const	response: AxiosResponse = await userAxios.get('http://jwt:3000/payload/access',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
-console.log("ok axios");
+
 			const	userId: number = response.data.id;
 			
 			const data = await request.file();
 			if (!data)
 				throw new NoFileError("No file uploaded.");
-console.log("ok file");
 
 			const validMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
 			if (!validMimeTypes.includes(data.mimetype))
 				throw new InvalidFileError("Invalid file type. Only JPG, PNG, WEBP allowed.");
-console.log("ok extension");
 
 			try {
 				const currentUser = await usersServ.getUserById(userId);

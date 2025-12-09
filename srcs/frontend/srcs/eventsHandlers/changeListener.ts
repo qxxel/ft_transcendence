@@ -6,16 +6,17 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 21:46:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 23:23:31 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:44:03 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // FUNCTION TO ATTACH LISTENER OF CHANGES
 
 
-/* ====================== IMPORT ====================== */
+/* ====================== IMPORTS ====================== */
 
-import { sendRequest }	from "../utils/sendRequest"
+import { sendRequest }			from "../utils/sendRequest"
+import { setDynamicFavicon }	from "../utils/setDynamicFavicon"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -54,6 +55,8 @@ async function uploadAvatar(userId: number, file: File) {
 		const imgElement = document.getElementById('user-avatar') as HTMLImageElement;
 		if (imgElement)
 			imgElement.src = `/uploads/${data.avatar}?t=${new Date().getTime()}`;
+
+		setDynamicFavicon(data.avatar);
 	} catch (err) {
 		console.error('Network error:', err);
 	}

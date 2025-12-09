@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/08 21:59:52 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/09 14:45:39 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { appStore }		from "../objects/store.js"
-import { getMenu }		from "../utils/getMenu.js"
-import { router }		from "../index.js"
-import { sendRequest }	from "../utils/sendRequest.js"
+import { AppState, appStore }	from "../objects/store.js"
+import { getMenu }				from "../utils/getMenu.js"
+import { router }				from "../index.js"
+import { sendRequest }			from "../utils/sendRequest.js"
+import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -27,7 +28,8 @@ async function	handleLoadPage(): Promise<void> {
 	document.addEventListener("DOMContentLoaded", async (event: Event) => {
 		console.log("DOMContentLoaded");
 
-		const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
+		// const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
+		const	response: Response = await sendRequest('/api/user/me', "GET", null);
 
 		if (!response.ok)
 			return;
@@ -37,14 +39,17 @@ async function	handleLoadPage(): Promise<void> {
 		appStore.setState((state) => ({
 			...state,
 			user: {
-				...state.user,
 				id: result.id as number,
 				username: result.username,
+				avatar: result.avatar,
 				isAuth: true
 			}
 		}));
 
-		const baseHref = window.location.origin;
+		const	state: AppState = appStore.getState();
+		setDynamicFavicon(state.user.avatar);
+
+		const	baseHref: string = window.location.origin;
 
 		const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)

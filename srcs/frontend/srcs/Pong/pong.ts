@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pong.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/08 21:35:24 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/09 14:03:57 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ export class PongGame extends Game {
 			p2: document.getElementById(this.ids.score2)!
 		};
 
-		const	state: AppState = appStore.getState();
+		let	state: AppState = appStore.getState();
 		let	pendingOptions: GameOptions | null = state.game.pendingOptions;
-		if (pendingOptions)
-			this.lastOptions = JSON.parse(JSON.stringify(pendingOptions));
+		if (pendingOptions)																{console.log("pendingOptions => " + [pendingOptions.winningScore])
+			this.lastOptions = JSON.parse(JSON.stringify(pendingOptions));				}
 		else if (this.lastOptions)
 		{
 			appStore.setState((state) => ({
@@ -82,12 +82,13 @@ export class PongGame extends Game {
 					pendingOptions: this.lastOptions
 				}
 			}));
-
-				//OLD
-			// this.appState.pendingOptions = this.lastOptions;
+																						console.log("lastOptions => " + this.lastOptions.winningScore)
 		}
+																						console.log("noOptions")
 
+		state = appStore.getState();
 		pendingOptions = state.game.pendingOptions;
+																						console.log("post pendingOptions => " + pendingOptions)
 		if (pendingOptions)
 			this.lastOptions = JSON.parse(JSON.stringify(pendingOptions));
 
@@ -111,13 +112,12 @@ export class PongGame extends Game {
 		}
 		else if (pendingOptions?.mode === 'ai')
 		{
-			const	user: UserState = state.user;
-			this.player1Name = user.username || "Player 1";
+			this.player1Name = state.user.username || "Player 1";
 			this.player2Name = "AI (" + pendingOptions.difficulty + ")";
 		}
 		else
 		{
-			this.player1Name = "Player 1";
+			this.player1Name = state.user.username || "Player 1";
 			this.player2Name = "Player 2";
 		}
 		this.updateNameDisplay();
@@ -377,7 +377,8 @@ export class PongGame extends Game {
 
 	private generateLegend(activePowerUps: PowerUps) {
 		const legendContainer = document.getElementById('powerup-legend');
-		if (!legendContainer) return;
+		if (!legendContainer)
+			return;
 
 		legendContainer.innerHTML = '';
 		legendContainer.style.display = 'none';

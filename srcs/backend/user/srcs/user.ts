@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/09 00:47:01 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:21:08 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ const	db = new Database(dbname, (err: Error | null) => {
 	else
 	{
 		db.run('PRAGMA foreign_keys = ON;', (pragmaErr) => {
-            if (pragmaErr)
+			if (pragmaErr)
 				console.error("Impossible to turn on Foreign Keys", pragmaErr);
-        });
+		});
 		console.log(`Database started on ${dbname}`);
 	}
 });
@@ -67,9 +67,9 @@ const	userFastify = Fastify({
 });
 
 userFastify.register(multipart, {
-    limits: {
-        fileSize: 5 * 1024 * 1024,
-    }
+	limits: {
+		fileSize: 5 * 1024 * 1024,
+	}
 });
 
 userFastify.register(formBody);
