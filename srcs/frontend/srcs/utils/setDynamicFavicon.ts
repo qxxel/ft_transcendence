@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 14:30:39 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 15:56:28 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 21:10:47 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,5 @@ export function	setDynamicFavicon(path: string | null): void {
 		link.href = dataUrl;
 	};
 
-	img.src = path ? "/uploads/" + path : "/uploads/default_avatar.png";
+	img.src = path ? "/uploads/" + path : "/assets/default_avatar.png";
 }

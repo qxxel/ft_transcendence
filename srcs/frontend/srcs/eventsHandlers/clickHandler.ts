@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 17:39:20 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 21:09:05 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ async function  onClickLogout(): Promise<void> {
 			isAuth: false
 		}
 	}));
-
-	// setDynamicFavicon(null);
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)

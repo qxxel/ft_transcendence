@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/09 16:13:52 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 21:08:38 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ async function	handleLoadPage(): Promise<void> {
 		const	response: Response = await sendRequest('/api/user/me', "GET", null);
 
 		if (!response.ok)
+		{
+			setDynamicFavicon(null);
 			return;
+		}
 
 		const	result: any = await response.json();
 
