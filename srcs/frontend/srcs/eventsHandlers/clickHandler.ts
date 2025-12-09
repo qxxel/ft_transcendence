@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 15:56:00 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 17:39:20 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,40 +257,6 @@ async function	onClickNewCode(): Promise<void> {
 
 	btnCooldown(); 
 	displayDate(5);
-}
-
-async function onClickBlockMessage(): Promise<void> {
-	const   res: Response = await fetch('/api/user/friends/block', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ receiverId: 2 })
-	});
-
-	if (!res.ok) {
-		const   errorText = await res.text();
-		console.error(`Échec du blocage. Statut : ${res.status}. Message : ${errorText}`);
-		return ;
-	}
-
-	let data: unknown;
-
-	const contentLength = res.headers.get('Content-Length');
-	
-	if (res.status === 204 || contentLength === '0' || contentLength === null) {
-		data = { message: `Action réussie. (Statut ${res.status})` }; 
-	} else {
-		try {
-			 data = await res.json();
-		} catch (e) {
-			console.error("Erreur de parsing JSON malgré le statut de succès:", e);
-			data = { error: "Réponse du serveur invalide (Non-JSON)." };
-		}
-	}
-	
-	console.log(data);
 }
 
 
@@ -592,8 +558,6 @@ export async function   setupClickHandlers(): Promise<void> {
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa();
 	(window as any).onClickNewCode = () => onClickNewCode();
 	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(); // /!\ detete this
-
-	(window as any).onClickBlockMessage = onClickBlockMessage;
 	
 	(window as any).showDifficultyMenu = showDifficultyMenu;
 	(window as any).hideDifficultyMenu = hideDifficultyMenu;

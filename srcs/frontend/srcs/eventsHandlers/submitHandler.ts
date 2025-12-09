@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 00:42:21 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 17:34:04 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,8 +297,6 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 }
 
 async function	handleAddFriendForm(form: HTMLFormElement) {
-	console.log("add friend form");
-
 	const targetName: string = (document.getElementById("username-add-input") as HTMLInputElement).value;
 	if (!targetName)
 		return ;
@@ -307,24 +305,24 @@ async function	handleAddFriendForm(form: HTMLFormElement) {
 	const	respTargetId: Response = await sendRequest(`/api/user/lookup/${targetName}`, "get", null);
 	if (!respTargetId.ok)
 	{
-		console.log((await respTargetId.json() as any).error)
-		return ;											//	AXEL: AFFICHER BULLE ERREUR
+		displayPopError(respTargetId)
+		return ;
 	}
 	const	targetId: number = (await respTargetId.json() as any).id;
 
 	const	response: Response = await sendRequest(`/api/user/friends/request/${targetId}`, "post", {});
 	if (!response.ok)
 	{
-		console.log(await response.json())
-		return ;											//	AXEL: AFFICHER BULLE ERREUR
+		displayPopError(response)
+		return ;
 	}
 
 	const	friendship: any = await response.json();
 
 	if (friendship.status === "PENDING")
-		console.log(`Request sended to ${targetName}.`);
+		console.log(`Request sended to ${targetName}.`);				//	DISPLAY POP
 	if (friendship.status === "ACCEPTED")
-		console.log(`You are now friend with ${targetName}.`);
+		console.log(`You are now friend with ${targetName}.`);			//	DISPLAY POP
 
 	await getAndRenderFriends();
 }
