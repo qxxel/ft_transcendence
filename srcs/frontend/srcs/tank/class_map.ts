@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 21:37:21 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/09 22:08:07 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,10 @@ export class	Map {
 		// DOOR SIZE = 14
 		// HOUSE WALLS
 
-		this.walls.push(new Wall(cell*12, cell*12, cell  , cell * 76  ,   c_blk1)); // LEFT
+		this.walls.push(new Wall(cell*12, cell*12, cell  , cell * 12  ,   c_blk1)); // LEFT
+		this.walls.push(new Wall(cell*12, cell*34, cell  , cell * 14  ,   c_blk1)); // LEFT
+		this.walls.push(new Wall(cell*12, cell*55, cell  , cell * 15  ,   c_blk1)); // LEFT
+		this.walls.push(new Wall(cell*12, cell*73, cell  , cell * 14  ,   c_blk1)); // LEFT
 
 		
 		// RIGHT TOP
@@ -147,13 +150,17 @@ export class	Map {
         this.walls.push(new Wall(cell*87, cell*30, cell  , cell * 2   ,   c_blk1)); 
         this.walls.push(new Wall(cell*87, cell*35, cell  , cell * 21  ,   c_blk1));
 
+
 		this.walls.push(new Wall(cell*87, cell*70, cell  , cell * 17  ,   c_blk1)); // RIGHT BOT
 
+		
 		this.walls.push(new Wall(cell*12, cell*12, cell * 44  , cell  ,   c_blk1)); // TOP LEFT
 		this.walls.push(new Wall(cell*70, cell*12, cell * 17  , cell  ,   c_blk1)); // TOP RIGHT
 
 		this.walls.push(new Wall(cell*12, cell*87, cell * 12  , cell  ,   c_blk1)); // BOT LEFT
-		this.walls.push(new Wall(cell*38, cell*87, cell * 50  , cell  ,   c_blk1)); // BOT RIGHT
+		this.walls.push(new Wall(cell*38, cell*87, cell * 15  , cell  ,   c_blk1)); // BOT MID LEFT
+		this.walls.push(new Wall(cell*64, cell*87, cell * 10  , cell  ,   c_blk1)); // BOT MID RIGHT
+		this.walls.push(new Wall(cell*85, cell*87, cell * 3  , cell  ,   c_blk1)); // BOT RIGHT
 
 
 		// HORIZONTAL
@@ -161,6 +168,9 @@ export class	Map {
         this.walls.push(new Wall(cell*20, cell*40, cell * 2   , cell  ,   c_blk1));
         this.walls.push(new Wall(cell*24, cell*40, cell * 2   , cell  ,   c_blk1));
         this.walls.push(new Wall(cell*28, cell*40, cell * 4   , cell  ,   c_blk1));
+
+        this.walls.push(new Wall(cell * 3, cell*65, cell   , cell  ,   c_blk1));
+        this.walls.push(new Wall(cell * 8, cell*65, cell   , cell  ,   c_blk1));
 
         this.walls.push(new Wall(cell*46, cell*40, cell * 12  , cell  ,   c_blk1));  // MID MID
 
@@ -178,9 +188,13 @@ export class	Map {
 		this.walls.push(new Wall(cell*50, cell*69, cell  , cell  ,   c_blk1)); // MID 
 		this.walls.push(new Wall(cell*50, cell*71, cell  , cell * 16  ,   c_blk1)); // MID 
 
+		this.walls.push(new Wall(cell*67, cell*87, cell  , cell * 13  ,   c_blk1)); // MID 
+
+
 		// FURNITURES
 
-        this.walls.push(new Wall(cell*24, cell*52, cell * 6 , cell * 12 ,   c_blk1)); // ROOM BOT LEFT 
+        this.walls.push(new Wall(cell*22, cell*50, cell * 5 , cell * 12 ,   c_blk1)); // ROOM BOT LEFT 
+        this.walls.push(new Wall(cell*36, cell*64, cell * 5 , cell * 12 ,   c_blk1)); // ROOM BOT LEFT 
         this.walls.push(new Wall(cell*22, cell*19.5, cell * 10 , cell * 4 ,   c_blk1)); // ROOM TOP LEFT 
 		
 
