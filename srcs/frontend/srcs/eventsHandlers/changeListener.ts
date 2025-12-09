@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 21:46:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 14:44:03 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 16:13:45 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { appStore } from "../objects/store";
 import { sendRequest }			from "../utils/sendRequest"
 import { setDynamicFavicon }	from "../utils/setDynamicFavicon"
 
@@ -56,7 +57,13 @@ async function uploadAvatar(userId: number, file: File) {
 		if (imgElement)
 			imgElement.src = `/uploads/${data.avatar}?t=${new Date().getTime()}`;
 
-		setDynamicFavicon(data.avatar);
+		appStore.setState((state) => ({
+			...state,
+			user: {
+				...state.user,
+				avatar: data.avatar,
+			}
+		}));
 	} catch (err) {
 		console.error('Network error:', err);
 	}

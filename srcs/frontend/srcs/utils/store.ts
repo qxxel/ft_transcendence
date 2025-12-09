@@ -6,16 +6,16 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:16:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 13:19:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 16:04:30 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // 
 
 
-export class Store<T> {
-	private state: T;
-	private subscribers: ((state: T) => void)[];
+export class	Store<T> {
+	private	state: T;
+	private	subscribers: ((state: T) => void)[];
 
 	constructor(initialState: T) {
 		this.state = initialState;
@@ -27,7 +27,7 @@ export class Store<T> {
 	}
 
 	setState(newState: Partial<T> | ((currentState: T) => Partial<T>)) {
-		const changes = typeof newState === 'function' ? newState(this.state) : newState;
+		const	changes = typeof newState === 'function' ? newState(this.state) : newState;
 
 		this.state = { ...this.state, ...changes };
 

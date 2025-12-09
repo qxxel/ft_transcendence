@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 00:42:19 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 15:56:00 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ import { btnCooldown }						from "../utils/buttonCooldown.js"
 
 import { Tank }	from "../tank/class_tank.js"
 import { Game }	from "../Pong/gameClass.js"
+import { setDynamicFavicon } from "../utils/setDynamicFavicon.js"
 
 /* ====================== FUNCTIONS ====================== */
 
@@ -58,6 +59,8 @@ async function  onClickLogout(): Promise<void> {
 			isAuth: false
 		}
 	}));
+
+	// setDynamicFavicon(null);
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
