@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/09 21:08:38 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 23:36:24 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { AppState, appStore }	from "../objects/store.js"
+import { appStore }				from "../objects/store.js"
 import { getMenu }				from "../utils/getMenu.js"
+import { notificationService }	from "../utils/notifService.js"
 import { router }				from "../index.js"
 import { sendRequest }			from "../utils/sendRequest.js"
 import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
@@ -49,7 +50,7 @@ async function	handleLoadPage(): Promise<void> {
 			}
 		}));
 
-		const	baseHref: string = window.location.origin;
+		notificationService.connect();
 
 		const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 		if (menu)

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 17:34:04 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 23:45:36 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 import { verifyEmail }						from "../utils/verifyEmail.js"
 import { AppState, appStore, UserState }	from "../objects/store.js"
-import { displayError, displayPopError }	from "../utils/display.js"
+import { displayError, displayPop }	from "../utils/display.js"
 import { getAndRenderFriends }				from "../friends/getAndRenderFriends.js"
 import { getMenu }							from "../utils/getMenu.js"
 import { router }							from "../index.js"
@@ -79,7 +79,7 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 			body: JSON.stringify({ })
 		}).then((response) => {
 				if (!response.ok)
-					displayPopError(response);
+					displayPop(response, "error");
 			});
 		
 		return ;
@@ -158,9 +158,6 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 			isAuth: true
 		}
 	}));
-
-	const	state: AppState = appStore.getState();
-	const	user: UserState = state.user;
 
 	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
@@ -305,7 +302,7 @@ async function	handleAddFriendForm(form: HTMLFormElement) {
 	const	respTargetId: Response = await sendRequest(`/api/user/lookup/${targetName}`, "get", null);
 	if (!respTargetId.ok)
 	{
-		displayPopError(respTargetId)
+		displayPop(respTargetId, "error")
 		return ;
 	}
 	const	targetId: number = (await respTargetId.json() as any).id;
@@ -313,7 +310,7 @@ async function	handleAddFriendForm(form: HTMLFormElement) {
 	const	response: Response = await sendRequest(`/api/user/friends/request/${targetId}`, "post", {});
 	if (!response.ok)
 	{
-		displayPopError(response)
+		displayPop(response, "error")
 		return ;
 	}
 

@@ -47,7 +47,7 @@ p {
     display: none !important;
 }
 
-div#div-errors {
+div#div-notif {
     height: 100%;
     width: 20%;
     position: fixed;
@@ -64,7 +64,7 @@ div#div-errors {
     pointer-events: none;
 }
 
-div.error {
+div.error, div.success, div.notif {
     max-height: 20%;
     display: flex;
     align-items: center;
@@ -72,16 +72,27 @@ div.error {
     border-radius: 12px;
     padding: 10px;
     margin-top: 10px;
+}
+
+div.error {
     background-color: rgba(255, 69, 69, 0.774);
 }
 
-div.error > p {
+div.success {
+    background-color: rgba(69, 255, 69, 0.774);
+}
+
+div.notif {
+    background-color: rgba(146, 146, 146, 0.774);
+}
+
+div.error > p, div.success > p, div.notif > p {
     max-height: 100%;
     margin: 0;
     color: black;
 }
-
-div.error > span {
+    
+div.error > span, div.success > span, div.notif > span {
     vertical-align: middle;
     margin-left: auto;
     text-align: left;

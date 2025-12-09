@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayUserController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 23:16:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 00:04:50 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { gatewayAxios }			from "../api-gateway.js"
-import { getValidUserId }		from "../utils/validateJwt.js"
-import { requestErrorsHandler }	from "../utils/requestErrors.js"
+import { gatewayAxios, notifManager }	from "../api-gateway.js"
+import { getValidUserId }				from "../utils/validateJwt.js"
+import { requestErrorsHandler }			from "../utils/requestErrors.js"
 
-import type { AxiosHeaderValue, AxiosResponse }  									from 'axios'
+import type { AxiosHeaderValue, AxiosResponse }  				from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 
 
@@ -135,9 +135,6 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 
 	/* =========== STATS ROUTE =========== */
 
-	// STATS UPDATES
-																														//
-
 	// STATS GETTER
 	gatewayFastify.get('/stats/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const	{ id } = request.params as { id: string };
@@ -166,6 +163,12 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	response: AxiosResponse = await gatewayAxios.post(`http://user:3000/friends/request/${parseTargetId}`, request.body,
 				{ headers: { 'user-id': userId } }
 			);
+
+			notifManager.sendToUser(parseTargetId, {
+				type: "FRIEND_REQUEST",
+				fromId: userId,
+				message: `You received a friend request from ${userId} !`
+			});
 
 			return reply.send(response.data);
 		} catch (err: unknown) {

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 21:09:05 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 23:42:17 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,13 @@ import { router }							from "../index.js"
 import { sendRequest }						from "../utils/sendRequest.js"
 import { socket }							from "../socket/socket.js"
 import { displayDate }						from "../utils/display.js"
-import { displayError, displayPopError }	from "../utils/display.js"
+import { displayError, displayPop }	from "../utils/display.js"
 import { btnCooldown }						from "../utils/buttonCooldown.js"
 
 import { Tank }	from "../tank/class_tank.js"
 import { Game }	from "../Pong/gameClass.js"
 import { setDynamicFavicon } from "../utils/setDynamicFavicon.js"
+import { notificationService } from "../utils/notifService.js"
 
 /* ====================== FUNCTIONS ====================== */
 
@@ -59,6 +60,9 @@ async function  onClickLogout(): Promise<void> {
 			isAuth: false
 		}
 	}));
+
+	notificationService.disconnect();
+	
 
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
@@ -248,7 +252,7 @@ async function	onClickNewCode(): Promise<void> {
 				if (btnSend) btnSend.disabled = false;
 				if (spanCooldown) spanCooldown.textContent = "";
 				locks.forEach(e => (e as HTMLElement).hidden = true);
-				displayPopError(response);
+				displayPop(response, "error");
 				return;
 			}
 		});

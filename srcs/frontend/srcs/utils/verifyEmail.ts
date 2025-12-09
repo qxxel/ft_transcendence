@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   verifyEmail.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:11:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/08 22:12:40 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 22:22:01 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { router }       from "../index.js"
-import { displayDate, displayPopError }	from "./display.js"
+import { displayDate, displayPop }	from "./display.js"
 import { sendRequest }	from "./sendRequest.js"
 
 export async function	verifyEmail(idDivHidden: string, idDivVisible: string, email: string): Promise<void> {
@@ -35,8 +35,9 @@ export async function	verifyEmail(idDivHidden: string, idDivVisible: string, ema
 			body: JSON.stringify({ email })
 		})
 		.then(async (res) => {
-			if (!res.ok) {
-				displayPopError(res)
+			if (!res.ok)
+			{
+				displayPop(res, "error")
 				return ;
 			}
 		});
