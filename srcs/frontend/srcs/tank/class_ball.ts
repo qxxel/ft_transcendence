@@ -78,6 +78,8 @@ export class	Ball extends Actor {
 				this.duration = 1500;
 				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 			}
+			else
+				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 		}
 		else
 			this.rect = new Rect2D(this.x, this.y, this.w, this.h);
