@@ -29,28 +29,90 @@ import type { Color, Keys }	from "./interface.js"
 export class	Tank extends Actor {
 
 	rect: Rect2D;
-	cannon: Cannon;
-	speed: number = 0.85;
+	cannon: Cannon[] = [];
+	speed: number = 0.80;
 	rot_speed: number = 0.1;
-	health: number = 5;
+	health: number = 6;
 	maxHealth: number = this.health;
 	fire_rate: number = 2000; // ms
 	fire_last: number = 0;
-	fire_speed: number = 3;
 	hud: Hud;
+	ball_size: number = 10;
+
 	constructor(
 		x:number,
 		y:number,
-		public	w:number,
-		public	h:number,
+		public w:number,
+		public h:number,
 		public	color:Color,
 		public	fire_color:Color,
 		public	keys:Keys,
+		public	model:string,
 		public  id:number) {
 		super(x,y)
-		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
-		this.cannon = new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),3,0,fire_color);
-		this.hud = new Hud(this.x,this.y,this.x + this.w, this.y, this.x + this.w/2,this.y,fire_color);
+
+		if (model == "sniper")
+		{
+			this.speed = 0.65
+			this.rot_speed = 0.08
+			this.health = 7
+			this.fire_rate = 6000;
+			this.maxHealth = this.health;
+			this.ball_size = 18.5;
+			this.w *= 0.9; 
+			this.h *= 0.9; 
+
+			this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+			this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),6,0,fire_color));
+			this.hud = new Hud(this.x,this.y,this.x + this.w, this.y, this.x + this.w/2,this.y,fire_color);
+		}
+		else if (model == "uzi")
+		{
+			this.speed = 1.15
+			this.rot_speed = 0.13
+			this.health = 4
+			this.fire_rate = 350
+			this.maxHealth = this.health;
+			this.ball_size = 8;
+
+			this.w *= 0.5; 
+			this.h *= 0.5; 
+			this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+			this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),3,0,fire_color));
+			this.hud = new Hud(this.x,this.y,this.x + this.w, this.y, this.x + this.w/2,this.y,fire_color);
+		}
+		else if (model == "shotgun")
+		{
+			this.speed = 0.9
+			this.rot_speed = 0.1
+			this.health = 8
+			this.fire_rate = 4000
+			this.maxHealth = this.health;
+			this.ball_size = 3;
+
+			this.w *= 1.1; 
+			this.h *= 1.1; 
+			this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+			this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h / 2),3,0,fire_color));
+
+			this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h / 2.15),3,-Math.PI / 32,fire_color));
+
+			this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h / 1.85),3,Math.PI / 32,fire_color));
+
+			this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h / 2.3),3,-Math.PI / 16,fire_color));
+
+			this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h / 1.7),3,Math.PI / 16,fire_color));
+
+
+
+			this.hud = new Hud(this.x,this.y,this.x + this.w, this.y, this.x + this.w/2,this.y,fire_color);
+		}
+		else
+		{
+			this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+			this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),3,0,fire_color));
+			this.hud = new Hud(this.x,this.y,this.x + this.w, this.y, this.x + this.w/2,this.y,fire_color);
+		}
 	}
 
 	update(input: Input): void {
@@ -61,7 +123,8 @@ export class	Tank extends Actor {
 
 	draw(ctx: CanvasRenderingContext2D): void {
 			this.rect.draw(ctx, this.color)
-			this.cannon.draw(ctx);
+			for (let c of this.cannon)
+				c.draw(ctx);
 
 			if (!this.canFire()) {
 				const elapsed = Date.now() - this.fire_last;
@@ -75,24 +138,44 @@ export class	Tank extends Actor {
 	}
 
 	listen(input: Input): void {
-		if (input.isDown(this.keys.up))			{ this.move(0,-this.speed); GSTATE.REDRAW = true; }
-		if (input.isDown(this.keys.down))		{ this.move(0,+this.speed); GSTATE.REDRAW = true; }
-		if (input.isDown(this.keys.left))		{ this.move(-this.speed,0); GSTATE.REDRAW = true; }
-		if (input.isDown(this.keys.right))		{ this.move(+this.speed,0); GSTATE.REDRAW = true; }
-		if (input.isDown(this.keys.rot_left))	{ this.cannon.slope(-this.rot_speed); GSTATE.REDRAW = true; }
-		if (input.isDown(this.keys.rot_right))	{ this.cannon.slope(+this.rot_speed); GSTATE.REDRAW = true; }
+		if (input.isDown(this.keys.up)) {
+				this.move(this.speed * Math.cos(this.cannon[0].geometry.angle),this.speed * Math.sin(this.cannon[0].geometry.angle));
+			GSTATE.REDRAW = true;
+		}
+		if (input.isDown(this.keys.down)) {
+				this.move(-this.speed * Math.cos(this.cannon[0].geometry.angle),-this.speed * Math.sin(this.cannon[0].geometry.angle));
+			GSTATE.REDRAW = true;
+		}
+		if (input.isDown(this.keys.left)) { 
+			for (let c of this.cannon)
+				c.slope(-this.rot_speed);
+			GSTATE.REDRAW = true;
+		}
+		if (input.isDown(this.keys.right)) { 
+			for (let c of this.cannon)
+				c.slope(+this.rot_speed);
+			GSTATE.REDRAW = true;
+		}
 		if (input.isPressed(this.keys.fire))	{ this.fire(); }
 	}
 
 	move(dx:number,dy:number): void {
-		if (this.collide(new Rect2D(this.x + dx, this.y + dy, this.w, this.h)))
-			return;
-		this.x += dx;
-		this.y += dy;
-		this.rect.x += dx;
-		this.rect.y += dy;
-		this.cannon.move(dx,dy);
-		this.hud.move(dx,dy);
+		if (!this.collide(new Rect2D(this.x, this.y + dy, this.w, this.h))){
+			this.y += dy;
+			this.rect.y += dy;
+			for (let c of this.cannon)
+				c.move(0,dy);
+			this.hud.move(0,dy);
+		}
+		if (!this.collide(new Rect2D(this.x + dx, this.y, this.w, this.h))){
+			this.x += dx;
+			this.rect.x += dx;
+			for (let c of this.cannon)
+				c.move(dx,0);
+			this.hud.move(dx,0);
+		}
+
+		
 	}
 
 	fire(): void {
@@ -101,25 +184,77 @@ export class	Tank extends Actor {
 		
 		const now = Date.now(); // performance.now();
 
-		const spawnRect = new Rect2D(this.cannon.getEnd().x - 10/2 ,this.cannon.getEnd().y - 10/2 ,10,10);
-
-		for (let a of GSTATE.ACTORS) {
-			if (a == this)
-				continue;
-			if (!(a instanceof Tank) && a.getRect().collide(spawnRect))
-				return;
+		for (let c of this.cannon)
+		{
+			let spawnRect = new Rect2D(c.getEnd().x , c.getEnd().y ,this.ball_size,this.ball_size);
+			for (let a of GSTATE.ACTORS) {
+				if (a == this)
+					continue;
+				if (!(a instanceof Tank) && a.getRect().collide(spawnRect))
+					return;
+			}
 		}
 
-		this.fire_last = now;
 
 		if (this.id == 0)
 			GSTATE.STATS1.fire += 1;
 		else
 			GSTATE.STATS2.fire += 1;
 
-		GSTATE.ACTORS.push(
-				new Ball(this.cannon.getEnd().x - 10/2 ,this.cannon.getEnd().y - 10/2 ,10,10, Math.cos(this.cannon.geometry.angle) * 3, Math.sin(this.cannon.geometry.angle) * 3,
-					this.fire_color, this));
+		for (let c of this.cannon)
+		{
+
+			this.fire_last = now;
+			GSTATE.ACTORS.push(
+					new Ball(
+						c.getEnd().x - this.ball_size / 2,
+						c.getEnd().y - this.ball_size / 2,
+						this.ball_size,
+						this.ball_size,
+						Math.cos(c.geometry.angle) * 3,
+						Math.sin(c.geometry.angle) * 3,
+						1000,
+						this.fire_color,
+						this
+					));
+		}
+
+		// if (!this.canFire()) return;
+		
+		// const now = Date.now();
+
+		// for (let c of this.cannon)
+		// {
+		// 	for (let a of GSTATE.ACTORS) {
+		// 		let spawnRect = new Rect2D(c.getEnd().x , c.getEnd().y ,this.ball_size,this.ball_size);
+		// 		if (a == this || (!(a instanceof Tank) && a.getRect().collide(spawnRect)))
+		// 			continue;
+		// 		else
+		// 		{
+		// 			if (this.id == 0)
+		// 				GSTATE.STATS1.fire += 1;
+		// 			else
+		// 				GSTATE.STATS2.fire += 1;
+		// 			GSTATE.ACTORS.push(
+		// 					new Ball(
+		// 						c.getEnd().x - this.ball_size / 2,
+		// 						c.getEnd().y - this.ball_size / 2,
+		// 						this.ball_size,
+		// 						this.ball_size,
+		// 						Math.cos(c.geometry.angle) * 3,
+		// 						Math.sin(c.geometry.angle) * 3,
+		// 						1000,
+		// 						this.fire_color,
+		// 						this
+		// 					));
+		// 		}
+		// 	}
+		// }
+		// 			this.fire_last = now;
+
+
+
+
 
 	}
 
@@ -140,6 +275,7 @@ export class	Tank extends Actor {
 	addHealth(amount:number): void {
 		if (this.health + amount > this.maxHealth) return; 
 		this.health += amount;
+
 		if (this.health <= 0) {
 			GSTATE.TANKS -= 1;
 			if (this.id == 0)

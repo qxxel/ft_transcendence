@@ -15,8 +15,8 @@
 
 /* ============================= IMPORT ============================= */
 
+import { Tank }			from "./class_tank.js";
 import type { Color }	from "./interface.js"
-
 
 /* ============================= CLASS ============================= */
 
@@ -51,6 +51,7 @@ export class	Line2D {
 	}
 
 	getEnd(): { x: number; y: number } {
+		// return { x: this.x2 + ((this.w / 2) * Math.cos(this.angle)), y: this.y2 + ((this.w / 2) * Math.sin(this.angle)) };
 		return { x: this.x2, y: this.y2 };
 	}
 

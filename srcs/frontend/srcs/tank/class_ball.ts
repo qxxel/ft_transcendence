@@ -29,11 +29,14 @@ export class	Ball extends Actor {
 
 	rect: Rect2D;
 	redraw: boolean = true;
-	speed: number = 5;
+	speed: number = 1;
 	damage: number = 1;
-	bounce_count: number = 5;
+	bounce_count: number = 3;
+	health: number = 2;
 	direction_impact: string = "";
-
+	birth: number;
+	opacity: number = 1;
+	
 	constructor(
 		x:number,
 		y:number,
@@ -41,37 +44,77 @@ export class	Ball extends Actor {
 		public	h:number,
 		public	dx:number,
 		public	dy:number,
+		public	duration:number,
 		public	color:Color,
 		public	author?:Tank) {
 		super(x,y)
-		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 
+		if (author)
+		{
+			if (author.model == "sniper")
+			{
+				this.damage = 4;
+				this.bounce_count = 2;
+				this.speed = 0.9;
+				this.health = 4;
+				this.duration = 0;
+				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+			}
+			else if (author.model == "uzi")
+			{
+				this.damage = 0.5;
+				this.bounce_count = 5;
+				this.speed = 1.25;
+				this.health = 1;
+				this.duration = 3000;
+				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+			}
+			else if (author.model == "shotgun")
+			{
+				this.damage = 1.2;
+				this.bounce_count = 2;
+				this.speed = 1.25;
+				this.health = 1;
+				this.duration = 1500;
+				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+			}
+		}
+		else
+			this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+		this.birth = Date.now()
 	}
 
 	update(input: Input): void {
 		this.move();
+		// console.log("BIRTH=", this.birth, "DURA=", this.duration, "NOW", Date.now());
+		console.log("OPACITY", this.opacity);
+		this.desaturate();
+		if (this.duration != 0 && Date.now() - this.birth  > this.duration)
+		{
+			this.destroy();
+		}
 		GSTATE.REDRAW = true;
 	}
 
 	draw(ctx: CanvasRenderingContext2D): void {
 		// this.rect.draw(ctx, {r:0,g:0,b:255});
 		ctx.beginPath();
-		ctx.fillStyle = `#${((this.color.r << 16) | (this.color.g << 8) | this.color.b).toString(16).padStart(6,'0')}`; // HUH
+		ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity})`;
 		ctx.arc(this.x + this.w/2, this.y + this.h/2, this.w/2, 0, Math.PI * 2);
 		ctx.fill();
 	}
 
 	move(): void {
-	const future: Rect2D = new Rect2D(this.x + this.dx, this.y + this.dy, this.w, this.h);
+	const future: Rect2D = new Rect2D(this.x + this.dx * this.speed, this.y + this.dy * this.speed, this.w, this.h);
 
 	if (this.collide(future)) {
 		if      (this.direction_impact == "vertical") this.dy = -this.dy;
 		else if (this.direction_impact == "horizontal") this.dx = -this.dx;
 	}
-		this.x += this.dx;
-		this.y += this.dy;
-		this.rect.x += this.dx;
-		this.rect.y += this.dy;
+		this.x += this.dx * this.speed;
+		this.y += this.dy * this.speed;
+		this.rect.x += this.dx * this.speed;
+		this.rect.y += this.dy * this.speed;
 	}
 
 	collide(rect1: Rect2D): boolean {
@@ -89,10 +132,20 @@ export class	Ball extends Actor {
 						else if (this.author.id == 1)
 							GSTATE.STATS2.hit += 1;
 					}
-					a.addHealth(-this.damage);
+					a.addHealth(-this.damage * this.opacity);
 					this.destroy();
 					return true;
 				}
+				else if (a instanceof Ball) {
+					if (this.author && a.author && this.author != a.author)
+					{
+						let tmp_damage:number = a.health;
+						a.takeDamage(this.health);
+						this.takeDamage(tmp_damage);
+					}
+					return false;
+				}
+				
 				if (this.author!.id == 0)
 					GSTATE.STATS1.bounce += 1;
 				else
@@ -127,6 +180,21 @@ export class	Ball extends Actor {
 		const overlapY = (this.h / 2 + other.h / 2) - Math.abs(dy);
 		return overlapX < overlapY ? "horizontal" : "vertical";
 	}
+	takeDamage(amount:number): void {
+		this.health -= amount;
+		if (this.health <= 0) {
+			this.destroy();
+		}
+	}
+
+	desaturate() : void
+	{
+		if (this.duration == 0)
+			this.opacity = 1;
+		else
+			this.opacity = 1 - (   (Date.now() - this.birth)  / this.duration );
+	}
+
 }
 
 export class	Collectible extends Ball {

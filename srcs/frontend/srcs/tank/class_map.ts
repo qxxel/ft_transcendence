@@ -79,24 +79,24 @@ export class	Map {
 // X      d X
 // XXXXXXXXXX
 
-		this.walls.push(new Wall(cell*2, cell*2, cell  , cell  ,   c_blk1)); // 1
-		this.walls.push(new Wall(cell*4, cell*2, cell*2, cell  ,   c_blk2)); // 2
-		this.walls.push(new Wall(cell*7, cell*2, cell  , cell  ,   c_blk1)); // 3
-		this.walls.push(new Wall(cell*2, cell*4, cell  , cell*2,   c_blk2)); // 4
+		this.walls.push(new Wall(cell*1.5, cell*1.5, cell  , cell  ,   c_blk1)); // 1
+		// this.walls.push(new Wall(cell*4, cell*1.5, cell*2, cell  ,   c_blk2)); // 2
+		this.walls.push(new Wall(cell*7.5, cell*1.5, cell  , cell  ,   c_blk1)); // 3
+		// this.walls.push(new Wall(cell*1.5, cell*4, cell  , cell*2,   c_blk2)); // 4
 		this.walls.push(new Wall(cell*4, cell*4, cell*2, cell*2,   c_blk2)); // 5
-		this.walls.push(new Wall(cell*7, cell*4, cell  , cell*2,   c_blk2)); // 6
-		this.walls.push(new Wall(cell*2, cell*7, cell  , cell  ,   c_blk1)); // 7
-		this.walls.push(new Wall(cell*4, cell*7, cell*2, cell  ,   c_blk2)); // 8
-		this.walls.push(new Wall(cell*7, cell*7, cell  , cell  ,   c_blk1)); // 9
+		// this.walls.push(new Wall(cell*7.5, cell*4, cell  , cell*2,   c_blk2)); // 6
+		this.walls.push(new Wall(cell*1.5, cell*7.5, cell  , cell  ,   c_blk1)); // 7
+		// this.walls.push(new Wall(cell*4, cell*7.5, cell*2, cell  ,   c_blk2)); // 8
+		this.walls.push(new Wall(cell*7.5, cell*7.5, cell  , cell  ,   c_blk1)); // 9
 
 		for(let w of this.walls) {
 			GSTATE.ACTORS.push(w);
 		}
 
-			this.spawns_tank1.push({x:cell*2.5 - 24,y:cell*1.5 - 24}); // a
-			this.spawns_tank1.push({x:cell*1.5 - 24,y:cell*7.5 - 24}); // b
-			this.spawns_tank2.push({x:cell*8.5 - 24,y:cell*2.5 - 24}); // c
-			this.spawns_tank2.push({x:cell*7.5 - 24,y:cell*8.5 - 24}); // d
+			this.spawns_tank1.push({x:cell*2 - 24,y:cell*1 - 24}); // a
+			this.spawns_tank1.push({x:cell*1 - 24,y:cell*8 - 24}); // b
+			this.spawns_tank2.push({x:cell*9 - 24,y:cell*2 - 24}); // c
+			this.spawns_tank2.push({x:cell*8 - 24,y:cell*9 - 24}); // d
 
 			this.spawns_collectible.push({x:cell*5.0 - 16/2,y: cell*3.5- 16/2});   // i
 			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*5.0- 16/2});   // j

@@ -46,7 +46,7 @@ export class	TankGame extends Game {
 	private lastCollectibleSpawn: number = 0;
 
 
-	// 	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user, mode, difficulty, star1, star2, star3); 
+		// gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user, mode, difficulty, star1, star2, star3); 
 	constructor(
 		private canvasId: string, 
 		private map_name: string,
@@ -86,20 +86,24 @@ export class	TankGame extends Game {
 	{
 		if (!this.map) return;
 		GSTATE.TANKS = 0;
-		let tank_width:number = 48;
-		let tank_height:number = 48;
+		let tank_width:number = 40;
+		let tank_height:number = 40;
 
 		if (this.map.name == 'desertfox')
 		{
 			let s1 = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
 			let s2 = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];
 
+			let model1: string = "sniper";
+			// let model1: string = "sniper";
+			let model2: string = "shotgun";
+
 			GSTATE.ACTORS.push(new Tank(s1!.x, s1!.y, tank_width, tank_height,
 				{r:50,g:200,b:30}, {r:0,g:255,b:255},
-				{up:'w',down:'s',left:'a',right:'d',rot_left:'q',rot_right:'e',fire:' '},0));
+				{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' '}, model1, 0));
 			GSTATE.ACTORS.push(new Tank(s2!.x, s2!.y, tank_width, tank_height,
 				{r:50,g:200,b:30}, {r:255,g:0,b:255},
-				{up:'i',down:'k',left:'j',right:'l',rot_left:'u',rot_right:'o',fire:'.'},1));
+				{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0'}, model2, 1));
 			GSTATE.TANKS += 2;
 		}
 		else { console.log("Unknown map :", this.map.name) }
@@ -167,9 +171,10 @@ export class	TankGame extends Game {
 	private listen() : void {
 
 		if (this.input.isPressed('Escape')) {
-			if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA QUIT
+			if (GSTATE.TANKS == 1 && this.isPaused) {
+				this.quitGame();
 			}
-			else if (GSTATE.TANKS != 1) { // SWITCH PAUSE UNPAUSE
+			else if (GSTATE.TANKS != 1) {
 				this.isPaused = !this.isPaused;
 				GSTATE.REDRAW = true;
 			}
@@ -255,13 +260,13 @@ export class	TankGame extends Game {
 	document.getElementById('p1-stat-name')!.innerText = this.player1Name + "";
 	document.getElementById('stat-p1-accuracy')!.innerText = `${accuracy1.toFixed(1)}%`;
 	document.getElementById('stat-p1-fire')!.innerText = `${GSTATE.STATS1.fire}`;
-	document.getElementById('stat-p1-hit')!.innerText = `${GSTATE.STATS2.hit}`;
+	document.getElementById('stat-p1-hit')!.innerText = `${GSTATE.STATS1.hit}`;
 	document.getElementById('stat-p1-bounce')!.innerText = `${GSTATE.STATS1.bounce}`;
 
 	document.getElementById('p2-stat-name')!.innerText = this.player2Name + "";
 	document.getElementById('stat-p2-accuracy')!.innerText = `${accuracy2.toFixed(1)}%`;
 	document.getElementById('stat-p2-fire')!.innerText = `${GSTATE.STATS2.fire}`;
-	document.getElementById('stat-p2-hit')!.innerText = `${GSTATE.STATS1.hit}`;
+	document.getElementById('stat-p2-hit')!.innerText = `${GSTATE.STATS2.hit}`;
 	document.getElementById('stat-p2-bounce')!.innerText = `${GSTATE.STATS2.bounce}`;
 
 
