@@ -36,8 +36,8 @@ export class	Map {
 		public	name: string = "default",
 	) {
 		if (this.name == "desertfox") { this.generate_desertfox(); }
-		if (this.name == "thehousemap") { this.generate_thehousemap(); }
-		if (this.name == "davinco") { this.generate_davinco(); }
+		else if (this.name == "thehousemap") { this.generate_thehousemap(); }
+		else if (this.name == "davinco") { this.generate_davinco(); }
 		else { this.generate_default(); }
 	}
 

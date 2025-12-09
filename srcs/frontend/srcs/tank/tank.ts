@@ -98,10 +98,10 @@ export class	TankGame extends Game {
 
 			GSTATE.ACTORS.push(new Tank(s1!.x, s1!.y, tank_width, tank_height,
 				{r:50,g:200,b:30}, {r:0,g:255,b:255},
-				{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' '}, this.p1Class, 0));
+				{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, this.p1Class, 0));
 			GSTATE.ACTORS.push(new Tank(s2!.x, s2!.y, tank_width, tank_height,
 				{r:50,g:200,b:30}, {r:255,g:0,b:255},
-				{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0'}, this.p2Class, 1));
+				{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, this.p2Class, 1));
 			GSTATE.TANKS += 2;
 		}
 		else { console.log("Unknown map :", this.map.name) }

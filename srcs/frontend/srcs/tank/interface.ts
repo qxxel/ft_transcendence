@@ -29,4 +29,5 @@ export interface	Keys {
 	rot_left: string,
 	rot_right: string,
 	fire: string
+	ability: string
 };

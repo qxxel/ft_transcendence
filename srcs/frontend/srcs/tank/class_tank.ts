@@ -36,6 +36,10 @@ export class	Tank extends Actor {
 	maxHealth: number = this.health;
 	fire_rate: number = 2000; // ms
 	fire_last: number = 0;
+	ability_cooldown: number = 2000; // ms
+	ability_duration: number = 2000; // ms
+	ability_last: number = 2000; // ms
+	ability_active: boolean = false; // ms
 	hud: Hud;
 	ball_size: number = 10;
 
@@ -157,6 +161,7 @@ export class	Tank extends Actor {
 			GSTATE.REDRAW = true;
 		}
 		if (input.isPressed(this.keys.fire))	{ this.fire(); }
+		if (input.isPressed(this.keys.ability))				{ this.ability(); }
 	}
 
 	move(dx:number,dy:number): void {
@@ -219,6 +224,12 @@ export class	Tank extends Actor {
 		}
 	}
 
+	ability(): void {
+		if (!this.canAbility()) return;
+		this.ability_last = Date.now();
+		console.log("Ability!\n");
+	}
+
 	collide(rect1: Rect2D): boolean {
 
 		for (let a of GSTATE.ACTORS) {
@@ -254,6 +265,10 @@ export class	Tank extends Actor {
 	}
 
 	canFire(): boolean {
-			return Date.now() - this.fire_last > this.fire_rate;
+		return Date.now() - this.fire_last > this.fire_rate;
+	}
+	canAbility(): boolean {
+		if (this.ability_active) return false;
+		return Date.now() - this.ability_last > this.ability_cooldown;
 	}
 }

@@ -86,7 +86,6 @@ export class	Ball extends Actor {
 
 	update(input: Input): void {
 		this.move();
-		// console.log("BIRTH=", this.birth, "DURA=", this.duration, "NOW", Date.now());
 		this.desaturate();
 		if (this.duration != 0 && Date.now() - this.birth  > this.duration)
 		{
@@ -207,7 +206,7 @@ export class	Collectible extends Ball {
 		h:number,
 		public type:string) {
 
-		super(x,y,w,h,0,0, {r:50,g:170,b:40});
+		super(x,y,w,h,0,0,0, {r:50,g:170,b:40});
 
 		switch (this.type) {
         	case 'heal':
