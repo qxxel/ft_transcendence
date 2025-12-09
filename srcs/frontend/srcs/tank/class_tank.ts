@@ -182,80 +182,41 @@ export class	Tank extends Actor {
 
 		if (!this.canFire()) return;
 		
-		const now = Date.now(); // performance.now();
-
+		const now = Date.now();
+		let isSpawnable:boolean;
 		for (let c of this.cannon)
 		{
-			let spawnRect = new Rect2D(c.getEnd().x , c.getEnd().y ,this.ball_size,this.ball_size);
+			isSpawnable = true;
+			let spawnRect = new Rect2D(c.getEnd().x - this.ball_size / 2, c.getEnd().y - this.ball_size / 2, this.ball_size, this.ball_size);
 			for (let a of GSTATE.ACTORS) {
 				if (a == this)
 					continue;
-				if (!(a instanceof Tank) && a.getRect().collide(spawnRect))
-					return;
+				if (!(a instanceof Tank || a instanceof Ball) && a.getRect().collide(spawnRect)) {
+					isSpawnable = false;
+				}
+			}
+			if (isSpawnable)
+			{
+				if (this.id == 0)
+					GSTATE.STATS1.fire += 1;
+				else
+					GSTATE.STATS2.fire += 1;
+
+				this.fire_last = now;
+				GSTATE.ACTORS.push(
+						new Ball(
+							c.getEnd().x - this.ball_size / 2,
+							c.getEnd().y - this.ball_size / 2,
+							this.ball_size,
+							this.ball_size,
+							Math.cos(c.geometry.angle) * 3,
+							Math.sin(c.geometry.angle) * 3,
+							1000,
+							this.fire_color,
+							this
+						));
 			}
 		}
-
-
-		if (this.id == 0)
-			GSTATE.STATS1.fire += 1;
-		else
-			GSTATE.STATS2.fire += 1;
-
-		for (let c of this.cannon)
-		{
-
-			this.fire_last = now;
-			GSTATE.ACTORS.push(
-					new Ball(
-						c.getEnd().x - this.ball_size / 2,
-						c.getEnd().y - this.ball_size / 2,
-						this.ball_size,
-						this.ball_size,
-						Math.cos(c.geometry.angle) * 3,
-						Math.sin(c.geometry.angle) * 3,
-						1000,
-						this.fire_color,
-						this
-					));
-		}
-
-		// if (!this.canFire()) return;
-		
-		// const now = Date.now();
-
-		// for (let c of this.cannon)
-		// {
-		// 	for (let a of GSTATE.ACTORS) {
-		// 		let spawnRect = new Rect2D(c.getEnd().x , c.getEnd().y ,this.ball_size,this.ball_size);
-		// 		if (a == this || (!(a instanceof Tank) && a.getRect().collide(spawnRect)))
-		// 			continue;
-		// 		else
-		// 		{
-		// 			if (this.id == 0)
-		// 				GSTATE.STATS1.fire += 1;
-		// 			else
-		// 				GSTATE.STATS2.fire += 1;
-		// 			GSTATE.ACTORS.push(
-		// 					new Ball(
-		// 						c.getEnd().x - this.ball_size / 2,
-		// 						c.getEnd().y - this.ball_size / 2,
-		// 						this.ball_size,
-		// 						this.ball_size,
-		// 						Math.cos(c.geometry.angle) * 3,
-		// 						Math.sin(c.geometry.angle) * 3,
-		// 						1000,
-		// 						this.fire_color,
-		// 						this
-		// 					));
-		// 		}
-		// 	}
-		// }
-		// 			this.fire_last = now;
-
-
-
-
-
 	}
 
 	collide(rect1: Rect2D): boolean {

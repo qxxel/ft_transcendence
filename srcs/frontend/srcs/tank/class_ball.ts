@@ -87,7 +87,6 @@ export class	Ball extends Actor {
 	update(input: Input): void {
 		this.move();
 		// console.log("BIRTH=", this.birth, "DURA=", this.duration, "NOW", Date.now());
-		console.log("OPACITY", this.opacity);
 		this.desaturate();
 		if (this.duration != 0 && Date.now() - this.birth  > this.duration)
 		{
