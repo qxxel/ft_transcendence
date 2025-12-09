@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 04:23:36 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/09 21:36:12 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ export class	TankGame extends Game {
 		private powerupFrequency: number = 0,
 		private star1: boolean = false,
       	private star2: boolean = false,
-      	private star3: boolean = false
+      	private star3: boolean = false,
+		private p1Class: string = "classic",
+        private p2Class: string = "classic"
 	) {
 		super();
 		(window as any).quitGame = () => this.quitGame();
@@ -89,21 +91,17 @@ export class	TankGame extends Game {
 		let tank_width:number = 40;
 		let tank_height:number = 40;
 
-		if (this.map.name == 'desertfox' || this.map.name == 'thehousemap')
+		if (this.map.name == 'desertfox' || this.map.name == 'thehousemap' || this.map.name == 'davinco')
 		{
 			let s1 = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
 			let s2 = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];
 
-			let model1: string = "sniper";
-			// let model1: string = "sniper";
-			let model2: string = "shotgun";
-
 			GSTATE.ACTORS.push(new Tank(s1!.x, s1!.y, tank_width, tank_height,
 				{r:50,g:200,b:30}, {r:0,g:255,b:255},
-				{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' '}, model1, 0));
+				{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' '}, this.p1Class, 0));
 			GSTATE.ACTORS.push(new Tank(s2!.x, s2!.y, tank_width, tank_height,
 				{r:50,g:200,b:30}, {r:255,g:0,b:255},
-				{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0'}, model2, 1));
+				{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0'}, this.p2Class, 1));
 			GSTATE.TANKS += 2;
 		}
 		else { console.log("Unknown map :", this.map.name) }

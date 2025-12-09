@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 05:19:44 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/09 21:37:21 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ export class	Map {
 	) {
 		if (this.name == "desertfox") { this.generate_desertfox(); }
 		if (this.name == "thehousemap") { this.generate_thehousemap(); }
+		if (this.name == "davinco") { this.generate_davinco(); }
 		else { this.generate_default(); }
 	}
 
@@ -182,6 +183,51 @@ export class	Map {
         this.walls.push(new Wall(cell*24, cell*52, cell * 6 , cell * 12 ,   c_blk1)); // ROOM BOT LEFT 
         this.walls.push(new Wall(cell*22, cell*19.5, cell * 10 , cell * 4 ,   c_blk1)); // ROOM TOP LEFT 
 		
+
+
+		for(let w of this.walls) {
+			GSTATE.ACTORS.push(w);
+		}
+
+			this.spawns_tank1.push({x:cell*30,y:cell*30}); // d
+			this.spawns_tank2.push({x:cell*60,y:cell*60}); // b
+
+			this.spawns_collectible.push({x:cell*5.0 - 16/2,y: cell*3.5- 16/2});   // i
+			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*5.0- 16/2});   // j
+			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*5.0- 16/2});   // k
+			this.spawns_collectible.push({x:cell*5.0 - 16/2,y: cell*6.5- 16/2});   // l
+			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*3.5- 16/2});   // w
+			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*3.5- 16/2});   // x
+			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*6.5- 16/2});   // y
+			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*6.5- 16/2});   // z
+
+	}
+
+	generate_davinco(): void {
+
+		const c_ext  = {r:0,g:0,b:0};//675645
+		const c_blk1 = {r:110,g:110,b:110};
+		const c_blk2 = {r:160,g:160,b:160};
+
+		const ext_width = 1;
+		const cell =  this.map_height/100;
+
+		this.walls.push(new Wall(0, 0, ext_width, this.map_height, c_ext));                           // EXTERIOR LEFT
+		this.walls.push(new Wall(this.map_width - ext_width, 0, ext_width, this.map_height, c_ext));  // EXTERIOR RIGHT
+		this.walls.push(new Wall(0, 0, this.map_width, ext_width, c_ext));                            // EXTERIOR TOP
+		this.walls.push(new Wall(0, this.map_height - ext_width, this.map_width, ext_width, c_ext));  // EXTERIOR BOT
+
+// XXXXXXXXXX
+// X a e    X
+// X 1 22 3cX
+// X  wi x  X
+// X 4j55k6 X
+// X 4 55 6 X
+// X  yl z  X
+// Xb7 88 9 X
+// X      d X
+// XXXXXXXXXX
+
 
 
 		for(let w of this.walls) {
