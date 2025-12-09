@@ -180,7 +180,6 @@ export class	Tank extends Actor {
 			this.hud.move(dx,0);
 		}
 
-		
 	}
 
 	fire(): void {
