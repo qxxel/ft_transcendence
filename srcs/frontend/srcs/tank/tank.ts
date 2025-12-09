@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 21:36:12 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/09 22:36:38 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ export class	TankGame extends Game {
 		let tank_width:number = 40;
 		let tank_height:number = 40;
 
-		if (this.map.name == 'desertfox' || this.map.name == 'thehousemap' || this.map.name == 'davinco')
+		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'davinco')
 		{
 			let s1 = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
 			let s2 = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];

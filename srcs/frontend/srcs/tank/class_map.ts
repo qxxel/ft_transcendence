@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 22:08:07 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/09 22:36:38 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ export class	Map {
 		public	name: string = "default",
 	) {
 		if (this.name == "desertfox") { this.generate_desertfox(); }
-		else if (this.name == "thehousemap") { this.generate_thehousemap(); }
+		else if (this.name == "thehouse") { this.generate_thehouse(); }
 		else if (this.name == "davinco") { this.generate_davinco(); }
 		else { this.generate_default(); }
 	}
@@ -111,7 +111,7 @@ export class	Map {
 
 	}
 
-	generate_thehousemap(): void {
+	generate_thehouse(): void {
 
 		const c_ext  = {r:0,g:0,b:0};//675645
 		const c_blk1 = {r:110,g:110,b:110};
