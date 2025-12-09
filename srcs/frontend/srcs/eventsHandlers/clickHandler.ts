@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 19:42:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 04:23:36 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,7 +416,8 @@ function onClickPlayPVP() {
 			...state,
 			game: {
 				...state.game,
-				currentGame: new TankGame('tank-canvas', 'desertfox')
+				// currentGame: new TankGame('tank-canvas', 'desertfox')
+				currentGame: new TankGame('tank-canvas', 'thehousemap')
 			}
 		}));
 
