@@ -147,7 +147,7 @@ export class	Ball extends Actor {
 					}
 				}
 				else if (a instanceof Ball) {
-					if (this.author && a.author && this.author != a.author)
+					if (this.author && a.author && this.author != a.author && !(a instanceof Pearl))
 					{
 						let tmp_damage:number = a.health;
 						a.takeDamage(this.health);
@@ -273,4 +273,49 @@ export class	Collectible extends Ball {
 		ctx.fill();
 		ctx.stroke();
 	}
+}
+
+
+export class	Pearl extends Ball {
+
+	impact_x:number = 0;
+	impact_y:number = 0;
+	impact_orientation: "horizontal" | "vertical" = "horizontal";
+
+	constructor(
+		x:number,
+		y:number,
+		public	w:number,
+		public	h:number,
+		public	dx:number,
+		public	dy:number,
+		public	color:Color,
+		public	author?:Tank) {
+		super(x,y,w,h,dx,dy,0,color,author);
+
+		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+	}
+
+	draw(ctx: CanvasRenderingContext2D): void {
+		ctx.beginPath();
+		ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity})`;
+		ctx.arc(this.x + this.w/2, this.y + this.h/2, this.w/2, 0, Math.PI * 2);
+		ctx.fill();
+	}
+
+	collide(rect1: Rect2D): boolean {
+
+		for (let a of GSTATE.ACTORS) {
+			if (a == this || a == this.author || a instanceof Collectible) continue;
+			if (a.getRect().collide(rect1))
+			{
+				this.impact_x = rect1.x; 
+				this.impact_y = rect1.y;
+				this.impact_orientation = this.getBounce(a.getRect());
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
