@@ -16,13 +16,13 @@
 /* ============================= IMPORTS ============================= */
 
 import { AppState, appStore, GamesState, UserState }	from "../objects/store.js"
-import { Game }								from "../Pong/gameClass.js"
-import { GSTATE }							from "./global.js"
-import { router }							from "../index.js"
-import { Input }							from "./class_input.js"
-import { Map }								from "./class_map.js"
-import { Tank }								from "./class_tank.js"
-import { Ball, Collectible }				from "./class_ball.js"
+import { Game }											from "../Pong/gameClass.js"
+import { GSTATE }										from "./global.js"
+import { router }										from "../index.js"
+import { Input }										from "./class_input.js"
+import { Map }											from "./class_map.js"
+import { Tank, Uzi, Sniper, Shotgun, Classic } 			from "./class_tank.js"
+import { Ball, Collectible }							from "./class_ball.js"
 
 import type { Color, Keys }	from "./interface.js"
 import { Wall } from "./class_wall.js"
@@ -96,12 +96,57 @@ export class	TankGame extends Game {
 			let s1 = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
 			let s2 = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];
 
-			GSTATE.ACTORS.push(new Tank(s1!.x, s1!.y, tank_width, tank_height,
-				{r:50,g:200,b:30}, {r:0,g:255,b:255},
-				{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, this.p1Class, 0));
-			GSTATE.ACTORS.push(new Tank(s2!.x, s2!.y, tank_width, tank_height,
-				{r:50,g:200,b:30}, {r:255,g:0,b:255},
-				{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, this.p2Class, 1));
+			switch (this.p1Class)
+			{
+				case "uzi":
+					GSTATE.ACTORS.push(new Uzi(s1!.x, s1!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:0,g:255,b:255},
+					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, 0));
+					break;
+				case "sniper":
+					GSTATE.ACTORS.push(new Sniper(s1!.x, s1!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:0,g:255,b:255},
+					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, 0));
+					break;
+				case "shotgun":
+					GSTATE.ACTORS.push(new Shotgun(s1!.x, s1!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:0,g:255,b:255},
+					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, 0));
+					break;
+				case "classic":
+					GSTATE.ACTORS.push(new Classic(s1!.x, s1!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:0,g:255,b:255},
+					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, 0));
+					break;
+			}
+
+			switch (this.p2Class)
+			{
+				case "uzi":
+					GSTATE.ACTORS.push(new Uzi(s2!.x, s2!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:255,g:0,b:255},
+					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, 1));
+					break;
+				case "sniper":
+					GSTATE.ACTORS.push(new Sniper(s2!.x, s2!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:255,g:0,b:255},
+					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, 1));
+					break;
+				case "shotgun":
+					GSTATE.ACTORS.push(new Shotgun(s2!.x, s2!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:255,g:0,b:255},
+					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, 1));
+					break;
+				case "classic":
+					GSTATE.ACTORS.push(new Classic(s2!.x, s2!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:255,g:0,b:255},
+					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, 1));
+					break;
+			}
+
+			// GSTATE.ACTORS.push(new Tank(s2!.x, s2!.y, tank_width, tank_height,
+				// {r:50,g:200,b:30}, {r:255,g:0,b:255},
+				// {up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, this.p2Class, 1));
 			GSTATE.TANKS += 2;
 		}
 		else { console.log("Unknown map :", this.map.name) }
