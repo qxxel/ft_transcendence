@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 02:10:20 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ io.use(async (socket, next) => {
 			throw new Error();
 
 
-		const	response: AxiosResponse = await gameAxios.get('http://jwt:3000/validate', 
+		const	response: AxiosResponse = await gameAxios.get('http://jwt:3000/payload/access', 
 			{ withCredentials: true, headers: { Cookie: cookieHeader || "" } }
 		);
 

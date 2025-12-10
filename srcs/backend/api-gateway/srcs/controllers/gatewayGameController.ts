@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayGameController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:05:35 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:37:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 01:07:42 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,12 @@ export async function	gatewayGameController(gatewayFastify: FastifyInstance) {
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 		
 			const	response: AxiosResponse = await gatewayAxios.get('http://game:3000/me',
-				{ headers: { 'user-id': userId } }
+				{ 
+					headers: { 
+						'user-id': userId, 
+						Cookie: request.headers.cookie || ""
+					} 
+				}
 			);
 
 			return reply.send(response.data);
