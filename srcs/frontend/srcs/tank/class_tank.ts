@@ -14,13 +14,13 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { Actor }	from "./class_actor.js"
-import { Ball, Collectible, Shield }		from "./class_ball.js"
-import { Cannon }	from "./class_cannon.js"
-import { GSTATE }	from "./global.js"
-import { Hud }		from "./class_hud.js"
-import { Rect2D }	from "./class_rect.js"
-import { Input } 	from "./class_input.js";
+import { Actor }				from "./class_actor.js"
+import { Ball, Collectible }	from "./class_ball.js"
+import { Cannon }				from "./class_cannon.js"
+import { GSTATE }				from "./global.js"
+import { Hud }					from "./class_hud.js"
+import { Rect2D }				from "./class_rect.js"
+import { Input } 				from "./class_input.js";
 
 import type { Color, Keys }	from "./interface.js"
 
