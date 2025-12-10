@@ -31,6 +31,9 @@ export class	Hud extends Actor {
 		public	wheel_y:number,
 		public	healthbar_x:number,
 		public	healthbar_y:number,
+		public	abilitybar_x:number,
+		public	abilitybar_y:number,
+
 		public	wheel_color:Color
 	) {
 		super(x,y);
@@ -58,15 +61,30 @@ export class	Hud extends Actor {
 		const barWidth = 40;
 		const barHeight = 6;
 		const offsetY = -20;
-	
+
 		const ratio = Math.max(0, Math.min(1, health / maxHealth));
-	
+
 		ctx.fillStyle = "#444";
 		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth, barHeight);
-	
+
 		ctx.fillStyle = "#00cc00";
 		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth * ratio, barHeight);
-	
+
+	}
+
+	abilitybar_draw(ctx: CanvasRenderingContext2D, ability_last:number, ability_cooldown:number): void {
+		const barWidth = 40;
+		const barHeight = 6;
+		const offsetY = -10;
+
+		const ratio = Math.max(0, Math.min(1, ability_last / ability_cooldown));
+
+		ctx.fillStyle = "#444";
+		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth, barHeight);
+
+		ctx.fillStyle = "#bb00ffff";
+		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth * ratio, barHeight);
+
 	}
 
 	move(dx:number,dy:number) {
@@ -76,5 +94,8 @@ export class	Hud extends Actor {
 		this.wheel_y += dy;
 		this.healthbar_x += dx;
 		this.healthbar_y += dy;
+		this.abilitybar_x += dx;
+		this.abilitybar_y += dy;
+
 	}
 }

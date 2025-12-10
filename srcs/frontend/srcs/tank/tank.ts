@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tank.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 15:40:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 22:36:38 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@
 /* ============================= IMPORTS ============================= */
 
 import { AppState, appStore, GamesState, UserState }	from "../objects/store.js"
-import { Game }								from "../Pong/gameClass.js"
-import { GSTATE }							from "./global.js"
-import { router }							from "../index.js"
-import { Input }							from "./class_input.js"
-import { Map }								from "./class_map.js"
-import { Tank }								from "./class_tank.js"
-import { Ball, Collectible }				from "./class_ball.js"
+import { Game }											from "../Pong/gameClass.js"
+import { GSTATE }										from "./global.js"
+import { router }										from "../index.js"
+import { Input }										from "./class_input.js"
+import { Map }											from "./class_map.js"
+import { Tank, Uzi, Sniper, Shotgun, Classic } 			from "./class_tank.js"
+import { Ball, Collectible }							from "./class_ball.js"
 
 import type { Color, Keys }	from "./interface.js"
 import { Wall } from "./class_wall.js"
@@ -46,14 +46,16 @@ export class	TankGame extends Game {
 	private lastCollectibleSpawn: number = 0;
 
 
-	// 	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user, mode, difficulty, star1, star2, star3); 
+		// gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user, mode, difficulty, star1, star2, star3); 
 	constructor(
 		private canvasId: string, 
 		private map_name: string,
 		private powerupFrequency: number = 0,
 		private star1: boolean = false,
       	private star2: boolean = false,
-      	private star3: boolean = false
+      	private star3: boolean = false,
+		private p1Class: string = "classic",
+        private p2Class: string = "classic"
 	) {
 		super();
 		(window as any).quitGame = () => this.quitGame();
@@ -86,20 +88,65 @@ export class	TankGame extends Game {
 	{
 		if (!this.map) return;
 		GSTATE.TANKS = 0;
-		let tank_width:number = 48;
-		let tank_height:number = 48;
+		let tank_width:number = 40;
+		let tank_height:number = 40;
 
-		if (this.map.name == 'desertfox')
+		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'davinco')
 		{
 			let s1 = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
 			let s2 = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];
 
-			GSTATE.ACTORS.push(new Tank(s1!.x, s1!.y, tank_width, tank_height,
-				{r:50,g:200,b:30}, {r:0,g:255,b:255},
-				{up:'w',down:'s',left:'a',right:'d',rot_left:'q',rot_right:'e',fire:' '},0));
-			GSTATE.ACTORS.push(new Tank(s2!.x, s2!.y, tank_width, tank_height,
-				{r:50,g:200,b:30}, {r:255,g:0,b:255},
-				{up:'i',down:'k',left:'j',right:'l',rot_left:'u',rot_right:'o',fire:'.'},1));
+			switch (this.p1Class)
+			{
+				case "uzi":
+					GSTATE.ACTORS.push(new Uzi(s1!.x, s1!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:0,g:255,b:255},
+					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, 0));
+					break;
+				case "sniper":
+					GSTATE.ACTORS.push(new Sniper(s1!.x, s1!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:0,g:255,b:255},
+					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, 0));
+					break;
+				case "shotgun":
+					GSTATE.ACTORS.push(new Shotgun(s1!.x, s1!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:0,g:255,b:255},
+					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, 0));
+					break;
+				case "classic":
+					GSTATE.ACTORS.push(new Classic(s1!.x, s1!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:0,g:255,b:255},
+					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, 0));
+					break;
+			}
+
+			switch (this.p2Class)
+			{
+				case "uzi":
+					GSTATE.ACTORS.push(new Uzi(s2!.x, s2!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:255,g:0,b:255},
+					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, 1));
+					break;
+				case "sniper":
+					GSTATE.ACTORS.push(new Sniper(s2!.x, s2!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:255,g:0,b:255},
+					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, 1));
+					break;
+				case "shotgun":
+					GSTATE.ACTORS.push(new Shotgun(s2!.x, s2!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:255,g:0,b:255},
+					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, 1));
+					break;
+				case "classic":
+					GSTATE.ACTORS.push(new Classic(s2!.x, s2!.y, tank_width, tank_height,
+					{r:50,g:200,b:30}, {r:255,g:0,b:255},
+					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, 1));
+					break;
+			}
+
+			// GSTATE.ACTORS.push(new Tank(s2!.x, s2!.y, tank_width, tank_height,
+				// {r:50,g:200,b:30}, {r:255,g:0,b:255},
+				// {up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, this.p2Class, 1));
 			GSTATE.TANKS += 2;
 		}
 		else { console.log("Unknown map :", this.map.name) }
@@ -167,9 +214,10 @@ export class	TankGame extends Game {
 	private listen() : void {
 
 		if (this.input.isPressed('Escape')) {
-			if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA QUIT
+			if (GSTATE.TANKS == 1 && this.isPaused) {
+				this.quitGame();
 			}
-			else if (GSTATE.TANKS != 1) { // SWITCH PAUSE UNPAUSE
+			else if (GSTATE.TANKS != 1) {
 				this.isPaused = !this.isPaused;
 				GSTATE.REDRAW = true;
 			}
@@ -255,13 +303,13 @@ export class	TankGame extends Game {
 	document.getElementById('p1-stat-name')!.innerText = this.player1Name + "";
 	document.getElementById('stat-p1-accuracy')!.innerText = `${accuracy1.toFixed(1)}%`;
 	document.getElementById('stat-p1-fire')!.innerText = `${GSTATE.STATS1.fire}`;
-	document.getElementById('stat-p1-hit')!.innerText = `${GSTATE.STATS2.hit}`;
+	document.getElementById('stat-p1-hit')!.innerText = `${GSTATE.STATS1.hit}`;
 	document.getElementById('stat-p1-bounce')!.innerText = `${GSTATE.STATS1.bounce}`;
 
 	document.getElementById('p2-stat-name')!.innerText = this.player2Name + "";
 	document.getElementById('stat-p2-accuracy')!.innerText = `${accuracy2.toFixed(1)}%`;
 	document.getElementById('stat-p2-fire')!.innerText = `${GSTATE.STATS2.fire}`;
-	document.getElementById('stat-p2-hit')!.innerText = `${GSTATE.STATS1.hit}`;
+	document.getElementById('stat-p2-hit')!.innerText = `${GSTATE.STATS2.hit}`;
 	document.getElementById('stat-p2-bounce')!.innerText = `${GSTATE.STATS2.bounce}`;
 
 

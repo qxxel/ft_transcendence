@@ -389,11 +389,18 @@ function onClickPlayPVP() {
 	}
 	else if (router.Path === '/tankmenu')
 	{
+		const mapSelect = document.getElementById("mapSelect") as HTMLSelectElement;
+    	const p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
+    	const p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
+		
+    	const selectedMap = mapSelect.value;
+    	const p1Tank = p1Select.value;
+    	const p2Tank = p2Select.value;
 		appStore.setState((state) => ({
 			...state,
 			game: {
 				...state.game,
-				currentGame: new TankGame('tank-canvas', 'desertfox')
+				currentGame: new TankGame('tank-canvas', selectedMap, 0, false, false, false, p1Tank, p2Tank)
 			}
 		}));
 
@@ -467,9 +474,18 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 	const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
 	const aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
 	const pointsInput = document.getElementById("featuredMaxPoints") as HTMLInputElement;
+	
 	const star1 = (document.getElementById("chk-1star") as HTMLInputElement).checked;
 	const star2 = (document.getElementById("chk-2star") as HTMLInputElement).checked;
 	const star3 = (document.getElementById("chk-3star") as HTMLInputElement).checked;
+
+	const mapSelect = document.getElementById("mapSelect") as HTMLSelectElement;
+    const p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
+    const p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
+
+    const selectedMap = mapSelect.value;
+    const p1Tank = p1Select.value;
+    const p2Tank = p2Select.value;
 
 	const	state: AppState = appStore.getState();
 	const	user: UserState | null = state.user;
@@ -529,7 +545,7 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 			...state,
 			game: {
 				...state.game,
-				currentGame: new TankGame('tank-canvas', 'desertfox', freq, star1, star2, star3)
+				currentGame: new TankGame('tank-canvas', selectedMap, freq, star1, star2, star3, p1Tank, p2Tank)
 			}
 		}));
 

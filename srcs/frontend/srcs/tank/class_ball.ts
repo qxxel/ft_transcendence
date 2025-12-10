@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   class_ball.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:24:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:25:31 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 22:21:40 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 import { Actor }	from "./class_actor.js"
 import { GSTATE }	from "./global.js"
 import { Rect2D }	from "./class_rect.js"
-import { Tank }		from "./class_tank.js"
+import { Tank, Classic, Uzi, Sniper, Shotgun }		from "./class_tank.js"
 import { Input }	from "./class_input.js"
 import type { Color }	from "./interface.js"
 
@@ -29,11 +29,14 @@ export class	Ball extends Actor {
 
 	rect: Rect2D;
 	redraw: boolean = true;
-	speed: number = 5;
+	speed: number = 1;
 	damage: number = 1;
-	bounce_count: number = 5;
+	bounce_count: number = 3;
+	health: number = 2;
 	direction_impact: string = "";
-
+	birth: number;
+	opacity: number = 1;
+	
 	constructor(
 		x:number,
 		y:number,
@@ -41,37 +44,77 @@ export class	Ball extends Actor {
 		public	h:number,
 		public	dx:number,
 		public	dy:number,
+		public	duration:number,
 		public	color:Color,
 		public	author?:Tank) {
 		super(x,y)
-		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 
+		if (author)
+		{
+			if (author instanceof Sniper)
+			{
+				this.damage = 4;
+				this.bounce_count = 2;
+				this.speed = 0.9;
+				this.health = 4;
+				this.duration = 0;
+				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+			}
+			else if (author instanceof Uzi)
+			{
+				this.damage = 0.5;
+				this.bounce_count = 5;
+				this.speed = 1.25;
+				this.health = 1;
+				this.duration = 3000;
+				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+			}
+			else if (author instanceof Shotgun)
+			{
+				this.damage = 1.2;
+				this.bounce_count = 2;
+				this.speed = 1.25;
+				this.health = 1;
+				this.duration = 1500;
+				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+			}
+			else //if (author instanceof Classic)
+				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+		}
+		else
+			this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+		this.birth = Date.now()
 	}
 
 	update(input: Input): void {
 		this.move();
+		this.desaturate();
+		if (this.duration != 0 && Date.now() - this.birth  > this.duration)
+		{
+			this.destroy();
+		}
 		GSTATE.REDRAW = true;
 	}
 
 	draw(ctx: CanvasRenderingContext2D): void {
 		// this.rect.draw(ctx, {r:0,g:0,b:255});
 		ctx.beginPath();
-		ctx.fillStyle = `#${((this.color.r << 16) | (this.color.g << 8) | this.color.b).toString(16).padStart(6,'0')}`; // HUH
+		ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity})`;
 		ctx.arc(this.x + this.w/2, this.y + this.h/2, this.w/2, 0, Math.PI * 2);
 		ctx.fill();
 	}
 
 	move(): void {
-	const future: Rect2D = new Rect2D(this.x + this.dx, this.y + this.dy, this.w, this.h);
+	const future: Rect2D = new Rect2D(this.x + this.dx * this.speed, this.y + this.dy * this.speed, this.w, this.h);
 
 	if (this.collide(future)) {
 		if      (this.direction_impact == "vertical") this.dy = -this.dy;
 		else if (this.direction_impact == "horizontal") this.dx = -this.dx;
 	}
-		this.x += this.dx;
-		this.y += this.dy;
-		this.rect.x += this.dx;
-		this.rect.y += this.dy;
+		this.x += this.dx * this.speed;
+		this.y += this.dy * this.speed;
+		this.rect.x += this.dx * this.speed;
+		this.rect.y += this.dy * this.speed;
 	}
 
 	collide(rect1: Rect2D): boolean {
@@ -83,16 +126,25 @@ export class	Ball extends Actor {
 				if (a instanceof Tank) {
 					if (this.author)
 					{
-						console.log("THIS.AUTHOR.id ==", this.author.id);
 						if (this.author.id == 0)
 							GSTATE.STATS1.hit += 1;
 						else if (this.author.id == 1)
 							GSTATE.STATS2.hit += 1;
 					}
-					a.addHealth(-this.damage);
+					a.addHealth(-this.damage * this.opacity);
 					this.destroy();
 					return true;
 				}
+				else if (a instanceof Ball) {
+					if (this.author && a.author && this.author != a.author)
+					{
+						let tmp_damage:number = a.health;
+						a.takeDamage(this.health);
+						this.takeDamage(tmp_damage);
+					}
+					return false;
+				}
+				
 				if (this.author!.id == 0)
 					GSTATE.STATS1.bounce += 1;
 				else
@@ -127,6 +179,21 @@ export class	Ball extends Actor {
 		const overlapY = (this.h / 2 + other.h / 2) - Math.abs(dy);
 		return overlapX < overlapY ? "horizontal" : "vertical";
 	}
+	takeDamage(amount:number): void {
+		this.health -= amount;
+		if (this.health <= 0) {
+			this.destroy();
+		}
+	}
+
+	desaturate() : void
+	{
+		if (this.duration == 0)
+			this.opacity = 1;
+		else
+			this.opacity = 1 - (   (Date.now() - this.birth)  / this.duration );
+	}
+
 }
 
 export class	Collectible extends Ball {
@@ -140,7 +207,7 @@ export class	Collectible extends Ball {
 		h:number,
 		public type:string) {
 
-		super(x,y,w,h,0,0, {r:50,g:170,b:40});
+		super(x,y,w,h,0,0,0, {r:50,g:170,b:40});
 
 		switch (this.type) {
         	case 'heal':
@@ -202,4 +269,41 @@ export class	Collectible extends Ball {
 		ctx.fill();
 		ctx.stroke();
 	}
+}
+
+export class	Shield extends Actor {
+
+	public rect: Rect2D;
+	constructor(
+		x:number,
+		y:number,
+		public	w:number,
+		public	h:number,
+		public	color:Color,
+		public	opacity:number,
+		public	author?:Tank) {
+		super(x,y);
+		this.rect = new Rect2D(x,y,w,h);
+	}
+
+	update(input: Input): void {
+		this.move();
+	}
+
+	draw(ctx : CanvasRenderingContext2D): void {
+		// ctx.fillStyle = "#00000FF";
+		// ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b})`;
+		ctx.strokeStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity})`;
+		ctx.strokeRect(this.x-4, this.y-4, this.w + 8, this.h + 8);
+		ctx.strokeRect(this.x-16, this.y-16, this.w + 32, this.h + 32);
+	}
+
+	move(): void {
+		if (this.author)
+		{
+			this.x = this.author.x;
+			this.y = this.author.y;
+		}
+	}
+
 }
