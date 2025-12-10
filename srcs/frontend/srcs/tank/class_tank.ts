@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   class_tank.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:32:29 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:33:43 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 22:40:35 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ export class	Tank extends Actor {
 							this.ball_size,
 							Math.cos(c.geometry.angle) * 3,
 							Math.sin(c.geometry.angle) * 3,
-							1000,
+							4500,
 							this.fire_color,
 							this
 						));
