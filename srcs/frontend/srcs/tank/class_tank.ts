@@ -52,8 +52,8 @@ export class	Tank extends Actor {
 		public	fire_color:Color,
 		public	keys:Keys,
 		public  id:number) {
-		super(x,y)
-			
+		super(x,y);
+
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 		this.hud = new Hud(this.x,this.y,this.x + this.w, this.y, this.x + this.w/2,this.y,this.x + 50,this.y + 50,fire_color);
 	}
@@ -242,7 +242,6 @@ export class	Tank extends Actor {
 export class	Classic extends Tank {
 
 	isShield:boolean = false;
-	shield: Shield;
 	constructor(
 		x:number,
 		y:number,
@@ -254,9 +253,9 @@ export class	Classic extends Tank {
 		public  id:number) {
 		super(x,y,w,h,color,fire_color,keys,id);
 		this.ability_cooldown = 3000; // ms
-		this.ability_duration = 1000; // ms
+		this.ability_duration = 3000; // ms
 		this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),3,0,fire_color));
-		this.shield = new Shield(x,y,w,h,{r:100,g:120,b:255}, 0.9,this);
+		this.hud.setShield(this.rect);
 	}
 
 	addHealth(amount:number): void {
@@ -265,16 +264,30 @@ export class	Classic extends Tank {
 	}
 
 	draw(ctx: CanvasRenderingContext2D): void {
-		super.draw(ctx);
+		this.rect.draw(ctx, this.color)
 		if (this.isShield)
-			this.shield.draw(ctx);
+			this.hud.shield_draw(ctx);
+		if (!this.canFire()) {
+			const elapsed = Date.now() - this.fire_last;
+			const progress = Math.min(elapsed / this.fire_rate, 1);
+			const start = -Math.PI / 2;
+			const end = start + progress * Math.PI * 2;
+			this.hud.wheel_draw(ctx,start,end);
+		}
+		if (!this.canAbility()) {
+			this.hud.abilitybar_draw(ctx, Date.now() - this.ability_last,this.ability_cooldown);
+		}
+		if (this.health < this.maxHealth)
+			this.hud.healthbar_draw(ctx,this.health,this.maxHealth);
+
+		for (let c of this.cannon)
+			c.draw(ctx)
+
 	}
 
 	ability_effect(): void {
 		if (!this.ability_active) return;
 		this.isShield = true;
-		this.shield.x = this.x;
-		this.shield.y = this.y;
 	}
 	ability_off(): void {
 		this.isShield = false;

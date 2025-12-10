@@ -17,7 +17,8 @@
 
 import { Actor }	from "./class_actor.js"
 import { Input } 	from "./class_input.js";
-import { Rect2D } from "./class_rect.js";
+import { Rect2D } 	from "./class_rect.js";
+import { Tank } 	from "./class_tank.js";
 
 import type { Color }	from "./interface.js"
 
@@ -47,6 +48,10 @@ export class	Hud extends Actor {
 
 	draw(ctx: CanvasRenderingContext2D): void {
 
+	}
+
+	setShield(shield: Rect2D) {
+		this.shield = shield;
 	}
 
 	wheel_draw(ctx: CanvasRenderingContext2D, start:number,end:number): void {
@@ -88,18 +93,11 @@ export class	Hud extends Actor {
 
 	}
 
-	shield_draw(ctx: CanvasRenderingContext2D, color:Color, opacity:number): void {
-		const barWidth = 40;
-		const barHeight = 6;
-		const offsetY = -10;
-
+	shield_draw(ctx: CanvasRenderingContext2D): void {
 		if (!this.shield) return;
- 
-		// ctx.fillStyle = "#00000FF";
-		// ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b})`;
-		ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity})`;
-		ctx.strokeRect(this.shield.x, this.shield.y, this.shield.w + 8, this.shield.h + 8);
-		ctx.strokeRect(this.shield.x-16, this.shield.y-16, this.shield.w + 32, this.shield.h + 32);
+		ctx.strokeStyle = `rgba(0, 0, 255)`;
+		ctx.lineWidth = 4;
+		ctx.strokeRect(this.shield.x, this.shield.y, this.shield.w, this.shield.h);
 	}
 
 	move(dx:number,dy:number) {
@@ -111,7 +109,5 @@ export class	Hud extends Actor {
 		this.healthbar_y += dy;
 		this.abilitybar_x += dx;
 		this.abilitybar_y += dy;
-		if (this.shield)
-			this.shield?.move(dx,dy);
 	}
 }

@@ -124,16 +124,27 @@ export class	Ball extends Actor {
 			if (a.getRect().collide(rect1))
 			{
 				if (a instanceof Tank) {
-					if (this.author)
+
+					if (a instanceof Classic && a.isShield)
+					{
+						if (this.author && this.author.id == 0)
+							GSTATE.STATS2.reflect += 1;
+						else (this.author && this.author.id == 1)
+							GSTATE.STATS1.reflect += 1;
+						this.author = a;
+
+						this.color = a.fire_color;
+					}
+					else if (this.author)
 					{
 						if (this.author.id == 0)
 							GSTATE.STATS1.hit += 1;
 						else if (this.author.id == 1)
 							GSTATE.STATS2.hit += 1;
+						a.addHealth(-this.damage * this.opacity);
+						this.destroy();
+						return true;
 					}
-					a.addHealth(-this.damage * this.opacity);
-					this.destroy();
-					return true;
 				}
 				else if (a instanceof Ball) {
 					if (this.author && a.author && this.author != a.author)
@@ -153,13 +164,13 @@ export class	Ball extends Actor {
 				this.bounce_count--;
 				if (this.bounce_count <= 0)
 				{
-					if (this.author)
-					{
-						if (this.author.id == 0)
-							GSTATE.STATS1.miss += 1;
-						else (this.author.id == 1)
-							GSTATE.STATS2.miss += 1;
-					}
+					// if (this.author)
+					// {
+					// 	if (this.author.id == 0)
+					// 		GSTATE.STATS1.reflect += 1;
+					// 	else (this.author.id == 1)
+					// 		GSTATE.STATS2.reflect += 1;
+					// }
 					this.destroy();
 				}
 				this.direction_impact = this.getBounce(a.getRect());
@@ -270,40 +281,3 @@ export class	Collectible extends Ball {
 		ctx.stroke();
 	}
 }
-
-// export class	Shield extends Actor {
-
-// 	public rect: Rect2D;
-// 	constructor(
-// 		x:number,
-// 		y:number,
-// 		public	w:number,
-// 		public	h:number,
-// 		public	color:Color,
-// 		public	opacity:number,
-// 		public	author?:Tank) {
-// 		super(x,y);
-// 		this.rect = new Rect2D(x,y,w,h);
-// 	}
-
-// 	update(input: Input): void {
-// 		this.move();
-// 	}
-
-// 	draw(ctx : CanvasRenderingContext2D): void {
-// 		// ctx.fillStyle = "#00000FF";
-// 		// ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b})`;
-// 		ctx.strokeStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity})`;
-// 		ctx.strokeRect(this.x-4, this.y-4, this.w + 8, this.h + 8);
-// 		ctx.strokeRect(this.x-16, this.y-16, this.w + 32, this.h + 32);
-// 	}
-
-// 	move(): void {
-// 		if (this.author)
-// 		{
-// 			this.x = this.author.x;
-// 			this.y = this.author.y;
-// 		}
-// 	}
-
-// }

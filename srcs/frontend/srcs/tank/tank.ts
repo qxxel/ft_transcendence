@@ -296,9 +296,8 @@ export class	TankGame extends Game {
 
 	if (winnerDisplay) winnerDisplay.innerText = `${winnerName} Wins!`;
 
-	const accuracy1: number = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit / GSTATE.STATS1.fire) * 100 : 0;
-	const accuracy2: number = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit / GSTATE.STATS2.fire) * 100 : 0;
-
+	const accuracy1: number = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit - GSTATE.STATS1.reflect) / GSTATE.STATS1.fire * 100 : 0;
+	const accuracy2: number = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit - GSTATE.STATS2.reflect) / GSTATE.STATS2.fire * 100 : 0;
 	document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
 	document.getElementById('p1-stat-name')!.innerText = this.player1Name + "";
 	document.getElementById('stat-p1-accuracy')!.innerText = `${accuracy1.toFixed(1)}%`;
@@ -398,7 +397,7 @@ export class	TankGame extends Game {
 		GSTATE.STATS1.lose = 0;		GSTATE.STATS2.lose = 0;
 		GSTATE.STATS1.fire = 0;		GSTATE.STATS2.fire = 0;
 		GSTATE.STATS1.hit = 0;		GSTATE.STATS2.hit = 0;
-		GSTATE.STATS1.miss = 0;		GSTATE.STATS2.miss = 0;
+		GSTATE.STATS1.reflect = 0;		GSTATE.STATS2.reflect = 0;
 		GSTATE.STATS1.bounce = 0;	GSTATE.STATS2.bounce = 0;
 	}
 	private	draw(): void {}
