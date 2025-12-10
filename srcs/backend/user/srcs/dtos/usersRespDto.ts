@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersRespDto.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:33:06 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 12:01:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:38:33 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ export class	usersRespDto {
 	private	id: number;
 	private	username: string;
 	private	email: string;
-	private	avatar: string;
+	private	avatar: string | null;
 	private	is2faEnable: boolean;
 
 
@@ -33,7 +33,7 @@ export class	usersRespDto {
 
 
 	// GETTERS
-	getTable(): [number, string, string, string, boolean] {
+	getTable(): [number, string, string, string | null, boolean] {
 		return [
 			this.id,
 			this.username,
@@ -55,7 +55,7 @@ export class	usersRespDto {
 		return this.username;
 	}
 
-	getAvatar(): string {
+	getAvatar(): string | null {
 		return this.avatar;
 	}
 

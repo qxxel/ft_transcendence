@@ -54,7 +54,17 @@ div#div-errors {
     padding: 10px;
 }
 
-div#error {
+.darken {
+    filter: grayscale(100%);
+    cursor: wait;
+}
+
+.darken > * {
+    filter: grayscale(100%);
+    pointer-events: none;
+}
+
+div.error {
     max-height: 20%;
     display: flex;
     align-items: center;
@@ -65,13 +75,13 @@ div#error {
     background-color: rgba(255, 69, 69, 0.774);
 }
 
-div#error > p {
+div.error > p {
     max-height: 100%;
     margin: 0;
     color: black;
 }
 
-div#error > span {
+div.error > span {
     vertical-align: middle;
     margin-left: auto;
     text-align: left;
@@ -1111,4 +1121,98 @@ input[type=range]::-moz-range-thumb {
     font-weight: bold;
     text-transform: uppercase;
     text-shadow: 0 0 10px rgba(208, 0, 255, 0.8);
+}
+
+
+/* ===== PROFILE ===== */
+
+#profile-header {
+    display: flex;
+}
+
+
+
+/* ===== AVATAR ===== */
+
+.avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: visible;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.avatar-wrapper:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px #FF0; 
+    z-index: 20;
+}
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: none;
+    display: block;
+}
+
+.avatar-overlay {
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+
+.avatar-overlay span {
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    user-select: none;
+}
+
+#display-user-avatar {
+    width: 150px;
+    height: 150px;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.avatar-overlay span {
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.avatar-wrapper:hover .avatar-overlay {
+    opacity: 1;
+}
+
+#avatar-container {
+    padding-top: 5%;
+    padding-left: 5%;
+    margin: auto;
+    display: flex;
+}
+
+#avatar-upload {
+    display: none;
 }

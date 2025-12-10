@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getMenu.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:55:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:46:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 17:34:40 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ export function	getMenu(isAuth: boolean): string {
 			<a href="/user">Profile</a>
 			<a href="/friends">Friends</a>
 			<a onclick="onClickLogout();" id="logout">Logout</a>
-			<a href="/about">About</a>
 		`;
 	}
 
@@ -34,8 +33,7 @@ export function	getMenu(isAuth: boolean): string {
 		<a href="/games">Play</a>
 		<a href="/tournament-setup">Tournament</a>
 		<a href="/sign-in">Sign in</a>
-		<a href="/sign-up">Sign up</a>
-		<a href="/about">About</a>
+		<a href="/sign-up">Sign up</a
 	`;
 }
 	

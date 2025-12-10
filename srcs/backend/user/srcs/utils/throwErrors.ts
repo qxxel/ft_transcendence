@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   throwErrors.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:49:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:44:25 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/04 22:10:35 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,19 @@ export class	MissingHeaderError extends Error {
 	constructor(message: string) {
 		super(message);
 		this.name = "MissingHeaderError";
+	}
+}
+
+export class	InvalidFileError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "InvalidFileError";
+	}
+}
+
+export class	NoFileError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "NoFileError";
 	}
 }

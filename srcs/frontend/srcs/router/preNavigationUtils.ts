@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:48:29 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 21:59:52 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ export async function	preNavigation(currentPath: string): Promise<void> {
 }
 
 export async function	redirections(currentPath: string): Promise<void> {
-	if (['/friends', '/user'].includes(currentPath))
+	if (['/friends', '/user', '/history'].includes(currentPath))
 	{
 		const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
 

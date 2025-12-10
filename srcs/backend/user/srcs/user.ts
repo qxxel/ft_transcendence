@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   user.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:21:08 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORT ====================== */
 
+import axios		from 'axios'
 import cors			from '@fastify/cors'
 import Fastify		from 'fastify'
-import formBody				from '@fastify/formbody'
-import fs			from 'fs'
-import sqlite3Pkg from 'sqlite3'
+import formBody		from '@fastify/formbody'
+import multipart	from '@fastify/multipart'
+import sqlite3Pkg	from 'sqlite3'
 
 import { friendshipsController }	from "./controllers/friendshipsController.js"
 import { friendshipsService }		from "./services/friendshipsService.js"
@@ -28,6 +29,14 @@ import { userStatsController }		from "./controllers/userStatsController.js"
 import { userStatsService }			from "./services/userStatsService.js"
 import { userStatsRepository }		from "./repositories/userStatsRepository.js"
 
+
+/* ====================== AXIOS VARIABLES ====================== */
+
+export const	userAxios = axios.create({
+	timeout: 1000
+});
+
+
 /* ====================== DATABASE ====================== */
 
 const			{ Database } = sqlite3Pkg;
@@ -38,9 +47,9 @@ const	db = new Database(dbname, (err: Error | null) => {
 	else
 	{
 		db.run('PRAGMA foreign_keys = ON;', (pragmaErr) => {
-            if (pragmaErr)
+			if (pragmaErr)
 				console.error("Impossible to turn on Foreign Keys", pragmaErr);
-        });
+		});
 		console.log(`Database started on ${dbname}`);
 	}
 });
@@ -55,6 +64,12 @@ export const	friendshipsServ = new friendshipsService(new friendshipsRepository(
 const	userFastify = Fastify({
 	logger: true,
 	trustProxy: true
+});
+
+userFastify.register(multipart, {
+	limits: {
+		fileSize: 5 * 1024 * 1024,
+	}
 });
 
 userFastify.register(formBody);

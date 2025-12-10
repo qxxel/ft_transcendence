@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 21:28:49 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/09 21:09:05 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ import { TournamentController } 			from "../Pong/tournament.js"
 import { router }							from "../index.js"
 import { sendRequest }						from "../utils/sendRequest.js"
 import { socket }							from "../socket/socket.js"
-import { displayDate, displayError  }		from "../utils/display.js"
+import { displayDate }						from "../utils/display.js"
+import { displayError, displayPopError }	from "../utils/display.js"
 import { btnCooldown }						from "../utils/buttonCooldown.js"
 
 import { Tank }	from "../tank/class_tank.js"
 import { Game }	from "../Pong/gameClass.js"
+import { setDynamicFavicon } from "../utils/setDynamicFavicon.js"
 
 /* ====================== FUNCTIONS ====================== */
 
@@ -74,7 +76,7 @@ async function	onClickEdit(): Promise<void> {
 	const	state: AppState = appStore.getState();
 	const	user: UserState | null = state.user;
 
-	const	response: Response = await sendRequest(`/api/user/${user.id}`, 'get', null);	//	MATHIS: GET /me
+	const	response: Response = await sendRequest(`/api/user/me`, 'get', null);
 	if (!response.ok)
 	{
 		console.log(response.statusText);
@@ -233,51 +235,26 @@ async function	onClickNewCode(): Promise<void> {
         return;
     }
 
-    const response = await sendRequest('/api/twofa/otp', 'GET', null);
+    const response = await fetch('/api/twofa/otp', {
+			method: 'POST',
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ })
+		}).then(async (response) => {
+			if (!response.ok) {
+				console.error("Erreur API:", response.statusText);
+				if (btnSend) btnSend.disabled = false;
+				if (spanCooldown) spanCooldown.textContent = "";
+				locks.forEach(e => (e as HTMLElement).hidden = true);
+				displayPopError(response);
+				return;
+			}
+		});
 
-	if (!response.ok) {
-		console.error("Erreur API:", response.statusText);
-		if (btnSend) btnSend.disabled = false;
-		if (spanCooldown) spanCooldown.textContent = "";
-		locks.forEach(e => (e as HTMLElement).hidden = true);
-		return;
-	}
 	btnCooldown(); 
 	displayDate(5);
-}
-
-async function onClickBlockMessage(): Promise<void> {
-	const   res: Response = await fetch('/api/user/friends/block', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ receiverId: 2 })
-	});
-
-	if (!res.ok) {
-		const   errorText = await res.text();
-		console.error(`Échec du blocage. Statut : ${res.status}. Message : ${errorText}`);
-		return ;
-	}
-
-	let data: unknown;
-
-	const contentLength = res.headers.get('Content-Length');
-	
-	if (res.status === 204 || contentLength === '0' || contentLength === null) {
-		data = { message: `Action réussie. (Statut ${res.status})` }; 
-	} else {
-		try {
-			 data = await res.json();
-		} catch (e) {
-			console.error("Erreur de parsing JSON malgré le statut de succès:", e);
-			data = { error: "Réponse du serveur invalide (Non-JSON)." };
-		}
-	}
-	
-	console.log(data);
 }
 
 
@@ -595,8 +572,6 @@ export async function   setupClickHandlers(): Promise<void> {
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa();
 	(window as any).onClickNewCode = () => onClickNewCode();
 	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(); // /!\ detete this
-
-	(window as any).onClickBlockMessage = onClickBlockMessage;
 	
 	(window as any).showDifficultyMenu = showDifficultyMenu;
 	(window as any).hideDifficultyMenu = hideDifficultyMenu;

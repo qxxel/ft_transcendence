@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   addRoutes.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:00:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 15:04:38 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/09 17:37:56 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,6 @@ export function	addRoutes(): void {
 		return html;
 	});
 
-	router.addRoute('/about', async () => {
-		const	html: string = await loadHtml("pages/about.html");
-		return html;
-	});
-
 	router.addRoute('/user', async () => {
 		const	html: string = await loadHtml("pages/user.html");
 		return html;
@@ -46,17 +41,12 @@ export function	addRoutes(): void {
 		const	html: string = await loadHtml("pages/sign-in.html");
 		return html;
 	});
-	
+
 	router.addRoute('/sign-up', async () => {
 		const	html: string = await loadHtml("pages/sign-up.html");
 		return html;
 	});
-	
-	router.addRoute('/rperrot', async () => {
-		const	html: string = await loadHtml("pages/rperrot.html");
-		return html;
-	});
-	
+
 	router.addRoute("/pongmenu", async () => {
 		const html = await loadHtml("pages/pongmenu.html");
 		return html;

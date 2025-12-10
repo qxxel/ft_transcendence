@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:10:14 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 00:47:52 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,13 @@ gatewayFastify.register(proxy, {
 	prefix: '/socket.io',
 	websocket: true,
 	rewritePrefix: '/socket.io'
+});
+
+gatewayFastify.register(proxy, {
+	upstream: 'http://user:3000',
+	prefix: '/api/user/avatar',
+	rewritePrefix: '/avatar',
+	http2: false
 });
 
 gatewayFastify.register(gatewayAuthController, { prefix: '/api/auth' });

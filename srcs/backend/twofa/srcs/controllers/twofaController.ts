@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/07 18:41:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/08 22:13:28 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ async function sendMailMessage(mail: any) {
 	await transporter.sendMail(mail);
 }
 
-async function	generateMailCode(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+async function	generateMailCode(request: FastifyRequest<{ Body: { email?: string } }>, reply: FastifyReply): Promise<FastifyReply> {
 	try {
 		let	payload: AxiosResponse;
 		try {
@@ -92,7 +92,7 @@ async function	generateMailCode(request: FastifyRequest, reply: FastifyReply): P
 		await twofaServ.deleteOtpByIdClient(payload.data.id);
 		await twofaServ.addOtp(payload.data.id, otpSecretKey, otp);
 
-		const	dataMail = MailCodeMessage(payload.data.username, otp, payload.data.email);
+		const	dataMail = MailCodeMessage(payload.data.username, otp, request.body.email || payload.data.email);
 		await sendMailMessage(dataMail);
 
 		return reply.status(200).send(otp);
@@ -152,7 +152,7 @@ async function	deleteCodeOtp(request: FastifyRequest, reply: FastifyReply): Prom
 }
 
 export async function	twofaController(authFastify: FastifyInstance): Promise<void> {
-	authFastify.get('/otp', generateMailCode);
+	authFastify.post<{ Body: { email?: string } }>('/otp', generateMailCode);
 	authFastify.post<{ Body: { otp: string } }>('/validate', validateCodeOtp);
 	authFastify.delete('/:id', deleteCodeOtp);
 }

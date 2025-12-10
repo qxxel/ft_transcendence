@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:47:24 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:16:38 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ import { TankGame }				from "../tank/tank.js"
 import { TournamentController }	from "../Pong/tournament.js"
 
 import type { AppState, UserState }	from "../objects/store.js"
+import { attachAvatarUploadListener } from "../eventsHandlers/changeListener.js"
 
 
 /* ====================== FUNCTION ====================== */
@@ -54,10 +55,6 @@ export async function  pathActions(currentPath: string): Promise<void> {
 				pendingOptions: null
 			}
 		}));
-
-			// OLD
-		// gameState.currentTournament = null;
-		// gameState.pendingOptions = undefined;
 	}
 
 	if (['/pong'].includes(currentPath))
@@ -83,6 +80,12 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			router.navigate("/");
 	}
 
+	if (['/history', '/user'].includes(currentPath))
+	{
+		if (!user.isAuth)
+			router.navigate("/");
+	}
+
 	if (['/pongmenu'].includes(currentPath)) {
 		appStore.setState((state) => ({
 			...state,
@@ -92,9 +95,6 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			}
 		}));
 
-			// OLD
-		// gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user);
-		
 		const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
 		const display = document.getElementById('points-display') as HTMLSpanElement;
 		
@@ -144,6 +144,11 @@ export async function  pathActions(currentPath: string): Promise<void> {
 		getAndRenderFriends();
 		console.log("Loading the friends...");
 	}
+
+	if (['/user'].includes(currentPath)) {
+		if (user.id)
+			attachAvatarUploadListener(user.id);
+	}
 }
 
 async function loadTwofa() {
@@ -159,13 +164,29 @@ async function loadTwofa() {
 }
 
 async function loadUser(user: UserState) {
-	const	Response: Response = await sendRequest(`/api/user/${user.id}`, 'get', null);		//	MATHIS: FAIRE UNE REQUETE `/me`
+	const	Response: Response = await sendRequest(`/api/user/me`, 'get', null);
 		if (!Response.ok) {
 			console.log(Response.statusText)
 			return ;
 		}
 
 		const	userRes = await Response.json();
+
+		const imgElement: HTMLImageElement = document.getElementById("user-avatar") as HTMLImageElement;
+		const displayImgElement: HTMLImageElement = document.getElementById("display-user-avatar") as HTMLImageElement;
+		if (imgElement)
+		{
+			if (userRes.avatar)
+			{
+				imgElement.src = "/uploads/" + userRes.avatar;
+				displayImgElement.src = "/uploads/" + userRes.avatar;
+			}
+			else
+			{	
+				imgElement.src = "/assets/default_avatar.png";
+				displayImgElement.src = "/assets/default_avatar.png";
+			}
+		}
 
 		if (userRes.is2faEnable == true) {
 			const	switchSpan = document.getElementById("switch-span") as HTMLInputElement;

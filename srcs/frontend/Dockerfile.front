@@ -6,7 +6,7 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/03 11:40:36 by agerbaud          #+#    #+#              #
-#    Updated: 2025/12/03 20:59:14 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/12/08 20:56:04 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,15 +28,19 @@ COPY	vite.config.ts	./
 RUN		npm install
 
 # COPY SOURCE CODE
-COPY	srcs/				./src/
-COPY	html/index.html		./index.html
-COPY	css/friends.css		./friends.css
-COPY	css/tournament.css	./tournament.css
-COPY	css/game.css		./game.css
-COPY	css/home.css		./home.css
-COPY	css/index.css		./index.css
-COPY	html/assets			./assets
-COPY	html/pages			./pages
+COPY	srcs/						./src/
+COPY	html/index.html				./index.html
+COPY	html/pages					./pages
+COPY	css/friends.css				./friends.css
+COPY	css/tournament.css			./tournament.css
+COPY	css/game.css				./game.css
+COPY	css/home.css				./home.css
+COPY	css/index.css				./index.css
+COPY	assets/back.jpeg			./assets/
+
+# 
+COPY	assets/default_avatar.png	./public/assets/
+COPY	assets/favicon.ico			./public/
 
 # COMPILE TYPESCRIPT FILES
 RUN	npm run build

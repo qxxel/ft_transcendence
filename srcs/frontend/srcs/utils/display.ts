@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/08 01:24:53 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 17:25:32 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ export async function displayError(response: Response, idMsgError: string) {
 
 export async function displayPopError(response: Response | string | undefined) {
 	const	divErrors = document.getElementById("div-errors");
-	if (!divErrors) {
+	if (!divErrors)
+	{
 		console.error("No HTMLElement named \`msg-error\`.");
 		if (response instanceof Response)
 			console.error(response.statusText);
@@ -43,7 +44,7 @@ export async function displayPopError(response: Response | string | undefined) {
 	const span = document.createElement("span");
 	span.textContent = "x";
 	const div = document.createElement("div");
-	div.id = "error";
+	div.classList = "error";
 
 	div.addEventListener("click", (event) => {
 		const target =  event.currentTarget as HTMLElement;

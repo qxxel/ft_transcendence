@@ -62,6 +62,7 @@ services:
       - "3000"
     volumes:
       - "userDB:/app/dist/db"
+      - "shared_uploads:/app/uploads"
     networks:
       - backend
 

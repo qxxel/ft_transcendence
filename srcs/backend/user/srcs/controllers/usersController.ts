@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 20:24:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 14:20:30 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,17 @@
 
 import { errorsHandler }	from "../utils/errorsHandler.js"
 import { extractUserId }	from "../utils/extractHeaders.js"
+import { usersUpdateDto }	from "../dtos/usersUpdateDto.js"
+import fs					from 'fs'
+import { pipeline }			from 'stream/promises'
+import { unlink }			from 'fs/promises'
 import { usersAddDto }		from "../dtos/usersAddDto.js"
 import { usersRespDto }		from "../dtos/usersRespDto.js"
-import { usersUpdateDto }	from "../dtos/usersUpdateDto.js"
-import { usersServ, userStatsServ } 		from "../user.js"
+import { userAxios, usersServ, userStatsServ } 		from "../user.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
+import type { AxiosResponse } from "axios"
+import { InvalidFileError, NoFileError } from "../utils/throwErrors.js"
 
 
 interface	userUpdate {
@@ -49,20 +54,20 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 		}
 	});
 
-	userFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
-		const	{ id } = request.params as { id: string };
-		const	parseId: number = parseInt(id, 10);
+	// userFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
+	// 	const	{ id } = request.params as { id: string };
+	// 	const	parseId: number = parseInt(id, 10);
 		
-		try {
-			const	user: usersRespDto = await usersServ.getUserById(parseId);
-			console.log("B2")
+	// 	try {
+	// 		const	user: usersRespDto = await usersServ.getUserById(parseId);
+	// 		console.log("B2")
 
-			return reply.code(200).send(user);
-		}
-		catch (err: unknown) {
-			return errorsHandler(userFastify, reply, err);
-		}
-	});
+	// 		return reply.code(200).send(user);
+	// 	}
+	// 	catch (err: unknown) {
+	// 		return errorsHandler(userFastify, reply, err);
+	// 	}
+	// });
 
 	// GET A USER WITH AN IDENTIFIER (EMAIL OR USERNAME)
 	userFastify.get('/lookup/:identifier', async (request: FastifyRequest, reply: FastifyReply) => {
@@ -140,6 +145,53 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 			await usersServ.updateUserById(userId, userUpdate);
 
 			return reply.code(201).send(userId);
+		}
+		catch (err: unknown) {
+			return errorsHandler(userFastify, reply, err);
+		}
+	});
+
+	// ADD A AVATAR
+	userFastify.post('/avatar', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await userAxios.get('http://jwt:3000/payload/access',
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+
+			const	userId: number = response.data.id;
+			
+			const data = await request.file();
+			if (!data)
+				throw new NoFileError("No file uploaded.");
+
+			const validMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+			if (!validMimeTypes.includes(data.mimetype))
+				throw new InvalidFileError("Invalid file type. Only JPG, PNG, WEBP allowed.");
+
+			try {
+				const currentUser = await usersServ.getUserById(userId);
+				const oldAvatar = currentUser.getAvatar();
+
+				if (oldAvatar) {
+					const oldPath = `/app/uploads/${oldAvatar}`;
+
+					await fs.promises.access(oldPath, fs.constants.F_OK);
+					await unlink(oldPath);
+				}
+			} catch (err) {
+				console.error("Error retrieving user for avatar deletion", err);
+			}
+
+			const extension = data.filename.split('.').pop();
+			const fileName = `avatar_${userId}_${Date.now()}.${extension}`;
+			const uploadPath = `/app/uploads/${fileName}`;
+
+			await pipeline(data.file, fs.createWriteStream(uploadPath));
+
+			await usersServ.updateAvatarById(userId, fileName);
+console.log("ok all");
+
+			return reply.code(200).send({ avatar: fileName });
 		}
 		catch (err: unknown) {
 			return errorsHandler(userFastify, reply, err);
