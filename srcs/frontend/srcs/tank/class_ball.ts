@@ -97,7 +97,6 @@ export class	Ball extends Actor {
 	}
 
 	draw(ctx: CanvasRenderingContext2D): void {
-		// this.rect.draw(ctx, {r:0,g:0,b:255});
 		ctx.beginPath();
 		ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity})`;
 		ctx.arc(this.x + this.w/2, this.y + this.h/2, this.w/2, 0, Math.PI * 2);
@@ -134,6 +133,7 @@ export class	Ball extends Actor {
 						this.author = a;
 
 						this.color = a.fire_color;
+						if (this.bounce_count == 1) this.bounce_count++; // FORCE REBOUNCE IF BALL GONNA DIE IDK AYW.
 					}
 					else if (this.author)
 					{
@@ -164,13 +164,6 @@ export class	Ball extends Actor {
 				this.bounce_count--;
 				if (this.bounce_count <= 0)
 				{
-					// if (this.author)
-					// {
-					// 	if (this.author.id == 0)
-					// 		GSTATE.STATS1.reflect += 1;
-					// 	else (this.author.id == 1)
-					// 		GSTATE.STATS2.reflect += 1;
-					// }
 					this.destroy();
 				}
 				this.direction_impact = this.getBounce(a.getRect());

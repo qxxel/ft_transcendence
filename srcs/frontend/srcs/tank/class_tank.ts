@@ -109,7 +109,7 @@ export class	Tank extends Actor {
 		}
 		if (input.isPressed(this.keys.fire))	{ this.fire(); }
 			
-		if (input.isPressed(this.keys.ability))	{ this.ability_cast(); }
+		if (input.isPressed(this.keys.ability))	{ this.ability_cast(input); }
 	}
 
 	move(dx:number,dy:number): void {
@@ -127,7 +127,6 @@ export class	Tank extends Actor {
 				c.move(dx,0);
 			this.hud.move(dx,0);
 		}
-
 	}
 
 	fire(): void {
@@ -171,7 +170,7 @@ export class	Tank extends Actor {
 		}
 	}
 
-	ability_cast(): void {
+	ability_cast(input: Input): void {
 		if (!this.canAbility()) return;
 		this.ability_active = true;
 		this.ability_last = Date.now();
@@ -252,7 +251,7 @@ export class	Classic extends Tank {
 		public	keys:Keys,
 		public  id:number) {
 		super(x,y,w,h,color,fire_color,keys,id);
-		this.ability_cooldown = 3000; // ms
+		this.ability_cooldown = 10000; // ms
 		this.ability_duration = 3000; // ms
 		this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),3,0,fire_color));
 		this.hud.setShield(this.rect);
@@ -356,6 +355,11 @@ export class	Sniper extends Tank {
 		this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),6,0,fire_color));
 	}
 
+	ability_cast(): void {
+		if (!this.ability_active) return;
+		console.log("SNI EFFECT!\n");
+	}
+
 	ability_effect(): void {
 		if (!this.ability_active) return;
 		console.log("SNI EFFECT!\n");
@@ -364,6 +368,11 @@ export class	Sniper extends Tank {
 
 export class	Shotgun extends Tank {
 
+	isDash:boolean = false;
+	dash_direction:number = 1;
+	dash_dx:number = 0;
+	dash_dy:number = 0;
+	dash_speed:number = 3;
 	constructor(
 		x:number,
 		y:number,
@@ -375,11 +384,11 @@ export class	Shotgun extends Tank {
 		public  id:number) {
 		super(x,y, w * 1.1, h * 1.1 ,color,fire_color,keys,id);
 		this.ability_cooldown = 5000; // ms
-		this.ability_duration = 1000; // ms
-		this.speed = 0.9
-		this.rot_speed = 0.1
-		this.health = 8
-		this.fire_rate = 4000
+		this.ability_duration = 300; // ms
+		this.speed = 0.9;
+		this.rot_speed = 0.1;
+		this.health = 8;
+		this.fire_rate = 4000;
 		this.maxHealth = this.health;
 		this.ball_size = 3;
 		this.w *= 1.1;
@@ -391,8 +400,59 @@ export class	Shotgun extends Tank {
 		this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h / 1.7),3,Math.PI / 16,fire_color));
 	}
 
+	ability_cast(input: Input): void {
+		if (!this.canAbility()) return;
+		this.ability_active = true;
+		this.isDash = true;
+		if (input.isDown(this.keys.down)) this.dash_direction = 0;
+		this.dash_dx = Math.cos(this.cannon[0].geometry.angle);
+		this.dash_dy = Math.sin(this.cannon[0].geometry.angle);
+		this.ability_last = Date.now();
+	}
+
+	listen(input: Input): void {
+		
+		if (input.isPressed(this.keys.fire))	{ this.fire(); }
+			
+		if (input.isPressed(this.keys.ability))	{ this.ability_cast(input); }
+
+		if (input.isDown(this.keys.left)) { 
+			for (let c of this.cannon)
+				c.slope(-this.rot_speed);
+			GSTATE.REDRAW = true;
+		}
+		if (input.isDown(this.keys.right)) { 
+			for (let c of this.cannon)
+				c.slope(+this.rot_speed);
+			GSTATE.REDRAW = true;
+		}
+
+		if (this.isDash) return;
+
+		if (input.isDown(this.keys.up)) {
+				this.move(this.speed * Math.cos(this.cannon[0].geometry.angle),this.speed * Math.sin(this.cannon[0].geometry.angle));
+			GSTATE.REDRAW = true;
+		}
+		if (input.isDown(this.keys.down)) {
+				this.move(-this.speed * Math.cos(this.cannon[0].geometry.angle),-this.speed * Math.sin(this.cannon[0].geometry.angle));
+			GSTATE.REDRAW = true;
+		}
+
+	}
+
 	ability_effect(): void {
 		if (!this.ability_active) return;
-		console.log("SHO EFFECT!\n");
+
+		if (this.dash_direction)
+		{
+			this.move(this.dash_speed * this.dash_dx,this.dash_speed * this.dash_dy);
+		}
+		else
+			this.move(-this.dash_speed * this.dash_dx,-this.dash_speed * this.dash_dy);
+	}
+
+	ability_off(): void {
+		this.isDash = false;
+		this.dash_direction = 1;
 	}
 }
