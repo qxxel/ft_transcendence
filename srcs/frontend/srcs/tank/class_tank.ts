@@ -34,13 +34,16 @@ export class	Tank extends Actor {
 	rot_speed: number = 0;
 	health: number = 0;
 	maxHealth: number = this.health;
-	fire_rate: number = 0; // ms
+	regen_rate: number = 0;
+	regen_amount: number = 0;
+	regen_last: number = 0;
+	fire_rate: number = 0;
 	fire_last: number = 0;
-	ability_base_cooldown: number = 4500; // ms
-	ability_cooldown: number = this.ability_base_cooldown; // ms
-	ability_duration: number = 0; // ms
-	ability_last: number = 0; // ms
-	ability_active: boolean = false; // ms
+	ability_base_cooldown: number = 0;
+	ability_cooldown: number = this.ability_base_cooldown;
+	ability_duration: number = 0;
+	ability_last: number = 0;
+	ability_active: boolean = false;
 	hud: Hud;
 	ball_size: number = 0;
 	ball_speed: number = 0;
@@ -66,6 +69,9 @@ export class	Tank extends Actor {
 		this.listen(input);
 		// if (this.id == 0 && !this.canAbility())
 			// console.log("this.ability_cooldown", this.ability_cooldown);
+
+		if (this.regen_rate != -1)
+			this.regen();
 		if (this.ability_update())
 			this.ability_effect();
 		if (Date.now() - this.fire_last <= (this.fire_rate * this.fire_coef))
@@ -211,6 +217,14 @@ export class	Tank extends Actor {
 		return true;
 	}
 
+	regen(): void {
+		if (Date.now() - this.regen_rate < this.regen_last) return;
+		this.addHealth(this.regen_amount);
+		this.regen_last = Date.now();
+		GSTATE.REDRAW = true;
+	}
+
+
 	collide(rect1: Rect2D): boolean {
 
 		for (let a of GSTATE.ACTORS) {
@@ -280,6 +294,8 @@ export class	Classic extends Tank {
 		this.rot_speed = 0.08
 		this.health = 6.5;
 		this.maxHealth = this.health;
+		this.regen_rate = 1000;
+		this.regen_amount = 0.04;
 		this.fire_rate = 1250; // ms
 		this.fire_last = 0;
 		this.ability_base_cooldown = 9000; // ms
@@ -347,6 +363,8 @@ export class	Uzi extends Tank {
 		this.health = 4
 		this.fire_rate = 350
 		this.maxHealth = this.health;
+		this.regen_rate = 1000;
+		this.regen_amount = 0.02;
 		this.ball_size = 8;
 		this.w *= 0.5;
 		this.h *= 0.5;
@@ -386,6 +404,8 @@ export class	Sniper extends Tank {
 		this.health = 7
 		this.fire_rate = 6000;
 		this.maxHealth = this.health;
+		this.regen_rate = 1000;
+		this.regen_amount = 0.04;
 		this.ball_size = 18.5;
 		this.ball_speed = 3.5;
 		this.w *= 0.9;
@@ -456,6 +476,8 @@ export class	Shotgun extends Tank {
 		this.health = 8;
 		this.fire_rate = 4000;
 		this.maxHealth = this.health;
+		this.regen_rate = 1000;
+		this.regen_amount = 0.04;
 		this.ball_size = 3;
 		this.w *= 1.1;
 		this.h *= 1.1; 

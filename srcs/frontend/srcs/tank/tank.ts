@@ -335,8 +335,8 @@ export class	TankGame extends Game {
 	private updateNameDisplay() {
     	const p1Span = document.getElementById('p1-name');
     	const p2Span = document.getElementById('p2-name');
-    	if (p1Span) p1Span.innerText = this.player1Name + "";// + ": " + GSTATE.STATS1.win;
-    	if (p2Span) p2Span.innerText = this.player2Name + "";// + ": " + GSTATE.STATS2.win;
+    	if (p1Span) p1Span.innerText = this.player1Name + "";
+    	if (p2Span) p2Span.innerText = this.player2Name + "";
   	}
 
 	private generateLegend(): void {
@@ -364,11 +364,13 @@ export class	TankGame extends Game {
 		}
 
 		if (this.star2) {
-			html += createRow("Speed", "#3296FFFF", "#0000FF");
+			html += createRow("Movement speed", "#FFFF00FF", "#0000FF");
+			html += createRow("Ball speed", "#3296FFFF", "#0000FF");
 		}
 
 		if (this.star3) {
-			html += createRow("Haste", "#643296FF", "#0000FF");
+			html += createRow("Fire rate", "#643296FF", "#0000FF");
+			html += createRow("Cooldown reduction", "#BB00FFFF", "#0000FF");
 		}
 		legendContainer.innerHTML = html;
 	}

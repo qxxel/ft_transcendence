@@ -235,13 +235,13 @@ export class	Collectible extends Ball {
         		this.color = {r:0,g:255,b:255};
         	    break;
 			case 'tank_speed':
-        		this.color = {r:50,g:150,b:255};
+        		this.color = {r:255,g:255,b:0};
         	    break;
 			case 'haste':
         		this.color = {r:100,g:50,b:150};
         	    break;
 			case 'cdr':
-        		this.color = {r:50,g:50,b:255};
+        		this.color = {r:187,g:0,b:255};
 			break;
     	}
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
@@ -259,7 +259,7 @@ export class	Collectible extends Ball {
 			case 'tank_speed':
 				a.tank_speed_coef = Math.min(a.tank_speed_coef+0.1, 1.5)
 				break;
-			case 'ball_speed': /////////////////////
+			case 'ball_speed':
 				a.ball_speed_coef = Math.min(a.ball_speed_coef+0.1, 1.5)
 				break;
 			case 'haste':
