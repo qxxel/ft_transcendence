@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 22:36:38 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/11 01:26:52 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,44 +70,38 @@ export class	Map {
 		this.walls.push(new Wall(0, 0, this.map_width, ext_width, c_ext));                            // EXTERIOR TOP
 		this.walls.push(new Wall(0, this.map_height - ext_width, this.map_width, ext_width, c_ext));  // EXTERIOR BOT
 
-// XXXXXXXXXX
-// X a e    X
-// X 1 22 3cX
-// X  wi x  X
-// X 4j55k6 X
-// X 4 55 6 X
-// X  yl z  X
-// Xb7 88 9 X
-// X      d X
-// XXXXXXXXXX
-
 		this.walls.push(new Wall(cell*1.5, cell*1.5, cell  , cell  ,   c_blk1)); // 1
-		// this.walls.push(new Wall(cell*4, cell*1.5, cell*2, cell  ,   c_blk2)); // 2
 		this.walls.push(new Wall(cell*7.5, cell*1.5, cell  , cell  ,   c_blk1)); // 3
-		// this.walls.push(new Wall(cell*1.5, cell*4, cell  , cell*2,   c_blk2)); // 4
 		this.walls.push(new Wall(cell*4, cell*4, cell*2, cell*2,   c_blk2)); // 5
-		// this.walls.push(new Wall(cell*7.5, cell*4, cell  , cell*2,   c_blk2)); // 6
 		this.walls.push(new Wall(cell*1.5, cell*7.5, cell  , cell  ,   c_blk1)); // 7
-		// this.walls.push(new Wall(cell*4, cell*7.5, cell*2, cell  ,   c_blk2)); // 8
 		this.walls.push(new Wall(cell*7.5, cell*7.5, cell  , cell  ,   c_blk1)); // 9
 
 		for(let w of this.walls) {
 			GSTATE.ACTORS.push(w);
 		}
 
-			this.spawns_tank1.push({x:cell*2 - 24,y:cell*1 - 24}); // a
-			this.spawns_tank1.push({x:cell*1 - 24,y:cell*8 - 24}); // b
-			this.spawns_tank2.push({x:cell*9 - 24,y:cell*2 - 24}); // c
-			this.spawns_tank2.push({x:cell*8 - 24,y:cell*9 - 24}); // d
+			this.spawns_tank1.push({x:cell*1 - 24, y:cell*5 - 24});
+        	this.spawns_tank1.push({x:cell*5 - 24, y:cell*1 - 24});
+        	this.spawns_tank2.push({x:cell*9 - 24, y:cell*5 - 24});
+        	this.spawns_tank2.push({x:cell*5 - 24, y:cell*9 - 24});
 
-			this.spawns_collectible.push({x:cell*5.0 - 16/2,y: cell*3.5- 16/2});   // i
-			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*5.0- 16/2});   // j
-			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*5.0- 16/2});   // k
-			this.spawns_collectible.push({x:cell*5.0 - 16/2,y: cell*6.5- 16/2});   // l
-			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*3.5- 16/2});   // w
-			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*3.5- 16/2});   // x
-			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*6.5- 16/2});   // y
-			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*6.5- 16/2});   // z
+        	const offset = 16/2;
+
+        	this.spawns_collectible.push({x:cell*2.5 - offset, y: cell*1.0 - offset}); 
+        	this.spawns_collectible.push({x:cell*7.5 - offset, y: cell*1.0 - offset}); 
+		
+        	this.spawns_collectible.push({x:cell*2.5 - offset, y: cell*9.0 - offset}); 
+        	this.spawns_collectible.push({x:cell*7.5 - offset, y: cell*9.0 - offset}); 
+
+        	this.spawns_collectible.push({x:cell*1.0 - offset, y: cell*3.0 - offset}); 
+        	this.spawns_collectible.push({x:cell*1.0 - offset, y: cell*7.0 - offset}); 
+        	this.spawns_collectible.push({x:cell*9.0 - offset, y: cell*3.0 - offset}); 
+        	this.spawns_collectible.push({x:cell*9.0 - offset, y: cell*7.0 - offset}); 
+
+        	this.spawns_collectible.push({x:cell*3.5 - offset, y: cell*3.5 - offset});
+        	this.spawns_collectible.push({x:cell*6.5 - offset, y: cell*3.5 - offset});
+        	this.spawns_collectible.push({x:cell*3.5 - offset, y: cell*6.5 - offset});
+        	this.spawns_collectible.push({x:cell*6.5 - offset, y: cell*6.5 - offset});
 
 	}
 
@@ -124,17 +118,6 @@ export class	Map {
 		this.walls.push(new Wall(this.map_width - ext_width, 0, ext_width, this.map_height, c_ext));  // EXTERIOR RIGHT
 		this.walls.push(new Wall(0, 0, this.map_width, ext_width, c_ext));                            // EXTERIOR TOP
 		this.walls.push(new Wall(0, this.map_height - ext_width, this.map_width, ext_width, c_ext));  // EXTERIOR BOT
-
-// XXXXXXXXXX
-// X a e    X
-// X 1 22 3cX
-// X  wi x  X
-// X 4j55k6 X
-// X 4 55 6 X
-// X  yl z  X
-// Xb7 88 9 X
-// X      d X
-// XXXXXXXXXX
 
 		// DOOR SIZE = 14
 		// HOUSE WALLS
@@ -203,17 +186,30 @@ export class	Map {
 			GSTATE.ACTORS.push(w);
 		}
 
-			this.spawns_tank1.push({x:cell*30,y:cell*30}); // d
-			this.spawns_tank2.push({x:cell*60,y:cell*60}); // b
+			this.spawns_tank1.push({x:cell*25, y:cell*25});
+			this.spawns_tank1.push({x:cell*70, y:cell*15});
+        	this.spawns_tank2.push({x:cell*75, y:cell*70});
+        	this.spawns_tank2.push({x:cell*30, y:cell*90});
 
-			this.spawns_collectible.push({x:cell*5.0 - 16/2,y: cell*3.5- 16/2});   // i
-			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*5.0- 16/2});   // j
-			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*5.0- 16/2});   // k
-			this.spawns_collectible.push({x:cell*5.0 - 16/2,y: cell*6.5- 16/2});   // l
-			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*3.5- 16/2});   // w
-			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*3.5- 16/2});   // x
-			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*6.5- 16/2});   // y
-			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*6.5- 16/2});   // z
+        	const offset = 16/2;
+
+        	this.spawns_collectible.push({x:cell*27 - offset, y: cell*15 - offset}); 
+        	this.spawns_collectible.push({x:cell*20 - offset, y: cell*35 - offset}); 
+
+        	this.spawns_collectible.push({x:cell*80 - offset, y: cell*20 - offset}); 
+        	this.spawns_collectible.push({x:cell*75 - offset, y: cell*30 - offset}); 
+
+        	this.spawns_collectible.push({x:cell*35 - offset, y: cell*45 - offset});
+        	this.spawns_collectible.push({x:cell*65 - offset, y: cell*45 - offset});
+
+        	this.spawns_collectible.push({x:cell*16 - offset, y: cell*60 - offset}); 
+        	this.spawns_collectible.push({x:cell*30 - offset, y: cell*80 - offset}); 
+
+        	this.spawns_collectible.push({x:cell*80 - offset, y: cell*60 - offset}); 
+        	this.spawns_collectible.push({x:cell*75 - offset, y: cell*80 - offset}); 
+
+        	this.spawns_collectible.push({x:cell*55 - offset, y: cell*25 - offset});
+        	this.spawns_collectible.push({x:cell*55 - offset, y: cell*75 - offset});
 
 	}
 
@@ -230,18 +226,6 @@ export class	Map {
 		this.walls.push(new Wall(this.map_width - ext_width, 0, ext_width, this.map_height, c_ext));  // EXTERIOR RIGHT
 		this.walls.push(new Wall(0, 0, this.map_width, ext_width, c_ext));                            // EXTERIOR TOP
 		this.walls.push(new Wall(0, this.map_height - ext_width, this.map_width, ext_width, c_ext));  // EXTERIOR BOT
-
-// XXXXXXXXXX
-// X a e    X
-// X 1 22 3cX
-// X  wi x  X
-// X 4j55k6 X
-// X 4 55 6 X
-// X  yl z  X
-// Xb7 88 9 X
-// X      d X
-// XXXXXXXXXX
-
 
 
 		for(let w of this.walls) {

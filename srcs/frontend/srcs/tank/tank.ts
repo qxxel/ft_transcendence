@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 22:36:38 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/11 01:14:31 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ export class	TankGame extends Game {
 		if (this.star3)
 			effects.push("haste");
 
-		if (this.map.name == 'desertfox')
+		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'davinco')
 		{
 			while (attempt++ < 2000)
 			{
@@ -269,7 +269,7 @@ export class	TankGame extends Game {
 			}
 			if (this.star1 || this.star2 || this.star3){
     		  	const now = Date.now();
-    		  	if (now - this.lastCollectibleSpawn > (this.powerupFrequency * 1000)) {
+    		  	if (now - this.lastCollectibleSpawn > (this.powerupFrequency * 1000) || 1) {
 					this.spawn_collectible();
 	    	  		this.lastCollectibleSpawn = now;
     		  	}
