@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtRespDto.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:30:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:19:59 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:36:51 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,15 @@ export class	jwtRespDto {
 	private	clientId: number;
 	private	token: string;
 	private	creationTime: number;
+	private	expirationTime: number;
 
 
 	constructor(row: any) {
 		this.id = row.id;
 		this.clientId = row.idclient;
 		this.token = row.token;
-		this.creationTime = row.creationtime;
+		this.creationTime = row.created_at;
+		this.expirationTime = row.expires_at;
 	}
 
 
@@ -45,5 +47,9 @@ export class	jwtRespDto {
 
 	getCreationTime(): number {
 		return this.creationTime;
+	}
+
+	getExpirationTime(): number {
+		return this.expirationTime;
 	}
 }

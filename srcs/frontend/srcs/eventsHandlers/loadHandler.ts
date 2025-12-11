@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/09 21:08:38 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/11 19:29:33 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,31 @@ function handleUnload() {
 	});
 }
 
+function handlePagehide() {
+	window.addEventListener("pagehide", async (event: Event) => {
+		
+		if (!router.canLeave && router.Path === "/sign-up") {
+			navigator.sendBeacon("/api/auth/twofa/me", null);
+		}
+
+		appStore.setState((state) => ({
+			...state,
+			user: {
+				id: null,
+				username: null,
+				avatar: null,
+				isAuth: false
+			}
+		}));
+		navigator.sendBeacon('/api/jwt/refresh/logout', null);
+		
+		if (socket && socket.connected)
+			socket.disconnect();
+	});
+}
+
 export async function	setupLoadHandler(): Promise<void> {
 	handleLoadPage();
 	handleUnload();
+	handlePagehide();
 }

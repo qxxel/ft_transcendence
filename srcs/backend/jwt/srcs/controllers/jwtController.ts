@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 23:12:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/11 18:56:40 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,9 @@ async function	createdToken(request: FastifyRequest, reply: FastifyReply): Promi
 		const	refreshToken: string = await addJWT(reply, user);
 
 		const	lastId: number = await jwtServ.addToken(refreshToken, user.id);
+
+		await jwtAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': user.id } } );
+		
 		return reply.status(201).send(lastId);
 	} catch (err: unknown) {
 		removeJWT(reply);
@@ -121,6 +124,8 @@ async function	validateTwofaCreatedToken(request: FastifyRequest, reply: Fastify
 		removeCookies(reply, "jwtTwofa", "/api");
 
 		const	refreshToken: string = await addJWT(reply, user);
+
+		await jwtAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': user.id } } );
 
 		await jwtServ.addToken(refreshToken, user.id)
 		return reply.status(201).send(payload);
@@ -209,15 +214,24 @@ async function	refreshTokenRefresh(request: FastifyRequest, reply: FastifyReply)
 async function	deleteSessionToken(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
 		const	cookies: any = getCookies(request);
+		
+		let	payload;
 		try {
-			await jose.jwtVerify(cookies.jwtAccess, jwtSecret);
+			({ payload } = await jose.jwtVerify(cookies.jwtAccess, jwtSecret));
 		} catch (error) {
-			await jose.jwtVerify(cookies.jwtTwofa, jwtSecret);	
+			try {
+				({ payload } = await jose.jwtVerify(cookies.jwtTwofa, jwtSecret));
+			} catch (error) {
+				({ payload } = await jose.jwtVerify(cookies.jwtRefresh, jwtSecret));
+			}
 		}
+
+		const	user: userDto = payload as any as userDto;
 
 		removeJWT(reply);
 
 		await jwtServ.deleteToken(cookies.jwtRefresh);
+		await jwtAxios.post('http://user:3000/log', { isLog: false }, { headers: { 'user-id': user.id } } );
 
 		return reply.status(204).send({ result: "deleted." });
 	} catch (err: unknown) {
@@ -230,10 +244,8 @@ async function	deleteUserToken(request: FastifyRequest, reply: FastifyReply): Pr
 		const	cookies: any = getCookies(request);
 		let		payload;
 		try {
-			console.log("1: ", cookies.jwtAccess);
 			({ payload } = await jose.jwtVerify(cookies.jwtAccess, jwtSecret));
 		} catch (error) {
-			console.log("2: ", cookies.jwtTwofa);
 			({ payload } = await jose.jwtVerify(cookies.jwtTwofa, jwtSecret));	
 		}
 

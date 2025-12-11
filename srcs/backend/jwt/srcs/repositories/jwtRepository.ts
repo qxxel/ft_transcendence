@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtRepository.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:30 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 16:35:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 21:19:57 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { jwtRespDto }		from "../dtos/jwtRespDto.js"
 import { jwtTableBuilder }	from "../tableBuilders/jwtTableBuilder.js"
 
 import type { Database }	from 'sqlite3'
@@ -57,37 +56,26 @@ export class	jwtRepository {
 		}
 	}
 
+	async cleanup(): Promise<void> {
+		const	query: string = "DELETE FROM jwt WHERE expires_at <= datetime('now')";
+
+		this.db.run(query, function(err: unknown) {
+				if (err)
+					console.error(err);
+			}
+		);
+	}
+
 	async addToken(token: string, clientId: number): Promise<number> {
 		return new Promise((resolve, reject) => {
-			let	currentTimestamp: number = Date.now();
-
-			const	query: string = "INSERT INTO jwt (idclient, token, creationtime) VALUES(?, ?, ?)";
-			const	elements: [number, string, number] = [clientId, token, currentTimestamp];
+			const	query: string = "INSERT INTO jwt (idclient, token) VALUES(?, ?)";
+			const	elements: [number, string] = [clientId, token];
 
 			this.db.run(query, elements, function (this: StatementWithLastID, err: unknown) {
 				if (err)
 					return reject(err);
 
 				resolve(this.lastID);
-			});
-		});
-	}
-
-	async getClientIdByToken(token: string): Promise<jwtRespDto> {
-		return new Promise((resolve, reject) => {
-			const	query: string = "SELECT * FROM jwt WHERE token = ?";
-			const	elements: string[] = [token];
-
-			this.db.get(query, elements, (err: unknown, row: unknown) => {
-				if (err)
-					return reject(err);
-
-				if (!row) {
-					console.error("error: the token isn't liked to a client.");
-					return reject(new Error("The token isn't liked to a client."));
-				}
-
-				resolve(new jwtRespDto(row));
 			});
 		});
 	}

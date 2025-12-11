@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 00:21:02 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/11 19:15:56 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 import argon2								from 'argon2'
 import { authAxios, authServ, authFastify }	from "../auth.js"
-import { deleteClientExpires }				from "../services/authService.js"
 import { errorsHandler }					from "../utils/errorsHandler.js"
 import { isValidPassword }					from "../utils/validation.js"
 import * as twofaError						from "../utils/throwErrors.js"
@@ -180,6 +179,7 @@ async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, 
 		const id: number = jwtRes.data;
 
 		await authServ.updateExpiresByIdClient(id, null);
+		await authAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': id } } );
 
 		return reply.status(201).send(id);
 	} catch (err: unknown) {
@@ -263,12 +263,19 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 		
 		const	payload: AxiosResponse = await authAxios.get("http://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		
-		deleteClientExpires(authServ, payload.data.id);
-		
 		const	response: AxiosResponse = await authAxios.delete("http://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
+
+		if (!payload.data.id)
+			throw new Error("invalide id");
+		
+		if (await authServ.getExpiresByIdClient(payload.data.id)) {
+			await authAxios.delete(`http://user:3000/${payload.data.id}`);
+			await authAxios.delete(`http://game:3000/user/${payload.data.id}`);
+			await authServ.deleteClient(payload.data.id);
+		}
 		
 		return reply.status(204).send(payload.data.id);	
 	} catch (err: unknown) {
@@ -286,6 +293,7 @@ async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promis
 		const { id } = jwtRes.data;
 
 		await authServ.updateExpiresByIdClient(id, null);
+		await authAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': id } } );
 
 		return reply.status(201).send(id);
 	} catch (err: unknown) {
