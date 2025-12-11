@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 17:34:04 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 00:15:20 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 	console.log("Sign in");
 	const	identifier: string = (document.getElementById("sign-in-username") as HTMLInputElement).value;
 	const	password: string = (document.getElementById("sign-in-password") as HTMLInputElement).value;
+	if (!identifier || !password) return;
 
 	const	signForm = document.getElementById("sign-in-form");
 	if (signForm)
@@ -109,6 +110,8 @@ async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 	const	username: string = (document.getElementById("sign-up-username") as HTMLInputElement).value;
 	const	email: string = (document.getElementById("sign-up-email") as HTMLInputElement).value;
 	const	password: string = (document.getElementById("sign-up-password") as HTMLInputElement).value;
+
+	if (!username || !email || !password) return;
 	form.reset();
 
 	const	response: Response = await fetch('/api/auth/sign-up', {
@@ -144,6 +147,7 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 	console.log("VerifyEmail");
 
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
+	if (!otp) return;
 	form.reset();
 	
 	const response: Response = await sendRequest('/api/auth/validateUser', 'post', { otp });
@@ -174,6 +178,7 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 	console.log("2fa");
 
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
+	if (!otp) return;
 	form.reset();
 
 	const response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
@@ -223,6 +228,7 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 		}
 
 		const verifyForm = document.getElementById("confirm-setting-form") as HTMLFormElement;
+		if (!verifyForm) return;
 
 		verifyForm.addEventListener("submit", async (event: Event) => {
 			event.preventDefault();
@@ -246,6 +252,8 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	const	newUsername: string = (document.getElementById("edit-username") as HTMLInputElement).value;
 	const	newEmail: string = (document.getElementById("edit-email") as HTMLInputElement).value;
 	const	new2fa: boolean = (document.getElementById("edit-2fa") as HTMLInputElement).checked;
+
+	if (!newUsername || !newEmail || !new2fa) return;
 
 	const	state: AppState = appStore.getState();
 	const	user: UserState = state.user;

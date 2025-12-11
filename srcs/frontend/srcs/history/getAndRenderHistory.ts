@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderHistory.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:38:18 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 00:17:32 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,6 +271,8 @@ export function initHistoryListeners(targetId: number | null, targetName: string
     const pongCheckbox = document.getElementById('filter-pong') as HTMLInputElement;
     const tankCheckbox = document.getElementById('filter-tank') as HTMLInputElement;
     const refreshBtn = document.getElementById('refresh-history') as HTMLButtonElement;
+	
+	if (!refreshBtn) return;
 
     if (!aiCheckbox || !pvpCheckbox || !pongCheckbox || !tankCheckbox) {
         if (attempt > 20) return;

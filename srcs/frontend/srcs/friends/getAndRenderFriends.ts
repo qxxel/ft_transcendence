@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderFriends.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 16:31:20 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 00:16:20 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,11 @@ export async function	getAndRenderFriends(): Promise<void> {
 
 function	renderFriends(friendsData: UserObject[]): void {
 	const	requestsListDiv: HTMLDivElement = document.getElementById("requests-list") as HTMLDivElement;
+	if (!requestsListDiv) return;
 	requestsListDiv.innerHTML = "<h2>PENDING REQUEST</h2>";
 
 	const	friendsListDiv: HTMLDivElement = document.getElementById("friends-list") as HTMLDivElement;
+	if (!friendsListDiv) return;
 	friendsListDiv.innerHTML = "<h1>FRIENDS LIST</h1>";
 
 	const	state: AppState = appStore.getState();
@@ -192,9 +194,11 @@ function	displayNoFriends(friendsListDiv: HTMLDivElement): void {
 
 function	displayErrors(): void {
 	const	requestsListDiv: HTMLDivElement = document.getElementById("requests-list") as HTMLDivElement;
+	if (!requestsListDiv) return;
 	requestsListDiv.innerHTML = "<h2>PENDING REQUEST</h2>";	
 
 	const	friendsListDiv: HTMLDivElement = document.getElementById("friends-list") as HTMLDivElement;
+	if (!friendsListDiv) return;
 	friendsListDiv.innerHTML = "<h1>FRIENDS LIST</h1>";
 
 	const	requestsErrorParagraph: HTMLParagraphElement = document.createElement("p");
