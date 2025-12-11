@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/11 18:53:51 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/11 19:15:56 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,15 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 		
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
+
+		if (!payload.data.id)
+			throw new Error("invalide id");
+		
+		if (await authServ.getExpiresByIdClient(payload.data.id)) {
+			await authAxios.delete(`http://user:3000/${payload.data.id}`);
+			await authAxios.delete(`http://game:3000/user/${payload.data.id}`);
+			await authServ.deleteClient(payload.data.id);
+		}
 		
 		return reply.status(204).send(payload.data.id);	
 	} catch (err: unknown) {
