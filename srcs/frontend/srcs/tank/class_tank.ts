@@ -15,7 +15,7 @@
 /* ============================= IMPORTS ============================= */
 
 import { Actor }				from "./class_actor.js"
-import { Ball, Collectible }	from "./class_ball.js"
+import { Ball, Collectible, Pearl }	from "./class_ball.js"
 import { Cannon }				from "./class_cannon.js"
 import { GSTATE }				from "./global.js"
 import { Hud }					from "./class_hud.js"
@@ -129,6 +129,19 @@ export class	Tank extends Actor {
 		}
 	}
 
+	setPos(dx:number,dy:number): void {
+			this.y += dy;
+			this.rect.y += dy;
+			for (let c of this.cannon)
+				c.move(0,dy);
+			this.hud.move(0,dy);
+			this.x += dx;
+			this.rect.x += dx;
+			for (let c of this.cannon)
+				c.move(dx,0);
+			this.hud.move(dx,0);
+		}
+
 	fire(): void {
 
 		if (!this.canFire()) return;
@@ -177,16 +190,15 @@ export class	Tank extends Actor {
 	}
 
 	ability_effect(): void {
-		if (!this.ability_active) return;
 	}
 
 	ability_off(): void {
-		if (!this.ability_active) return;
+		this.ability_active = false;
 	}
 
 	ability_update(): boolean {
+		if (this.ability_active == false) return false;
 		if (this.ability_active == true && !this.isAbility()) {
-			this.ability_active = false;
 			this.ability_off();
 			return false;
 		}
@@ -319,7 +331,6 @@ export class	Uzi extends Tank {
 	}
 
 	ability_effect(): void {
-		if (!this.ability_active) return;
 		this.fire_rate = 100;
 		this.fire();
 	}
@@ -342,8 +353,8 @@ export class	Sniper extends Tank {
 
 		
 		super(x,y, w * 0.9, h * 0.9 ,color,fire_color,keys,id);
-		this.ability_cooldown = 5000; // ms
-		this.ability_duration = 1000; // ms
+		this.ability_cooldown = 2000; // ms
+		this.ability_duration = 0; // ms
 		this.speed = 0.65
 		this.rot_speed = 0.08
 		this.health = 7
@@ -356,12 +367,42 @@ export class	Sniper extends Tank {
 	}
 
 	ability_cast(): void {
-		if (!this.ability_active) return;
-		console.log("SNI EFFECT!\n");
+		if (!this.canAbility()) return;
+		console.log("SNI CAST!\n");
+
+		const now = Date.now();
+		let isSpawnable:boolean;
+		for (let c of this.cannon)
+		{
+			isSpawnable = true;
+			let spawnRect = new Rect2D(c.getEnd().x - this.ball_size / 2, c.getEnd().y - this.ball_size / 2, this.ball_size, this.ball_size);
+			for (let a of GSTATE.ACTORS) {
+				if (a == this)
+					continue;
+				if (!(a instanceof Tank || a instanceof Ball) && a.getRect().collide(spawnRect)) {
+					isSpawnable = false;
+				}
+			}
+			if (isSpawnable)
+			{
+				this.ability_active = true;
+				this.ability_last = now;
+				GSTATE.ACTORS.push(
+						new Pearl(
+							c.getEnd().x - this.ball_size / 2,
+							c.getEnd().y - this.ball_size / 2,
+							this.ball_size,
+							this.ball_size,
+							Math.cos(c.geometry.angle) * 3,
+							Math.sin(c.geometry.angle) * 3,
+							this.fire_color,
+							this
+						));
+			}
+		}
 	}
 
 	ability_effect(): void {
-		if (!this.ability_active) return;
 		console.log("SNI EFFECT!\n");
 	}
 }

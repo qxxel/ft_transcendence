@@ -75,6 +75,7 @@ export class	TankGame extends Game {
         this.player2Name = "Player 2";
     	this.lastCollectibleSpawn = Date.now();
 		GSTATE.REDRAW = true;
+		GSTATE.CANVAS = this.canvas;
 		this.reset_state();
 		this.updateNameDisplay()
 		this.setup_tanks();

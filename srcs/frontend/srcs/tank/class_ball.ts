@@ -20,6 +20,7 @@ import { GSTATE }	from "./global.js"
 import { Rect2D }	from "./class_rect.js"
 import { Tank, Classic, Uzi, Sniper, Shotgun }		from "./class_tank.js"
 import { Input }	from "./class_input.js"
+import { Wall }			from "./class_wall.js"
 import type { Color }	from "./interface.js"
 
 
@@ -309,13 +310,60 @@ export class	Pearl extends Ball {
 			if (a == this || a == this.author || a instanceof Collectible) continue;
 			if (a.getRect().collide(rect1))
 			{
-				this.impact_x = rect1.x; 
-				this.impact_y = rect1.y;
+				if (a instanceof Classic && a.isShield)
+				{
+					this.author = a;
+					this.color = a.fire_color;
+					if (this.bounce_count == 1) this.bounce_count++; // FORCE REBOUNCE IF BALL GONNA DIE IDK AYW.
+					this.direction_impact = this.getBounce(a.getRect());
+					return true;
+				}
+
+				this.impact_x = rect1.x + rect1.w/2;
+				this.impact_y = rect1.y + rect1.h/2;
 				this.impact_orientation = this.getBounce(a.getRect());
+				let spawnRect: Rect2D = new Rect2D(this.impact_x - this.author!.w/2, this.impact_y - this.author!.h/2, this.author!.w, this.author!.h);
+				spawnRect = this.findSpawn(spawnRect);
+				if (this.author && spawnRect != undefined) {
+					this.author.setPos((spawnRect.x - this.author!.x), (spawnRect.y - this.author!.y));
+				}
+				this.destroy();
 				return true;
 			}
 		}
 		return false;
+	}
+
+	findSpawn(spawnRect:Rect2D): Rect2D {
+		if (this.canSpawn(spawnRect)) return spawnRect;
+		if (this.impact_orientation == 'horizontal')
+		{
+			if (this.dx >= 0)
+				spawnRect.x -= 1; 
+			else
+				spawnRect.x += 1; 
+		}
+		else if (this.impact_orientation == 'vertical')
+		{
+			if (this.dy >= 0)
+				spawnRect.y -= 1;
+			else
+				spawnRect.y += 1;
+		}
+		this.impact_orientation = this.impact_orientation == 'horizontal' ? 'vertical' : 'horizontal';
+		return this.findSpawn(spawnRect);
+	}
+
+	canSpawn(rect1:Rect2D): boolean {
+		if (rect1.x < 0 || rect1.x > GSTATE.CANVAS.width || rect1.y < 0 || rect1.y > GSTATE.CANVAS.height) return false;
+		for (let a of GSTATE.ACTORS) {
+			if (a == this || a == this.author || a instanceof Collectible) continue;
+			if ((a instanceof Wall || a instanceof Tank) && a.getRect().collide(rect1))
+			{
+				return false;
+			}	
+		}
+		return true;
 	}
 
 }
