@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/08 21:59:52 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/10 02:56:14 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 import { appStore }		from "../objects/store.js"
 import { getMenu }		from "../utils/getMenu.js"
 import { router }		from "../index.js"
+import { socket }		from "../socket/socket.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 
 
@@ -62,7 +63,31 @@ function handleUnload() {
 	});
 }
 
+function handlePagehide() {
+	window.addEventListener("pagehide", async (event: Event) => {
+		
+		if (!router.canLeave && router.Path === "/sign-up") {
+			navigator.sendBeacon("/api/auth/twofa/me", null);
+		}
+
+		appStore.setState((state) => ({
+			...state,
+			user: {
+				id: null,
+				username: null,
+				avatar: null,
+				isAuth: false
+			}
+		}));
+		navigator.sendBeacon('/api/jwt/refresh/logout', null);
+		
+		if (socket && socket.connected)
+			socket.disconnect();
+	});
+}
+
 export async function	setupLoadHandler(): Promise<void> {
 	handleLoadPage();
 	handleUnload();
+	handlePagehide();
 }

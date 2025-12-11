@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:20:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:42:57 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 18:11:05 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,20 @@ export class	usersRepository {
 				}
 
 				resolve(new usersRespDto(row));
+			});
+		});
+	}
+
+	async updateLogById(userId: number, isLog: boolean): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "UPDATE users SET is_log = ? WHERE id = ?";
+			const	elements: [boolean, number] = [isLog, userId];
+
+			this.db.run(query, elements, (err: unknown, row: unknown) => {
+				if (err)
+					return reject(err);
+
+				resolve();
 			});
 		});
 	}

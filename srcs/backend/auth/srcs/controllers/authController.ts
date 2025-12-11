@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 18:54:31 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/11 18:53:51 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,7 @@ async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, 
 		const id: number = jwtRes.data;
 
 		await authServ.updateExpiresByIdClient(id, null);
+		await authAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': id } } );
 
 		return reply.status(201).send(id);
 	} catch (err: unknown) {
@@ -283,6 +284,7 @@ async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promis
 		const { id } = jwtRes.data;
 
 		await authServ.updateExpiresByIdClient(id, null);
+		await authAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': id } } );
 
 		return reply.status(201).send(id);
 	} catch (err: unknown) {
