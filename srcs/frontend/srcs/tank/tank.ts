@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/11 01:14:31 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/11 01:28:44 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,7 +270,7 @@ export class	TankGame extends Game {
 			}
 			if (this.star1 || this.star2 || this.star3){
     		  	const now = Date.now();
-    		  	if (now - this.lastCollectibleSpawn > (this.powerupFrequency * 1000) || 1) {
+    		  	if (now - this.lastCollectibleSpawn > (this.powerupFrequency * 1000)) {
 					this.spawn_collectible();
 	    	  		this.lastCollectibleSpawn = now;
     		  	}
