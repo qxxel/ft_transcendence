@@ -30,14 +30,16 @@ export class	Ball extends Actor {
 
 	rect: Rect2D;
 	redraw: boolean = true;
-	speed: number = 1;
+	speed: number = 2.5;
 	damage: number = 1;
 	bounce_count: number = 3;
 	health: number = 2;
 	direction_impact: string = "";
 	birth: number;
 	opacity: number = 1;
-	
+	isReflected:boolean = false;
+	ability_reduction:number = 0;
+	duration:number = 0;
 	constructor(
 		x:number,
 		y:number,
@@ -45,7 +47,6 @@ export class	Ball extends Actor {
 		public	h:number,
 		public	dx:number,
 		public	dy:number,
-		public	duration:number,
 		public	color:Color,
 		public	author?:Tank) {
 		super(x,y)
@@ -56,7 +57,7 @@ export class	Ball extends Actor {
 			{
 				this.damage = 4;
 				this.bounce_count = 2;
-				this.speed = 0.9;
+				this.speed = 3.75;
 				this.health = 4;
 				this.duration = 0;
 				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
@@ -65,7 +66,7 @@ export class	Ball extends Actor {
 			{
 				this.damage = 0.5;
 				this.bounce_count = 5;
-				this.speed = 1.25;
+				this.speed = 2.25;
 				this.health = 1;
 				this.duration = 3000;
 				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
@@ -74,12 +75,22 @@ export class	Ball extends Actor {
 			{
 				this.damage = 1.2;
 				this.bounce_count = 2;
-				this.speed = 1.25;
+				this.speed = 2.95;
 				this.health = 1;
-				this.duration = 1500;
+				this.duration = 380;
+				this.ability_reduction = 400;
 				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 			}
-			else //if (author instanceof Classic)
+			else if (author instanceof Classic)
+			{
+				this.damage = 1;
+				this.bounce_count = 3;
+				this.speed = 2.5;
+				this.health = 2;
+				this.duration = 4500;
+				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+			}
+			else
 				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 		}
 		else
@@ -105,12 +116,11 @@ export class	Ball extends Actor {
 	}
 
 	move(): void {
-	const future: Rect2D = new Rect2D(this.x + this.dx * this.speed, this.y + this.dy * this.speed, this.w, this.h);
-
-	if (this.collide(future)) {
-		if      (this.direction_impact == "vertical") this.dy = -this.dy;
-		else if (this.direction_impact == "horizontal") this.dx = -this.dx;
-	}
+		const future: Rect2D = new Rect2D(this.x + this.dx * this.speed, this.y + this.dy * this.speed, this.w, this.h);
+		if (this.collide(future)) {
+			if      (this.direction_impact == "vertical") this.dy = -this.dy;
+			else if (this.direction_impact == "horizontal") this.dx = -this.dx;
+		}
 		this.x += this.dx * this.speed;
 		this.y += this.dy * this.speed;
 		this.rect.x += this.dx * this.speed;
@@ -127,22 +137,25 @@ export class	Ball extends Actor {
 
 					if (a instanceof Classic && a.isShield)
 					{
+						console.log("REFLECT\n");
 						if (this.author && this.author.id == 0)
 							GSTATE.STATS2.reflect += 1;
-						else (this.author && this.author.id == 1)
+						else if (this.author && this.author.id == 1)
 							GSTATE.STATS1.reflect += 1;
 						this.author = a;
-
+						this.isReflected = true;
 						this.color = a.fire_color;
+						this.birth = Date.now();
 						if (this.bounce_count == 1) this.bounce_count++; // FORCE REBOUNCE IF BALL GONNA DIE IDK AYW.
 					}
 					else if (this.author)
 					{
-						if (this.author.id == 0)
+						if (this.author.id == 0 && this.isReflected == false)
 							GSTATE.STATS1.hit += 1;
-						else if (this.author.id == 1)
+						else if (this.author.id == 1 && this.isReflected == false)
 							GSTATE.STATS2.hit += 1;
 						a.addHealth(-this.damage * this.opacity);
+						if (this.author instanceof Shotgun && !this.author.canAbility()) this.author.ability_cooldown -= this.ability_reduction;
 						this.destroy();
 						return true;
 					}
@@ -212,18 +225,24 @@ export class	Collectible extends Ball {
 		h:number,
 		public type:string) {
 
-		super(x,y,w,h,0,0,0, {r:50,g:170,b:40});
+		super(x,y,w,h,0,0, {r:50,g:170,b:40});
 
 		switch (this.type) {
         	case 'heal':
         		this.color = {r:50,g:170,b:40};
 				break;
-			case 'speed':
+			case 'ball_speed':
+        		this.color = {r:0,g:255,b:255};
+        	    break;
+			case 'tank_speed':
         		this.color = {r:50,g:150,b:255};
         	    break;
 			case 'haste':
         		this.color = {r:100,g:50,b:150};
         	    break;
+			case 'cdr':
+        		this.color = {r:50,g:50,b:255};
+			break;
     	}
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 	}
@@ -235,14 +254,20 @@ export class	Collectible extends Ball {
 		const b = new Actor(0,0);
 		switch (this.type) {
 			case 'heal':
-				a.addHealth(1);
+				a.addHealth(4);
 				break;
-			case 'speed':
-				a.speed = Math.min(a.speed+0.15, 2);
+			case 'tank_speed':
+				a.tank_speed_coef = Math.min(a.tank_speed_coef+0.1, 1.5)
+				break;
+			case 'ball_speed': /////////////////////
+				a.ball_speed_coef = Math.min(a.ball_speed_coef+0.1, 1.5)
 				break;
 			case 'haste':
-				a.fire_rate = Math.max(a.fire_rate-250, 500);
+				a.fire_coef = Math.max(a.fire_coef-0.1, 0.5);
 				break;
+			case 'cdr':
+				a.ability_cooldown = 0;
+			break;
 		}
 	}
 
@@ -292,9 +317,10 @@ export class	Pearl extends Ball {
 		public	dy:number,
 		public	color:Color,
 		public	author?:Tank) {
-		super(x,y,w,h,dx,dy,0,color,author);
+		super(x,y,w,h,dx,dy,color,author);
 
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
+		this.speed = 5;
 	}
 
 	draw(ctx: CanvasRenderingContext2D): void {
@@ -307,7 +333,7 @@ export class	Pearl extends Ball {
 	collide(rect1: Rect2D): boolean {
 
 		for (let a of GSTATE.ACTORS) {
-			if (a == this || a == this.author || a instanceof Collectible) continue;
+			if (a == this || a == this.author || a instanceof Collectible || (a instanceof Ball && a.author && a.author == this.author)) continue;
 			if (a.getRect().collide(rect1))
 			{
 				if (a instanceof Classic && a.isShield)

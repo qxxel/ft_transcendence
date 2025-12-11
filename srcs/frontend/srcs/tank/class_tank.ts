@@ -30,19 +30,23 @@ export class	Tank extends Actor {
 
 	rect: Rect2D;
 	cannon: Cannon[] = [];
-	speed: number = 0.80;
-	rot_speed: number = 0.1;
-	health: number = 6;
+	speed: number = 0;
+	rot_speed: number = 0;
+	health: number = 0;
 	maxHealth: number = this.health;
-	fire_rate: number = 2000; // ms
+	fire_rate: number = 0; // ms
 	fire_last: number = 0;
-	ability_cooldown: number = 5000; // ms
-	ability_duration: number = 2000; // ms
+	ability_base_cooldown: number = 4500; // ms
+	ability_cooldown: number = this.ability_base_cooldown; // ms
+	ability_duration: number = 0; // ms
 	ability_last: number = 0; // ms
 	ability_active: boolean = false; // ms
 	hud: Hud;
-	ball_size: number = 10;
-
+	ball_size: number = 0;
+	ball_speed: number = 0;
+	ball_speed_coef: number = 1;
+	tank_speed_coef: number = 1;
+	fire_coef: number = 1;
 	constructor(
 		x:number,
 		y:number,
@@ -60,11 +64,13 @@ export class	Tank extends Actor {
 
 	update(input: Input): void {
 		this.listen(input);
+		// if (this.id == 0 && !this.canAbility())
+			// console.log("this.ability_cooldown", this.ability_cooldown);
 		if (this.ability_update())
 			this.ability_effect();
-		if (Date.now() - this.fire_last <= this.fire_rate)
+		if (Date.now() - this.fire_last <= (this.fire_rate * this.fire_coef))
 			GSTATE.REDRAW = true;
-		if (Date.now() - this.ability_last <= this.ability_cooldown)
+		if (Date.now() - this.ability_last <= this.ability_base_cooldown)
 			GSTATE.REDRAW = true;
 	}
 
@@ -75,26 +81,26 @@ export class	Tank extends Actor {
 
 			if (!this.canFire()) {
 				const elapsed = Date.now() - this.fire_last;
-				const progress = Math.min(elapsed / this.fire_rate, 1);
+				const progress = Math.min(elapsed / ( this.fire_rate * this.fire_coef), 1);
 				const start = -Math.PI / 2;
 				const end = start + progress * Math.PI * 2;
+				console.log(start, end);
 				this.hud.wheel_draw(ctx,start,end);
 			}
 			if (!this.canAbility()) {
-				this.hud.abilitybar_draw(ctx, Date.now() - this.ability_last,this.ability_cooldown);
+				this.hud.abilitybar_draw(ctx, Date.now() - this.ability_last, this.ability_cooldown);
 			}
 			if (this.health < this.maxHealth)
 				this.hud.healthbar_draw(ctx,this.health,this.maxHealth);
-
 	}
 
 	listen(input: Input): void {
 		if (input.isDown(this.keys.up)) {
-				this.move(this.speed * Math.cos(this.cannon[0].geometry.angle),this.speed * Math.sin(this.cannon[0].geometry.angle));
+				this.move(this.speed * this.tank_speed_coef * Math.cos(this.cannon[0].geometry.angle),this.speed * this.tank_speed_coef * Math.sin(this.cannon[0].geometry.angle));
 			GSTATE.REDRAW = true;
 		}
 		if (input.isDown(this.keys.down)) {
-				this.move(-this.speed * Math.cos(this.cannon[0].geometry.angle),-this.speed * Math.sin(this.cannon[0].geometry.angle));
+				this.move(-this.speed * this.tank_speed_coef * Math.cos(this.cannon[0].geometry.angle),-this.speed * this.tank_speed_coef * Math.sin(this.cannon[0].geometry.angle));
 			GSTATE.REDRAW = true;
 		}
 		if (input.isDown(this.keys.left)) { 
@@ -173,9 +179,8 @@ export class	Tank extends Actor {
 							c.getEnd().y - this.ball_size / 2,
 							this.ball_size,
 							this.ball_size,
-							Math.cos(c.geometry.angle) * 3,
-							Math.sin(c.geometry.angle) * 3,
-							4500,
+							Math.cos(c.geometry.angle),
+							Math.sin(c.geometry.angle),
 							this.fire_color,
 							this
 						));
@@ -185,6 +190,7 @@ export class	Tank extends Actor {
 
 	ability_cast(input: Input): void {
 		if (!this.canAbility()) return;
+		this.ability_cooldown = this.ability_base_cooldown;
 		this.ability_active = true;
 		this.ability_last = Date.now();
 	}
@@ -220,7 +226,10 @@ export class	Tank extends Actor {
 	getRect(): Rect2D { return this.rect; };
 
 	addHealth(amount:number): void {
-		if (this.health + amount > this.maxHealth) return; 
+		if (this.health + amount > this.maxHealth) {
+			this.health = this.maxHealth;
+			return; 
+		}
 		this.health += amount;
 
 		if (this.health <= 0) {
@@ -240,13 +249,16 @@ export class	Tank extends Actor {
 	}
 
 	canFire(): boolean {
-		return Date.now() - this.fire_last > this.fire_rate;
+		return Date.now() - this.fire_last > (this.fire_rate * this.fire_coef);
 	}
 	canAbility(): boolean {
+		// console.log(Date.now() - this.ability_last, '/', this.ability_cooldown);
 		return Date.now() - this.ability_last > this.ability_cooldown;
+		// return Date.now() - this.ability_last > this.ability_cooldown;
 	}
 	isAbility(): boolean {
 		return Date.now() - this.ability_last < this.ability_duration;
+		// return Date.now() - this.ability_last < this.ability_duration;
 	}
 }
 
@@ -263,8 +275,20 @@ export class	Classic extends Tank {
 		public	keys:Keys,
 		public  id:number) {
 		super(x,y,w,h,color,fire_color,keys,id);
-		this.ability_cooldown = 10000; // ms
-		this.ability_duration = 3000; // ms
+
+		this.speed = 0.9;
+		this.rot_speed = 0.08
+		this.health = 6.5;
+		this.maxHealth = this.health;
+		this.fire_rate = 1250; // ms
+		this.fire_last = 0;
+		this.ability_base_cooldown = 9000; // ms
+		this.ability_cooldown = this.ability_base_cooldown; // ms
+		this.ability_duration = 1500; // ms
+		this.ability_last = 0; // ms
+		this.ability_active = false; // ms
+		this.ball_size = 10;
+		this.ball_speed = 3;
 		this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),3,0,fire_color));
 		this.hud.setShield(this.rect);
 	}
@@ -280,20 +304,18 @@ export class	Classic extends Tank {
 			this.hud.shield_draw(ctx);
 		if (!this.canFire()) {
 			const elapsed = Date.now() - this.fire_last;
-			const progress = Math.min(elapsed / this.fire_rate, 1);
+			const progress = Math.min(elapsed / (this.fire_rate * this.fire_coef), 1);
 			const start = -Math.PI / 2;
 			const end = start + progress * Math.PI * 2;
 			this.hud.wheel_draw(ctx,start,end);
 		}
 		if (!this.canAbility()) {
-			this.hud.abilitybar_draw(ctx, Date.now() - this.ability_last,this.ability_cooldown);
+			this.hud.abilitybar_draw(ctx, Date.now() - this.ability_last,this.ability_base_cooldown);
 		}
 		if (this.health < this.maxHealth)
 			this.hud.healthbar_draw(ctx,this.health,this.maxHealth);
-
 		for (let c of this.cannon)
 			c.draw(ctx)
-
 	}
 
 	ability_effect(): void {
@@ -317,7 +339,8 @@ export class	Uzi extends Tank {
 		public	keys:Keys,
 		public  id:number) {
 		super(x,y, w * 0.5, h * 0.5 ,color,fire_color,keys,id);
-		this.ability_cooldown = 5000; // ms
+		this.ability_base_cooldown = 5750; // ms
+		this.ability_cooldown = this.ability_base_cooldown; // ms
 		this.ability_duration = 1000; // ms
 		this.speed = 1.15
 		this.rot_speed = 0.13
@@ -341,6 +364,8 @@ export class	Uzi extends Tank {
 
 export class	Sniper extends Tank {
 
+	ability_speed:number = 5;
+
 	constructor(
 		x:number,
 		y:number,
@@ -353,14 +378,16 @@ export class	Sniper extends Tank {
 
 		
 		super(x,y, w * 0.9, h * 0.9 ,color,fire_color,keys,id);
-		this.ability_cooldown = 2000; // ms
+		this.ability_base_cooldown = 5000; // ms
+		this.ability_cooldown = this.ability_base_cooldown; // ms
 		this.ability_duration = 0; // ms
-		this.speed = 0.65
+		this.speed = 0.69
 		this.rot_speed = 0.08
 		this.health = 7
 		this.fire_rate = 6000;
 		this.maxHealth = this.health;
 		this.ball_size = 18.5;
+		this.ball_speed = 3.5;
 		this.w *= 0.9;
 		this.h *= 0.9; 
 		this.cannon.push(new Cannon(this.x + this.w/2, this.y + this.h/2, this.x + this.w, this.y + (this.h/2),6,0,fire_color));
@@ -368,7 +395,7 @@ export class	Sniper extends Tank {
 
 	ability_cast(): void {
 		if (!this.canAbility()) return;
-		console.log("SNI CAST!\n");
+		this.ability_cooldown = this.ability_base_cooldown;
 
 		const now = Date.now();
 		let isSpawnable:boolean;
@@ -391,10 +418,10 @@ export class	Sniper extends Tank {
 						new Pearl(
 							c.getEnd().x - this.ball_size / 2,
 							c.getEnd().y - this.ball_size / 2,
-							this.ball_size,
-							this.ball_size,
-							Math.cos(c.geometry.angle) * 3,
-							Math.sin(c.geometry.angle) * 3,
+							this.ball_size/2,
+							this.ball_size/2,
+							Math.cos(c.geometry.angle),
+							Math.sin(c.geometry.angle),
 							this.fire_color,
 							this
 						));
@@ -402,9 +429,6 @@ export class	Sniper extends Tank {
 		}
 	}
 
-	ability_effect(): void {
-		console.log("SNI EFFECT!\n");
-	}
 }
 
 export class	Shotgun extends Tank {
@@ -424,9 +448,10 @@ export class	Shotgun extends Tank {
 		public	keys:Keys,
 		public  id:number) {
 		super(x,y, w * 1.1, h * 1.1 ,color,fire_color,keys,id);
-		this.ability_cooldown = 5000; // ms
-		this.ability_duration = 300; // ms
-		this.speed = 0.9;
+		this.ability_base_cooldown = 4500; // ms
+		this.ability_cooldown = this.ability_base_cooldown; // ms
+		this.ability_duration = 350; // ms
+		this.speed = 0.8;
 		this.rot_speed = 0.1;
 		this.health = 8;
 		this.fire_rate = 4000;
@@ -443,12 +468,27 @@ export class	Shotgun extends Tank {
 
 	ability_cast(input: Input): void {
 		if (!this.canAbility()) return;
+		this.ability_cooldown = this.ability_base_cooldown;
 		this.ability_active = true;
 		this.isDash = true;
 		if (input.isDown(this.keys.down)) this.dash_direction = 0;
 		this.dash_dx = Math.cos(this.cannon[0].geometry.angle);
 		this.dash_dy = Math.sin(this.cannon[0].geometry.angle);
 		this.ability_last = Date.now();
+	}
+
+	ability_effect(): void {
+		if (!this.ability_active) return;
+
+		if (this.dash_direction)
+			this.move(this.dash_speed * this.dash_dx,this.dash_speed * this.dash_dy);
+		else
+			this.move(-this.dash_speed * this.dash_dx,-this.dash_speed * this.dash_dy);
+	}
+
+	ability_off(): void {
+		this.isDash = false;
+		this.dash_direction = 1;
 	}
 
 	listen(input: Input): void {
@@ -471,29 +511,15 @@ export class	Shotgun extends Tank {
 		if (this.isDash) return;
 
 		if (input.isDown(this.keys.up)) {
-				this.move(this.speed * Math.cos(this.cannon[0].geometry.angle),this.speed * Math.sin(this.cannon[0].geometry.angle));
+				this.move((this.speed * this.tank_speed_coef) * Math.cos(this.cannon[0].geometry.angle),(this.speed * this.tank_speed_coef) * Math.sin(this.cannon[0].geometry.angle));
 			GSTATE.REDRAW = true;
 		}
 		if (input.isDown(this.keys.down)) {
-				this.move(-this.speed * Math.cos(this.cannon[0].geometry.angle),-this.speed * Math.sin(this.cannon[0].geometry.angle));
+				this.move(-(this.speed * this.tank_speed_coef) * Math.cos(this.cannon[0].geometry.angle),-(this.speed * this.tank_speed_coef) * Math.sin(this.cannon[0].geometry.angle));
 			GSTATE.REDRAW = true;
 		}
 
 	}
 
-	ability_effect(): void {
-		if (!this.ability_active) return;
 
-		if (this.dash_direction)
-		{
-			this.move(this.dash_speed * this.dash_dx,this.dash_speed * this.dash_dy);
-		}
-		else
-			this.move(-this.dash_speed * this.dash_dx,-this.dash_speed * this.dash_dy);
-	}
-
-	ability_off(): void {
-		this.isDash = false;
-		this.dash_direction = 1;
-	}
 }

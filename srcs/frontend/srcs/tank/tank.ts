@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/11 01:28:44 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/09 22:36:38 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,22 +102,22 @@ export class	TankGame extends Game {
 				case "uzi":
 					GSTATE.ACTORS.push(new Uzi(s1!.x, s1!.y, tank_width, tank_height,
 					{r:50,g:200,b:30}, {r:0,g:255,b:255},
-					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, 0));
+					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:'b',ability:'n'}, 0));
 					break;
 				case "sniper":
 					GSTATE.ACTORS.push(new Sniper(s1!.x, s1!.y, tank_width, tank_height,
 					{r:50,g:200,b:30}, {r:0,g:255,b:255},
-					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, 0));
+					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:'b',ability:'n'}, 0));
 					break;
 				case "shotgun":
 					GSTATE.ACTORS.push(new Shotgun(s1!.x, s1!.y, tank_width, tank_height,
 					{r:50,g:200,b:30}, {r:0,g:255,b:255},
-					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, 0));
+					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:'b',ability:'n'}, 0));
 					break;
 				case "classic":
 					GSTATE.ACTORS.push(new Classic(s1!.x, s1!.y, tank_width, tank_height,
 					{r:50,g:200,b:30}, {r:0,g:255,b:255},
-					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:' ',ability:'q'}, 0));
+					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:'b',ability:'n'}, 0));
 					break;
 			}
 
@@ -126,22 +126,22 @@ export class	TankGame extends Game {
 				case "uzi":
 					GSTATE.ACTORS.push(new Uzi(s2!.x, s2!.y, tank_width, tank_height,
 					{r:50,g:200,b:30}, {r:255,g:0,b:255},
-					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, 1));
+					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'1',ability:'2'}, 1));
 					break;
 				case "sniper":
 					GSTATE.ACTORS.push(new Sniper(s2!.x, s2!.y, tank_width, tank_height,
 					{r:50,g:200,b:30}, {r:255,g:0,b:255},
-					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, 1));
+					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'1',ability:'2'}, 1));
 					break;
 				case "shotgun":
 					GSTATE.ACTORS.push(new Shotgun(s2!.x, s2!.y, tank_width, tank_height,
 					{r:50,g:200,b:30}, {r:255,g:0,b:255},
-					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, 1));
+					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'1',ability:'2'}, 1));
 					break;
 				case "classic":
 					GSTATE.ACTORS.push(new Classic(s2!.x, s2!.y, tank_width, tank_height,
 					{r:50,g:200,b:30}, {r:255,g:0,b:255},
-					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, 1));
+					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'1',ability:'2'}, 1));
 					break;
 			}
 
@@ -164,12 +164,16 @@ export class	TankGame extends Game {
 		let effects: string[] = [];
 		if (this.star1)
 			effects.push("heal");
-		if (this.star2)
-			effects.push("speed");
-		if (this.star3)
+		if (this.star2) {
+			effects.push("ball_speed");
+			effects.push("tank_speed");
+		}
+		if (this.star3) {
 			effects.push("haste");
+			effects.push("cdr");
+		}
 
-		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'davinco')
+		if (this.map.name == 'desertfox')
 		{
 			while (attempt++ < 2000)
 			{
@@ -245,6 +249,7 @@ export class	TankGame extends Game {
 	private	update(): void {
 
 		if (!this.map || !this.ctx || !this.canvas) return;
+
 		if (GSTATE.REDRAW) {
 			this.map.drawBackground(this.ctx);
 			for (let a of GSTATE.ACTORS) {
@@ -297,8 +302,8 @@ export class	TankGame extends Game {
 
 	if (winnerDisplay) winnerDisplay.innerText = `${winnerName} Wins!`;
 
-	const accuracy1: number = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit - GSTATE.STATS1.reflect) / GSTATE.STATS1.fire * 100 : 0;
-	const accuracy2: number = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit - GSTATE.STATS2.reflect) / GSTATE.STATS2.fire * 100 : 0;
+	const accuracy1: number = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit) / GSTATE.STATS1.fire * 100 : 0;
+	const accuracy2: number = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit) / GSTATE.STATS2.fire * 100 : 0;
 	document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
 	document.getElementById('p1-stat-name')!.innerText = this.player1Name + "";
 	document.getElementById('stat-p1-accuracy')!.innerText = `${accuracy1.toFixed(1)}%`;
