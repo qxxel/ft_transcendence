@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/11 19:29:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 02:37:57 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ import { getMenu }				from "../utils/getMenu.js"
 import { router }				from "../index.js"
 import { sendRequest }			from "../utils/sendRequest.js"
 import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
+import { delTabs }				from "../utils/tabs.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -60,33 +61,17 @@ async function	handleLoadPage(): Promise<void> {
 }
 
 function handleUnload() {
-	window.addEventListener("beforeunload", async (event: Event) => {
-		if (!router.canLeave)
-			event.preventDefault();
-		return;
+	window.addEventListener("beforeunload", (event: Event) => {
+
+		delTabs()
 	});
 }
 
 function handlePagehide() {
-	window.addEventListener("pagehide", async (event: Event) => {
-		
-		if (!router.canLeave && router.Path === "/sign-up") {
-			navigator.sendBeacon("/api/auth/twofa/me", null);
-		}
+	window.addEventListener("pagehide", (event: PageTransitionEvent) => {
 
-		appStore.setState((state) => ({
-			...state,
-			user: {
-				id: null,
-				username: null,
-				avatar: null,
-				isAuth: false
-			}
-		}));
-		navigator.sendBeacon('/api/jwt/refresh/logout', null);
-		
-		if (socket && socket.connected)
-			socket.disconnect();
+		if (event.persisted)
+			delTabs()
 	});
 }
 
