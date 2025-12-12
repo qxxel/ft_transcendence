@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 22:36:38 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/12 01:35:15 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ export class	TankGame extends Game {
 			effects.push("cdr");
 		}
 
-		if (this.map.name == 'desertfox')
+		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'davinco')
 		{
 			while (attempt++ < 2000)
 			{
@@ -263,8 +263,23 @@ export class	TankGame extends Game {
 			GSTATE.REDRAW = false;
 
 			if (this.isPaused) {
-				this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+				if (GSTATE.TANKS == 1){
+					this.ctx.fillStyle = 'rgba(0, 200, 0, 0.5)';
+					if (GSTATE.STATS1.win){
+						this.ctx.fillRect(0, 0, this.canvas.width / 2, this.canvas.height);
+						this.ctx.fillStyle = 'rgba(200, 0, 0, 0.5)';
+						this.ctx.fillRect(this.canvas.width / 2, 0, this.canvas.width, this.canvas.height);
+					}
+					else {
+						this.ctx.fillRect(this.canvas.width / 2, 0, this.canvas.width, this.canvas.height);
+						this.ctx.fillStyle = 'rgba(200, 0, 0, 0.5)';
+						this.ctx.fillRect(0, 0, this.canvas.width / 2, this.canvas.height);
+					}
+				}
+				else {
+					this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+					this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+				}
         		this.ctx.fillStyle = 'white';
         		this.ctx.font = '50px monospace';
         		this.ctx.textAlign = 'center';

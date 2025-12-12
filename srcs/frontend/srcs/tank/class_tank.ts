@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:32:29 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 22:40:35 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/12 01:02:01 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,7 +290,7 @@ export class	Classic extends Tank {
 		public  id:number) {
 		super(x,y,w,h,color,fire_color,keys,id);
 
-		this.speed = 0.9;
+		this.speed = 0.95;
 		this.rot_speed = 0.08
 		this.health = 6.5;
 		this.maxHealth = this.health;
