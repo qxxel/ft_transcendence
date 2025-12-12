@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:03:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/20 23:09:40 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 20:08:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,5 @@ export function	twofaTableBuilder(db: Database): void {
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		id_client INT NOT NULL UNIQUE,
 		otpSecretKey TEXT NOT NULL,
-		otp TEXT NOT NULL
 	);`);
 }

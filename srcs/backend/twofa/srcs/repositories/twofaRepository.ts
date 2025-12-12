@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 03:35:30 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 20:10:02 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ export class	twofaRepository {
 		}
 	}
 
-	async addOtp(id: number, otpSecretKey: string, otp: string): Promise<void> {
+	async addOtp(id: number, otpSecretKey: string): Promise<void> {
 		return new Promise((resolve, reject) => {
-			const	query: string = "INSERT INTO twofa (id_client, otpSecretKey, otp) VALUES(?, ?, ?)";
-			const	elements: [number, string, string] = [id, otpSecretKey, otp];
+			const	query: string = "INSERT INTO twofa (id_client, otpSecretKey) VALUES(?, ?)";
+			const	elements: [number, string] = [id, otpSecretKey];
 
 			this.db.run(query, elements, function (err: unknown) {
 				if (err)
@@ -63,27 +63,18 @@ export class	twofaRepository {
 		});
 	}
 
-	async getOtpByIdClient(id: number): Promise<string | null> {
-		return new Promise((resolve, reject) => {
-			const	query: string = "SELECT otp FROM twofa WHERE id_client = ?";
-			const	elements: number[] = [id];
-
-			this.db.get(query, elements, (err: unknown, row: { otp: string }) => {
-				if (err) return reject(err);
-				else if(!row) return reject(null);
-				return resolve(row.otp);
-			});
-		});
-	}
-
 	async getOtpSecretKeyByIdClient(id: number): Promise<string | null> {
 		return new Promise((resolve, reject) => {
 			const	query: string = "SELECT otpSecretKey FROM twofa WHERE id_client = ?";
 			const	elements: number[] = [id];
 
-			this.db.get(query, elements, (err: unknown, row: { otpSecretKey: string } | null) => {
-				if (err) return reject(err);
-				else if(!row) return reject(null);
+			this.db.get(query, elements, (err: unknown, row: any) => {
+				if (err)
+					return reject(err);
+
+				if(!row || typeof row.otpSecretKey !== "string")
+					return reject(null);
+
 				return resolve(row.otpSecretKey);
 			});
 		});
