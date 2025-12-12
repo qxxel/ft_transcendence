@@ -38,7 +38,7 @@ export interface	GlobalState {
 	ACTORS: Actor[];
 	TANKS: number;
 	CANVAS: HTMLCanvasElement;
-	CTX: CanvasRenderingContext2D;
+	CTX: CanvasRenderingContext2D | null;
 	REDRAW: boolean;
 	STATS1: Stats;
 	STATS2: Stats;

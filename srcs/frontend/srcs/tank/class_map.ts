@@ -247,8 +247,6 @@ export class	Map {
 	}
 
 	generate_default(): void {
-		console.log("generate_default()");
-
 		// this.walls.push(new Wall(0, 0, this.map_width, this.map_height, {r:0,g:0,b:255}));
 		this.walls.push(new Wall(this.map_width / 5, this.map_height / 5, this.map_width / 7, this.map_height / 7, {r:0,g:0,b:255}));     // CUBE TOP LEFT
 		this.walls.push(new Wall(this.map_width / 1.5, this.map_height / 5, this.map_width / 7, this.map_height / 7, {r:0,g:0,b:255}));   // CUBE TOP RIGHT

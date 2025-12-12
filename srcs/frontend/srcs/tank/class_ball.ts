@@ -51,41 +51,41 @@ export class	Ball extends Actor {
 		public	author?:Tank) {
 		super(x,y)
 
-		if (author)
+		if (this.author)
 		{
-			if (author instanceof Sniper)
+			if (this.author instanceof Sniper)
 			{
 				this.damage = 4;
 				this.bounce_count = 2;
-				this.speed = 3.75;
+				this.speed = this.author.ball_speed_coef * 3.75;
 				this.health = 4;
 				this.duration = 0;
 				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 			}
-			else if (author instanceof Uzi)
+			else if (this.author instanceof Uzi)
 			{
 				this.damage = 0.5;
 				this.bounce_count = 5;
-				this.speed = 2.25;
+				this.speed = this.author.ball_speed_coef * 2.25;
 				this.health = 1;
 				this.duration = 3000;
 				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 			}
-			else if (author instanceof Shotgun)
+			else if (this.author instanceof Shotgun)
 			{
 				this.damage = 1.2;
 				this.bounce_count = 2;
-				this.speed = 2.95;
+				this.speed = this.author.ball_speed_coef * 2.95;
 				this.health = 1;
 				this.duration = 380;
 				this.ability_reduction = 400;
 				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 			}
-			else if (author instanceof Classic)
+			else if (this.author instanceof Classic)
 			{
 				this.damage = 1;
 				this.bounce_count = 3;
-				this.speed = 2.5;
+				this.speed = this.author.ball_speed_coef * 2.5;
 				this.health = 2;
 				this.duration = 4500;
 				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
@@ -320,7 +320,10 @@ export class	Pearl extends Ball {
 		super(x,y,w,h,dx,dy,color,author);
 
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
-		this.speed = 5;
+		if (this.author) 
+			this.speed = this.author.ball_speed_coef * 5;
+		else
+			this.speed = 5;
 	}
 
 	draw(ctx: CanvasRenderingContext2D): void {

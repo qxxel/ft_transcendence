@@ -63,8 +63,9 @@ export class	TankGame extends Game {
 
 	public setCtx(): void {
 		this.canvas = document.getElementById(this.canvasId) as HTMLCanvasElement;
-		this.ctx = this.canvas.getContext('2d')!;
-
+		if (!this.canvas) this.quitGame();
+		this.ctx = this.canvas.getContext('2d');
+		if (!this.ctx) this.quitGame();
 		this.input = new Input();
 		this.input.start();
 		this.map = new Map(this.canvas.width, this.canvas.height, 2, this.map_name);
@@ -76,8 +77,9 @@ export class	TankGame extends Game {
     	this.lastCollectibleSpawn = Date.now();
 		GSTATE.REDRAW = true;
 		GSTATE.CANVAS = this.canvas;
+		GSTATE.CTX = this.ctx;
 		this.reset_state();
-		this.updateNameDisplay()
+		this.updateNameDisplay();
 		this.setup_tanks();
 		this.generateLegend();
 
@@ -209,6 +211,8 @@ export class	TankGame extends Game {
 	}
 
 	private	gameLoop(): void {
+		if (!GSTATE.CANVAS || !GSTATE.CTX)
+			this.quitGame();
 		this.listen();
 		this.update();
 		this.input.update(); // CURRENT SAVED INTO PREVIOUS
@@ -304,32 +308,31 @@ export class	TankGame extends Game {
 
 	const accuracy1: number = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit) / GSTATE.STATS1.fire * 100 : 0;
 	const accuracy2: number = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit) / GSTATE.STATS2.fire * 100 : 0;
-	document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
-	document.getElementById('p1-stat-name')!.innerText = this.player1Name + "";
-	document.getElementById('stat-p1-accuracy')!.innerText = `${accuracy1.toFixed(1)}%`;
-	document.getElementById('stat-p1-fire')!.innerText = `${GSTATE.STATS1.fire}`;
-	document.getElementById('stat-p1-hit')!.innerText = `${GSTATE.STATS1.hit}`;
-	document.getElementById('stat-p1-bounce')!.innerText = `${GSTATE.STATS1.bounce}`;
 
-	document.getElementById('p2-stat-name')!.innerText = this.player2Name + "";
-	document.getElementById('stat-p2-accuracy')!.innerText = `${accuracy2.toFixed(1)}%`;
-	document.getElementById('stat-p2-fire')!.innerText = `${GSTATE.STATS2.fire}`;
-	document.getElementById('stat-p2-hit')!.innerText = `${GSTATE.STATS2.hit}`;
-	document.getElementById('stat-p2-bounce')!.innerText = `${GSTATE.STATS2.bounce}`;
+	let e: HTMLElement | null;
 
+	e = document.getElementById('stat-duration'); 		if (e) e.innerText = `${minutes}m ${seconds}s`;
 
-    const restartMsg = document.getElementById('restart-msg');
-    if (restartMsg) {
-        restartMsg.innerText = "Press 'R' to Restart or 'Esc' to Quit";
-    }
+	e = document.getElementById('p1-stat-name');		if (e) e.innerText = this.player1Name + "";
+	e = document.getElementById('stat-p1-accuracy');	if (e) e.innerText = `${accuracy1.toFixed(1)}%`;
+	e = document.getElementById('stat-p1-fire');		if (e) e.innerText = `${GSTATE.STATS1.fire}`;
+	e = document.getElementById('stat-p1-hit');			if (e) e.innerText = `${GSTATE.STATS1.hit}`;
+	e = document.getElementById('stat-p1-bounce');		if (e) e.innerText = `${GSTATE.STATS1.bounce}`;
+
+	e = document.getElementById('p2-stat-name'); 		if (e) e.innerText = this.player2Name + "";
+	e = document.getElementById('stat-p2-accuracy'); 	if (e) e.innerText = `${accuracy2.toFixed(1)}%`;
+	e = document.getElementById('stat-p2-fire'); 		if (e) e.innerText = `${GSTATE.STATS2.fire}`;
+	e = document.getElementById('stat-p2-hit'); 		if (e) e.innerText = `${GSTATE.STATS2.hit}`;
+	e = document.getElementById('stat-p2-bounce'); 		if (e) e.innerText = `${GSTATE.STATS2.bounce}`;
+
+    e = document.getElementById('restart-msg');			if (e) e.innerText = "Press 'R' to Restart or 'Esc' to Quit";
 
     dashboard.style.display = 'block';
   }
 
 	private hideEndGameDashboard() {
 		const dashboard = document.getElementById('game-over-dashboard');
-    	if (!dashboard) return;
-    	dashboard.style.display = 'none';
+    	if (dashboard) dashboard.style.display = 'none';
 	}
 
 	private updateNameDisplay() {
@@ -343,9 +346,7 @@ export class	TankGame extends Game {
 		const legendContainer = document.getElementById('powerup-legend');
 		if (!legendContainer) return;
 
-		legendContainer.innerHTML = '';
 		legendContainer.style.display = 'none';
-
 		if (this.star1 == false && this.star2 == false && this.star3 == false) return;
 
 		legendContainer.style.display = 'flex';
@@ -365,7 +366,7 @@ export class	TankGame extends Game {
 
 		if (this.star2) {
 			html += createRow("Movement speed", "#FFFF00FF", "#0000FF");
-			html += createRow("Ball speed", "#3296FFFF", "#0000FF");
+			html += createRow("Ball speed", "#00FFFFFF", "#0000FF");
 		}
 
 		if (this.star3) {

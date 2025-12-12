@@ -289,7 +289,7 @@
     font-weight: bold;
 }
 
-.stats-grid {
+.stats-grid-tank {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     padding: 15px;
@@ -435,12 +435,12 @@
     width: 100%;
   }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 5px;
-    text-align: center;
-  }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  text-align: center;
+}
 
   .stat-box {
     display: flex;
