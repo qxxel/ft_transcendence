@@ -146,7 +146,6 @@ export class PongGame extends Game {
 
 		this.isGameOver = false;
 		this.serverState = null;
-
 		const dashboard = document.getElementById('game-over-dashboard');
         if (!dashboard) return;
 		dashboard.style.display = "none";

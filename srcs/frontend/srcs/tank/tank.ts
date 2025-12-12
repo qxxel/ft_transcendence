@@ -17,16 +17,19 @@
 
 import { AppState, appStore, GamesState, UserState }	from "../objects/store.js"
 import { Game }											from "../Pong/gameClass.js"
-import { GSTATE }										from "./global.js"
+import { GSTATE, History }								from "./global.js"
 import { router }										from "../index.js"
 import { Input }										from "./class_input.js"
 import { Map }											from "./class_map.js"
 import { Tank, Uzi, Sniper, Shotgun, Classic } 			from "./class_tank.js"
 import { Ball, Collectible }							from "./class_ball.js"
+import { sendRequest } from "../utils/sendRequest.js"
 
 import type { Color, Keys }	from "./interface.js"
 import { Wall } from "./class_wall.js"
 import { Rect2D } from "./class_rect.js"
+
+
 
 
 /* ============================= CLASS ============================= */
@@ -41,8 +44,8 @@ export class	TankGame extends Game {
 	private	input: Input = new Input();
 	private	map: Map | null = null;
 	private	isPaused: boolean = false;
-  	private player1Name: string | undefined = "Player 1";
-  	private player2Name: string | undefined = "Player 2";
+  	private player1Name: string = "Player 1";
+  	private player2Name: string = "Player 2";
 	private lastCollectibleSpawn: number = 0;
 
 
@@ -82,7 +85,6 @@ export class	TankGame extends Game {
 		this.updateNameDisplay();
 		this.setup_tanks();
 		this.generateLegend();
-
 	}
 
 	setWinningScore(newWinningScore: number) {}
@@ -309,6 +311,7 @@ export class	TankGame extends Game {
 	}
   private showEndGameDashboard() {
 	this.updateNameDisplay()
+	sendRequest("/api/game", "POST", this.setHistory());
     const dashboard = document.getElementById('game-over-dashboard');
     if (!dashboard) return;
 
@@ -423,7 +426,23 @@ export class	TankGame extends Game {
 		GSTATE.STATS1.hit = 0;		GSTATE.STATS2.hit = 0;
 		GSTATE.STATS1.reflect = 0;		GSTATE.STATS2.reflect = 0;
 		GSTATE.STATS1.bounce = 0;	GSTATE.STATS2.bounce = 0;
+		this.startTime = Date.now();
 	}
 	private	draw(): void {}
 
+	private setHistory(): History {
+		return {
+			idClient:1,
+			gameType:2,
+			winner:GSTATE.STATS1.win ? 1 : 0,
+			p1:this.player1Name,
+			p2:this.player2Name,
+			p1score:GSTATE.STATS1.win,
+			p2score:GSTATE.STATS2.win,
+			mode:"pvp",
+			powerup:(this.star1 || this.star2 || this.star3) ? 1 : 0,
+			start:this.startTime,
+			duration:Date.now() - this.startTime
+		};
+	}
 }

@@ -25,6 +25,20 @@ export interface	Spawn {
 	y:number;
 }
 
+export interface	History {
+		idClient:number;
+		gameType:number;
+		winner:number;
+		p1:string;
+		p2:string;
+		p1score:number;
+		p2score:number;
+		mode:string;
+		powerup:number;
+		start:number;
+		duration:number;
+}
+
 export interface	Stats {
 	win:number;
 	lose:number;
@@ -65,6 +79,7 @@ export const	Stats: Stats = {
 	reflect: 0 as number,
 	bounce: 0 as number,
 }
+
 /*
 
 export let GSTATE = {
