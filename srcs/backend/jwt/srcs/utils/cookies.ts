@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cookies.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:06:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 23:20:55 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 19:55:47 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,11 @@ export function	removeCookies(reply: FastifyReply, key: string, path: string): v
 }
 
 
-export function	getCookies(request: FastifyRequest): any {
-	try {
-		const	cookies: any = Object.fromEntries(
-			(request.headers.cookie || "")
-			.split("; ")
-			.map(c => c.split("="))
-		)
-
-		return cookies;
-	} catch (err: unknown) {
-		return ;
-	}
+export function	getCookies(request: FastifyRequest): Record<string, string> {
+	return Object.fromEntries(
+		(request.headers.cookie || "")
+		.split("; ")
+		.map(c => c.split("="))
+		.filter(([k, v]) => k && v)
+	);
 }
