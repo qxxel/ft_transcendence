@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 14:23:25 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 03:35:30 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,35 +63,33 @@ export class	twofaRepository {
 		});
 	}
 
-	async getOtpByIdClient(id: number): Promise<string>{
+	async getOtpByIdClient(id: number): Promise<string | null> {
 		return new Promise((resolve, reject) => {
 			const	query: string = "SELECT otp FROM twofa WHERE id_client = ?";
 			const	elements: number[] = [id];
 
 			this.db.get(query, elements, (err: unknown, row: { otp: string }) => {
-				if (err)
-					return reject(err);
-
+				if (err) return reject(err);
+				else if(!row) return reject(null);
 				return resolve(row.otp);
 			});
 		});
 	}
 
-	async getOtpSecretKeyByIdClient(id: number): Promise<string>{
+	async getOtpSecretKeyByIdClient(id: number): Promise<string | null> {
 		return new Promise((resolve, reject) => {
 			const	query: string = "SELECT otpSecretKey FROM twofa WHERE id_client = ?";
 			const	elements: number[] = [id];
 
-			this.db.get(query, elements, (err: unknown, row: { otpSecretKey: string }) => {
-				if (err)
-					return reject(err);
-				//if row null ???
+			this.db.get(query, elements, (err: unknown, row: { otpSecretKey: string } | null) => {
+				if (err) return reject(err);
+				else if(!row) return reject(null);
 				return resolve(row.otpSecretKey);
 			});
 		});
 	}
 
-	async deleteOtpByIdClient(id: number): Promise<void>{
+	async deleteOtpByIdClient(id: number): Promise<void> {
 		return new Promise((resolve, reject) => {
 			const	query: string = "DELETE FROM twofa WHERE id_client = ?";
 			const	elements: number[] = [id];

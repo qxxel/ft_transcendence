@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/01 14:22:57 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 04:20:58 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ export class	twofaService {
 		return await this.twofaRepo.addOtp(id, otpSecretKey, otp);
 	}
 
-	async getOtpByIdClient(id: number): Promise<string> {
+	async getOtpByIdClient(id: number): Promise<string | null> {
 		return await this.twofaRepo.getOtpByIdClient(id);
 	}
 
-	async getOtpSecretKeyByIdClient(id: number): Promise<string> {
+	async getOtpSecretKeyByIdClient(id: number): Promise<string | null> {
 		return await this.twofaRepo.getOtpSecretKeyByIdClient(id);
 	}
 

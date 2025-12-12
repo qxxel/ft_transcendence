@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/08 22:13:28 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 03:37:07 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,11 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 			isJwtTwofa = false;
 		}
 		
-		const	otpSecretKey = await twofaServ.getOtpSecretKeyByIdClient(payload.data.id);
+		const	otpSecretKey: string | null = await twofaServ.getOtpSecretKeyByIdClient(payload.data.id);
 		
+		if (!otpSecretKey)
+			throw new twofaError.BadCodeError("Bad code");
+
 		const	isOtpValid = verifyOtp(otpSecretKey, request.body.otp);
 		
 		if (!isOtpValid)
