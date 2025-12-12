@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 00:17:32 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/12 05:22:23 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,11 +272,13 @@ export function initHistoryListeners(targetId: number | null, targetName: string
     const tankCheckbox = document.getElementById('filter-tank') as HTMLInputElement;
     const refreshBtn = document.getElementById('refresh-history') as HTMLButtonElement;
 	
-	if (!refreshBtn) return;
+	// if (!refreshBtn) return;
 
     if (!aiCheckbox || !pvpCheckbox || !pongCheckbox || !tankCheckbox) {
-        if (attempt > 20) return;
-        requestAnimationFrame(() => initHistoryListeners(targetId, targetName, attempt + 1));
+        const it_id = setTimeout(() => {
+            requestAnimationFrame(() => initHistoryListeners(targetId, targetName, attempt + 1));
+        }, 200);
+        // if (attempt > 20) return;
         return;
     }
 

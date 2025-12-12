@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 00:12:31 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/12 05:19:34 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -489,7 +489,7 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 	const star2 = (document.getElementById("chk-2star") as HTMLInputElement).checked;
 	const star3 = (document.getElementById("chk-3star") as HTMLInputElement).checked;
 
-	if (!freqInput || !aiInput || !pointsInput || !star1 || !star2 || !star3) return;
+	if (!freqInput || !aiInput || !pointsInput || star1 === null || star2 === null || star3 === null) return;
 
 	const	state: AppState = appStore.getState();
 	const	user: UserState | null = state.user;

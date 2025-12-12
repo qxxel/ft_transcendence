@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 00:15:20 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/12 05:20:07 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,7 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 		}
 
 		const verifyForm = document.getElementById("confirm-setting-form") as HTMLFormElement;
-		if (!verifyForm) return;
+		// if (!verifyForm) return;
 
 		verifyForm.addEventListener("submit", async (event: Event) => {
 			event.preventDefault();
@@ -253,7 +253,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	const	newEmail: string = (document.getElementById("edit-email") as HTMLInputElement).value;
 	const	new2fa: boolean = (document.getElementById("edit-2fa") as HTMLInputElement).checked;
 
-	if (!newUsername || !newEmail || !new2fa) return;
+	if (!newUsername || !newEmail || new2fa === null) return;
 
 	const	state: AppState = appStore.getState();
 	const	user: UserState = state.user;
