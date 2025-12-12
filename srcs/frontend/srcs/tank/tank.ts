@@ -376,17 +376,17 @@ export class	TankGame extends Game {
 		};
 
 		if (this.star1) {
-			html += createRow("Health", "#32AA28FF", "#0000FF");
+			html += createRow("Health", "rgb(50, 170, 40)", "rgb(0, 0, 255)");
 		}
 
 		if (this.star2) {
-			html += createRow("Movement speed", "#FFFF00FF", "#0000FF");
-			html += createRow("Ball speed", "#00FFFFFF", "#0000FF");
+			html += createRow("Movement speed", "rgb(255, 255, 0)", "rgb(0, 0, 255)");
+			html += createRow("Ball speed", "rgb(0, 255, 255)", "rgb(0, 0, 255)");
 		}
 
 		if (this.star3) {
-			html += createRow("Fire rate", "#643296FF", "#0000FF");
-			html += createRow("Cooldown reduction", "#BB00FFFF", "#0000FF");
+			html += createRow("Fire rate", "rgb(239, 19, 19)", "rgb(0, 0, 255)");
+			html += createRow("Cooldown reduction", "rgb(247, 0, 255)", "rgb(0, 0, 255)");
 		}
 		legendContainer.innerHTML = html;
 	}

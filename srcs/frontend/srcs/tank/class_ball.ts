@@ -231,17 +231,17 @@ export class	Collectible extends Ball {
         	case 'heal':
         		this.color = {r:50,g:170,b:40};
 				break;
-			case 'ball_speed':
-        		this.color = {r:0,g:255,b:255};
-        	    break;
 			case 'tank_speed':
         		this.color = {r:255,g:255,b:0};
         	    break;
+			case 'ball_speed':
+        		this.color = {r:0,g:255,b:255};
+        	    break;
 			case 'haste':
-        		this.color = {r:100,g:50,b:150};
+        		this.color = {r:239,g:19,b:19};
         	    break;
 			case 'cdr':
-        		this.color = {r:187,g:0,b:255};
+        		this.color = {r:247,g:0,b:255};
 			break;
     	}
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
@@ -266,8 +266,9 @@ export class	Collectible extends Ball {
 				a.fire_coef = Math.max(a.fire_coef-0.1, 0.5);
 				break;
 			case 'cdr':
-				a.ability_cooldown = 0;
-			break;
+				a.ability_base_cooldown_coeff = Math.max(a.ability_base_cooldown_coeff-0.1, 0.5);
+				a.ability_cooldown = a.ability_base_cooldown * a.ability_base_cooldown_coeff;
+				break;
 		}
 	}
 

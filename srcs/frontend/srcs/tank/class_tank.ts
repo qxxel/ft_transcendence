@@ -49,6 +49,7 @@ export class	Tank extends Actor {
 	ball_speed: number = 0;
 	ball_speed_coef: number = 1;
 	tank_speed_coef: number = 1;
+	ability_base_cooldown_coeff: number = 1;
 	fire_coef: number = 1;
 	constructor(
 		x:number,
@@ -76,7 +77,7 @@ export class	Tank extends Actor {
 			this.ability_effect();
 		if (Date.now() - this.fire_last <= (this.fire_rate * this.fire_coef))
 			GSTATE.REDRAW = true;
-		if (Date.now() - this.ability_last <= this.ability_base_cooldown)
+		if (Date.now() - this.ability_last <= this.ability_base_cooldown * this.ability_base_cooldown_coeff)
 			GSTATE.REDRAW = true;
 	}
 
@@ -196,7 +197,7 @@ export class	Tank extends Actor {
 
 	ability_cast(input: Input): void {
 		if (!this.canAbility()) return;
-		this.ability_cooldown = this.ability_base_cooldown;
+		this.ability_cooldown = this.ability_base_cooldown * this.ability_base_cooldown_coeff;
 		this.ability_active = true;
 		this.ability_last = Date.now();
 	}
@@ -266,13 +267,10 @@ export class	Tank extends Actor {
 		return Date.now() - this.fire_last > (this.fire_rate * this.fire_coef);
 	}
 	canAbility(): boolean {
-		// console.log(Date.now() - this.ability_last, '/', this.ability_cooldown);
 		return Date.now() - this.ability_last > this.ability_cooldown;
-		// return Date.now() - this.ability_last > this.ability_cooldown;
 	}
 	isAbility(): boolean {
 		return Date.now() - this.ability_last < this.ability_duration;
-		// return Date.now() - this.ability_last < this.ability_duration;
 	}
 }
 
@@ -326,7 +324,7 @@ export class	Classic extends Tank {
 			this.hud.wheel_draw(ctx,start,end);
 		}
 		if (!this.canAbility()) {
-			this.hud.abilitybar_draw(ctx, Date.now() - this.ability_last,this.ability_base_cooldown);
+			this.hud.abilitybar_draw(ctx, Date.now() - this.ability_last,this.ability_base_cooldown * this.ability_base_cooldown_coeff);
 		}
 		if (this.health < this.maxHealth)
 			this.hud.healthbar_draw(ctx,this.health,this.maxHealth);
@@ -394,7 +392,6 @@ export class	Sniper extends Tank {
 		public	keys:Keys,
 		public  id:number) {
 
-		
 		super(x,y, w * 0.9, h * 0.9 ,color,fire_color,keys,id);
 		this.ability_base_cooldown = 5000; // ms
 		this.ability_cooldown = this.ability_base_cooldown; // ms
@@ -415,7 +412,7 @@ export class	Sniper extends Tank {
 
 	ability_cast(): void {
 		if (!this.canAbility()) return;
-		this.ability_cooldown = this.ability_base_cooldown;
+		this.ability_cooldown = this.ability_base_cooldown * this.ability_base_cooldown_coeff;
 
 		const now = Date.now();
 		let isSpawnable:boolean;
@@ -490,7 +487,7 @@ export class	Shotgun extends Tank {
 
 	ability_cast(input: Input): void {
 		if (!this.canAbility()) return;
-		this.ability_cooldown = this.ability_base_cooldown;
+		this.ability_cooldown = this.ability_base_cooldown * this.ability_base_cooldown_coeff;
 		this.ability_active = true;
 		this.isDash = true;
 		if (input.isDown(this.keys.down)) this.dash_direction = 0;
