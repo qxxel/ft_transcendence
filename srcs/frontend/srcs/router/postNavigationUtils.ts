@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 14:16:38 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 00:33:33 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ async function loadUser(user: UserState) {
 
 		const imgElement: HTMLImageElement = document.getElementById("user-avatar") as HTMLImageElement;
 		const displayImgElement: HTMLImageElement = document.getElementById("display-user-avatar") as HTMLImageElement;
-		if (imgElement)
+		if (imgElement && displayImgElement)
 		{
 			if (userRes.avatar)
 			{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtService.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 17:21:57 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:37:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 /* ====================== IMPORT ====================== */
 
 import { jwtRepository }	from "../repositories/jwtRepository.js"
-
-import type { jwtRespDto }	from "../dtos/jwtRespDto.js"
 
 
 /* ====================== CLASS ====================== */
@@ -29,13 +27,12 @@ export class	jwtService {
 		this.jwtRepo = jwtRepo;
 	}
 
+	async cleanup(): Promise<void> {
+		return await this.jwtRepo.cleanup();
+	}
 
 	async addToken(token: string, clientId: number): Promise<number> {
 		return await this.jwtRepo.addToken(token, clientId);
-	}
-
-	async getClientIdByToken(token: string): Promise<jwtRespDto> {
-		return await this.jwtRepo.getClientIdByToken(token);
 	}
 
 	async isValidToken(token: string): Promise<boolean> {

@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/11 00:46:16 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/12 00:12:31 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ import { setDynamicFavicon } from "../utils/setDynamicFavicon.js"
 
 function onClickPlay(): void {
 	const	maxPointsInput: HTMLInputElement = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+	if (!maxPointsInput) return;
 
 	const	state: AppState = appStore.getState();
 	const	currentGame: Game | null = state.game.currentGame;
@@ -45,7 +46,7 @@ function onClickPlay(): void {
 }
 
 async function  onClickLogout(): Promise<void> {
-	const   response: Response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
+	const	response: Response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
 
 	if (!response.ok)
 		throw new Error('Logout failed');
@@ -96,8 +97,10 @@ async function	onClickEdit(): Promise<void> {
 	});
 
 	const username = document.getElementById("edit-username") as HTMLInputElement;
+	if (!username) return;
 	username.value = userRes.username ?? "";
 	const mail = document.getElementById("edit-email") as HTMLInputElement;
+	if (!mail) return;
 	mail.value = userRes.email ?? "";
 }
 
@@ -221,6 +224,8 @@ async function	onClickNewCode(): Promise<void> {
 	const spanCooldown = document.getElementById("btnCooldown");
 	const locks = document.querySelectorAll(".lock");
 
+	if (!btnSend || !spanCooldown) return;
+
 	if (spanCooldown) spanCooldown.textContent = "(5s)";
 	locks.forEach(e => (e as HTMLElement).hidden = false);
 	if (btnSend) btnSend.disabled = true;
@@ -284,6 +289,8 @@ function switchGameMode(mode: 'default' | 'featured') {
 	const defDiv = document.getElementById('default-mode-content');
 	const featDiv = document.getElementById('featured-mode-content');
 
+	if (!defDiv || !featDiv) return;
+
 	if (mode === 'default') {
 		defDiv?.classList.remove('hidden');
 		featDiv?.classList.add('hidden');
@@ -295,9 +302,8 @@ function switchGameMode(mode: 'default' | 'featured') {
 
 function selectFeaturedDifficulty(level: number) {
 	const input = document.getElementById('aiHardcore') as HTMLInputElement;
-	if (input) {
-		input.value = level.toString();
-	}
+	if (!input) return;
+	input.value = level.toString();
 
 	for (let i = 1; i <= 4; i++) {
 		document.getElementById(`btn-feat-${i}`)?.classList.remove('active');
@@ -310,6 +316,7 @@ function selectFeaturedDifficulty(level: number) {
 
 function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard') {
 	const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+	if (!maxPointsInput) return;
 	const winningScore = parseInt(maxPointsInput.value, 10);
 	
 	const	state: AppState = appStore.getState();
@@ -351,6 +358,7 @@ function onClickPlayPVP() {
 
 	if (router.Path === '/pongmenu') {
 		const	maxPointsInput: HTMLInputElement = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+		if (!maxPointsInput) return;
 		const	winningScore: number = parseInt(maxPointsInput.value, 10);
 
 		const	state: AppState = appStore.getState();
@@ -392,6 +400,7 @@ function onClickPlayPVP() {
 		const mapSelect = document.getElementById("mapSelect") as HTMLSelectElement;
     	const p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
     	const p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
+		if (!mapSelect || !p1Select || !p2Select) return;
 		
     	const selectedMap = mapSelect.value;
     	const p1Tank = p1Select.value;
@@ -424,6 +433,7 @@ function	onStartTournament() {
 	}
 
 	const scoreInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+	if (!scoreInput) return;
 	const winningScore = parseInt(scoreInput.value, 10);
 
 	appStore.setState((state) => ({
@@ -479,6 +489,8 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 	const star2 = (document.getElementById("chk-2star") as HTMLInputElement).checked;
 	const star3 = (document.getElementById("chk-3star") as HTMLInputElement).checked;
 
+	if (!freqInput || !aiInput || !pointsInput || !star1 || !star2 || !star3) return;
+
 	const	state: AppState = appStore.getState();
 	const	user: UserState | null = state.user;
 	const	currentGame: Game | null = state.game.currentGame;
@@ -533,6 +545,8 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 		const mapSelect = document.getElementById("mapSelect") as HTMLSelectElement;
     	const p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
     	const p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
+
+		if (!mapSelect || !p1Select || !p2Select ) return;
 		
     	const selectedMap = mapSelect.value;
     	const p1Tank = p1Select.value;

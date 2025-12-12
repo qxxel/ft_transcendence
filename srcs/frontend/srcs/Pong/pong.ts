@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pong.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/09 14:03:57 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 00:03:08 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ export class PongGame extends Game {
 
 	public setCtx() {
 		this.canvas = document.getElementById(this.ids.canvas) as HTMLCanvasElement;
+		if (!this.canvas) return;
 		this.renderer = new PongRenderer(this.canvas);
 
 		this.scoreElements = {
@@ -68,6 +69,7 @@ export class PongGame extends Game {
 			p1: document.getElementById(this.ids.score1)!,
 			p2: document.getElementById(this.ids.score2)!
 		};
+		if (!this.scoreElements.p1 || !this.scoreElements.p2 || !this.scoreElements.winScore) return ;
 
 		let	state: AppState = appStore.getState();
 		let	pendingOptions: GameOptions | null = state.game.pendingOptions;
@@ -146,8 +148,8 @@ export class PongGame extends Game {
 		this.serverState = null;
 
 		const dashboard = document.getElementById('game-over-dashboard');
-        if (dashboard)
-			dashboard.style.display = "none";
+        if (!dashboard) return;
+		dashboard.style.display = "none";
 
 		socket.on('game-update', (newState: PongState) => {
 			this.serverState = newState;
@@ -336,8 +338,8 @@ export class PongGame extends Game {
 
 		const winnerName = pongResume.winner === 1 ? this.player1Name : this.player2Name;
 		const winnerDisplay = document.getElementById('winner-display');
-		if (winnerDisplay)
-			winnerDisplay.innerText = `${winnerName} Wins!`;
+		if (!winnerDisplay) return;
+		winnerDisplay.innerText = `${winnerName} Wins!`;
 
 		const	state: AppState = appStore.getState();
 		const	currentTournament: TournamentController | null = state.game.currentTournament;
@@ -371,8 +373,10 @@ export class PongGame extends Game {
 	private updateNameDisplay() {
 		const p1Span = document.getElementById('p1-name');
 		const p2Span = document.getElementById('p2-name');
-		if (p1Span) p1Span.innerText = this.player1Name + ": ";
-		if (p2Span) p2Span.innerText = this.player2Name + ": ";
+		if (!p1Span) return; 
+		p1Span.innerText = this.player1Name + ": ";
+		if (!p2Span) return; 
+		p2Span.innerText = this.player2Name + ": ";
 	}
 
 	private generateLegend(activePowerUps: PowerUps) {

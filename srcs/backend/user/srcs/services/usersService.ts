@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 18:59:22 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 18:11:00 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,14 @@ export class	usersService {
 			if (await this.usersRepo.isTaken(nameQuery, [email]))
 				throw new IsTakenError(`The name ${email} is already taken. Try another one !`);
 		}
+	}
+
+	async updateLogById(userId: number, isLog: boolean): Promise<void> {
+		const	query: string = "SELECT 1 FROM users WHERE id = ? LIMIT 1";
+		if (!(await this.usersRepo.isTaken(query, [userId.toString()])))
+			throw new NotExistError(`The user ${userId} does not exist`);
+	
+		return await this.usersRepo.updateLogById(userId, isLog);
 	}
 
 	async updateUserById(userId: number, user: usersUpdateDto): Promise<void> {

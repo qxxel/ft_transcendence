@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 14:20:30 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/11 19:28:32 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,25 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 			const	user: usersRespDto = await usersServ.addUser(newUser);
 
 			return reply.code(201).send(user);
+		}
+		catch (err: unknown) {
+			return errorsHandler(userFastify, reply, err);
+		}
+	});
+
+	// UPDATE A log WITH HIS ID
+	userFastify.post<{ Body: { isLog: boolean } }>('/log', async (request: FastifyRequest<{ Body: { isLog: boolean } }>, reply: FastifyReply) => {
+		if (!request.body) {
+			userFastify.log.error("The request is empty");
+			console.error("The request is empty");
+			return reply.code(400).send({ error: "The request is empty" });
+		}
+		try {
+			const	userId: number = extractUserId(request);
+
+			await usersServ.updateLogById(userId, request.body.isLog);
+
+			return reply.code(201).send();
 		}
 		catch (err: unknown) {
 			return errorsHandler(userFastify, reply, err);
