@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:32:29 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 01:02:01 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/12 03:18:30 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -465,7 +465,7 @@ export class	Shotgun extends Tank {
 		public	keys:Keys,
 		public  id:number) {
 		super(x,y, w * 1.1, h * 1.1 ,color,fire_color,keys,id);
-		this.ability_base_cooldown = 4500; // ms
+		this.ability_base_cooldown = 3900; // ms
 		this.ability_cooldown = this.ability_base_cooldown; // ms
 		this.ability_duration = 350; // ms
 		this.speed = 0.8;
@@ -473,7 +473,7 @@ export class	Shotgun extends Tank {
 		this.health = 8;
 		this.fire_rate = 4000;
 		this.maxHealth = this.health;
-		this.regen_rate = 1000;
+		this.regen_rate = 800;
 		this.regen_amount = 0.04;
 		this.ball_size = 3;
 		this.w *= 1.1;

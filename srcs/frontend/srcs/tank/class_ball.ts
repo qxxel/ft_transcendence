@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:24:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 22:21:40 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/12 03:23:12 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ export class	Ball extends Actor {
 			{
 				this.damage = 1.2;
 				this.bounce_count = 2;
-				this.speed = this.author.ball_speed_coef * 2.95;
+				this.speed = this.author.ball_speed_coef * 3;
 				this.health = 1;
-				this.duration = 380;
+				this.duration = 420;
 				this.ability_reduction = 400;
 				this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 			}
@@ -206,7 +206,7 @@ export class	Ball extends Actor {
 
 	desaturate() : void
 	{
-		if (this.duration == 0)
+		if (this.duration == 0 || (this.author && this.author instanceof Shotgun))
 			this.opacity = 1;
 		else
 			this.opacity = 1 - (   (Date.now() - this.birth)  / this.duration );
