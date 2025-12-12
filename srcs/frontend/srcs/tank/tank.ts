@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 22:36:38 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/12 01:12:53 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ export class	TankGame extends Game {
 			effects.push("cdr");
 		}
 
-		if (this.map.name == 'desertfox')
+		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'davinco')
 		{
 			while (attempt++ < 2000)
 			{
