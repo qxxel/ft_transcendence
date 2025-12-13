@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sendRequest.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:23:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/11 19:29:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 23:15:12 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ export async function	sendRequest(path: string, requestMethod: string, body: Obj
 	
 	if (response.status === 401){
 		response = await fetch("/api/jwt/refresh/access", {
-			method: "POST",
+			method: "PATCH",
 			credentials: "include",
 		});
 		

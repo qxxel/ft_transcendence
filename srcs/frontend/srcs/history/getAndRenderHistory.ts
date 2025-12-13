@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 00:08:21 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/13 23:31:00 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,31 +46,46 @@ export async function	getAndRenderHistory(targetId: number | null,
     	tankFilter: boolean = true
 	): Promise<void> {
 
-	let	response: Response;
-	if (!targetId)
-		response = await sendRequest('/api/game/me', "get", null);
-	else
-		response = await sendRequest(`/api/game/${targetId}`, "get", null);
-	if (!response.ok)
-	{
-		const errorData: Object = await response.json();
-		console.error(errorData);
+	try {
+		let	response: Response;
+		if (!targetId)
+			response = await sendRequest('/api/game/me', "get", null);
+		else
+			response = await sendRequest(`/api/game/${targetId}`, "get", null);
+		if (!response.ok)
+		{
+			try {
+				const errorData: Object = await response.json();
+				console.error(errorData);
+			} catch (e) {
+				console.error("Impossible to read JSON error", e);
+			}
 
-		displayErrors(targetName);
-		
-		return ;
+			displayErrors(targetName);
+
+			return ;
+		}
+
+		const	gamesData: GameObject[] = await response.json();
+
+		if (!Array.isArray(gamesData)) {
+	            console.error("Invalid data format received:", gamesData);
+	            throw new Error("Invalid data format");
+	        }
+
+		if (gamesData.length === 0)
+		{
+			displayNoGame(false);
+			return ;
+		}
+
+		console.log(gamesData) // ICI LE PRINT DU TABLEAU
+
+		renderGames(gamesData, aiFilter, pvpFilter, pongFilter, tankFilter);
+	} catch (error) {
+		console.error("Critical error while charging history:", error);
+        displayErrors(targetName);
 	}
-
-	const	gamesData: GameObject[] = await response.json();
-	if (gamesData.length === 0)
-	{
-		displayNoGame(false);
-		return ;
-	}
-
-	console.log(gamesData) // ICI LE PRINT DU TABLEAU
-
-	renderGames(gamesData, aiFilter, pvpFilter, pongFilter, tankFilter);
 }
 
 /* ====================== UTILS ====================== */
@@ -231,9 +246,8 @@ function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): vo
 
 function displayErrors(targetName: string | null): void {
     const historyEntriesDiv: HTMLDivElement = document.getElementById("history-entries") as HTMLDivElement;
-    if (!historyEntriesDiv) return;
-
-    historyEntriesDiv.innerHTML = ""; 
+    if (historyEntriesDiv)
+		historyEntriesDiv.innerHTML = ""; 
 
     const historyErrorParagraph: HTMLParagraphElement = document.createElement("p");
     historyErrorParagraph.classList.add("error-message");
@@ -244,13 +258,14 @@ function displayErrors(targetName: string | null): void {
     else
         historyErrorParagraph.textContent = `Error while getting your history.`;
 
-    historyEntriesDiv.appendChild(historyErrorParagraph);
+    if (historyEntriesDiv)
+		historyEntriesDiv.appendChild(historyErrorParagraph);
 }
 
 function displayNoGame(filter: boolean): void {
     const historyEntriesDiv: HTMLDivElement = document.getElementById("history-entries") as HTMLDivElement;
-    if (!historyEntriesDiv) return;
-    historyEntriesDiv.innerHTML = "";
+    if (historyEntriesDiv)
+    	historyEntriesDiv.innerHTML = "";
 
     const historyEmptyParagraph: HTMLParagraphElement = document.createElement("p");
     historyEmptyParagraph.classList.add("empty-message");
@@ -262,11 +277,13 @@ function displayNoGame(filter: boolean): void {
         historyEmptyParagraph.textContent = "Empty match history.";
     }
 
-    historyEntriesDiv.appendChild(historyEmptyParagraph);
+    if (historyEntriesDiv)
+		historyEntriesDiv.appendChild(historyEmptyParagraph);
 }
 
 export function initHistoryListeners(targetId: number | null, targetName: string | null = null, attempt: number = 0): void {
-    const aiCheckbox = document.getElementById('filter-ai') as HTMLInputElement;
+    console.log("TEST");
+	const aiCheckbox = document.getElementById('filter-ai') as HTMLInputElement;
     const pvpCheckbox = document.getElementById('filter-pvp') as HTMLInputElement;
     const pongCheckbox = document.getElementById('filter-pong') as HTMLInputElement;
     const tankCheckbox = document.getElementById('filter-tank') as HTMLInputElement;
