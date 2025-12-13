@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 07:37:41 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 23:07:28 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ async function  onClickLogout(): Promise<void> {
 	const	response: Response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
 
 	if (!response.ok)
-		throw new Error('Logout failed');
+		return displayPopError(response)
 
 	appStore.setState((state) => ({
 		...state,
@@ -71,17 +71,10 @@ async function  onClickLogout(): Promise<void> {
 }
 	
 async function	onClickEdit(): Promise<void> {
-	console.log("Edit");
-
-	const	state: AppState = appStore.getState();
-	const	user: UserState | null = state.user;
-
 	const	response: Response = await sendRequest(`/api/user/me`, 'get', null);
 	if (!response.ok)
-	{
-		console.log(response.statusText);
-		return ;
-	}
+		return displayPopError(response);
+
 	const	userRes = await response.json();
 
 	const editElements = document.querySelectorAll(".edit-mode");
@@ -115,31 +108,21 @@ export async function	onClickHistory(targetId: number | null, targetName: string
 }
 
 function	onClickCancel(): void {
-	console.log("Cancel");
+	router.canLeave = true;
 
 	const confirmSetting = document.getElementById("confirm-setting");
 	if (confirmSetting)
-	{
-		router.navigate("/user");
-		router.canLeave = true;
-		return ;
-	}
-
+		return router.navigate("/user");
 	router.navigate("/")
-	router.canLeave = true;
 }
 
 async function	onClickDeleteAccount(): Promise<void> {
-	console.log("DeleteAccount");
-	
 	if (!confirm("Are you sure you want to delete your account?"))
 		return ;
 
 	const	response: Response = await sendRequest(`/api/auth/me`, 'delete', null);
-	if (!response.ok) {
-		console.log(response.statusText);
-		return ;
-	}
+	if (!response.ok)
+		displayPopError(response);
 
 	appStore.setState((state) => ({
 		...state,
@@ -162,17 +145,14 @@ async function	onClickDeleteAccount(): Promise<void> {
 }
 
 async function	onClickDeleteTwofa(): Promise<void> {
-	console.log("DeleteTwofa");
-	
 	if (!confirm("Are you sure you want to go back?"))
 		return ;
+
 	router.canLeave = true;
 
 	const	response: Response = await sendRequest(`/api/auth/twofa/me`, 'delete', null);
-	if (!response.ok) {
-		console.log(response.statusText);
-		return ;
-	}
+	if (!response.ok)
+		displayPopError(response)
 	
 	appStore.setState((state) => ({
 		...state,
@@ -194,9 +174,7 @@ async function	onClickDeleteTwofa(): Promise<void> {
 	router.navigate(router.Path);
 }
 
-async function	onClickSkipeVerifyEmailDev(): Promise<void> {
-	console.log("VerifyEmail");
-	
+async function	onClickSkipeVerifyEmailDev(): Promise<void> { // delete this
 	const response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
 
 	if (!response.ok)
@@ -223,23 +201,21 @@ async function	onClickNewCode(): Promise<void> {
 	const spanCooldown = document.getElementById("btnCooldown");
 	const locks = document.querySelectorAll(".lock");
 
-	if (!btnSend || !spanCooldown) return;
-
+	if (btnSend) btnSend.disabled = true;
 	if (spanCooldown) spanCooldown.textContent = "(5s)";
 	locks.forEach(e => (e as HTMLElement).hidden = false);
-	if (btnSend) btnSend.disabled = true;
 
 	const res = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
 
-    if (!res.ok) {
-        console.error("Erreur API:", res.statusText);
-        if (btnSend) btnSend.disabled = false;
-        if (spanCooldown) spanCooldown.textContent = "";
-        locks.forEach(e => (e as HTMLElement).hidden = true);
-        return;
-    }
+	if (!res.ok) {
+		if (btnSend) btnSend.disabled = false;
+		if (spanCooldown) spanCooldown.textContent = "";
+		locks.forEach(e => (e as HTMLElement).hidden = true);
+		displayPopError(res)
+		return;
+	}
 
-    fetch('/api/twofa/otp', {
+	fetch('/api/twofa/otp', {
 			method: 'POST',
 			credentials: "include",
 			headers: {
@@ -397,13 +373,13 @@ function onClickPlayPVP() {
 	else if (router.Path === '/tankmenu')
 	{
 		const mapSelect = document.getElementById("mapSelect") as HTMLSelectElement;
-    	const p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
-    	const p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
+		const p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
+		const p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
 		if (!mapSelect || !p1Select || !p2Select) return;
 		
-    	const selectedMap = mapSelect.value;
-    	const p1Tank = p1Select.value;
-    	const p2Tank = p2Select.value;
+		const selectedMap = mapSelect.value;
+		const p1Tank = p1Select.value;
+		const p2Tank = p2Select.value;
 		appStore.setState((state) => ({
 			...state,
 			game: {
@@ -432,9 +408,9 @@ function	onStartTournament() {
 	}
 
 	if (new Set(playerNames).size !== playerNames.length) {
-        displayError("Player names must be unique.", "tournament-msg-error");
-        return;
-    }
+		displayError("Player names must be unique.", "tournament-msg-error");
+		return;
+	}
 	const scoreInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
 	if (!scoreInput) return;
 	const winningScore = parseInt(scoreInput.value, 10);
@@ -545,14 +521,14 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 	else if (router.Path === '/tankmenu')
 	{
 		const mapSelect = document.getElementById("mapSelect") as HTMLSelectElement;
-    	const p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
-    	const p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
+		const p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
+		const p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
 
 		if (!mapSelect || !p1Select || !p2Select ) return;
 		
-    	const selectedMap = mapSelect.value;
-    	const p1Tank = p1Select.value;
-    	const p2Tank = p2Select.value;
+		const selectedMap = mapSelect.value;
+		const p1Tank = p1Select.value;
+		const p2Tank = p2Select.value;
 		console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Stars=[${star1},${star2},${star3}]`);
 		const freq = parseInt(freqInput.value,10);
 

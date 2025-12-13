@@ -6,38 +6,34 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/13 07:38:22 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 22:41:00 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 export async function displayError(response: Response | string, idMsgError: string) {
 	const	p = document.getElementById(idMsgError);
 	if (!p) {
-		console.error("No HTMLElement named \`msg-error\`.");
+		displayPopError("No HTMLElement named \`msg-error\`.")
 	} else {
-		try {
-			if (typeof response === "string")
-				p.textContent = response;
-			else {
+		if (typeof response === "string")
+			p.textContent = response;
+		else {
+			try {
 				const	result = await response.json();
 				p.textContent = result?.error || "An unexpected error has occurred";
+			} catch (error) {
+				console.error(error);
+				displayPopError(response)
 			}
-			return;
-		} catch (error) {
-			console.error(error);
 		}
 	}
-	if (typeof response === "string")
-		console.error(response);
-	else
-		console.error(response.statusText);
 }
 
 export async function displayPopError(response: Response | string | undefined) {
 	const	divErrors = document.getElementById("div-errors");
 	if (!divErrors)
 	{
-		console.error("No HTMLElement named \`msg-error\`.");
+		console.error("No HTMLElement named \`div-errors\`.");
 		if (response instanceof Response)
 			console.error(response.statusText);
 		else if (typeof response === "string")
