@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 18:52:52 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 22:30:08 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ export class	authService {
 	}
 
 	async cleanup(): Promise<void> {
-		const expiredClients = await this.getExpiredClients();
+		const expiredClients: number[] = await this.getExpiredClients();
 
 		for (const client of expiredClients) {
-			const date = await this.getExpiresByIdClient(client);
+			const date: number | null = await this.getExpiresByIdClient(client);
 
-			if (date === undefined || date === null)
+			if (date === null)
 				continue;
 
-			const	delay = date - Date.now();
+			const	delay: number = date - Date.now();
 
 			if (delay <= 0)
 				deleteClient(this, client);
@@ -60,7 +60,7 @@ export class	authService {
 		return await this.authRepo.addClient(id, password);
 	}
 
-	async getPasswordByIdClient(id: number): Promise<string> {
+	async getPasswordByIdClient(id: number): Promise<string | null> {
 		return await this.authRepo.getPasswordByIdClient(id);
 	}
 
@@ -68,7 +68,7 @@ export class	authService {
 		return await this.authRepo.getExpiredClients();
 	}
 
-	async getExpiresByIdClient(id: number): Promise<number | undefined | null> {
+	async getExpiresByIdClient(id: number): Promise<number | null> {
 		return await this.authRepo.getExpiresByIdClient(id);
 	}
 

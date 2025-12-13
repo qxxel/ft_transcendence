@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:14:11 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/11 19:25:20 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 20:55:33 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ export async function	addJWT(reply: FastifyReply, user: userDto): Promise<string
 	return jwtRefresh;
 }
 
-export async function	removeJWT(reply: FastifyReply): Promise<void> {
+export function	removeJWT(reply: FastifyReply): void {
 	removeCookies(reply, "jwtTwofa", "/api");
 	removeCookies(reply, "jwtAccess", "/");
 	removeCookies(reply, "jwtRefresh", "/api/jwt/refresh");
