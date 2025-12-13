@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsRepository.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:58:33 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 23:28:08 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ export class	friendshipsRepository {
 				RETURNING *;`;
 			const	elements: number[] = friendship.getTable();
 
-			this.db.get(query, elements, (err: unknown, row: any) => {
+			this.db.get(query, elements, (err: Error | null, row: any) => {
 				if (err)
 					return reject(err);
 
@@ -85,7 +85,7 @@ export class	friendshipsRepository {
 				RETURNING *;`;
 			const	elements: number[] = friendship.getTable();
 																								//	AXEL: A ENLEVER
-			this.db.get(query, elements, (err: unknown, row: any) => {
+			this.db.get(query, elements, (err: Error | null, row: any) => {
 				if (err)
 					return reject(err);
 
@@ -102,7 +102,7 @@ export class	friendshipsRepository {
 				RETURNING *;`;
 			const	elements: number[] = friendship.getTable();
 
-			this.db.get(query, elements, (err: unknown, row: any) => {
+			this.db.get(query, elements, (err: Error | null, row: any) => {
 				if (err)
 					return reject(err);
 
@@ -121,7 +121,7 @@ export class	friendshipsRepository {
 				OR (requester_id = ? AND receiver_id = ?)`;
 			const	elements: number[] = [userId, targetId, targetId, userId];
 
-			this.db.run(query, elements, function(err: unknown) {
+			this.db.run(query, elements, function(err: Error | null) {
 				if (err)
 					return reject(err);
 
@@ -140,7 +140,7 @@ export class	friendshipsRepository {
 					OR (requester_id = ? AND receiver_id = ?);`;
 				const	elements: number[] = friendship.getCheckTable();
 			
-				this.db.run(deleteQuery, elements, (err: unknown) => {
+				this.db.run(deleteQuery, elements, (err: Error | null) => {
 					if (err)
 					{
 						this.db.run("ROLLBACK");
@@ -152,7 +152,7 @@ export class	friendshipsRepository {
 						RETURNING *;`;
 					const	insertElements: number[] = friendship.getTable();
 				
-					this.db.get(insertQuery, insertElements, (err: unknown, row: any) => {
+					this.db.get(insertQuery, insertelements, (err: Error | null, row: any) => {
 						if (err) 
 						{
 							this.db.run("ROLLBACK");
@@ -175,7 +175,7 @@ export class	friendshipsRepository {
 					OR (requester_id = ? AND receiver_id = ?)
 				LIMIT 1;`;
 
-			this.db.get(query, elements, (err: unknown, row: any) => {
+			this.db.get(query, elements, (err: Error | null, row: any) => {
 				if (err)
 					return reject(err);
 
@@ -199,7 +199,7 @@ export class	friendshipsRepository {
 				AND (f.status = 'ACCEPTED' OR f.status = 'PENDING');`;
 			const elements = [userId, userId, userId];
 
-			this.db.all(query, elements, (err: unknown, rows: FriendUser[]) => {
+			this.db.all(query, elements, (err: Error | null, rows: FriendUser[]) => {
 				if (err)
 					return reject(err);
 
