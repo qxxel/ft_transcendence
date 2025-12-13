@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/12 00:03:08 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 00:17:31 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -352,10 +352,10 @@ export class PongGame extends Game {
 		const	seconds: string = (gameDurationSec % 60).toFixed(0);
 		const	secondsText: string = seconds + "s"
 
-		document.getElementById('stat-duration')!.innerText = minutesText + secondsText;
-		document.getElementById('stat-p1-hits')!.innerText = pongResume.player1Hits.toString();
-		document.getElementById('stat-p2-hits')!.innerText = pongResume.player2Hits.toString();
-		document.getElementById('stat-rally')!.innerText = pongResume.longestRally.toString();
+		if (document.getElementById('stat-duration')) document.getElementById('stat-duration')!.innerText = minutesText + secondsText;
+		if (document.getElementById('stat-p1-hits')) document.getElementById('stat-p1-hits')!.innerText = pongResume.player1Hits.toString();
+		if (document.getElementById('stat-p2-hits')) document.getElementById('stat-p2-hits')!.innerText = pongResume.player2Hits.toString();
+		if (document.getElementById('stat-rally')) document.getElementById('stat-rally')!.innerText = pongResume.longestRally.toString();
 
 		const	restartMsg = document.getElementById('restart-msg');
 		if (restartMsg)

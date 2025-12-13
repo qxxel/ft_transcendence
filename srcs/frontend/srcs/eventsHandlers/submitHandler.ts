@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 23:03:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 00:06:25 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,8 +231,8 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 		verifyForm.addEventListener("submit", async (event: Event) => {
 			event.preventDefault();
 			const	form = event.target;
-			const	otp: string = (document.getElementById("digit-code") as HTMLInputElement)?.value;
-			const	password: string = (document.getElementById("confirm-setting-password") as HTMLInputElement)?.value;
+			const	otp: string | undefined = (document.getElementById("digit-code") as HTMLInputElement)?.value;
+			const	password: string | undefined = (document.getElementById("confirm-setting-password") as HTMLInputElement)?.value;
 			
 			if (!password) return displayError("password required!", "confirm-setting-msg-error");
 
