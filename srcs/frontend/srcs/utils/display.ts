@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/13 05:58:47 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/13 07:38:22 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,10 @@ export async function displayPopError(response: Response | string | undefined) {
 	divErrors.appendChild(div);
 }
 
-export function displayDate(min: number) {
+export function displayDate(date: number) {
 	const localeClient = navigator.language;
 	
-	const	now = new Date();
-	now.setMinutes(now.getMinutes() + min);
+	const	exp = new Date(date);
 
 	const options: Intl.DateTimeFormatOptions = {
 		year: 'numeric',
@@ -91,5 +90,5 @@ export function displayDate(min: number) {
 
 	const el = document.getElementById("date-with-offset");
 	if (el)
-		el.textContent = now.toLocaleString(localeClient, options);
+		el.textContent = exp.toLocaleString(localeClient, options);
 }

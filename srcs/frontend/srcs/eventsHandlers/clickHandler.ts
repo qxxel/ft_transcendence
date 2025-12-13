@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 06:08:13 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/13 07:37:41 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ import { TournamentController } 			from "../Pong/tournament.js"
 import { router }							from "../index.js"
 import { sendRequest }						from "../utils/sendRequest.js"
 import { socket }							from "../socket/socket.js"
-import { displayDate }						from "../utils/display.js"
 import { displayError, displayPopError }	from "../utils/display.js"
 import { btnCooldown }						from "../utils/buttonCooldown.js"
 
@@ -240,28 +239,27 @@ async function	onClickNewCode(): Promise<void> {
         return;
     }
 
-    const response = await fetch('/api/twofa/otp', {
+    fetch('/api/twofa/otp', {
 			method: 'POST',
 			credentials: "include",
 			headers: {
 				"Content-Type": "application/json"
 			},
 			body: JSON.stringify({ })
-		}).then(async (response) => {
+		}
+	).then(async (response) => {
 			if (!response.ok) {
-				console.error("Erreur API:", response.statusText);
 				if (btnSend) btnSend.disabled = false;
 				if (spanCooldown) spanCooldown.textContent = "";
 				locks.forEach(e => (e as HTMLElement).hidden = true);
 				displayPopError(response);
 				return;
 			}
-		});
+		}
+	);
 
-	btnCooldown(); 
-	displayDate(5);
+	btnCooldown();
 }
-
 
 /* ====================== UI TOGGLE HELPERS ====================== */
 

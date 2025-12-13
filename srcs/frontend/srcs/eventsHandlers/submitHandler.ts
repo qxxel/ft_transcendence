@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 05:59:36 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/13 07:38:15 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,9 +179,20 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 
 	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
 	if (!otp) return;
-	form.reset();
+
+	const	p = document.getElementById("2fa-msg-error");
+	if (p)
+		p.textContent = null;
+
+	const	signForm = document.getElementById("2fa-form");
+	if (signForm)
+		signForm.classList.add("darken");
 
 	const response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
+	
+	form.reset();
+	if (signForm)
+		signForm.classList.remove("darken");
 
 	if (!response.ok)
 		return displayError(response, "2fa-msg-error");
@@ -215,16 +226,15 @@ interface	userUpdate {
 async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Promise<boolean> {
 	return new Promise((resolve) => {
 		if (isChangeEmail) {
-			const twofaElements = document.querySelectorAll(".twofa");
+			const twofaElements = document.getElementById("div-verify-email");
 	
-			twofaElements.forEach(e => {
-				(e as HTMLElement).hidden = false;
-			});
+			if (twofaElements)
+				twofaElements.hidden = false;
+
 			const	digitCode = (document.getElementById("digit-code") as HTMLInputElement);
-	
-			if (digitCode) {
+
+			if (digitCode)
 				digitCode.required = true;
-			}
 		}
 
 		const verifyForm = document.getElementById("confirm-setting-form") as HTMLFormElement;
@@ -269,8 +279,6 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	if (!newUsername || !newEmail || new2fa === null) return;
 
 	const	state: AppState = appStore.getState();
-
-	console.log(newUsername, newEmail, new2fa);
 	
 	const getUser: Response = await sendRequest(`/api/user/me`, 'get', null)
 	if (!getUser.ok)

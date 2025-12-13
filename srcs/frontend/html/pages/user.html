@@ -106,9 +106,9 @@
             >  <!-- /!\ add special charactere -->
         </div>
         
-        <div class="form-group">
-            <label for="sign-up-password" class="twofa" hidden>Verification Code:</label>
-            <input type="text" id="digit-code" class="twofa" name="digit-code" maxlength="4" placeholder="Enter 4 digit code" pattern="^[0-9]{4}$" hidden>
+        <div id="div-verify-email" class="form-group" hidden>
+            <label for="sign-up-password" class="twofa">Verification Code:</label>
+            <input type="text" id="digit-code" class="twofa" name="digit-code" maxlength="4" placeholder="Enter 4 digit code" pattern="^[0-9]{4}$">
             
             <p>Open your email and enter the code.</p>
             <p>The verification code is valid until : <span id="date-with-offset"></span></p>

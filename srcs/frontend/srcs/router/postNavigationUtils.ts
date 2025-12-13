@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 00:33:33 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/13 06:43:16 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 import { appStore }				from "../objects/store.js"
 import { btnCooldown }			from "../utils/buttonCooldown.js"
-import { displayDate }			from "../utils/display.js"
+import { displayDate, displayPopError }			from "../utils/display.js"
 import { Game }					from "../Pong/gameClass.js"
 import { GameOptions }			from "../Pong/objects/gameOptions.js"
 import { getAndRenderFriends }  from  "../friends/getAndRenderFriends.js"
@@ -153,14 +153,28 @@ export async function  pathActions(currentPath: string): Promise<void> {
 
 async function loadTwofa() {
 	const	Response: Response = await sendRequest(`/api/jwt/payload/twofa`, 'get', null);
+	
 	if (!Response.ok) {
 		console.log(Response.statusText);
 		router.navigate("/sign-in");
 		return ;
 	}
+	
+	Response.json()
+		.then((result) => {
+			console.log(result)
+			if (result.exp)
+				displayDate(result.exp * 1000);
+			else
+				displayPopError("Unable to display the expiration date");
+		}
+	).catch((err: unknown) => {
+		if (err instanceof Error)
+			displayPopError(err.message);
+	});
+	
 	router.canLeave = false;
 	btnCooldown();
-	displayDate(5);
 }
 
 async function loadUser(user: UserState) {
