@@ -135,11 +135,8 @@ export class	TankGame extends Game {
 					GSTATE.ACTORS.push(new Classic(s2!.x, s2!.y, tankWidth, tankHeight, colorBody, p2colorFire, p2Keys, 1));
 					break;
 			}
-
 			GSTATE.TANKS += 2;
 		}
-		else { console.log("Unknown map :", this.map.name) }
-
 	}
 
 	private spawn_collectible() : void 
@@ -191,7 +188,6 @@ export class	TankGame extends Game {
 				GSTATE.ACTORS.push(new Collectible(s!.x,s!.y,c_width,c_height, effects[index]!));
 				break;
 			}
-
 		}
 		GSTATE.REDRAW = true;
 	}
@@ -391,9 +387,9 @@ export class	TankGame extends Game {
 			cancelAnimationFrame(this.animationFrameId);
 			this.input.stop();
 			this.animationFrameId = null;
-		for (let a of GSTATE.ACTORS)
-			GSTATE.ACTORS.splice(0,GSTATE.ACTORS.length)
-		console.log('TankGame Stopped');
+			for (let a of GSTATE.ACTORS)
+				GSTATE.ACTORS.splice(0,GSTATE.ACTORS.length)
+			console.log('TankGame Stopped');
 		}
 	}
 

@@ -137,7 +137,6 @@ export class	Ball extends Actor {
 
 					if (a instanceof Classic && a.isShield)
 					{
-						console.log("REFLECT\n");
 						if (this.author && this.author.id == 0)
 							GSTATE.STATS2.reflect += 1;
 						else if (this.author && this.author.id == 1)
@@ -292,10 +291,16 @@ export class	Collectible extends Ball {
 		}
 		return false;
 	}
+
+	update(input: Input): void {
+		this.move();
+	}
+
 	draw(ctx: CanvasRenderingContext2D): void {
 		ctx.beginPath();
 		ctx.fillStyle = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`;
-        ctx.strokeStyle = '#0000FF';
+        ctx.strokeStyle = 'rgb(0,0,255)';
+		ctx.lineWidth = 4;
 		ctx.arc(this.x + this.w/2, this.y + this.h/2, this.w/2, 0, Math.PI * 2);
 		ctx.fill();
 		ctx.stroke();

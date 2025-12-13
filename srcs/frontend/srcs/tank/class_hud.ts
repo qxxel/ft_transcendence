@@ -57,7 +57,7 @@ export class	Hud extends Actor {
 	wheel_draw(ctx: CanvasRenderingContext2D, start:number,end:number): void {
 
 		ctx.beginPath();
-		ctx.strokeStyle = `#${((this.wheel_color.r << 16) | (this.wheel_color.g << 8) | this.wheel_color.b).toString(16).padStart(6,'0')}`; // HUH;
+		ctx.strokeStyle = `rgb(${this.wheel_color.r}, ${this.wheel_color.g}, ${this.wheel_color.b})`;
 		ctx.lineWidth = 4;
 		ctx.arc(this.wheel_x, this.wheel_y, 5, -Math.PI / 2, end);
 		ctx.stroke();

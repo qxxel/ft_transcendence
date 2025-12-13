@@ -37,8 +37,8 @@ export class	Line2D {
 
 
 	draw(ctx : CanvasRenderingContext2D, color: Color): void {
-		ctx.strokeStyle = `#${((color.r << 16) | (color.g << 8) | color.b).toString(16).padStart(6,'0')}`; // HUH;
-		ctx.lineWidth = this.w; //ctx.lineWidth = stickWidth;
+		ctx.strokeStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
+		ctx.lineWidth = this.w;
 		ctx.lineCap = 'round';
 		ctx.beginPath();
 		ctx.moveTo(this.x1, this.y1);
@@ -51,7 +51,6 @@ export class	Line2D {
 	}
 
 	getEnd(): { x: number; y: number } {
-		// return { x: this.x2 + ((this.w / 2) * Math.cos(this.angle)), y: this.y2 + ((this.w / 2) * Math.sin(this.angle)) };
 		return { x: this.x2, y: this.y2 };
 	}
 

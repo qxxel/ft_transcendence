@@ -68,9 +68,6 @@ export class	Tank extends Actor {
 
 	update(input: Input): void {
 		this.listen(input);
-		// if (this.id == 0 && !this.canAbility())
-			// console.log("this.ability_cooldown", this.ability_cooldown);
-
 		if (this.regen_rate != -1)
 			this.regen();
 		if (this.ability_update())
