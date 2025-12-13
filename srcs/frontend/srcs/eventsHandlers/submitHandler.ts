@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 05:20:07 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/13 01:58:44 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,11 +235,24 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 			const	form = event.target as HTMLFormElement;
 			const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
 			const	password: string = (document.getElementById("confirm-setting-password") as HTMLInputElement).value;
-			form.reset();
+			
+			const	p = document.getElementById("confirm-setting-msg-error");
+			if (p)
+				p.textContent = null;
+
+			const	confirmSettingForm = document.getElementById("confirm-setting-form");
+			if (confirmSettingForm)
+				confirmSettingForm.classList.add("darken");
 
 			const response: Response = await sendRequest('/api/auth/updateUser', 'PATCH', { otp, password, user });
+			
+			form.reset();
+			if (confirmSettingForm)
+				confirmSettingForm.classList.remove("darken");
+
 			if (!response.ok) 
 				return displayError(response, "confirm-setting-msg-error");
+			
 			router.canLeave = true;
 			resolve(true);
 		});

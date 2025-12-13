@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/09 19:05:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 01:08:31 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ import { authService }		from './services/authService.js'
 /* ====================== AXIOS VARIABLES ====================== */
 
 export const	authAxios = axios.create({
-	timeout: 1000
+	timeout: 5000
 });
 
 

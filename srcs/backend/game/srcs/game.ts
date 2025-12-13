@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/10 02:10:20 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/13 01:08:42 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ import type { FastifyInstance }	from 'fastify'
 /* ====================== AXIOS VARIABLES ====================== */
 
 export const	gameAxios = axios.create({
-	timeout: 1000
+	timeout: 5000
 });
 
 

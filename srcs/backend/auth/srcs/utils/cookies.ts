@@ -1,30 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   throwErrors.ts                                     :+:      :+:    :+:   */
+/*   cookies.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/03 18:47:53 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/13 00:25:13 by mreynaud         ###   ########.fr       */
+/*   Created: 2025/12/12 23:23:05 by mreynaud          #+#    #+#             */
+/*   Updated: 2025/12/12 23:25:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// FILE TO DEFINE ALL THROW ERRORS FOR TWOFA SERVICE
 
+/* ====================== FUNCTIONS ====================== */
 
-/* ====================== CLASSES ====================== */
-
-export class	RequestEmptyError extends Error {
-	constructor(message: string) {
-		super(message);
-		this.name = "RequestEmptyError";
-	}
-}
-
-export class	WrongCodeError extends Error {
-	constructor(message: string) {
-		super(message);
-		this.name = "WrongCodeError";
-	}
+export function	getCookies(cookie: string | undefined): Record<string, string> {
+	return Object.fromEntries(
+		(cookie || "")
+		.split("; ")
+		.map(c => c.split("="))
+		.filter(([k, v]) => k && v)
+	);
 }
