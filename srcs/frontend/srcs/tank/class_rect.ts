@@ -39,7 +39,7 @@ export class	Rect2D {
 	}
 
 	draw(ctx : CanvasRenderingContext2D, color: Color): void {
-		ctx.fillStyle = `#${((color.r << 16) | (color.g << 8) | color.b).toString(16).padStart(6,'0')}`; // HUH
+		ctx.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
 		ctx.fillRect(this.x, this.y, this.w, this.h);
 	}
 

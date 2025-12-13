@@ -52,7 +52,7 @@ export class	Map {
 		}
 	}
 		drawBackground(ctx: CanvasRenderingContext2D): void {
-		ctx.fillStyle = '#000000ff';
+		ctx.fillStyle = 'rgb(0,0,0)';
 		ctx.fillRect(0, 0, this.map_width, this.map_height);
 	}
 
@@ -247,7 +247,6 @@ export class	Map {
 	}
 
 	generate_default(): void {
-		// this.walls.push(new Wall(0, 0, this.map_width, this.map_height, {r:0,g:0,b:255}));
 		this.walls.push(new Wall(this.map_width / 5, this.map_height / 5, this.map_width / 7, this.map_height / 7, {r:0,g:0,b:255}));     // CUBE TOP LEFT
 		this.walls.push(new Wall(this.map_width / 1.5, this.map_height / 5, this.map_width / 7, this.map_height / 7, {r:0,g:0,b:255}));   // CUBE TOP RIGHT
 		this.walls.push(new Wall(this.map_width / 5, this.map_height / 1.5, this.map_width / 7, this.map_height / 7, {r:0,g:0,b:255}));   // CUBE BOT LEFT

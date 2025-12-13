@@ -294,7 +294,7 @@ export class	Collectible extends Ball {
 	}
 	draw(ctx: CanvasRenderingContext2D): void {
 		ctx.beginPath();
-		ctx.fillStyle = `#${((this.color.r << 16) | (this.color.g << 8) | this.color.b).toString(16).padStart(6,'0')}`; // HUH
+		ctx.fillStyle = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`;
         ctx.strokeStyle = '#0000FF';
 		ctx.arc(this.x + this.w/2, this.y + this.h/2, this.w/2, 0, Math.PI * 2);
 		ctx.fill();

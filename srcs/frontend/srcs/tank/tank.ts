@@ -48,8 +48,6 @@ export class	TankGame extends Game {
   	private player2Name: string = "Player 2";
 	private lastCollectibleSpawn: number = 0;
 
-
-		// gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user, mode, difficulty, star1, star2, star3); 
 	constructor(
 		private canvasId: string, 
 		private map_name: string,
@@ -69,18 +67,19 @@ export class	TankGame extends Game {
 		if (!this.canvas) this.quitGame();
 		this.ctx = this.canvas.getContext('2d');
 		if (!this.ctx) this.quitGame();
-		this.input = new Input();
-		this.input.start();
 		this.map = new Map(this.canvas.width, this.canvas.height, 2, this.map_name);
+		if (!this.map) this.quitGame();
+		this.input.start();
 
-		const	state: AppState = appStore.getState();
-		const	user: UserState = state.user;
+		const state: AppState = appStore.getState();
+		if (!state) this.quitGame();
+		const user: UserState = state.user;
         this.player1Name = user.username ? user.username : "Player 1";
         this.player2Name = "Player 2";
     	this.lastCollectibleSpawn = Date.now();
-		GSTATE.REDRAW = true;
 		GSTATE.CANVAS = this.canvas;
 		GSTATE.CTX = this.ctx;
+		GSTATE.REDRAW = true;
 		this.reset_state();
 		this.updateNameDisplay();
 		this.setup_tanks();
@@ -93,65 +92,50 @@ export class	TankGame extends Game {
 	{
 		if (!this.map) return;
 		GSTATE.TANKS = 0;
-		let tank_width:number = 40;
-		let tank_height:number = 40;
-
+		const tankWidth:number = 40;
+		const tankHeight:number = 40;
+		const colorBody:Color = {r:50,g:200,b:30}
+		const p1colorFire:Color = {r:0,g:255,b:255};
+		const p2colorFire:Color = {r:255,g:0,b:255};
+		const p1Keys:Keys = {up:'w', down:'s', left:'a', right:'d', rot_left:'b', rot_right:'n', fire:'b', ability:'n'};
+		const p2Keys:Keys = {up:'arrowup', down:'arrowdown', left:'arrowleft', right:'arrowright', rot_left:'2', rot_right:'3', fire:'1', ability:'2'};
 		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'davinco')
 		{
-			let s1 = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
-			let s2 = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];
+			const s1 = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
+			const s2 = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];
 
 			switch (this.p1Class)
 			{
 				case "uzi":
-					GSTATE.ACTORS.push(new Uzi(s1!.x, s1!.y, tank_width, tank_height,
-					{r:50,g:200,b:30}, {r:0,g:255,b:255},
-					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:'b',ability:'n'}, 0));
+					GSTATE.ACTORS.push(new Uzi(s1!.x, s1!.y, tankWidth, tankHeight, colorBody, p1colorFire, p1Keys, 0));
 					break;
 				case "sniper":
-					GSTATE.ACTORS.push(new Sniper(s1!.x, s1!.y, tank_width, tank_height,
-					{r:50,g:200,b:30}, {r:0,g:255,b:255},
-					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:'b',ability:'n'}, 0));
+					GSTATE.ACTORS.push(new Sniper(s1!.x, s1!.y, tankWidth, tankHeight, colorBody, p1colorFire, p1Keys, 0));
 					break;
 				case "shotgun":
-					GSTATE.ACTORS.push(new Shotgun(s1!.x, s1!.y, tank_width, tank_height,
-					{r:50,g:200,b:30}, {r:0,g:255,b:255},
-					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:'b',ability:'n'}, 0));
+					GSTATE.ACTORS.push(new Shotgun(s1!.x, s1!.y, tankWidth, tankHeight, colorBody, p1colorFire, p1Keys, 0));
 					break;
 				case "classic":
-					GSTATE.ACTORS.push(new Classic(s1!.x, s1!.y, tank_width, tank_height,
-					{r:50,g:200,b:30}, {r:0,g:255,b:255},
-					{up:'w',down:'s',left:'a',right:'d',rot_left:'b',rot_right:'n',fire:'b',ability:'n'}, 0));
+					GSTATE.ACTORS.push(new Classic(s1!.x, s1!.y, tankWidth, tankHeight, colorBody, p1colorFire, p1Keys, 0));
 					break;
 			}
 
 			switch (this.p2Class)
 			{
 				case "uzi":
-					GSTATE.ACTORS.push(new Uzi(s2!.x, s2!.y, tank_width, tank_height,
-					{r:50,g:200,b:30}, {r:255,g:0,b:255},
-					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'1',ability:'2'}, 1));
+					GSTATE.ACTORS.push(new Uzi(s2!.x, s2!.y, tankWidth, tankHeight, colorBody, p2colorFire, p2Keys, 1));
 					break;
 				case "sniper":
-					GSTATE.ACTORS.push(new Sniper(s2!.x, s2!.y, tank_width, tank_height,
-					{r:50,g:200,b:30}, {r:255,g:0,b:255},
-					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'1',ability:'2'}, 1));
+					GSTATE.ACTORS.push(new Sniper(s2!.x, s2!.y, tankWidth, tankHeight, colorBody, p2colorFire, p2Keys, 1));
 					break;
 				case "shotgun":
-					GSTATE.ACTORS.push(new Shotgun(s2!.x, s2!.y, tank_width, tank_height,
-					{r:50,g:200,b:30}, {r:255,g:0,b:255},
-					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'1',ability:'2'}, 1));
+					GSTATE.ACTORS.push(new Shotgun(s2!.x, s2!.y, tankWidth, tankHeight, colorBody, p2colorFire, p2Keys, 1));
 					break;
 				case "classic":
-					GSTATE.ACTORS.push(new Classic(s2!.x, s2!.y, tank_width, tank_height,
-					{r:50,g:200,b:30}, {r:255,g:0,b:255},
-					{up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'1',ability:'2'}, 1));
+					GSTATE.ACTORS.push(new Classic(s2!.x, s2!.y, tankWidth, tankHeight, colorBody, p2colorFire, p2Keys, 1));
 					break;
 			}
 
-			// GSTATE.ACTORS.push(new Tank(s2!.x, s2!.y, tank_width, tank_height,
-				// {r:50,g:200,b:30}, {r:255,g:0,b:255},
-				// {up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright',rot_left:'2',rot_right:'3',fire:'0',ability:'1'}, this.p2Class, 1));
 			GSTATE.TANKS += 2;
 		}
 		else { console.log("Unknown map :", this.map.name) }
@@ -217,7 +201,7 @@ export class	TankGame extends Game {
 			this.quitGame();
 		this.listen();
 		this.update();
-		this.input.update(); // CURRENT SAVED INTO PREVIOUS
+		this.input.update();
 
 		this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
 	}
@@ -235,7 +219,7 @@ export class	TankGame extends Game {
 		}
 		else if (this.isPaused && this.input.isPressed('r'))
 		{
-			if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA RESTART
+			if (GSTATE.TANKS == 1 && this.isPaused) {
 				for (let a of GSTATE.ACTORS)
 				{
 					if (a instanceof Tank || a instanceof Ball || a instanceof Collectible)
@@ -415,7 +399,6 @@ export class	TankGame extends Game {
 
 	private quitGame() {
 		this.stop();
-		// socket.emit('leave-game');
 		router.navigate('/games');
 	}
 

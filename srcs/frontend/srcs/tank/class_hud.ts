@@ -70,10 +70,10 @@ export class	Hud extends Actor {
 
 		const ratio = Math.max(0, Math.min(1, health / maxHealth));
 
-		ctx.fillStyle = "#444";
+		ctx.fillStyle = 'rgb(68, 68, 68)';
 		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth, barHeight);
 
-		ctx.fillStyle = "#00cc00";
+		ctx.fillStyle = 'rgb(0, 204, 0)';
 		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth * ratio, barHeight);
 
 	}
@@ -85,17 +85,17 @@ export class	Hud extends Actor {
 
 		const ratio = Math.max(0, Math.min(1, ability_last / ability_cooldown));
 
-		ctx.fillStyle = "#444";
+		ctx.fillStyle = 'rgb(68, 68, 68)';
 		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth, barHeight);
 
-		ctx.fillStyle = "#bb00ffff";
+		ctx.fillStyle = 'rgb(187, 0, 255)';
 		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth * ratio, barHeight);
 
 	}
 
 	shield_draw(ctx: CanvasRenderingContext2D): void {
 		if (!this.shield) return;
-		ctx.strokeStyle = `rgba(0, 0, 255)`;
+		ctx.strokeStyle = `rgb(0, 0, 255)`;
 		ctx.lineWidth = 4;
 		ctx.strokeRect(this.shield.x, this.shield.y, this.shield.w, this.shield.h);
 	}
