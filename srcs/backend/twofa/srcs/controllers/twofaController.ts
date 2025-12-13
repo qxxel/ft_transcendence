@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/12 20:09:41 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 01:01:16 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ async function	generateMailCode(request: FastifyRequest<{ Body: { email?: string
 
 		return reply.status(200).send(otp);
 	} catch (err: unknown) {
-		return errorsHandler(twofaFastify, reply, err);
+		return await errorsHandler(twofaFastify, reply, err);
 	}
 }
 
@@ -119,12 +119,12 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 		const	otpSecretKey: string | null = await twofaServ.getOtpSecretKeyByIdClient(payload.data.id);
 		
 		if (!otpSecretKey)
-			throw new twofaError.BadCodeError("Bad code");
+			throw new twofaError.WrongCodeError("Wrong code!");
 
 		const	isOtpValid = verifyOtp(otpSecretKey, request.body.otp);
 		
 		if (!isOtpValid)
-			throw new twofaError.BadCodeError("Bad code");
+			throw new twofaError.WrongCodeError("Wrong code!");
 		
 		if (isJwtTwofa) {
 			const	jwtRes = await twofaAxios.post("http://jwt:3000/twofa/validate", {}, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
@@ -137,7 +137,7 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 		
 		return reply.status(200).send(payload.data.id);
 	} catch (err: unknown) {
-		return errorsHandler(twofaFastify, reply, err);
+		return await errorsHandler(twofaFastify, reply, err);
 	}
 }
 
@@ -150,7 +150,7 @@ async function	deleteCodeOtp(request: FastifyRequest, reply: FastifyReply): Prom
 		
 		return reply.status(204).send({ result: "deleted." });
 	} catch (err: unknown) {
-		return errorsHandler(twofaFastify, reply, err);
+		return await errorsHandler(twofaFastify, reply, err);
 	}
 }
 

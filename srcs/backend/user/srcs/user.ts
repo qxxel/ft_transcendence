@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/09 14:21:08 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 01:09:16 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ import { userStatsRepository }		from "./repositories/userStatsRepository.js"
 /* ====================== AXIOS VARIABLES ====================== */
 
 export const	userAxios = axios.create({
-	timeout: 1000
+	timeout: 5000
 });
 
 

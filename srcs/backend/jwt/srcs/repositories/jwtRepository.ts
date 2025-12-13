@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:30 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 21:19:57 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 22:24:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ export class	jwtRepository {
 	async cleanup(): Promise<void> {
 		const	query: string = "DELETE FROM jwt WHERE expires_at <= datetime('now')";
 
-		this.db.run(query, function(err: unknown) {
+		this.db.run(query, (err: unknown) => {
 				if (err)
 					console.error(err);
 			}
@@ -99,7 +99,7 @@ export class	jwtRepository {
 			const	query: string = "DELETE FROM jwt WHERE token = ?";
 			const	elements: string[] = [token];
 
-			this.db.run(query, elements, function(err: unknown) {
+			this.db.run(query, elements, (err: unknown) => {
 				if (err)
 					return reject(err);
 
@@ -113,7 +113,7 @@ export class	jwtRepository {
 			const	query: string = "DELETE FROM jwt WHERE idclient = ?";
 			const	elements: number[] = [token];
 
-			this.db.run(query, elements, function(err: unknown) {
+			this.db.run(query, elements, (err: unknown) => {
 				if (err)
 					return reject(err);
 

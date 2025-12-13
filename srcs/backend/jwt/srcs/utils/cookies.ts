@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:06:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 19:55:47 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 23:27:48 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 
 import { expAccess, expRefresh, expTwofa }	from "../jwt.js"
 
-import type { FastifyRequest, FastifyReply }	from "fastify"
+import type { FastifyReply }	from "fastify"
 
 
-/* ====================== IMPORT ====================== */
+/* ====================== FUNCTIONS ====================== */
 
 // hostOnly ???
 export function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string): void {
@@ -56,9 +56,9 @@ export function	removeCookies(reply: FastifyReply, key: string, path: string): v
 }
 
 
-export function	getCookies(request: FastifyRequest): Record<string, string> {
+export function	getCookies(cookie: string | undefined): Record<string, string> {
 	return Object.fromEntries(
-		(request.headers.cookie || "")
+		(cookie || "")
 		.split("; ")
 		.map(c => c.split("="))
 		.filter(([k, v]) => k && v)

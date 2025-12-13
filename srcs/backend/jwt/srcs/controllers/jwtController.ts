@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 21:30:16 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 00:30:19 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ import type { userDto }											from "../dtos/userDto.js"
 
 async function	getPayloadTokenAccess(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	cookies: Record<string, string> = getCookies(request);
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
 		if (!cookies.jwtAccess)
-			throw new jwtError.MissingTokenError("Token access missing !");
+			throw new jwtError.MissingTokenError("Token access missing!");
 
 		const	{ payload } = await jose.jwtVerify(cookies.jwtAccess, jwtSecret);
 
@@ -45,9 +45,9 @@ async function	getPayloadTokenAccess(request: FastifyRequest, reply: FastifyRepl
 
 async function	getPayloadTokenTwofa(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	cookies: Record<string, string> = getCookies(request);
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
 		if (!cookies.jwtTwofa)
-			throw new jwtError.MissingTokenError("Token twofa missing !");
+			throw new jwtError.MissingTokenError("Token twofa missing!");
 
 		const	{ payload } = await jose.jwtVerify(cookies.jwtTwofa, jwtSecret);
 
@@ -66,7 +66,7 @@ async function	createdToken(request: FastifyRequest, reply: FastifyReply): Promi
 		const	user: userDto = request.body as userDto;
 
 		if (!user || !user.id)
-			throw new jwtError.MissingIdError("Id of the user is missing !")
+			throw new jwtError.MissingIdError("Id of the user is missing!")
 
 		if (user.is2faEnable) {
 			await addTwofaJWT(reply, user);
@@ -94,7 +94,7 @@ async function	createdTokenTwofa(request: FastifyRequest, reply: FastifyReply): 
 		const	user: userDto = request.body as userDto;
 
 		if (!user || !user.id)
-			throw new jwtError.MissingIdError("Id of the user is missing !")
+			throw new jwtError.MissingIdError("Id of the user is missing!")
 
 		await addTwofaJWT(reply, user);
 			
@@ -107,16 +107,16 @@ async function	createdTokenTwofa(request: FastifyRequest, reply: FastifyReply): 
 
 async function	validateTwofaCreatedToken(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	cookies: Record<string, string> = getCookies(request);
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
 		if (!cookies.jwtTwofa)
-			throw new jwtError.MissingTokenError("Token twofa missing !");
+			throw new jwtError.MissingTokenError("Token twofa missing!");
 
 		const	{ payload } = await jose.jwtVerify(cookies.jwtTwofa, jwtSecret);
 
 		const	user: userDto = payload as any as userDto;
 
 		if (!user || !user.id)
-			throw new jwtError.MissingIdError("Id of the user is missing !");
+			throw new jwtError.MissingIdError("Id of the user is missing!");
 
 		removeCookies(reply, "jwtTwofa", "/api");
 
@@ -134,22 +134,22 @@ async function	validateTwofaCreatedToken(request: FastifyRequest, reply: Fastify
 
 async function	recreatedToken(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	cookies: Record<string, string> = getCookies(request);
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
 		if (!cookies.jwtAccess)
-			throw new jwtError.MissingTokenError("Token access missing !");
+			throw new jwtError.MissingTokenError("Token access missing!");
 
 		const	{ payload } = await jose.jwtVerify(cookies.jwtAccess, jwtSecret);
 
 		const	oldUser: userDto = payload as any as userDto;
 		
 		if (!oldUser || !oldUser.id)
-			throw new jwtError.MissingIdError("Id of the user is missing !");
+			throw new jwtError.MissingIdError("Id of the user is missing!");
 
 		const	resUser: AxiosResponse = await jwtAxios.get(`http://user:3000/me`, { headers: { 'user-id': oldUser.id } });
 		const	newUser: userDto = resUser.data as userDto;
 
 		if (!newUser || !newUser.id)
-			throw new jwtError.MissingIdError("Id of the user is missing !");
+			throw new jwtError.MissingIdError("Id of the user is missing!");
 
 		const	refreshToken: string = await addJWT(reply, newUser);
 
@@ -163,16 +163,16 @@ async function	recreatedToken(request: FastifyRequest, reply: FastifyReply): Pro
 
 async function	recreatedTokenTwofa(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	cookies:  Record<string, string> = getCookies(request);
+		const	cookies:  Record<string, string> = getCookies(request.headers.cookie);
 		if (!cookies.jwtTwofa)
-			throw new jwtError.MissingTokenError("Token twofa missing !");
+			throw new jwtError.MissingTokenError("Token twofa missing!");
 
 		const	{ payload } = await jose.jwtVerify(cookies.jwtTwofa, jwtSecret);
 		
 		const	user: userDto = payload as any as userDto;
 
 		if (!user || !user.id)
-			throw new jwtError.MissingIdError("Id of the user is missing !")
+			throw new jwtError.MissingIdError("Id of the user is missing!")
 
 		await addTwofaJWT(reply, user);
 		
@@ -185,9 +185,9 @@ async function	recreatedTokenTwofa(request: FastifyRequest, reply: FastifyReply)
 
 async function	refreshTokenAccess(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	cookies: Record<string, string> = getCookies(request);
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
 		if (!cookies.jwtRefresh)
-			throw new jwtError.MissingTokenError("Token refresh missing !");
+			throw new jwtError.MissingTokenError("Token refresh missing!");
 		
 		
 		const	{ payload } = await jose.jwtVerify(cookies.jwtRefresh, jwtSecret);
@@ -198,7 +198,7 @@ async function	refreshTokenAccess(request: FastifyRequest, reply: FastifyReply):
 		const	user: userDto = payload as any as userDto;
 
 		if (!user || !user.id)
-			throw new jwtError.MissingIdError("Id of the user is missing !");
+			throw new jwtError.MissingIdError("Id of the user is missing!");
 
 		const	jwtAccess: string = await jwtGenerate(user, expAccess);
 		setCookiesAccessToken(reply, jwtAccess);
@@ -211,9 +211,9 @@ async function	refreshTokenAccess(request: FastifyRequest, reply: FastifyReply):
 
 async function	refreshTokenRefresh(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	cookies: Record<string, string> = getCookies(request);
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
 		if (!cookies.jwtRefresh)
-			throw new jwtError.MissingTokenError("Token refresh missing !");
+			throw new jwtError.MissingTokenError("Token refresh missing!");
 		
 		const	{ payload } = await jose.jwtVerify(cookies.jwtRefresh, jwtSecret);
 
@@ -223,7 +223,7 @@ async function	refreshTokenRefresh(request: FastifyRequest, reply: FastifyReply)
 		const	user: userDto = payload as any as userDto;
 
 		if (!user || !user.id)
-			throw new jwtError.MissingIdError("Id of the user is missing !");
+			throw new jwtError.MissingIdError("Id of the user is missing!");
 
 		const	refreshToken: string = await addJWT(reply, user);
 		await jwtServ.addToken(refreshToken, user.id);
@@ -236,9 +236,9 @@ async function	refreshTokenRefresh(request: FastifyRequest, reply: FastifyReply)
 
 async function	deleteSessionToken(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	cookies: Record<string, string> = getCookies(request);
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
 		if (!cookies)
-			throw new jwtError.MissingTokenError("Token missing !");
+			throw new jwtError.MissingTokenError("Token missing!");
 		
 		let	payload;
 		if (cookies.jwtAccess)
@@ -250,7 +250,7 @@ async function	deleteSessionToken(request: FastifyRequest, reply: FastifyReply):
 			if (await jwtServ.isValidToken(cookies.jwtRefresh))
 				throw new jwtError.UnauthorizedTokenError("invalid token");
 		} else
-			throw new jwtError.MissingTokenError("Token missing !");
+			throw new jwtError.MissingTokenError("Token missing!");
 
 		removeJWT(reply);
 
@@ -268,7 +268,7 @@ async function	deleteSessionToken(request: FastifyRequest, reply: FastifyReply):
 
 async function	deleteUserToken(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	cookies: Record<string, string> = getCookies(request);
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
 
 		let	payload;
 		if (cookies.jwtAccess)
@@ -276,10 +276,10 @@ async function	deleteUserToken(request: FastifyRequest, reply: FastifyReply): Pr
 		else if (cookies.jwtTwofa)
 			({ payload } = await jose.jwtVerify(cookies.jwtTwofa, jwtSecret));
 		else
-			throw new jwtError.MissingTokenError("Token missing !");
+			throw new jwtError.MissingTokenError("Token missing!");
 
 		if (!payload || !payload.id)
-			throw new jwtError.MissingIdError("Id of the user is missing !");
+			throw new jwtError.MissingIdError("Id of the user is missing!");
 
 		removeJWT(reply);
 

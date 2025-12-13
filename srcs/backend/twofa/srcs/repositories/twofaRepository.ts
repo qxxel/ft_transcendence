@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 20:10:02 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 22:25:22 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ export class	twofaRepository {
 			const	query: string = "INSERT INTO twofa (id_client, otpSecretKey) VALUES(?, ?)";
 			const	elements: [number, string] = [id, otpSecretKey];
 
-			this.db.run(query, elements, function (err: unknown) {
+			this.db.run(query, elements, (err: unknown) => {
 				if (err)
 					return reject(err);
 
@@ -85,7 +85,7 @@ export class	twofaRepository {
 			const	query: string = "DELETE FROM twofa WHERE id_client = ?";
 			const	elements: number[] = [id];
 
-			this.db.run(query, elements, function(err: unknown) {
+			this.db.run(query, elements, (err: unknown) => {
 				if (err)
 					return reject(err);
 

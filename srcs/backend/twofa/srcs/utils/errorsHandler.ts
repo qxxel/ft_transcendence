@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/12 04:12:19 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 01:02:05 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,16 @@ import type { FastifyInstance, FastifyReply } from "fastify"
 
 /* ====================== FUNCTION ====================== */
 
+async function sleep(ms: number): Promise<void> {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function	logError(twofaFastify: FastifyInstance, err: string): void {
 	twofaFastify.log.error(err);
 	console.error(err);
 }
 
-export function	errorsHandler(twofaFastify: FastifyInstance, reply: FastifyReply, err: unknown): FastifyReply {
+export async function	errorsHandler(twofaFastify: FastifyInstance, reply: FastifyReply, err: unknown): Promise<FastifyReply> {
 	if (axios.isAxiosError(err)) {
 		if (err.response?.data?.error) {
 			logError(twofaFastify, err.response.data.error);
@@ -37,7 +41,8 @@ export function	errorsHandler(twofaFastify: FastifyInstance, reply: FastifyReply
 	} else if (err instanceof twofaError.RequestEmptyError) {
 		logError(twofaFastify, err.message);
 		return reply.code(400).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof twofaError.BadCodeError) {
+	} else if (err instanceof twofaError.WrongCodeError) {
+		await sleep(1000);
 		logError(twofaFastify, err.message);
 		return reply.code(400).send({ errorType: err.name, error: err.message });
 	} else if (err instanceof Error) {
