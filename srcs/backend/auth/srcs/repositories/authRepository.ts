@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 12:20:21 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/12 22:23:57 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ export class	authRepository {
 			const	query: string = "INSERT INTO auth (id_client, password) VALUES(?, ?)";
 			const	elements: [number, string] = [id, password];
 
-			this.db.run(query, elements, function (err: unknown) {
+			this.db.run(query, elements, (err: unknown) => {
 				if (err)
 					return reject(err);
 
@@ -63,14 +63,17 @@ export class	authRepository {
 		});
 	}
 
-	async getPasswordByIdClient(id: number): Promise<string>{
+	async getPasswordByIdClient(id: number): Promise<string | null>{
 		return new Promise((resolve, reject) => {
 			const	query: string = "SELECT password FROM auth WHERE id_client = ?";
 			const	elements: number[] = [id];
 
-			this.db.get(query, elements, (err: unknown, row: { password: string }) => {
+			this.db.get(query, elements, (err: unknown, row: any) => {
 				if (err)
 					return reject(err);
+
+				if(!row || typeof row.password !== "string")
+					return reject(null);
 
 				return resolve(row.password);
 			});
@@ -81,25 +84,27 @@ export class	authRepository {
 		return new Promise((resolve, reject) => {
 			const	query: string = "SELECT id_client FROM auth WHERE expires_at IS NOT NULL";
 
-			this.db.all( query, (err: unknown, rows: { id_client: number }[]) => {
+			this.db.all( query, (err: unknown, rows: any[]) => {
 				if (err)
 					return reject(err);
-				resolve(rows.map(r => r.id_client));
+
+				const	ids: number[] = rows
+					.map(r => Number(r.id_client))
+					.filter((id: number) => !isNaN(id));
+				resolve(ids);
 			});
 		});
 	}
 	
-	async getExpiresByIdClient(id: number): Promise<number | undefined | null>{
+	async getExpiresByIdClient(id: number): Promise<number | null>{
 		return new Promise((resolve, reject) => {
 			const	query: string = "SELECT expires_at FROM auth WHERE id_client = ?";
 			const	elements: number[] = [id];
 
-			this.db.get(query, elements, (err: unknown, row: { expires_at: string } | undefined) => {
+			this.db.get(query, elements, (err: unknown, row: any) => {
 				if (err)
 					return reject(err);
-				if (!row)
-					return resolve(undefined);
-				if (row.expires_at === null)
+				if(!row || typeof row.expires_at !== "string")
 					return resolve(null);
 				return resolve((new Date(row.expires_at)).getTime());
 			});
@@ -117,7 +122,7 @@ export class	authRepository {
 				query = "UPDATE auth SET expires_at = ? WHERE id_client = ?";
 				elements = [expires_at, userId];
 			}
-			this.db.run(query, elements, (err: unknown, row: unknown) => {
+			this.db.run(query, elements, (err: unknown) => {
 				if (err)
 					return reject(err);
 
@@ -131,7 +136,7 @@ export class	authRepository {
 			const	query: string = "DELETE FROM auth WHERE id_client = ?";
 			const	elements: number[] = [id];
 
-			this.db.run(query, elements, function(err: unknown) {
+			this.db.run(query, elements, (err: unknown) => {
 				if (err)
 					return reject(err);
 

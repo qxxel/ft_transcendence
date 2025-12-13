@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/08 23:37:22 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 00:09:24 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@ export async function	errorsHandler(authFastify: FastifyInstance, reply: Fastify
 		return reply.code(418).send({ errorType: err.name, error: err.message });
 	} else if (err instanceof authError.WrongCredentialsError) {
 		await sleep(1000);
+		logError(authFastify, err.message);
+		return reply.code(418).send({ errorType: err.name, error: err.message });
+	} else if (err instanceof authError.InvalidSyntaxError) {
+		logError(authFastify, err.message);
+		return reply.code(418).send({ errorType: err.name, error: err.message });
+	} else if (err instanceof authError.MissingIdError) {
 		logError(authFastify, err.message);
 		return reply.code(418).send({ errorType: err.name, error: err.message });
 	} else if (err instanceof Error) {
