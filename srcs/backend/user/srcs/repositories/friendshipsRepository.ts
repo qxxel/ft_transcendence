@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 23:28:08 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 00:26:46 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ export class	friendshipsRepository {
 						RETURNING *;`;
 					const	insertElements: number[] = friendship.getTable();
 				
-					this.db.get(insertQuery, insertelements, (err: Error | null, row: any) => {
+					this.db.get(insertQuery, insertElements, (err: Error | null, row: any) => {
 						if (err) 
 						{
 							this.db.run("ROLLBACK");
