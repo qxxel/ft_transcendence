@@ -116,9 +116,10 @@
 
         <p id="confirm-setting-msg-error" class="msg-error"></p>
 
-        <button type="submit" id="verify-email-submit" class="auth-link-button">Verify</button>
-
+        <div class="button-row">
+            <button type="button" onclick="onClickCancel()" id="button-cancel" class="cancel-button-form">Cancel</button>
+            <button type="submit" id="verify-email-submit" class="verify-button-form">Verify</button>
+        </div>
     </form>
 
-    <button type="button" onclick="onClickCancel()" id="button-cancel" class="auth-link-button">Cancel</button>
 </div>
