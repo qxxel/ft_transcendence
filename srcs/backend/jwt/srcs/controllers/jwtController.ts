@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 00:30:19 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 00:31:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ async function	refreshTokenAccess(request: FastifyRequest, reply: FastifyReply):
 		
 		const	{ payload } = await jose.jwtVerify(cookies.jwtRefresh, jwtSecret);
 
-		if (await jwtServ.isValidToken(cookies.jwtRefresh))
+		if (!(await jwtServ.isValidToken(cookies.jwtRefresh)))
 			throw new jwtError.UnauthorizedTokenError("invalid token");
 		
 		const	user: userDto = payload as any as userDto;
