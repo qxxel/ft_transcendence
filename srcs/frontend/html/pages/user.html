@@ -94,11 +94,8 @@
 </div>
 
 <div id="confirm-setting" class="game-container" hidden>
-    <h1>Check your email</h1>
-
     <form id="confirm-setting-form">
-
-        <p>Open your email and enter the code.</p>
+        <h1>Verify your identity</h1>
 
         <div class="form-group">
             <label for="sign-up-password">Password:</label>
@@ -108,17 +105,20 @@
                 title="Password must contain at least 8 characters, including uppercase, lowercase, number and special character."
             >  <!-- /!\ add special charactere -->
         </div>
+        
         <div class="form-group">
             <label for="sign-up-password" class="twofa" hidden>Verification Code:</label>
             <input type="text" id="digit-code" class="twofa" name="digit-code" maxlength="4" placeholder="Enter 4 digit code" pattern="^[0-9]{4}$" hidden>
+            
+            <p>Open your email and enter the code.</p>
+            <p>The verification code is valid until : <span id="date-with-offset"></span></p>
         </div>
 
-        <p>The verification code is valid until : <span id="date-with-offset"></span></p>
         <p id="confirm-setting-msg-error" class="msg-error"></p>
 
         <button type="submit" id="verify-email-submit" class="auth-link-button">Verify</button>
-        
-        <button type="button" onclick="onClickCancel()" id="button-retour" class="auth-link-button">retour</button>
 
     </form>
+
+    <button type="button" onclick="onClickCancel()" id="button-retour" class="auth-link-button">retour</button>
 </div>
