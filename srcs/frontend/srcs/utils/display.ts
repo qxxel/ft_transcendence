@@ -3,27 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   display.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/09 17:25:32 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 05:58:47 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-export async function displayError(response: Response, idMsgError: string) {
+export async function displayError(response: Response | string, idMsgError: string) {
 	const	p = document.getElementById(idMsgError);
 	if (!p) {
 		console.error("No HTMLElement named \`msg-error\`.");
-		console.error(response.statusText);
 	} else {
 		try {
-			const	result = await response.json();
-			p.textContent = result?.error || "An unexpected error has occurred";
+			if (typeof response === "string")
+				p.textContent = response;
+			else {
+				const	result = await response.json();
+				p.textContent = result?.error || "An unexpected error has occurred";
+			}
+			return;
 		} catch (error) {
 			console.error(error);
-			console.error(response.statusText);
 		}
 	}
+	if (typeof response === "string")
+		console.error(response);
+	else
+		console.error(response.statusText);
 }
 
 export async function displayPopError(response: Response | string | undefined) {

@@ -233,6 +233,28 @@ button:disabled {
     box-shadow: 0 0 10px #ff0;
 }
 
+.btn-yellow-create-bracket {
+    background-color: #FFFF00;
+    color: #000;
+    font-family: 'monospace', sans-serif;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-decoration: none;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.btn-yellow-create-bracket:hover {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 0 10px #fff;
+}
+
 .btn-green {
     background-color: #00FF00;
     color: #000;
@@ -370,6 +392,36 @@ button:disabled {
     min-width: 350px;
     max-width: 1000px;
     margin: 0 auto;
+}
+
+.tournament-menu-content {
+    text-align: center;
+}
+
+.tournament-setup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    margin: 20px 0;
+  }
+.player-name-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+  background: #333;
+  color: #fff;
+  font-family: 'monospace', sans-serif;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.menu-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
 /* ==========================================================================

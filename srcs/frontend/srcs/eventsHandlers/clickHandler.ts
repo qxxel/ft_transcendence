@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 00:44:56 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/13 06:08:13 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -433,6 +433,10 @@ function	onStartTournament() {
 		return;
 	}
 
+	if (new Set(playerNames).size !== playerNames.length) {
+        displayError("Player names must be unique.", "tournament-msg-error");
+        return;
+    }
 	const scoreInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
 	if (!scoreInput) return;
 	const winningScore = parseInt(scoreInput.value, 10);

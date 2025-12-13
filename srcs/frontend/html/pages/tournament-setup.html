@@ -25,34 +25,8 @@
     <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
     <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
   </div>
-  <button id="start-tournament-btn" class="btn-yellow" onclick="onStartTournament()">Create Bracket</button>
+  <p id="tournament-msg-error" class="msg-error"></p>
+  <div class="tournament-menu-content">
+    <button id="start-tournament-btn" class="btn-yellow-create-bracket" onclick="onStartTournament()">Create Bracket</button>
+  </div>
 </div>
-
-<style>
-  .tournament-setup-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 10px;
-    margin: 20px 0;
-  }
-  .player-name-input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #aaa;
-    background: #333;
-    color: #fff;
-    font-family: 'monospace', sans-serif;
-    font-size: 1em;
-    box-sizing: border-box;
-  }
-
-  /* We also need the .menu-content styles here */
-  .menu-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 20px;
-  }
-</style>
