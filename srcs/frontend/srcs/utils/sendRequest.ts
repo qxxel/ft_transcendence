@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:23:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 23:15:12 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 00:45:24 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ async function	sendMainRequest(path: string, requestMethod: string, body: any | 
 		});
 	}
 	else if (body instanceof FormData)
-    {
-        response = await fetch(path, {
+	{
+		response = await fetch(path, {
 			method: requestMethod,
 			credentials: "include",
-            body: body 
+			body: body 
 		});
-    }
+	}
 	else
 	{
 		response = await fetch(path, {

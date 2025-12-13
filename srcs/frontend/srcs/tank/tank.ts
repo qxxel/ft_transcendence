@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 01:35:15 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 00:44:53 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ export class	TankGame extends Game {
 		private map_name: string,
 		private powerupFrequency: number = 0,
 		private star1: boolean = false,
-      	private star2: boolean = false,
-      	private star3: boolean = false,
+	  	private star2: boolean = false,
+	  	private star3: boolean = false,
 		private p1Class: string = "classic",
-        private p2Class: string = "classic"
+		private p2Class: string = "classic"
 	) {
 		super();
 		(window as any).quitGame = () => this.quitGame();
@@ -74,9 +74,9 @@ export class	TankGame extends Game {
 		const state: AppState = appStore.getState();
 		if (!state) this.quitGame();
 		const user: UserState = state.user;
-        this.player1Name = user.username ? user.username : "Player 1";
-        this.player2Name = "Player 2";
-    	this.lastCollectibleSpawn = Date.now();
+		this.player1Name = user.username ? user.username : "Player 1";
+		this.player2Name = "Player 2";
+		this.lastCollectibleSpawn = Date.now();
 		GSTATE.CANVAS = this.canvas;
 		GSTATE.CTX = this.ctx;
 		GSTATE.REDRAW = true;
@@ -262,10 +262,10 @@ export class	TankGame extends Game {
 					this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
 					this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 				}
-        		this.ctx.fillStyle = 'white';
-        		this.ctx.font = '50px monospace';
-        		this.ctx.textAlign = 'center';
-        		if (GSTATE.TANKS != 1) this.ctx.fillText('PAUSED', this.canvas.width / 2, this.canvas.height / 2);
+				this.ctx.fillStyle = 'white';
+				this.ctx.font = '50px monospace';
+				this.ctx.textAlign = 'center';
+				if (GSTATE.TANKS != 1) this.ctx.fillText('PAUSED', this.canvas.width / 2, this.canvas.height / 2);
 				return ;
 			}
 		}
@@ -275,12 +275,12 @@ export class	TankGame extends Game {
 				a.update(this.input);
 			}
 			if (this.star1 || this.star2 || this.star3){
-    		  	const now = Date.now();
-    		  	if (now - this.lastCollectibleSpawn > (this.powerupFrequency * 1000)) {
+			  	const now = Date.now();
+			  	if (now - this.lastCollectibleSpawn > (this.powerupFrequency * 1000)) {
 					this.spawn_collectible();
-	    	  		this.lastCollectibleSpawn = now;
-    		  	}
-    		}
+			  		this.lastCollectibleSpawn = now;
+			  	}
+			}
 		}
 		if (!this.isPaused && GSTATE.TANKS == 1) {
 			let winner: Tank;
@@ -292,15 +292,15 @@ export class	TankGame extends Game {
   private showEndGameDashboard() {
 	this.updateNameDisplay()
 	sendRequest("/api/game", "POST", this.setHistory());
-    const dashboard = document.getElementById('game-over-dashboard');
-    if (!dashboard) return;
+	const dashboard = document.getElementById('game-over-dashboard');
+	if (!dashboard) return;
 
-    const matchDurationSeconds = Math.floor((Date.now() - this.startTime) / 1000);
-    const minutes = Math.floor(matchDurationSeconds / 60);
-    const seconds = matchDurationSeconds % 60;
+	const matchDurationSeconds = Math.floor((Date.now() - this.startTime) / 1000);
+	const minutes = Math.floor(matchDurationSeconds / 60);
+	const seconds = matchDurationSeconds % 60;
 
-    const winnerName = GSTATE.STATS1.win == 1 ? this.player1Name : this.player2Name;
-    const winnerDisplay = document.getElementById('winner-display');
+	const winnerName = GSTATE.STATS1.win == 1 ? this.player1Name : this.player2Name;
+	const winnerDisplay = document.getElementById('winner-display');
 
 	if (winnerDisplay) winnerDisplay.innerText = `${winnerName} Wins!`;
 
@@ -323,21 +323,21 @@ export class	TankGame extends Game {
 	e = document.getElementById('stat-p2-hit'); 		if (e) e.innerText = `${GSTATE.STATS2.hit}`;
 	e = document.getElementById('stat-p2-bounce'); 		if (e) e.innerText = `${GSTATE.STATS2.bounce}`;
 
-    e = document.getElementById('restart-msg');			if (e) e.innerText = "Press 'R' to Restart or 'Esc' to Quit";
+	e = document.getElementById('restart-msg');			if (e) e.innerText = "Press 'R' to Restart or 'Esc' to Quit";
 
-    dashboard.style.display = 'block';
+	dashboard.style.display = 'block';
   }
 
 	private hideEndGameDashboard() {
 		const dashboard = document.getElementById('game-over-dashboard');
-    	if (dashboard) dashboard.style.display = 'none';
+		if (dashboard) dashboard.style.display = 'none';
 	}
 
 	private updateNameDisplay() {
-    	const p1Span = document.getElementById('p1-name');
-    	const p2Span = document.getElementById('p2-name');
-    	if (p1Span) p1Span.innerText = this.player1Name + "";
-    	if (p2Span) p2Span.innerText = this.player2Name + "";
+		const p1Span = document.getElementById('p1-name');
+		const p2Span = document.getElementById('p2-name');
+		if (p1Span) p1Span.innerText = this.player1Name + "";
+		if (p2Span) p2Span.innerText = this.player2Name + "";
   	}
 
 	private generateLegend(): void {

@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/11 01:26:52 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 00:43:22 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,27 +81,27 @@ export class	Map {
 		}
 
 			this.spawns_tank1.push({x:cell*1 - 24, y:cell*5 - 24});
-        	this.spawns_tank1.push({x:cell*5 - 24, y:cell*1 - 24});
-        	this.spawns_tank2.push({x:cell*9 - 24, y:cell*5 - 24});
-        	this.spawns_tank2.push({x:cell*5 - 24, y:cell*9 - 24});
+			this.spawns_tank1.push({x:cell*5 - 24, y:cell*1 - 24});
+			this.spawns_tank2.push({x:cell*9 - 24, y:cell*5 - 24});
+			this.spawns_tank2.push({x:cell*5 - 24, y:cell*9 - 24});
 
-        	const offset = 16/2;
+			const offset = 16/2;
 
-        	this.spawns_collectible.push({x:cell*2.5 - offset, y: cell*1.0 - offset}); 
-        	this.spawns_collectible.push({x:cell*7.5 - offset, y: cell*1.0 - offset}); 
+			this.spawns_collectible.push({x:cell*2.5 - offset, y: cell*1.0 - offset}); 
+			this.spawns_collectible.push({x:cell*7.5 - offset, y: cell*1.0 - offset}); 
 		
-        	this.spawns_collectible.push({x:cell*2.5 - offset, y: cell*9.0 - offset}); 
-        	this.spawns_collectible.push({x:cell*7.5 - offset, y: cell*9.0 - offset}); 
+			this.spawns_collectible.push({x:cell*2.5 - offset, y: cell*9.0 - offset}); 
+			this.spawns_collectible.push({x:cell*7.5 - offset, y: cell*9.0 - offset}); 
 
-        	this.spawns_collectible.push({x:cell*1.0 - offset, y: cell*3.0 - offset}); 
-        	this.spawns_collectible.push({x:cell*1.0 - offset, y: cell*7.0 - offset}); 
-        	this.spawns_collectible.push({x:cell*9.0 - offset, y: cell*3.0 - offset}); 
-        	this.spawns_collectible.push({x:cell*9.0 - offset, y: cell*7.0 - offset}); 
+			this.spawns_collectible.push({x:cell*1.0 - offset, y: cell*3.0 - offset}); 
+			this.spawns_collectible.push({x:cell*1.0 - offset, y: cell*7.0 - offset}); 
+			this.spawns_collectible.push({x:cell*9.0 - offset, y: cell*3.0 - offset}); 
+			this.spawns_collectible.push({x:cell*9.0 - offset, y: cell*7.0 - offset}); 
 
-        	this.spawns_collectible.push({x:cell*3.5 - offset, y: cell*3.5 - offset});
-        	this.spawns_collectible.push({x:cell*6.5 - offset, y: cell*3.5 - offset});
-        	this.spawns_collectible.push({x:cell*3.5 - offset, y: cell*6.5 - offset});
-        	this.spawns_collectible.push({x:cell*6.5 - offset, y: cell*6.5 - offset});
+			this.spawns_collectible.push({x:cell*3.5 - offset, y: cell*3.5 - offset});
+			this.spawns_collectible.push({x:cell*6.5 - offset, y: cell*3.5 - offset});
+			this.spawns_collectible.push({x:cell*3.5 - offset, y: cell*6.5 - offset});
+			this.spawns_collectible.push({x:cell*6.5 - offset, y: cell*6.5 - offset});
 
 	}
 
@@ -129,9 +129,9 @@ export class	Map {
 
 		
 		// RIGHT TOP
-        this.walls.push(new Wall(cell*87, cell*12, cell  , cell * 15  ,   c_blk1)); 
-        this.walls.push(new Wall(cell*87, cell*30, cell  , cell * 2   ,   c_blk1)); 
-        this.walls.push(new Wall(cell*87, cell*35, cell  , cell * 21  ,   c_blk1));
+		this.walls.push(new Wall(cell*87, cell*12, cell  , cell * 15  ,   c_blk1)); 
+		this.walls.push(new Wall(cell*87, cell*30, cell  , cell * 2   ,   c_blk1)); 
+		this.walls.push(new Wall(cell*87, cell*35, cell  , cell * 21  ,   c_blk1));
 
 
 		this.walls.push(new Wall(cell*87, cell*70, cell  , cell * 17  ,   c_blk1)); // RIGHT BOT
@@ -147,19 +147,19 @@ export class	Map {
 
 
 		// HORIZONTAL
-        this.walls.push(new Wall(cell*12, cell*40, cell * 6   , cell  ,   c_blk1));
-        this.walls.push(new Wall(cell*20, cell*40, cell * 2   , cell  ,   c_blk1));
-        this.walls.push(new Wall(cell*24, cell*40, cell * 2   , cell  ,   c_blk1));
-        this.walls.push(new Wall(cell*28, cell*40, cell * 4   , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell*12, cell*40, cell * 6   , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell*20, cell*40, cell * 2   , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell*24, cell*40, cell * 2   , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell*28, cell*40, cell * 4   , cell  ,   c_blk1));
 
-        this.walls.push(new Wall(cell * 3, cell*65, cell   , cell  ,   c_blk1));
-        this.walls.push(new Wall(cell * 8, cell*65, cell   , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell * 3, cell*65, cell   , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell * 8, cell*65, cell   , cell  ,   c_blk1));
 
-        this.walls.push(new Wall(cell*46, cell*40, cell * 12  , cell  ,   c_blk1));  // MID MID
+		this.walls.push(new Wall(cell*46, cell*40, cell * 12  , cell  ,   c_blk1));  // MID MID
 
-        // MID RIGHT
-        this.walls.push(new Wall(cell*72, cell*40, cell * 6   , cell  ,   c_blk1));
-        this.walls.push(new Wall(cell*81, cell*40, cell * 6   , cell  ,   c_blk1));
+		// MID RIGHT
+		this.walls.push(new Wall(cell*72, cell*40, cell * 6   , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell*81, cell*40, cell * 6   , cell  ,   c_blk1));
 
 		// VERTICAL
 		this.walls.push(new Wall(cell*50, cell*40, cell  , cell * 20  ,   c_blk1)); // MID 
@@ -176,9 +176,9 @@ export class	Map {
 
 		// FURNITURES
 
-        this.walls.push(new Wall(cell*22, cell*50, cell * 5 , cell * 12 ,   c_blk1)); // ROOM BOT LEFT 
-        this.walls.push(new Wall(cell*36, cell*64, cell * 5 , cell * 12 ,   c_blk1)); // ROOM BOT LEFT 
-        this.walls.push(new Wall(cell*22, cell*19.5, cell * 10 , cell * 4 ,   c_blk1)); // ROOM TOP LEFT 
+		this.walls.push(new Wall(cell*22, cell*50, cell * 5 , cell * 12 ,   c_blk1)); // ROOM BOT LEFT 
+		this.walls.push(new Wall(cell*36, cell*64, cell * 5 , cell * 12 ,   c_blk1)); // ROOM BOT LEFT 
+		this.walls.push(new Wall(cell*22, cell*19.5, cell * 10 , cell * 4 ,   c_blk1)); // ROOM TOP LEFT 
 		
 
 
@@ -188,28 +188,28 @@ export class	Map {
 
 			this.spawns_tank1.push({x:cell*25, y:cell*25});
 			this.spawns_tank1.push({x:cell*70, y:cell*15});
-        	this.spawns_tank2.push({x:cell*75, y:cell*70});
-        	this.spawns_tank2.push({x:cell*30, y:cell*90});
+			this.spawns_tank2.push({x:cell*75, y:cell*70});
+			this.spawns_tank2.push({x:cell*30, y:cell*90});
 
-        	const offset = 16/2;
+			const offset = 16/2;
 
-        	this.spawns_collectible.push({x:cell*27 - offset, y: cell*15 - offset}); 
-        	this.spawns_collectible.push({x:cell*20 - offset, y: cell*35 - offset}); 
+			this.spawns_collectible.push({x:cell*27 - offset, y: cell*15 - offset}); 
+			this.spawns_collectible.push({x:cell*20 - offset, y: cell*35 - offset}); 
 
-        	this.spawns_collectible.push({x:cell*80 - offset, y: cell*20 - offset}); 
-        	this.spawns_collectible.push({x:cell*75 - offset, y: cell*30 - offset}); 
+			this.spawns_collectible.push({x:cell*80 - offset, y: cell*20 - offset}); 
+			this.spawns_collectible.push({x:cell*75 - offset, y: cell*30 - offset}); 
 
-        	this.spawns_collectible.push({x:cell*35 - offset, y: cell*45 - offset});
-        	this.spawns_collectible.push({x:cell*65 - offset, y: cell*45 - offset});
+			this.spawns_collectible.push({x:cell*35 - offset, y: cell*45 - offset});
+			this.spawns_collectible.push({x:cell*65 - offset, y: cell*45 - offset});
 
-        	this.spawns_collectible.push({x:cell*16 - offset, y: cell*60 - offset}); 
-        	this.spawns_collectible.push({x:cell*30 - offset, y: cell*80 - offset}); 
+			this.spawns_collectible.push({x:cell*16 - offset, y: cell*60 - offset}); 
+			this.spawns_collectible.push({x:cell*30 - offset, y: cell*80 - offset}); 
 
-        	this.spawns_collectible.push({x:cell*80 - offset, y: cell*60 - offset}); 
-        	this.spawns_collectible.push({x:cell*75 - offset, y: cell*80 - offset}); 
+			this.spawns_collectible.push({x:cell*80 - offset, y: cell*60 - offset}); 
+			this.spawns_collectible.push({x:cell*75 - offset, y: cell*80 - offset}); 
 
-        	this.spawns_collectible.push({x:cell*55 - offset, y: cell*25 - offset});
-        	this.spawns_collectible.push({x:cell*55 - offset, y: cell*75 - offset});
+			this.spawns_collectible.push({x:cell*55 - offset, y: cell*25 - offset});
+			this.spawns_collectible.push({x:cell*55 - offset, y: cell*75 - offset});
 
 	}
 

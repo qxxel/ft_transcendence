@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   addRoutes.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:00:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 17:37:56 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 00:42:14 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ export function	addRoutes(): void {
 	});
 
 	router.addRoute("/tournament-setup", async () => {
-        return await loadHtml("pages/tournament-setup.html");
-    });
+		return await loadHtml("pages/tournament-setup.html");
+	});
 
-    router.addRoute("/tournament-bracket", async () => {
-        return await loadHtml("pages/tournament-bracket.html");
-    });
+	router.addRoute("/tournament-bracket", async () => {
+		return await loadHtml("pages/tournament-bracket.html");
+	});
 
 	router.addRoute('/tank', async () => {
 		const	html: string = await loadHtml("pages/tank.html");

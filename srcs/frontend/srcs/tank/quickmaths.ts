@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quickmaths.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:36:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:37:06 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 00:44:47 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,5 @@
 /* ============================= FUNCTION ============================= */
 
 export function deg2rad(degrees: number):number {
-    return degrees * (Math.PI/180);
+	return degrees * (Math.PI/180);
 }

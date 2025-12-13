@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/14 00:17:31 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 00:41:35 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ export class PongGame extends Game {
 		this.isGameOver = false;
 		this.serverState = null;
 		const dashboard = document.getElementById('game-over-dashboard');
-        if (!dashboard) return;
+		if (!dashboard) return;
 		dashboard.style.display = "none";
 
 		socket.on('game-update', (newState: PongState) => {

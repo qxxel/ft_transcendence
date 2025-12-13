@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:24:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 03:23:12 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 00:42:55 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,22 +227,22 @@ export class	Collectible extends Ball {
 		super(x,y,w,h,0,0, {r:50,g:170,b:40});
 
 		switch (this.type) {
-        	case 'heal':
-        		this.color = {r:50,g:170,b:40};
+			case 'heal':
+				this.color = {r:50,g:170,b:40};
 				break;
 			case 'tank_speed':
-        		this.color = {r:255,g:255,b:0};
-        	    break;
+				this.color = {r:255,g:255,b:0};
+				break;
 			case 'ball_speed':
-        		this.color = {r:0,g:255,b:255};
-        	    break;
+				this.color = {r:0,g:255,b:255};
+				break;
 			case 'haste':
-        		this.color = {r:239,g:19,b:19};
-        	    break;
+				this.color = {r:239,g:19,b:19};
+				break;
 			case 'cdr':
-        		this.color = {r:247,g:0,b:255};
+				this.color = {r:247,g:0,b:255};
 			break;
-    	}
+		}
 		this.rect = new Rect2D(this.x, this.y, this.w, this.h);
 	}
 
@@ -299,7 +299,7 @@ export class	Collectible extends Ball {
 	draw(ctx: CanvasRenderingContext2D): void {
 		ctx.beginPath();
 		ctx.fillStyle = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`;
-        ctx.strokeStyle = 'rgb(0,0,255)';
+		ctx.strokeStyle = 'rgb(0,0,255)';
 		ctx.lineWidth = 4;
 		ctx.arc(this.x + this.w/2, this.y + this.h/2, this.w/2, 0, Math.PI * 2);
 		ctx.fill();

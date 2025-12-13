@@ -3,190 +3,190 @@
 /* ************************************************************************** */
 
 .friends-page-container {
-    position: relative;
-    background-color: rgba(0, 0, 0, 0.7);
-    border: 2px solid #fff;
-    border-radius: 12px;
-    box-shadow: 0 0 15px #fff;
-    padding: 20px; 
-    width: 100%;
-    max-width: 900px;
+	position: relative;
+	background-color: rgba(0, 0, 0, 0.7);
+	border: 2px solid #fff;
+	border-radius: 12px;
+	box-shadow: 0 0 15px #fff;
+	padding: 20px; 
+	width: 100%;
+	max-width: 900px;
 }
 
 .friends-page-container h1 {
-    padding-top: 20px;
-    margin-top: 20px;
+	padding-top: 20px;
+	margin-top: 20px;
 }
 
 .friends-page-container h2 {
-    text-align: center;
-    text-transform: uppercase;
-    color: #FFFF00;
-    text-shadow: 0 0 10px #FFFF00;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+	text-align: center;
+	text-transform: uppercase;
+	color: #FFFF00;
+	text-shadow: 0 0 10px #FFFF00;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
 }
 
 .add-friend-module {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 30px;
-    padding: 15px;
+	display: flex;
+	justify-content: center;
+	gap: 15px;
+	margin-bottom: 30px;
+	padding: 15px;
 }
 
 #username-add-input {
-    width: 63%;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #aaa;
-    background: #333;
-    color: #fff;
-    font-family: 'monospace', sans-serif;
-    font-size: 1em;
-    box-sizing: border-box;
+	width: 63%;
+	padding: 10px;
+	border-radius: 6px;
+	border: 1px solid #aaa;
+	background: #333;
+	color: #fff;
+	font-family: 'monospace', sans-serif;
+	font-size: 1em;
+	box-sizing: border-box;
 }
 
 #add-friend-button {
-    font-size: 15px;
-    padding: 12px 12px;
-    margin-top: 0px;
+	font-size: 15px;
+	padding: 12px 12px;
+	margin-top: 0px;
 }
 
 .neon-button {
-    background: transparent;
-    border: 1px solid #FF0;
-    color: #FF0;
-    padding: 8px 15px;
-    text-transform: uppercase;
-    cursor: pointer;
-    font-weight: bold;
-    box-shadow: 0 0 5px #FF0;
-    transition: all 0.2s;
+	background: transparent;
+	border: 1px solid #FF0;
+	color: #FF0;
+	padding: 8px 15px;
+	text-transform: uppercase;
+	cursor: pointer;
+	font-weight: bold;
+	box-shadow: 0 0 5px #FF0;
+	transition: all 0.2s;
 }
 
 .neon-button:hover {
-    color: black;
-    background: #FF0;
-    box-shadow: 0 0 10px #FF0, 0 0 20px #FF0;
+	color: black;
+	background: #FF0;
+	box-shadow: 0 0 10px #FF0, 0 0 20px #FF0;
 }
 
 .accept-button {
-    border-color: #0F0;
-    color: #0F0;
-    box-shadow: 0 0 5px #0F0;
+	border-color: #0F0;
+	color: #0F0;
+	box-shadow: 0 0 5px #0F0;
 }
 
 .accept-button:hover {
-    color: black;
-    background: #0F0;
-    box-shadow: 0 0 10px #0F0, 0 0 20px #0F0;
+	color: black;
+	background: #0F0;
+	box-shadow: 0 0 10px #0F0, 0 0 20px #0F0;
 }
 
 .ignore-button {
-    border-color: #F00;
-    color: #F00;
-    box-shadow: 0 0 5px #F00;
+	border-color: #F00;
+	color: #F00;
+	box-shadow: 0 0 5px #F00;
 }
 
 .ignore-button:hover {
-    color: black;
-    background: #F00;
-    box-shadow: 0 0 10px #F00, 0 0 20px #F00;
+	color: black;
+	background: #F00;
+	box-shadow: 0 0 10px #F00, 0 0 20px #F00;
 }
 
 .friends-list, .requests-list {
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 .friend-entry {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 0;
 }
 
 .friend-entry:last-child {
-    border-bottom: none;
+	border-bottom: none;
 }
 
 .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-right: 15px;
-    background: gray;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	margin-right: 15px;
+	background: gray;
 }
 
 .online .status-dot {
-    background: #0F0;
-    box-shadow: 0 0 5px #0F0;
+	background: #0F0;
+	box-shadow: 0 0 5px #0F0;
 }
 
 .playing .status-dot {
-    background: #FF0;
-    box-shadow: 0 0 5px #FF0;
+	background: #FF0;
+	box-shadow: 0 0 5px #FF0;
 }
 
 .username {
-    flex-basis: 66%;
-    font-weight: bold;
+	flex-basis: 66%;
+	font-weight: bold;
 }
 
 .empty-message {
-    flex-basis: 100%;
-    font-weight: bold;
+	flex-basis: 100%;
+	font-weight: bold;
 }
 
 .error-message {
-    flex-basis: 100%;
-    font-weight: bold;
+	flex-basis: 100%;
+	font-weight: bold;
 }
 
 .status-text {
-    flex-grow: 1;
-    color: rgba(255, 255, 255, 0.7);
-    font-style: italic;
+	flex-grow: 1;
+	color: rgba(255, 255, 255, 0.7);
+	font-style: italic;
 }
 
 .playing-status {
-    color: #FF0;
+	color: #FF0;
 }
 
 .actions {
-    display: flex;
-    gap: 10px;
+	display: flex;
+	gap: 10px;
 }
 
 .remove-button {
-    background: transparent;
-    border: none;
-    color: rgba(255, 255, 255, 0.5);
-    cursor: pointer;
-    font-size: 18px;
-    transition: color 0.2s;
+	background: transparent;
+	border: none;
+	color: rgba(255, 255, 255, 0.5);
+	cursor: pointer;
+	font-size: 18px;
+	transition: color 0.2s;
 }
 
 .remove-button:hover {
-    color: #F00;
-    text-shadow: 0 0 5px #F00;
+	color: #F00;
+	text-shadow: 0 0 5px #F00;
 }
 
 .history-button {
-    width: 100%;
-    padding: 5px 10px;
-    font-size: 14px;
-    border-color: #666;
-    color: #666;
-    box-shadow: 0 0 5px #666;
+	width: 100%;
+	padding: 5px 10px;
+	font-size: 14px;
+	border-color: #666;
+	color: #666;
+	box-shadow: 0 0 5px #666;
 }
 
 .history-button:hover {
-    color: black;
-    background: #666;
-    box-shadow: 0 0 10px #666, 0 0 20px #666;
+	color: black;
+	background: #666;
+	box-shadow: 0 0 10px #666, 0 0 20px #666;
 }
 
 .pending-request .username {
-    color: #FFF;
+	color: #FFF;
 }
