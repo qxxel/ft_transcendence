@@ -514,6 +514,13 @@ input[type=range]::-moz-range-thumb {
     margin: 0 auto;
 }
 
+.auth-link:hover {
+  border-color: #fff;
+  color: #fff;
+  background-color: #ffffff1a;
+}
+
+
 .auth-link-button {
     background-color: #FFFF00;
     color: #000;
@@ -529,7 +536,48 @@ input[type=range]::-moz-range-thumb {
     transition: all 0.2s ease;
     display: block;
     width: fit-content;
-    margin: 0 auto;
+    margin: auto auto;
+}
+
+/* .auth-link-button:hover {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 0 10px #fff;
+} */
+
+.tttttttttttttttttttttt {
+    background-color: #FFFF00;
+    color: #000;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'monospace', sans-serif;
+    font-size: 1em;
+}
+
+.tttttttttttttttttttttt:hover {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 0 10px #fff;
+}
+
+.eeeeeeeeeeeeeeee {
+    background: transparent;
+    border: 1px solid #777;
+    color: #ccc;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'monospace', sans-serif;
+    font-size: 1em;
+}
+
+.eeeeeeeeeeeeeeee:hover {
+    border-color: #fff;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 #btnSend2faCode {
