@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 00:29:14 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 03:52:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,20 +92,20 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 			const	userRes: AxiosResponse = await authAxios.get(`http://user:3000/lookup/${identifier}`);
 			user = userRes.data;
 		} catch (error) {
-			throw new authError.WrongCredentialsError("Wrong password or username.");
+			throw new authError.WrongCredentialsError("Wrong password or username!");
 		}
 
-		if (!user || user.id)
-			throw new authError.WrongCredentialsError("Wrong password or username.");
+		if (!user || !user.id)
+			throw new authError.WrongCredentialsError("Wrong password or username!");
 
 		const expires_at: number | null = await authServ.getExpiresByIdClient(user.id);
 		if (expires_at !== null)
-			throw new authError.WrongCredentialsError("Wrong password or username.");
+			throw new authError.WrongCredentialsError("Wrong password or username!");
 		
 		const	pwdHash: string | null = await authServ.getPasswordByIdClient(user.id);
 
 		if (!pwdHash || !await argon2.verify(pwdHash, password))
-			throw new authError.WrongCredentialsError("Wrong password or username.");
+			throw new authError.WrongCredentialsError("Wrong password or username!");
 
 		const	jwtRes: AxiosResponse = await authAxios.post('http://jwt:3000', user, { withCredentials: true } );
 		
