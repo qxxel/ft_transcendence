@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 05:19:34 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/13 00:44:56 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,15 +287,16 @@ function hideDifficultyMenu() {
 
 function switchGameMode(mode: 'default' | 'featured') {
 	const defDiv = document.getElementById('default-mode-content');
+	const inputDiv = document.getElementById('default-mode-content-input');
 	const featDiv = document.getElementById('featured-mode-content');
-
-	if (!defDiv || !featDiv) return;
 
 	if (mode === 'default') {
 		defDiv?.classList.remove('hidden');
+		inputDiv?.classList.remove('hidden');
 		featDiv?.classList.add('hidden');
 	} else {
 		defDiv?.classList.add('hidden');
+		inputDiv?.classList.add('hidden');
 		featDiv?.classList.remove('hidden');
 	}
 }
@@ -482,22 +483,21 @@ function startTournamentMatch(matchId: string, p1: string, p2: string) {
 
 function onClickStartFeatured(mode: 'ai' | 'pvp') {
 	const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
-	const aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
-	const pointsInput = document.getElementById("featuredMaxPoints") as HTMLInputElement;
 	
-	const star1 = (document.getElementById("chk-1star") as HTMLInputElement).checked;
-	const star2 = (document.getElementById("chk-2star") as HTMLInputElement).checked;
-	const star3 = (document.getElementById("chk-3star") as HTMLInputElement).checked;
+	const star1 = (document.getElementById("chk-1star") as HTMLInputElement)?.checked;
+	const star2 = (document.getElementById("chk-2star") as HTMLInputElement)?.checked;
+	const star3 = (document.getElementById("chk-3star") as HTMLInputElement)?.checked;
 
-	if (!freqInput || !aiInput || !pointsInput || star1 === null || star2 === null || star3 === null) return;
+	if (!freqInput || star1 === null || star2 === null || star3 === null) return;
 
 	const	state: AppState = appStore.getState();
 	const	user: UserState | null = state.user;
-	const	currentGame: Game | null = state.game.currentGame;
-	const	currentTournament: TournamentController | null = state.game.currentTournament;
 
 	if (router.Path === '/pongmenu')
 	{
+		const aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
+		const pointsInput = document.getElementById("featuredMaxPoints") as HTMLInputElement;
+		if (!aiInput || !pointsInput) return;
 		const	winningScore = parseInt(pointsInput.value, 10);
 
 		const	aiVal = parseInt(aiInput.value);
