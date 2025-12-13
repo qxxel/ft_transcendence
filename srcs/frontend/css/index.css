@@ -47,13 +47,6 @@ p {
     display: none !important;
 }
 
-div#div-errors {
-    height: 100%;
-    width: 20%;
-    position: fixed;
-    padding: 10px;
-}
-
 .darken {
     filter: grayscale(100%);
     cursor: wait;
@@ -64,28 +57,45 @@ div#div-errors {
     pointer-events: none;
 }
 
+div#div-errors {
+    height: 100%;
+    width: 25%;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 0;
+    z-index: 1000;
+}
+
 div.error {
-    max-height: 20%;
+    background-color: #000000;
+    border: 2px solid #ff3333;
+    box-shadow: 0 0 10px #ff3333, inset 0 0 5px #ff3333;
+    
+    font-family: 'Courier New', Courier, monospace;
+    color: #ff3333;
+    font-weight: bold;
+    text-transform: uppercase;
+    
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+    
     display: flex;
     align-items: center;
     cursor: pointer;
-    border-radius: 12px;
-    padding: 10px;
-    margin-top: 10px;
-    background-color: rgba(255, 69, 69, 0.774);
 }
 
 div.error > p {
-    max-height: 100%;
     margin: 0;
-    color: black;
+    font-size: 14px;
+    text-shadow: 0 0 2px #ff3333;
 }
 
 div.error > span {
-    vertical-align: middle;
     margin-left: auto;
-    text-align: left;
-    color: black;
+    font-weight: bold;
+    color: #fff;
 }
 
 p.msg-error {
