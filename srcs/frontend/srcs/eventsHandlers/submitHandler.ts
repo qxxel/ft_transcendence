@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:08:52 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:18:40 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,7 +314,6 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		user: {
 			...state.user,
 			username: newUsername,
-			isAuth: new2fa
 		}
 	}));
 
