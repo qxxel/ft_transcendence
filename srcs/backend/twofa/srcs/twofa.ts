@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   twofa.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:21 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:59:40 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORTS ====================== */
 
 import axios				from 'axios'
-import cors					from '@fastify/cors'
 import Fastify				from 'fastify'
-import formBody				from '@fastify/formbody'
 import sqlite3Pkg			from 'sqlite3'
-import { twofaController }	from './controllers/twofaController.js'
+import cors					from '@fastify/cors'
+import formBody				from '@fastify/formbody'
 import { twofaService }		from "./services/twofaService.js"
+import { twofaController }	from "./controllers/twofaController.js"
 import { twofaRepository }	from "./repositories/twofaRepository.js"
 
 import type { FastifyInstance }	from 'fastify'

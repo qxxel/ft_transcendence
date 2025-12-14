@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorsHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/12 21:39:57 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:59:17 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 /* ====================== IMPORTS ====================== */
 
 import * as jose		from 'jose'
-import * as jwtError	from "./throwErrors.js"
 import axios			from 'axios'
+import * as jwtError	from "./throwErrors.js"
 
-import type { FastifyInstance, FastifyReply } from "fastify"
+import type { FastifyInstance, FastifyReply } from 'fastify'
 
 
 /* ====================== FUNCTION ====================== */

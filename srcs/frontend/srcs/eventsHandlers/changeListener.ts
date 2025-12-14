@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 21:46:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:07:29 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { appStore } from "../objects/store";
+import { appStore } 			from "../objects/store";
 import { sendRequest }			from "../utils/sendRequest"
-import { setDynamicFavicon }	from "../utils/setDynamicFavicon"
 
 
 /* ====================== FUNCTIONS ====================== */

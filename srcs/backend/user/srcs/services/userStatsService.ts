@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:23:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 01:55:32 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:04:57 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { userStatsRespDto }			from "../dtos/userStatsRespDto.js"
 import { userStatsPongUpdateDto }	from "../dtos/userStatsUpdateDto.js"
 import { userStatsTankUpdateDto }	from "../dtos/userStatsUpdateDto.js"
 import { userStatsRepository }		from "../repositories/userStatsRepository.js"
-import { userStatsRespDto }			from "../dtos/userStatsRespDto.js"
 
 import { GameNotFoundError, NotExistError }	from "../utils/throwErrors.js"
 

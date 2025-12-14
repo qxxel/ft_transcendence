@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:32:29 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:13:46 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { Actor }				from "./class_actor.js"
+import { GSTATE }					from "./global.js"
+import { Hud }						from "./class_hud.js"
+import { Rect2D }					from "./class_rect.js"
 import { Ball, Collectible, Pearl }	from "./class_ball.js"
-import { Cannon }				from "./class_cannon.js"
-import { GSTATE }				from "./global.js"
-import { Hud }					from "./class_hud.js"
-import { Rect2D }				from "./class_rect.js"
-import { Input } 				from "./class_input.js";
+import { Input } 					from "./class_input.js"
+import { Actor }					from "./class_actor.js"
+import { Cannon }					from "./class_cannon.js"
 
 import type { Color, Keys }	from "./interface.js"
 

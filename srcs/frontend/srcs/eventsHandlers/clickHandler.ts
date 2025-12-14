@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:08:10 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { AppState, appStore, UserState }	from "../objects/store.js"
-import { GameOptions }						from "../Pong/objects/gameOptions.js"
-import { getMenu }							from "../utils/getMenu.js"
-import { initHistoryListeners } 			from "../history/getAndRenderHistory.js"
+import { router }							from "../index.js"
 import { PongGame }							from "../Pong/pong.js"
 import { TankGame } 						from "../tank/tank.js"
-import { TournamentController } 			from "../Pong/tournament.js"
-import { router }							from "../index.js"
-import { sendRequest }						from "../utils/sendRequest.js"
 import { socket }							from "../socket/socket.js"
+import { getMenu }							from "../utils/getMenu.js"
+import { AppState, appStore, UserState }	from "../objects/store.js"
 import { displayError, displayPopError }	from "../utils/display.js"
 import { loadTwofa }						from "../router/loadPage.js"
+import { TournamentController } 			from "../Pong/tournament.js"
+import { sendRequest }						from "../utils/sendRequest.js"
+import { GameOptions }						from "../Pong/objects/gameOptions.js"
+import { initHistoryListeners } 			from "../history/getAndRenderHistory.js"
 
 import { Game }	from "../Pong/gameClass.js"
 

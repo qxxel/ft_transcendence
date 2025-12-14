@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:11:07 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { router }				from "../index.js"
+import { loadTwofa, loadUser }	from "./loadPage.js"
+import { PongGame }				from "../Pong/pong.js"
 import { appStore }				from "../objects/store.js"
 import { Game }					from "../Pong/gameClass.js"
-import { getAndRenderFriends }  from  "../friends/getAndRenderFriends.js"
-import { PongGame }				from "../Pong/pong.js"
-import { router }				from "../index.js"
 import { TournamentController }	from "../Pong/tournament.js"
-import { loadTwofa, loadUser }	from "./loadPage.js"
+import { getAndRenderFriends } 	from  "../friends/getAndRenderFriends.js"
 
-import type { AppState, UserState }	from "../objects/store.js"
-import { attachAvatarUploadListener } from "../eventsHandlers/changeListener.js"
+import type { AppState, UserState }		from "../objects/store.js"
+import { attachAvatarUploadListener }	from "../eventsHandlers/changeListener.js"
 
 
 /* ====================== FUNCTION ====================== */

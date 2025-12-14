@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayAuthController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/10 02:01:16 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:39:50 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { gatewayAxios }			from '../api-gateway.js'
+import { gatewayAxios }			from "../api-gateway.js"
 import { requestErrorsHandler }	from "../utils/requestErrors.js"
 
 import type { AxiosResponse }									from 'axios'

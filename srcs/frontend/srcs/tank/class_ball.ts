@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:24:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:12:30 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { Actor }	from "./class_actor.js"
-import { GSTATE }	from "./global.js"
-import { Rect2D }	from "./class_rect.js"
-import { Tank, Classic, Uzi, Sniper, Shotgun }		from "./class_tank.js"
-import { Input }	from "./class_input.js"
-import { Wall }			from "./class_wall.js"
+import { GSTATE }									from "./global.js"
+import { Wall }										from "./class_wall.js"
+import { Rect2D }									from "./class_rect.js"
+import { Sniper, Shotgun }							from "./class_tank.js"
+import { Tank, Classic, Uzi }						from "./class_tank.js"
+import { Actor }									from "./class_actor.js"
+import { Input }									from "./class_input.js"
+
 import type { Color }	from "./interface.js"
 
 

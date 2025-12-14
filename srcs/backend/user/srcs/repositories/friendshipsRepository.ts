@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:03:31 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 
 import { friendshipsAddDto }		from "../dtos/friendshipsAddDto.js"
 import { friendshipsRespDto }		from "../dtos/friendshipsRespDto.js"
-import { friendshipsTableBuilder }	from "../tableBuilders/friendshipsTableBuilder.js"
 import { friendshipsUpdateDto }		from "../dtos/friendshipsUpdateDto.js"
+import { friendshipsTableBuilder }	from "../tableBuilders/friendshipsTableBuilder.js"
 
 import type { Database }	from 'sqlite3'
 import type { FriendUser }	from "../objects/friendUser.js"

@@ -6,16 +6,16 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:10:39 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORTS ====================== */
 
-import { btnCooldown }					from "../utils/buttonCooldown.js"
+import { router }						from "../index.js"
 import { displayDate, displayPopError }	from "../utils/display.js"
 import { sendRequest }					from "../utils/sendRequest.js"
-import { router }						from "../index.js"
+import { btnCooldown }					from "../utils/buttonCooldown.js"
 
 /* ====================== FUNCTION ====================== */
 

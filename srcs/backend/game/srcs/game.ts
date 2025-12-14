@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 01:47:27 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:54:33 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,18 @@
 
 /* ====================== IMPORTS ====================== */
 
-import axios, { type AxiosResponse }				from 'axios'
-import cors					from '@fastify/cors'
+import axios				from 'axios'
 import Fastify				from 'fastify'
-import formBody				from '@fastify/formbody'
-import { Server }			from 'socket.io'
 import sqlite3Pkg			from 'sqlite3'
+import { Server }			from 'socket.io'
+import cors					from '@fastify/cors'
+import formBody				from '@fastify/formbody'
 import { gamesController }	from "./controllers/gamesController.js"
 import { GamesService }		from "./services/gamesService.js"
 import { gamesRepository }	from "./repositories/gamesRepository.js"
 import { setupPongSocket }	from "./socket/pongSocket.js"
 
+import type { AxiosResponse }	from 'axios'
 import type { FastifyInstance }	from 'fastify'
 
 

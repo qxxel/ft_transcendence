@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsAddDto.ts                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:48:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:59:00 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 04:17:01 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 /* ====================== IMPORT ====================== */
 
-import { SelfFriendRequestError }	from "../utils/throwErrors.js";
+import { SelfFriendRequestError }	from "../utils/throwErrors.js"
 
 
 /* ====================== CLASS ====================== */

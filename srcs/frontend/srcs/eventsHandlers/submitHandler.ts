@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:08:52 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { verifyEmail }						from "../utils/verifyEmail.js"
-import { appStore }							from "../objects/store.js"
-import { displayError, displayPopError }	from "../utils/display.js"
-import { getAndRenderFriends }				from "../friends/getAndRenderFriends.js"
-import { getMenu }							from "../utils/getMenu.js"
 import { router }							from "../index.js"
 import { socket }							from "../socket/socket.js"
+import { getMenu }							from "../utils/getMenu.js"
+import { appStore }							from "../objects/store.js"
+import { displayError, displayPopError }	from "../utils/display.js"
 import { sendRequest }						from "../utils/sendRequest.js"
+import { verifyEmail }						from "../utils/verifyEmail.js"
+import { getAndRenderFriends }				from "../friends/getAndRenderFriends.js"
 
 
 

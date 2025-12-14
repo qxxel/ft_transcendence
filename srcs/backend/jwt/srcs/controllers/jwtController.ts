@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:47:41 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:58:49 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 /* ====================== IMPORTS ====================== */
 
 import * as jose												from 'jose'
-import { getCookies, setCookiesAccessToken, removeCookies }		from "../utils/cookies.js"
-import { jwtGenerate, addJWT, addTwofaJWT, removeJWT }			from "../utils/jwtManagement.js"
 import { jwtServ, jwtSecret, expAccess, jwtAxios, jwtFastify }	from "../jwt.js"
+import { getCookies, setCookiesAccessToken, removeCookies }		from "../utils/cookies.js"
 import * as jwtError											from "../utils/throwErrors.js"
+import { jwtGenerate, addJWT, addTwofaJWT, removeJWT }			from "../utils/jwtManagement.js"
 import { errorsHandler }										from "../utils/errorsHandler.js"
 
-import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 import type { AxiosResponse }									from 'axios'
+import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 import type { userDto }											from "../dtos/userDto.js"
 
 

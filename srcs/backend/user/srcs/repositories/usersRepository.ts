@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:20:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 01:55:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:16:09 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { NotExistError }		from "../utils/throwErrors.js";
 import { usersAddDto }			from "../dtos/usersAddDto.js"
+import { NotExistError }		from "../utils/throwErrors.js"
 import { usersRespDto }			from "../dtos/usersRespDto.js"
 import { usersTableBuilder }	from "../tableBuilders/usersTableBuilder.js"
 

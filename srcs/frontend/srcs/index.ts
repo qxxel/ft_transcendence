@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   index.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 02:29:26 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 04:07:20 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,13 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { addRoutes }			from "./router/addRoutes.js"
-import { appStore }				from "./objects/store.js"
-import { initFaviconSync }		from "./store/initFaviconSync.js"
+import { addTabs }	            from "./utils/tabs.js"
 import { Router }				from "./router/router.js"
-import { setupClickHandlers }	from "./eventsHandlers/clickHandler.js"
+import { addRoutes }			from "./router/addRoutes.js"
+import { initFaviconSync }		from "./store/initFaviconSync.js"
 import { setupLoadHandler }		from "./eventsHandlers/loadHandler.js"
+import { setupClickHandlers }	from "./eventsHandlers/clickHandler.js"
 import { setupSubmitHandler }	from "./eventsHandlers/submitHandler.js"
-import { addTabs }	from "./utils/tabs.js"
 
 
 

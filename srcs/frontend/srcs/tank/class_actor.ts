@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:22:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:42:50 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:16:01 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { GSTATE } from "./global.js";
-import { Rect2D } from "./class_rect.js";
-import { Input } from "./class_input.js";
+import { GSTATE } from "./global.js"
+import { Rect2D } from "./class_rect.js"
+import { Input } from "./class_input.js"
 
 /* ============================= CLASS ============================= */
 

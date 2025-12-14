@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:40:27 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:08:29 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { AppState, appStore }	from "../objects/store.js"
-import { getMenu }				from "../utils/getMenu.js"
 import { router }				from "../index.js"
+import { delTabs }				from "../utils/tabs.js"
+import { appStore }				from "../objects/store.js"
+import { getMenu }				from "../utils/getMenu.js"
 import { sendRequest }			from "../utils/sendRequest.js"
 import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
-import { delTabs }				from "../utils/tabs.js"
 
 
 /* ====================== FUNCTIONS ====================== */

@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:56:11 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,18 @@
 
 import argon2								from 'argon2'
 import { authAxios, authServ, authFastify }	from "../auth.js"
-import { errorsHandler }					from "../utils/errorsHandler.js"
-import { isValidPassword }					from "../utils/validation.js"
-import { getCookies }						from "../utils/cookies.js"
 import { isLoggedIn }						from "../utils/isLog.js"
+import { getCookies }						from "../utils/cookies.js"
+import { isValidPassword }					from "../utils/validation.js"
 import * as authError						from "../utils/throwErrors.js"
+import { errorsHandler }					from "../utils/errorsHandler.js"
 
-import type	{ AxiosResponse }												from 'axios'
-import type { FastifyInstance, FastifyRequest, FastifyReply }				from 'fastify'
-import type { validationResult }											from "../utils/validation.js"
-import type { SignUpBody, SignInBody, user, updateUserBody, usersRespDto }	from "../dtos/interface.js"
+import type	{ AxiosResponse }								from 'axios'
+import type { FastifyInstance, FastifyRequest }				from 'fastify'
+import type { FastifyReply }								from 'fastify'
+import type { SignUpBody, SignInBody, user }				from "../dtos/interface.js"
+import type { updateUserBody, usersRespDto }				from "../dtos/interface.js"
+import type { validationResult }							from "../utils/validation.js"
 
 
 /* ====================== FUNCTIONS ====================== */

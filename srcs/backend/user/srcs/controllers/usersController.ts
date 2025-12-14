@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:02:59 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { errorsHandler }	from "../utils/errorsHandler.js"
-import { extractUserId }	from "../utils/extractHeaders.js"
-import { usersUpdateDto }	from "../dtos/usersUpdateDto.js"
-import fs					from 'fs'
-import { pipeline }			from 'stream/promises'
-import { unlink }			from 'fs/promises'
-import { usersAddDto }		from "../dtos/usersAddDto.js"
-import { usersRespDto }		from "../dtos/usersRespDto.js"
-import { userAxios, usersServ } 		from "../user.js"
+import fs									from 'fs'
+import { unlink }							from 'fs/promises'
+import { pipeline }							from 'stream/promises'
+import { userAxios, usersServ } 			from "../user.js"
+import { usersAddDto }						from "../dtos/usersAddDto.js"
+import { InvalidFileError, NoFileError }	from "../utils/throwErrors.js"
+import { usersRespDto }						from "../dtos/usersRespDto.js"
+import { errorsHandler }					from "../utils/errorsHandler.js"
+import { usersUpdateDto }					from "../dtos/usersUpdateDto.js"
+import { extractUserId }					from "../utils/extractHeaders.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
-import type { AxiosResponse } from "axios"
-import { InvalidFileError, NoFileError } from "../utils/throwErrors.js"
+import type { AxiosResponse } 									from 'axios'
 
 
 interface	userUpdate {

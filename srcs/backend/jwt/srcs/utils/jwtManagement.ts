@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtManagement.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:14:11 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 20:55:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:52:52 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 
 /* ====================== IMPORTS ====================== */
 
-import * as jose																				from 'jose'
-import { jwtSecret, expAccess, expRefresh, expTwofa }											from "../jwt.js"
-import { setCookiesAccessToken, setCookiesRefreshToken, setCookiesTwofaToken, removeCookies }	from "./cookies.js"
+import * as jose											from 'jose'
+import { jwtSecret, expAccess, expRefresh, expTwofa }		from "../jwt.js"
+import { setCookiesAccessToken, setCookiesRefreshToken }	from "./cookies.js"
+import { setCookiesTwofaToken, removeCookies }				from "./cookies.js"
 
 
 import type { FastifyReply }	from 'fastify'
-import type { userDto }	from "../dtos/userDto.js"
+import type { userDto }			from "../dtos/userDto.js"
 
 
 /* ====================== FUNCTIONS ====================== */
