@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:47:23 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,7 +314,6 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		user: {
 			...state.user,
 			username: newUsername,
-			isAuth: new2fa
 		}
 	}));
 
