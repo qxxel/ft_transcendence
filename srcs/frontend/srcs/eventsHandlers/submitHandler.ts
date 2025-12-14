@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:28:08 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 22:11:50 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,7 +296,10 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	if (!postUser.ok)
 		return displayError(postUser, "user-setting-msg-error"); // /!\ response.status
 	
-	verifyEmail("user-profile", "confirm-setting", newEmail);
+	if (resultGetUser.email != newEmail)
+		verifyEmail("user-profile", "confirm-setting", newEmail);
+	else
+		verifyEmail("user-profile", "confirm-setting", null);
 
 	const	userUpdate: userUpdate = {
 		username: newUsername,
