@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 14:30:39 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:45:30 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@
 // }
 
 export function	setDynamicFavicon(path: string | null): void {
-	const canvas: HTMLCanvasElement = document.createElement('canvas');
-	const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d');
-	const img = new Image();
+	const	canvas: HTMLCanvasElement = document.createElement('canvas');
+	const	ctx: CanvasRenderingContext2D | null = canvas.getContext('2d');
+	const	img = new Image();
 
 	img.crossOrigin = "Anonymous"; 
 

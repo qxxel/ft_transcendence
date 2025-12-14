@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authController.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 03:52:01 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		if (!user || !user.id)
 			throw new authError.WrongCredentialsError("Wrong password or username!");
 
-		const expires_at: number | null = await authServ.getExpiresByIdClient(user.id);
+		const	expires_at: number | null = await authServ.getExpiresByIdClient(user.id);
 		if (expires_at !== null)
 			throw new authError.WrongCredentialsError("Wrong password or username!");
 		
@@ -134,7 +134,7 @@ async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, 
 		if (jwtRes.headers['set-cookie'])
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
 
-		const id: number = jwtRes.data;
+		const	id: number = jwtRes.data;
 
 		if (!id)
 			throw new authError.MissingIdError("Id of the user is missing!");
@@ -162,7 +162,7 @@ async function	updateUser(request: FastifyRequest<{ Body: updateUserBody}>, repl
 		if (!cookies || !cookies.jwtAccess)
 			throw new Error("You are not connected");
 		
-		const payload: AxiosResponse = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	payload: AxiosResponse = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		
 		if (!payload.data.id)
 			throw new Error("invalide id");
@@ -252,7 +252,7 @@ async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promis
 		if (jwtRes.headers['set-cookie'])
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
 
-		const { id } = jwtRes.data;
+		const	{ id } = jwtRes.data;
 
 		await authServ.updateExpiresByIdClient(id, null);
 		await authAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': id } } );

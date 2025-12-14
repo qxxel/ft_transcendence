@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:32:29 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:43:44 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,10 @@ export class	Tank extends Actor {
 				c.draw(ctx);
 
 			if (!this.canFire()) {
-				const elapsed = Date.now() - this.fire_last;
-				const progress = Math.min(elapsed / ( this.fire_rate * this.fire_coef), 1);
-				const start = -Math.PI / 2;
-				const end = start + progress * Math.PI * 2;
+				const	elapsed = Date.now() - this.fire_last;
+				const	progress = Math.min(elapsed / ( this.fire_rate * this.fire_coef), 1);
+				const	start = -Math.PI / 2;
+				const	end = start + progress * Math.PI * 2;
 				console.log(start, end);
 				this.hud.wheel_draw(ctx,start,end);
 			}
@@ -156,7 +156,7 @@ export class	Tank extends Actor {
 
 		if (!this.canFire()) return;
 		
-		const now = Date.now();
+		const	now = Date.now();
 		let isSpawnable:boolean;
 		for (let c of this.cannon)
 		{
@@ -314,10 +314,10 @@ export class	Classic extends Tank {
 		if (this.isShield)
 			this.hud.shield_draw(ctx);
 		if (!this.canFire()) {
-			const elapsed = Date.now() - this.fire_last;
-			const progress = Math.min(elapsed / (this.fire_rate * this.fire_coef), 1);
-			const start = -Math.PI / 2;
-			const end = start + progress * Math.PI * 2;
+			const	elapsed = Date.now() - this.fire_last;
+			const	progress = Math.min(elapsed / (this.fire_rate * this.fire_coef), 1);
+			const	start = -Math.PI / 2;
+			const	end = start + progress * Math.PI * 2;
 			this.hud.wheel_draw(ctx,start,end);
 		}
 		if (!this.canAbility()) {
@@ -411,7 +411,7 @@ export class	Sniper extends Tank {
 		if (!this.canAbility()) return;
 		this.ability_cooldown = this.ability_base_cooldown * this.ability_base_cooldown_coeff;
 
-		const now = Date.now();
+		const	now = Date.now();
 		let isSpawnable:boolean;
 		for (let c of this.cannon)
 		{

@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/14 02:26:52 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ export class PongGame extends Game {
 
 		this.isGameOver = false;
 		this.serverState = null;
-		const dashboard = document.getElementById('game-over-dashboard');
+		const	dashboard = document.getElementById('game-over-dashboard');
 		if (!dashboard) return;
 		dashboard.style.display = "none";
 
@@ -320,12 +320,12 @@ export class PongGame extends Game {
 			this.scoreElements.p2.innerText = pongResume.score2.toString();
 		}
 
-		const dashboard = document.getElementById('game-over-dashboard');
+		const	dashboard = document.getElementById('game-over-dashboard');
 		if (!dashboard)
 			return;
 
-		const winnerName = pongResume.winner === 1 ? this.player1Name : this.player2Name;
-		const winnerDisplay = document.getElementById('winner-display');
+		const	winnerName = pongResume.winner === 1 ? this.player1Name : this.player2Name;
+		const	winnerDisplay = document.getElementById('winner-display');
 		if (!winnerDisplay) return;
 		winnerDisplay.innerText = `${winnerName} Wins!`;
 
@@ -359,8 +359,8 @@ export class PongGame extends Game {
 	}
 
 	private updateNameDisplay() {
-		const p1Span = document.getElementById('p1-name');
-		const p2Span = document.getElementById('p2-name');
+		const	p1Span = document.getElementById('p1-name');
+		const	p2Span = document.getElementById('p2-name');
 		if (!p1Span) return; 
 		p1Span.innerText = this.player1Name + ": ";
 		if (!p2Span) return; 
@@ -368,7 +368,7 @@ export class PongGame extends Game {
 	}
 
 	private generateLegend(activePowerUps: PowerUps) {
-		const legendContainer = document.getElementById('powerup-legend');
+		const	legendContainer = document.getElementById('powerup-legend');
 		if (!legendContainer)
 			return;
 
@@ -380,7 +380,7 @@ export class PongGame extends Game {
 		legendContainer.style.display = 'flex';
 		let html = '<div class="legend-title">Power-Ups</div>';
 
-		const createRow = (text: string, fill: string, stroke: string) => {
+		const	createRow = (text: string, fill: string, stroke: string) => {
 			return `
 			<div class="legend-item">
 					<div class="legend-bubble" style="background-color: ${fill}; border-color: ${stroke};"></div>

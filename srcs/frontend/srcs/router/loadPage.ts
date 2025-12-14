@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:25:23 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ export async function loadUser() {
 
 	const	userRes = await Response.json();
 
-	const imgElement: HTMLImageElement = document.getElementById("user-avatar") as HTMLImageElement;
-	const displayImgElement: HTMLImageElement = document.getElementById("display-user-avatar") as HTMLImageElement;
+	const	imgElement: HTMLImageElement = document.getElementById("user-avatar") as HTMLImageElement;
+	const	displayImgElement: HTMLImageElement = document.getElementById("display-user-avatar") as HTMLImageElement;
 	if (imgElement && displayImgElement)
 	{
 		if (userRes.avatar)

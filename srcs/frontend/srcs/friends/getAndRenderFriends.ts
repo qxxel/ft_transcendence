@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:40:56 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ export async function	getAndRenderFriends(): Promise<void> {
 	const	response: Response = await sendRequest('/api/user/friends/me', "get", null);
 	if (!response.ok)
 	{
-		const errorData: Object = await response.json();
+		const	errorData: Object = await response.json();
 		console.error(errorData);
 
 		displayErrors();

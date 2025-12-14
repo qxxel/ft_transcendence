@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:26:46 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:43:03 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,11 @@ export class	Hud extends Actor {
 	}
 
 	healthbar_draw(ctx: CanvasRenderingContext2D, health:number, maxHealth:number): void {
-		const barWidth = 40;
-		const barHeight = 6;
-		const offsetY = -20;
+		const	barWidth = 40;
+		const	barHeight = 6;
+		const	offsetY = -20;
 
-		const ratio = Math.max(0, Math.min(1, health / maxHealth));
+		const	ratio = Math.max(0, Math.min(1, health / maxHealth));
 
 		ctx.fillStyle = 'rgb(68, 68, 68)';
 		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth, barHeight);
@@ -79,11 +79,11 @@ export class	Hud extends Actor {
 	}
 
 	abilitybar_draw(ctx: CanvasRenderingContext2D, ability_last:number, ability_cooldown:number): void {
-		const barWidth = 40;
-		const barHeight = 6;
-		const offsetY = -10;
+		const	barWidth = 40;
+		const	barHeight = 6;
+		const	offsetY = -10;
 
-		const ratio = Math.max(0, Math.min(1, ability_last / ability_cooldown));
+		const	ratio = Math.max(0, Math.min(1, ability_last / ability_cooldown));
 
 		ctx.fillStyle = 'rgb(68, 68, 68)';
 		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth, barHeight);

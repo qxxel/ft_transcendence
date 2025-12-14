@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:24:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:42:55 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ export class	Ball extends Actor {
 	}
 
 	move(): void {
-		const future: Rect2D = new Rect2D(this.x + this.dx * this.speed, this.y + this.dy * this.speed, this.w, this.h);
+		const	future: Rect2D = new Rect2D(this.x + this.dx * this.speed, this.y + this.dy * this.speed, this.w, this.h);
 		if (this.collide(future)) {
 			if      (this.direction_impact == "vertical") this.dy = -this.dy;
 			else if (this.direction_impact == "horizontal") this.dx = -this.dx;
@@ -189,11 +189,11 @@ export class	Ball extends Actor {
 	getRect(): Rect2D { return this.rect; };
 
 	getBounce(other: Rect2D): "horizontal" | "vertical" {
-		const dx = (this.x + this.w / 2) - (other.x + other.w / 2);
-		const dy = (this.y + this.h / 2) - (other.y + other.h / 2);
+		const	dx = (this.x + this.w / 2) - (other.x + other.w / 2);
+		const	dy = (this.y + this.h / 2) - (other.y + other.h / 2);
 
-		const overlapX = (this.w / 2 + other.w / 2) - Math.abs(dx);
-		const overlapY = (this.h / 2 + other.h / 2) - Math.abs(dy);
+		const	overlapX = (this.w / 2 + other.w / 2) - Math.abs(dx);
+		const	overlapY = (this.h / 2 + other.h / 2) - Math.abs(dy);
 		return overlapX < overlapY ? "horizontal" : "vertical";
 	}
 	takeDamage(amount:number): void {
@@ -250,7 +250,7 @@ export class	Collectible extends Ball {
 
 	effect(a: Tank) {
 
-		const b = new Actor(0,0);
+		const	b = new Actor(0,0);
 		switch (this.type) {
 			case 'heal':
 				a.addHealth(4);

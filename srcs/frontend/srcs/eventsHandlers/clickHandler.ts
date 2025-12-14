@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:32:23 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ async function	onClickEdit(): Promise<void> {
 
 	const	userRes = await response.json();
 
-	const editElements = document.querySelectorAll(".edit-mode");
-	const viewElements = document.querySelectorAll(".view-mode");
+	const	editElements = document.querySelectorAll(".edit-mode");
+	const	viewElements = document.querySelectorAll(".view-mode");
 
 	editElements.forEach(e => {
 		(e as HTMLElement).hidden = false;
@@ -86,10 +86,10 @@ async function	onClickEdit(): Promise<void> {
 		(e as HTMLElement).hidden = true;
 	});
 
-	const username = document.getElementById("edit-username") as HTMLInputElement;
+	const	username = document.getElementById("edit-username") as HTMLInputElement;
 	if (!username) return;
 	username.value = userRes.username ?? "";
-	const mail = document.getElementById("edit-email") as HTMLInputElement;
+	const	mail = document.getElementById("edit-email") as HTMLInputElement;
 	if (!mail) return;
 	mail.value = userRes.email ?? "";
 }
@@ -108,7 +108,7 @@ export async function	onClickHistory(targetId: number | null, targetName: string
 function	onClickCancel(): void {
 	router.canLeave = true;
 
-	const confirmSetting = document.getElementById("confirm-setting");
+	const	confirmSetting = document.getElementById("confirm-setting");
 	if (confirmSetting)
 		return router.navigate("/user");
 	router.navigate("/")
@@ -176,7 +176,7 @@ async function	onClickDeleteTwofa(): Promise<void> {
 }
 
 async function	onClickSkipeVerifyEmailDev(): Promise<void> { // delete this
-	const response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
+	const	response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
 
 	if (!response.ok)
 		return displayError(response, "verify-email-msg-error");
@@ -198,15 +198,15 @@ async function	onClickSkipeVerifyEmailDev(): Promise<void> { // delete this
 }
 
 async function	onClickNewCode(): Promise<void> {
-	const btnSend = document.getElementById("btnSend2faCode") as HTMLButtonElement;
-	const spanCooldown = document.getElementById("btnCooldown");
-	const locks = document.querySelectorAll(".lock");
+	const	btnSend = document.getElementById("btnSend2faCode") as HTMLButtonElement;
+	const	spanCooldown = document.getElementById("btnCooldown");
+	const	locks = document.querySelectorAll(".lock");
 
 	if (btnSend) btnSend.disabled = true;
 	if (spanCooldown) spanCooldown.textContent = "(5s)";
 	locks.forEach(e => (e as HTMLElement).hidden = false);
 
-	const res = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
+	const	res = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
 
 	if (!res.ok) {
 		if (btnSend) btnSend.disabled = false;
@@ -241,8 +241,8 @@ async function	onClickNewCode(): Promise<void> {
 /* ====================== UI TOGGLE HELPERS ====================== */
 
 function showDifficultyMenu() {
-	const mainBtns = document.getElementById('main-menu-btns');
-	const diffBtns = document.getElementById('difficulty-btns');
+	const	mainBtns = document.getElementById('main-menu-btns');
+	const	diffBtns = document.getElementById('difficulty-btns');
 	
 	if (mainBtns && diffBtns) {
 		mainBtns.classList.add('hidden');
@@ -251,8 +251,8 @@ function showDifficultyMenu() {
 }
 
 function hideDifficultyMenu() {
-	const mainBtns = document.getElementById('main-menu-btns');
-	const diffBtns = document.getElementById('difficulty-btns');
+	const	mainBtns = document.getElementById('main-menu-btns');
+	const	diffBtns = document.getElementById('difficulty-btns');
 	
 	if (mainBtns && diffBtns) {
 		mainBtns.classList.remove('hidden');
@@ -261,9 +261,9 @@ function hideDifficultyMenu() {
 }
 
 function switchGameMode(mode: 'default' | 'featured') {
-	const defDiv = document.getElementById('default-mode-content');
-	const inputDiv = document.getElementById('default-mode-content-input');
-	const featDiv = document.getElementById('featured-mode-content');
+	const	defDiv = document.getElementById('default-mode-content');
+	const	inputDiv = document.getElementById('default-mode-content-input');
+	const	featDiv = document.getElementById('featured-mode-content');
 
 	if (mode === 'default') {
 		defDiv?.classList.remove('hidden');
@@ -277,7 +277,7 @@ function switchGameMode(mode: 'default' | 'featured') {
 }
 
 function selectFeaturedDifficulty(level: number) {
-	const input = document.getElementById('aiHardcore') as HTMLInputElement;
+	const	input = document.getElementById('aiHardcore') as HTMLInputElement;
 	if (!input) return;
 	input.value = level.toString();
 
@@ -291,9 +291,9 @@ function selectFeaturedDifficulty(level: number) {
 /* ====================== GAME & TOURNAMENT HANDLERS ====================== */
 
 function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard') {
-	const maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+	const	maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
 	if (!maxPointsInput) return;
-	const winningScore = parseInt(maxPointsInput.value, 10);
+	const	winningScore = parseInt(maxPointsInput.value, 10);
 	
 	const	state: AppState = appStore.getState();
 	const	user: UserState | null = state.user;
@@ -373,14 +373,14 @@ function onClickPlayPVP() {
 	}
 	else if (router.Path === '/tankmenu')
 	{
-		const mapSelect = document.getElementById("mapSelect") as HTMLSelectElement;
-		const p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
-		const p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
+		const	mapSelect = document.getElementById("mapSelect") as HTMLSelectElement;
+		const	p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
+		const	p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
 		if (!mapSelect || !p1Select || !p2Select) return;
 		
-		const selectedMap = mapSelect.value;
-		const p1Tank = p1Select.value;
-		const p2Tank = p2Select.value;
+		const	selectedMap = mapSelect.value;
+		const	p1Tank = p1Select.value;
+		const	p2Tank = p2Select.value;
 		appStore.setState((state) => ({
 			...state,
 			game: {
@@ -394,8 +394,8 @@ function onClickPlayPVP() {
 }
 
 function	onStartTournament() {
-	const inputs = document.querySelectorAll('.player-name-input') as NodeListOf<HTMLInputElement>;
-	const playerNames: string[] = [];
+	const	inputs = document.querySelectorAll('.player-name-input') as NodeListOf<HTMLInputElement>;
+	const	playerNames: string[] = [];
 	
 	inputs.forEach(input => {
 		if (input.value.trim() !== '') {
@@ -412,9 +412,9 @@ function	onStartTournament() {
 		displayError("Player names must be unique.", "tournament-msg-error");
 		return;
 	}
-	const scoreInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
+	const	scoreInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
 	if (!scoreInput) return;
-	const winningScore = parseInt(scoreInput.value, 10);
+	const	winningScore = parseInt(scoreInput.value, 10);
 
 	appStore.setState((state) => ({
 		...state,
@@ -461,11 +461,11 @@ function startTournamentMatch(matchId: string, p1: string, p2: string) {
 }
 
 function onClickStartFeatured(mode: 'ai' | 'pvp') {
-	const freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
+	const	freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
 	
-	const star1 = (document.getElementById("chk-1star") as HTMLInputElement)?.checked;
-	const star2 = (document.getElementById("chk-2star") as HTMLInputElement)?.checked;
-	const star3 = (document.getElementById("chk-3star") as HTMLInputElement)?.checked;
+	const	star1 = (document.getElementById("chk-1star") as HTMLInputElement)?.checked;
+	const	star2 = (document.getElementById("chk-2star") as HTMLInputElement)?.checked;
+	const	star3 = (document.getElementById("chk-3star") as HTMLInputElement)?.checked;
 
 	if (!freqInput || star1 === null || star2 === null || star3 === null) return;
 
@@ -474,8 +474,8 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 
 	if (router.Path === '/pongmenu')
 	{
-		const aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
-		const pointsInput = document.getElementById("featuredMaxPoints") as HTMLInputElement;
+		const	aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
+		const	pointsInput = document.getElementById("featuredMaxPoints") as HTMLInputElement;
 		if (!aiInput || !pointsInput) return;
 		const	winningScore = parseInt(pointsInput.value, 10);
 
@@ -521,17 +521,17 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 	}
 	else if (router.Path === '/tankmenu')
 	{
-		const mapSelect = document.getElementById("mapSelect") as HTMLSelectElement;
-		const p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
-		const p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
+		const	mapSelect = document.getElementById("mapSelect") as HTMLSelectElement;
+		const	p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
+		const	p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
 
 		if (!mapSelect || !p1Select || !p2Select ) return;
 		
-		const selectedMap = mapSelect.value;
-		const p1Tank = p1Select.value;
-		const p2Tank = p2Select.value;
+		const	selectedMap = mapSelect.value;
+		const	p1Tank = p1Select.value;
+		const	p2Tank = p2Select.value;
 		console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Stars=[${star1},${star2},${star3}]`);
-		const freq = parseInt(freqInput.value,10);
+		const	freq = parseInt(freqInput.value,10);
 
 		appStore.setState((state) => ({
 			...state,
@@ -585,7 +585,7 @@ export async function   setupClickHandlers(): Promise<void> {
 
 
 	document.addEventListener('click', (event) => {
-		const target = event.target as HTMLAnchorElement;
+		const	target = event.target as HTMLAnchorElement;
 		if (target.tagName === 'A' && target.hasAttribute('href')) {
 			event.preventDefault();
 			console.log(target.getAttribute('href')!);
@@ -594,25 +594,25 @@ export async function   setupClickHandlers(): Promise<void> {
 	});
 
 	document.addEventListener('input', (event) => {
-		const target = event.target as HTMLInputElement;
+		const	target = event.target as HTMLInputElement;
 		if (!target) return;
 
 		if (target.id === 'choosenMaxPoints') {
-			const display = document.getElementById('points-display');
+			const	display = document.getElementById('points-display');
 			if (display) {
 				display.innerText = target.value;
 			}
 		}
 		
 		if (target.id === 'powerupFreq') {
-			const display = document.getElementById('powerup-freq-display');
+			const	display = document.getElementById('powerup-freq-display');
 			if (display) {
 				display.innerText = target.value + " sec";
 			}
 		}
 
 		if (target.id === 'featuredMaxPoints') {
-			const display = document.getElementById('featured-points-display');
+			const	display = document.getElementById('featured-points-display');
 			if (display) {
 				display.innerText = target.value;
 			}
@@ -631,7 +631,7 @@ export async function   setupClickHandlers(): Promise<void> {
 	});
 
 	window.addEventListener('keydown', (event: KeyboardEvent) => {
-  	const keysToBlock = [
+  	const	keysToBlock = [
   	  "ArrowUp", 
   	  "ArrowDown",
   	];

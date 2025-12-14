@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongSocket.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:30:40 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ const	activeGames = new Map<string, PongInstance>();
 
 export function	setupPongSocket(io: Server, socket: Socket, pongService: GamesService) {
 
-	const userId: number | undefined = socket.data.user?.id;
+	const	userId: number | undefined = socket.data.user?.id;
 
 	socket.on('join-game', (opts: PongOptions) => {
 		try {

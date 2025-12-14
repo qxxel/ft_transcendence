@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongAi.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:59:46 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:27:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ export class AIController {
 	}
 
 	public update(state: PongState): { up: boolean, down: boolean } {
-		const now = Date.now();
-		const keys = { up: false, down: false };
+		const	now = Date.now();
+		const	keys = { up: false, down: false };
 
 		
 		if (now - this.lastDecisionTime > 1000 || this.difficulty == 'boris') {
@@ -42,8 +42,8 @@ export class AIController {
 					this.targetY = this.calculateOptimalPaddlePosition(predictedY, state);
 				}
 				else {
-					const errorMargin = (this.difficulty === 'easy') ? state.paddle2.height / 10 : state.paddle2.height / 2;
-					const randomOffset = (Math.random() * errorMargin * 2) - errorMargin;
+					const	errorMargin = (this.difficulty === 'easy') ? state.paddle2.height / 10 : state.paddle2.height / 2;
+					const	randomOffset = (Math.random() * errorMargin * 2) - errorMargin;
 					this.targetY = predictedY + randomOffset;
 				}
 				this.targetY = Math.max(state.paddle2.height / 2, Math.min(this.targetY, state.height - state.paddle2.height / 2));
@@ -54,8 +54,8 @@ export class AIController {
 				}
 			}
 		}
-		const paddleCenter = state.paddle2.y + state.paddle2.height / 2;
-		const deadZone = 10;
+		const	paddleCenter = state.paddle2.y + state.paddle2.height / 2;
+		const	deadZone = 10;
 
 		if (paddleCenter < this.targetY - deadZone) {
 			keys.down = true;
@@ -66,12 +66,12 @@ export class AIController {
 	}
 
 	private predictBallLandingY(state: PongState): number {
-		const targetX = state.paddle2.x - state.ball.radius;
-		const timeToImpact = (targetX - state.ball.x) / state.ball.dx;
+		const	targetX = state.paddle2.x - state.ball.radius;
+		const	timeToImpact = (targetX - state.ball.x) / state.ball.dx;
 		let predictedY = state.ball.y + (state.ball.dy * timeToImpact);
 
-		const topWall = state.ball.radius;
-		const bottomWall = state.height - state.ball.radius;
+		const	topWall = state.ball.radius;
+		const	bottomWall = state.height - state.ball.radius;
 
 		while (predictedY < topWall || predictedY > bottomWall) {
 			if (predictedY < topWall) {
@@ -85,7 +85,7 @@ export class AIController {
 
 	private offensiveBounce(predictedY: number, state: PongState): number {
 
-		const opponentCenterY = state.paddle1.y + (state.paddle1.height / 2);
+		const	opponentCenterY = state.paddle1.y + (state.paddle1.height / 2);
 		let targetY = 0;
 
 		if (opponentCenterY < state.height / 2) {
@@ -94,27 +94,27 @@ export class AIController {
 			targetY = 0;
 		}
 
-		const distanceX = state.paddle2.x; 
-		const distanceY = targetY - predictedY;
+		const	distanceX = state.paddle2.x; 
+		const	distanceY = targetY - predictedY;
 
 		// tan(angle) = opposite / adjacent
 		let requiredAngle = Math.atan(distanceY / distanceX);
-		const maxAngle = Math.PI / 3;
+		const	maxAngle = Math.PI / 3;
 		if (requiredAngle > maxAngle) requiredAngle = maxAngle;
 		if (requiredAngle < -maxAngle) requiredAngle = -maxAngle;
 
 		// bounceAngle = normalizedIntersectY * maxAngle ==> normalizedIntersectY = requiredAngle / maxAngle
-		const normalizedIntersectY = requiredAngle / maxAngle;
-		const offset = normalizedIntersectY * (state.paddle2.height / 2);
+		const	normalizedIntersectY = requiredAngle / maxAngle;
+		const	offset = normalizedIntersectY * (state.paddle2.height / 2);
 		return predictedY - offset;
 	}
 
 	private hardBounce(predictedY: number, state: PongState): number{
-		const opponentCenterY = state.paddle1.y + (state.paddle1.height / 2);
-		const center = state.height / 2;
+		const	opponentCenterY = state.paddle1.y + (state.paddle1.height / 2);
+		const	center = state.height / 2;
 
-		const aimForBottom = opponentCenterY < center;
-		const maxOffset = (state.paddle2.height / 2) * 0.8;
+		const	aimForBottom = opponentCenterY < center;
+		const	maxOffset = (state.paddle2.height / 2) * 0.8;
 
 		if (aimForBottom) {
 			return predictedY - maxOffset;

@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:24:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:41:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ export interface	AppState {
 	game: GamesState;
 }
 
-const initialState: AppState = {
+const	initialState: AppState = {
 	user: {
 		id: null,
 		username: null,

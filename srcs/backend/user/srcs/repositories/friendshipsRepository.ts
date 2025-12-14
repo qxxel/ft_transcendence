@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 01:54:04 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ export class	friendshipsRepository {
 
 	async getRelationStatus(elements: number[]): Promise<{ status: string, requester_id: number | string } | null> {
 		return new Promise((resolve, reject) => {
-			const query: string = `SELECT status, requester_id FROM friendships 
+			const	query: string = `SELECT status, requester_id FROM friendships 
 					WHERE (requester_id = ? AND receiver_id = ?) 
 					OR (requester_id = ? AND receiver_id = ?)
 				LIMIT 1;`;
@@ -188,7 +188,7 @@ export class	friendshipsRepository {
 
 	async getFriendsList(userId: number): Promise<FriendUser[]> {
 		return new Promise((resolve, reject) => {
-			const query = `SELECT u.id, u.username, u.avatar, u.email, f.status, f.receiver_id
+			const	query = `SELECT u.id, u.username, u.avatar, u.email, f.status, f.receiver_id
 				FROM friendships f
 				INNER JOIN users u ON u.id = CASE
 					WHEN f.requester_id = ? THEN f.receiver_id
@@ -196,7 +196,7 @@ export class	friendshipsRepository {
 				END
 				WHERE (f.requester_id = ? OR f.receiver_id = ?)
 				AND (f.status = 'ACCEPTED' OR f.status = 'PENDING');`;
-			const elements = [userId, userId, userId];
+			const	elements = [userId, userId, userId];
 
 			this.db.all(query, elements, (err: Error | null, rows: FriendUser[]) => {
 				if (err)

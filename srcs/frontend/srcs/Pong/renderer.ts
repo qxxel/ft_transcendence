@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:06:22 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/14 00:41:40 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ export class PongRenderer {
 		this.ctx.fillRect(p1.x, p1.y, p1.width, p1.height);
 		this.ctx.fillRect(p2.x, p2.y, p2.width, p2.height);
 
-		for (const c of collectibles) {
+		for (const	c of collectibles) {
 			switch (c.type) {
 				case 'IncreaseBallSize':
 					this.ctx.fillStyle = '#FFFF00';

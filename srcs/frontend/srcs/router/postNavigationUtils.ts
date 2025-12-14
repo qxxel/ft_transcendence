@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:33:16 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			}
 		}));
 
-		const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
-		const display = document.getElementById('points-display') as HTMLSpanElement;
+		const	slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
+		const	display = document.getElementById('points-display') as HTMLSpanElement;
 		
 		if (slider && display) {
 			display.innerHTML = slider.value;
@@ -109,8 +109,8 @@ export async function  pathActions(currentPath: string): Promise<void> {
 	}
 
 	if (['/tournament-setup'].includes(currentPath)) {
-		const slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
-		const display = document.getElementById('points-display') as HTMLSpanElement;
+		const	slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
+		const	display = document.getElementById('points-display') as HTMLSpanElement;
 		
 		if (slider && display) {
 		  display.innerHTML = slider.value;
@@ -126,7 +126,7 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			return;
 		}
 
-		const container = document.getElementById('bracket-container');
+		const	container = document.getElementById('bracket-container');
 		if (container)
 			container.innerHTML = currentTournament.renderBracket();
 	}

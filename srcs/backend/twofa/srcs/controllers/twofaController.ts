@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 02:07:18 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 /* ====================== FUNCTIONS ====================== */
 
 function generateOtpSecretKey() {
-	const secretKey = speakeasy.generateSecret();
+	const	secretKey = speakeasy.generateSecret();
 	return secretKey.base32;
 }
 
@@ -64,7 +64,7 @@ function MailCodeMessage(user: string, otp: string, email: string) {
 }
 
 async function sendMailMessage(mail: any) {
-	const transporter = nodemailer.createTransport({
+	const	transporter = nodemailer.createTransport({
 		service: "gmail",
 		auth: {
 			user: emailName,

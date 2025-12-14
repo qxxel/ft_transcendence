@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:38:43 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 01:51:48 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 		}
 
 		try {
-			const { targetId } = request.params as { targetId: string };
-			const parseTargetId = parseInt(targetId, 10);
+			const	{ targetId } = request.params as { targetId: string };
+			const	parseTargetId = parseInt(targetId, 10);
 
 			const	userId: number = extractUserId(request);
 
@@ -82,8 +82,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 		}
 		
 		try {
-			const { targetId } = request.params as { targetId: string };
-			const parseTargetId = parseInt(targetId, 10);
+			const	{ targetId } = request.params as { targetId: string };
+			const	parseTargetId = parseInt(targetId, 10);
 
 			const	userId: number = extractUserId(request);
 
@@ -158,8 +158,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 		}
 
 		try {
-			const { targetId } = request.params as { targetId: string };
-			const parseTargetId = parseInt(targetId, 10);
+			const	{ targetId } = request.params as { targetId: string };
+			const	parseTargetId = parseInt(targetId, 10);
 
 			const	userId: number = extractUserId(request);
 
@@ -173,8 +173,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 
 	userFastify.delete('/unblock/:targetId', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const { targetId } = request.params as { targetId: string };
-			const parseTargetId = parseInt(targetId, 10);
+			const	{ targetId } = request.params as { targetId: string };
+			const	parseTargetId = parseInt(targetId, 10);
 
 			const	userId: number = extractUserId(request);
 

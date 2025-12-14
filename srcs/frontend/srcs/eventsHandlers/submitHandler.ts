@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:32:56 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 	if (signForm)
 		signForm.classList.add("darken");
 
-	const response: Response = await sendRequest('/api/auth/validateUser', 'post', { otp });
+	const	response: Response = await sendRequest('/api/auth/validateUser', 'post', { otp });
 	
 	form.reset();
 	if (signForm)
@@ -187,7 +187,7 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 	if (signForm)
 		signForm.classList.add("darken");
 
-	const response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
+	const	response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
 	
 	form.reset();
 	if (signForm)
@@ -235,7 +235,7 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 		}
 
 		console.log("verifyForm")
-		const verifyForm: HTMLElement | null = document.getElementById("confirm-setting-form")
+		const	verifyForm: HTMLElement | null = document.getElementById("confirm-setting-form")
 
 		if (!(verifyForm instanceof HTMLFormElement)) return displayPopError("Missing form HTMLElement!");
 
@@ -255,7 +255,7 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 			if (confirmSettingForm)
 				confirmSettingForm.classList.add("darken");
 
-			const response: Response = await sendRequest('/api/auth/updateUser', 'PATCH', { otp, password, user });
+			const	response: Response = await sendRequest('/api/auth/updateUser', 'PATCH', { otp, password, user });
 			
 			if (form instanceof HTMLFormElement)
 				form.reset();
@@ -278,7 +278,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 
 	if (!newUsername || !newEmail || new2fa === undefined) return displayError("Username, email et 2fa required!", "user-setting-msg-error");
 	
-	const getUser: Response = await sendRequest(`/api/user/me`, 'get', null)
+	const	getUser: Response = await sendRequest(`/api/user/me`, 'get', null)
 	if (!getUser.ok)
 		return displayPopError(getUser);
 	
@@ -289,7 +289,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		&& resultGetUser.is2faEnable == new2fa
 	) return router.navigate("/user");
 	
-	const postUser: Response = await sendRequest(`/api/user/me/validate`, 'post', {
+	const	postUser: Response = await sendRequest(`/api/user/me/validate`, 'post', {
 		username: newUsername,
 		email: newEmail,
 		is2faEnable: new2fa
@@ -299,13 +299,13 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	
 	verifyEmail("user-profile", "confirm-setting", newEmail);
 
-	const userUpdate: userUpdate = {
+	const	userUpdate: userUpdate = {
 		username: newUsername,
 		email: newEmail,
 		is2faEnable: new2fa,
 	}
 
-	const verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // /!\ try catch ???
+	const	verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // /!\ try catch ???
 	if (!verified) 
 		return; // /!\ faire quelque chose
 
@@ -322,7 +322,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 }
 
 async function	handleAddFriendForm(form: HTMLFormElement) {
-	const targetName: string | undefined = (document.getElementById("username-add-input") as HTMLInputElement)?.value;
+	const	targetName: string | undefined = (document.getElementById("username-add-input") as HTMLInputElement)?.value;
 	if (!targetName)
 		return ;
 	form.reset();

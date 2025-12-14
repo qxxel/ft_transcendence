@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:45:03 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ export async function displayPopError(response: Response | string | undefined) {
 		return;
 	}
 	
-	const p = document.createElement("p");
-	const span = document.createElement("span");
+	const	p = document.createElement("p");
+	const	span = document.createElement("span");
 	span.textContent = "x";
-	const div = document.createElement("div");
+	const	div = document.createElement("div");
 	div.classList = "error";
 
 	div.addEventListener("click", (event) => {
-		const target =  event.currentTarget as HTMLElement;
+		const	target =  event.currentTarget as HTMLElement;
 		target.remove();
 	})
 
@@ -71,11 +71,11 @@ export async function displayPopError(response: Response | string | undefined) {
 }
 
 export function displayDate(date: number) {
-	const localeClient = navigator.language;
+	const	localeClient = navigator.language;
 	
 	const	exp = new Date(date);
 
-	const options: Intl.DateTimeFormatOptions = {
+	const	options: Intl.DateTimeFormatOptions = {
 		year: 'numeric',
 		month: '2-digit',
 		day: '2-digit',
@@ -84,7 +84,7 @@ export function displayDate(date: number) {
 		second: '2-digit'
 	};
 
-	const el = document.getElementById("date-with-offset");
+	const	el = document.getElementById("date-with-offset");
 	if (el)
 		el.textContent = exp.toLocaleString(localeClient, options);
 }

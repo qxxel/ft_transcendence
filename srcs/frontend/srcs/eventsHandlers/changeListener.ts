@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 21:46:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:40:12 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ import { setDynamicFavicon }	from "../utils/setDynamicFavicon"
 /* ====================== FUNCTIONS ====================== */
 
 export function attachAvatarUploadListener(userId: number) {
-	const fileInput = document.getElementById('avatar-upload') as HTMLInputElement;
+	const	fileInput = document.getElementById('avatar-upload') as HTMLInputElement;
 
 	if (fileInput) {
 		fileInput.addEventListener('change', async (event) => {
-			const files: FileList | null = (event.target as HTMLInputElement).files;
+			const	files: FileList | null = (event.target as HTMLInputElement).files;
 
 			if (files && files.length > 0) {
 				const	file = files[0];
@@ -39,7 +39,7 @@ export function attachAvatarUploadListener(userId: number) {
 }
 
 async function uploadAvatar(userId: number, file: File) {
-	const formData = new FormData();
+	const	formData = new FormData();
 	formData.append('file', file);
 
 	try {
@@ -51,9 +51,9 @@ async function uploadAvatar(userId: number, file: File) {
 			return ;
 		}
 
-		const data = await response.json();
+		const	data = await response.json();
 
-		const imgElement = document.getElementById('user-avatar') as HTMLImageElement;
+		const	imgElement = document.getElementById('user-avatar') as HTMLImageElement;
 		if (imgElement)
 			imgElement.src = `/uploads/${data.avatar}?t=${new Date().getTime()}`;
 

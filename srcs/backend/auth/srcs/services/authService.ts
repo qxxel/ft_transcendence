@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authService.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 22:30:08 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ export class	authService {
 	}
 
 	async cleanup(): Promise<void> {
-		const expiredClients: number[] = await this.getExpiredClients();
+		const	expiredClients: number[] = await this.getExpiredClients();
 
-		for (const client of expiredClients) {
-			const date: number | null = await this.getExpiresByIdClient(client);
+		for (const	client of expiredClients) {
+			const	date: number | null = await this.getExpiresByIdClient(client);
 
 			if (date === null)
 				continue;

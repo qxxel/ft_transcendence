@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 02:09:24 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:45:40 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@ import { socket }	from "../socket/socket.js"
 /* ====================== FUNCTIONS ====================== */
 
 function getTabs() : number {
-	const iTabsString: string = localStorage.getItem("iTabs") || "0";
+	const	iTabsString: string = localStorage.getItem("iTabs") || "0";
 	return parseInt(iTabsString, 10);
 }
 
 export function addTabs() {
-	const iTabs: number = getTabs() + 1;
+	const	iTabs: number = getTabs() + 1;
 	localStorage.setItem("iTabs", JSON.stringify(iTabs));
 }
 
 export function delTabs() {
-	const iTabs: number = getTabs() - 1;
+	const	iTabs: number = getTabs() - 1;
 	if (iTabs > 0) {
 		localStorage.setItem("iTabs", JSON.stringify(iTabs));
 	}

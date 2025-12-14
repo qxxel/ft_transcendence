@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/10 18:11:00 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,14 @@ export class	usersService {
 		if (!(await this.usersRepo.isTaken(query, [userId.toString()])))
 			throw new NotExistError(`The user ${userId} does not exist`);
 
-		const username = user.getUsername();
+		const	username = user.getUsername();
 		if (username !== undefined) {
 			const	nameQuery: string = "SELECT 1 FROM users WHERE username = ? LIMIT 1";
 			if (await this.usersRepo.isTaken(nameQuery, [username]))
 				throw new IsTakenError(`The name ${username} is already taken. Try another one !`);
 		}
 
-		const email = user.getEmail();
+		const	email = user.getEmail();
 		if (email !== undefined)
 		{
 			const	nameQuery: string = "SELECT 1 FROM users WHERE email = ? LIMIT 1";

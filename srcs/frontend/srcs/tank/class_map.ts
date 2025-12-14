@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:43:22 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ export class	Map {
 
 	generate_desertfox(): void {
 
-		const c_ext  = {r:0,g:0,b:0};//675645
-		const c_blk1 = {r:110,g:110,b:110};
-		const c_blk2 = {r:160,g:160,b:160};
+		const	c_ext  = {r:0,g:0,b:0};//675645
+		const	c_blk1 = {r:110,g:110,b:110};
+		const	c_blk2 = {r:160,g:160,b:160};
 
-		const ext_width = 1;
-		const cell =  this.map_height/10;
+		const	ext_width = 1;
+		const	cell =  this.map_height/10;
 
 		this.walls.push(new Wall(0, 0, ext_width, this.map_height, c_ext));                           // EXTERIOR LEFT
 		this.walls.push(new Wall(this.map_width - ext_width, 0, ext_width, this.map_height, c_ext));  // EXTERIOR RIGHT
@@ -85,7 +85,7 @@ export class	Map {
 			this.spawns_tank2.push({x:cell*9 - 24, y:cell*5 - 24});
 			this.spawns_tank2.push({x:cell*5 - 24, y:cell*9 - 24});
 
-			const offset = 16/2;
+			const	offset = 16/2;
 
 			this.spawns_collectible.push({x:cell*2.5 - offset, y: cell*1.0 - offset}); 
 			this.spawns_collectible.push({x:cell*7.5 - offset, y: cell*1.0 - offset}); 
@@ -107,12 +107,12 @@ export class	Map {
 
 	generate_thehouse(): void {
 
-		const c_ext  = {r:0,g:0,b:0};//675645
-		const c_blk1 = {r:110,g:110,b:110};
-		const c_blk2 = {r:160,g:160,b:160};
+		const	c_ext  = {r:0,g:0,b:0};//675645
+		const	c_blk1 = {r:110,g:110,b:110};
+		const	c_blk2 = {r:160,g:160,b:160};
 
-		const ext_width = 1;
-		const cell =  this.map_height/100;
+		const	ext_width = 1;
+		const	cell =  this.map_height/100;
 
 		this.walls.push(new Wall(0, 0, ext_width, this.map_height, c_ext));                           // EXTERIOR LEFT
 		this.walls.push(new Wall(this.map_width - ext_width, 0, ext_width, this.map_height, c_ext));  // EXTERIOR RIGHT
@@ -191,7 +191,7 @@ export class	Map {
 			this.spawns_tank2.push({x:cell*75, y:cell*70});
 			this.spawns_tank2.push({x:cell*30, y:cell*90});
 
-			const offset = 16/2;
+			const	offset = 16/2;
 
 			this.spawns_collectible.push({x:cell*27 - offset, y: cell*15 - offset}); 
 			this.spawns_collectible.push({x:cell*20 - offset, y: cell*35 - offset}); 
@@ -215,12 +215,12 @@ export class	Map {
 
 	generate_davinco(): void {
 
-		const c_ext  = {r:0,g:0,b:0};//675645
-		const c_blk1 = {r:110,g:110,b:110};
-		const c_blk2 = {r:160,g:160,b:160};
+		const	c_ext  = {r:0,g:0,b:0};//675645
+		const	c_blk1 = {r:110,g:110,b:110};
+		const	c_blk2 = {r:160,g:160,b:160};
 
-		const ext_width = 1;
-		const cell =  this.map_height/100;
+		const	ext_width = 1;
+		const	cell =  this.map_height/100;
 
 		this.walls.push(new Wall(0, 0, ext_width, this.map_height, c_ext));                           // EXTERIOR LEFT
 		this.walls.push(new Wall(this.map_width - ext_width, 0, ext_width, this.map_height, c_ext));  // EXTERIOR RIGHT

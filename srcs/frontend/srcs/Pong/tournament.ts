@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:48:42 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:41:44 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ export class    TournamentController {
 	}
 
 	private	generateBracket(): void {
-		const numPlayers = this.players.length;
+		const	numPlayers = this.players.length;
 		this.matches = [];
 
 		let bracketSize = 4;
@@ -42,19 +42,19 @@ export class    TournamentController {
 		else if (numPlayers > 4)
 			bracketSize = 8;
 
-		const totalRounds = Math.log2(bracketSize);
+		const	totalRounds = Math.log2(bracketSize);
 
 		for (let r = 1; r <= totalRounds; r++) {
-			const matchesInRound = bracketSize / Math.pow(2, r);
+			const	matchesInRound = bracketSize / Math.pow(2, r);
 
 			for (let m = 1; m <= matchesInRound; m++) {
 				let nextId: string | null = null;
 				if (r < totalRounds) {
-					const nextMatchNum = Math.ceil(m / 2);
+					const	nextMatchNum = Math.ceil(m / 2);
 					nextId = `r${r + 1}-m${nextMatchNum}`;
 				}
 
-				const match: Match = {
+				const	match: Match = {
 					id: `r${r}-m${m}`,
 					round: r,
 					matchNum: m,
@@ -67,11 +67,11 @@ export class    TournamentController {
 			}
 		}
 
-		const shuffledPlayers = [...this.players].sort(() => Math.random() - 0.5);
-		const round1Matches = this.matches.filter(m => m.round === 1);
+		const	shuffledPlayers = [...this.players].sort(() => Math.random() - 0.5);
+		const	round1Matches = this.matches.filter(m => m.round === 1);
 		let playerIdx = 0;
 
-		for (const match of round1Matches) {
+		for (const	match of round1Matches) {
 			if (playerIdx < numPlayers) {
 				match.player1 = shuffledPlayers[playerIdx] || null;
 				playerIdx++;
@@ -80,7 +80,7 @@ export class    TournamentController {
 			}
 		}
 
-		for (const match of round1Matches) {
+		for (const	match of round1Matches) {
 			if (playerIdx < numPlayers) {
 				match.player2 = shuffledPlayers[playerIdx] || null;
 				playerIdx++;
@@ -89,7 +89,7 @@ export class    TournamentController {
 			}
 		}
 
-		for (const match of round1Matches) {
+		for (const	match of round1Matches) {
 			this.processBye(match);
 		}
 	}
@@ -111,7 +111,7 @@ export class    TournamentController {
 	private advanceWinnerToNextRound(finishedMatch: Match) {
 		if (!finishedMatch.winner || !finishedMatch.nextMatchId) return;
 
-		const nextMatch = this.matches.find(m => m.id === finishedMatch.nextMatchId);
+		const	nextMatch = this.matches.find(m => m.id === finishedMatch.nextMatchId);
 		if (!nextMatch) return;
 
 		if (finishedMatch.matchNum % 2 !== 0) {
@@ -126,27 +126,27 @@ export class    TournamentController {
 	public renderBracket(): string {
 		let html = '<div class="bracket-container">';
 		
-		const roundsObj: { [key: number]: Match[] } = {};
+		const	roundsObj: { [key: number]: Match[] } = {};
 		
 		this.matches.forEach(m => {
 			if (!roundsObj[m.round]) roundsObj[m.round] = [];
 			roundsObj[m.round]!.push(m);
 		});
 
-		const roundNumbers = Object.keys(roundsObj).map(Number).sort((a, b) => a - b);
+		const	roundNumbers = Object.keys(roundsObj).map(Number).sort((a, b) => a - b);
 
-		for (const r of roundNumbers) {
+		for (const	r of roundNumbers) {
 			html += `<div class="round-column"><h3>Round ${r}</h3>`;
 			
-			for (const match of roundsObj[r]!) {
-				const p1Name = match.player1?.name || (match.round === 1 ? 'BYE' : 'TBD');
-				const p2Name = match.player2?.name || (match.round === 1 ? 'BYE' : 'TBD');
+			for (const	match of roundsObj[r]!) {
+				const	p1Name = match.player1?.name || (match.round === 1 ? 'BYE' : 'TBD');
+				const	p2Name = match.player2?.name || (match.round === 1 ? 'BYE' : 'TBD');
 				
-				const p1Class = (match.winner && match.winner === match.player1) ? 'winner' : '';
-				const p2Class = (match.winner && match.winner === match.player2) ? 'winner' : '';
+				const	p1Class = (match.winner && match.winner === match.player1) ? 'winner' : '';
+				const	p2Class = (match.winner && match.winner === match.player2) ? 'winner' : '';
 				
 				let button = '';
-				const isPlayable = !match.winner && match.player1 && match.player2;
+				const	isPlayable = !match.winner && match.player1 && match.player2;
 				
 				if (isPlayable) {
 					button = `<button class="btn-yellow btn-sm" 
@@ -181,7 +181,7 @@ export class    TournamentController {
 	public reportMatchWinner(winnerName: string) {
 		if (!this.currentMatch) return;
 		
-		const match = this.matches.find(m => m.id === this.currentMatch!.id);
+		const	match = this.matches.find(m => m.id === this.currentMatch!.id);
 		if (match) {
 			match.winner = match.player1?.name === winnerName ? match.player1 : match.player2;
 			console.log(`Match ${match.id} won by ${winnerName}`);
