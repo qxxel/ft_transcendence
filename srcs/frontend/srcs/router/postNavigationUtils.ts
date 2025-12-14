@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:11:07 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:29:53 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ export async function  pathActions(currentPath: string): Promise<void> {
 		if (currentGame) {
 			currentGame.setCtx();
 			currentGame.start();
-			console.log("Loading the new game...");
 		}
 		else {
 			router.navigate("/tankmenu");
@@ -144,7 +143,6 @@ export async function  pathActions(currentPath: string): Promise<void> {
 
 	if (['/friends'].includes(currentPath)) {
 		getAndRenderFriends();
-		console.log("Loading the friends...");
 	}
 
 	if (['/user'].includes(currentPath)) {

@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:10:39 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:29:43 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ export async function loadTwofa() {
 	
 	Response.json()
 		.then((result) => {
-			console.log(result)
 			if (result.exp)
 				displayDate(result.exp * 1000);
 			else

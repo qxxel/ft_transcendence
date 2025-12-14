@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:08:10 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:27:07 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -530,7 +530,6 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 		const	selectedMap = mapSelect.value;
 		const	p1Tank = p1Select.value;
 		const	p2Tank = p2Select.value;
-		console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Stars=[${star1},${star2},${star3}]`);
 		const	freq = parseInt(freqInput.value,10);
 
 		appStore.setState((state) => ({
@@ -588,7 +587,6 @@ export async function   setupClickHandlers(): Promise<void> {
 		const	target = event.target as HTMLAnchorElement;
 		if (target.tagName === 'A' && target.hasAttribute('href')) {
 			event.preventDefault();
-			console.log(target.getAttribute('href')!);
 			router.navigate(target.getAttribute('href')!);
 		}
 	});

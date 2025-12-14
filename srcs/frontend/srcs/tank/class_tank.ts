@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:32:29 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:13:46 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:30:34 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ export class	Tank extends Actor {
 				const	progress = Math.min(elapsed / ( this.fire_rate * this.fire_coef), 1);
 				const	start = -Math.PI / 2;
 				const	end = start + progress * Math.PI * 2;
-				console.log(start, end);
 				this.hud.wheel_draw(ctx,start,end);
 			}
 			if (!this.canAbility()) {

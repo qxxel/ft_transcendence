@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:08:29 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:27:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
 
 async function	handleLoadPage(): Promise<void> {
 	document.addEventListener("DOMContentLoaded", async (event: Event) => {
-		console.log("DOMContentLoaded");
 
 		// const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
 		const	response: Response = await sendRequest('/api/user/me', "GET", null);

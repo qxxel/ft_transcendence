@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:14:59 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:30:41 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -388,7 +388,6 @@ export class	TankGame extends Game {
 			this.animationFrameId = null;
 			for (let a of GSTATE.ACTORS)
 				GSTATE.ACTORS.splice(0,GSTATE.ACTORS.length)
-			console.log('TankGame Stopped');
 		}
 	}
 

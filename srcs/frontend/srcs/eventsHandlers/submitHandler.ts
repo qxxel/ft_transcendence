@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:18:40 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:28:08 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,6 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 			}
 		}
 
-		console.log("verifyForm")
 		const	verifyForm: HTMLElement | null = document.getElementById("confirm-setting-form")
 
 		if (!(verifyForm instanceof HTMLFormElement)) return displayPopError("Missing form HTMLElement!");
@@ -342,11 +341,6 @@ async function	handleAddFriendForm(form: HTMLFormElement) {
 	}
 
 	const	friendship: any = await response.json();
-
-	if (friendship.status === "PENDING")
-		console.log(`Request sended to ${targetName}.`);				//	DISPLAY POP
-	if (friendship.status === "ACCEPTED")
-		console.log(`You are now friend with ${targetName}.`);			//	DISPLAY POP
 
 	await getAndRenderFriends();
 }
