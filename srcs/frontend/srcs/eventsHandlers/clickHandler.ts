@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:40:21 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:32:23 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,9 @@ import { router }							from "../index.js"
 import { sendRequest }						from "../utils/sendRequest.js"
 import { socket }							from "../socket/socket.js"
 import { displayError, displayPopError }	from "../utils/display.js"
-import { btnCooldown }						from "../utils/buttonCooldown.js"
+import { loadTwofa }						from "../router/loadPage.js"
 
-import { Tank }	from "../tank/class_tank.js"
 import { Game }	from "../Pong/gameClass.js"
-import { setDynamicFavicon } from "../utils/setDynamicFavicon.js"
 
 /* ====================== FUNCTIONS ====================== */
 
@@ -171,6 +169,9 @@ async function	onClickDeleteTwofa(): Promise<void> {
 	if (socket && socket.connected)
 		socket.disconnect();
 
+	if (router.Path === "/2fa")
+		router.navigate("/sign-in");
+
 	router.navigate(router.Path);
 }
 
@@ -234,7 +235,7 @@ async function	onClickNewCode(): Promise<void> {
 		}
 	);
 
-	btnCooldown();
+	loadTwofa();
 }
 
 /* ====================== UI TOGGLE HELPERS ====================== */

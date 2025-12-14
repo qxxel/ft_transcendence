@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:40:33 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:32:56 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { verifyEmail }						from "../utils/verifyEmail.js"
-import { AppState, appStore, UserState }	from "../objects/store.js"
+import { appStore }							from "../objects/store.js"
 import { displayError, displayPopError }	from "../utils/display.js"
 import { getAndRenderFriends }				from "../friends/getAndRenderFriends.js"
 import { getMenu }							from "../utils/getMenu.js"
@@ -141,9 +141,20 @@ async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 	const	otp: string | undefined = (document.getElementById("digit-code") as HTMLInputElement)?.value;
 	if (!otp) return displayError("Digit-code required!", "verify-email-msg-error");
-	form.reset();
 	
+	const	p = document.getElementById("verify-email-msg-error");
+	if (p)
+		p.textContent = null;
+	
+	const	signForm = document.getElementById("verify-email-form");
+	if (signForm)
+		signForm.classList.add("darken");
+
 	const response: Response = await sendRequest('/api/auth/validateUser', 'post', { otp });
+	
+	form.reset();
+	if (signForm)
+		signForm.classList.remove("darken");
 
 	if (!response.ok)
 		return displayError(response, "verify-email-msg-error"); // /!\ response.status

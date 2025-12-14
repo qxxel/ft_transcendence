@@ -23,7 +23,9 @@
 		<p>The verification code is valid until: <span id="date-with-offset"></span></p>
 		<p id="2fa-msg-error" class="msg-error"></p>
 
-		<button type="submit" id="verify-submit" class="auth-link-button">Verify</button>
-
+		<div class="button-row">
+			<button type="button" onclick="onClickDeleteTwofa()" id="button-cancel" class="cancel-button-form">Cancel</button>
+			<button type="submit" id="verify-submit" class="auth-link-button">Verify</button>
+		</div>
 	</form>
 </div>
