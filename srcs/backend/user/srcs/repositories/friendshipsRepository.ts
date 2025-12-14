@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsRepository.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:26:46 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 01:54:04 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ import { friendshipsUpdateDto }		from "../dtos/friendshipsUpdateDto.js"
 
 import type { Database }	from 'sqlite3'
 import type { FriendUser }	from "../objects/friendUser.js"
-import { NoRelationError } from "../utils/throwErrors.js"
 
 /* ====================== INTERFACE ====================== */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/11 19:28:32 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 02:00:25 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ import { pipeline }			from 'stream/promises'
 import { unlink }			from 'fs/promises'
 import { usersAddDto }		from "../dtos/usersAddDto.js"
 import { usersRespDto }		from "../dtos/usersRespDto.js"
-import { userAxios, usersServ, userStatsServ } 		from "../user.js"
+import { userAxios, usersServ } 		from "../user.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 import type { AxiosResponse } from "axios"

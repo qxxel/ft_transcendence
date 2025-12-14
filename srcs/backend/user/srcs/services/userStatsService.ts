@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsService.ts                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:23:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 18:07:11 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 01:55:32 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ import { userStatsRepository }		from "../repositories/userStatsRepository.js"
 import { userStatsRespDto }			from "../dtos/userStatsRespDto.js"
 
 import { GameNotFoundError, NotExistError }	from "../utils/throwErrors.js"
-import { isTaken } from "../utils/validation.js"
 
 
 /* ====================== CLASS ====================== */

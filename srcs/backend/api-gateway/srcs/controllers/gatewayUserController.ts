@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayUserController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 23:16:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 02:06:43 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 	});
 
 	// USERS GETTERS
-	gatewayFastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
+	gatewayFastify.get('/', async (_request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.get('http://user:3000/');
 

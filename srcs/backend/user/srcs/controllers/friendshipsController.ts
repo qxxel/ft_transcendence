@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:38:43 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:57:38 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 01:51:48 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,10 @@
 import { errorsHandler }		from "../utils/errorsHandler.js"
 import { extractUserId }		from "../utils/extractHeaders.js"
 import { friendshipsAddDto }	from "../dtos/friendshipsAddDto.js"
-import { friendshipsRespDto }	from "../dtos/friendshipsRespDto.js"
 import { friendshipsServ } 		from "../user.js"
 import { friendshipsUpdateDto }	from "../dtos/friendshipsUpdateDto.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
-import { MissingHeaderError } from "../utils/throwErrors.js"
 
 
 /* ====================== FUNCTION ====================== */

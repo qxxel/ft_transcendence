@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/14 01:28:22 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 02:26:52 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,8 +226,29 @@ export class PongGame extends Game {
 	}
 
 	private renderLoop() {
+		this.syncServerDisplay();
 		this.draw();
 		this.animationFrameId = requestAnimationFrame(() => this.renderLoop());
+	}
+
+	private syncServerDisplay() {
+		if (!this.serverState || !this.displayState)
+			return;
+
+		this.displayState.ball.x = this.serverState.ball.x;
+		this.displayState.ball.y = this.serverState.ball.y;
+
+		this.displayState.paddle1.y = this.serverState.paddle1.y;
+		this.displayState.paddle2.y = this.serverState.paddle2.y;
+
+		this.displayState.collectibles = this.serverState.collectibles;
+		this.displayState.score1 = this.serverState.score1;
+		this.displayState.score2 = this.serverState.score2;
+		this.displayState.ball.radius = this.serverState.ball.radius;
+		this.displayState.paddle1.height = this.serverState.paddle1.height;
+		this.displayState.paddle2.height = this.serverState.paddle2.height;
+
+		this.displayState.status = this.serverState.status;
 	}
 
 	private draw() {

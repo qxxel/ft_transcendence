@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsRepository.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:47:32 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 23:36:58 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 01:54:31 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,6 @@ import { userStatsTankUpdateDto }	from "../dtos/userStatsUpdateDto.js"
 import { userStatsTrigger }			from "../triggers/userStatsTrigger.js"
 
 import type { Database }	from 'sqlite3'
-
-/* ====================== INTERFACE ====================== */
-
-// BECAUSE TYPESCRIPT DON'T ACCEPT `this.lastID` BUT IT APPEARS WITH THE COMPILATION
-interface	StatementWithLastID {
-	lastID: number;
-}
-
 
 /* ====================== CLASS ====================== */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   auth.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/13 01:08:31 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 01:56:23 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ import cron					from "node-cron";
 import cors					from '@fastify/cors'
 import Fastify, { type FastifyInstance }				from 'fastify'
 import formBody				from '@fastify/formbody'
-import fs					from 'fs'
 import sqlite3Pkg			from 'sqlite3'
 import { authController }	from './controllers/authController.js'
 import { authRepository }	from "./repositories/authRepository.js"

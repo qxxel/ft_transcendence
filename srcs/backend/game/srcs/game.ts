@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 01:08:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 01:47:27 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 
 /* ====================== IMPORTS ====================== */
 
-import axios, { isAxiosError, type AxiosResponse }				from 'axios'
+import axios, { type AxiosResponse }				from 'axios'
 import cors					from '@fastify/cors'
 import Fastify				from 'fastify'
 import formBody				from '@fastify/formbody'
-import fs					from 'fs'
 import { Server }			from 'socket.io'
 import sqlite3Pkg			from 'sqlite3'
 import { gamesController }	from "./controllers/gamesController.js"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsController.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:26:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 17:54:01 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 01:53:31 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 
 import { errorsHandler }			from "../utils/errorsHandler.js"
 import { userStatsRespDto }			from "../dtos/userStatsRespDto.js"
-import { userStatsPongUpdateDto }	from "../dtos/userStatsUpdateDto.js"
-import { userStatsTankUpdateDto }	from "../dtos/userStatsUpdateDto.js"
 import { userStatsServ } 			from "../user.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
