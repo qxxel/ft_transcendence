@@ -6,17 +6,18 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:59:54 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORTS ====================== */
 
-import speakeasy			from 'speakeasy'
-import nodemailer			from 'nodemailer'
-import * as twofaError		from "../utils/throwErrors.js"
-import { errorsHandler }	from "../utils/errorsHandler.js"
-import { twofaAxios, twofaServ, emailName, emailPass, twofaFastify }	from "../twofa.js"
+import speakeasy							from 'speakeasy'
+import nodemailer							from 'nodemailer'
+import { emailPass, twofaFastify }			from "../twofa.js"
+import { twofaAxios, twofaServ, emailName }	from "../twofa.js"
+import * as twofaError						from "../utils/throwErrors.js"
+import { errorsHandler }					from "../utils/errorsHandler.js"
 
 import type { AxiosResponse }									from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'

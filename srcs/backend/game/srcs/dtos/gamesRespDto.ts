@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   gamesRespDto.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:20:29 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:35:46 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:49:33 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW GAMES
-
-
-/* ====================== IMPORTS ====================== */
-
-// import { isValidName, isValidEmail }	from "../utils/validation.js"
-// import { ValidationError }				from "../utils/throwErrors.js"
-
-// import type { validationResult }	from "../utils/validation.js"
-
 
 /* ====================== CLASS ====================== */
 

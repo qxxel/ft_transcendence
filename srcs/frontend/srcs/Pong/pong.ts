@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:10:24 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,16 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { AppState, appStore, UserState }	from "../objects/store.js"
-import { connectSocket, socket }			from "../socket/socket.js"
-import { Game }								from "./gameClass.js"
-import { linearInterpolation }				from "./utils/lerp.js"
 import { router }							from "../index.js"
 import { PongRenderer }						from "./renderer.js"
+import { Game }								from "./gameClass.js"
+import { TournamentController } 			from "./tournament.js"
+import { AppState, appStore, UserState }	from "../objects/store.js"
+import { connectSocket, socket }			from "../socket/socket.js"
 
 import type { PongState }				from "./objects/pongState.js"
-import type { GameOptions, PowerUps }	from "./objects/gameOptions.js"
 import type { PongResume }				from "./objects/pongResume.js"
-import { TournamentController } from "./tournament.js"
+import type { GameOptions, PowerUps }	from "./objects/gameOptions.js"
 
 
 /* ====================== CLASS ====================== */

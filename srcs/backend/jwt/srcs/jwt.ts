@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 01:55:57 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:58:36 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,17 @@
 
 /* ====================== IMPORTS ====================== */
 
+import axios				from 'axios'
+import Fastify				from 'fastify'
+import sqlite3Pkg			from 'sqlite3'
 import cron					from "node-cron";
 import cors					from '@fastify/cors'
-import Fastify, { type FastifyInstance }				from 'fastify'
 import formBody				from '@fastify/formbody'
-import axios				from 'axios'
-import sqlite3Pkg			from 'sqlite3'
-import { jwtController }	from "./controllers/jwtController.js"
 import { jwtService }		from "./services/jwtService.js"
+import { jwtController }	from "./controllers/jwtController.js"
 import { jwtRepository }	from "./repositories/jwtRepository.js"
 
+import  type { FastifyInstance }	from 'fastify'
 
 /* ====================== TOKENS VARIABLES ====================== */
 

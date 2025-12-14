@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:04:49 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 /* ====================== IMPORTS ====================== */
 
 import { usersAddDto }		from "../dtos/usersAddDto.js"
-import { usersRepository }	from "../repositories/usersRepository.js"
 import { usersRespDto }		from "../dtos/usersRespDto.js"
-import { usersUpdateDto }		from "../dtos/usersUpdateDto.js"
+import { usersUpdateDto }	from "../dtos/usersUpdateDto.js"
+import { usersRepository }	from "../repositories/usersRepository.js"
 
 import { IsTakenError, NotExistError }	from "../utils/throwErrors.js"
 

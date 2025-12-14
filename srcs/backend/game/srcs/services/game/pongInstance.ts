@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:56:55 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { AIController }	from "../../engine/pong/pongAi.js"
-import { gamesAddDto }	from "../../dtos/gamesAddDto.js"
-import { PongPhysics }	from "../../engine/pong/pongPhysic.js"
-import { GamesService }	from "../gamesService.js"
 import { Server }		from 'socket.io'
+import { GamesService }	from "../gamesService.js"
+import { gamesAddDto }	from "../../dtos/gamesAddDto.js"
+import { AIController }	from "../../engine/pong/pongAi.js"
+import { PongPhysics }	from "../../engine/pong/pongPhysic.js"
 
 import type { PongOptions, Collectible, PongState, PowerUps, PongResume }	from "../../engine/pong/pongState.js"
 

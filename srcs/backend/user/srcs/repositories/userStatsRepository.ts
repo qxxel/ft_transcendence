@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:47:32 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 01:54:31 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:16:05 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { userStatsRespDto }			from "../dtos/userStatsRespDto.js"
 import { userStatsPongUpdateDto }	from "../dtos/userStatsUpdateDto.js"
-import { userStatsRespDto }			from "../dtos/userStatsRespDto.js";
-import { userStatsTableBuilder }	from "../tableBuilders/userStatsTableBuilder.js"
 import { userStatsTankUpdateDto }	from "../dtos/userStatsUpdateDto.js"
 import { userStatsTrigger }			from "../triggers/userStatsTrigger.js"
+import { userStatsTableBuilder }	from "../tableBuilders/userStatsTableBuilder.js"
 
 import type { Database }	from 'sqlite3'
 

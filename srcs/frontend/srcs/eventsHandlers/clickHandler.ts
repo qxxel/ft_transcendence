@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:27:07 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { AppState, appStore, UserState }	from "../objects/store.js"
-import { GameOptions }						from "../Pong/objects/gameOptions.js"
-import { getMenu }							from "../utils/getMenu.js"
-import { initHistoryListeners } 			from "../history/getAndRenderHistory.js"
+import { router }							from "../index.js"
 import { PongGame }							from "../Pong/pong.js"
 import { TankGame } 						from "../tank/tank.js"
-import { TournamentController } 			from "../Pong/tournament.js"
-import { router }							from "../index.js"
-import { sendRequest }						from "../utils/sendRequest.js"
 import { socket }							from "../socket/socket.js"
+import { getMenu }							from "../utils/getMenu.js"
+import { AppState, appStore, UserState }	from "../objects/store.js"
 import { displayError, displayPopError }	from "../utils/display.js"
 import { loadTwofa }						from "../router/loadPage.js"
+import { TournamentController } 			from "../Pong/tournament.js"
+import { sendRequest }						from "../utils/sendRequest.js"
+import { GameOptions }						from "../Pong/objects/gameOptions.js"
+import { initHistoryListeners } 			from "../history/getAndRenderHistory.js"
 
 import { Game }	from "../Pong/gameClass.js"
 
@@ -530,7 +530,6 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 		const	selectedMap = mapSelect.value;
 		const	p1Tank = p1Select.value;
 		const	p2Tank = p2Select.value;
-		console.log(`Starting Featured (${mode}): Freq=${freqInput.value}, Stars=[${star1},${star2},${star3}]`);
 		const	freq = parseInt(freqInput.value,10);
 
 		appStore.setState((state) => ({
@@ -588,7 +587,6 @@ export async function   setupClickHandlers(): Promise<void> {
 		const	target = event.target as HTMLAnchorElement;
 		if (target.tagName === 'A' && target.hasAttribute('href')) {
 			event.preventDefault();
-			console.log(target.getAttribute('href')!);
 			router.navigate(target.getAttribute('href')!);
 		}
 	});

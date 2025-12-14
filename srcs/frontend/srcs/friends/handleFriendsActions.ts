@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:48:02 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:09:22 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { getAndRenderFriends }	from "./getAndRenderFriends.js";
 import { sendRequest }			from "../utils/sendRequest.js"
+import { getAndRenderFriends }	from "./getAndRenderFriends.js"
 
 
 /* ====================== FUNCTION ====================== */

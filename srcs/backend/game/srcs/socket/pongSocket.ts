@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:57:00 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { PongInstance }		from "../services/game/pongInstance.js"
-import { GamesService }		from "../services/gamesService.js"
 import { Server, Socket }	from 'socket.io'
+import { GamesService }		from "../services/gamesService.js"
+import { PongInstance }		from "../services/game/pongInstance.js"
 
 import type { PongOptions }	from "../engine/pong/pongState.js"
 

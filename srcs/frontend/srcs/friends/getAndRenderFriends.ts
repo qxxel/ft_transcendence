@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:09:31 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { attachDelegationListeners }	from "./friendsEvents.js"
-import { sendRequest }					from "../utils/sendRequest.js"
-import { AppState, appStore, UserState } from "../objects/store.js";
-import { onClickHistory } from "../eventsHandlers/clickHandler.js";
+import { attachDelegationListeners }		from "./friendsEvents.js"
+import { AppState, appStore, UserState }	from "../objects/store.js"
+import { sendRequest }						from "../utils/sendRequest.js"
+import { onClickHistory }					from "../eventsHandlers/clickHandler.js"
 
 
 /* ====================== INTERFACE ====================== */

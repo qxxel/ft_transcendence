@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:24:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:09:46 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 /* ====================== INTERFACES ====================== */
 
 import { Game }					from "../Pong/gameClass"
-import { GameOptions }			from "../Pong/objects/gameOptions"
 import { Store }				from "../utils/store.js"
 import { TournamentController }	from "../Pong/tournament"
+import { GameOptions }			from "../Pong/objects/gameOptions"
 
 
 /* ====================== INTERFACES ====================== */

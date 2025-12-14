@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersUpdateDto.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:51:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 20:28:46 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 04:03:22 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { usersRespDto }					from "./usersRespDto.js"
 import { isValidName, isValidEmail }	from "../utils/validation.js"
 import { ValidationError }				from "../utils/throwErrors.js"
-import { usersRespDto }					from "./usersRespDto.js"
 
 import type { validationResult }	from "../utils/validation.js"
 

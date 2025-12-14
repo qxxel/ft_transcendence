@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gamesController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:36:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 18:49:19 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:54:47 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,15 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { errorsHandler }	from "../utils/errorsHandler.js"
-import { extractUserId }	from "../utils/extractHeaders.js"
-import { gamesAddDto }		from "../dtos/gamesAddDto.js"
-import { gamesRespDto }		from "../dtos/gamesRespDto.js"
 import { gamesServ }			from "../game.js"
+import { gamesAddDto }			from "../dtos/gamesAddDto.js"
+import { gamesRespDto }			from "../dtos/gamesRespDto.js"
+import { errorsHandler }		from "../utils/errorsHandler.js"
+import { extractUserId }		from "../utils/extractHeaders.js"
 
-import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
-import type { GameUser }										from "../objects/gameUser.js"
+import type { FastifyInstance, FastifyRequest }		from 'fastify'
+import type { FastifyReply }						from 'fastify'
+import type { GameUser }							from "../objects/gameUser.js"
 
 
 /* ====================== FUNCTION ====================== */

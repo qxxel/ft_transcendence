@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:48:42 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:28:45 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,6 @@ export class    TournamentController {
 		const	match = this.matches.find(m => m.id === this.currentMatch!.id);
 		if (match) {
 			match.winner = match.player1?.name === winnerName ? match.player1 : match.player2;
-			console.log(`Match ${match.id} won by ${winnerName}`);
 			this.advanceWinnerToNextRound(match);
 		}
 	}

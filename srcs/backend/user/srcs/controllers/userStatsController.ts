@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:26:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 01:53:31 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:03:06 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { userStatsServ } 			from "../user.js"
 import { errorsHandler }			from "../utils/errorsHandler.js"
 import { userStatsRespDto }			from "../dtos/userStatsRespDto.js"
-import { userStatsServ } 			from "../user.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 

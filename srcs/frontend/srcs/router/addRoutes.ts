@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:00:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:55:49 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 07:57:29 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { loadHtml }	from "./loadHtml.js"
 import { router }	from "../index.js"
+import { loadHtml }	from "./loadHtml.js"
 
 
 /* ====================== FUNCTIONS ====================== */

@@ -3,18 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   errorsHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 18:49:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 22:11:07 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 04:06:46 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 /* ====================== IMPORTS ====================== */
 
-import { IsTakenError, NotExistError, GameNotFoundError, AlreadyRelatedError, MissingHeaderError, InvalidFileError, NoFileError }	from "./throwErrors.js"
-import { AlreadyAcceptedError, NoRelationError, BlockedError, SelfFriendRequestError } from "./throwErrors.js"
+import { IsTakenError, NotExistError, NoFileError }		from "./throwErrors.js"
+import { GameNotFoundError, AlreadyRelatedError }		from "./throwErrors.js"
+import { MissingHeaderError, InvalidFileError }			from "./throwErrors.js"
+import { AlreadyAcceptedError, NoRelationError }		from "./throwErrors.js"
+import { BlockedError, SelfFriendRequestError }			from "./throwErrors.js"
 
 import type { FastifyInstance, FastifyReply } from "fastify"
 

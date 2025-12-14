@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:30:41 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,18 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { AppState, appStore, GamesState, UserState }	from "../objects/store.js"
-import { Game }											from "../Pong/gameClass.js"
 import { GSTATE, History }								from "./global.js"
 import { router }										from "../index.js"
-import { Input }										from "./class_input.js"
 import { Map }											from "./class_map.js"
 import { Tank, Uzi, Sniper, Shotgun, Classic } 			from "./class_tank.js"
 import { Ball, Collectible }							from "./class_ball.js"
-import { sendRequest } from "../utils/sendRequest.js"
+import { Rect2D } 										from "./class_rect.js"
+import { Input }										from "./class_input.js"
+import { AppState, appStore, UserState }				from "../objects/store.js"
+import { Game }											from "../Pong/gameClass.js"
+import { sendRequest }									from "../utils/sendRequest.js"
 
 import type { Color, Keys }	from "./interface.js"
-import { Wall } from "./class_wall.js"
-import { Rect2D } from "./class_rect.js"
 
 
 
@@ -389,7 +388,6 @@ export class	TankGame extends Game {
 			this.animationFrameId = null;
 			for (let a of GSTATE.ACTORS)
 				GSTATE.ACTORS.splice(0,GSTATE.ACTORS.length)
-			console.log('TankGame Stopped');
 		}
 	}
 

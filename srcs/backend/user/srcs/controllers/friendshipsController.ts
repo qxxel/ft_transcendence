@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:38:43 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:01:03 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { friendshipsServ } 		from "../user.js"
 import { errorsHandler }		from "../utils/errorsHandler.js"
 import { extractUserId }		from "../utils/extractHeaders.js"
 import { friendshipsAddDto }	from "../dtos/friendshipsAddDto.js"
-import { friendshipsServ } 		from "../user.js"
 import { friendshipsUpdateDto }	from "../dtos/friendshipsUpdateDto.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'

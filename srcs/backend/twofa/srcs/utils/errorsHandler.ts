@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   errorsHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/13 01:02:05 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 04:00:28 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 /* ====================== IMPORTS ====================== */
 
-import * as twofaError	from "./throwErrors.js"
 import axios			from 'axios'
+import * as twofaError	from "./throwErrors.js"
 
 import type { FastifyInstance, FastifyReply } from "fastify"
 

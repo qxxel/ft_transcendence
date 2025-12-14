@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:51:37 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:42:44 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:11:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 import { appStore, AppState }	from "../objects/store.js"
 import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js" 
-import { Store }				from "../utils/store.js"
 
 
 /* ====================== FUNCTION ====================== */

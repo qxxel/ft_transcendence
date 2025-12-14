@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 07:40:00 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 07:57:20 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,14 @@
 import { appStore }				from "../objects/store.js"
 import { getMenu }				from "../utils/getMenu.js"
 import { sendRequest }			from "../utils/sendRequest.js"
+import { addTabs, delTabs }		from "../utils/tabs.js"
 import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
-import { delTabs }				from "../utils/tabs.js"
-import { addTabs }				from "../utils/tabs.js"
 
 /* ====================== FUNCTIONS ====================== */
 
 async function	handleLoadPage(): Promise<void> {
 	return new Promise((resolve) => {
-		document.addEventListener("DOMContentLoaded", async (event: Event) => {
+		document.addEventListener("DOMContentLoaded", async (_event: Event) => {
 			console.log("DOMContentLoaded");
 			addTabs()
 

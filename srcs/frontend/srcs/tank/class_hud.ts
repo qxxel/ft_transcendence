@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:26:46 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:12:50 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 
 /* ============================= IMPORTS ============================= */
 
+import { Rect2D } 	from "./class_rect.js"
 import { Actor }	from "./class_actor.js"
-import { Input } 	from "./class_input.js";
-import { Rect2D } 	from "./class_rect.js";
-import { Tank } 	from "./class_tank.js";
+import { Input } 	from "./class_input.js"
 
 import type { Color }	from "./interface.js"
 

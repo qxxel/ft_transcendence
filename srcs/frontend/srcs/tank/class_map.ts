@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 04:13:07 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { Actor }		from "./class_actor.js"
 import { GSTATE }		from "./global.js"
+import { Actor }		from "./class_actor.js"
 import { Wall }			from "./class_wall.js"
+
 import type { Spawn }	from "./global.js"
 
 

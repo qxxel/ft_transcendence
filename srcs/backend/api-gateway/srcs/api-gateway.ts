@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 00:47:52 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:54:56 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@
 /* ====================== IMPORT ====================== */
 
 import axios						from 'axios'
-import cors							from '@fastify/cors'
 import Fastify						from 'fastify'
+import cors							from '@fastify/cors'
 import formBody						from '@fastify/formbody'
 import proxy						from '@fastify/http-proxy'
+import { gatewayJwtController }		from "./controllers/gatewayJwtController.js"
 import { gatewayAuthController }	from "./controllers/gatewayAuthController.js"
 import { gatewayGameController }	from "./controllers/gatewayGameController.js"
-import { gatewayJwtController }		from "./controllers/gatewayJwtController.js"
 import { gatewayUserController }	from "./controllers/gatewayUserController.js"
-import { gatewaytwofaController }		from "./controllers/gatewaytwofaController.js"
+import { gatewaytwofaController }	from "./controllers/gatewaytwofaController.js"
 
 import type { FastifyInstance }	from 'fastify'
 

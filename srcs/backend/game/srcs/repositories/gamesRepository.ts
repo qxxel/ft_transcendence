@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gamesRepository.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:54:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 23:27:40 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:49:52 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { gamesAddDto }		from "../dtos/gamesAddDto.js"
-import { gamesRespDto }		from "../dtos/gamesRespDto.js"
+import { gamesAddDto }			from "../dtos/gamesAddDto.js"
+import { gamesRespDto }			from "../dtos/gamesRespDto.js"
 import { gamesTableBuilder }	from "../tableBuilders/gamesTableBuilder.js"
 
 import type { Database }	from 'sqlite3'

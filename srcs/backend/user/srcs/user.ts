@@ -3,31 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   user.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/13 01:09:16 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 04:00:54 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* ====================== IMPORT ====================== */
 
 import axios		from 'axios'
-import cors			from '@fastify/cors'
 import Fastify		from 'fastify'
+import sqlite3Pkg	from 'sqlite3'
+import cors			from '@fastify/cors'
 import formBody		from '@fastify/formbody'
 import multipart	from '@fastify/multipart'
-import sqlite3Pkg	from 'sqlite3'
 
-import { friendshipsController }	from "./controllers/friendshipsController.js"
-import { friendshipsService }		from "./services/friendshipsService.js"
-import { friendshipsRepository }	from "./repositories/friendshipsRepository.js"
-import { usersController }			from "./controllers/usersController.js"
 import { usersService }				from "./services/usersService.js"
+import { userStatsService }			from "./services/userStatsService.js"
+import { friendshipsService }		from "./services/friendshipsService.js"
+import { usersController }			from "./controllers/usersController.js"
 import { usersRepository }			from "./repositories/usersRepository.js"
 import { userStatsController }		from "./controllers/userStatsController.js"
-import { userStatsService }			from "./services/userStatsService.js"
 import { userStatsRepository }		from "./repositories/userStatsRepository.js"
+import { friendshipsController }	from "./controllers/friendshipsController.js"
+import { friendshipsRepository }	from "./repositories/friendshipsRepository.js"
 
 
 /* ====================== AXIOS VARIABLES ====================== */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gamesService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:48:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:56:17 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:56:46 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { NotExistError }	from "../utils/throwErrors.js"
 import { gamesAddDto }		from "../dtos/gamesAddDto.js"
+import { NotExistError }	from "../utils/throwErrors.js"
 import { gamesRespDto }		from "../dtos/gamesRespDto.js"
 import { gamesRepository }	from "../repositories/gamesRepository.js"
 

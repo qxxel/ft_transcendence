@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cookies.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:06:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/12 23:27:48 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:59:09 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 import { expAccess, expRefresh, expTwofa }	from "../jwt.js"
 
-import type { FastifyReply }	from "fastify"
+import type { FastifyReply }	from 'fastify'
 
 
 /* ====================== FUNCTIONS ====================== */

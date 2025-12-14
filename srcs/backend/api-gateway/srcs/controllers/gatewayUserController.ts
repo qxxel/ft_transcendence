@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 03:41:31 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ import { gatewayAxios }			from "../api-gateway.js"
 import { getValidUserId }		from "../utils/validateJwt.js"
 import { requestErrorsHandler }	from "../utils/requestErrors.js"
 
-import type { AxiosHeaderValue, AxiosResponse }  									from 'axios'
+import type { AxiosHeaderValue, AxiosResponse }  				from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 
 
