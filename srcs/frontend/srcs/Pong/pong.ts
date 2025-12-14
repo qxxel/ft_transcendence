@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/14 00:41:35 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 01:28:22 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ export class PongGame extends Game {
 
 	private ids: { canvas: string; score1: string; score2: string; winScore: string };
 
-	// private user: User;
-
 	constructor(canvasId: string,
 			score1Id: string,
 			score2Id: string,
@@ -73,8 +71,8 @@ export class PongGame extends Game {
 
 		let	state: AppState = appStore.getState();
 		let	pendingOptions: GameOptions | null = state.game.pendingOptions;
-		if (pendingOptions)																{console.log("pendingOptions => " + [pendingOptions.winningScore])
-			this.lastOptions = JSON.parse(JSON.stringify(pendingOptions));				}
+		if (pendingOptions)
+			this.lastOptions = JSON.parse(JSON.stringify(pendingOptions));
 		else if (this.lastOptions)
 		{
 			appStore.setState((state) => ({
@@ -84,13 +82,10 @@ export class PongGame extends Game {
 					pendingOptions: this.lastOptions
 				}
 			}));
-																						console.log("lastOptions => " + this.lastOptions.winningScore)
 		}
-																						console.log("noOptions")
 
 		state = appStore.getState();
 		pendingOptions = state.game.pendingOptions;
-																						console.log("post pendingOptions => " + pendingOptions)
 		if (pendingOptions)
 			this.lastOptions = JSON.parse(JSON.stringify(pendingOptions));
 
@@ -194,9 +189,6 @@ export class PongGame extends Game {
 					pendingOptions: null
 				}
 			}));
-
-				// OLD
-			// this.appState.pendingOptions = undefined;
 		}
 	}
 
@@ -234,32 +226,8 @@ export class PongGame extends Game {
 	}
 
 	private renderLoop() {
-		this.smoothState();
-
 		this.draw();
 		this.animationFrameId = requestAnimationFrame(() => this.renderLoop());
-	}
-
-	private smoothState() {
-		if (!this.serverState || !this.displayState)
-			return;
-
-		const	smoothing = 1;
-
-		this.displayState.ball.x = linearInterpolation(this.displayState.ball.x, this.serverState.ball.x, smoothing);
-		this.displayState.ball.y = linearInterpolation(this.displayState.ball.y, this.serverState.ball.y, smoothing);
-
-		this.displayState.paddle1.y = linearInterpolation(this.displayState.paddle1.y, this.serverState.paddle1.y, smoothing);
-		this.displayState.paddle2.y = linearInterpolation(this.displayState.paddle2.y, this.serverState.paddle2.y, smoothing);
-
-		this.displayState.collectibles = this.serverState.collectibles;
-		this.displayState.score1 = this.serverState.score1;
-		this.displayState.score2 = this.serverState.score2;
-		this.displayState.ball.radius = this.serverState.ball.radius;
-		this.displayState.paddle1.height = this.serverState.paddle1.height;
-		this.displayState.paddle2.height = this.serverState.paddle2.height;
-
-		this.displayState.status = this.serverState.status;
 	}
 
 	private draw() {
