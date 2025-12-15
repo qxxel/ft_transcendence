@@ -3,17 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   verifyEmail.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:11:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:45:45 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 03:00:14 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// MANAGES EMAIL VERIFICATION FLOW FOR TWO-FACTOR AUTHENTICATION, FETCHING OTP AND UPDATING UI
+
+
+/* ====================== IMPORTS ====================== */
 
 import { router }						from "../index.js"
 import { displayDate, displayPopError }	from "./display.js"
 
-export async function	verifyEmail(idDivHidden: string, idDivVisible: string, email: string): Promise<void> {
+
+/* ====================== FUNCTIONS ====================== */
+
+export async function	verifyEmail(idDivHidden: string, idDivVisible: string, email: string | null): Promise<void> {
 
 	const	response: Response = await fetch('/api/jwt/payload/twofa', {
 		method: "GET",
@@ -41,17 +49,19 @@ export async function	verifyEmail(idDivHidden: string, idDivVisible: string, ema
 
 	router.canLeave = false;
 
-	fetch('/api/twofa/otp', {
-			method: 'POST',
-			credentials: "include",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({ email })
-		}
-	).then(async (res) => {
-			if (!res.ok)
-				displayPopError(res)
-		}
-	);
+	if (email) {
+		fetch('/api/twofa/otp', {
+				method: 'POST',
+				credentials: "include",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({ email })
+			}
+		).then(async (res) => {
+				if (!res.ok)
+					displayPopError(res)
+			}
+		);
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:28:08 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:17:28 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 		signForm.classList.remove("darken");
 
 	if (!response.ok)
-		return displayError(response, "sign-in-msg-error"); // /!\ response.status
+		return displayError(response, "sign-in-msg-error");
 
 	const	result: any = await response.json();
 
@@ -119,7 +119,7 @@ async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 	});
 
 	if (!response.ok)
-		return displayError(response, "sign-up-msg-error"); // /!\ response.status
+		return displayError(response, "sign-up-msg-error");
 	
 	const	result = await response.json();
 
@@ -157,7 +157,7 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 		signForm.classList.remove("darken");
 
 	if (!response.ok)
-		return displayError(response, "verify-email-msg-error"); // /!\ response.status
+		return displayError(response, "verify-email-msg-error");
 
 	appStore.setState((state) => ({
 		...state,
@@ -194,7 +194,7 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 		signForm.classList.remove("darken");
 
 	if (!response.ok)
-		return displayError(response, "2fa-msg-error"); // /!\ response.status
+		return displayError(response, "2fa-msg-error");
 
 	appStore.setState((state) => ({
 		...state,
@@ -294,9 +294,12 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		is2faEnable: new2fa
 	});
 	if (!postUser.ok)
-		return displayError(postUser, "user-setting-msg-error"); // /!\ response.status
+		return displayError(postUser, "user-setting-msg-error");
 	
-	verifyEmail("user-profile", "confirm-setting", newEmail);
+	if (resultGetUser.email != newEmail)
+		verifyEmail("user-profile", "confirm-setting", newEmail);
+	else
+		verifyEmail("user-profile", "confirm-setting", null);
 
 	const	userUpdate: userUpdate = {
 		username: newUsername,

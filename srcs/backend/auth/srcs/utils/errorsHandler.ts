@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   errorsHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:54:15 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:53:23 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// HANDLE AND LOG ALL ERRORS FOR AUTH SERVICE REQUESTS
 
 
 /* ====================== IMPORTS ====================== */

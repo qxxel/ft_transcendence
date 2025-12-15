@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsAddDto.ts                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:48:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:17:01 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:42:04 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 // WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW FRIENDSHIPS
 

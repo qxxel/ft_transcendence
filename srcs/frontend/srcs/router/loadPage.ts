@@ -3,12 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:29:43 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:58:50 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// LOAD AND DISPLAY USER AND 2FA DATA ON THE PAGE
+
 
 /* ====================== IMPORTS ====================== */
 

@@ -79,7 +79,7 @@
 			<p class="warning-text">Once you delete your account, there is no going back.</p>
 			
 			<div class="account-actions">
-				<button type="button" onclick="onClickDeleteAccount();" id="delete-account" class="btn-danger">
+				<button type="button" onclick="onClickDeleteAccountStep();" id="button-step1-delete-account" class="btn-danger">
 					Delete Account
 				</button>
 				
@@ -116,9 +116,10 @@
 
 		<p id="confirm-setting-msg-error" class="msg-error"></p>
 
-		<div class="button-row">
+		<div id="div-button-profile" class="button-row">
 			<button type="button" onclick="onClickCancel()" id="button-cancel" class="cancel-button-form">Cancel</button>
 			<button type="submit" id="verify-email-submit" class="verify-button-form">Verify</button>
+			<!-- <button type="button" onclick="onClickDeleteAccount()" id="button-delete-account" class="verify-button-form" hidden>button</button> -->
 		</div>
 	</form>
 

@@ -3,12 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   display.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:59:14 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// UTILITY FUNCTIONS TO DISPLAY ERRORS AND FORMATTED DATES ON THE FRONTEND
+
+
+/* ====================== FUNCTION ====================== */
 
 export async function displayError(response: Response | string, idMsgError: string) {
 	const	p = document.getElementById(idMsgError);

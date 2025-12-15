@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   store.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:16:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:45:36 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:59:40 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// 
+// GENERIC STATE MANAGEMENT CLASS FOR FRONTEND, WITH SUBSCRIPTION SUPPORT
 
+
+/* ====================== FUNCTION ====================== */
 
 export class	Store<T> {
 	private	state: T;

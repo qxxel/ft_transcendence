@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:27:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 07:57:20 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,50 +15,51 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { router }				from "../index.js"
-import { delTabs }				from "../utils/tabs.js"
 import { appStore }				from "../objects/store.js"
 import { getMenu }				from "../utils/getMenu.js"
 import { sendRequest }			from "../utils/sendRequest.js"
+import { addTabs, delTabs }		from "../utils/tabs.js"
 import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
-
 
 /* ====================== FUNCTIONS ====================== */
 
 async function	handleLoadPage(): Promise<void> {
-	document.addEventListener("DOMContentLoaded", async (event: Event) => {
+	return new Promise((resolve) => {
+		document.addEventListener("DOMContentLoaded", async (_event: Event) => {
+			console.log("DOMContentLoaded");
+			addTabs()
 
-		// const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
-		const	response: Response = await sendRequest('/api/user/me', "GET", null);
+			// const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
+			const	response: Response = await sendRequest('/api/user/me', "GET", null);
 
-		if (!response.ok)
-		{
-			setDynamicFavicon(null);
-			return;
-		}
-
-		const	result: any = await response.json();
-
-		appStore.setState((state) => ({
-			...state,
-			user: {
-				id: result.id as number,
-				username: result.username,
-				avatar: result.avatar,
-				isAuth: true
+			if (!response.ok) {
+				setDynamicFavicon(null);
+				return resolve();
 			}
-		}));
 
-		const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
-		if (menu)
-			menu.innerHTML = getMenu(true);
+			const	result: any = await response.json();
 
-		router.navigate('/');
+			appStore.setState((state) => ({
+				...state,
+				user: {
+					id: result.id as number,
+					username: result.username,
+					avatar: result.avatar,
+					isAuth: true
+				}
+			}));
+
+			const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+			if (menu)
+				menu.innerHTML = getMenu(true);
+
+			resolve();
+		});
 	});
 }
 
 function handleUnload() {
-	window.addEventListener("beforeunload", (event: Event) => { delTabs() });
+	window.addEventListener("beforeunload", (_event: Event) => { delTabs() });
 }
 
 function handlePagehide() {
@@ -69,7 +70,7 @@ function handlePagehide() {
 }
 
 export async function	setupLoadHandler(): Promise<void> {
-	handleLoadPage();
+	await handleLoadPage();
 	handleUnload();
 	handlePagehide();
 }

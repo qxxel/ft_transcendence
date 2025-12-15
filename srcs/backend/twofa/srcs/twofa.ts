@@ -3,12 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   twofa.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:21 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:59:40 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:54:52 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// SET UP AND RUN THE 2FA SERVICE SERVER WITH DATABASE, CONTROLLERS, AND CORS
+
 
 /* ====================== IMPORTS ====================== */
 
