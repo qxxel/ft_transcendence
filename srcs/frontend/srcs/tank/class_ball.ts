@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:24:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:28:04 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ export class	Ball extends Actor {
 				else if (a instanceof Ball) {
 					if (this.author && a.author && this.author != a.author && !(a instanceof Pearl))
 					{
-						let tmp_damage:number = a.health;
+						let	tmp_damage:number = a.health;
 						a.takeDamage(this.health);
 						this.takeDamage(tmp_damage);
 					}
@@ -359,7 +359,7 @@ export class	Pearl extends Ball {
 				this.impact_x = rect1.x + rect1.w/2;
 				this.impact_y = rect1.y + rect1.h/2;
 				this.impact_orientation = this.getBounce(a.getRect());
-				let spawnRect: Rect2D = new Rect2D(this.impact_x - this.author!.w/2, this.impact_y - this.author!.h/2, this.author!.w, this.author!.h);
+				let	spawnRect: Rect2D = new Rect2D(this.impact_x - this.author!.w/2, this.impact_y - this.author!.h/2, this.author!.w, this.author!.h);
 				spawnRect = this.findSpawn(spawnRect);
 				if (this.author && spawnRect != undefined) {
 					this.author.setPos((spawnRect.x - this.author!.x), (spawnRect.y - this.author!.y));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sendRequest.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:23:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:45:24 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ async function	sendMainRequest(path: string, requestMethod: string, body: any | 
 
 export async function	sendRequest(path: string, requestMethod: string, body: Object | null): Promise<Response> {
 	
-	let response: Response = await sendMainRequest(path, requestMethod, body);
+	let	response: Response = await sendMainRequest(path, requestMethod, body);
 	
 	if (response.status === 401){
 		response = await fetch("/api/jwt/refresh/access", {

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:58:50 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 06:19:56 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ export async function loadUser() {
 		return ;
 	}
 
-	const	userRes = await Response.json();
+	const	userRes: any = await Response.json();
 
 	const	imgElement: HTMLImageElement = document.getElementById("user-avatar") as HTMLImageElement;
 	const	displayImgElement: HTMLImageElement = document.getElementById("display-user-avatar") as HTMLImageElement;
@@ -73,22 +73,22 @@ export async function loadUser() {
 	}
 
 	if (userRes.is2faEnable == true) {
-		const	switchSpan = document.getElementById("switch-span") as HTMLInputElement;
-		if (switchSpan) {
+		const	switchSpan: HTMLElement | null = document.getElementById("switch-span");
+		if (switchSpan instanceof HTMLInputElement) {
 			switchSpan.textContent = "Enabled";
 			switchSpan.classList.add('status-enabled');
 			switchSpan.classList.remove('status-disabled');
 		}
 
-		const	checkbox2fa = document.getElementById("edit-2fa") as HTMLInputElement;
-		if (checkbox2fa)
+		const	checkbox2fa: HTMLElement | null = document.getElementById("edit-2fa");
+		if (checkbox2fa instanceof HTMLInputElement)
 			checkbox2fa.checked = true;
 	}
 
-	const	usernameEl = document.getElementById("user-username") as HTMLSpanElement;
-	const	emailEl = document.getElementById("user-email") as HTMLSpanElement;
+	const	usernameEl: HTMLElement | null = document.getElementById("user-username");
+	const	emailEl: HTMLElement | null = document.getElementById("user-email");
 	
-	if (usernameEl && emailEl) {
+	if (usernameEl instanceof HTMLSpanElement && emailEl instanceof HTMLSpanElement) {
 		usernameEl.textContent = userRes.username ?? "";
 		emailEl.textContent = userRes.email ?? "";
 	}

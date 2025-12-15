@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lerp.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 19:28:32 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:42:08 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 05:57:53 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 
 /* ====================== FUNCTION ====================== */
 
-export function	linearInterpolation(start: number, end: number, smooth: number) {
+export function	linearInterpolation(start: number, end: number, smooth: number): number {
 	return start * (1 - smooth) + end * smooth;
 }

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:35:55 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 06:30:06 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ import { Game }											from "../Pong/gameClass.js"
 import { sendRequest }									from "../utils/sendRequest.js"
 
 import type { Color, Keys }	from "./interface.js"
+import type { Spawn }		from "./global.js"
 
 
 
@@ -101,8 +102,8 @@ export class	TankGame extends Game {
 		const	p2Keys:Keys = {up:'arrowup', down:'arrowdown', left:'arrowleft', right:'arrowright', rot_left:'2', rot_right:'3', fire:'1', ability:'2'};
 		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'davinco')
 		{
-			const	s1 = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
-			const	s2 = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];
+			const	s1: Spawn = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
+			const	s2: Spawn = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];
 
 			switch (this.p1Class)
 			{
@@ -142,11 +143,11 @@ export class	TankGame extends Game {
 	private spawn_collectible() : void 
 	{
 		if (!this.map || this.powerupFrequency == 0) return;
-		let c_width:number = 25;
-		let c_height:number = 25;
-		let attempt: number = 0;
-		let nope: boolean;
-		let effects: string[] = [];
+		let	c_width:number = 25;
+		let	c_height:number = 25;
+		let	attempt: number = 0;
+		let	nope: boolean;
+		let	effects: string[] = [];
 		if (this.star1)
 			effects.push("heal");
 		if (this.star2) {
@@ -162,9 +163,9 @@ export class	TankGame extends Game {
 		{
 			while (attempt++ < 2000)
 			{
-				let s = this.map.spawns_collectible[Math.floor(Math.random() * this.map.spawns_collectible.length)];
+				let	s: Spawn = this.map.spawns_collectible[Math.floor(Math.random() * this.map.spawns_collectible.length)];
 				nope = false;
-				let collec: Rect2D;
+				let	collec: Rect2D;
 				if (!s) continue;
 				collec = new Rect2D(s!.x,s!.y,c_width,c_height);
 
@@ -183,7 +184,7 @@ export class	TankGame extends Game {
 				if (nope)
 					continue;
 
-				let index: number;
+				let	index: number;
 				index = Math.floor(Math.random() * effects.length);
 				GSTATE.ACTORS.push(new Collectible(s!.x,s!.y,c_width,c_height, effects[index]!));
 				break;
@@ -283,7 +284,7 @@ export class	TankGame extends Game {
 			}
 		}
 		if (!this.isPaused && GSTATE.TANKS == 1) {
-			let winner: Tank;
+			let	winner: Tank;
 
 			this.showEndGameDashboard()
 			this.isPaused = true;
@@ -296,19 +297,19 @@ export class	TankGame extends Game {
 	const	dashboard = document.getElementById('game-over-dashboard');
 	if (!dashboard) return;
 
-	const	matchDurationSeconds = Math.floor((Date.now() - this.startTime) / 1000);
-	const	minutes = Math.floor(matchDurationSeconds / 60);
-	const	seconds = matchDurationSeconds % 60;
+	const	matchDurationSeconds: number = Math.floor((Date.now() - this.startTime) / 1000);
+	const	minutes: number = Math.floor(matchDurationSeconds / 60);
+	const	seconds: number = matchDurationSeconds % 60;
 
-	const	winnerName = GSTATE.STATS1.win == 1 ? this.player1Name : this.player2Name;
-	const	winnerDisplay = document.getElementById('winner-display');
+	const	winnerName: string = GSTATE.STATS1.win == 1 ? this.player1Name : this.player2Name;
+	const	winnerDisplay: HTMLElement | null = document.getElementById('winner-display');
 
 	if (winnerDisplay) winnerDisplay.innerText = `${winnerName} Wins!`;
 
 	const	accuracy1: number = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit) / GSTATE.STATS1.fire * 100 : 0;
 	const	accuracy2: number = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit) / GSTATE.STATS2.fire * 100 : 0;
 
-	let e: HTMLElement | null;
+	let	e: HTMLElement | null;
 
 	e = document.getElementById('stat-duration'); 		if (e) e.innerText = `${minutes}m ${seconds}s`;
 
@@ -330,26 +331,26 @@ export class	TankGame extends Game {
   }
 
 	private hideEndGameDashboard() {
-		const	dashboard = document.getElementById('game-over-dashboard');
+		const	dashboard: HTMLElement | null = document.getElementById('game-over-dashboard');
 		if (dashboard) dashboard.style.display = 'none';
 	}
 
 	private updateNameDisplay() {
-		const	p1Span = document.getElementById('p1-name');
-		const	p2Span = document.getElementById('p2-name');
+		const	p1Span: HTMLElement | null = document.getElementById('p1-name');
+		const	p2Span: HTMLElement | null = document.getElementById('p2-name');
 		if (p1Span) p1Span.innerText = this.player1Name + "";
 		if (p2Span) p2Span.innerText = this.player2Name + "";
   	}
 
 	private generateLegend(): void {
-		const	legendContainer = document.getElementById('powerup-legend');
+		const	legendContainer: HTMLElement | null = document.getElementById('powerup-legend');
 		if (!legendContainer) return;
 
 		legendContainer.style.display = 'none';
 		if (this.star1 == false && this.star2 == false && this.star3 == false) return;
 
 		legendContainer.style.display = 'flex';
-		let html = '<div class="legend-title">Power-Ups</div>';
+		let	html: string = '<div class="legend-title">Power-Ups</div>';
 
 		const	createRow = (text: string, fill: string, stroke: string) => {
 			return `

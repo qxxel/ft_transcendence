@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   router.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:42:34 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 06:22:23 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ interface	Route {
 export class	Router {
 	private	currentPath: string = window.location.pathname;
 	private	routes: Route[] = [];
-	public	canLeave = true;
+	public	canLeave: boolean = true;
 
 	addRoute(path: string, component: () => string | Promise<string>): void {
 		this.routes.push({ path, component });

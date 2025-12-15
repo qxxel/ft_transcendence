@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:01:43 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 06:33:09 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ import { Game }	from "../Pong/gameClass.js"
 /* ====================== FUNCTIONS ====================== */
 
 function onClickPlay(): void {
-	const	maxPointsInput: HTMLInputElement = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-	if (!maxPointsInput) return;
+	const	maxPointsInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
+	if (!(maxPointsInput instanceof HTMLFormElement)) return;
 
 	const	state: AppState = appStore.getState();
 	const	currentGame: Game | null = state.game.currentGame;
@@ -61,7 +61,7 @@ async function  onClickLogout(): Promise<void> {
 		}
 	}));
 
-	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	const	menu: HTMLElement | null = document.getElementById("nav");
 	if (menu)
 		menu.innerHTML = getMenu(false);
 			
@@ -82,18 +82,21 @@ async function	onClickEdit(): Promise<void> {
 	const	viewElements = document.querySelectorAll(".view-mode");
 
 	editElements.forEach(e => {
-		(e as HTMLElement).hidden = false;
+		if (e instanceof HTMLElement)
+			e.hidden = false;
 	});
 	
 	viewElements.forEach(e => {
-		(e as HTMLElement).hidden = true;
+		if (e instanceof HTMLElement)
+			e.hidden = true;
 	});
 
-	const	username = document.getElementById("edit-username") as HTMLInputElement;
-	if (!username) return;
+	const	username: HTMLElement | null = document.getElementById("edit-username");
+	if (!(username instanceof HTMLInputElement)) return;
 	username.value = userRes.username ?? "";
-	const	mail = document.getElementById("edit-email") as HTMLInputElement;
-	if (!mail) return;
+
+	const	mail: HTMLElement | null = document.getElementById("edit-email");
+	if (!(mail instanceof HTMLInputElement)) return;
 	mail.value = userRes.email ?? "";
 }
 
@@ -111,7 +114,7 @@ export async function	onClickHistory(targetId: number | null, targetName: string
 function	onClickCancel(): void {
 	router.canLeave = true;
 
-	const	confirmSetting = document.getElementById("confirm-setting");
+	const	confirmSetting: HTMLElement | null = document.getElementById("confirm-setting");
 	if (confirmSetting)
 		return router.navigate("/user");
 	router.navigate("/")
@@ -125,12 +128,12 @@ async function onClickDeleteAccount(): Promise<void>{
 	if (!confirm("Are you sure you want to delete your account?"))
 		return ;
 
-	const	confirmSettingForm = document.getElementById("confirm-setting-form");
+	const	confirmSettingForm: HTMLElement | null = document.getElementById("confirm-setting-form");
 	if (confirmSettingForm)
 		confirmSettingForm.classList.add("darken");
 
 
-	const	p = document.getElementById("confirm-setting-msg-error");
+	const	p: HTMLElement | null = document.getElementById("confirm-setting-msg-error");
 	if (p)
 		p.textContent = null;
 	
@@ -152,7 +155,7 @@ async function onClickDeleteAccount(): Promise<void>{
 		}
 	}));
 	
-	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	const	menu: HTMLElement | null = document.getElementById("nav");
 	if (menu)
 		menu.innerHTML = getMenu(false);
 			
@@ -171,7 +174,7 @@ async function	onClickDeleteAccountStep(): Promise<void> {
 	
 	const	divButtonProfile: HTMLElement | null = document.getElementById("div-button-profile");
 	if (divButtonProfile) {
-		const buttonDeleteAccount = document.createElement("button");
+		const	buttonDeleteAccount = document.createElement("button");
 		
 		buttonDeleteAccount.type = "button";
 		buttonDeleteAccount.id = "button-delete-account";
@@ -203,7 +206,7 @@ async function	onClickDeleteTwofa(): Promise<void> {
 		}
 	}));
 
-	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	const	menu: HTMLElement | null = document.getElementById("nav");
 	if (menu)
 		menu.innerHTML = getMenu(false);
 			
@@ -230,7 +233,7 @@ async function	onClickSkipeVerifyEmailDev(): Promise<void> { // delete this
 		}
 	}));
 	
-	var menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
 		menu.innerHTML = getMenu(true);
 
@@ -239,20 +242,27 @@ async function	onClickSkipeVerifyEmailDev(): Promise<void> { // delete this
 }
 
 async function	onClickNewCode(): Promise<void> {
-	const	btnSend = document.getElementById("btnSend2faCode") as HTMLButtonElement;
-	const	spanCooldown = document.getElementById("btnCooldown");
-	const	locks = document.querySelectorAll(".lock");
+	const	btnSend: HTMLElement | null = document.getElementById("btnSend2faCode");
+	const	spanCooldown: HTMLElement | null = document.getElementById("btnCooldown");
+	const	locks: NodeListOf<Element> = document.querySelectorAll(".lock");
 
-	if (btnSend) btnSend.disabled = true;
+	if (btnSend instanceof HTMLButtonElement) btnSend.disabled = true;
 	if (spanCooldown) spanCooldown.textContent = "(5s)";
-	locks.forEach(e => (e as HTMLElement).hidden = false);
+	locks.forEach(e => {
+		if (e instanceof HTMLElement)
+			e.hidden = false;
+	});
 
 	const	res = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
 
 	if (!res.ok) {
-		if (btnSend) btnSend.disabled = false;
+		if (btnSend instanceof HTMLButtonElement) btnSend.disabled = false;
 		if (spanCooldown) spanCooldown.textContent = "";
-		locks.forEach(e => (e as HTMLElement).hidden = true);
+		locks.forEach(e => {
+			if (e instanceof HTMLElement)
+				e.hidden = true;
+		});
+
 		displayPopError(res)
 		return;
 	}
@@ -267,9 +277,12 @@ async function	onClickNewCode(): Promise<void> {
 		}
 	).then(async (response) => {
 			if (!response.ok) {
-				if (btnSend) btnSend.disabled = false;
+				if (btnSend instanceof HTMLButtonElement) btnSend.disabled = false;
 				if (spanCooldown) spanCooldown.textContent = "";
-				locks.forEach(e => (e as HTMLElement).hidden = true);
+				locks.forEach(e => {
+					if (e instanceof HTMLElement)
+						e.hidden = true;
+				});
 				displayPopError(response);
 				return;
 			}
@@ -282,8 +295,8 @@ async function	onClickNewCode(): Promise<void> {
 /* ====================== UI TOGGLE HELPERS ====================== */
 
 function showDifficultyMenu() {
-	const	mainBtns = document.getElementById('main-menu-btns');
-	const	diffBtns = document.getElementById('difficulty-btns');
+	const	mainBtns: HTMLElement | null = document.getElementById('main-menu-btns');
+	const	diffBtns: HTMLElement | null = document.getElementById('difficulty-btns');
 	
 	if (mainBtns && diffBtns) {
 		mainBtns.classList.add('hidden');
@@ -292,8 +305,8 @@ function showDifficultyMenu() {
 }
 
 function hideDifficultyMenu() {
-	const	mainBtns = document.getElementById('main-menu-btns');
-	const	diffBtns = document.getElementById('difficulty-btns');
+	const	mainBtns: HTMLElement | null = document.getElementById('main-menu-btns');
+	const	diffBtns: HTMLElement | null = document.getElementById('difficulty-btns');
 	
 	if (mainBtns && diffBtns) {
 		mainBtns.classList.remove('hidden');
@@ -302,9 +315,9 @@ function hideDifficultyMenu() {
 }
 
 function switchGameMode(mode: 'default' | 'featured') {
-	const	defDiv = document.getElementById('default-mode-content');
-	const	inputDiv = document.getElementById('default-mode-content-input');
-	const	featDiv = document.getElementById('featured-mode-content');
+	const	defDiv: HTMLElement | null = document.getElementById('default-mode-content');
+	const	inputDiv: HTMLElement | null = document.getElementById('default-mode-content-input');
+	const	featDiv: HTMLElement | null = document.getElementById('featured-mode-content');
 
 	if (mode === 'default') {
 		defDiv?.classList.remove('hidden');
@@ -318,8 +331,8 @@ function switchGameMode(mode: 'default' | 'featured') {
 }
 
 function selectFeaturedDifficulty(level: number) {
-	const	input = document.getElementById('aiHardcore') as HTMLInputElement;
-	if (!input) return;
+	const	input: HTMLElement | null = document.getElementById('aiHardcore');
+	if (!(input instanceof HTMLInputElement)) return;
 	input.value = level.toString();
 
 	for (let i = 1; i <= 4; i++) {
@@ -332,9 +345,9 @@ function selectFeaturedDifficulty(level: number) {
 /* ====================== GAME & TOURNAMENT HANDLERS ====================== */
 
 function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard') {
-	const	maxPointsInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-	if (!maxPointsInput) return;
-	const	winningScore = parseInt(maxPointsInput.value, 10);
+	const	maxPointsInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
+	if (!(maxPointsInput instanceof HTMLInputElement)) return;
+	const	winningScore: number = parseInt(maxPointsInput.value, 10);
 	
 	const	state: AppState = appStore.getState();
 	const	user: UserState | null = state.user;
@@ -374,8 +387,8 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard') {
 function onClickPlayPVP() {
 
 	if (router.Path === '/pongmenu') {
-		const	maxPointsInput: HTMLInputElement = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-		if (!maxPointsInput) return;
+		const	maxPointsInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
+		if (!(maxPointsInput instanceof HTMLInputElement)) return;
 		const	winningScore: number = parseInt(maxPointsInput.value, 10);
 
 		const	state: AppState = appStore.getState();
@@ -414,10 +427,12 @@ function onClickPlayPVP() {
 	}
 	else if (router.Path === '/tankmenu')
 	{
-		const	mapSelect = document.getElementById("mapSelect") as HTMLSelectElement;
-		const	p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
-		const	p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
-		if (!mapSelect || !p1Select || !p2Select) return;
+		const	mapSelect: HTMLElement | null = document.getElementById("mapSelect");
+		const	p1Select: HTMLElement | null = document.getElementById("p1TankSelect");
+		const	p2Select: HTMLElement | null = document.getElementById("p2TankSelect");
+		if (!(mapSelect instanceof HTMLSelectElement) || 
+			!(p1Select instanceof HTMLSelectElement) || 
+			!(p2Select instanceof HTMLSelectElement)) return;
 		
 		const	selectedMap = mapSelect.value;
 		const	p1Tank = p1Select.value;
@@ -435,7 +450,7 @@ function onClickPlayPVP() {
 }
 
 function	onStartTournament() {
-	const	inputs = document.querySelectorAll('.player-name-input') as NodeListOf<HTMLInputElement>;
+	const	inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll('.player-name-input');
 	const	playerNames: Player[] = [];
 	
 	for (const input of inputs) {
@@ -457,9 +472,9 @@ function	onStartTournament() {
 		displayError("Player names must be unique.", "tournament-msg-error");
 		return;
 	}
-	const	scoreInput = document.getElementById("choosenMaxPoints") as HTMLInputElement;
-	if (!scoreInput) return;
-	const	winningScore = parseInt(scoreInput.value, 10);
+	const	scoreInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
+	if (!(scoreInput instanceof HTMLInputElement)) return;
+	const	winningScore: number = parseInt(scoreInput.value, 10);
 
 	appStore.setState((state) => ({
 		...state,
@@ -546,25 +561,25 @@ function startTournamentMatch(matchId: string, p1: string, p2: string) {
 }
 
 function onClickStartFeatured(mode: 'ai' | 'pvp') {
-	const	freqInput = document.getElementById("powerupFreq") as HTMLInputElement;
+	const	freqInput: HTMLElement | null = document.getElementById("powerupFreq");
 	
-	const	star1 = (document.getElementById("chk-1star") as HTMLInputElement)?.checked;
-	const	star2 = (document.getElementById("chk-2star") as HTMLInputElement)?.checked;
-	const	star3 = (document.getElementById("chk-3star") as HTMLInputElement)?.checked;
+	const	star1: boolean | undefined = (document.getElementById("chk-1star") as HTMLInputElement)?.checked;
+	const	star2: boolean | undefined = (document.getElementById("chk-2star") as HTMLInputElement)?.checked;
+	const	star3: boolean | undefined = (document.getElementById("chk-3star") as HTMLInputElement)?.checked;
 
-	if (!freqInput || star1 === null || star2 === null || star3 === null) return;
+	if (!(freqInput instanceof HTMLInputElement) || star1 === undefined || star2 === undefined || star3 === undefined) return;
 
 	const	state: AppState = appStore.getState();
 	const	user: UserState | null = state.user;
 
 	if (router.Path === '/pongmenu')
 	{
-		const	aiInput = document.getElementById("aiHardcore") as HTMLInputElement;
-		const	pointsInput = document.getElementById("featuredMaxPoints") as HTMLInputElement;
-		if (!aiInput || !pointsInput) return;
+		const	aiInput: HTMLElement | null = document.getElementById("aiHardcore");
+		const	pointsInput: HTMLElement | null = document.getElementById("featuredMaxPoints");
+		if (!(aiInput instanceof HTMLInputElement) || !(pointsInput instanceof HTMLInputElement)) return;
 		const	winningScore = parseInt(pointsInput.value, 10);
 
-		const	aiVal = parseInt(aiInput.value);
+		const	aiVal: number = parseInt(aiInput.value);
 		let		difficulty: "easy" | "medium" | "hard" | "boris" = "medium";
 		if (aiVal === 1)
 			difficulty = "easy";
@@ -606,16 +621,18 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 	}
 	else if (router.Path === '/tankmenu')
 	{
-		const	mapSelect = document.getElementById("mapSelect") as HTMLSelectElement;
-		const	p1Select = document.getElementById("p1TankSelect") as HTMLSelectElement;
-		const	p2Select = document.getElementById("p2TankSelect") as HTMLSelectElement;
+		const	mapSelect: HTMLElement | null = document.getElementById("mapSelect");
+		const	p1Select: HTMLElement | null = document.getElementById("p1TankSelect");
+		const	p2Select: HTMLElement | null = document.getElementById("p2TankSelect");
 
-		if (!mapSelect || !p1Select || !p2Select ) return;
+		if (!(mapSelect instanceof HTMLSelectElement) || 
+			!(p1Select instanceof HTMLSelectElement) || 
+			!(p2Select instanceof HTMLSelectElement) ) return;
 		
-		const	selectedMap = mapSelect.value;
-		const	p1Tank = p1Select.value;
-		const	p2Tank = p2Select.value;
-		const	freq = parseInt(freqInput.value,10);
+		const	selectedMap: string = mapSelect.value;
+		const	p1Tank: string = p1Select.value;
+		const	p2Tank: string = p2Select.value;
+		const	freq: number = parseInt(freqInput.value,10);
 
 		appStore.setState((state) => ({
 			...state,
@@ -627,8 +644,6 @@ function onClickStartFeatured(mode: 'ai' | 'pvp') {
 
 		router.navigate("/tank");
 	}
-
-
 }
 
 function onClickHomeBtn() {
@@ -671,33 +686,33 @@ export async function   setupClickHandlers(): Promise<void> {
 
 
 	document.addEventListener('click', (event) => {
-		const	target = event.target as HTMLAnchorElement;
-		if (target.tagName === 'A' && target.hasAttribute('href')) {
+		const	target: EventTarget | null = event.target;
+		if (target instanceof HTMLAnchorElement && target.tagName === 'A' && target.hasAttribute('href')) {
 			event.preventDefault();
 			router.navigate(target.getAttribute('href')!);
 		}
 	});
 
 	document.addEventListener('input', (event) => {
-		const	target = event.target as HTMLInputElement;
-		if (!target) return;
+		const	target: EventTarget | null = event.target;
+		if (!(target instanceof HTMLInputElement)) return;
 
 		if (target.id === 'choosenMaxPoints') {
-			const	display = document.getElementById('points-display');
+			const	display: HTMLElement | null = document.getElementById('points-display');
 			if (display) {
 				display.innerText = target.value;
 			}
 		}
 		
 		if (target.id === 'powerupFreq') {
-			const	display = document.getElementById('powerup-freq-display');
+			const	display: HTMLElement | null = document.getElementById('powerup-freq-display');
 			if (display) {
 				display.innerText = target.value + " sec";
 			}
 		}
 
 		if (target.id === 'featuredMaxPoints') {
-			const	display = document.getElementById('featured-points-display');
+			const	display: HTMLElement | null = document.getElementById('featured-points-display');
 			if (display) {
 				display.innerText = target.value;
 			}
@@ -716,12 +731,12 @@ export async function   setupClickHandlers(): Promise<void> {
 	});
 
 	window.addEventListener('keydown', (event: KeyboardEvent) => {
-  	const	keysToBlock = [
-  	  "ArrowUp", 
-  	  "ArrowDown",
-  	];
-  	if (keysToBlock.includes(event.code)) {
-  	  event.preventDefault();
-  	}
+	const	keysToBlock: string[] = [
+		"ArrowUp", 
+		"ArrowDown",
+	];
+	if (keysToBlock.includes(event.code)) {
+		event.preventDefault();
+	}
 });
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setDynamicFavicon.ts                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 14:30:39 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== FUNCTION ====================== */
 
 // export function	seDynamicFavicon(path: string | null): void {
-// 	let link: HTMLLinkElement | null = document.querySelector("link[rel~='icon']");
+// 	let	link: HTMLLinkElement | null = document.querySelector("link[rel~='icon']");
 
 // 	if (!link)
 // 	{
