@@ -8,7 +8,7 @@
 
 **ft_transcendence** is the final project of the Common Core curriculum at 42 School. It involves building a robust, full-stack website centered around a real-time multiplayer Pong game.
 
-This version of the project (Subject: v16.0) emphasizes adaptability and complex architectural choices. We have designed a Single Page Application (SPA) backed by a **Microservices Architecture**.
+This version of the project (Subject: v18.0) emphasizes adaptability and complex architectural choices. We have designed a Single Page Application (SPA) backed by a **Microservices Architecture**.
 
 ### Key Features
 * **Microservices Backend**: Built with **Node.js** and **Fastify**, split into specialized services (API Gateway, Auth, Game, User, JWT, 2FA) for scalability and maintainability.
