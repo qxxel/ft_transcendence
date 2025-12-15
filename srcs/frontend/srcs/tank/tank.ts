@@ -76,6 +76,7 @@ export class	TankGame extends Game {
 		this.player1Name = user.username ? user.username : "Player 1";
 		this.player2Name = "Player 2";
 		this.lastCollectibleSpawn = Date.now();
+		GSTATE.STATE = state;
 		GSTATE.CANVAS = this.canvas;
 		GSTATE.CTX = this.ctx;
 		GSTATE.REDRAW = true;
@@ -290,7 +291,8 @@ export class	TankGame extends Game {
 	}
   private showEndGameDashboard() {
 	this.updateNameDisplay()
-	sendRequest("/api/game", "POST", this.setHistory());
+	const history: History | null = this.setHistory();
+	if (history) sendRequest("/api/game", "POST", history);
 	const	dashboard = document.getElementById('game-over-dashboard');
 	if (!dashboard) return;
 
@@ -407,7 +409,9 @@ export class	TankGame extends Game {
 	}
 	private	draw(): void {}
 
-	private setHistory(): History {
+	private setHistory(): History | null {
+
+		if (!GSTATE.STATE.user.username) return null;
 		return {
 			idClient:1,
 			gameType:2,

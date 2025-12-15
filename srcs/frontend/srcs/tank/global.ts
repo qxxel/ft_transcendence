@@ -16,7 +16,7 @@
 /* ============================= IMPORT ============================= */
 
 import { Actor }	from "./class_actor.js"
-
+import { AppState }	from "../objects/store.js";
 
 /* ============================= INTERFACE ============================= */
 
@@ -51,6 +51,7 @@ export interface	Stats {
 export interface	GlobalState {
 	ACTORS: Actor[];
 	TANKS: number;
+	STATE: AppState;
 	CANVAS: HTMLCanvasElement;
 	CTX: CanvasRenderingContext2D | null;
 	REDRAW: boolean;
@@ -64,6 +65,7 @@ export interface	GlobalState {
 export const	GSTATE: GlobalState = {
 	ACTORS: [],
 	TANKS: 0,
+	STATE: undefined as unknown as AppState,
 	CANVAS: undefined as unknown as HTMLCanvasElement,
 	CTX: undefined as unknown as CanvasRenderingContext2D,
 	REDRAW: true as boolean,
