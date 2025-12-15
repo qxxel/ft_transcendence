@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 23:02:03 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 01:47:06 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ async function	onClickDeleteAccountStep(): Promise<void> {
 		buttonDeleteAccount.type = "button";
 		buttonDeleteAccount.id = "button-delete-account";
 		buttonDeleteAccount.className = "verify-button-form";
-		buttonDeleteAccount.textContent = "confirm";
+		buttonDeleteAccount.textContent = "Confirm";
 		
 		buttonDeleteAccount.addEventListener("click", onClickDeleteAccount);
 		divButtonProfile.appendChild(buttonDeleteAccount);
