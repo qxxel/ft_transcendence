@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:34:17 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 23:20:46 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,9 @@ export async function  pathActions(currentPath: string): Promise<void> {
 		const	display: HTMLElement | null = document.getElementById('points-display');
 		
 		if (slider instanceof HTMLInputElement && display instanceof HTMLSpanElement) {
-			display.innerHTML = slider.value;
+			display.textContent = slider.value;
 			slider.addEventListener('input', () => {
-				display.innerHTML = slider.value;
+				display.textContent = slider.value;
 			});
 		}
 	}
@@ -114,9 +114,9 @@ export async function  pathActions(currentPath: string): Promise<void> {
 		const	display: HTMLElement | null = document.getElementById('points-display');
 		
 		if (slider instanceof HTMLInputElement && display instanceof HTMLSpanElement) {
-		  display.innerHTML = slider.value;
+		  display.textContent = slider.value;
 		  slider.addEventListener('input', () => {
-			display.innerHTML = slider.value;
+			display.textContent = slider.value;
 		  });
 		}
 	}

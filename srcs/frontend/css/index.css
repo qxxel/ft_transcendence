@@ -1251,7 +1251,7 @@ input[type=range]::-moz-range-thumb {
 	font-size: 0.65em;
 	padding: 1px 5px;
 	border-radius: 3px;
-	margin-right: 8px;
+	margin-right: 2px;
 	vertical-align: middle;
 	font-weight: bold;
 	letter-spacing: 1px;
@@ -1263,12 +1263,12 @@ input[type=range]::-moz-range-thumb {
 }
 
 .diff-easy {
-	color: #00ff00;
+	font-weight: 350;
 	text-shadow: 0 0 5px rgba(0, 255, 0, 0.4);
 }
 
 .diff-medium {
-	color: #ffaa00;
+	font-weight: 350;
 	text-shadow: 0 0 5px rgba(255, 170, 0, 0.4);
 }
 

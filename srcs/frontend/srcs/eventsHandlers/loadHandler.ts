@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 05:27:55 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 23:06:01 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ async function	handleLoadPage(): Promise<void> {
 					isAuth: true
 				}
 			}));
+
+			setDynamicFavicon(result.avatar);
 
 			const	menu: HTMLElement | null = document.getElementById("nav");
 			if (menu)

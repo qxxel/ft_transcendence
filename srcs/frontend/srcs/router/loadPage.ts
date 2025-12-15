@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:19:56 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 23:09:10 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ export async function loadUser() {
 	const	usernameEl: HTMLElement | null = document.getElementById("user-username");
 	const	emailEl: HTMLElement | null = document.getElementById("user-email");
 	
-	if (usernameEl instanceof HTMLSpanElement && emailEl instanceof HTMLSpanElement) {
+	if (usernameEl instanceof HTMLDivElement && emailEl instanceof HTMLDivElement) {
 		usernameEl.textContent = userRes.username ?? "";
 		emailEl.textContent = userRes.email ?? "";
 	}

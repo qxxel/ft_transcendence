@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderHistory.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:33:36 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 00:10:17 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,13 @@ function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): vo
 	const	p2NameSpan: HTMLSpanElement = document.createElement("span");
 	p2NameSpan.classList.add("col-p2");
 
-	const	powerupHtml: string = game.powerup ? '<span class="powerup-icon" title="Powerups Enabled">⚡</span>' : '';
+	// const	powerupHtml: string = game.powerup ? '<span class="powerup-icon" title="">⚡</span>' : '';
+	const	powerupSpan: HTMLSpanElement = document.createElement("span");
+	if (game.powerup){
+		powerupSpan.classList.add("powerup-icon");
+		powerupSpan.title = "Powerups Enabled";
+		powerupSpan.textContent = "⚡";
+	}
 
 	if (game.mode === "ai") {
 		const	rawName: string = (game.p2 || "").toLowerCase();
@@ -224,10 +230,29 @@ function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): vo
 		p2NameSpan.classList.add("is-ai");
 		p2NameSpan.classList.add(difficultyClass);
 
-		p2NameSpan.innerHTML = `<span class="bot-tag">BOT</span> ${powerupHtml}${displayName}`;
+		p2NameSpan.appendChild(powerupSpan);
+		
+		const	botSpan: HTMLSpanElement = document.createElement("span");
+		botSpan.classList.add("bot-tag");
+		botSpan.textContent = "BOT";
+		p2NameSpan.appendChild(botSpan);
+
+		const	nameSpan: HTMLSpanElement = document.createElement("span");
+		nameSpan.classList.add("col-p2");
+		nameSpan.textContent = displayName;
+		p2NameSpan.appendChild(nameSpan);
+		
+		// p2NameSpan.innerHTML = `<span class="bot-tag">BOT</span> ${powerupHtml}${displayName}`;	//	/!\	XSS ATTACKS
+		// p2NameSpan.textContent =  displayName;	//	/!\	XSS ATTACKS
 	} else {
+		p2NameSpan.appendChild(powerupSpan);
 		const	p2Name: string = game.p2 || "Player 2";
-		p2NameSpan.innerHTML = `${powerupHtml}${p2Name}`;
+		// p2NameSpan.innerHTML = `${powerupHtml}${p2Name}`;	//	/!\	XSS ATTACKS
+		// p2NameSpan.textContent = p2Name;	//	/!\	XSS ATTACKS
+		const	nameSpan: HTMLSpanElement = document.createElement("span");
+		nameSpan.classList.add("col-p2");
+		nameSpan.textContent = p2Name;
+		p2NameSpan.appendChild(nameSpan);
 	}
 
 	const	scoreSpan: HTMLSpanElement = document.createElement("span");
