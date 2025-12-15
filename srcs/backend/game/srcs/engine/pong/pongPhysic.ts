@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:58:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:09:26 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 00:07:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ export class PongPhysics {
 	private width: number;
 	private height: number;
 	private	rally: number = 0;
-	private readonly maxBallSpeed = 12;
-	private readonly ballSpeedIncrease = 0.5;
+	private readonly maxBallSpeed: number = 12;
+	private readonly ballSpeedIncrease: number = 0.5;
 
 	constructor(width: number, height: number) {
 		this.width = width;
@@ -32,12 +32,12 @@ export class PongPhysics {
 	}
 
 	public update(ball: Ball, p1: Paddle, p2: Paddle): number {
-		const	prevBallY = ball.y - ball.dy;
+		const	prevBallY: number = ball.y - ball.dy;
 
 		ball.x += ball.dx;
 		ball.y += ball.dy;
 
-		const	minDx = 2.0;
+		const	minDx: number = 2.0;
 
 		if (ball.y + ball.radius > this.height) {
 			ball.y = this.height - ball.radius;
@@ -111,11 +111,11 @@ export class PongPhysics {
 	}
 
 	private calculateDeflection(paddle: Paddle, ball: Ball, playerID: number) {
-		const	relativeIntersectY = (paddle.y + (paddle.height / 2)) - ball.y;
-		const	normalizedIntersectY = relativeIntersectY / (paddle.height / 2);
-		const	maxBounceAngle = Math.PI / 3;
-		const	bounceAngle = normalizedIntersectY * maxBounceAngle;
-		const	direction = (ball.x < this.width / 2) ? 1 : -1;
+		const	relativeIntersectY: number = (paddle.y + (paddle.height / 2)) - ball.y;
+		const	normalizedIntersectY: number = relativeIntersectY / (paddle.height / 2);
+		const	maxBounceAngle: number = Math.PI / 3;
+		const	bounceAngle: number = normalizedIntersectY * maxBounceAngle;
+		const	direction: number = (ball.x < this.width / 2) ? 1 : -1;
 		ball.dx = direction * ball.speed * Math.cos(bounceAngle);
 		ball.dy = -1 * ball.speed * Math.sin(bounceAngle);
 		ball.lastHitter = playerID;
@@ -123,10 +123,10 @@ export class PongPhysics {
 	}
 
 	public increaseBallSpeed(ball: Ball, customMaxSpeed?: number) {
-		const	limit = customMaxSpeed ?? this.maxBallSpeed;
+		const	limit: number = customMaxSpeed ?? this.maxBallSpeed;
 		if (ball.speed >= limit) return;
-		const	newSpeed = Math.min(ball.speed + this.ballSpeedIncrease, limit);
-		const	magnitude = Math.sqrt(ball.dx ** 2 + ball.dy ** 2);
+		const	newSpeed: number = Math.min(ball.speed + this.ballSpeedIncrease, limit);
+		const	magnitude: number = Math.sqrt(ball.dx ** 2 + ball.dy ** 2);
 		if (magnitude > 0) {
 			ball.dx = (ball.dx / magnitude) * newSpeed;
 			ball.dy = (ball.dy / magnitude) * newSpeed;
@@ -138,12 +138,12 @@ export class PongPhysics {
 		if (direction === "none")
 			return ;
 
-		const	isHorizontalOverlap = 
+		const	isHorizontalOverlap: boolean = 
 			ball.x + ball.radius > paddle.x && 
 			ball.x - ball.radius < paddle.x + paddle.width;
 
 		if (direction === "up") {
-			const	nextY = paddle.y - paddle.speed;
+			const	nextY: number = paddle.y - paddle.speed;
 			if (isHorizontalOverlap && 
 				paddle.y >= ball.y + ball.radius && 
 				nextY < ball.y + ball.radius) {
@@ -157,7 +157,7 @@ export class PongPhysics {
 		}
 
 		if (direction === "down") {
-			const	nextY = paddle.y + paddle.speed;
+			const	nextY: number = paddle.y + paddle.speed;
 			if (isHorizontalOverlap && 
 				paddle.y + paddle.height <= ball.y - ball.radius && 
 				nextY + paddle.height > ball.y - ball.radius) {
@@ -191,9 +191,9 @@ export class PongPhysics {
 
 	public checkCollectibleCollision(ball: Ball, collectibles: Collectible[]): number {
 		for (const c of collectibles) {
-			const	dx = ball.x - c.x;
-			const	dy = ball.y - c.y;
-			const	distance = Math.sqrt(dx * dx + dy * dy);
+			const	dx: number = ball.x - c.x;
+			const	dy: number = ball.y - c.y;
+			const	distance: number = Math.sqrt(dx * dx + dy * dy);
 
 			if (distance < ball.radius + c.radius) {
 				return c.id;

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 00:10:35 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ import { gamesAddDto }	from "../../dtos/gamesAddDto.js"
 import { AIController }	from "../../engine/pong/pongAi.js"
 import { PongPhysics }	from "../../engine/pong/pongPhysic.js"
 
-import type { PongOptions, Collectible, PongState, PowerUps, PongResume }	from "../../engine/pong/pongState.js"
+import type { PongOptions, Collectible, PongState, PowerUps, PongResume, Paddle }	from "../../engine/pong/pongState.js"
 
 
 /* ====================== CLASS ====================== */
@@ -70,8 +70,8 @@ export class	PongInstance {
 		this.pongService = pongService;
 		this.isTournament = opts.isTournament;
 
-		const	width = 800;
-		const	height = 600;
+		const	width: number = 800;
+		const	height: number = 600;
 
 		this.winningScore = opts.winningScore;
 
@@ -145,8 +145,8 @@ export class	PongInstance {
 			this.keyState.p2.down = aiMove.down;
 		}
 
-		const	p1Dir = this.resolveDirection(this.keyState.p1);
-		const	p2Dir = this.resolveDirection(this.keyState.p2);
+		const	p1Dir: "up" | "down" | "none" = this.resolveDirection(this.keyState.p1);
+		const	p2Dir: "up" | "down" | "none" = this.resolveDirection(this.keyState.p2);
 
 		this.physics.movePaddle(this.gameState.paddle1, this.gameState.ball, p1Dir);
 		this.physics.movePaddle(this.gameState.paddle2, this.gameState.ball, p2Dir);
@@ -156,7 +156,7 @@ export class	PongInstance {
 		this.physics.updateCollectibles(this.gameState.collectibles);
 		this.gameState.collectibles = this.gameState.collectibles.filter(c => c.active);
 
-		const	hitCollectibleId = this.physics.checkCollectibleCollision(this.gameState.ball, this.gameState.collectibles);
+		const	hitCollectibleId: number = this.physics.checkCollectibleCollision(this.gameState.ball, this.gameState.collectibles);
 		if (hitCollectibleId !== -1) {
 			const	collected = this.gameState.collectibles.find(c => c.id === hitCollectibleId);
 			if (collected) {
@@ -165,7 +165,7 @@ export class	PongInstance {
 			this.gameState.collectibles = this.gameState.collectibles.filter(c => c.id !== hitCollectibleId);
 		}
 
-		const	scoreResult = this.physics.update(this.gameState.ball, this.gameState.paddle1, this.gameState.paddle2);
+		const	scoreResult: number = this.physics.update(this.gameState.ball, this.gameState.paddle1, this.gameState.paddle2);
 		
 		if (scoreResult === 1)
 		{
@@ -228,8 +228,8 @@ export class	PongInstance {
 	}
 
 	private resetRound(firstServe: boolean = false) {
-		const	width = this.gameState.width;
-		const	height = this.gameState.height;
+		const	width: number = this.gameState.width;
+		const	height: number = this.gameState.height;
 
 
 		this.longestRally = 0;
@@ -255,9 +255,9 @@ export class	PongInstance {
 		this.gameState.collectibles = [];
 
 
-		const	currentDirectionX = Math.sign(this.gameState.ball.dx);
-		let	directionX = firstServe ? (Math.random() < 0.5 ? 1 : -1) : currentDirectionX * -1;
-		const	angle = (Math.random() * Math.PI / 4) - (Math.PI / 8);
+		const	currentDirectionX: number = Math.sign(this.gameState.ball.dx);
+		let	directionX: number = firstServe ? (Math.random() < 0.5 ? 1 : -1) : currentDirectionX * -1;
+		const	angle: number = (Math.random() * Math.PI / 4) - (Math.PI / 8);
 		
 		this.gameState.ball.dx = directionX * this.gameState.ball.speed * Math.cos(angle);
 		this.gameState.ball.dy = this.gameState.ball.speed * Math.sin(angle);
@@ -331,12 +331,12 @@ export class	PongInstance {
 
 		if (availableTypes.length === 0) return;
 
-		const	type = availableTypes[Math.floor(Math.random() * availableTypes.length)]!;
-		const	radius = 15;
+		const	type: string = availableTypes[Math.floor(Math.random() * availableTypes.length)]!;
+		const	radius: number = 15;
 
-		const	safeZoneX = this.gameState.width * 0.2;
-		const	x = safeZoneX + (Math.random() * (this.gameState.width - safeZoneX * 2));
-		const	y = radius + (Math.random() * (this.gameState.height - radius * 2));
+		const	safeZoneX: number = this.gameState.width * 0.2;
+		const	x: number = safeZoneX + (Math.random() * (this.gameState.width - safeZoneX * 2));
+		const	y: number = radius + (Math.random() * (this.gameState.height - radius * 2));
 
 		const	newCollectible: Collectible = {
 			id: this.nextCollectibleId++,
@@ -352,7 +352,7 @@ export class	PongInstance {
 		if (this.gameState.ball.lastHitter === 0)
 			return;
 
-		const	targetPaddle = (this.gameState.ball.lastHitter === 1) 
+		const	targetPaddle: Paddle = (this.gameState.ball.lastHitter === 1) 
 			? this.gameState.paddle1 
 			: this.gameState.paddle2;
 

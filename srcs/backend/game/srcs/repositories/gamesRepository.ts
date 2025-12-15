@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gamesRepository.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:54:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:49:52 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 00:07:58 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ export class	gamesRepository {
 	async addGame(gameAddDto: gamesAddDto): Promise<number> {
 		return new Promise((resolve, reject) => {
 			const	query: string = "INSERT INTO games (id_client, game_type, winner, p1, p1score, p2, p2score, mode, powerup, start, duration) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			const	elements = gameAddDto.getTable();
+			const	elements: [number, number, number, string, number, string, number, string, boolean, number, number] = gameAddDto.getTable();
 
 			this.db.run(query, elements, function (this: StatementWithLastID, err: Error | null) {
 				if (err)

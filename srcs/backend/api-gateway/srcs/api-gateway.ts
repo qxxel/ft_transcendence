@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:54:56 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 00:03:15 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ import type { FastifyInstance }	from 'fastify'
 
 /* ====================== AXIOS VARIABLES ====================== */
 
-export const	gatewayAxios = axios.create({
+export const	gatewayAxios: any = axios.create({
 	timeout: 15000
 });
 
