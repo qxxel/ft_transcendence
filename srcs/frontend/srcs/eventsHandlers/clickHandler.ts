@@ -525,6 +525,7 @@ async function onStartRankedTournament() { // TODO, vieux copier-coller mais ces
     
     // // Remplacer le HTML par le bracket (comme tu fais déjà)
     // document.getElementById('app').innerHTML = window.tournamentController.renderBracket();
+    // et puis surement apres .fillBracket();
 }
 
 function startTournamentMatch(matchId: string, p1: string, p2: string) {

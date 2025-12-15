@@ -128,8 +128,10 @@ export async function  pathActions(currentPath: string): Promise<void> {
 		}
 
 		const	container: HTMLElement | null = document.getElementById('bracket-container');
-		if (container)
+		if (container) {
 			container.innerHTML = currentTournament.renderBracket();
+			currentTournament.fillBracket();
+		}
 	}
 
 	if (['/tank'].includes(currentPath)) {
