@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vite.config.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 16:13:32 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 17:37:41 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 03:02:12 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ export default defineConfig({
         		tankmenu: path.resolve(__dirname, 'pages/tankmenu.html'),
         		"tournament-bracket": path.resolve(__dirname, 'pages/tournament-bracket.html'),
         		"tournament-setup": path.resolve(__dirname, 'pages/tournament-setup.html'),
+				"tournament-setup-ranked": path.resolve(__dirname, 'pages/tournament-setup-ranked.html'),
+				"tournament-menu": path.resolve(__dirname, 'pages/tournament-menu.html'),
         		user: path.resolve(__dirname, 'pages/user.html'),
 			}
 		}

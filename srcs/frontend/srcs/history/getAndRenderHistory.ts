@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:28:30 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:35:15 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ export async function	getAndRenderHistory(targetId: number | null,
 			return ;
 		}
 
-		console.log(gamesData) // ICI LE PRINT DU TABLEAU
+console.log(gamesData) // ICI LE PRINT DU TABLEAU
 
 		renderGames(gamesData, aiFilter, pvpFilter, pongFilter, tankFilter);
 	} catch (error) {
@@ -172,10 +172,15 @@ function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): vo
 
 	const	gameTypeSpan = document.createElement("span");
 	gameTypeSpan.classList.add("col-game-type");
-	if (game.game_type === 2) {
+	if (game.game_type === 3) {
+		gameTypeSpan.textContent = "TOURNAMENT";
+		gameTypeSpan.classList.add("type-tournament");
+	}
+	else if (game.game_type === 2) {
 		gameTypeSpan.textContent = "TANK";
 		gameTypeSpan.classList.add("type-tank");
-	} else {
+	}
+	else {
 		gameTypeSpan.textContent = "PONG";
 		gameTypeSpan.classList.add("type-pong");
 	}

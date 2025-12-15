@@ -357,6 +357,25 @@ button:disabled {
 	background-color: rgba(255, 255, 255, 0.1);
 }
 
+.btn-cancel-tournament {
+	background: transparent;
+	border: 1px solid #777;
+	color: #ccc;
+	font-family: 'monospace', sans-serif;
+	font-size: 0.9em;
+	padding: 8px 25px;
+	border-radius: 20px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-decoration:none;
+}
+
+.btn-cancel-tournament:hover {
+	border-color: #fff;
+	color: #fff;
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
 .btn-leave {
 	background: transparent;
 	border: 1px solid #FF0000;
@@ -633,6 +652,13 @@ input[type=range]::-moz-range-thumb {
 	background-color: #fff;
 	color: #000;
 	box-shadow: 0 0 10px #fff;
+}
+
+.cancel-row-tournament {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		margin-top: 10px;
 }
 
 .cancel-button-form {
@@ -1072,6 +1098,12 @@ input[type=range]::-moz-range-thumb {
 .type-tank {
 	color: #ffaa00; 
 	border: 1px solid rgba(255, 170, 0, 0.3);
+	background: rgba(255, 170, 0, 0.05);
+}
+
+.type-tournament {
+	color: #ff00ee; 
+	border: 1px solid rgba(255, 0, 234, 0.3);
 	background: rgba(255, 170, 0, 0.05);
 }
 

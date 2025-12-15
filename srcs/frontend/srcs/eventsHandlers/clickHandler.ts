@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:27:07 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:55:22 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ import { TournamentController } 			from "../Pong/tournament.js"
 import { sendRequest }						from "../utils/sendRequest.js"
 import { GameOptions }						from "../Pong/objects/gameOptions.js"
 import { initHistoryListeners } 			from "../history/getAndRenderHistory.js"
+import { Player }							 from "../Pong/objects/tournamentObjects.js"
 
 import { Game }	from "../Pong/gameClass.js"
 
@@ -395,11 +396,11 @@ function onClickPlayPVP() {
 
 function	onStartTournament() {
 	const	inputs = document.querySelectorAll('.player-name-input') as NodeListOf<HTMLInputElement>;
-	const	playerNames: string[] = [];
+	const	playerNames: Player[] = [];
 	
 	inputs.forEach(input => {
 		if (input.value.trim() !== '') {
-			playerNames.push(input.value.trim());
+			playerNames.push({name: input.value.trim()});
 		}
 	});
 
@@ -425,6 +426,46 @@ function	onStartTournament() {
 	}));
 
 	router.navigate("/tournament-bracket");
+}
+
+async function onStartRankedTournament() { // TODO, vieux copier-coller mais cest plus pour avoir le mecanisme:
+    
+	console.log("RANKED TOURNAMENT")
+	// const inputs = document.querySelectorAll('.ranked-player-input'); // Tes inputs
+    // const players: Player[] = [];
+
+    // // 1. Récupérer le user courant (déjà connecté)
+    // const currentUser = Store.getUser(); // Ton store frontend
+    // players.push({ name: currentUser.username, id: currentUser.id, isRegistered: true });
+
+    // // 2. Vérifier les autres pseudos entrés
+    // for (const input of inputs) {
+    //     const username = input.value;
+    //     if (!username) continue;
+
+    //     // Appel API pour vérifier si le user existe et récupérer son ID
+    //     // Tu dois sûrement avoir une route GET /users/:username ou GET /users?name=X
+    //     const userCheck = await sendRequest('GET', `/api/users/find?username=${username}`);
+        
+    //     if (userCheck && userCheck.id) {
+    //         players.push({ name: userCheck.username, id: userCheck.id, isRegistered: true });
+    //     } else {
+    //         alert(`L'utilisateur ${username} n'existe pas !`);
+    //         return;
+    //     }
+    // }
+
+    // if (players.length < 2) {
+    //     alert("Il faut au moins 2 joueurs enregistrés.");
+    //     return;
+    // }
+
+    // // 3. Lancer le tournoi
+    // // On instancie la classe avec le flag isRanked à TRUE
+    // window.tournamentController = new TournamentController(players, 5, true);
+    
+    // // Remplacer le HTML par le bracket (comme tu fais déjà)
+    // document.getElementById('app').innerHTML = window.tournamentController.renderBracket();
 }
 
 function startTournamentMatch(matchId: string, p1: string, p2: string) {
@@ -578,6 +619,7 @@ export async function   setupClickHandlers(): Promise<void> {
 
 	(window as any).onClickPlayPVP = () => onClickPlayPVP();
 	(window as any).onStartTournament = () => onStartTournament();
+	(window as any).onStartRankedTournament = () => onStartRankedTournament();
 	
 	(window as any).startTournamentMatch = (matchId: string, p1: string, p2: string) => 
 		startTournamentMatch(matchId, p1, p2);

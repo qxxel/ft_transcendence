@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:29:53 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:57:38 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			currentGame.stop();
 	}
 
-	if (!['/tournament-setup', '/tournament-bracket', '/pong'].includes(currentPath))
+	if (!['/tournament-setup', '/tournament-setup-ranked', '/tournament-bracket', '/pong'].includes(currentPath))
 	{
 		appStore.setState((state) => ({
 			...state,
