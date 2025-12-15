@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 04:19:23 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 06:01:43 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -438,17 +438,21 @@ function	onStartTournament() {
 	const	inputs = document.querySelectorAll('.player-name-input') as NodeListOf<HTMLInputElement>;
 	const	playerNames: Player[] = [];
 	
-	inputs.forEach(input => {
-		if (input.value.trim() !== '') {
-			playerNames.push({name: input.value.trim()});
-		}
-	});
-
+	for (const input of inputs) {
+    	const val = input.value.trim();
+    	if (val !== '') {
+    	    if (val.length >= 3 && val.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(val)) {
+    	        playerNames.push({ name: val });
+    	    } else {
+    	        displayError("Player names must be valid.", "tournament-msg-error");
+    	        return;
+    	    }
+    	}
+	}
 	if (playerNames.length < 4) {
-		alert("You need at least 4 players to start a tournament.");
+		displayError("You need at least 4 players to start a tournament.", "tournament-msg-error");
 		return;
 	}
-
 	if (new Set(playerNames).size !== playerNames.length) {
 		displayError("Player names must be unique.", "tournament-msg-error");
 		return;
