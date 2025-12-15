@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:57:38 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 05:20:37 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ import { PongGame }				from "../Pong/pong.js"
 import { appStore }				from "../objects/store.js"
 import { Game }					from "../Pong/gameClass.js"
 import { TournamentController }	from "../Pong/tournament.js"
+import { initHistoryListeners } from "../history/getAndRenderHistory.js"
 import { getAndRenderFriends } 	from  "../friends/getAndRenderFriends.js"
 
 import type { AppState, UserState }		from "../objects/store.js"
@@ -85,7 +86,7 @@ export async function  pathActions(currentPath: string): Promise<void> {
 
 	if (['/history'].includes(currentPath))
 	{
-		console.log("ALERT WE ARE IN THE HISTORY !!!!"); // agerbaud help
+		initHistoryListeners(null);
 	}
 
 	if (['/pongmenu'].includes(currentPath)) {
