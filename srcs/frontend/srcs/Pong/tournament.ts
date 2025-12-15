@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:48:42 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:27:42 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 05:12:46 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 
 import { Player, Match }	from "./objects/tournamentObjects"
 import { sendRequest } from	"../utils/sendRequest"
+import { PongResume } from "./objects/pongResume";
+import { appStore } from "../objects/store";
 
 /* ====================== CLASS ====================== */
 
@@ -180,7 +182,7 @@ export class    TournamentController {
 		this.currentMatch = { id, p1, p2 };
 	}
 
-	public async reportMatchWinner(winnerName: string) {
+	public async reportMatchWinner(winnerName: string, resume:PongResume) {
 		if (!this.currentMatch) return;
 		
 		const match = this.matches.find(m => m.id === this.currentMatch!.id);
@@ -188,30 +190,47 @@ export class    TournamentController {
 			match.winner = match.player1.name === winnerName ? match.player1 : match.player2;
 			
 			if (this.isRanked) {
-				await this.saveMatchResult(match.player1, match.player2, match.winner);
+				await this.saveMatchResult(match.player1, match.player2, match.winner, resume);
 			}
 
 			this.advanceWinnerToNextRound(match);
 		}
 	}
 
-	private async saveMatchResult(p1: Player, p2: Player, winner: Player) {
-        try {
-            const scoreP1 = winner.name === p1.name ? this.winningScore : 0;
-            const scoreP2 = winner.name === p2.name ? this.winningScore : 0;
+	private async saveMatchResult(p1: Player, p2: Player, winner: Player, resume:PongResume) {
+		try {
+			const p1payload = {
+				idClient:p1.id,
+				gameType:1,
+				winner:winner.id,
+				p1:p1.name,
+				p2:p2.name,
+				p1score:resume.score1,
+				p2score:resume.score2,
+				mode:"tour",
+				powerup:0,
+				start:Date.now() - resume.duration,
+				duration:resume.duration
+			};
 
-            const payload = {
-                player1Id: p1.id,
-                player2Id: p2.id,
-                score1: scoreP1,
-                score2: scoreP2,
-                winnerId: winner.id,
-                type: 3
-            };
+			const p2payload = {
+				idClient:p2.id,
+				gameType:1,
+				winner:winner.id,
+				p1:p2.name,
+				p2:p1.name,
+				p1score:resume.score2,
+				p2score:resume.score1,
+				mode:"tour",
+				powerup:0,
+				start:Date.now() - resume.duration,
+				duration:resume.duration
+			};
 
-            await sendRequest('POST', '/', payload); 
-        } catch (error) {
-            console.error("Error while saving tournamente match", error);
-        }
-    }
+			await sendRequest('POST', '/', p1payload); 
+			await sendRequest('POST', '/', p2payload); 
+		} catch (error) {
+			console.error("Error while saving tournamente match", error);
+		}
+	}
 }

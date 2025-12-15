@@ -1198,6 +1198,16 @@ input[type=range]::-moz-range-thumb {
 	padding: 2px 0;
 }
 
+.col-mode-tournament {
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 0.9em;
+	color: #808080;
+	border: 1px solid #333;
+	border-radius: 3px;
+	padding: 2px 0;
+}
+
 .col-score {
 	font-size: 1.2em;
 	font-weight: bold;

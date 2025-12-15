@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pong.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/15 02:43:50 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 04:40:07 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,7 +332,7 @@ export class PongGame extends Game {
 		const	state: AppState = appStore.getState();
 		const	currentTournament: TournamentController | null = state.game.currentTournament;
 		if (this.isTournament && currentTournament)
-			currentTournament.reportMatchWinner(winnerName);
+			currentTournament.reportMatchWinner(winnerName, pongResume);
 
 
 		const	gameDurationSec: number = (pongResume.duration / 1000)

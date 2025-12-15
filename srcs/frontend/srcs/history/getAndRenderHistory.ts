@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:35:15 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 05:12:22 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,11 +172,7 @@ function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): vo
 
 	const	gameTypeSpan = document.createElement("span");
 	gameTypeSpan.classList.add("col-game-type");
-	if (game.game_type === 3) {
-		gameTypeSpan.textContent = "TOURNAMENT";
-		gameTypeSpan.classList.add("type-tournament");
-	}
-	else if (game.game_type === 2) {
+	if (game.game_type === 2) {
 		gameTypeSpan.textContent = "TANK";
 		gameTypeSpan.classList.add("type-tank");
 	}
@@ -192,7 +188,10 @@ function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): vo
 	durationSpan.textContent = `Duration ${formatDuration(game.duration)}`;
 
 	const	modeSpan = document.createElement("span");
-	modeSpan.classList.add("col-mode");
+	if (game.mode == "tour")
+		modeSpan.classList.add("col-mode-tournament");
+	else
+		modeSpan.classList.add("col-mode");
 	modeSpan.textContent = game.mode;
 
 	const	p1NameSpan = document.createElement("span");
