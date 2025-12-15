@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   quickmaths.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:36:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:44:47 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:35:32 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// UTILITY FUNCTION THAT CONVERTS DEGREES TO RADIANS
 
 
 /* ============================= FUNCTION ============================= */

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   class_actor.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:22:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:16:01 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:27:20 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// CLASS THAT DEFINES A GAME ACTOR
 
 
 /* ============================= IMPORTS ============================= */

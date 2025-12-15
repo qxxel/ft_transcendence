@@ -6,9 +6,12 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 23:19:56 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/12 23:20:44 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:52:36 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// HANDLE ALL TYPE DEFINITIONS FOR USER AUTHENTICATION
+
 
 /* ====================== INTERFACES ====================== */
 

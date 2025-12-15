@@ -3,12 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   user.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:00:54 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:58:16 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// HANDLE ALL REQUESTS AND DATABASE CONNECTIONS FOR THE USER SERVICE
+
 
 /* ====================== IMPORT ====================== */
 

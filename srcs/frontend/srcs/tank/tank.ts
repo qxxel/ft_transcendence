@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tank.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:30:41 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:35:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// MAIN GAME CLASS THAT HANDLES TANK GAME LOGIC, GAME LOOP, INPUT, STATE MANAGEMENT, AND UI INTERACTIONS
 
 
 /* ============================= IMPORTS ============================= */

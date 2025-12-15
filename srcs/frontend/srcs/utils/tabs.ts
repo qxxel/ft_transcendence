@@ -6,9 +6,12 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 02:09:24 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 07:57:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:59:57 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// MANAGES MULTI-TAB HEARTBEATS AND CLEANUP, ENSURING SINGLE ACTIVE SESSION AND LOGOUT ON LAST TAB CLOSE
+
 
 /* ====================== IMPORTS ====================== */
 
