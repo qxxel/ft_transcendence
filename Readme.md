@@ -22,7 +22,7 @@ This version of the project (Subject: v16.0) emphasizes adaptability and complex
     * **JWT** (JSON Web Tokens) for secure session management.
     * **2FA** (Two-Factor Authentication) implementation.
     * **HTTPS** support with self-signed certificates generated automatically.
-    * Password hashing and input validation.
+    * **Password hashing** and input validation.
 * **DevOps**: Fully containerized using **Docker** and **Docker Compose** for consistent deployment.
 
 ---
