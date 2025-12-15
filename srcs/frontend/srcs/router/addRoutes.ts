@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:00:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:10:33 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 04:19:30 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,14 @@ export function	addRoutes(): void {
 		return await loadHtml("pages/tournament-setup.html");
 	});
 
+	router.addRoute("/tournament-setup-ranked", async () => {
+		return await loadHtml("pages/tournament-setup-ranked.html");
+	});
+
+	router.addRoute("/tournament-menu", async () => {
+		return await loadHtml("pages/tournament-menu.html");
+	});
+
 	router.addRoute("/tournament-bracket", async () => {
 		return await loadHtml("pages/tournament-bracket.html");
 	});
@@ -81,8 +89,8 @@ export function	addRoutes(): void {
 	});
 
 	router.addRoute("/history", async () => {
-	  const	html = await loadHtml("pages/history.html");
-	  return html;
+		const	html = await loadHtml("pages/history.html");
+		return html;
 	});
 
 	router.addRoute("/", async () => {

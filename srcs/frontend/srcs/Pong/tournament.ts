@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:48:42 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:28:45 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:27:42 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== IMPORT ====================== */
 
 import { Player, Match }	from "./objects/tournamentObjects"
-
+import { sendRequest } from	"../utils/sendRequest"
 
 /* ====================== CLASS ====================== */
 
@@ -25,10 +25,12 @@ export class    TournamentController {
 	public matches: Match[] = [];
 	public currentMatch: { id: string; p1: string; p2: string } | null = null;
 	public winningScore: number = 5;
+	public isRanked: boolean = false;
 
-	constructor(playerNames: string[], winningScore: number) {
-		this.players = playerNames.map(name => ({ name }));
+	constructor(players: Player[], winningScore: number, isRanked: boolean = false) {
+		this.players = players;
 		this.winningScore = winningScore;
+		this.isRanked = isRanked;
 		this.generateBracket();
 	}
 
@@ -178,13 +180,38 @@ export class    TournamentController {
 		this.currentMatch = { id, p1, p2 };
 	}
 
-	public reportMatchWinner(winnerName: string) {
+	public async reportMatchWinner(winnerName: string) {
 		if (!this.currentMatch) return;
 		
-		const	match = this.matches.find(m => m.id === this.currentMatch!.id);
-		if (match) {
-			match.winner = match.player1?.name === winnerName ? match.player1 : match.player2;
+		const match = this.matches.find(m => m.id === this.currentMatch!.id);
+		if (match && match.player1 && match.player2) {
+			match.winner = match.player1.name === winnerName ? match.player1 : match.player2;
+			
+			if (this.isRanked) {
+				await this.saveMatchResult(match.player1, match.player2, match.winner);
+			}
+
 			this.advanceWinnerToNextRound(match);
 		}
 	}
+
+	private async saveMatchResult(p1: Player, p2: Player, winner: Player) {
+        try {
+            const scoreP1 = winner.name === p1.name ? this.winningScore : 0;
+            const scoreP2 = winner.name === p2.name ? this.winningScore : 0;
+
+            const payload = {
+                player1Id: p1.id,
+                player2Id: p2.id,
+                score1: scoreP1,
+                score2: scoreP2,
+                winnerId: winner.id,
+                type: 3
+            };
+
+            await sendRequest('POST', '/', payload); 
+        } catch (error) {
+            console.error("Error while saving tournamente match", error);
+        }
+    }
 }

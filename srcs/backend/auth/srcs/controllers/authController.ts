@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authController.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:56:11 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 22:45:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,35 @@ async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, 
 	}
 }
 
+async function	validateAndDeleteClient(request: FastifyRequest<{ Body: { password: string } }>, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		if (!request.body)
+			throw new Error("The request is empty");
+
+		const	password: string = request.body.password;
+
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
+
+		if (!cookies || !cookies.jwtAccess)
+			throw new Error("You are not connected");
+		
+		const	payload: AxiosResponse = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		
+		if (!payload.data.id)
+			throw new Error("invalide id");
+		
+		const	pwdHash: string | null = await authServ.getPasswordByIdClient(payload.data.id);
+		if (!pwdHash || !await argon2.verify(pwdHash, password))
+			throw new authError.WrongCredentialsError("Wrong password!");
+
+		await deleteClient(request, reply);
+
+		return reply.status(201).send(payload.data.id);
+	} catch (err: unknown) {
+		return await errorsHandler(authFastify, reply , err);
+	}
+}
+
 async function	updateUser(request: FastifyRequest<{ Body: updateUserBody}>, reply: FastifyReply): Promise<FastifyReply> {
 	try {
 		if (!request.body)
@@ -269,6 +298,7 @@ export async function	authController(authFastify: FastifyInstance): Promise<void
 	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
 	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
 	authFastify.post<{ Body: { otp: string } }>('/validateUser', validateUser);
+	authFastify.post<{ Body: { password: string } }>('/delete/me', validateAndDeleteClient);
 
 	authFastify.patch<{ Body: updateUserBody }>('/updateUser', updateUser);
 

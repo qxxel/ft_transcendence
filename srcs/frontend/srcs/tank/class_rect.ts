@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   class_rect.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:30:41 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:43:39 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:32:28 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// CLASS THAT DEFINES A 2D RECTANGLE WITH COLLISION AND DRAWING UTILITIES
 
 
 /* ============================= IMPORT ============================= */
