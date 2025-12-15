@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:33:09 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 22:54:16 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -459,7 +459,7 @@ function	onStartTournament() {
     	    if (val.length >= 3 && val.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(val)) {
     	        playerNames.push({ name: val });
     	    } else {
-    	        displayError("Player names must be valid.", "tournament-msg-error");
+				displayError("Player names must be 3-20 characters long and assume only letters, numbers, '-' or '_'.", "tournament-msg-error");
     	        return;
     	    }
     	}
@@ -468,9 +468,10 @@ function	onStartTournament() {
 		displayError("You need at least 4 players to start a tournament.", "tournament-msg-error");
 		return;
 	}
-	if (new Set(playerNames).size !== playerNames.length) {
-		displayError("Player names must be unique.", "tournament-msg-error");
-		return;
+	const namesLower = playerNames.map(p => p.name.toLowerCase());
+	if (new Set(namesLower).size !== playerNames.length) {
+	    displayError("Player names must be unique.", "tournament-msg-error");
+	    return;
 	}
 	const	scoreInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
 	if (!(scoreInput instanceof HTMLInputElement)) return;
