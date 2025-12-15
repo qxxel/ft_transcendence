@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:32:29 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:32:44 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,11 +156,11 @@ export class	Tank extends Actor {
 		if (!this.canFire()) return;
 		
 		const	now = Date.now();
-		let isSpawnable:boolean;
+		let	isSpawnable:boolean;
 		for (let c of this.cannon)
 		{
 			isSpawnable = true;
-			let spawnRect = new Rect2D(c.getEnd().x - this.ball_size / 2, c.getEnd().y - this.ball_size / 2, this.ball_size, this.ball_size);
+			let	spawnRect = new Rect2D(c.getEnd().x - this.ball_size / 2, c.getEnd().y - this.ball_size / 2, this.ball_size, this.ball_size);
 			for (let a of GSTATE.ACTORS) {
 				if (a == this)
 					continue;
@@ -411,11 +411,11 @@ export class	Sniper extends Tank {
 		this.ability_cooldown = this.ability_base_cooldown * this.ability_base_cooldown_coeff;
 
 		const	now = Date.now();
-		let isSpawnable:boolean;
+		let	isSpawnable:boolean;
 		for (let c of this.cannon)
 		{
 			isSpawnable = true;
-			let spawnRect = new Rect2D(c.getEnd().x - this.ball_size / 2, c.getEnd().y - this.ball_size / 2, this.ball_size, this.ball_size);
+			let	spawnRect = new Rect2D(c.getEnd().x - this.ball_size / 2, c.getEnd().y - this.ball_size / 2, this.ball_size, this.ball_size);
 			for (let a of GSTATE.ACTORS) {
 				if (a == this)
 					continue;

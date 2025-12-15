@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsService.ts                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:23:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:04:57 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 06:10:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ export class	userStatsService {
 		if (!(await this.userStatsRepo.isTaken(query, [userId.toString()])))
 			throw new NotExistError(`The user ${userId} does not exist`);
 
-		var userStatsUpdate: userStatsPongUpdateDto | userStatsTankUpdateDto;
+		var	userStatsUpdate: userStatsPongUpdateDto | userStatsTankUpdateDto;
 
 		if (body.gameType && body.gameType === "pong")
 		{

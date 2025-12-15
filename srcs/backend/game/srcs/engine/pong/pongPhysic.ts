@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongPhysic.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:58:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:49:42 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 06:09:26 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ export class PongPhysics {
 	}
 
 	public updateCollectibles(collectibles: Collectible[]) {
-		for (const	c of collectibles) {
+		for (const c of collectibles) {
 			c.y += c.dy;
 
 			if (c.y - c.radius < 0 || c.y + c.radius > this.height) {
@@ -190,7 +190,7 @@ export class PongPhysics {
 	}
 
 	public checkCollectibleCollision(ball: Ball, collectibles: Collectible[]): number {
-		for (const	c of collectibles) {
+		for (const c of collectibles) {
 			const	dx = ball.x - c.x;
 			const	dy = ball.y - c.y;
 			const	distance = Math.sqrt(dx * dx + dy * dy);

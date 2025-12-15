@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongAi.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:59:46 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ export class AIController {
 		if (now - this.lastDecisionTime > 1000 || this.difficulty == 'boris') {
 			this.lastDecisionTime = now;
 			if (state.ball.dx > 0) {
-				let predictedY = this.predictBallLandingY(state);
+				let	predictedY = this.predictBallLandingY(state);
 				if (this.difficulty == 'hard' || this.difficulty == 'boris'){
 					this.targetY = this.calculateOptimalPaddlePosition(predictedY, state);
 				}
@@ -68,7 +68,7 @@ export class AIController {
 	private predictBallLandingY(state: PongState): number {
 		const	targetX = state.paddle2.x - state.ball.radius;
 		const	timeToImpact = (targetX - state.ball.x) / state.ball.dx;
-		let predictedY = state.ball.y + (state.ball.dy * timeToImpact);
+		let	predictedY = state.ball.y + (state.ball.dy * timeToImpact);
 
 		const	topWall = state.ball.radius;
 		const	bottomWall = state.height - state.ball.radius;
@@ -86,7 +86,7 @@ export class AIController {
 	private offensiveBounce(predictedY: number, state: PongState): number {
 
 		const	opponentCenterY = state.paddle1.y + (state.paddle1.height / 2);
-		let targetY = 0;
+		let	targetY = 0;
 
 		if (opponentCenterY < state.height / 2) {
 			targetY = state.height;
@@ -98,7 +98,7 @@ export class AIController {
 		const	distanceY = targetY - predictedY;
 
 		// tan(angle) = opposite / adjacent
-		let requiredAngle = Math.atan(distanceY / distanceX);
+		let	requiredAngle = Math.atan(distanceY / distanceX);
 		const	maxAngle = Math.PI / 3;
 		if (requiredAngle > maxAngle) requiredAngle = maxAngle;
 		if (requiredAngle < -maxAngle) requiredAngle = -maxAngle;

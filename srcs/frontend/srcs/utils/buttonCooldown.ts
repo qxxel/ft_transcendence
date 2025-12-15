@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   buttonCooldown.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 17:39:14 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:36:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== FUNCTION ====================== */
 
 export async function btnCooldown() {
-	let timeLeft = 5;
+	let	timeLeft = 5;
 	const	spanCooldown = document.getElementById("btnCooldown");
 	const	btnSend = document.getElementById("btnSend2faCode") as HTMLButtonElement;
 	const	locks = document.querySelectorAll(".lock");

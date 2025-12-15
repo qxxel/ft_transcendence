@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 02:09:24 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:59:57 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ export function addTabs() {
 }
 
 export function delTabs() {
-	let tabs = getCleanTabs();
+	let	tabs = getCleanTabs();
 
 	tabs = tabs.filter(t => t.id !== CURRENT_TAB_ID);
 	localStorage.setItem(STORAGE_KEY, JSON.stringify(tabs));

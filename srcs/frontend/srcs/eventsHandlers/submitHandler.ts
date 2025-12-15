@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:17:28 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 04:44:58 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -342,8 +342,6 @@ async function	handleAddFriendForm(form: HTMLFormElement) {
 		displayPopError(response)
 		return ;
 	}
-
-	const	friendship: any = await response.json();
 
 	await getAndRenderFriends();
 }

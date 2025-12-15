@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 07:57:20 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 05:27:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ async function	handleLoadPage(): Promise<void> {
 				}
 			}));
 
-			const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+			const	menu: HTMLElement | null = document.getElementById("nav");
 			if (menu)
 				menu.innerHTML = getMenu(true);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongInstance.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:56:55 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,7 @@ export class	PongInstance {
 
 
 		const	currentDirectionX = Math.sign(this.gameState.ball.dx);
-		let directionX = firstServe ? (Math.random() < 0.5 ? 1 : -1) : currentDirectionX * -1;
+		let	directionX = firstServe ? (Math.random() < 0.5 ? 1 : -1) : currentDirectionX * -1;
 		const	angle = (Math.random() * Math.PI / 4) - (Math.PI / 8);
 		
 		this.gameState.ball.dx = directionX * this.gameState.ball.speed * Math.cos(angle);

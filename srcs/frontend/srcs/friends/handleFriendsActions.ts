@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleFriendsActions.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:48:02 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:09:22 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 05:38:58 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ import { getAndRenderFriends }	from "./getAndRenderFriends.js"
 /* ====================== FUNCTION ====================== */
 
 export async function	handleFriendAction(url: string, method: string, body: Object | null, success: string) {
-	const	response = await sendRequest(url, method, body);
+	const	response: Response = await sendRequest(url, method, body);
 
 	if (!response.ok)
 	{

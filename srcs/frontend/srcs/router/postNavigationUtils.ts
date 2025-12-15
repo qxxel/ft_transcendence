@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:57:38 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 06:21:50 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,10 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			}
 		}));
 
-		const	slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
-		const	display = document.getElementById('points-display') as HTMLSpanElement;
+		const	slider: HTMLElement | null = document.getElementById('choosenMaxPoints');
+		const	display: HTMLElement | null = document.getElementById('points-display');
 		
-		if (slider && display) {
+		if (slider instanceof HTMLInputElement && display instanceof HTMLSpanElement) {
 			display.innerHTML = slider.value;
 			slider.addEventListener('input', () => {
 				display.innerHTML = slider.value;
@@ -109,10 +109,10 @@ export async function  pathActions(currentPath: string): Promise<void> {
 	}
 
 	if (['/tournament-setup'].includes(currentPath)) {
-		const	slider = document.getElementById('choosenMaxPoints') as HTMLInputElement;
-		const	display = document.getElementById('points-display') as HTMLSpanElement;
+		const	slider: HTMLElement | null = document.getElementById('choosenMaxPoints');
+		const	display: HTMLElement | null = document.getElementById('points-display');
 		
-		if (slider && display) {
+		if (slider instanceof HTMLInputElement && display instanceof HTMLSpanElement) {
 		  display.innerHTML = slider.value;
 		  slider.addEventListener('input', () => {
 			display.innerHTML = slider.value;
@@ -126,7 +126,7 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			return;
 		}
 
-		const	container = document.getElementById('bracket-container');
+		const	container: HTMLElement | null = document.getElementById('bracket-container');
 		if (container)
 			container.innerHTML = currentTournament.renderBracket();
 	}
