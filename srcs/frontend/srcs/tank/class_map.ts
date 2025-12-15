@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   class_map.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:13:07 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:32:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// CLASS THAT GENERATES AND MANAGES GAME MAPS WITH WALLS AND SPAWN POINTS
 
 
 /* ============================= IMPORTS ============================= */

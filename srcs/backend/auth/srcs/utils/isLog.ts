@@ -6,9 +6,12 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 23:29:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/12 23:31:21 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:53:40 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// CHECK IF A USER IS LOGGED IN VIA AUTH SERVICE
+
 
 /* ====================== IMPORTS ====================== */
 import axios			from 'axios'

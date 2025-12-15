@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayAuthController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:39:50 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/14 22:59:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 		}
 	});
 
-	gatewayFastify.patch('/updateUser', async (request: FastifyRequest, reply: FastifyReply) => {
+	gatewayFastify.post('/delete/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.patch(
-				'http://auth:3000/updateUser',
+			const	response: AxiosResponse = await gatewayAxios.post(
+				'http://auth:3000/delete/me',
 				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
@@ -93,10 +93,11 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 		}
 	});
 
-	gatewayFastify.delete('/me', async (request: FastifyRequest, reply: FastifyReply) => {
+	gatewayFastify.patch('/updateUser', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.delete(
-				'http://auth:3000/me',
+			const	response: AxiosResponse = await gatewayAxios.patch(
+				'http://auth:3000/updateUser',
+				request.body,
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 			

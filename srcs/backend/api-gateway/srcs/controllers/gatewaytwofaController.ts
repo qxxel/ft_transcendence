@@ -3,12 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   gatewaytwofaController.ts                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 23:09:42 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:41:03 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:49:42 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// HANDLE ALL REQUESTS THAT THE API GATEWAY RECEIVES FOR `/api/twofa` ENDPOINTS
+
 
 /* ====================== IMPORTS ====================== */
 

@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   errorsHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:00:28 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:56:46 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// HANDLE AND LOG ALL ERRORS FOR 2FA SERVICE REQUESTS
 
 
 /* ====================== IMPORTS ====================== */

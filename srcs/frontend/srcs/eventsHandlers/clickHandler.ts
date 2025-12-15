@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:55:22 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 04:19:23 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ import { displayError, displayPopError }	from "../utils/display.js"
 import { loadTwofa }						from "../router/loadPage.js"
 import { TournamentController } 			from "../Pong/tournament.js"
 import { sendRequest }						from "../utils/sendRequest.js"
+import { verifyEmail }						from "../utils/verifyEmail.js"
 import { GameOptions }						from "../Pong/objects/gameOptions.js"
 import { initHistoryListeners } 			from "../history/getAndRenderHistory.js"
 import { Player }							 from "../Pong/objects/tournamentObjects.js"
+
 
 import { Game }	from "../Pong/gameClass.js"
 
@@ -115,13 +117,30 @@ function	onClickCancel(): void {
 	router.navigate("/")
 }
 
-async function	onClickDeleteAccount(): Promise<void> {
+async function onClickDeleteAccount(): Promise<void>{
+	const	password: string | undefined = (document.getElementById("confirm-setting-password") as HTMLInputElement)?.value;
+		
+	if (!password) return displayError("password required!", "confirm-setting-msg-error");
+
 	if (!confirm("Are you sure you want to delete your account?"))
 		return ;
 
-	const	response: Response = await sendRequest(`/api/auth/me`, 'delete', null);
+	const	confirmSettingForm = document.getElementById("confirm-setting-form");
+	if (confirmSettingForm)
+		confirmSettingForm.classList.add("darken");
+
+
+	const	p = document.getElementById("confirm-setting-msg-error");
+	if (p)
+		p.textContent = null;
+	
+	const	response: Response = await sendRequest(`/api/auth/delete/me`, 'POST', { password });
+
+	if (confirmSettingForm)
+		confirmSettingForm.classList.remove("darken");
+	
 	if (!response.ok)
-		displayPopError(response);
+		return displayError(response, "confirm-setting-msg-error");
 
 	appStore.setState((state) => ({
 		...state,
@@ -132,7 +151,7 @@ async function	onClickDeleteAccount(): Promise<void> {
 			isAuth: false
 		}
 	}));
-
+	
 	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
 	if (menu)
 		menu.innerHTML = getMenu(false);
@@ -140,7 +159,28 @@ async function	onClickDeleteAccount(): Promise<void> {
 	if (socket && socket.connected)
 		socket.disconnect();
 
+	router.canLeave = true;
 	router.navigate("/");
+
+}
+
+async function	onClickDeleteAccountStep(): Promise<void> {
+	verifyEmail("user-profile", "confirm-setting", null);
+	
+	document.getElementById("verify-email-submit")?.remove();
+	
+	const	divButtonProfile: HTMLElement | null = document.getElementById("div-button-profile");
+	if (divButtonProfile) {
+		const buttonDeleteAccount = document.createElement("button");
+		
+		buttonDeleteAccount.type = "button";
+		buttonDeleteAccount.id = "button-delete-account";
+		buttonDeleteAccount.className = "verify-button-form";
+		buttonDeleteAccount.textContent = "Confirm";
+		
+		buttonDeleteAccount.addEventListener("click", onClickDeleteAccount);
+		divButtonProfile.appendChild(buttonDeleteAccount);
+	}
 }
 
 async function	onClickDeleteTwofa(): Promise<void> {
@@ -601,6 +641,7 @@ export async function   setupClickHandlers(): Promise<void> {
 	(window as any).onClickHistory = (targetId: number | null = null, targetName: string | null = null) => onClickHistory(targetId, targetName);
 	(window as any).onClickCancel = () => onClickCancel();
 	(window as any).onClickDeleteAccount = () => onClickDeleteAccount();
+	(window as any).onClickDeleteAccountStep = () => onClickDeleteAccountStep();
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa();
 	(window as any).onClickNewCode = () => onClickNewCode();
 	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(); // /!\ detete this

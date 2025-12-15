@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   errorsHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 18:49:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:06:46 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 02:58:33 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// HANDLE ALL ERRORS FOR THE USER SERVICE
 
 
 /* ====================== IMPORTS ====================== */
