@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extractHeaders.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 16:17:02 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 16:17:04 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 00:11:33 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ export function	extractUserId(request: FastifyRequest): number {
 	if (!userIdHeader)
 		throw new MissingHeaderError("Missing User ID header (Unauthorized)");
 
-	const	userId = parseInt(userIdHeader as string, 10);
+	const	userId: number = parseInt(userIdHeader as string, 10);
 
 	return userId;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayUserController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 19:53:59 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 00:06:39 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,8 +194,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 	gatewayFastify.post('/friends/:idA/:idB', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	{ idA, idB } = request.params as { idA: string, idB: string };
-			const	parseIdA = parseInt(idA, 10);
-			const	parseIdB = parseInt(idB, 10);
+			const	parseIdA: number = parseInt(idA, 10);
+			const	parseIdB: number = parseInt(idB, 10);
 
 			const	response: AxiosResponse = await gatewayAxios.post(`http://user:3000/friends/${parseIdA}/${parseIdB}`, request.body);	//	AXEL: A ENLEVER
 
@@ -231,7 +231,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 	gatewayFastify.delete('/friends/:targetId', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	{ targetId } = request.params as { targetId: string };
-			const	parseTargetId = parseInt(targetId, 10);
+			const	parseTargetId: number = parseInt(targetId, 10);
 
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 
@@ -276,8 +276,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 	gatewayFastify.get('/friends/:idA/:idB', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	{ idA, idB } = request.params as { idA: string, idB: string };
-			const	parseIdA = parseInt(idA, 10);
-			const	parseIdB = parseInt(idB, 10);
+			const	parseIdA: number = parseInt(idA, 10);
+			const	parseIdB: number = parseInt(idB, 10);
 
 			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/friends/${parseIdA}/${parseIdB}`);
 
@@ -291,7 +291,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 	gatewayFastify.post('/friends/block/:targetId', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	{ targetId } = request.params as { targetId: string };
-			const	parseTargetId = parseInt(targetId, 10);
+			const	parseTargetId: number = parseInt(targetId, 10);
 
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 
@@ -308,7 +308,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 	gatewayFastify.delete('/friends/unblock/:targetId', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	{ targetId } = request.params as { targetId: string };
-			const	parseTargetId = parseInt(targetId, 10);
+			const	parseTargetId: number = parseInt(targetId, 10);
 
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
 

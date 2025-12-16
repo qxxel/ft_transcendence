@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:56:46 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 23:38:06 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ export async function	errorsHandler(twofaFastify: FastifyInstance, reply: Fastif
 		return reply.code(400).send({ errorType: err.name, error: err.message });
 	} else if (err instanceof twofaError.WrongCodeError) {
 		await sleep(1000);
+		logError(twofaFastify, err.message);
+		return reply.code(400).send({ errorType: err.name, error: err.message });
+	} else if (err instanceof twofaError.MissingIdError) {
 		logError(twofaFastify, err.message);
 		return reply.code(400).send({ errorType: err.name, error: err.message });
 	} else if (err instanceof Error) {

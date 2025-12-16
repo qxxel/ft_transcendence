@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 22:45:54 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 23:29:08 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,12 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 	try {
 		if (!request.body)
 			throw new authError.RequestEmptyError("The request is empty");
-
-		const	{ identifier, password } = request.body;
+		
+		const	identifier: number = request.body.identifier;
+		const	password: string = request.body.password;
+		
+		if (!identifier || !password)
+			throw new authError.RequestEmptyError("The request is empty");
 
 		if (await isLoggedIn(request.headers.cookie))
 			throw new authError.AlreadyConnectedError("You are already connected!");

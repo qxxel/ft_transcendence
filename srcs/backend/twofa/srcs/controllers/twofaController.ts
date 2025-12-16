@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:56:30 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 23:40:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 
 /* ====================== FUNCTIONS ====================== */
 
-function generateOtpSecretKey() {
+function generateOtpSecretKey(): string {
 	const	secretKey = speakeasy.generateSecret();
 	return secretKey.base32;
 }
 
-function generateOtp(secretKey: string) {
+function generateOtp(secretKey: string): string {
 	return speakeasy.totp({
 		secret: secretKey,
 		encoding: 'base32',
@@ -43,7 +43,7 @@ function generateOtp(secretKey: string) {
 	});
 }
 
-function verifyOtp(secret: string, otp: string) {
+function verifyOtp(secret: string, otp: string): boolean {
 	return speakeasy.totp.verify( {
 		secret,
 		token: otp,
@@ -67,7 +67,7 @@ function MailCodeMessage(user: string, otp: string, email: string) {
 	};
 }
 
-async function sendMailMessage(mail: any) {
+async function sendMailMessage(mail: any): Promise<void> {
 	const	transporter = nodemailer.createTransport({
 		service: "gmail",
 		auth: {
@@ -92,6 +92,9 @@ async function	generateMailCode(request: FastifyRequest<{ Body: { email?: string
 		const	otpSecretKey: string = generateOtpSecretKey();
 		const	otp: string = generateOtp(otpSecretKey);
 
+		if (!payload || !payload.data || !payload.data.id)
+			throw new twofaError.MissingIdError("Id of the user is missing!");
+			
 		await twofaServ.deleteOtpByIdClient(payload.data.id);
 		await twofaServ.addOtp(payload.data.id, otpSecretKey);
 
@@ -119,18 +122,21 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 			isJwtTwofa = false;
 		}
 		
+		if (!payload || !payload.data || !payload.data.id)
+			throw new twofaError.MissingIdError("Id of the user is missing!");
+
 		const	otpSecretKey: string | null = await twofaServ.getOtpSecretKeyByIdClient(payload.data.id);
 		
 		if (!otpSecretKey)
 			throw new twofaError.WrongCodeError("Wrong code!");
 
-		const	isOtpValid = verifyOtp(otpSecretKey, request.body.otp);
+		const	isOtpValid: boolean = verifyOtp(otpSecretKey, request.body.otp);
 		
 		if (!isOtpValid)
 			throw new twofaError.WrongCodeError("Wrong code!");
 		
 		if (isJwtTwofa) {
-			const	jwtRes = await twofaAxios.post("http://jwt:3000/twofa/validate", {}, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+			const	jwtRes: AxiosResponse = await twofaAxios.post("http://jwt:3000/twofa/validate", {}, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 			
 			if (jwtRes.headers['set-cookie'])
 				reply.header('Set-Cookie', jwtRes.headers['set-cookie']);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 19:47:21 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 00:07:29 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,20 +180,20 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 
 			const	userId: number = response.data.id;
 			
-			const	data = await request.file();
+			const	data: any = await request.file();
 			if (!data)
 				throw new NoFileError("No file uploaded.");
 
-			const	validMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+			const	validMimeTypes: string[] = ['image/jpeg', 'image/png', 'image/webp'];
 			if (!validMimeTypes.includes(data.mimetype))
 				throw new InvalidFileError("Invalid file type. Only JPG, PNG, WEBP allowed.");
 
 			try {
-				const	currentUser = await usersServ.getUserById(userId);
-				const	oldAvatar = currentUser.getAvatar();
+				const	currentUser: usersRespDto = await usersServ.getUserById(userId);
+				const	oldAvatar: string | null = currentUser.getAvatar();
 
 				if (oldAvatar) {
-					const	oldPath = `/app/uploads/${oldAvatar}`;
+					const	oldPath: string = `/app/uploads/${oldAvatar}`;
 
 					await fs.promises.access(oldPath, fs.constants.F_OK);
 					await unlink(oldPath);
@@ -202,9 +202,9 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 				console.error("Error retrieving user for avatar deletion", err);
 			}
 
-			const	extension = data.filename.split('.').pop();
-			const	fileName = `avatar_${userId}_${Date.now()}.${extension}`;
-			const	uploadPath = `/app/uploads/${fileName}`;
+			const	extension: any = data.filename.split('.').pop();
+			const	fileName: string = `avatar_${userId}_${Date.now()}.${extension}`;
+			const	uploadPath: string = `/app/uploads/${fileName}`;
 
 			await pipeline(data.file, fs.createWriteStream(uploadPath));
 

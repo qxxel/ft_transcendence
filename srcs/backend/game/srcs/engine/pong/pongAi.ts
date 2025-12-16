@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:59:46 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 00:05:29 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ export class AIController {
 	}
 
 	public update(state: PongState): { up: boolean, down: boolean } {
-		const	now = Date.now();
+		const	now: number = Date.now();
 		const	keys = { up: false, down: false };
 
 		
@@ -54,8 +54,8 @@ export class AIController {
 				}
 			}
 		}
-		const	paddleCenter = state.paddle2.y + state.paddle2.height / 2;
-		const	deadZone = 10;
+		const	paddleCenter: number = state.paddle2.y + state.paddle2.height / 2;
+		const	deadZone: number = 10;
 
 		if (paddleCenter < this.targetY - deadZone) {
 			keys.down = true;
@@ -66,12 +66,12 @@ export class AIController {
 	}
 
 	private predictBallLandingY(state: PongState): number {
-		const	targetX = state.paddle2.x - state.ball.radius;
-		const	timeToImpact = (targetX - state.ball.x) / state.ball.dx;
-		let	predictedY = state.ball.y + (state.ball.dy * timeToImpact);
+		const	targetX: number = state.paddle2.x - state.ball.radius;
+		const	timeToImpact: number = (targetX - state.ball.x) / state.ball.dx;
+		let	predictedY: number = state.ball.y + (state.ball.dy * timeToImpact);
 
-		const	topWall = state.ball.radius;
-		const	bottomWall = state.height - state.ball.radius;
+		const	topWall: number = state.ball.radius;
+		const	bottomWall: number = state.height - state.ball.radius;
 
 		while (predictedY < topWall || predictedY > bottomWall) {
 			if (predictedY < topWall) {

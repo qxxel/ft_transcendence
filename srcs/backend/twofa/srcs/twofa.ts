@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:21 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:54:52 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 23:42:42 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ import type { FastifyInstance }	from 'fastify'
 const	{ Database } = sqlite3Pkg;
 const	dbname: string = '/app/dist/db/twofa.db';
 
-const	db = new Database(dbname, (err: Error | null) => {
+const	db: sqlite3Pkg.Database = new Database(dbname, (err: Error | null) => {
 	if (err)
 		console.error(err);
 

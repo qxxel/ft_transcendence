@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 16:21:52 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 00:07:20 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ import type { FastifyInstance }	from 'fastify'
 
 /* ====================== AXIOS VARIABLES ====================== */
 
-export const	gameAxios = axios.create({
+export const	gameAxios: any = axios.create({
 	timeout: 5000
 });
 
@@ -42,7 +42,7 @@ export const	gameAxios = axios.create({
 const	{ Database } = sqlite3Pkg;
 const	dbname: string = '/app/dist/db/game.db';
 
-const	db = new Database(dbname, (err: Error | null) => {
+const	db: sqlite3Pkg.Database = new Database(dbname, (err: Error | null) => {
 	if (err)
 		console.error(err);
 
@@ -70,7 +70,7 @@ gameFastify.register(cors, {
 
 gameFastify.register(gamesController, { prefix: '/' });
 
-const	io = new Server(gameFastify.server, {
+const	io: any = new Server(gameFastify.server, {
 	path: '/socket.io',
 	cors: {
 		origin: "https://localhost:8080",
@@ -79,7 +79,7 @@ const	io = new Server(gameFastify.server, {
 	}
 });
 
-io.use(async (socket, next) => {
+io.use(async (socket: any, next: any) => {
 	try {
 		const	cookieHeader: string | undefined = socket.request.headers.cookie;
 		console.log("cookies: " + cookieHeader);
@@ -104,7 +104,7 @@ io.use(async (socket, next) => {
 	}
 });
 
-io.on('connection', (socket) => {
+io.on('connection', (socket: any) => {
 	console.log(`New socket connexion: ${socket.id}`);
 
 	setupPongSocket(io, socket, gamesServ);
