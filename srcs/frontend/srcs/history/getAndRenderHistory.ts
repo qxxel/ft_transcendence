@@ -155,69 +155,69 @@ function renderGames(
 }
 
 export function buildElement<K extends keyof HTMLElementTagNameMap>(
-    tag: K, 
-    classes: string[] = [], 
-    text: string = "", 
-    children: HTMLElement[] = []
+	tag: K, 
+	classes: string[] = [], 
+	text: string = "", 
+	children: HTMLElement[] = []
 ): HTMLElementTagNameMap[K] {
-    const element = document.createElement(tag);
-    if (classes.length) element.classList.add(...classes.filter(Boolean));
-    if (text) element.textContent = text;
-    children.forEach(child => element.appendChild(child));
-    return element;
+	const element = document.createElement(tag);
+	if (classes.length) element.classList.add(...classes.filter(Boolean));
+	if (text) element.textContent = text;
+	children.forEach(child => element.appendChild(child));
+	return element;
 }
 
 function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): void {
-    const isVictory = game.winner === game.id_client;
-    const isTank = game.game_type === 2;
-    const isAiMode = game.mode === "ai";
-    
-    let p2DisplayName = game.p2 || "Player 2";
-    let p2Classes = ["col-p2"];
-    let aiBotBadge: HTMLElement | null = null;
+	const isVictory = game.winner === game.id_client;
+	const isTank = game.game_type === 2;
+	const isAiMode = game.mode === "ai";
+	
+	let p2DisplayName = game.p2 || "Player 2";
+	let p2Classes = ["col-p2"];
+	let aiBotBadge: HTMLElement | null = null;
 
-    if (isAiMode) {
-        const rawName = (game.p2 || "").toLowerCase();
-        let difficultyClass = "diff-medium";
-        
-        if (rawName.includes("boris")) difficultyClass = "diff-boris";
-        else if (rawName.includes("hard")) difficultyClass = "diff-hard";
-        else if (rawName.includes("easy")) difficultyClass = "diff-easy";
+	if (isAiMode) {
+		const rawName = (game.p2 || "").toLowerCase();
+		let difficultyClass = "diff-medium";
+		
+		if (rawName.includes("boris")) difficultyClass = "diff-boris";
+		else if (rawName.includes("hard")) difficultyClass = "diff-hard";
+		else if (rawName.includes("easy")) difficultyClass = "diff-easy";
 
-        p2DisplayName = (game.p2 || "AI")
-            .replace(/^AI\s*[-_]?\s*/i, '')
-            .replace(/[()]/g, '')
-            .trim()
-            .toUpperCase();
-            
-        p2Classes.push("is-ai", difficultyClass);
-        aiBotBadge = buildElement("span", ["bot-tag"], "BOT");
-    }
+		p2DisplayName = (game.p2 || "AI")
+			.replace(/^AI\s*[-_]?\s*/i, '')
+			.replace(/[()]/g, '')
+			.trim()
+			.toUpperCase();
+			
+		p2Classes.push("is-ai", difficultyClass);
+		aiBotBadge = buildElement("span", ["bot-tag"], "BOT");
+	}
 
-    const powerupIcon = game.powerup 
-        ? buildElement("span", ["powerup-icon"], "⚡") 
-        : null;
-    if (powerupIcon) powerupIcon.title = "Powerups Enabled";
+	const powerupIcon = game.powerup 
+		? buildElement("span", ["powerup-icon"], "⚡") 
+		: null;
+	if (powerupIcon) powerupIcon.title = "Powerups Enabled";
 
-    const p2Children: HTMLElement[] = [];
-    if (powerupIcon) p2Children.push(powerupIcon);
-    if (aiBotBadge) p2Children.push(aiBotBadge);
-    p2Children.push(buildElement("span", ["col-p2"], p2DisplayName));
+	const p2Children: HTMLElement[] = [];
+	if (powerupIcon) p2Children.push(powerupIcon);
+	if (aiBotBadge) p2Children.push(aiBotBadge);
+	p2Children.push(buildElement("span", ["col-p2"], p2DisplayName));
 
-    const p2Container = buildElement("span", p2Classes, "", p2Children);
+	const p2Container = buildElement("span", p2Classes, "", p2Children);
 
-    const gameRow = buildElement("div", ["game-row", isVictory ? "row-victory" : "row-defeat"], "", [
-        buildElement("span", ["col-result", isVictory ? "text-victory" : "text-defeat"], isVictory ? "VICTORY" : "DEFEAT"),
-        buildElement("span", ["col-ago"], formatTimeAgo(game.start)),
-        buildElement("span", ["col-game-type", isTank ? "type-tank" : "type-pong"], isTank ? "TANK" : "PONG"),
-        buildElement("span", [game.mode === "tour" ? "col-mode-tournament" : "col-mode"], game.mode),
-        buildElement("span", ["col-p1"], game.p1),
-        buildElement("span", ["col-score"], `${game.p1score ?? 0} - ${game.p2score ?? 0}`),
-        p2Container,
-        buildElement("span", ["col-duration"], `Duration ${formatDuration(game.duration)}`)
-    ]);
+	const gameRow = buildElement("div", ["game-row", isVictory ? "row-victory" : "row-defeat"], "", [
+		buildElement("span", ["col-result", isVictory ? "text-victory" : "text-defeat"], isVictory ? "VICTORY" : "DEFEAT"),
+		buildElement("span", ["col-ago"], formatTimeAgo(game.start)),
+		buildElement("span", ["col-game-type", isTank ? "type-tank" : "type-pong"], isTank ? "TANK" : "PONG"),
+		buildElement("span", [game.mode === "tour" ? "col-mode-tournament" : "col-mode"], game.mode),
+		buildElement("span", ["col-p1"], game.p1),
+		buildElement("span", ["col-score"], `${game.p1score ?? 0} - ${game.p2score ?? 0}`),
+		p2Container,
+		buildElement("span", ["col-duration"], `Duration ${formatDuration(game.duration)}`)
+	]);
 
-    historyListDiv.appendChild(gameRow);
+	historyListDiv.appendChild(gameRow);
 }
 
 function displayErrors(targetName: string | null): void {

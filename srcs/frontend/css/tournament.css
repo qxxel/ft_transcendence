@@ -69,3 +69,22 @@
 	color: #4CAF50;
 	font-size: 0.9em;
 }
+
+.btn-exit-tournament {
+    display: block;
+    margin: 30px auto;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'monospace', sans-serif;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+
+  .btn-exit-tournament:hover {
+    background-color: #c82333;
+  }

@@ -122,17 +122,17 @@ export async function  pathActions(currentPath: string): Promise<void> {
 	}
 
 	if (['/tournament-bracket'].includes(currentPath)) {
-    if (!currentTournament) {
-        router.navigate("/tournament-setup");
-        return;
-    }
+	if (!currentTournament) {
+		router.navigate("/tournament-setup");
+		return;
+	}
 
-    const container: HTMLElement | null = document.getElementById('bracket-container');
-    if (container) {
-        container.appendChild(currentTournament.renderBracket());
-        
-        currentTournament.fillBracket();
-    }
+	const container: HTMLElement | null = document.getElementById('bracket-container');
+	if (container) {
+		container.appendChild(currentTournament.renderBracket());
+		
+		currentTournament.fillBracket();
+	}
 }
 
 	if (['/tank'].includes(currentPath)) {
