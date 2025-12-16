@@ -154,7 +154,7 @@ function renderGames(
 	});
 }
 
-function buildElement<K extends keyof HTMLElementTagNameMap>(
+export function buildElement<K extends keyof HTMLElementTagNameMap>(
     tag: K, 
     classes: string[] = [], 
     text: string = "", 

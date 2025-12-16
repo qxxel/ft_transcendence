@@ -18,6 +18,7 @@
 import { Player, Match }	from "./objects/tournamentObjects"
 import { sendRequest } from	"../utils/sendRequest"
 import { PongResume } from "./objects/pongResume";
+import { buildElement } from "../history/getAndRenderHistory.ts"
 
 /* ====================== CLASS ====================== */
 
@@ -126,71 +127,78 @@ export class    TournamentController {
 		this.processBye(nextMatch); 
 	}
 
-	public renderBracket(): string {
-		let	html: string = '<div class="bracket-container">';
-		
-		const	roundsObj: { [key: number]: Match[] } = {};
-		
-		this.matches.forEach(m => {
-			if (!roundsObj[m.round]) roundsObj[m.round] = [];
-			roundsObj[m.round]!.push(m);
-		});
+	public renderBracket(): HTMLDivElement {
+	    const bracketContainer = buildElement('div', ['bracket-container']);
+	
+	    const roundsObj: { [key: number]: Match[] } = {};
+	    this.matches.forEach(m => {
+	        if (!roundsObj[m.round]) roundsObj[m.round] = [];
+	        roundsObj[m.round]!.push(m);
+	    });
+	    const roundNumbers: number[] = Object.keys(roundsObj).map(Number).sort((a, b) => a - b);
 
-		const	roundNumbers: number[] = Object.keys(roundsObj).map(Number).sort((a, b) => a - b);
+	    for (const r of roundNumbers) {
+	        const column = buildElement('div', ['round-column'], "", [
+	            buildElement('h3', [], `Round ${r}`)
+	        ]);
+		
+	        for (const match of roundsObj[r]!) {
+	            const matchCard = buildElement('div', ['match-card'], "", [
+				
+	                buildElement('div', ['match-info'], "", [
+	                    buildElement('div', ['player', 'p1'], "Player 1"), 
+	                    buildElement('div', ['vs'], "VS"),
+	                    buildElement('div', ['player', 'p2'], "Player 2")
+	                ]),
+	                buildElement('div', ['match-action']) 
+	            ]);
 
-		for (const r of roundNumbers) {
-			html += `<div class="round-column"><h3>Round ${r}</h3>`;
-			
-			for (const match of roundsObj[r]!) {
-				const	p1Class: string = (match.winner && match.winner === match.player1) ? 'winner' : '';
-				const	p2Class: string = (match.winner && match.winner === match.player2) ? 'winner' : '';
-				html += `
-					<div class="match-card" id="${match.id}">
-						<div class="match-info">
-							<div class="player ${p1Class}" id="p1-name">Player 1</div>
-							<div class="vs">VS</div>
-							<div class="player ${p2Class}" id="p2-name">Player 2</div>
-						</div>
-						<div id="match-action"></div>
-					</div>
-				`;		//	/!\	XSS ATTACKS
-			}
-			html += '</div>';
-		}
-		html += '</div>';
-		return html;
+	            matchCard.id = match.id.toString();
+	            column.appendChild(matchCard);
+	        }
+	        bracketContainer.appendChild(column);
+	    }
+	    return bracketContainer;
 	}
 
 	public fillBracket(): void {
-		for (const match of this.matches) {
-			const card = document.getElementById(match.id);
-			if (!card) continue;
+	    for (const match of this.matches) {
+	        const card = document.getElementById(match.id);
+	        if (!card) continue;
 
-			const p1El: HTMLElement | null = card.querySelector('#p1-name');
-			const p2El: HTMLElement | null = card.querySelector('#p2-name');
-			const actionEl: HTMLElement | null = card.querySelector('#match-action');
+	        const p1El = card.querySelector('.p1');
+	        const p2El = card.querySelector('.p2');
+	        const actionEl = card.querySelector('.match-action');
 
-			const p1Name = match.player1?.name || (match.round === 1 ? 'BYE' : 'TBD');
-			const p2Name = match.player2?.name || (match.round === 1 ? 'BYE' : 'TBD');
+	        const p1Name = match.player1?.name || (match.round === 1 ? 'BYE' : 'TBD');
+	        const p2Name = match.player2?.name || (match.round === 1 ? 'BYE' : 'TBD');
 
-			if (p1El) p1El.textContent = p1Name;
-			if (p2El) p2El.textContent = p2Name;
+	        if (p1El) p1El.textContent = p1Name;
+	        if (p2El) p2El.textContent = p2Name;
 
-			if (p1El && match.player1 && match.player2 && match.winner === match.player1) p1El.classList.add('winner'); // p1El.className += 'winner';
-			if (p2El && match.player1 && match.player2 && match.winner === match.player2) p2El.classList.add('winner');
+	        if (p1El) p1El.classList.remove('winner');
+	        if (p2El) p2El.classList.remove('winner');
 
-			if (!match.winner && match.player1 && match.player2 && actionEl) {
-				const btn = document.createElement('button');
-				btn.className = 'btn-yellow btn-sm';
-				btn.textContent = 'Play';
-				btn.addEventListener('click', () => {
-					(window as any).startTournamentMatch(match.id, p1Name, p2Name);
-				});
-				actionEl.appendChild(btn);	
-			} else if (match.winner) {
-				if (actionEl) actionEl.textContent = '✅ Finished';
-			}
-		}
+	        if (p1El && match.winner === match.player1) p1El.classList.add('winner');
+	        if (p2El && match.winner === match.player2) p2El.classList.add('winner');
+
+	        if (actionEl) {
+	            actionEl.innerHTML = '';
+			
+	            if (!match.winner && match.player1 && match.player2) {
+	                const btn = document.createElement('button');
+	                btn.className = 'btn-yellow btn-sm';
+	                btn.textContent = 'Play';
+	                btn.onclick = () => {
+	                   (window as any).startTournamentMatch(match.id, p1Name, p2Name);
+	                };
+	                actionEl.appendChild(btn);
+	            } 
+	            else if (match.winner) {
+	                actionEl.textContent = '✅ Finished';
+	            }
+	        }
+	    }
 	}
 	
 	public startMatch(id: string, p1: string, p2: string) {
