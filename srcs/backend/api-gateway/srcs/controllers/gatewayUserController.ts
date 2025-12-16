@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/10 15:36:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 09:54:21 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 				fromId: user.id,
 				message: `${user.username} accepted your request, you're now friend with him !`
 			});
-console.log("accept")
+
 			return reply.send(response.data);
 		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);
