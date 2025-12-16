@@ -84,28 +84,61 @@ export class AIController {
 	}
 
 	private offensiveBounce(predictedY: number, state: PongState): number {
+		const opponentCenterY = state.paddle1.y + (state.paddle1.height / 2);
+		const center = state.height / 2;
+		
+		let targetY = 0;
 
-		const	opponentCenterY = state.paddle1.y + (state.paddle1.height / 2);
-		let	targetY = 0;
+		const extremityThreshold = state.height * 0.20;
 
-		if (opponentCenterY < state.height / 2) {
+		if (opponentCenterY < extremityThreshold) {
 			targetY = state.height;
-		} else {
+		} 
+		else if (opponentCenterY > state.height - extremityThreshold) {
 			targetY = 0;
 		}
+		else {
+			let topPowerUps = 0;
+			let bottomPowerUps = 0;
 
-		const	distanceX = state.paddle2.x; 
-		const	distanceY = targetY - predictedY;
+			if (state.collectibles) {
+				for (const item of state.collectibles) {
+					if (item.active) {
+						if (item.y < center) {
+							topPowerUps++;
+						} else {
+							bottomPowerUps++;
+						}
+					}
+				}
+			}
 
-		// tan(angle) = opposite / adjacent
-		let	requiredAngle = Math.atan(distanceY / distanceX);
-		const	maxAngle = Math.PI / 3;
+			if (topPowerUps > bottomPowerUps) {
+				targetY = 0;
+			} else if (bottomPowerUps > topPowerUps) {
+				targetY = state.height;
+			} else {
+				if (opponentCenterY < center) {
+					targetY = state.height;
+				} else {
+					targetY = 0;
+				}
+			}
+		}
+
+
+		const distanceX = state.paddle2.x; 
+		const distanceY = targetY - predictedY;
+
+		let requiredAngle = Math.atan(distanceY / distanceX);
+		const maxAngle = Math.PI / 3;
+		
 		if (requiredAngle > maxAngle) requiredAngle = maxAngle;
 		if (requiredAngle < -maxAngle) requiredAngle = -maxAngle;
 
-		// bounceAngle = normalizedIntersectY * maxAngle ==> normalizedIntersectY = requiredAngle / maxAngle
-		const	normalizedIntersectY = requiredAngle / maxAngle;
-		const	offset = normalizedIntersectY * (state.paddle2.height / 2);
+		const normalizedIntersectY = requiredAngle / maxAngle;
+		const offset = normalizedIntersectY * (state.paddle2.height / 2);
+
 		return predictedY - offset;
 	}
 
@@ -124,7 +157,7 @@ export class AIController {
 	}
 
 	private calculateOptimalPaddlePosition(predictedY: number, state: PongState): number {
-		if (Math.random() > 0.5){
+		if (Math.random() > 0.3){
 			return this.hardBounce(predictedY, state);
 		}
 		else {
