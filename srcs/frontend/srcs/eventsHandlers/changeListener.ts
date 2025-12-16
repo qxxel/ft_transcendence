@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   changeListener.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 21:46:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 05:29:59 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:18:29 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { appStore } 			from "../objects/store";
+import { displayPop } from "../utils/display";
 import { sendRequest }			from "../utils/sendRequest"
 
 
@@ -45,8 +46,7 @@ async function uploadAvatar(userId: number, file: File) { // userId not use ???
 		const	response: Response = await sendRequest(`/api/user/avatar`, "POST", formData);
 		if (!response.ok)
 		{
-			console.error('Upload error:', await response.text());
-			console.error(response);					//	A CHANGER
+			displayPop(response, "error");
 			return ;
 		}
 
@@ -64,6 +64,6 @@ async function uploadAvatar(userId: number, file: File) { // userId not use ???
 			}
 		}));
 	} catch (err) {
-		console.error('Network error:', err);
+		displayPop("Network error: " + err, "error");
 	}
 }

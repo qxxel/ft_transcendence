@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:59:14 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:29:03 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,61 +18,71 @@
 export async function displayError(response: Response | string, idMsgError: string) {
 	const	p = document.getElementById(idMsgError);
 	if (!p) {
-		displayPopError("No HTMLElement named \`msg-error\`.")
+		displayPop("No HTMLElement named \`msg-error\`.", "error")
 	} else {
 		if (typeof response === "string")
 			p.textContent = response;
-		else {
+		else
+		{
 			try {
 				const	result = await response.json();
 				p.textContent = result?.error || "An unexpected error has occurred";
-			} catch (error) {
-				console.error(error);
-				displayPopError(response)
+			} catch (err) {
+				displayPop("" + err, "error");	//	AXEL/MATHIS: PAS BEAU A VOIR
+				// console.error(err);
+				// displayPop(response, "error")
 			}
 		}
 	}
 }
 
-export async function displayPopError(response: Response | string | undefined) {
-	const	divErrors = document.getElementById("div-errors");
-	if (!divErrors)
+export async function	displayPop(response: Response | string | undefined, type: "notif" | "success" | "error") {
+	const	divNotifs = document.getElementById("div-notif");
+
+	if (!divNotifs)
 	{
-		console.error("No HTMLElement named \`div-errors\`.");
+		console.error("No HTMLElement named \`div-notif\`.");	// MATHIS: A VOIR COMMENT AFFICHER LES ERREURS ICI
 		if (response instanceof Response)
-			console.error(response.statusText);
+			console.error(response.statusText);					// "
 		else if (typeof response === "string")
-			console.error(response);
+			console.error(response);							// "
 		else
-			console.error("An unexpected error has occurred");
+			console.error("An unexpected error has occurred");	// "
 		return;
 	}
-	
-	const	p = document.createElement("p");
-	const	span = document.createElement("span");
-	span.textContent = "x";
-	const	div = document.createElement("div");
-	div.classList = "error";
+	const p = document.createElement("p");
+	const span = document.createElement("span");
+	span.textContent = "✕";
+	const div = document.createElement("div");
+	div.classList = type;
 
 	div.addEventListener("click", (event) => {
 		const	target =  event.currentTarget as HTMLElement;
 		target.remove();
 	})
 
-	if (response instanceof Response) {
+	if (response instanceof Response)
+	{
 		try {
 			const	result = await response.json();
-			p.textContent = result?.error || "An unexpected error has occurred";
+			if (type === "error")
+				p.textContent = result?.error || "An unexpected error has occurred";
+			else
+				p.textContent = result?.data || "An unexpected error has occurred";
 		} catch (error) {
-			console.error(error);
-			console.error(response.statusText);
+			console.error(error);							// MATHIS: A VOIR COMMENT AFFICHER LES ERREURS ICI
+			console.error(response.statusText);				// "
 		}
-	} else {
-		p.textContent = response || "An unexpected error has occurred"
 	}
+	else
+		p.innerHTML = response || "An unexpected error has occurred"		//	MATHIS/AXEL: VOIR POUR TEXTCONTENT
+
+	// setTimeout(() => div.remove(), 10000);
+
 	div.appendChild(p);
 	div.appendChild(span);
-	divErrors.appendChild(div);
+	divNotifs.appendChild(div);
+	divNotifs.hidden = false;
 }
 
 export function displayDate(date: number) {

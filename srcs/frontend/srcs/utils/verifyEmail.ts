@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   verifyEmail.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:11:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 03:00:14 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:05:07 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// MANAGES EMAIL VERIFICATION FLOW FOR TWO-FACTOR AUTHENTICATION, FETCHING OTP AND UPDATING UI
+// FILE THAT HANDLE THE VERIFY OF THE EMAIL
 
 
 /* ====================== IMPORTS ====================== */
 
 import { router }						from "../index.js"
-import { displayDate, displayPopError }	from "./display.js"
+import { displayDate, displayPop }	from "./display.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -28,16 +28,17 @@ export async function	verifyEmail(idDivHidden: string, idDivVisible: string, ema
 		credentials: "include"
 	});
 
-	if (response.ok) {
+	if (response.ok)
+	{
 		const	result = await response.json();
-		
+
 		if (result.exp)
 			displayDate(result.exp * 1000);
 		else
-			displayPopError("Unable to display the expiration date");
-	} else {
-		displayDate(Date.now() + 5 * 60 * 1000);
+			displayPop("Unable to display the expiration date", "error");
 	}
+	else
+		displayDate(Date.now() + 5 * 60 * 1000);
 
 	const	divHidden = document.getElementById(idDivHidden);
 	if (divHidden)
@@ -49,19 +50,22 @@ export async function	verifyEmail(idDivHidden: string, idDivVisible: string, ema
 
 	router.canLeave = false;
 
-	if (email) {
+	if (email)
+	{
 		fetch('/api/twofa/otp', {
-				method: 'POST',
-				credentials: "include",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({ email })
+			method: 'POST',
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ email })
+		})
+		.then(async (res) => {
+			if (!res.ok)
+			{
+				displayPop(res, "error")
+				return ;
 			}
-		).then(async (res) => {
-				if (!res.ok)
-					displayPopError(res)
-			}
-		);
+		});
 	}
 }

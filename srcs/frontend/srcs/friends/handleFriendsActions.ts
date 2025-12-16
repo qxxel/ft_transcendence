@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleFriendsActions.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:48:02 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 05:38:58 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 10:05:33 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,21 @@
 /* ====================== IMPORTS ====================== */
 
 import { sendRequest }			from "../utils/sendRequest.js"
+import { displayPop }			from "../utils/display.js";
 import { getAndRenderFriends }	from "./getAndRenderFriends.js"
 
 
 /* ====================== FUNCTION ====================== */
 
-export async function	handleFriendAction(url: string, method: string, body: Object | null, success: string) {
+export async function	handleFriendAction(url: string, method: string, body: Object | null): Promise<boolean> {
 	const	response: Response = await sendRequest(url, method, body);
 
 	if (!response.ok)
 	{
-		const	errorData: any = await response.json();
-		console.error("Error: ", errorData.error);
-		return ;
+		displayPop(response, "error");
+		return false;
 	}
 
-	console.log(success);
 	await getAndRenderFriends();
+	return true;
 }

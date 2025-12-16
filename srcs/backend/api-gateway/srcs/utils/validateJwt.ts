@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validateJwt.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 22:08:37 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/06 21:41:16 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 15:27:31 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,12 @@ export async function	getValidUserId(request: FastifyRequest): Promise<AxiosHead
 	);
 
 	return response.data.id;
+}
+
+export async function	getValidUserPayload(request: FastifyRequest): Promise<AxiosHeaderValue> {
+	const	response: AxiosResponse = await gatewayAxios.get('http://jwt:3000/payload/access',
+		{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+	);
+
+	return response.data;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 04:44:58 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 10:04:36 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,14 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { router }							from "../index.js"
-import { socket }							from "../socket/socket.js"
-import { getMenu }							from "../utils/getMenu.js"
-import { appStore }							from "../objects/store.js"
-import { displayError, displayPopError }	from "../utils/display.js"
-import { sendRequest }						from "../utils/sendRequest.js"
-import { verifyEmail }						from "../utils/verifyEmail.js"
-import { getAndRenderFriends }				from "../friends/getAndRenderFriends.js"
-
+import { appStore }					from "../objects/store.js"
+import { displayError, displayPop }	from "../utils/display.js"
+import { router }					from "../index.js"
+import { socket }					from "../socket/socket.js"
+import { getMenu }					from "../utils/getMenu.js"
+import { sendRequest }				from "../utils/sendRequest.js"
+import { verifyEmail }				from "../utils/verifyEmail.js"
+import { getAndRenderFriends }		from "../friends/getAndRenderFriends.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -79,10 +78,9 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 			body: JSON.stringify({ })
 		}).then((response) => {
 				if (!response.ok)
-					displayPopError(response);
-			}
-		);
-
+					displayPop(response, "error");
+			});
+		
 		return ;
 	}
 
@@ -229,14 +227,14 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 				twofaElements.hidden = false;
 				digitCode.required = true;
 			} else {
-				displayPopError("Missing HTMLElement!");
+				displayPop("Missing HTMLElement!", "error");
 				reject(false);
 			}
 		}
 
 		const	verifyForm: HTMLElement | null = document.getElementById("confirm-setting-form")
 
-		if (!(verifyForm instanceof HTMLFormElement)) return displayPopError("Missing form HTMLElement!");
+		if (!(verifyForm instanceof HTMLFormElement)) return displayPop("Missing form HTMLElement!", "error");
 
 		verifyForm.addEventListener("submit", async (event: Event) => {
 			event.preventDefault();
@@ -279,7 +277,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	
 	const	getUser: Response = await sendRequest(`/api/user/me`, 'get', null)
 	if (!getUser.ok)
-		return displayPopError(getUser);
+		return displayPop(getUser, "error");
 	
 	const	resultGetUser = await getUser.json(); // /!\ try catch
 	
@@ -331,7 +329,7 @@ async function	handleAddFriendForm(form: HTMLFormElement) {
 	const	respTargetId: Response = await sendRequest(`/api/user/lookup/${targetName}`, "get", null);
 	if (!respTargetId.ok)
 	{
-		displayPopError(respTargetId)
+		displayPop(respTargetId, "error")
 		return ;
 	}
 	const	targetId: number = (await respTargetId.json() as any).id; // try catch (json peut throw)
@@ -339,9 +337,16 @@ async function	handleAddFriendForm(form: HTMLFormElement) {
 	const	response: Response = await sendRequest(`/api/user/friends/request/${targetId}`, "post", {});
 	if (!response.ok)
 	{
-		displayPopError(response)
+		displayPop(response, "error")
 		return ;
 	}
+
+	const	friendship: any = await response.json();
+
+	if (friendship.status === "PENDING")
+		displayPop(`Request sended to ${targetName}.`, "success");
+	if (friendship.status === "ACCEPTED")
+		displayPop(`You are now friend with ${targetName}.`, "success");
 
 	await getAndRenderFriends();
 }
@@ -352,7 +357,7 @@ export function	setupSubmitHandler(): void {
 
 		const	form: EventTarget | null = event.target;
 		if (!(form instanceof HTMLFormElement))
-			return displayPopError("Missing form HTMLElement!");
+			return displayPop("Missing form HTMLElement!", "error");
 
 		if (form.id === "sign-in-form")
 			await handleSignInForm(form);

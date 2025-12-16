@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tournament.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:48:42 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 23:17:08 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 16:25:36 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ import { sendRequest } from	"../utils/sendRequest"
 import { PongResume } from "./objects/pongResume";
 import { buildElement } from "../history/getAndRenderHistory.ts"
 import { router } from "../index.ts";
+import { displayPop } from "../utils/display.ts";
 
 /* ====================== CLASS ====================== */
 
@@ -273,8 +274,9 @@ export class    TournamentController {
 
 			await sendRequest('POST', '/', p1payload); 
 			await sendRequest('POST', '/', p2payload); 
-		} catch (error) {
-			console.error("Error while saving tournamente match", error);
+		} catch (err) {
+			displayPop("Error while saving tournament match" + err, "error");
+			// console.error("Error while saving tournamente match", err);
 		}
 	}
 }

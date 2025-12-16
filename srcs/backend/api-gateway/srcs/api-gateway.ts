@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:54:56 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 09:57:25 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,28 @@ import axios						from 'axios'
 import Fastify						from 'fastify'
 import cors							from '@fastify/cors'
 import formBody						from '@fastify/formbody'
-import proxy						from '@fastify/http-proxy'
-import { gatewayJwtController }		from "./controllers/gatewayJwtController.js"
 import { gatewayAuthController }	from "./controllers/gatewayAuthController.js"
 import { gatewayGameController }	from "./controllers/gatewayGameController.js"
-import { gatewayUserController }	from "./controllers/gatewayUserController.js"
+import { gatewayJwtController }		from "./controllers/gatewayJwtController.js"
+import { gatewayNotifController }	from "./controllers/gatewayNotifController.js"
 import { gatewaytwofaController }	from "./controllers/gatewaytwofaController.js"
+import { gatewayUserController }	from "./controllers/gatewayUserController.js"
+import { NotificationManager }		from './utils/notificationManager.js'
+import proxy						from '@fastify/http-proxy'
 
+import type { AxiosInstance }	from 'axios'
 import type { FastifyInstance }	from 'fastify'
 
-/* ====================== AXIOS VARIABLES ====================== */
+/* ====================== AXIOS VARIABLE ====================== */
 
-export const	gatewayAxios = axios.create({
+export const	gatewayAxios: AxiosInstance = axios.create({
 	timeout: 15000
 });
+
+
+/* ====================== NOTIFS VARIABLE ====================== */
+
+export const	notifManager: NotificationManager = new NotificationManager();
 
 
 /* ====================== SERVER ====================== */
@@ -66,9 +74,10 @@ gatewayFastify.register(proxy, {
 });
 
 gatewayFastify.register(gatewayAuthController, { prefix: '/api/auth' });
-gatewayFastify.register(gatewaytwofaController, { prefix: '/api/twofa' });
 gatewayFastify.register(gatewayGameController, { prefix: '/api/game' });
 gatewayFastify.register(gatewayJwtController, { prefix: '/api/jwt' });
+gatewayFastify.register(gatewayNotifController, { prefix: '/api/notifications' });
+gatewayFastify.register(gatewaytwofaController, { prefix: '/api/twofa' });
 gatewayFastify.register(gatewayUserController, { prefix: '/api/user' });
 
 

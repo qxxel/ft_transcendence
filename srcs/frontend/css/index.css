@@ -44,7 +44,15 @@ p {
 }
 
 .hidden {
-	display: none !important;
+    display: none !important;
+}
+
+div#div-notif {
+    height: 100%;
+    width: 20%;
+    position: fixed;
+    padding: 10px;
+	/* display: none; */
 }
 
 .darken {
@@ -68,6 +76,44 @@ div#div-errors {
 	z-index: 1000;
 }
 
+div.error, div.success, div.notif {
+    max-height: 20%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 12px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+div.error {
+    background-color: rgba(255, 69, 69, 0.774);
+    box-shadow: 0 0 5px rgba(255, 69, 69, 0.774);
+}
+
+div.success {
+    background-color: rgba(69, 255, 69, 0.774);
+    box-shadow: 0 0 5px rgba(69, 255, 69, 0.774);
+}
+
+div.notif {
+    background-color: rgba(0, 174, 255, 0.774);
+    box-shadow: 0 0 5px rgba(0, 174, 255, 0.774);
+}
+
+div.error > p, div.success > p, div.notif > p {
+    max-height: 100%;
+    margin: 0;
+    color: black;
+}
+    
+div.error > span, div.success > span, div.notif > span {
+    vertical-align: middle;
+    margin-left: auto;
+    text-align: left;
+    color: black;
+}
+
 div.error {
 	background-color: #000000;
 	border: 2px solid #ff3333;
@@ -77,7 +123,7 @@ div.error {
 	color: #ff3333;
 	font-weight: bold;
 	text-transform: uppercase;
-	
+
 	border-radius: 10px;
 	padding: 15px;
 	margin-top: 15px;
@@ -100,6 +146,7 @@ div.error > p {
 	margin: 0;
 	font-size: 14px;
 	text-shadow: 0 0 2px #ff3333;
+	color: #ff3333;
 }
 
 div.error > span {

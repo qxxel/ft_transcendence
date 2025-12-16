@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 22:54:16 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 16:19:07 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ import { router }							from "../index.js"
 import { PongGame }							from "../Pong/pong.js"
 import { TankGame } 						from "../tank/tank.js"
 import { socket }							from "../socket/socket.js"
+import { displayError, displayPop }			from "../utils/display.js"
 import { getMenu }							from "../utils/getMenu.js"
 import { AppState, appStore, UserState }	from "../objects/store.js"
-import { displayError, displayPopError }	from "../utils/display.js"
 import { loadTwofa }						from "../router/loadPage.js"
 import { TournamentController } 			from "../Pong/tournament.js"
 import { sendRequest }						from "../utils/sendRequest.js"
@@ -49,7 +49,7 @@ async function  onClickLogout(): Promise<void> {
 	const	response: Response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
 
 	if (!response.ok)
-		return displayPopError(response)
+		return displayPop(response, "error");
 
 	appStore.setState((state) => ({
 		...state,
@@ -74,7 +74,7 @@ async function  onClickLogout(): Promise<void> {
 async function	onClickEdit(): Promise<void> {
 	const	response: Response = await sendRequest(`/api/user/me`, 'get', null);
 	if (!response.ok)
-		return displayPopError(response);
+		return displayPop(response, "error");
 
 	const	userRes = await response.json();
 
@@ -101,8 +101,7 @@ async function	onClickEdit(): Promise<void> {
 }
 
 export async function	onClickHistory(targetId: number | null, targetName: string | null): Promise<void> {
-	console.log("History => " + targetId + " - " + targetName);
-	// TODO: SECURE IF NOT AUTH
+	//	MATHIS/AXEL/KILLIAN: SECURE IF NOT AUTH
 
 	router.navigate("/history");
 
@@ -194,7 +193,7 @@ async function	onClickDeleteTwofa(): Promise<void> {
 
 	const	response: Response = await sendRequest(`/api/auth/twofa/me`, 'delete', null);
 	if (!response.ok)
-		displayPopError(response)
+		displayPop(response, "error")
 	
 	appStore.setState((state) => ({
 		...state,
@@ -253,9 +252,10 @@ async function	onClickNewCode(): Promise<void> {
 			e.hidden = false;
 	});
 
-	const	res = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
+	const	res: Response = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
 
-	if (!res.ok) {
+	if (!res.ok)
+	{
 		if (btnSend instanceof HTMLButtonElement) btnSend.disabled = false;
 		if (spanCooldown) spanCooldown.textContent = "";
 		locks.forEach(e => {
@@ -263,7 +263,7 @@ async function	onClickNewCode(): Promise<void> {
 				e.hidden = true;
 		});
 
-		displayPopError(res)
+		displayPop(res, "error");
 		return;
 	}
 
@@ -276,14 +276,15 @@ async function	onClickNewCode(): Promise<void> {
 			body: JSON.stringify({ })
 		}
 	).then(async (response) => {
-			if (!response.ok) {
+			if (!response.ok)
+			{
 				if (btnSend instanceof HTMLButtonElement) btnSend.disabled = false;
 				if (spanCooldown) spanCooldown.textContent = "";
 				locks.forEach(e => {
 					if (e instanceof HTMLElement)
 						e.hidden = true;
 				});
-				displayPopError(response);
+				displayPop(response, "error");
 				return;
 			}
 		}

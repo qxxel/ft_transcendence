@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   sendRequest.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:23:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 15:51:17 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+import { displayPop } from "./display";
 
 // IT'S THE FUNCTION THAT HANDLE ALL THE REQUESTS TO THE BACKEND
 
@@ -23,7 +25,7 @@ async function	sendMainRequest(path: string, requestMethod: string, body: any | 
 		response = await fetch(path, {
 			method: requestMethod,
 			credentials: "include"
-		});
+		})
 	}
 	else if (body instanceof FormData)
 	{
@@ -31,7 +33,7 @@ async function	sendMainRequest(path: string, requestMethod: string, body: any | 
 			method: requestMethod,
 			credentials: "include",
 			body: body 
-		});
+		})
 	}
 	else
 	{
@@ -42,7 +44,7 @@ async function	sendMainRequest(path: string, requestMethod: string, body: any | 
 				"Content-Type": "application/json"
 			},
 			body: JSON.stringify(body)
-		});
+		})
 	}
 
 	return response;
@@ -56,8 +58,8 @@ export async function	sendRequest(path: string, requestMethod: string, body: Obj
 		response = await fetch("/api/jwt/refresh/access", {
 			method: "PATCH",
 			credentials: "include",
-		});
-		
+		})
+
 		if (response.ok)
 			response = await sendMainRequest(path, requestMethod, body);
 	}

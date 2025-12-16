@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 23:09:10 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 16:03:58 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,32 @@
 /* ====================== IMPORTS ====================== */
 
 import { router }						from "../index.js"
-import { displayDate, displayPopError }	from "../utils/display.js"
+import { displayDate, displayPop }		from "../utils/display.js"
 import { sendRequest }					from "../utils/sendRequest.js"
 import { btnCooldown }					from "../utils/buttonCooldown.js"
 
 /* ====================== FUNCTION ====================== */
 
 export async function loadTwofa() {
-	const	Response: Response = await sendRequest(`/api/jwt/payload/twofa`, 'get', null);
+	const	response: Response = await sendRequest(`/api/jwt/payload/twofa`, 'get', null);
 	
-	if (!Response.ok) {
-		console.log(Response.statusText);
+	if (!response.ok)
+	{
+		displayPop(response.statusText, "error");
 		router.navigate("/sign-in");
 		return ;
 	}
 	
-	Response.json()
+	response.json()
 		.then((result) => {
 			if (result.exp)
 				displayDate(result.exp * 1000);
 			else
-				displayPopError("Unable to display the expiration date");
+				displayPop("Unable to display the expiration date", "error");
 		}
 	).catch((err: unknown) => {
 		if (err instanceof Error)
-			displayPopError(err.message);
+			displayPop(err.message, "error");
 	});
 	
 	router.canLeave = false;
@@ -48,13 +49,14 @@ export async function loadTwofa() {
 }
 
 export async function loadUser() {
-	const	Response: Response = await sendRequest(`/api/user/me`, 'get', null);
-	if (!Response.ok) {
-		console.log(Response.statusText)
+	const	response: Response = await sendRequest(`/api/user/me`, 'get', null);
+	if (!response.ok)
+	{
+		displayPop(response.statusText, "error");
 		return ;
 	}
 
-	const	userRes: any = await Response.json();
+	const	userRes: any = await response.json();
 
 	const	imgElement: HTMLImageElement = document.getElementById("user-avatar") as HTMLImageElement;
 	const	displayImgElement: HTMLImageElement = document.getElementById("display-user-avatar") as HTMLImageElement;
