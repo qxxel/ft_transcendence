@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 10:01:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:22:13 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
 async function	handleLoadPage(): Promise<void> {
 	return new Promise((resolve) => {
 		document.addEventListener("DOMContentLoaded", async (_event: Event) => {
-			console.log("DOMContentLoaded");
 			addTabs()
 
 			// const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
 			const	response: Response = await sendRequest('/api/user/me', "GET", null);
 
-			if (!response.ok) {
+			if (!response.ok)
+			{
 				setDynamicFavicon(null);
 				return resolve();
 			}
@@ -49,7 +49,7 @@ async function	handleLoadPage(): Promise<void> {
 				}
 			}));
 
-			setDynamicFavicon(result.avatar);
+			setDynamicFavicon(result.avatar ?? null);
 
 			const	menu: HTMLElement | null = document.getElementById("nav");
 			if (menu)

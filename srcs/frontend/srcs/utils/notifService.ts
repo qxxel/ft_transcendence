@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/10 16:50:31 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 11:31:12 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ export class	NotificationService {
 		{
 			this.eventSource.close();
 			this.eventSource = null;
-			console.log("Notifications disconnected");
 		}
 	}
 }

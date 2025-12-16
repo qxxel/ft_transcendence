@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   socket.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 17:53:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 00:42:39 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 16:26:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,16 @@ export function	connectSocket() {
 	});
 
 	socket.on("connect", () => {
-		console.log(`✅ WEBSOCKET CONNECTED ! ID: ${socket.id}`);
+		console.log(`✅ WEBSOCKET CONNECTED ! ID: ${socket.id}`);	// AXEL: DEBUG => A ENLEVER
 	});
 
 	socket.on("disconnect", () => {
-		console.log("❌ DISCONNECTED");
+		console.log("❌ DISCONNECTED");	// AXEL: DEBUG => A ENLEVER
 	});
 
 	socket.on("connect_error", (err) => {
-		console.error("❌ Connection error WebSocket :", err.message);
+		console.error("❌ Connection error WebSocket :", err.message);	// AXEL: DEBUG => A ENLEVER
 	});
 
-	socket.on("message_recu", (data) => {
-		console.log("📩 Game server response: ", data);
-	});
 };
 
-// export function	sendKeyPress(key: string) {
-// 	if (socket && socket.connected) {
-// 		socket.emit("touche_appuyee", { key });
-// 	} else {
-// 		console.log("⏳ Attente de connexion pour envoyer :", key);
-// 	}
-// };

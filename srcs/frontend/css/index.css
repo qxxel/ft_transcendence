@@ -52,7 +52,7 @@ div#div-notif {
     width: 20%;
     position: fixed;
     padding: 10px;
-	display: none !important;
+	/* display: none; */
 }
 
 .darken {
@@ -89,7 +89,6 @@ div.error, div.success, div.notif {
 div.error {
     background-color: rgba(255, 69, 69, 0.774);
     box-shadow: 0 0 5px rgba(255, 69, 69, 0.774);
-
 }
 
 div.success {
@@ -124,7 +123,7 @@ div.error {
 	color: #ff3333;
 	font-weight: bold;
 	text-transform: uppercase;
-	
+
 	border-radius: 10px;
 	padding: 15px;
 	margin-top: 15px;
@@ -147,6 +146,7 @@ div.error > p {
 	margin: 0;
 	font-size: 14px;
 	text-shadow: 0 0 2px #ff3333;
+	color: #ff3333;
 }
 
 div.error > span {

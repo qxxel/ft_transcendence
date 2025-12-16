@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:11:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 10:07:50 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:05:07 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,17 @@ export async function	verifyEmail(idDivHidden: string, idDivVisible: string, ema
 		credentials: "include"
 	});
 
-	if (response.ok) {
+	if (response.ok)
+	{
 		const	result = await response.json();
-		
+
 		if (result.exp)
 			displayDate(result.exp * 1000);
 		else
 			displayPop("Unable to display the expiration date", "error");
-	} else {
-		displayDate(Date.now() + 5 * 60 * 1000);
 	}
+	else
+		displayDate(Date.now() + 5 * 60 * 1000);
 
 	const	divHidden = document.getElementById(idDivHidden);
 	if (divHidden)

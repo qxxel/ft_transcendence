@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 10:01:21 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:19:07 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,7 @@ async function	onClickEdit(): Promise<void> {
 }
 
 export async function	onClickHistory(targetId: number | null, targetName: string | null): Promise<void> {
-	console.log("History => " + targetId + " - " + targetName);
-	// TODO: SECURE IF NOT AUTH
+	//	MATHIS/AXEL/KILLIAN: SECURE IF NOT AUTH
 
 	router.navigate("/history");
 
@@ -253,9 +252,10 @@ async function	onClickNewCode(): Promise<void> {
 			e.hidden = false;
 	});
 
-	const	res = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
+	const	res: Response = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
 
-	if (!res.ok) {
+	if (!res.ok)
+	{
 		if (btnSend instanceof HTMLButtonElement) btnSend.disabled = false;
 		if (spanCooldown) spanCooldown.textContent = "";
 		locks.forEach(e => {
@@ -276,7 +276,8 @@ async function	onClickNewCode(): Promise<void> {
 			body: JSON.stringify({ })
 		}
 	).then(async (response) => {
-			if (!response.ok) {
+			if (!response.ok)
+			{
 				if (btnSend instanceof HTMLButtonElement) btnSend.disabled = false;
 				if (spanCooldown) spanCooldown.textContent = "";
 				locks.forEach(e => {

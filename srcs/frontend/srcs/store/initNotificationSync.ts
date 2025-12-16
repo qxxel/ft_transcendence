@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 18:23:25 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/10 18:26:02 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:26:16 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,15 @@ import { notificationService }	from "../utils/notifService.js"
 export function	initNotificationSync(): void {
 	let isConnected = false;
 
-	console.log("[NotificationSync] Initialized monitoring");
-
 	appStore.subscribe((state: AppState) => {
-		if (state.user && !isConnected)
+		if ((state.user && state.user.isAuth) &&!isConnected)
 		{
 			notificationService.connect();
 			isConnected = true;
 			return ;
 		}
 
-		if (!state.user && isConnected)
+		if ((!state.user || !state.user.isAuth) && isConnected)
 		{
 			notificationService.disconnect();
 			isConnected = false;

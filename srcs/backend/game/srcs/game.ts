@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:54:33 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 16:21:52 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ io.use(async (socket, next) => {
 });
 
 io.on('connection', (socket) => {
-	console.log(`[Main] Nouvelle connexion Socket : ${socket.id}`);
+	console.log(`New socket connexion: ${socket.id}`);
 
 	setupPongSocket(io, socket, gamesServ);
 });

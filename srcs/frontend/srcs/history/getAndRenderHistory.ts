@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderHistory.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 00:10:17 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 16:24:31 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 /* ====================== FUNCTIONS ====================== */
 
+import { displayPop } from "../utils/display";
 import { sendRequest }	from "../utils/sendRequest"
 
 
@@ -55,23 +56,22 @@ export async function	getAndRenderHistory(targetId: number | null,
 		if (!response.ok)
 		{
 			try {
-				const	errorData: Object = await response.json();
-				console.error(errorData);
+				displayPop(response, "error");
 			} catch (e) {
-				console.error("Impossible to read JSON error", e);
+				displayPop("Impossible to read JSON error", "error");	//	MATHIS/AXEL: A VOIR SI METTRE `e` DANS LE MESSAGE
 			}
 
 			displayErrors(targetName);
-
 			return ;
 		}
 
 		const	gamesData: GameObject[] = await response.json();
 
-		if (!Array.isArray(gamesData)) {
-				console.error("Invalid data format received:", gamesData);
-				throw new Error("Invalid data format");
-			}
+		if (!Array.isArray(gamesData))
+		{
+			displayPop(response, "error");
+			throw new Error("Invalid data format");	//	KILLIAN/AXEL: A VOIR SI ON THROW QUAND MEME (MESSAGE DEJA AFFICHE)
+		}
 
 		if (gamesData.length === 0)
 		{
@@ -79,11 +79,9 @@ export async function	getAndRenderHistory(targetId: number | null,
 			return ;
 		}
 
-console.log(gamesData) // ICI LE PRINT DU TABLEAU
-
 		renderGames(gamesData, aiFilter, pvpFilter, pongFilter, tankFilter);
-	} catch (error) {
-		console.error("Critical error while charging history:", error);
+	} catch (err: unknown) {
+		displayPop("Critical error while charging history: " + err, "error")
 		displayErrors(targetName);
 	}
 }

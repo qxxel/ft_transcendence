@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 10:02:58 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:29:03 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,15 @@ export async function displayError(response: Response | string, idMsgError: stri
 	} else {
 		if (typeof response === "string")
 			p.textContent = response;
-		else {
+		else
+		{
 			try {
 				const	result = await response.json();
 				p.textContent = result?.error || "An unexpected error has occurred";
-			} catch (error) {
-				console.error(error);
-				displayPop(response, "error")
+			} catch (err) {
+				displayPop("" + err, "error");	//	AXEL/MATHIS: PAS BEAU A VOIR
+				// console.error(err);
+				// displayPop(response, "error")
 			}
 		}
 	}
@@ -36,18 +38,18 @@ export async function displayError(response: Response | string, idMsgError: stri
 
 export async function	displayPop(response: Response | string | undefined, type: "notif" | "success" | "error") {
 	const	divNotifs = document.getElementById("div-notif");
+
 	if (!divNotifs)
 	{
-		console.error("No HTMLElement named \`div-errors\`.");
+		console.error("No HTMLElement named \`div-notif\`.");	// MATHIS: A VOIR COMMENT AFFICHER LES ERREURS ICI
 		if (response instanceof Response)
-			console.error(response.statusText);
+			console.error(response.statusText);					// "
 		else if (typeof response === "string")
-			console.error(response);
+			console.error(response);							// "
 		else
-			console.error("An unexpected error has occurred");
+			console.error("An unexpected error has occurred");	// "
 		return;
 	}
-
 	const p = document.createElement("p");
 	const span = document.createElement("span");
 	span.textContent = "✕";
@@ -68,8 +70,8 @@ export async function	displayPop(response: Response | string | undefined, type: 
 			else
 				p.textContent = result?.data || "An unexpected error has occurred";
 		} catch (error) {
-			console.error(error);
-			console.error(response.statusText);
+			console.error(error);							// MATHIS: A VOIR COMMENT AFFICHER LES ERREURS ICI
+			console.error(response.statusText);				// "
 		}
 	}
 	else
@@ -80,6 +82,7 @@ export async function	displayPop(response: Response | string | undefined, type: 
 	div.appendChild(p);
 	div.appendChild(span);
 	divNotifs.appendChild(div);
+	divNotifs.hidden = false;
 }
 
 export function displayDate(date: number) {

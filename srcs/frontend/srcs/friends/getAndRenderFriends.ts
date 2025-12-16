@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderFriends.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 05:37:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 15:57:39 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,7 @@ export async function	getAndRenderFriends(): Promise<void> {
 	const	response: Response = await sendRequest('/api/user/friends/me', "get", null);
 	if (!response.ok)
 	{
-		const	errorData: Object = await response.json();
-		console.error(errorData);
-
 		displayErrors();
-		
 		return ;
 	}
 
