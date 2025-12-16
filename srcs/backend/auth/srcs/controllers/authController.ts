@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 00:21:02 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 22:45:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,86 +17,45 @@
 
 import argon2								from 'argon2'
 import { authAxios, authServ, authFastify }	from "../auth.js"
-import { deleteClientExpires }				from "../services/authService.js"
-import { errorsHandler }					from "../utils/errorsHandler.js"
+import { isLoggedIn }						from "../utils/isLog.js"
+import { getCookies }						from "../utils/cookies.js"
 import { isValidPassword }					from "../utils/validation.js"
-import * as twofaError						from "../utils/throwErrors.js"
+import * as authError						from "../utils/throwErrors.js"
+import { errorsHandler }					from "../utils/errorsHandler.js"
 
-import type	{ AxiosResponse }									from 'axios'
-import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
-import type { validationResult }								from "../utils/validation.js"
+import type	{ AxiosResponse }								from 'axios'
+import type { FastifyInstance, FastifyRequest }				from 'fastify'
+import type { FastifyReply }								from 'fastify'
+import type { SignUpBody, SignInBody, user }				from "../dtos/interface.js"
+import type { updateUserBody, usersRespDto }				from "../dtos/interface.js"
+import type { validationResult }							from "../utils/validation.js"
 
-
-/* ====================== INTERFACES ====================== */
-
-interface	SignUpBody {
-	username: string;
-	email: string;
-	password: string;
-};
-
-interface	SignInBody {
-	identifier: number;
-	password: string;
-}
-
-interface	user {
-	username?: string;
-	email?: string;
-	avatar?: string;
-	is2faEnable?: boolean;
-}
-
-interface	updateUserBody {
-	otp?: string;
-	password: string;
-	user: user;
-}
 
 /* ====================== FUNCTIONS ====================== */
-
-function	getCookies(request: FastifyRequest): any {
-	try {
-		const	cookies: any = Object.fromEntries(
-			(request.headers.cookie || "")
-			.split("; ")
-			.map(c => c.split("="))
-		)
-		return cookies;
-	} catch (err: unknown) {
-		return ;
-	}
-}
-
-async function isLoggedIn(cookie: string | undefined): Promise<boolean> {
-	try {
-		const	res: AxiosResponse = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: cookie || "" } });
-
-		return (res.status === 200);
-	} catch (err: any) {
-		if (err.response?.status === 401)
-			return false;
-
-		throw err;
-	}
-}
 
 async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: FastifyReply): Promise<FastifyReply> {
 	try {
 		if (!request.body)
-			throw new twofaError.RequestEmptyError("The request is empty");
+			throw new authError.RequestEmptyError("The request is empty");
 		
 		const	validation: validationResult = isValidPassword(request.body.password)
 		if (!validation.result)
-			throw new Error(validation.error);
+			throw new authError.InvalidSyntaxError(validation.error);
 
 		const	hash: string = await argon2.hash(request.body.password);
 		
 		if (await isLoggedIn(request.headers.cookie))
-			throw new twofaError.AlreadyConnectedError("You are already connected");
+			throw new authError.AlreadyConnectedError("You are already connected!");
 
 		const	userRes: AxiosResponse = await authAxios.post('http://user:3000', request.body);
-		const	user: any = userRes.data;
+		
+		if (!userRes || !userRes.data)
+			throw new authError.MissingIdError("Id of the user is missing!");
+		
+		const	user: usersRespDto = userRes.data;
+
+		if (!user || !user.id)
+			throw new authError.MissingIdError("Id of the user is missing!");
 
 		try {
 			const	jwtRes: AxiosResponse = await authAxios.post('http://jwt:3000/twofa', user);
@@ -123,32 +82,32 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: FastifyReply): Promise<FastifyReply> {
 	try {
 		if (!request.body)
-			throw new twofaError.RequestEmptyError("The request is empty");
+			throw new authError.RequestEmptyError("The request is empty");
 
 		const	{ identifier, password } = request.body;
 
 		if (await isLoggedIn(request.headers.cookie))
-			throw new twofaError.AlreadyConnectedError("You are already connected");
+			throw new authError.AlreadyConnectedError("You are already connected!");
 
-		let	user;
+		let	user: usersRespDto;
 		try {
 			const	userRes: AxiosResponse = await authAxios.get(`http://user:3000/lookup/${identifier}`);
 			user = userRes.data;
 		} catch (error) {
-			throw new twofaError.WrongCredentialsError("Wrong password or username.");
+			throw new authError.WrongCredentialsError("Wrong password or username!");
 		}
 
-		if (!user)
-			throw new twofaError.WrongCredentialsError("Wrong password or username.");
+		if (!user || !user.id)
+			throw new authError.WrongCredentialsError("Wrong password or username!");
 
-		const expires_at: number | undefined | null = await authServ.getExpiresByIdClient(user.id);
-		if (expires_at !== null && expires_at !== undefined)
-			throw new twofaError.WrongCredentialsError("Wrong password or username.");
+		const	expires_at: number | null = await authServ.getExpiresByIdClient(user.id);
+		if (expires_at !== null)
+			throw new authError.WrongCredentialsError("Wrong password or username!");
 		
-		const	pwdHash: string = await authServ.getPasswordByIdClient(user.id);
+		const	pwdHash: string | null = await authServ.getPasswordByIdClient(user.id);
 
-		if (!await argon2.verify(pwdHash, password))
-			throw new twofaError.WrongCredentialsError("Wrong password or username.");
+		if (!pwdHash || !await argon2.verify(pwdHash, password))
+			throw new authError.WrongCredentialsError("Wrong password or username!");
 
 		const	jwtRes: AxiosResponse = await authAxios.post('http://jwt:3000', user, { withCredentials: true } );
 		
@@ -177,11 +136,44 @@ async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, 
 		if (jwtRes.headers['set-cookie'])
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
 
-		const id: number = jwtRes.data;
+		const	id: number = jwtRes.data;
+
+		if (!id)
+			throw new authError.MissingIdError("Id of the user is missing!");
 
 		await authServ.updateExpiresByIdClient(id, null);
+		await authAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': id } } );
 
 		return reply.status(201).send(id);
+	} catch (err: unknown) {
+		return await errorsHandler(authFastify, reply , err);
+	}
+}
+
+async function	validateAndDeleteClient(request: FastifyRequest<{ Body: { password: string } }>, reply: FastifyReply): Promise<FastifyReply> {
+	try {
+		if (!request.body)
+			throw new Error("The request is empty");
+
+		const	password: string = request.body.password;
+
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
+
+		if (!cookies || !cookies.jwtAccess)
+			throw new Error("You are not connected");
+		
+		const	payload: AxiosResponse = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		
+		if (!payload.data.id)
+			throw new Error("invalide id");
+		
+		const	pwdHash: string | null = await authServ.getPasswordByIdClient(payload.data.id);
+		if (!pwdHash || !await argon2.verify(pwdHash, password))
+			throw new authError.WrongCredentialsError("Wrong password!");
+
+		await deleteClient(request, reply);
+
+		return reply.status(201).send(payload.data.id);
 	} catch (err: unknown) {
 		return await errorsHandler(authFastify, reply , err);
 	}
@@ -196,22 +188,24 @@ async function	updateUser(request: FastifyRequest<{ Body: updateUserBody}>, repl
 		const	otp: string | undefined = request.body.otp;
 		const	user: user = request.body.user;
 
-		const	{ jwtAccess } = getCookies(request);
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
 		
-		if (!jwtAccess)
+		if (!cookies || !cookies.jwtAccess)
 			throw new Error("You are not connected");
 		
-		const payload = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
+		const	payload: AxiosResponse = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		
 		if (!payload.data.id)
 			throw new Error("invalide id");
 		
-		const	pwdHash: string = await authServ.getPasswordByIdClient(payload.data.id);
-		if (!await argon2.verify(pwdHash, password))
-			throw new twofaError.WrongCredentialsError("Invalid.");
+		const	pwdHash: string | null = await authServ.getPasswordByIdClient(payload.data.id);
+		if (!pwdHash || !await argon2.verify(pwdHash, password))
+			throw new authError.WrongCredentialsError("Wrong password!");
 
 		const	oldUserRes: AxiosResponse = await authAxios.get(`http://user:3000/me`, {headers: { 'user-id': payload.data.id }});
 		if (user.email && oldUserRes.data.email !== user.email) {
+			if (otp == undefined)
+				throw new authError.WrongCredentialsError("Wrong password!");
 			await authAxios.post('http://twofa:3000/validate', { otp }, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } } );
 		}
 			
@@ -229,9 +223,8 @@ async function	updateUser(request: FastifyRequest<{ Body: updateUserBody}>, repl
 
 async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	{ jwtAccess } = getCookies(request);
-
-		if (!jwtAccess)
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
+		if (!cookies || !cookies.jwtAccess)
 			throw new Error("You are not connected");
 
 		const	payload: AxiosResponse = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
@@ -257,14 +250,21 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 
 async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
 	try {
-		const	{ jwtTwofa } = getCookies(request);
-		if (!jwtTwofa)
+		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
+		if (!cookies || !cookies.jwtTwofa)
 			return reply.status(204).send();
 		
 		const	payload: AxiosResponse = await authAxios.get("http://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		
-		deleteClientExpires(authServ, payload.data.id);
+		if (!payload.data.id)
+			throw new Error("invalide id");
 		
+		if (await authServ.getExpiresByIdClient(payload.data.id)) {
+			await authAxios.delete(`http://user:3000/${payload.data.id}`);
+			await authAxios.delete(`http://game:3000/user/${payload.data.id}`);
+			await authServ.deleteClient(payload.data.id);
+		}
+
 		const	response: AxiosResponse = await authAxios.delete("http://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		
 		if (response.headers['set-cookie'])
@@ -283,9 +283,10 @@ async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promis
 		if (jwtRes.headers['set-cookie'])
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
 
-		const { id } = jwtRes.data;
+		const	{ id } = jwtRes.data;
 
 		await authServ.updateExpiresByIdClient(id, null);
+		await authAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': id } } );
 
 		return reply.status(201).send(id);
 	} catch (err: unknown) {
@@ -297,6 +298,7 @@ export async function	authController(authFastify: FastifyInstance): Promise<void
 	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
 	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
 	authFastify.post<{ Body: { otp: string } }>('/validateUser', validateUser);
+	authFastify.post<{ Body: { password: string } }>('/delete/me', validateAndDeleteClient);
 
 	authFastify.patch<{ Body: updateUserBody }>('/updateUser', updateUser);
 

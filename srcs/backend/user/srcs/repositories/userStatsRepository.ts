@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsRepository.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:47:32 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 18:52:22 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 04:16:05 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,13 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { userStatsRespDto }			from "../dtos/userStatsRespDto.js"
 import { userStatsPongUpdateDto }	from "../dtos/userStatsUpdateDto.js"
-import { userStatsRespDto }			from "../dtos/userStatsRespDto.js";
-import { userStatsTableBuilder }	from "../tableBuilders/userStatsTableBuilder.js"
 import { userStatsTankUpdateDto }	from "../dtos/userStatsUpdateDto.js"
 import { userStatsTrigger }			from "../triggers/userStatsTrigger.js"
+import { userStatsTableBuilder }	from "../tableBuilders/userStatsTableBuilder.js"
 
 import type { Database }	from 'sqlite3'
-
-/* ====================== INTERFACE ====================== */
-
-// BECAUSE TYPESCRIPT DON'T ACCEPT `this.lastID` BUT IT APPEARS WITH THE COMPILATION
-interface	StatementWithLastID {
-	lastID: number;
-}
-
 
 /* ====================== CLASS ====================== */
 
@@ -75,7 +67,7 @@ export class	userStatsRepository {
 				WHERE user_id = ? RETURNING *;`;
 			const	elements: number[] = userStatsUpdate.getTable();
 
-			this.db.get(query, elements, function (err: unknown, row: unknown) {
+			this.db.get(query, elements, function (err: Error | null, row: unknown) {
 				if (err)
 					return reject(err);
 
@@ -97,7 +89,7 @@ export class	userStatsRepository {
 				WHERE user_id = ? RETURNING *;`;
 			const	elements: number[] = userStatsUpdate.getTable();
 
-			this.db.run(query, elements, function (row: unknown, err: unknown) {
+			this.db.run(query, elements, function (row: unknown, err: Error | null) {
 				if (err)
 					return reject(err);
 
@@ -111,7 +103,7 @@ export class	userStatsRepository {
 			const	query: string = "SELECT * FROM user_stats WHERE user_id = ?";
 			const	elements: [number] = [userId];
 
-			this.db.get(query, elements, (err: unknown, row: unknown) => {
+			this.db.get(query, elements, (err: Error | null, row: unknown) => {
 				if (err)
 					return reject(err);
 
@@ -127,7 +119,7 @@ export class	userStatsRepository {
 
 	async isTaken(query: string, elements: Array<string>): Promise<boolean> {
 		return new Promise((resolve, reject) => {
-			this.db.get(query, elements, (err: unknown, row: unknown) => {
+			this.db.get(query, elements, (err: Error | null, row: unknown) => {
 				if (err)
 					return reject(err);
 

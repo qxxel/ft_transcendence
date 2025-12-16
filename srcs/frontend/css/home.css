@@ -3,155 +3,155 @@
 /* ************************************************************************** */
 
 .home-container {
-    position: relative;
-    width: 100% !important;
-    max-width: 1200px !important;
-    min-width: 630px !important;
-    height: 630px !important;
-    
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
-    background-color: rgba(0, 0, 0, 0.85);
-    
-    border: 2px solid #fff;
-    border-radius: 20px;
-    box-shadow: 0 0 50px rgba(255, 255, 255, 0.15);
-    
-    overflow: hidden;
-    text-align: center;
+	position: relative;
+	width: 100% !important;
+	max-width: 1200px !important;
+	min-width: 630px !important;
+	height: 630px !important;
+	
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	
+	background-color: rgba(0, 0, 0, 0.85);
+	
+	border: 2px solid #fff;
+	border-radius: 20px;
+	box-shadow: 0 0 50px rgba(255, 255, 255, 0.15);
+	
+	overflow: hidden;
+	text-align: center;
 }
 
 .neon-title {
-    font-family: 'monospace', sans-serif;
-    font-size: 3.5em; 
-    font-weight: bold;
-    color: #FFFF00;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    margin: 0;
-    position: relative;
-    z-index: 2;
-    
-    text-shadow: 0 0 10px #FFFF00;
+	font-family: 'monospace', sans-serif;
+	font-size: 3.5em; 
+	font-weight: bold;
+	color: #FFFF00;
+	text-transform: uppercase;
+	letter-spacing: 4px;
+	margin: 0;
+	position: relative;
+	z-index: 2;
+	
+	text-shadow: 0 0 10px #FFFF00;
 }
 
 .neon-title::before,
 .neon-title::after {
-    content: "FT_TRANSCENDENCE";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    opacity: 0.8;
-    display: none;
+	content: "FT_TRANSCENDENCE";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #000;
+	opacity: 0.8;
+	display: none;
 }
 
 .home-container:hover .neon-title::before,
 .home-container:hover .neon-title::after {
-    display: block;
+	display: block;
 }
 
 .home-container:hover .neon-title::before {
-    color: #00FFFF;
-    z-index: -1;
-    animation: glitch-anim-1 0.4s infinite linear alternate-reverse;
+	color: #00FFFF;
+	z-index: -1;
+	animation: glitch-anim-1 0.4s infinite linear alternate-reverse;
 }
 
 .home-container:hover .neon-title::after {
-    color: #FF00FF;
-    z-index: -2;
-    animation: glitch-anim-2 0.4s infinite linear alternate-reverse;
+	color: #FF00FF;
+	z-index: -2;
+	animation: glitch-anim-2 0.4s infinite linear alternate-reverse;
 }
 
 @keyframes glitch-anim-1 {
-    0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
-    20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
-    40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
-    60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
-    80% { clip-path: inset(10% 0 60% 0); transform: translate(-2px, 1px); }
-    100% { clip-path: inset(30% 0 40% 0); transform: translate(2px, -1px); }
+	0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
+	20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+	40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
+	60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
+	80% { clip-path: inset(10% 0 60% 0); transform: translate(-2px, 1px); }
+	100% { clip-path: inset(30% 0 40% 0); transform: translate(2px, -1px); }
 }
 
 @keyframes glitch-anim-2 {
-    0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -1px); }
-    20% { clip-path: inset(80% 0 5% 0); transform: translate(-2px, 2px); }
-    40% { clip-path: inset(30% 0 20% 0); transform: translate(2px, 1px); }
-    60% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, -2px); }
-    80% { clip-path: inset(50% 0 30% 0); transform: translate(2px, 2px); }
-    100% { clip-path: inset(40% 0 40% 0); transform: translate(-2px, -1px); }
+	0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -1px); }
+	20% { clip-path: inset(80% 0 5% 0); transform: translate(-2px, 2px); }
+	40% { clip-path: inset(30% 0 20% 0); transform: translate(2px, 1px); }
+	60% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, -2px); }
+	80% { clip-path: inset(50% 0 30% 0); transform: translate(2px, 2px); }
+	100% { clip-path: inset(40% 0 40% 0); transform: translate(-2px, -1px); }
 }
 
 /* Subtitle */
 .neon-subtitle {
-    font-family: 'monospace', sans-serif;
-    font-size: 1.2em;
-    color: #ccc;
-    letter-spacing: 3px;
-    margin-bottom: 60px;
-    z-index: 2;
-    position: relative;
+	font-family: 'monospace', sans-serif;
+	font-size: 1.2em;
+	color: #ccc;
+	letter-spacing: 3px;
+	margin-bottom: 60px;
+	z-index: 2;
+	position: relative;
 }
 
 /* Mega Button */
 .btn-mega {
-    background-color: #FFFF00;
-    color: #000;
-    font-family: 'monospace', sans-serif;
-    font-size: 1.5em;
-    font-weight: bold;
-    padding: 18px 50px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    z-index: 2;
-    position: relative;
-    box-shadow: 0 0 20px rgba(255, 255, 0, 0.4);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+	background-color: #FFFF00;
+	color: #000;
+	font-family: 'monospace', sans-serif;
+	font-size: 1.5em;
+	font-weight: bold;
+	padding: 18px 50px;
+	border: none;
+	border-radius: 50px;
+	cursor: pointer;
+	z-index: 2;
+	position: relative;
+	box-shadow: 0 0 20px rgba(255, 255, 0, 0.4);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-mega:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 40px rgba(255, 255, 0, 0.8);
-    background-color: #fff;
+	transform: scale(1.05);
+	box-shadow: 0 0 40px rgba(255, 255, 0, 0.8);
+	background-color: #fff;
 }
 
 /* --- Background Animation Styles --- */
 .home-background-effect {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    opacity: 0.2;
-    z-index: 0;
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	opacity: 0.2;
+	z-index: 0;
 }
 
 .anim-net {
-    position: absolute;
-    left: 50%; top: 10%; bottom: 10%;
-    border-left: 4px dashed rgba(255,255,255,0.3);
+	position: absolute;
+	left: 50%; top: 10%; bottom: 10%;
+	border-left: 4px dashed rgba(255,255,255,0.3);
 }
 
 .anim-ball {
-    position: absolute;
-    width: 15px; height: 15px;
-    background: #fff;
-    border-radius: 50%;
-    top: 50%; left: 50%;
-    box-shadow: 0 0 15px #FFFF00;
-    animation: ballBounce 2.5s infinite linear;
+	position: absolute;
+	width: 15px; height: 15px;
+	background: #fff;
+	border-radius: 50%;
+	top: 50%; left: 50%;
+	box-shadow: 0 0 15px #FFFF00;
+	animation: ballBounce 2.5s infinite linear;
 }
 
 .anim-paddle {
-    position: absolute;
-    width: 12px; height: 80px;
-    background: #fff;
-    top: 50%;
-    transform: translateY(-50%);
-    box-shadow: 0 0 10px #fff;
+	position: absolute;
+	width: 12px; height: 80px;
+	background: #fff;
+	top: 50%;
+	transform: translateY(-50%);
+	box-shadow: 0 0 10px #fff;
 }
 
 .anim-paddle.left { left: 40px; animation: paddleLeft 2.5s infinite ease-in-out; }
@@ -159,12 +159,12 @@
 
 /* UI Corners (Keep these!) */
 .ui-corner {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border: 2px solid #FFFF00;
-    transition: all 0.3s ease;
-    z-index: 3;
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	border: 2px solid #FFFF00;
+	transition: all 0.3s ease;
+	z-index: 3;
 }
 .top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
 .top-right { top: 20px; right: 20px; border-left: none; border-bottom: none; }
@@ -179,59 +179,59 @@
 
 /* Tiny Tech Text */
 .ui-status {
-    position: absolute;
-    top: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'monospace';
-    font-size: 0.7em;
-    color: #555;
-    letter-spacing: 2px;
+	position: absolute;
+	top: 25px;
+	left: 50%;
+	transform: translateX(-50%);
+	font-family: 'monospace';
+	font-size: 0.7em;
+	color: #555;
+	letter-spacing: 2px;
 }
 
 /* --- TEAM CREDITS FOOTER --- */
 .team-credits {
-    position: absolute;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    
-    font-family: 'monospace';
-    font-size: 0.7em;
-    color: #555;
-    letter-spacing: 1px;
-    
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    z-index: 3;
+	position: absolute;
+	bottom: 25px;
+	left: 50%;
+	transform: translateX(-50%);
+	
+	font-family: 'monospace';
+	font-size: 0.7em;
+	color: #555;
+	letter-spacing: 1px;
+	
+	display: flex;
+	gap: 15px;
+	align-items: center;
+	z-index: 3;
 }
 
 .team-name {
-    color: #555;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-    cursor: default;
+	color: #555;
+	transition: color 0.3s ease, text-shadow 0.3s ease;
+	cursor: default;
 }
 
 /* Hover effect for names */
 .team-name:hover {
-    color: #FFFF00;
-    text-shadow: 0 0 8px #FFFF00;
+	color: #FFFF00;
+	text-shadow: 0 0 8px #FFFF00;
 }
 
 /* Animation Keyframes */
 @keyframes ballBounce {
-    0%   { left: 50px; top: 70%; }
-    50%  { left: calc(100% - 60px); top: 30%; }
-    100% { left: 50px; top: 70%; }
+	0%   { left: 50px; top: 70%; }
+	50%  { left: calc(100% - 60px); top: 30%; }
+	100% { left: 50px; top: 70%; }
 }
 
 @keyframes paddleLeft {
-    0%, 100% { top: 70%; }
-    50% { top: 30%; } 
+	0%, 100% { top: 70%; }
+	50% { top: 30%; } 
 }
 
 @keyframes paddleRight {
-    0%, 100% { top: 70%; }
-    50% { top: 30%; } 
+	0%, 100% { top: 70%; }
+	50% { top: 30%; } 
 }

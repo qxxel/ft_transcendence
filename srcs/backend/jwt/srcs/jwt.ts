@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwt.ts                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/08 17:03:24 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:58:36 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,22 @@
 
 /* ====================== IMPORTS ====================== */
 
-import cors					from '@fastify/cors'
-import Fastify, { type FastifyInstance }				from 'fastify'
-import formBody				from '@fastify/formbody'
-import fs					from 'fs'
 import axios				from 'axios'
+import Fastify				from 'fastify'
 import sqlite3Pkg			from 'sqlite3'
-import { jwtController }	from "./controllers/jwtController.js"
+import cron					from "node-cron";
+import cors					from '@fastify/cors'
+import formBody				from '@fastify/formbody'
 import { jwtService }		from "./services/jwtService.js"
+import { jwtController }	from "./controllers/jwtController.js"
 import { jwtRepository }	from "./repositories/jwtRepository.js"
 
+import  type { FastifyInstance }	from 'fastify'
 
 /* ====================== TOKENS VARIABLES ====================== */
 
-export const	expAccess: string = "86400s"; // 86400s = 1day
-export const	expRefresh: string = "900s"; // 900s = 15min
+export const	expRefresh: string = "86400s"; // 86400s = 1day
+export const	expAccess: string = "900s"; // 900s = 15min
 export const	expTwofa: string = "300s"; // 300s = 5min
 
 export const	jwtSecret: Uint8Array<ArrayBuffer> = new TextEncoder().encode(process.env.JWT_SECRET);
@@ -49,11 +50,17 @@ const	db = new Database(dbname, (err: Error | null) => {
 
 export const	jwtServ: jwtService = new jwtService(new jwtRepository(db));
 
+cron.schedule("0 */10 * * * *", () => {
+	console.log("Cron: Running cleanup...");
+	jwtServ.cleanup();
+	console.log("Cron: Cleanup done.");
+});
+
 
 /* ====================== AXIOS VARIABLES ====================== */
 
 export const	jwtAxios = axios.create({
-	timeout: 1000
+	timeout: 5000
 });
 
 

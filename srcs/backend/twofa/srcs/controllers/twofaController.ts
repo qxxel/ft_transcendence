@@ -6,18 +6,21 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/08 22:13:28 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:56:30 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// HANDLE ALL 2FA-RELATED REQUESTS: GENERATE, VALIDATE, AND DELETE OTP CODES
+
+
 /* ====================== IMPORTS ====================== */
 
-import axios				from 'axios'
-import speakeasy			from 'speakeasy'
-import nodemailer			from 'nodemailer'
-import * as twofaError		from "../utils/throwErrors.js"
-import { errorsHandler }	from "../utils/errorsHandler.js"
-import { twofaAxios, twofaServ, emailName, emailPass, twofaFastify }	from "../twofa.js"
+import speakeasy							from 'speakeasy'
+import nodemailer							from 'nodemailer'
+import { emailPass, twofaFastify }			from "../twofa.js"
+import { twofaAxios, twofaServ, emailName }	from "../twofa.js"
+import * as twofaError						from "../utils/throwErrors.js"
+import { errorsHandler }					from "../utils/errorsHandler.js"
 
 import type { AxiosResponse }									from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
@@ -27,7 +30,7 @@ import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 /* ====================== FUNCTIONS ====================== */
 
 function generateOtpSecretKey() {
-	const secretKey = speakeasy.generateSecret();
+	const	secretKey = speakeasy.generateSecret();
 	return secretKey.base32;
 }
 
@@ -65,7 +68,7 @@ function MailCodeMessage(user: string, otp: string, email: string) {
 }
 
 async function sendMailMessage(mail: any) {
-	const transporter = nodemailer.createTransport({
+	const	transporter = nodemailer.createTransport({
 		service: "gmail",
 		auth: {
 			user: emailName,
@@ -90,14 +93,14 @@ async function	generateMailCode(request: FastifyRequest<{ Body: { email?: string
 		const	otp: string = generateOtp(otpSecretKey);
 
 		await twofaServ.deleteOtpByIdClient(payload.data.id);
-		await twofaServ.addOtp(payload.data.id, otpSecretKey, otp);
+		await twofaServ.addOtp(payload.data.id, otpSecretKey);
 
 		const	dataMail = MailCodeMessage(payload.data.username, otp, request.body.email || payload.data.email);
 		await sendMailMessage(dataMail);
 
-		return reply.status(200).send(otp);
+		return reply.status(200).send(otp); // return otp ???
 	} catch (err: unknown) {
-		return errorsHandler(twofaFastify, reply, err);
+		return await errorsHandler(twofaFastify, reply, err);
 	}
 }
 
@@ -116,12 +119,15 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 			isJwtTwofa = false;
 		}
 		
-		const	otpSecretKey = await twofaServ.getOtpSecretKeyByIdClient(payload.data.id);
+		const	otpSecretKey: string | null = await twofaServ.getOtpSecretKeyByIdClient(payload.data.id);
 		
+		if (!otpSecretKey)
+			throw new twofaError.WrongCodeError("Wrong code!");
+
 		const	isOtpValid = verifyOtp(otpSecretKey, request.body.otp);
 		
 		if (!isOtpValid)
-			throw new twofaError.BadCodeError("Bad code");
+			throw new twofaError.WrongCodeError("Wrong code!");
 		
 		if (isJwtTwofa) {
 			const	jwtRes = await twofaAxios.post("http://jwt:3000/twofa/validate", {}, { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
@@ -134,7 +140,7 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 		
 		return reply.status(200).send(payload.data.id);
 	} catch (err: unknown) {
-		return errorsHandler(twofaFastify, reply, err);
+		return await errorsHandler(twofaFastify, reply, err);
 	}
 }
 
@@ -147,7 +153,7 @@ async function	deleteCodeOtp(request: FastifyRequest, reply: FastifyReply): Prom
 		
 		return reply.status(204).send({ result: "deleted." });
 	} catch (err: unknown) {
-		return errorsHandler(twofaFastify, reply, err);
+		return await errorsHandler(twofaFastify, reply, err);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 21:20:00 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 09:57:25 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 /* ====================== IMPORT ====================== */
 
 import axios						from 'axios'
-import cors							from '@fastify/cors'
 import Fastify						from 'fastify'
+import cors							from '@fastify/cors'
 import formBody						from '@fastify/formbody'
 import { gatewayAuthController }	from "./controllers/gatewayAuthController.js"
 import { gatewayGameController }	from "./controllers/gatewayGameController.js"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   auth.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:55:51 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,21 @@
 /* ====================== IMPORT ====================== */
 
 import axios				from 'axios'
-import cors					from '@fastify/cors'
-import Fastify, { type FastifyInstance }				from 'fastify'
-import formBody				from '@fastify/formbody'
-import fs					from 'fs'
 import sqlite3Pkg			from 'sqlite3'
+import Fastify				from 'fastify'
+import cron					from 'node-cron'
+import cors					from '@fastify/cors'
+import formBody				from '@fastify/formbody'
+import { authService }		from './services/authService.js'
 import { authController }	from './controllers/authController.js'
 import { authRepository }	from "./repositories/authRepository.js"
-import { authService }		from './services/authService.js'
 
+import type { FastifyInstance }	from 'fastify'
 
 /* ====================== AXIOS VARIABLES ====================== */
 
 export const	authAxios = axios.create({
-	timeout: 1000
+	timeout: 5000
 });
 
 
@@ -46,6 +47,13 @@ const	db = new Database(dbname, (err: Error | null) => {
 });
 
 export const	authServ = new authService(new authRepository(db));
+
+cron.schedule("0 * * * * *", () => {
+	console.log("Cron: Running cleanup...");
+	authServ.cleanup();
+	console.log("Cron: Cleanup done.");
+});
+
 
 /* ====================== SERVER ====================== */
 
@@ -65,11 +73,6 @@ authFastify.register(cors, {
 
 authFastify.register(authController);
 
-authFastify.addHook('onReady', async () => {
-	console.log("Running cleanup...");
-	await authServ.cleanup();
-	console.log("Cleanup done.");
-});
 
 const	start = async () => {
 	try {

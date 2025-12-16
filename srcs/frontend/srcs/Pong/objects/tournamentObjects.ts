@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tournamentObjects.ts                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:54:09 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 11:53:47 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:09:57 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 
 export interface	Player {
 	name: string;
+	id?: number;
+	isRegistered?: boolean;
 }
 
 export interface	Match {

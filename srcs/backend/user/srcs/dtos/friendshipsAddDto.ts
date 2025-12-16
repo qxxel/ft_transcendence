@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsAddDto.ts                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:48:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:59:00 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:42:04 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 // WILL BE THE DTO TO TRANSFERT DATA FROM CONTROLLER TO DB FOR NEW FRIENDSHIPS
 
 
 /* ====================== IMPORT ====================== */
 
-import { SelfFriendRequestError }	from "../utils/throwErrors.js";
+import { SelfFriendRequestError }	from "../utils/throwErrors.js"
 
 
 /* ====================== CLASS ====================== */

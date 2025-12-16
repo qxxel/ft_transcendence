@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   interface.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:36:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:36:39 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:34:10 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// FILE THAT DEFINES SHARED INTERFACES FOR COLORS AND INPUT KEY MAPPINGS
 
 
 /* ============================= INTERFACES ============================= */
@@ -29,4 +29,5 @@ export interface	Keys {
 	rot_left: string,
 	rot_right: string,
 	fire: string
+	ability: string
 };

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsService.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 14:02:53 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:59:31 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 04:04:37 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,12 @@
 /* ====================== IMPORTS ====================== */
 
 import { friendshipsAddDto }		from "../dtos/friendshipsAddDto.js"
-import { friendshipsRepository }	from "../repositories/friendshipsRepository.js"
 import { friendshipsRespDto }		from "../dtos/friendshipsRespDto.js"
 import { friendshipsUpdateDto }		from "../dtos/friendshipsUpdateDto.js";
+import { friendshipsRepository }	from "../repositories/friendshipsRepository.js"
 
 import { AlreadyRelatedError, BlockedError, NoRelationError }	from "../utils/throwErrors.js"
 import type { FriendUser } from "../objects/friendUser.js";
-// import { stat } from "fs";
 
 
 /* ====================== CLASS ====================== */
@@ -114,9 +113,9 @@ export class	friendshipsService {
 		if (idA === idB)
 			return { status: "SELF" };
 		
-		const params = [idA, idB, idB, idA];
+		const	params = [idA, idB, idB, idA];
 		
-		const relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus(params);
+		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus(params);
 		
 		if (!relation)
 			return { status: "NONE" };

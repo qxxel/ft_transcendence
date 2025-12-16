@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   class_cannon.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:25:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:26:37 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:29:04 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// CLASS THAT DEFINES A CANNON WITH POSITION, ANGLE, AND DRAW/MOVE FUNCTIONALITY
 
 
 /* ============================= IMPORTS ============================= */
 
 import { Actor }	from "./class_actor.js"
 import { Line2D }	from "./class_line.js"
-import { Input } 	from "./class_input.js";
+import { Input } 	from "./class_input.js"
+import { Tank } 	from "./class_tank.js"
 
 import type { Color } from "./interface.js"
 
@@ -34,11 +35,12 @@ export class	Cannon extends Actor {
 		public	x2:number,
 		public	y2:number,
 		public	w:number,
-		public	h:number,
+		public	angle:number,
 		public	color:Color,
+		public 	author?:Tank
 ) {
 		super(x1,y1)
-		this.geometry = new Line2D(this.x1, this.y1, this.x2, this.y2, this.w, 0);
+		this.geometry = new Line2D(this.x1, this.y1, this.x2, this.y2, this.w, this.angle);
 	}
 
 	update(input: Input): void {
@@ -53,7 +55,7 @@ export class	Cannon extends Actor {
 	}
 
 	getEnd(): { x: number; y: number } {
-		return this.geometry.getEnd();
+			return this.geometry.getEnd();
 	}
 
 	slope(angle: number): void {

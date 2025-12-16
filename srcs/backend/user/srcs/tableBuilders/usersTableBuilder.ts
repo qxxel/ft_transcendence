@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersTableBuilder.ts                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:21:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/21 16:42:42 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 18:30:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ export function	usersTableBuilder(db: Database): void {
 		username TEXT NOT NULL UNIQUE,
 		email TEXT NOT NULL UNIQUE,
 		avatar TEXT,
-		is_2fa_enable BOOLEAN DEFAULT FALSE
+		is_2fa_enable BOOLEAN DEFAULT FALSE,
+		is_log BOOLEAN DEFAULT FALSE
 	);`);
 }

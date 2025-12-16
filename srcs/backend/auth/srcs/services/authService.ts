@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authService.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 21:20:13 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 06:09:26 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,39 +16,19 @@
 /* ====================== IMPORT ====================== */
 
 import { authRepository }	from "../repositories/authRepository.js"
-import { authAxios } 	from "../auth.js"
+import { authAxios }	 	from "../auth.js"
 
 /* ====================== FUNCTION ====================== */
 
-function runIn(fn: () => void, m: number, s: number, ms: number) {
-	setTimeout(fn, m * 60 * 1000 + s * 1000 + ms);
-}
-
 async function deleteClient(authServ: authService, id: number) {
-	let maxAttempts: number = 0;
-
-	while (maxAttempts < 5) {
-		try {
-			await authAxios.delete(`http://user:3000/${id}`);
-			await authAxios.delete(`http://twofa:3000/${id}`);
-			await authServ.deleteClient(id);
-			
-			break;
-		} catch (error) {
-			await new Promise(res => setTimeout(res, 1000));
-
-			maxAttempts++;
-
-			if (maxAttempts >= 5)
-				throw new Error(`Unable to delete client ${id}`);
-		}
+	try {
+		await authAxios.delete(`http://game:3000/user/${id}`);
+		await authAxios.delete(`http://user:3000/${id}`);
+		await authAxios.delete(`http://twofa:3000/${id}`);
+		await authServ.deleteClient(id);
+	} catch (error) {
+		console.error(error);
 	}
-}
-
-export async function deleteClientExpires(authServ: authService, id: number) {
-	const expires_at = await authServ.getExpiresByIdClient(id)
-	if (expires_at !== null && expires_at !== undefined)
-		deleteClient(authServ, id);
 }
 
 /* ====================== CLASS ====================== */
@@ -61,29 +41,26 @@ export class	authService {
 	}
 
 	async cleanup(): Promise<void> {
-		const expiredClients = await this.getExpiredClients();
+		const	expiredClients: number[] = await this.getExpiredClients();
 
 		for (const client of expiredClients) {
-			const date = await this.getExpiresByIdClient(client);
+			const	date: number | null = await this.getExpiresByIdClient(client);
 
-			if (date === undefined || date === null)
+			if (date === null)
 				continue;
 
-			const	delay = date - Date.now();
+			const	delay: number = date - Date.now();
 
 			if (delay <= 0)
 				deleteClient(this, client);
-			else
-				runIn(() => deleteClientExpires(this, client), 0, 0, delay);
 		}
 	}
 
 	async addClient(id: number, password: string): Promise<void> {
-		runIn(() => deleteClientExpires(this, id), 5, 0, 0);
 		return await this.authRepo.addClient(id, password);
 	}
 
-	async getPasswordByIdClient(id: number): Promise<string> {
+	async getPasswordByIdClient(id: number): Promise<string | null> {
 		return await this.authRepo.getPasswordByIdClient(id);
 	}
 
@@ -91,7 +68,7 @@ export class	authService {
 		return await this.authRepo.getExpiredClients();
 	}
 
-	async getExpiresByIdClient(id: number): Promise<number | undefined | null> {
+	async getExpiresByIdClient(id: number): Promise<number | null> {
 		return await this.authRepo.getExpiresByIdClient(id);
 	}
 

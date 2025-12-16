@@ -6,11 +6,12 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:58:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/30 18:07:07 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:42:53 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // ADD UTILS FOR USER DTOs, ESPECIALLY FOR VALIDATION OF NAME AND PASSWORD
+
 
 /* ====================== IMPORT ====================== */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsRepository.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 15:58:33 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 04:03:31 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,11 @@
 
 import { friendshipsAddDto }		from "../dtos/friendshipsAddDto.js"
 import { friendshipsRespDto }		from "../dtos/friendshipsRespDto.js"
-import { friendshipsTableBuilder }	from "../tableBuilders/friendshipsTableBuilder.js"
 import { friendshipsUpdateDto }		from "../dtos/friendshipsUpdateDto.js"
+import { friendshipsTableBuilder }	from "../tableBuilders/friendshipsTableBuilder.js"
 
 import type { Database }	from 'sqlite3'
 import type { FriendUser }	from "../objects/friendUser.js"
-import { NoRelationError } from "../utils/throwErrors.js"
 
 /* ====================== INTERFACE ====================== */
 
@@ -69,7 +68,7 @@ export class	friendshipsRepository {
 				RETURNING *;`;
 			const	elements: number[] = friendship.getTable();
 
-			this.db.get(query, elements, (err: unknown, row: any) => {
+			this.db.get(query, elements, (err: Error | null, row: any) => {
 				if (err)
 					return reject(err);
 
@@ -85,7 +84,7 @@ export class	friendshipsRepository {
 				RETURNING *;`;
 			const	elements: number[] = friendship.getTable();
 																								//	AXEL: A ENLEVER
-			this.db.get(query, elements, (err: unknown, row: any) => {
+			this.db.get(query, elements, (err: Error | null, row: any) => {
 				if (err)
 					return reject(err);
 
@@ -102,7 +101,7 @@ export class	friendshipsRepository {
 				RETURNING *;`;
 			const	elements: number[] = friendship.getTable();
 
-			this.db.get(query, elements, (err: unknown, row: any) => {
+			this.db.get(query, elements, (err: Error | null, row: any) => {
 				if (err)
 					return reject(err);
 
@@ -121,7 +120,7 @@ export class	friendshipsRepository {
 				OR (requester_id = ? AND receiver_id = ?)`;
 			const	elements: number[] = [userId, targetId, targetId, userId];
 
-			this.db.run(query, elements, function(err: unknown) {
+			this.db.run(query, elements, function(err: Error | null) {
 				if (err)
 					return reject(err);
 
@@ -140,7 +139,7 @@ export class	friendshipsRepository {
 					OR (requester_id = ? AND receiver_id = ?);`;
 				const	elements: number[] = friendship.getCheckTable();
 			
-				this.db.run(deleteQuery, elements, (err: unknown) => {
+				this.db.run(deleteQuery, elements, (err: Error | null) => {
 					if (err)
 					{
 						this.db.run("ROLLBACK");
@@ -152,7 +151,7 @@ export class	friendshipsRepository {
 						RETURNING *;`;
 					const	insertElements: number[] = friendship.getTable();
 				
-					this.db.get(insertQuery, insertElements, (err: unknown, row: any) => {
+					this.db.get(insertQuery, insertElements, (err: Error | null, row: any) => {
 						if (err) 
 						{
 							this.db.run("ROLLBACK");
@@ -170,12 +169,12 @@ export class	friendshipsRepository {
 
 	async getRelationStatus(elements: number[]): Promise<{ status: string, requester_id: number | string } | null> {
 		return new Promise((resolve, reject) => {
-			const query: string = `SELECT status, requester_id FROM friendships 
+			const	query: string = `SELECT status, requester_id FROM friendships 
 					WHERE (requester_id = ? AND receiver_id = ?) 
 					OR (requester_id = ? AND receiver_id = ?)
 				LIMIT 1;`;
 
-			this.db.get(query, elements, (err: unknown, row: any) => {
+			this.db.get(query, elements, (err: Error | null, row: any) => {
 				if (err)
 					return reject(err);
 
@@ -189,7 +188,7 @@ export class	friendshipsRepository {
 
 	async getFriendsList(userId: number): Promise<FriendUser[]> {
 		return new Promise((resolve, reject) => {
-			const query = `SELECT u.id, u.username, u.avatar, u.email, f.status, f.receiver_id
+			const	query = `SELECT u.id, u.username, u.avatar, u.email, f.status, f.receiver_id
 				FROM friendships f
 				INNER JOIN users u ON u.id = CASE
 					WHEN f.requester_id = ? THEN f.receiver_id
@@ -197,9 +196,9 @@ export class	friendshipsRepository {
 				END
 				WHERE (f.requester_id = ? OR f.receiver_id = ?)
 				AND (f.status = 'ACCEPTED' OR f.status = 'PENDING');`;
-			const elements = [userId, userId, userId];
+			const	elements = [userId, userId, userId];
 
-			this.db.all(query, elements, (err: unknown, rows: FriendUser[]) => {
+			this.db.all(query, elements, (err: Error | null, rows: FriendUser[]) => {
 				if (err)
 					return reject(err);
 

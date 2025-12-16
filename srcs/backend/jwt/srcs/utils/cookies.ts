@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cookies.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:06:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 23:20:55 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:59:09 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 
 import { expAccess, expRefresh, expTwofa }	from "../jwt.js"
 
-import type { FastifyRequest, FastifyReply }	from "fastify"
+import type { FastifyReply }	from 'fastify'
 
 
-/* ====================== IMPORT ====================== */
+/* ====================== FUNCTIONS ====================== */
 
 // hostOnly ???
 export function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string): void {
@@ -56,16 +56,11 @@ export function	removeCookies(reply: FastifyReply, key: string, path: string): v
 }
 
 
-export function	getCookies(request: FastifyRequest): any {
-	try {
-		const	cookies: any = Object.fromEntries(
-			(request.headers.cookie || "")
-			.split("; ")
-			.map(c => c.split("="))
-		)
-
-		return cookies;
-	} catch (err: unknown) {
-		return ;
-	}
+export function	getCookies(cookie: string | undefined): Record<string, string> {
+	return Object.fromEntries(
+		(cookie || "")
+		.split("; ")
+		.map(c => c.split("="))
+		.filter(([k, v]) => k && v)
+	);
 }

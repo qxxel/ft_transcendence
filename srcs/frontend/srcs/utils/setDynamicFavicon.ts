@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setDynamicFavicon.ts                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 14:30:39 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 21:10:47 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== FUNCTION ====================== */
 
 // export function	seDynamicFavicon(path: string | null): void {
-// 	let link: HTMLLinkElement | null = document.querySelector("link[rel~='icon']");
+// 	let	link: HTMLLinkElement | null = document.querySelector("link[rel~='icon']");
 
 // 	if (!link)
 // 	{
@@ -35,9 +35,9 @@
 // }
 
 export function	setDynamicFavicon(path: string | null): void {
-	const canvas: HTMLCanvasElement = document.createElement('canvas');
-	const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d');
-	const img = new Image();
+	const	canvas: HTMLCanvasElement = document.createElement('canvas');
+	const	ctx: CanvasRenderingContext2D | null = canvas.getContext('2d');
+	const	img = new Image();
 
 	img.crossOrigin = "Anonymous"; 
 

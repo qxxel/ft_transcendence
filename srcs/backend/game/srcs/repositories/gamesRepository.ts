@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gamesRepository.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:54:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 23:14:28 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:49:52 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { gamesAddDto }		from "../dtos/gamesAddDto.js"
-import { gamesRespDto }		from "../dtos/gamesRespDto.js"
+import { gamesAddDto }			from "../dtos/gamesAddDto.js"
+import { gamesRespDto }			from "../dtos/gamesRespDto.js"
 import { gamesTableBuilder }	from "../tableBuilders/gamesTableBuilder.js"
 
 import type { Database }	from 'sqlite3'
@@ -64,7 +64,7 @@ export class	gamesRepository {
 			const	query: string = "INSERT INTO games (id_client, game_type, winner, p1, p1score, p2, p2score, mode, powerup, start, duration) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			const	elements = gameAddDto.getTable();
 
-			this.db.run(query, elements, function (this: StatementWithLastID, err: unknown) {
+			this.db.run(query, elements, function (this: StatementWithLastID, err: Error | null) {
 				if (err)
 					return reject(err);
 
@@ -78,7 +78,7 @@ export class	gamesRepository {
 			const	query: string = "SELECT * FROM games WHERE id = ?";
 			const	elements: number[] = [gameId];
 
-			this.db.get(query, elements, (err: unknown, row: unknown) => {
+			this.db.get(query, elements, (err: Error | null, row: unknown) => {
 				if (err)
 					return reject(err);
 
@@ -98,7 +98,7 @@ export class	gamesRepository {
 			const	query: string = "SELECT * FROM games WHERE id_client = ?";
 			const	elements: number[] = [userId];
 
-			this.db.all(query, elements, (err: unknown, rows: GameUser[]) => {
+			this.db.all(query, elements, (err: Error | null, rows: GameUser[]) => {
 				if (err)
 					return reject(err);
 
@@ -109,7 +109,7 @@ export class	gamesRepository {
 
 	async isTaken(query: string, elements: string[]): Promise<boolean> {
 		return new Promise((resolve, reject) => {
-			this.db.get(query, elements, (err: unknown, row: unknown) => {
+			this.db.get(query, elements, (err: Error | null, row: unknown) => {
 				if (err)
 					return reject(err);
 
@@ -123,7 +123,7 @@ export class	gamesRepository {
 			const	query: string = "DELETE FROM games WHERE id = ?";
 			const	elements: number[] = [gameId];
 
-			this.db.run(query, elements, function(err: unknown) {
+			this.db.run(query, elements, function(err: Error | null) {
 				if (err)
 					return reject(err);
 
@@ -137,7 +137,7 @@ export class	gamesRepository {
 			const	query: string = "DELETE FROM games WHERE id_client = ?";
 			const	elements: number[] = [userId];
 
-			this.db.run(query, elements, function(err: unknown) {
+			this.db.run(query, elements, function(err: Error | null) {
 				if (err)
 					return reject(err);
 

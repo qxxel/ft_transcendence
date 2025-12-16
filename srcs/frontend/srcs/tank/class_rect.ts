@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   class_rect.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:30:41 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:31:09 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:32:28 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// CLASS THAT DEFINES A 2D RECTANGLE WITH COLLISION AND DRAWING UTILITIES
 
 
 /* ============================= IMPORT ============================= */
@@ -39,7 +39,7 @@ export class	Rect2D {
 	}
 
 	draw(ctx : CanvasRenderingContext2D, color: Color): void {
-		ctx.fillStyle = `#${((color.r << 16) | (color.g << 8) | color.b).toString(16).padStart(6,'0')}`; // HUH
+		ctx.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
 		ctx.fillRect(this.x, this.y, this.w, this.h);
 	}
 

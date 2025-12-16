@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tournament.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:48:42 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/02 11:49:48 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 23:17:08 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 /* ====================== IMPORT ====================== */
 
 import { Player, Match }	from "./objects/tournamentObjects"
-
+import { sendRequest } from	"../utils/sendRequest"
+import { PongResume } from "./objects/pongResume";
+import { buildElement } from "../history/getAndRenderHistory.ts"
+import { router } from "../index.ts";
 
 /* ====================== CLASS ====================== */
 
@@ -25,36 +28,38 @@ export class    TournamentController {
 	public matches: Match[] = [];
 	public currentMatch: { id: string; p1: string; p2: string } | null = null;
 	public winningScore: number = 5;
+	public isRanked: boolean = false;
 
-	constructor(playerNames: string[], winningScore: number) {
-		this.players = playerNames.map(name => ({ name }));
+	constructor(players: Player[], winningScore: number, isRanked: boolean = false) {
+		this.players = players;
 		this.winningScore = winningScore;
+		this.isRanked = isRanked;
 		this.generateBracket();
 	}
 
 	private	generateBracket(): void {
-		const numPlayers = this.players.length;
+		const	numPlayers: number = this.players.length;
 		this.matches = [];
 
-		let bracketSize = 4;
+		let	bracketSize: number = 4;
 		if (numPlayers > 8)
 			bracketSize = 16;
 		else if (numPlayers > 4)
 			bracketSize = 8;
 
-		const totalRounds = Math.log2(bracketSize);
+		const	totalRounds: number = Math.log2(bracketSize);
 
 		for (let r = 1; r <= totalRounds; r++) {
-			const matchesInRound = bracketSize / Math.pow(2, r);
+			const	matchesInRound: number = bracketSize / Math.pow(2, r);
 
-			for (let m = 1; m <= matchesInRound; m++) {
-				let nextId: string | null = null;
+			for (let m: number = 1; m <= matchesInRound; m++) {
+				let	nextId: string | null = null;
 				if (r < totalRounds) {
-					const nextMatchNum = Math.ceil(m / 2);
+					const	nextMatchNum = Math.ceil(m / 2);
 					nextId = `r${r + 1}-m${nextMatchNum}`;
 				}
 
-				const match: Match = {
+				const	match: Match = {
 					id: `r${r}-m${m}`,
 					round: r,
 					matchNum: m,
@@ -67,9 +72,9 @@ export class    TournamentController {
 			}
 		}
 
-		const shuffledPlayers = [...this.players].sort(() => Math.random() - 0.5);
-		const round1Matches = this.matches.filter(m => m.round === 1);
-		let playerIdx = 0;
+		const	shuffledPlayers: Player[] = [...this.players].sort(() => Math.random() - 0.5);
+		const	round1Matches: Match[] = this.matches.filter(m => m.round === 1);
+		let	playerIdx = 0;
 
 		for (const match of round1Matches) {
 			if (playerIdx < numPlayers) {
@@ -111,7 +116,7 @@ export class    TournamentController {
 	private advanceWinnerToNextRound(finishedMatch: Match) {
 		if (!finishedMatch.winner || !finishedMatch.nextMatchId) return;
 
-		const nextMatch = this.matches.find(m => m.id === finishedMatch.nextMatchId);
+		const	nextMatch: Match | undefined = this.matches.find(m => m.id === finishedMatch.nextMatchId);
 		if (!nextMatch) return;
 
 		if (finishedMatch.matchNum % 2 !== 0) {
@@ -123,69 +128,153 @@ export class    TournamentController {
 		this.processBye(nextMatch); 
 	}
 
-	public renderBracket(): string {
-		let html = '<div class="bracket-container">';
-		
+	public renderBracket(): HTMLDivElement {
+		const bracketContainer = buildElement('div', ['bracket-container']);
+	
 		const roundsObj: { [key: number]: Match[] } = {};
-		
 		this.matches.forEach(m => {
 			if (!roundsObj[m.round]) roundsObj[m.round] = [];
 			roundsObj[m.round]!.push(m);
 		});
-
-		const roundNumbers = Object.keys(roundsObj).map(Number).sort((a, b) => a - b);
+		const roundNumbers: number[] = Object.keys(roundsObj).map(Number).sort((a, b) => a - b);
 
 		for (const r of roundNumbers) {
-			html += `<div class="round-column"><h3>Round ${r}</h3>`;
-			
+			const column = buildElement('div', ['round-column'], "", [
+				buildElement('h3', [], `Round ${r}`)
+			]);
+		
 			for (const match of roundsObj[r]!) {
-				const p1Name = match.player1?.name || (match.round === 1 ? 'BYE' : 'TBD');
-				const p2Name = match.player2?.name || (match.round === 1 ? 'BYE' : 'TBD');
+				const matchCard = buildElement('div', ['match-card'], "", [
 				
-				const p1Class = (match.winner && match.winner === match.player1) ? 'winner' : '';
-				const p2Class = (match.winner && match.winner === match.player2) ? 'winner' : '';
-				
-				let button = '';
-				const isPlayable = !match.winner && match.player1 && match.player2;
-				
-				if (isPlayable) {
-					button = `<button class="btn-yellow btn-sm" 
-						onclick="window.startTournamentMatch('${match.id}', '${p1Name}', '${p2Name}')">
-						Play
-					</button>`;
-				} else if (match.winner) {
-					 button = `<span class="match-done">✅ Finished</span>`;
-				}
+					buildElement('div', ['match-info'], "", [
+						buildElement('div', ['player', 'p1'], "Player 1"), 
+						buildElement('div', ['vs'], "VS"),
+						buildElement('div', ['player', 'p2'], "Player 2")
+					]),
+					buildElement('div', ['match-action']) 
+				]);
 
-				html += `
-					<div class="match-card" id="${match.id}">
-						<div class="match-info">
-							<div class="player ${p1Class}">${p1Name}</div>
-							<div class="vs">VS</div>
-							<div class="player ${p2Class}">${p2Name}</div>
-						</div>
-						${button}
-					</div>
-				`;
+				matchCard.id = match.id.toString();
+				column.appendChild(matchCard);
 			}
-			html += '</div>';
+			bracketContainer.appendChild(column);
 		}
-		html += '</div>';
-		return html;
+		return bracketContainer;
 	}
 
+	public fillBracket(): void {
+		for (const match of this.matches) {
+			const card = document.getElementById(match.id);
+			if (!card) continue;
+
+			const p1El = card.querySelector('.p1');
+			const p2El = card.querySelector('.p2');
+			const actionEl = card.querySelector('.match-action');
+
+			const p1Name = match.player1?.name || (match.round === 1 ? 'BYE' : 'TBD');
+			const p2Name = match.player2?.name || (match.round === 1 ? 'BYE' : 'TBD');
+
+			if (p1El) p1El.textContent = p1Name;
+			if (p2El) p2El.textContent = p2Name;
+
+			if (p1El) p1El.classList.remove('winner');
+			if (p2El) p2El.classList.remove('winner');
+
+			if (p1El && match.winner === match.player1) p1El.classList.add('winner');
+			if (p2El && match.winner === match.player2) p2El.classList.add('winner');
+
+			if (actionEl) {
+				actionEl.innerHTML = '';
+			
+				if (!match.winner && match.player1 && match.player2) {
+					const btn = document.createElement('button');
+					btn.className = 'btn-yellow btn-sm';
+					btn.textContent = 'Play';
+					btn.onclick = () => {
+					   (window as any).startTournamentMatch(match.id, p1Name, p2Name);
+					};
+					actionEl.appendChild(btn);
+				} 
+				else if (match.winner) {
+					actionEl.textContent = '✅ Finished';
+				}
+			}
+		}
+		this.checkTournamentEnded();
+	}
+
+	private checkTournamentEnded(): void {
+		const finalMatch = this.matches.find(m => !m.nextMatchId);
+
+		if (finalMatch && finalMatch.winner) {
+			const container = document.querySelector('.game-container');
+			if (container && !document.getElementById('quit-tournament-btn')) {
+				const btn = document.createElement('button');
+				btn.id = 'quit-tournament-btn';
+				btn.className = 'btn-exit-tournament';
+				btn.textContent = 'Return to Menu';
+				
+				btn.onclick = () => {
+					router.navigate("/tournament-menu");
+				}
+				container.appendChild(btn);
+			}
+		}
+	}
+	
 	public startMatch(id: string, p1: string, p2: string) {
 		this.currentMatch = { id, p1, p2 };
 	}
 
-	public reportMatchWinner(winnerName: string) {
+	public async reportMatchWinner(winnerName: string, resume:PongResume) {
 		if (!this.currentMatch) return;
 		
-		const match = this.matches.find(m => m.id === this.currentMatch!.id);
-		if (match) {
-			match.winner = match.player1?.name === winnerName ? match.player1 : match.player2;
-			console.log(`Match ${match.id} won by ${winnerName}`);
+		const match: Match | undefined = this.matches.find(m => m.id === this.currentMatch!.id);
+		if (match && match.player1 && match.player2) {
+			match.winner = match.player1.name === winnerName ? match.player1 : match.player2;
+			
+			if (this.isRanked) {
+				await this.saveMatchResult(match.player1, match.player2, match.winner, resume);
+			}
+
 			this.advanceWinnerToNextRound(match);
+		}
+	}
+
+	private async saveMatchResult(p1: Player, p2: Player, winner: Player, resume:PongResume) {
+		try {
+			const p1payload = {
+				idClient:p1.id,
+				gameType:1,
+				winner:winner.id,
+				p1:p1.name,
+				p2:p2.name,
+				p1score:resume.score1,
+				p2score:resume.score2,
+				mode:"tour",
+				powerup:0,
+				start:Date.now() - resume.duration,
+				duration:resume.duration
+			};
+
+			const p2payload = {
+				idClient:p2.id,
+				gameType:1,
+				winner:winner.id,
+				p1:p2.name,
+				p2:p1.name,
+				p1score:resume.score2,
+				p2score:resume.score1,
+				mode:"tour",
+				powerup:0,
+				start:Date.now() - resume.duration,
+				duration:resume.duration
+			};
+
+			await sendRequest('POST', '/', p1payload); 
+			await sendRequest('POST', '/', p2payload); 
+		} catch (error) {
+			console.error("Error while saving tournamente match", error);
 		}
 	}
 }

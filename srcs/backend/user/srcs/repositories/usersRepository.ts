@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersRepository.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:20:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:42:57 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 04:16:09 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { NotExistError }		from "../utils/throwErrors.js";
 import { usersAddDto }			from "../dtos/usersAddDto.js"
+import { NotExistError }		from "../utils/throwErrors.js"
 import { usersRespDto }			from "../dtos/usersRespDto.js"
 import { usersTableBuilder }	from "../tableBuilders/usersTableBuilder.js"
 
@@ -64,7 +64,7 @@ export class	usersRepository {
 			const	query: string = "INSERT INTO users (username, email, avatar) VALUES(?, ?, ?)";
 			const	elements: [string, string, string | null] = user.getTable();
 
-			this.db.run(query, elements, function (this: StatementWithLastID, err: unknown) {
+			this.db.run(query, elements, function (this: StatementWithLastID, err: Error | null) {
 				if (err)
 					return reject(err);
 
@@ -77,7 +77,7 @@ export class	usersRepository {
 		return new Promise((resolve, reject) => {
 			const	query: string = "SELECT * FROM users WHERE id = ?";
 			const	elements: number[] = [userId];
-			this.db.get(query, elements, (err: unknown, row: unknown) => {
+			this.db.get(query, elements, (err: Error | null, row: unknown) => {
 				if (err)
 					return reject(err);
 
@@ -96,7 +96,7 @@ export class	usersRepository {
 			const	query: string = "SELECT * FROM users WHERE username = ?";
 			const	elements: string[] = [username];
 
-			this.db.get(query, elements, (err: unknown, row: unknown) => {
+			this.db.get(query, elements, (err: Error | null, row: unknown) => {
 				if (err)
 					return reject(err);
 
@@ -115,7 +115,7 @@ export class	usersRepository {
 			const	query: string = "SELECT * FROM users WHERE email = ?";
 			const	elements: string[] = [email];
 
-			this.db.get(query, elements, (err: unknown, row: unknown) => {
+			this.db.get(query, elements, (err: Error | null, row: unknown) => {
 				if (err)
 					return reject(err);
 
@@ -129,12 +129,26 @@ export class	usersRepository {
 		});
 	}
 
+	async updateLogById(userId: number, isLog: boolean): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const	query: string = "UPDATE users SET is_log = ? WHERE id = ?";
+			const	elements: [boolean, number] = [isLog, userId];
+
+			this.db.run(query, elements, (err: Error) => {
+				if (err)
+					return reject(err);
+
+				resolve();
+			});
+		});
+	}
+
 	async updateUsernameById(userId: number, username: string): Promise<void> {
 		return new Promise((resolve, reject) => {
 			const	query: string = "UPDATE users SET username = ? WHERE id = ?";
 			const	elements: [string, number] = [username, userId];
 
-			this.db.run(query, elements, (err: unknown, row: unknown) => {
+			this.db.run(query, elements, (err: Error) => {
 				if (err)
 					return reject(err);
 
@@ -148,7 +162,7 @@ export class	usersRepository {
 			const	query: string = "UPDATE users SET email = ? WHERE id = ?";
 			const	elements: [string, number] = [email, userId];
 
-			this.db.run(query, elements, (err: unknown, row: unknown) => {
+			this.db.run(query, elements, (err: Error) => {
 				if (err)
 					return reject(err);
 
@@ -162,7 +176,7 @@ export class	usersRepository {
 			const	query: string = "UPDATE users SET avatar = ? WHERE id = ?";
 			const	elements: [string, number] = [avatar, userId];
 
-			this.db.run(query, elements, (err: unknown, row: unknown) => {
+			this.db.run(query, elements, (err: Error) => {
 				if (err)
 					return reject(err);
 
@@ -176,7 +190,7 @@ export class	usersRepository {
 			const	query: string = "UPDATE users SET is_2fa_Enable = ? WHERE id = ?";
 			const	elements: [boolean, number] = [is2faEnable, userId];
 
-			this.db.run(query, elements, (err: unknown, row: unknown) => {
+			this.db.run(query, elements, (err: Error) => {
 				if (err)
 					return reject(err);
 
@@ -187,7 +201,7 @@ export class	usersRepository {
 
 	async isTaken(query: string, elements: Array<string>): Promise<boolean> {
 		return new Promise((resolve, reject) => {
-			this.db.get(query, elements, (err: unknown, row: unknown) => {
+			this.db.get(query, elements, (err: Error | null, row: unknown) => {
 				if (err)
 					return reject(err);
 
@@ -201,7 +215,7 @@ export class	usersRepository {
 			const	query: string = "DELETE FROM users WHERE id = ?";
 			const	elements: number[] = [userId];
 
-			this.db.run(query, elements, function(err: unknown) {
+			this.db.run(query, elements, function(err: Error | null) {
 				if (err)
 					return reject(err);
 

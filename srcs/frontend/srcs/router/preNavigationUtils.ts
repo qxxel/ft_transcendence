@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/08 21:59:52 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/15 06:22:06 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,7 @@ export async function	redirections(currentPath: string): Promise<void> {
 			}
 		}));
 
-			// OLD
-		// user.setId(result.id as number);
-		// user.setUsername(result.username);
-		// user.setSigned(true);
-
-		const baseHref = window.location.origin;
-
-		const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+		const	menu: HTMLElement | null = document.getElementById("nav");
 		if (menu)
 			menu.innerHTML = getMenu(true);
 

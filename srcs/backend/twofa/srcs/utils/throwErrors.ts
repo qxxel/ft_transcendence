@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:47:53 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/03 21:57:30 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/13 00:25:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ export class	RequestEmptyError extends Error {
 	}
 }
 
-export class	BadCodeError extends Error {
+export class	WrongCodeError extends Error {
 	constructor(message: string) {
 		super(message);
-		this.name = "BadCodeError";
+		this.name = "WrongCodeError";
 	}
 }

@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   global.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:34:48 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:35:58 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:33:33 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// FILE THAT DEFINES GLOBAL GAME STATE, SHARED INTERFACES, AND RUNTIME VARIABLES
 
 
 /* ============================= IMPORT ============================= */
 
 import { Actor }	from "./class_actor.js"
-
+import { AppState }	from "../objects/store.js";
 
 /* ============================= INTERFACE ============================= */
 
@@ -25,20 +25,35 @@ export interface	Spawn {
 	y:number;
 }
 
+export interface	History {
+		idClient:number;
+		gameType:number;
+		winner:number;
+		p1:string;
+		p2:string;
+		p1score:number;
+		p2score:number;
+		mode:string;
+		powerup:number;
+		start:number;
+		duration:number;
+}
+
 export interface	Stats {
 	win:number;
 	lose:number;
 	fire:number;
 	hit:number;
-	miss:number;
+	reflect:number;
 	bounce:number;
 }
 
 export interface	GlobalState {
 	ACTORS: Actor[];
 	TANKS: number;
+	STATE: AppState;
 	CANVAS: HTMLCanvasElement;
-	CTX: CanvasRenderingContext2D;
+	CTX: CanvasRenderingContext2D | null;
 	REDRAW: boolean;
 	STATS1: Stats;
 	STATS2: Stats;
@@ -50,11 +65,12 @@ export interface	GlobalState {
 export const	GSTATE: GlobalState = {
 	ACTORS: [],
 	TANKS: 0,
+	STATE: undefined as unknown as AppState,
 	CANVAS: undefined as unknown as HTMLCanvasElement,
 	CTX: undefined as unknown as CanvasRenderingContext2D,
 	REDRAW: true as boolean,
-	STATS1: {win:0,lose:0,fire:0,hit:0,miss:0,bounce:0} as Stats,
-	STATS2: {win:0,lose:0,fire:0,hit:0,miss:0,bounce:0} as Stats,
+	STATS1: {win:0,lose:0,fire:0,hit:0,reflect:0,bounce:0} as Stats,
+	STATS2: {win:0,lose:0,fire:0,hit:0,reflect:0,bounce:0} as Stats,
 };
 
 export const	Stats: Stats = {
@@ -62,9 +78,10 @@ export const	Stats: Stats = {
 	lose: 0 as number,
 	fire: 0 as number,
 	hit: 0 as number,
-	miss: 0 as number,
+	reflect: 0 as number,
 	bounce: 0 as number,
 }
+
 /*
 
 export let GSTATE = {

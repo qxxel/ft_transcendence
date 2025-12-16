@@ -6,11 +6,11 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:16:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/24 08:01:27 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:39:31 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// interface	FOR THE STORAGE OF USER DATA
+// INTERFACE FOR THE STORAGE OF USER DATA
 
 
 /* ====================== interface	====================== */

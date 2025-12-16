@@ -6,15 +6,38 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:11:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/09 22:22:01 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 10:07:50 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { router }       from "../index.js"
-import { displayDate, displayPop }	from "./display.js"
-import { sendRequest }	from "./sendRequest.js"
+// FILE THAT HANDLE THE VERIFY OF THE EMAIL
 
-export async function	verifyEmail(idDivHidden: string, idDivVisible: string, email: string): Promise<void> {
+
+/* ====================== IMPORTS ====================== */
+
+import { router }						from "../index.js"
+import { displayDate, displayPop }	from "./display.js"
+
+
+/* ====================== FUNCTIONS ====================== */
+
+export async function	verifyEmail(idDivHidden: string, idDivVisible: string, email: string | null): Promise<void> {
+
+	const	response: Response = await fetch('/api/jwt/payload/twofa', {
+		method: "GET",
+		credentials: "include"
+	});
+
+	if (response.ok) {
+		const	result = await response.json();
+		
+		if (result.exp)
+			displayDate(result.exp * 1000);
+		else
+			displayPop("Unable to display the expiration date", "error");
+	} else {
+		displayDate(Date.now() + 5 * 60 * 1000);
+	}
 
 	const	divHidden = document.getElementById(idDivHidden);
 	if (divHidden)
@@ -26,7 +49,9 @@ export async function	verifyEmail(idDivHidden: string, idDivVisible: string, ema
 
 	router.canLeave = false;
 
-	fetch('/api/twofa/otp', {
+	if (email)
+	{
+		fetch('/api/twofa/otp', {
 			method: 'POST',
 			credentials: "include",
 			headers: {
@@ -41,5 +66,5 @@ export async function	verifyEmail(idDivHidden: string, idDivVisible: string, ema
 				return ;
 			}
 		});
-	displayDate(5);
+	}
 }

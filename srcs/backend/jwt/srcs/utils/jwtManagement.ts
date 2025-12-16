@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwtManagement.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:14:11 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 17:59:20 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:52:52 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 
 /* ====================== IMPORTS ====================== */
 
-import * as jose																				from 'jose'
-import { jwtSecret, expAccess, expRefresh, expTwofa }											from "../jwt.js"
-import { setCookiesAccessToken, setCookiesRefreshToken, setCookiesTwofaToken, removeCookies }	from "./cookies.js"
+import * as jose											from 'jose'
+import { jwtSecret, expAccess, expRefresh, expTwofa }		from "../jwt.js"
+import { setCookiesAccessToken, setCookiesRefreshToken }	from "./cookies.js"
+import { setCookiesTwofaToken, removeCookies }				from "./cookies.js"
 
 
 import type { FastifyReply }	from 'fastify'
-import type { userDto }	from "../dtos/userDto.js"
+import type { userDto }			from "../dtos/userDto.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -55,7 +56,8 @@ export async function	addJWT(reply: FastifyReply, user: userDto): Promise<string
 	return jwtRefresh;
 }
 
-export async function	removeJWT(reply: FastifyReply): Promise<void> {
+export function	removeJWT(reply: FastifyReply): void {
+	removeCookies(reply, "jwtTwofa", "/api");
 	removeCookies(reply, "jwtAccess", "/");
 	removeCookies(reply, "jwtRefresh", "/api/jwt/refresh");
 }

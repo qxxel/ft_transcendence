@@ -9,16 +9,17 @@
     </div>
   </header>
 
-
-	<div class="legend-controls-container" style="top: 20px;">
+	<div class="legend-controls-container" style="top: 8 b0px;">
 	<div class="legend-title">Player 1</div>
-	<div class="legend-item"><span>Move :</span> W / A / S / D</div>
-	<div class="legend-item"><span>Rotate Cannon :</span> Q / E</div>
-	<div class="legend-item"><span>Fire :</span> Space</div>
+	<div class="legend-item"><span>Move :</span> W / S </div>
+	<div class="legend-item"><span>Rotate Cannon :</span> A / D</div>
+	<div class="legend-item"><span>Fire :</span> B</div>
+	<div class="legend-item"><span>Ability :</span> N</div>
 	<div class="legend-title">Player 2</div>
-	<div class="legend-item"><span>Move :</span> I / J / K / L</div>
-	<div class="legend-item"><span>Rotate Cannon :</span> U / O </div>
-	<div class="legend-item"><span>Fire :</span> . (period) </div>
+	<div class="legend-item"><span>Move :</span> ⬆️ / ⬇️ </div>
+	<div class="legend-item"><span>Rotate Cannon :</span> ⬅️ / ➡️ </div>
+	<div class="legend-item"><span>Fire :</span> 1 </div>
+	<div class="legend-item"><span>Ability :</span> 2 </div>
 	</div>
 
   <canvas id="tank-canvas" width="600" height="600"></canvas>
@@ -38,7 +39,7 @@
         <h2 id="winner-display">AI Wins!</h2>
     </div>
 
-  <table id="dashboard-table" class="stats-grid">
+  <table id="dashboard-table" class="stats-grid-tank-endgame">
     <thead>
       <tr>
         <th scope="col" id="stat-duration">--</th>
@@ -74,36 +75,3 @@
 
 </div>
 
-<style>
-  .game-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #fff;
-    font-size: 1.25em;
-    margin-bottom: 15px;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff;
-  }
-
-  .scoreboard {
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 5px 15px;
-    border-radius: 6px;
-    border: 1px solid #555;
-  }
-
-  .win-condition {
-    color: #FFFF00;
-    font-weight: bold;
-  }
-
-#tank-canvas {
-    width: 100%;
-    height: auto;
-    background-color: #000;
-    border: 3px solid #fff; 
-    border-radius: 6px;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
-    margin-bottom: 10px;
-}
-</style>

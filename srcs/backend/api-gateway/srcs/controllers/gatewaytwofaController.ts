@@ -6,13 +6,16 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 23:09:42 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/08 22:07:48 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:49:42 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// HANDLE ALL REQUESTS THAT THE API GATEWAY RECEIVES FOR `/api/twofa` ENDPOINTS
+
+
 /* ====================== IMPORTS ====================== */
 
-import { gatewayAxios }			from '../api-gateway.js'
+import { gatewayAxios }			from "../api-gateway.js"
 import { requestErrorsHandler }	from "../utils/requestErrors.js"
 
 import type { AxiosResponse }									from 'axios'

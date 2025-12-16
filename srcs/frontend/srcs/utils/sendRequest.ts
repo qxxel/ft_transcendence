@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sendRequest.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:23:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 00:47:26 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ async function	sendMainRequest(path: string, requestMethod: string, body: any | 
 		});
 	}
 	else if (body instanceof FormData)
-    {
-        response = await fetch(path, {
+	{
+		response = await fetch(path, {
 			method: requestMethod,
 			credentials: "include",
-            body: body 
+			body: body 
 		});
-    }
+	}
 	else
 	{
 		response = await fetch(path, {
@@ -50,11 +50,11 @@ async function	sendMainRequest(path: string, requestMethod: string, body: any | 
 
 export async function	sendRequest(path: string, requestMethod: string, body: Object | null): Promise<Response> {
 	
-	let response: Response = await sendMainRequest(path, requestMethod, body);
+	let	response: Response = await sendMainRequest(path, requestMethod, body);
 	
 	if (response.status === 401){
 		response = await fetch("/api/jwt/refresh/access", {
-			method: "POST",
+			method: "PATCH",
 			credentials: "include",
 		});
 		

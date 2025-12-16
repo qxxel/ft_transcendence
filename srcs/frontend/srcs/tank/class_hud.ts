@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   class_hud.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:26:46 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:27:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:30:29 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// CLASS THAT HANDLES THE HUD DISPLAY INCLUDING HEALTH, ABILITY BARS, AND SHIELD INDICATORS
 
 
 /* ============================= IMPORTS ============================= */
 
+import { Rect2D } 	from "./class_rect.js"
 import { Actor }	from "./class_actor.js"
-import { Input } 	from "./class_input.js";
+import { Input } 	from "./class_input.js"
 
 import type { Color }	from "./interface.js"
 
@@ -31,7 +32,10 @@ export class	Hud extends Actor {
 		public	wheel_y:number,
 		public	healthbar_x:number,
 		public	healthbar_y:number,
-		public	wheel_color:Color
+		public	abilitybar_x:number,
+		public	abilitybar_y:number,
+		public	wheel_color:Color,
+		public	shield?:Rect2D
 	) {
 		super(x,y);
 
@@ -45,28 +49,54 @@ export class	Hud extends Actor {
 
 	}
 
+	setShield(shield: Rect2D) {
+		this.shield = shield;
+	}
+
 	wheel_draw(ctx: CanvasRenderingContext2D, start:number,end:number): void {
 
 		ctx.beginPath();
-		ctx.strokeStyle = `#${((this.wheel_color.r << 16) | (this.wheel_color.g << 8) | this.wheel_color.b).toString(16).padStart(6,'0')}`; // HUH;
+		ctx.strokeStyle = `rgb(${this.wheel_color.r}, ${this.wheel_color.g}, ${this.wheel_color.b})`;
 		ctx.lineWidth = 4;
 		ctx.arc(this.wheel_x, this.wheel_y, 5, -Math.PI / 2, end);
 		ctx.stroke();
 	}
 
 	healthbar_draw(ctx: CanvasRenderingContext2D, health:number, maxHealth:number): void {
-		const barWidth = 40;
-		const barHeight = 6;
-		const offsetY = -20;
-	
-		const ratio = Math.max(0, Math.min(1, health / maxHealth));
-	
-		ctx.fillStyle = "#444";
+		const	barWidth = 40;
+		const	barHeight = 6;
+		const	offsetY = -20;
+
+		const	ratio = Math.max(0, Math.min(1, health / maxHealth));
+
+		ctx.fillStyle = 'rgb(68, 68, 68)';
 		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth, barHeight);
-	
-		ctx.fillStyle = "#00cc00";
+
+		ctx.fillStyle = 'rgb(0, 204, 0)';
 		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth * ratio, barHeight);
-	
+
+	}
+
+	abilitybar_draw(ctx: CanvasRenderingContext2D, ability_last:number, ability_cooldown:number): void {
+		const	barWidth = 40;
+		const	barHeight = 6;
+		const	offsetY = -10;
+
+		const	ratio = Math.max(0, Math.min(1, ability_last / ability_cooldown));
+
+		ctx.fillStyle = 'rgb(68, 68, 68)';
+		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth, barHeight);
+
+		ctx.fillStyle = 'rgb(187, 0, 255)';
+		ctx.fillRect(this.healthbar_x - barWidth / 2, this.healthbar_y + offsetY, barWidth * ratio, barHeight);
+
+	}
+
+	shield_draw(ctx: CanvasRenderingContext2D): void {
+		if (!this.shield) return;
+		ctx.strokeStyle = `rgb(0, 0, 255)`;
+		ctx.lineWidth = 4;
+		ctx.strokeRect(this.shield.x, this.shield.y, this.shield.w, this.shield.h);
 	}
 
 	move(dx:number,dy:number) {
@@ -76,5 +106,7 @@ export class	Hud extends Actor {
 		this.wheel_y += dy;
 		this.healthbar_x += dx;
 		this.healthbar_y += dy;
+		this.abilitybar_x += dx;
+		this.abilitybar_y += dy;
 	}
 }

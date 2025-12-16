@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderHistory.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:38:18 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 00:10:17 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,66 +42,81 @@ export async function	getAndRenderHistory(targetId: number | null,
 		targetName: string | null,
 		aiFilter: boolean = true,
 		pvpFilter: boolean = true,
-    	pongFilter: boolean = true,
-    	tankFilter: boolean = true
+		pongFilter: boolean = true,
+		tankFilter: boolean = true
 	): Promise<void> {
 
-	let	response: Response;
-	if (!targetId)
-		response = await sendRequest('/api/game/me', "get", null);
-	else
-		response = await sendRequest(`/api/game/${targetId}`, "get", null);
-	if (!response.ok)
-	{
-		const errorData: Object = await response.json();
-		console.error(errorData);
+	try {
+		let	response: Response;
+		if (!targetId)
+			response = await sendRequest('/api/game/me', "get", null);
+		else
+			response = await sendRequest(`/api/game/${targetId}`, "get", null);
+		if (!response.ok)
+		{
+			try {
+				const	errorData: Object = await response.json();
+				console.error(errorData);
+			} catch (e) {
+				console.error("Impossible to read JSON error", e);
+			}
 
+			displayErrors(targetName);
+
+			return ;
+		}
+
+		const	gamesData: GameObject[] = await response.json();
+
+		if (!Array.isArray(gamesData)) {
+				console.error("Invalid data format received:", gamesData);
+				throw new Error("Invalid data format");
+			}
+
+		if (gamesData.length === 0)
+		{
+			displayNoGame(false);
+			return ;
+		}
+
+console.log(gamesData) // ICI LE PRINT DU TABLEAU
+
+		renderGames(gamesData, aiFilter, pvpFilter, pongFilter, tankFilter);
+	} catch (error) {
+		console.error("Critical error while charging history:", error);
 		displayErrors(targetName);
-		
-		return ;
 	}
-
-	const	gamesData: GameObject[] = await response.json();
-	if (gamesData.length === 0)
-	{
-		displayNoGame(false);
-		return ;
-	}
-
-	console.log(gamesData) // ICI LE PRINT DU TABLEAU
-
-	renderGames(gamesData, aiFilter, pvpFilter, pongFilter, tankFilter);
 }
 
 /* ====================== UTILS ====================== */
 
 function formatTimeAgo(timestamp: number): string {
-	const now = Date.now();
-	const diffSeconds = Math.floor((now - timestamp) / 1000);
+	const	now: number = Date.now();
+	const	diffSeconds: number = Math.floor((now - timestamp) / 1000);
 
 	if (diffSeconds < 60) return `${diffSeconds}s ago`;
 	
-	const diffMinutes = Math.floor(diffSeconds / 60);
+	const	diffMinutes: number = Math.floor(diffSeconds / 60);
 	if (diffMinutes < 60) return `${diffMinutes}m ago`;
 	
-	const diffHours = Math.floor(diffMinutes / 60);
+	const	diffHours: number = Math.floor(diffMinutes / 60);
 	if (diffHours < 24) return `${diffHours}h ago`;
 	
-	const diffDays = Math.floor(diffHours / 24);
+	const	diffDays: number = Math.floor(diffHours / 24);
 	return `${diffDays}d ago`;
 }
 
 function formatDuration(ms: number): string {
-	const seconds = Math.floor(ms / 1000);
+	const	seconds: number = Math.floor(ms / 1000);
 	if (seconds < 60) return `${seconds}s`;
 	
-	const minutes = Math.floor(seconds / 60);
-	const remainingSeconds = seconds % 60;
+	const	minutes: number = Math.floor(seconds / 60);
+	const	remainingSeconds: number = seconds % 60;
 	
 	if (minutes < 60) return `${minutes}m ${remainingSeconds}s`;
 	
-	const hours = Math.floor(minutes / 60);
-	const remainingMinutes = minutes % 60;
+	const	hours: number = Math.floor(minutes / 60);
+	const	remainingMinutes: number = minutes % 60;
 	
 	return `${hours}h ${remainingMinutes}m`;
 }
@@ -109,202 +124,183 @@ function formatDuration(ms: number): string {
 /* ====================== RENDER FUNCTIONS ====================== */
 
 function renderGames(
-    	gamesData: GameObject[], 
-    	aiFilter: boolean, 
-    	pvpFilter: boolean,
-    	pongFilter: boolean,
-    	tankFilter: boolean
+		gamesData: GameObject[], 
+		aiFilter: boolean, 
+		pvpFilter: boolean,
+		pongFilter: boolean,
+		tankFilter: boolean
 	): void {
-    const historyEntriesDiv = document.getElementById("history-entries") as HTMLDivElement;
-    if (historyEntriesDiv) historyEntriesDiv.innerHTML = ""; 
+	const	historyEntriesDiv: HTMLElement | null = document.getElementById("history-entries");
+	if (historyEntriesDiv instanceof HTMLDivElement) historyEntriesDiv.innerHTML = ""; 
 
-    const games = gamesData.filter((game) => {
-        const modeMatch = (aiFilter && game.mode === "ai") || (pvpFilter && game.mode === "pvp");
-        
-        const typeMatch = (pongFilter && (game.game_type === 1 || game.game_type === 0)) || 
-                          (tankFilter && game.game_type === 2);
+	const	games: GameObject[] = gamesData.filter((game) => {
+		const	modeMatch: boolean = (aiFilter && game.mode === "ai") || (pvpFilter && game.mode === "pvp");
+		
+		const	typeMatch: boolean = (pongFilter && (game.game_type === 1 || game.game_type === 0)) || 
+						  (tankFilter && game.game_type === 2);
 
-        return modeMatch && typeMatch;
-    });
+		return modeMatch && typeMatch;
+	});
 
-    if (games.length === 0) {
-        displayNoGame(true);
-        return;
-    }
+	if (games.length === 0) {
+		displayNoGame(true);
+		return;
+	}
 
-    games.sort((a, b) => b.start - a.start);
+	games.sort((a, b) => b.start - a.start);
 
-    games.forEach((value: GameObject) => {
-        if (historyEntriesDiv) createGameElement(historyEntriesDiv, value);
-    });
+	games.forEach((value: GameObject) => {
+		if (historyEntriesDiv instanceof HTMLDivElement) createGameElement(historyEntriesDiv, value);
+	});
+}
+
+export function buildElement<K extends keyof HTMLElementTagNameMap>(
+	tag: K, 
+	classes: string[] = [], 
+	text: string = "", 
+	children: HTMLElement[] = []
+): HTMLElementTagNameMap[K] {
+	const element = document.createElement(tag);
+	if (classes.length) element.classList.add(...classes.filter(Boolean));
+	if (text) element.textContent = text;
+	children.forEach(child => element.appendChild(child));
+	return element;
 }
 
 function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): void {
-	const gameRow: HTMLDivElement = document.createElement("div");
-	gameRow.classList.add("game-row");
-
 	const isVictory = game.winner === game.id_client;
-	gameRow.classList.add(isVictory ? "row-victory" : "row-defeat");
-
-	const resultSpan = document.createElement("span");
-	resultSpan.classList.add("col-result");
-	resultSpan.textContent = isVictory ? "VICTORY" : "DEFEAT";
-	resultSpan.classList.add(isVictory ? "text-victory" : "text-defeat");
-
-	const timeAgoSpan = document.createElement("span");
-	timeAgoSpan.classList.add("col-ago");
-	timeAgoSpan.textContent = formatTimeAgo(game.start);
-
-	const gameTypeSpan = document.createElement("span");
-    gameTypeSpan.classList.add("col-game-type");
-    if (game.game_type === 2) {
-        gameTypeSpan.textContent = "TANK";
-        gameTypeSpan.classList.add("type-tank");
-    } else {
-        gameTypeSpan.textContent = "PONG";
-        gameTypeSpan.classList.add("type-pong");
-    }
-
-	const durationSpan = document.createElement("span");
-	durationSpan.classList.add("col-duration");
+	const isTank = game.game_type === 2;
+	const isAiMode = game.mode === "ai";
 	
-	durationSpan.textContent = formatDuration(game.duration);
-	durationSpan.textContent = `Duration ${formatDuration(game.duration)}`;
+	let p2DisplayName = game.p2 || "Player 2";
+	let p2Classes = ["col-p2"];
+	let aiBotBadge: HTMLElement | null = null;
 
-	const modeSpan = document.createElement("span");
-	modeSpan.classList.add("col-mode");
-	modeSpan.textContent = game.mode;
-
-	const p1NameSpan = document.createElement("span");
-	p1NameSpan.classList.add("col-p1");
-	p1NameSpan.textContent = game.p1;
-	
-	const p2NameSpan = document.createElement("span");
-	p2NameSpan.classList.add("col-p2");
-
-	const powerupHtml = game.powerup ? '<span class="powerup-icon" title="Powerups Enabled">⚡</span>' : '';
-
-	if (game.mode === "ai") {
+	if (isAiMode) {
 		const rawName = (game.p2 || "").toLowerCase();
-		
 		let difficultyClass = "diff-medium";
+		
+		if (rawName.includes("boris")) difficultyClass = "diff-boris";
+		else if (rawName.includes("hard")) difficultyClass = "diff-hard";
+		else if (rawName.includes("easy")) difficultyClass = "diff-easy";
 
-		if (rawName.includes("boris")) {
-			difficultyClass = "diff-boris";
-		} else if (rawName.includes("hard")) {
-			difficultyClass = "diff-hard";
-		} else if (rawName.includes("easy")) {
-			difficultyClass = "diff-easy";
-		}
-
-		let displayName = (game.p2 || "AI")
-    	.replace(/^AI\s*[-_]?\s*/i, '')
-    	.replace(/[()]/g, '')
-    	.trim()
-    	.toUpperCase();
-		p2NameSpan.classList.add("is-ai");
-		p2NameSpan.classList.add(difficultyClass);
-
-		p2NameSpan.innerHTML = `<span class="bot-tag">BOT</span> ${powerupHtml}${displayName}`;
-	} else {
-		const p2Name = game.p2 || "Player 2";
-        p2NameSpan.innerHTML = `${powerupHtml}${p2Name}`;
+		p2DisplayName = (game.p2 || "AI")
+			.replace(/^AI\s*[-_]?\s*/i, '')
+			.replace(/[()]/g, '')
+			.trim()
+			.toUpperCase();
+			
+		p2Classes.push("is-ai", difficultyClass);
+		aiBotBadge = buildElement("span", ["bot-tag"], "BOT");
 	}
 
-	const scoreSpan = document.createElement("span");
-	scoreSpan.classList.add("col-score");
-	const p1Score = game.p1score ?? (game as any).plscore ?? 0;
-	const p2Score = game.p2score ?? 0;
-	scoreSpan.textContent = `${p1Score} - ${p2Score}`;
+	const powerupIcon = game.powerup 
+		? buildElement("span", ["powerup-icon"], "⚡") 
+		: null;
+	if (powerupIcon) powerupIcon.title = "Powerups Enabled";
 
-	gameRow.appendChild(resultSpan);
-	gameRow.appendChild(timeAgoSpan);
-	gameRow.appendChild(gameTypeSpan);
-	gameRow.appendChild(modeSpan);
-	gameRow.appendChild(p1NameSpan);
-	gameRow.appendChild(scoreSpan);
-	gameRow.appendChild(p2NameSpan);
-	gameRow.appendChild(durationSpan);
+	const p2Children: HTMLElement[] = [];
+	if (powerupIcon) p2Children.push(powerupIcon);
+	if (aiBotBadge) p2Children.push(aiBotBadge);
+	p2Children.push(buildElement("span", ["col-p2"], p2DisplayName));
+
+	const p2Container = buildElement("span", p2Classes, "", p2Children);
+
+	const gameRow = buildElement("div", ["game-row", isVictory ? "row-victory" : "row-defeat"], "", [
+		buildElement("span", ["col-result", isVictory ? "text-victory" : "text-defeat"], isVictory ? "VICTORY" : "DEFEAT"),
+		buildElement("span", ["col-ago"], formatTimeAgo(game.start)),
+		buildElement("span", ["col-game-type", isTank ? "type-tank" : "type-pong"], isTank ? "TANK" : "PONG"),
+		buildElement("span", [game.mode === "tour" ? "col-mode-tournament" : "col-mode"], game.mode),
+		buildElement("span", ["col-p1"], game.p1),
+		buildElement("span", ["col-score"], `${game.p1score ?? 0} - ${game.p2score ?? 0}`),
+		p2Container,
+		buildElement("span", ["col-duration"], `Duration ${formatDuration(game.duration)}`)
+	]);
 
 	historyListDiv.appendChild(gameRow);
 }
 
 function displayErrors(targetName: string | null): void {
-    const historyEntriesDiv: HTMLDivElement = document.getElementById("history-entries") as HTMLDivElement;
-    if (!historyEntriesDiv) return;
+	const	historyEntriesDiv: HTMLElement | null = document.getElementById("history-entries");
+	if (historyEntriesDiv instanceof HTMLDivElement)
+		historyEntriesDiv.innerHTML = ""; 
 
-    historyEntriesDiv.innerHTML = ""; 
+	const	historyErrorParagraph: HTMLParagraphElement = document.createElement("p");
+	historyErrorParagraph.classList.add("error-message");
+	historyErrorParagraph.classList.add("history-error");
+	
+	if (targetName)
+		historyErrorParagraph.textContent = `Error while getting history of ${targetName}.`;
+	else
+		historyErrorParagraph.textContent = `Error while getting your history.`;
 
-    const historyErrorParagraph: HTMLParagraphElement = document.createElement("p");
-    historyErrorParagraph.classList.add("error-message");
-    historyErrorParagraph.classList.add("history-error");
-    
-    if (targetName)
-        historyErrorParagraph.textContent = `Error while getting history of ${targetName}.`;
-    else
-        historyErrorParagraph.textContent = `Error while getting your history.`;
-
-    historyEntriesDiv.appendChild(historyErrorParagraph);
+	if (historyEntriesDiv instanceof HTMLDivElement)
+		historyEntriesDiv.appendChild(historyErrorParagraph);
 }
 
 function displayNoGame(filter: boolean): void {
-    const historyEntriesDiv: HTMLDivElement = document.getElementById("history-entries") as HTMLDivElement;
-    if (!historyEntriesDiv) return;
-    historyEntriesDiv.innerHTML = "";
+	const	historyEntriesDiv: HTMLElement | null = document.getElementById("history-entries");
+	if (historyEntriesDiv instanceof HTMLDivElement)
+		historyEntriesDiv.innerHTML = "";
 
-    const historyEmptyParagraph: HTMLParagraphElement = document.createElement("p");
-    historyEmptyParagraph.classList.add("empty-message");
-    historyEmptyParagraph.classList.add("history-empty");
+	const	historyEmptyParagraph: HTMLParagraphElement = document.createElement("p");
+	historyEmptyParagraph.classList.add("empty-message");
+	historyEmptyParagraph.classList.add("history-empty");
 
-    if (filter) {
-        historyEmptyParagraph.textContent = "No results with current filters, try adjusting or resetting your filters.";
-    } else {
-        historyEmptyParagraph.textContent = "Empty match history.";
-    }
+	if (filter) {
+		historyEmptyParagraph.textContent = "No results with current filters, try adjusting or resetting your filters.";
+	} else {
+		historyEmptyParagraph.textContent = "Empty match history.";
+	}
 
-    historyEntriesDiv.appendChild(historyEmptyParagraph);
+	if (historyEntriesDiv)
+		historyEntriesDiv.appendChild(historyEmptyParagraph);
 }
 
 export function initHistoryListeners(targetId: number | null, targetName: string | null = null, attempt: number = 0): void {
-    const aiCheckbox = document.getElementById('filter-ai') as HTMLInputElement;
-    const pvpCheckbox = document.getElementById('filter-pvp') as HTMLInputElement;
-    const pongCheckbox = document.getElementById('filter-pong') as HTMLInputElement;
-    const tankCheckbox = document.getElementById('filter-tank') as HTMLInputElement;
-    const refreshBtn = document.getElementById('refresh-history') as HTMLButtonElement;
+	const	aiCheckbox: HTMLElement | null = document.getElementById('filter-ai');
+	const	pvpCheckbox: HTMLElement | null = document.getElementById('filter-pvp');
+	const	pongCheckbox: HTMLElement | null = document.getElementById('filter-pong');
+	const	tankCheckbox: HTMLElement | null = document.getElementById('filter-tank');
+	const	refreshBtn: HTMLElement | null = document.getElementById('refresh-history');
 
-    if (!aiCheckbox || !pvpCheckbox || !pongCheckbox || !tankCheckbox) {
-        if (attempt > 20) return;
-        requestAnimationFrame(() => initHistoryListeners(targetId, targetName, attempt + 1));
-        return;
-    }
+	if (!(aiCheckbox instanceof HTMLInputElement) ||
+		!(pvpCheckbox instanceof HTMLInputElement) ||
+		!(pongCheckbox instanceof HTMLInputElement) ||
+		!(tankCheckbox instanceof HTMLInputElement)) {
+		setTimeout(() => {
+			requestAnimationFrame(() => initHistoryListeners(targetId, targetName, attempt + 1));
+		}, 200);
+		return;
+	}
 
-    const refreshList = () => {
-        const list = document.getElementById('history-entries');
-        if (list) list.style.opacity = "0.5";
+	const	refreshList = () => {
+		const	list: HTMLElement | null = document.getElementById('history-entries');
+		if (list) list.style.opacity = "0.5";
 
-        getAndRenderHistory(
-            targetId, 
-            targetName, 
-            aiCheckbox.checked, 
-            pvpCheckbox.checked, 
-            pongCheckbox.checked, 
-            tankCheckbox.checked
-        ).then(() => {
-            if (list) list.style.opacity = "1";
-        });
-    };
+		getAndRenderHistory(
+			targetId, 
+			targetName, 
+			aiCheckbox.checked, 
+			pvpCheckbox.checked, 
+			pongCheckbox.checked, 
+			tankCheckbox.checked
+		).then(() => {
+			if (list) list.style.opacity = "1";
+		});
+	};
 
-    aiCheckbox.onchange = refreshList;
-    pvpCheckbox.onchange = refreshList;
-    pongCheckbox.onchange = refreshList;
-    tankCheckbox.onchange = refreshList;
+	aiCheckbox.onchange = refreshList;
+	pvpCheckbox.onchange = refreshList;
+	pongCheckbox.onchange = refreshList;
+	tankCheckbox.onchange = refreshList;
 
-    if (refreshBtn) {
-        refreshBtn.onclick = () => {
-            refreshBtn.style.transform = "rotate(360deg)";
-            setTimeout(() => refreshBtn.style.transform = "none", 500);
-            refreshList();
-        };
-    }
-    refreshList();
+	if (refreshBtn instanceof HTMLButtonElement) {
+		refreshBtn.onclick = () => {
+			refreshBtn.style.transform = "rotate(360deg)";
+			setTimeout(() => refreshBtn.style.transform = "none", 500);
+			refreshList();
+		};
+	}
+	refreshList();
 }

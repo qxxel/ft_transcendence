@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/07 20:26:20 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 22:59:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { gatewayAxios }			from '../api-gateway.js'
+import { gatewayAxios }			from "../api-gateway.js"
 import { requestErrorsHandler }	from "../utils/requestErrors.js"
 
 import type { AxiosResponse }									from 'axios'
@@ -76,6 +76,23 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 		}
 	});
 
+	gatewayFastify.post('/delete/me', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	response: AxiosResponse = await gatewayAxios.post(
+				'http://auth:3000/delete/me',
+				request.body,
+				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
+			);
+			
+			if (response.headers['set-cookie'])
+				reply.header('Set-Cookie', response.headers['set-cookie']);
+
+			return reply.send(response.data);
+		} catch (err: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, err);
+		}
+	});
+
 	gatewayFastify.patch('/updateUser', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.patch(
@@ -93,10 +110,10 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 		}
 	});
 
-	gatewayFastify.delete('/me', async (request: FastifyRequest, reply: FastifyReply) => {
+	gatewayFastify.post('/twofa/me', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.delete(
-				'http://auth:3000/me',
+				'http://auth:3000/twofa/me',
 				{ withCredentials: true, headers: { Cookie: request.headers.cookie || "" } }
 			);
 			

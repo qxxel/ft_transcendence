@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 14:10:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 03:54:33 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,25 @@
 
 /* ====================== IMPORTS ====================== */
 
-import axios, { isAxiosError, type AxiosResponse }				from 'axios'
-import cors					from '@fastify/cors'
+import axios				from 'axios'
 import Fastify				from 'fastify'
-import formBody				from '@fastify/formbody'
-import fs					from 'fs'
-import { Server }			from 'socket.io'
 import sqlite3Pkg			from 'sqlite3'
+import { Server }			from 'socket.io'
+import cors					from '@fastify/cors'
+import formBody				from '@fastify/formbody'
 import { gamesController }	from "./controllers/gamesController.js"
 import { GamesService }		from "./services/gamesService.js"
 import { gamesRepository }	from "./repositories/gamesRepository.js"
 import { setupPongSocket }	from "./socket/pongSocket.js"
 
+import type { AxiosResponse }	from 'axios'
 import type { FastifyInstance }	from 'fastify'
 
 
 /* ====================== AXIOS VARIABLES ====================== */
 
 export const	gameAxios = axios.create({
-	timeout: 1000
+	timeout: 5000
 });
 
 
@@ -87,7 +87,7 @@ io.use(async (socket, next) => {
 			throw new Error();
 
 
-		const	response: AxiosResponse = await gameAxios.get('http://jwt:3000/validate', 
+		const	response: AxiosResponse = await gameAxios.get('http://jwt:3000/payload/access', 
 			{ withCredentials: true, headers: { Cookie: cookieHeader || "" } }
 		);
 

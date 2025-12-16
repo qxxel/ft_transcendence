@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   renderer.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:06:22 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/04 12:43:04 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 06:09:26 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // HANDLES DRAWING TO THE CANVAS
+
 
 /* ====================== IMPORTS ====================== */
 
@@ -100,7 +101,7 @@ export class PongRenderer {
 		this.ctx.fillText('Press \'Esc\' to resume', this.width / 2, this.height / 1.85);
 	}
 
-	public drawGameOver(winnerName: string, isTournament: boolean) {
+	public drawGameOver(winnerName: string, isTournament: boolean) { // winnerName and isTournament unused
 		this.ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
 		this.ctx.fillRect(0, 0, this.width, this.height);
 	}

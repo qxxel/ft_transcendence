@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   pong.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/09 14:03:57 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 06:33:46 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // MAIN PONG GAME CONTROLLER
 
+
 /* ====================== IMPORTS ====================== */
 
-import { AppState, appStore, UserState }	from "../objects/store.js"
-import { connectSocket, socket }			from "../socket/socket.js"
-import { Game }								from "./gameClass.js"
-import { linearInterpolation }				from "./utils/lerp.js"
 import { router }							from "../index.js"
 import { PongRenderer }						from "./renderer.js"
+import { Game }								from "./gameClass.js"
+import { TournamentController } 			from "./tournament.js"
+import { AppState, appStore, UserState }	from "../objects/store.js"
+import { connectSocket, socket }			from "../socket/socket.js"
 
 import type { PongState }				from "./objects/pongState.js"
-import type { GameOptions, PowerUps }	from "./objects/gameOptions.js"
 import type { PongResume }				from "./objects/pongResume.js"
-import { TournamentController } from "./tournament.js"
+import type { GameOptions, PowerUps }	from "./objects/gameOptions.js"
 
 
 /* ====================== CLASS ====================== */
@@ -47,8 +47,6 @@ export class PongGame extends Game {
 
 	private ids: { canvas: string; score1: string; score2: string; winScore: string };
 
-	// private user: User;
-
 	constructor(canvasId: string,
 			score1Id: string,
 			score2Id: string,
@@ -61,6 +59,7 @@ export class PongGame extends Game {
 
 	public setCtx() {
 		this.canvas = document.getElementById(this.ids.canvas) as HTMLCanvasElement;
+		if (!this.canvas) return;
 		this.renderer = new PongRenderer(this.canvas);
 
 		this.scoreElements = {
@@ -68,11 +67,12 @@ export class PongGame extends Game {
 			p1: document.getElementById(this.ids.score1)!,
 			p2: document.getElementById(this.ids.score2)!
 		};
+		if (!this.scoreElements.p1 || !this.scoreElements.p2 || !this.scoreElements.winScore) return ;
 
 		let	state: AppState = appStore.getState();
 		let	pendingOptions: GameOptions | null = state.game.pendingOptions;
-		if (pendingOptions)																{console.log("pendingOptions => " + [pendingOptions.winningScore])
-			this.lastOptions = JSON.parse(JSON.stringify(pendingOptions));				}
+		if (pendingOptions)
+			this.lastOptions = JSON.parse(JSON.stringify(pendingOptions));
 		else if (this.lastOptions)
 		{
 			appStore.setState((state) => ({
@@ -82,13 +82,10 @@ export class PongGame extends Game {
 					pendingOptions: this.lastOptions
 				}
 			}));
-																						console.log("lastOptions => " + this.lastOptions.winningScore)
 		}
-																						console.log("noOptions")
 
 		state = appStore.getState();
 		pendingOptions = state.game.pendingOptions;
-																						console.log("post pendingOptions => " + pendingOptions)
 		if (pendingOptions)
 			this.lastOptions = JSON.parse(JSON.stringify(pendingOptions));
 
@@ -144,10 +141,9 @@ export class PongGame extends Game {
 
 		this.isGameOver = false;
 		this.serverState = null;
-
-		const dashboard = document.getElementById('game-over-dashboard');
-        if (dashboard)
-			dashboard.style.display = "none";
+		const	dashboard: HTMLElement | null = document.getElementById('game-over-dashboard');
+		if (!dashboard) return;
+		dashboard.style.display = "none";
 
 		socket.on('game-update', (newState: PongState) => {
 			this.serverState = newState;
@@ -193,9 +189,6 @@ export class PongGame extends Game {
 					pendingOptions: null
 				}
 			}));
-
-				// OLD
-			// this.appState.pendingOptions = undefined;
 		}
 	}
 
@@ -233,23 +226,20 @@ export class PongGame extends Game {
 	}
 
 	private renderLoop() {
-		this.smoothState();
-
+		this.syncServerDisplay();
 		this.draw();
 		this.animationFrameId = requestAnimationFrame(() => this.renderLoop());
 	}
 
-	private smoothState() {
+	private syncServerDisplay() {
 		if (!this.serverState || !this.displayState)
 			return;
 
-		const	smoothing = 1;
+		this.displayState.ball.x = this.serverState.ball.x;
+		this.displayState.ball.y = this.serverState.ball.y;
 
-		this.displayState.ball.x = linearInterpolation(this.displayState.ball.x, this.serverState.ball.x, smoothing);
-		this.displayState.ball.y = linearInterpolation(this.displayState.ball.y, this.serverState.ball.y, smoothing);
-
-		this.displayState.paddle1.y = linearInterpolation(this.displayState.paddle1.y, this.serverState.paddle1.y, smoothing);
-		this.displayState.paddle2.y = linearInterpolation(this.displayState.paddle2.y, this.serverState.paddle2.y, smoothing);
+		this.displayState.paddle1.y = this.serverState.paddle1.y;
+		this.displayState.paddle2.y = this.serverState.paddle2.y;
 
 		this.displayState.collectibles = this.serverState.collectibles;
 		this.displayState.score1 = this.serverState.score1;
@@ -330,19 +320,19 @@ export class PongGame extends Game {
 			this.scoreElements.p2.innerText = pongResume.score2.toString();
 		}
 
-		const dashboard = document.getElementById('game-over-dashboard');
+		const	dashboard: HTMLElement | null = document.getElementById('game-over-dashboard');
 		if (!dashboard)
 			return;
 
-		const winnerName = pongResume.winner === 1 ? this.player1Name : this.player2Name;
-		const winnerDisplay = document.getElementById('winner-display');
-		if (winnerDisplay)
-			winnerDisplay.innerText = `${winnerName} Wins!`;
+		const	winnerName: string = pongResume.winner === 1 ? this.player1Name : this.player2Name;
+		const	winnerDisplay: HTMLElement | null = document.getElementById('winner-display');
+		if (!winnerDisplay) return;
+		winnerDisplay.innerText = `${winnerName} Wins!`;
 
 		const	state: AppState = appStore.getState();
 		const	currentTournament: TournamentController | null = state.game.currentTournament;
 		if (this.isTournament && currentTournament)
-			currentTournament.reportMatchWinner(winnerName);
+			currentTournament.reportMatchWinner(winnerName, pongResume);
 
 
 		const	gameDurationSec: number = (pongResume.duration / 1000)
@@ -351,12 +341,12 @@ export class PongGame extends Game {
 		const	seconds: string = (gameDurationSec % 60).toFixed(0);
 		const	secondsText: string = seconds + "s"
 
-		document.getElementById('stat-duration')!.innerText = minutesText + secondsText;
-		document.getElementById('stat-p1-hits')!.innerText = pongResume.player1Hits.toString();
-		document.getElementById('stat-p2-hits')!.innerText = pongResume.player2Hits.toString();
-		document.getElementById('stat-rally')!.innerText = pongResume.longestRally.toString();
+		if (document.getElementById('stat-duration')) document.getElementById('stat-duration')!.innerText = minutesText + secondsText;
+		if (document.getElementById('stat-p1-hits')) document.getElementById('stat-p1-hits')!.innerText = pongResume.player1Hits.toString();
+		if (document.getElementById('stat-p2-hits')) document.getElementById('stat-p2-hits')!.innerText = pongResume.player2Hits.toString();
+		if (document.getElementById('stat-rally')) document.getElementById('stat-rally')!.innerText = pongResume.longestRally.toString();
 
-		const	restartMsg = document.getElementById('restart-msg');
+		const	restartMsg: HTMLElement | null = document.getElementById('restart-msg');
 		if (restartMsg)
 		{
 			if (this.isTournament)
@@ -369,14 +359,16 @@ export class PongGame extends Game {
 	}
 
 	private updateNameDisplay() {
-		const p1Span = document.getElementById('p1-name');
-		const p2Span = document.getElementById('p2-name');
-		if (p1Span) p1Span.innerText = this.player1Name + ": ";
-		if (p2Span) p2Span.innerText = this.player2Name + ": ";
+		const	p1Span: HTMLElement | null = document.getElementById('p1-name');
+		const	p2Span: HTMLElement | null = document.getElementById('p2-name');
+		if (!p1Span) return; 
+		p1Span.innerText = this.player1Name + ": ";
+		if (!p2Span) return; 
+		p2Span.innerText = this.player2Name + ": ";
 	}
 
 	private generateLegend(activePowerUps: PowerUps) {
-		const legendContainer = document.getElementById('powerup-legend');
+		const	legendContainer: HTMLElement | null = document.getElementById('powerup-legend');
 		if (!legendContainer)
 			return;
 
@@ -386,9 +378,9 @@ export class PongGame extends Game {
 		if (!activePowerUps.star1 && !activePowerUps.star2 && !activePowerUps.star3) return;
 
 		legendContainer.style.display = 'flex';
-		let html = '<div class="legend-title">Power-Ups</div>';
+		let	html: string = '<div class="legend-title">Power-Ups</div>';
 
-		const createRow = (text: string, fill: string, stroke: string) => {
+		const	createRow = (text: string, fill: string, stroke: string) => {
 			return `
 			<div class="legend-item">
 					<div class="legend-bubble" style="background-color: ${fill}; border-color: ${stroke};"></div>

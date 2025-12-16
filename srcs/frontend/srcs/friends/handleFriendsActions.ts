@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:48:02 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/10 15:22:35 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 10:05:33 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { getAndRenderFriends }	from "./getAndRenderFriends.js";
 import { sendRequest }			from "../utils/sendRequest.js"
-import { displayPop } from "../utils/display.js";
+import { displayPop }			from "../utils/display.js";
+import { getAndRenderFriends }	from "./getAndRenderFriends.js"
 
 
 /* ====================== FUNCTION ====================== */
 
 export async function	handleFriendAction(url: string, method: string, body: Object | null): Promise<boolean> {
-	const response = await sendRequest(url, method, body);
+	const	response: Response = await sendRequest(url, method, body);
 
 	if (!response.ok)
 	{

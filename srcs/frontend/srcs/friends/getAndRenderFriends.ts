@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderFriends.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 16:31:20 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 05:37:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { attachDelegationListeners }	from "./friendsEvents.js"
-import { sendRequest }					from "../utils/sendRequest.js"
-import { AppState, appStore, UserState } from "../objects/store.js";
-import { onClickHistory } from "../eventsHandlers/clickHandler.js";
+import { attachDelegationListeners }		from "./friendsEvents.js"
+import { AppState, appStore, UserState }	from "../objects/store.js"
+import { sendRequest }						from "../utils/sendRequest.js"
+import { onClickHistory }					from "../eventsHandlers/clickHandler.js"
 
 
 /* ====================== INTERFACE ====================== */
@@ -39,7 +39,7 @@ export async function	getAndRenderFriends(): Promise<void> {
 	const	response: Response = await sendRequest('/api/user/friends/me', "get", null);
 	if (!response.ok)
 	{
-		const errorData: Object = await response.json();
+		const	errorData: Object = await response.json();
 		console.error(errorData);
 
 		displayErrors();
@@ -54,9 +54,11 @@ export async function	getAndRenderFriends(): Promise<void> {
 
 function	renderFriends(friendsData: UserObject[]): void {
 	const	requestsListDiv: HTMLDivElement = document.getElementById("requests-list") as HTMLDivElement;
+	if (!requestsListDiv) return;
 	requestsListDiv.innerHTML = "<h2>PENDING REQUEST</h2>";
 
 	const	friendsListDiv: HTMLDivElement = document.getElementById("friends-list") as HTMLDivElement;
+	if (!friendsListDiv) return;
 	friendsListDiv.innerHTML = "<h1>FRIENDS LIST</h1>";
 
 	const	state: AppState = appStore.getState();
@@ -191,10 +193,14 @@ function	displayNoFriends(friendsListDiv: HTMLDivElement): void {
 }
 
 function	displayErrors(): void {
-	const	requestsListDiv: HTMLDivElement = document.getElementById("requests-list") as HTMLDivElement;
+	const	requestsListDiv: HTMLElement | null = document.getElementById("requests-list");
+	if (!(requestsListDiv instanceof HTMLDivElement)) return;
+
 	requestsListDiv.innerHTML = "<h2>PENDING REQUEST</h2>";	
 
-	const	friendsListDiv: HTMLDivElement = document.getElementById("friends-list") as HTMLDivElement;
+	const	friendsListDiv: HTMLElement | null = document.getElementById("friends-list");
+	if (!(friendsListDiv instanceof HTMLDivElement)) return;
+
 	friendsListDiv.innerHTML = "<h1>FRIENDS LIST</h1>";
 
 	const	requestsErrorParagraph: HTMLParagraphElement = document.createElement("p");

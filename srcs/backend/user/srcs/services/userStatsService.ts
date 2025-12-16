@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsService.ts                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:23:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 18:07:11 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 06:10:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,12 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { userStatsRespDto }			from "../dtos/userStatsRespDto.js"
 import { userStatsPongUpdateDto }	from "../dtos/userStatsUpdateDto.js"
 import { userStatsTankUpdateDto }	from "../dtos/userStatsUpdateDto.js"
 import { userStatsRepository }		from "../repositories/userStatsRepository.js"
-import { userStatsRespDto }			from "../dtos/userStatsRespDto.js"
 
 import { GameNotFoundError, NotExistError }	from "../utils/throwErrors.js"
-import { isTaken } from "../utils/validation.js"
 
 
 /* ====================== CLASS ====================== */
@@ -38,7 +37,7 @@ export class	userStatsService {
 		if (!(await this.userStatsRepo.isTaken(query, [userId.toString()])))
 			throw new NotExistError(`The user ${userId} does not exist`);
 
-		var userStatsUpdate: userStatsPongUpdateDto | userStatsTankUpdateDto;
+		var	userStatsUpdate: userStatsPongUpdateDto | userStatsTankUpdateDto;
 
 		if (body.gameType && body.gameType === "pong")
 		{

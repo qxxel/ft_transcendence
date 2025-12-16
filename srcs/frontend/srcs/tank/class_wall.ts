@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   class_wall.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:33:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:34:40 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:33:14 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// CLASS THAT DEFINES STATIC WALL OBJECTS WITH COLLISION AND DRAWING LOGIC
 
 
 /* ============================= IMPORTS ============================= */
 
-import { Actor }	from "./class_actor.js"
 import { Rect2D }	from "./class_rect.js"
-import { Input } 	from "./class_input.js";
+import { Actor }	from "./class_actor.js"
+import { Input } 	from "./class_input.js"
 
 import type { Color }	from "./interface.js"
 

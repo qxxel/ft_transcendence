@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 18:59:22 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/14 04:04:49 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 /* ====================== IMPORTS ====================== */
 
 import { usersAddDto }		from "../dtos/usersAddDto.js"
-import { usersRepository }	from "../repositories/usersRepository.js"
 import { usersRespDto }		from "../dtos/usersRespDto.js"
-import { usersUpdateDto }		from "../dtos/usersUpdateDto.js"
+import { usersUpdateDto }	from "../dtos/usersUpdateDto.js"
+import { usersRepository }	from "../repositories/usersRepository.js"
 
 import { IsTakenError, NotExistError }	from "../utils/throwErrors.js"
 
@@ -74,20 +74,28 @@ export class	usersService {
 		if (!(await this.usersRepo.isTaken(query, [userId.toString()])))
 			throw new NotExistError(`The user ${userId} does not exist`);
 
-		const username = user.getUsername();
+		const	username = user.getUsername();
 		if (username !== undefined) {
 			const	nameQuery: string = "SELECT 1 FROM users WHERE username = ? LIMIT 1";
 			if (await this.usersRepo.isTaken(nameQuery, [username]))
 				throw new IsTakenError(`The name ${username} is already taken. Try another one !`);
 		}
 
-		const email = user.getEmail();
+		const	email = user.getEmail();
 		if (email !== undefined)
 		{
 			const	nameQuery: string = "SELECT 1 FROM users WHERE email = ? LIMIT 1";
 			if (await this.usersRepo.isTaken(nameQuery, [email]))
 				throw new IsTakenError(`The name ${email} is already taken. Try another one !`);
 		}
+	}
+
+	async updateLogById(userId: number, isLog: boolean): Promise<void> {
+		const	query: string = "SELECT 1 FROM users WHERE id = ? LIMIT 1";
+		if (!(await this.usersRepo.isTaken(query, [userId.toString()])))
+			throw new NotExistError(`The user ${userId} does not exist`);
+	
+		return await this.usersRepo.updateLogById(userId, isLog);
 	}
 
 	async updateUserById(userId: number, user: usersUpdateDto): Promise<void> {

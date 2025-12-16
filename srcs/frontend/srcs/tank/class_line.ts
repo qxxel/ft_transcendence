@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   class_line.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:28:44 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/19 17:29:41 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:31:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// CLASS THAT DEFINES AND DRAWS A 2D LINE WITH POSITION, ANGLE, AND TRANSFORMATIONS
 
 
 /* ============================= IMPORT ============================= */
 
 import type { Color }	from "./interface.js"
-
 
 /* ============================= CLASS ============================= */
 
@@ -37,8 +36,8 @@ export class	Line2D {
 
 
 	draw(ctx : CanvasRenderingContext2D, color: Color): void {
-		ctx.strokeStyle = `#${((color.r << 16) | (color.g << 8) | color.b).toString(16).padStart(6,'0')}`; // HUH;
-		ctx.lineWidth = this.w; //ctx.lineWidth = stickWidth;
+		ctx.strokeStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
+		ctx.lineWidth = this.w;
 		ctx.lineCap = 'round';
 		ctx.beginPath();
 		ctx.moveTo(this.x1, this.y1);

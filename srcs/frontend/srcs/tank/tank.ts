@@ -3,30 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   tank.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 15:40:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 06:30:06 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /!\ DESCRIBE THE FILE /!\
+// MAIN GAME CLASS THAT HANDLES TANK GAME LOGIC, GAME LOOP, INPUT, STATE MANAGEMENT, AND UI INTERACTIONS
 
 
 /* ============================= IMPORTS ============================= */
 
-import { AppState, appStore, GamesState, UserState }	from "../objects/store.js"
-import { Game }								from "../Pong/gameClass.js"
-import { GSTATE }							from "./global.js"
-import { router }							from "../index.js"
-import { Input }							from "./class_input.js"
-import { Map }								from "./class_map.js"
-import { Tank }								from "./class_tank.js"
-import { Ball, Collectible }				from "./class_ball.js"
+import { GSTATE, History }								from "./global.js"
+import { router }										from "../index.js"
+import { Map }											from "./class_map.js"
+import { Tank, Uzi, Sniper, Shotgun, Classic } 			from "./class_tank.js"
+import { Ball, Collectible }							from "./class_ball.js"
+import { Rect2D } 										from "./class_rect.js"
+import { Input }										from "./class_input.js"
+import { AppState, appStore, UserState }				from "../objects/store.js"
+import { Game }											from "../Pong/gameClass.js"
+import { sendRequest }									from "../utils/sendRequest.js"
 
 import type { Color, Keys }	from "./interface.js"
-import { Wall } from "./class_wall.js"
-import { Rect2D } from "./class_rect.js"
+import type { Spawn }		from "./global.js"
+
+
 
 
 /* ============================= CLASS ============================= */
@@ -41,19 +44,19 @@ export class	TankGame extends Game {
 	private	input: Input = new Input();
 	private	map: Map | null = null;
 	private	isPaused: boolean = false;
-  	private player1Name: string | undefined = "Player 1";
-  	private player2Name: string | undefined = "Player 2";
+  	private player1Name: string = "Player 1";
+  	private player2Name: string = "Player 2";
 	private lastCollectibleSpawn: number = 0;
 
-
-	// 	gameState.currentGame = new PongGame('pong-canvas', 'score1', 'score2', 'winning-points', gameState, user, mode, difficulty, star1, star2, star3); 
 	constructor(
 		private canvasId: string, 
 		private map_name: string,
 		private powerupFrequency: number = 0,
 		private star1: boolean = false,
-      	private star2: boolean = false,
-      	private star3: boolean = false
+	  	private star2: boolean = false,
+	  	private star3: boolean = false,
+		private p1Class: string = "classic",
+		private p2Class: string = "classic"
 	) {
 		super();
 		(window as any).quitGame = () => this.quitGame();
@@ -61,23 +64,27 @@ export class	TankGame extends Game {
 
 	public setCtx(): void {
 		this.canvas = document.getElementById(this.canvasId) as HTMLCanvasElement;
-		this.ctx = this.canvas.getContext('2d')!;
-
-		this.input = new Input();
-		this.input.start();
+		if (!this.canvas) this.quitGame();
+		this.ctx = this.canvas.getContext('2d');
+		if (!this.ctx) this.quitGame();
 		this.map = new Map(this.canvas.width, this.canvas.height, 2, this.map_name);
+		if (!this.map) this.quitGame();
+		this.input.start();
 
 		const	state: AppState = appStore.getState();
+		if (!state) this.quitGame();
 		const	user: UserState = state.user;
-        this.player1Name = user.username ? user.username : "Player 1";
-        this.player2Name = "Player 2";
-    	this.lastCollectibleSpawn = Date.now();
+		this.player1Name = user.username ? user.username : "Player 1";
+		this.player2Name = "Player 2";
+		this.lastCollectibleSpawn = Date.now();
+		GSTATE.STATE = state;
+		GSTATE.CANVAS = this.canvas;
+		GSTATE.CTX = this.ctx;
 		GSTATE.REDRAW = true;
 		this.reset_state();
-		this.updateNameDisplay()
+		this.updateNameDisplay();
 		this.setup_tanks();
 		this.generateLegend();
-
 	}
 
 	setWinningScore(newWinningScore: number) {}
@@ -86,48 +93,79 @@ export class	TankGame extends Game {
 	{
 		if (!this.map) return;
 		GSTATE.TANKS = 0;
-		let tank_width:number = 48;
-		let tank_height:number = 48;
-
-		if (this.map.name == 'desertfox')
+		const	tankWidth:number = 40;
+		const	tankHeight:number = 40;
+		const	colorBody:Color = {r:50,g:200,b:30}
+		const	p1colorFire:Color = {r:0,g:255,b:255};
+		const	p2colorFire:Color = {r:255,g:0,b:255};
+		const	p1Keys:Keys = {up:'w', down:'s', left:'a', right:'d', rot_left:'b', rot_right:'n', fire:'b', ability:'n'};
+		const	p2Keys:Keys = {up:'arrowup', down:'arrowdown', left:'arrowleft', right:'arrowright', rot_left:'2', rot_right:'3', fire:'1', ability:'2'};
+		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'davinco')
 		{
-			let s1 = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
-			let s2 = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];
+			const	s1: Spawn = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
+			const	s2: Spawn = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];
 
-			GSTATE.ACTORS.push(new Tank(s1!.x, s1!.y, tank_width, tank_height,
-				{r:50,g:200,b:30}, {r:0,g:255,b:255},
-				{up:'w',down:'s',left:'a',right:'d',rot_left:'q',rot_right:'e',fire:' '},0));
-			GSTATE.ACTORS.push(new Tank(s2!.x, s2!.y, tank_width, tank_height,
-				{r:50,g:200,b:30}, {r:255,g:0,b:255},
-				{up:'i',down:'k',left:'j',right:'l',rot_left:'u',rot_right:'o',fire:'.'},1));
+			switch (this.p1Class)
+			{
+				case "uzi":
+					GSTATE.ACTORS.push(new Uzi(s1!.x, s1!.y, tankWidth, tankHeight, colorBody, p1colorFire, p1Keys, 0));
+					break;
+				case "sniper":
+					GSTATE.ACTORS.push(new Sniper(s1!.x, s1!.y, tankWidth, tankHeight, colorBody, p1colorFire, p1Keys, 0));
+					break;
+				case "shotgun":
+					GSTATE.ACTORS.push(new Shotgun(s1!.x, s1!.y, tankWidth, tankHeight, colorBody, p1colorFire, p1Keys, 0));
+					break;
+				case "classic":
+					GSTATE.ACTORS.push(new Classic(s1!.x, s1!.y, tankWidth, tankHeight, colorBody, p1colorFire, p1Keys, 0));
+					break;
+			}
+
+			switch (this.p2Class)
+			{
+				case "uzi":
+					GSTATE.ACTORS.push(new Uzi(s2!.x, s2!.y, tankWidth, tankHeight, colorBody, p2colorFire, p2Keys, 1));
+					break;
+				case "sniper":
+					GSTATE.ACTORS.push(new Sniper(s2!.x, s2!.y, tankWidth, tankHeight, colorBody, p2colorFire, p2Keys, 1));
+					break;
+				case "shotgun":
+					GSTATE.ACTORS.push(new Shotgun(s2!.x, s2!.y, tankWidth, tankHeight, colorBody, p2colorFire, p2Keys, 1));
+					break;
+				case "classic":
+					GSTATE.ACTORS.push(new Classic(s2!.x, s2!.y, tankWidth, tankHeight, colorBody, p2colorFire, p2Keys, 1));
+					break;
+			}
 			GSTATE.TANKS += 2;
 		}
-		else { console.log("Unknown map :", this.map.name) }
-
 	}
 
 	private spawn_collectible() : void 
 	{
 		if (!this.map || this.powerupFrequency == 0) return;
-		let c_width:number = 25;
-		let c_height:number = 25;
-		let attempt: number = 0;
-		let nope: boolean;
-		let effects: string[] = [];
+		let	c_width:number = 25;
+		let	c_height:number = 25;
+		let	attempt: number = 0;
+		let	nope: boolean;
+		let	effects: string[] = [];
 		if (this.star1)
 			effects.push("heal");
-		if (this.star2)
-			effects.push("speed");
-		if (this.star3)
+		if (this.star2) {
+			effects.push("ball_speed");
+			effects.push("tank_speed");
+		}
+		if (this.star3) {
 			effects.push("haste");
+			effects.push("cdr");
+		}
 
-		if (this.map.name == 'desertfox')
+		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'davinco')
 		{
 			while (attempt++ < 2000)
 			{
-				let s = this.map.spawns_collectible[Math.floor(Math.random() * this.map.spawns_collectible.length)];
+				let	s: Spawn = this.map.spawns_collectible[Math.floor(Math.random() * this.map.spawns_collectible.length)];
 				nope = false;
-				let collec: Rect2D;
+				let	collec: Rect2D;
 				if (!s) continue;
 				collec = new Rect2D(s!.x,s!.y,c_width,c_height);
 
@@ -146,20 +184,21 @@ export class	TankGame extends Game {
 				if (nope)
 					continue;
 
-				let index: number;
+				let	index: number;
 				index = Math.floor(Math.random() * effects.length);
 				GSTATE.ACTORS.push(new Collectible(s!.x,s!.y,c_width,c_height, effects[index]!));
 				break;
 			}
-
 		}
 		GSTATE.REDRAW = true;
 	}
 
 	private	gameLoop(): void {
+		if (!GSTATE.CANVAS || !GSTATE.CTX)
+			this.quitGame();
 		this.listen();
 		this.update();
-		this.input.update(); // CURRENT SAVED INTO PREVIOUS
+		this.input.update();
 
 		this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
 	}
@@ -167,16 +206,17 @@ export class	TankGame extends Game {
 	private listen() : void {
 
 		if (this.input.isPressed('Escape')) {
-			if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA QUIT
+			if (GSTATE.TANKS == 1 && this.isPaused) {
+				this.quitGame();
 			}
-			else if (GSTATE.TANKS != 1) { // SWITCH PAUSE UNPAUSE
+			else if (GSTATE.TANKS != 1) {
 				this.isPaused = !this.isPaused;
 				GSTATE.REDRAW = true;
 			}
 		}
 		else if (this.isPaused && this.input.isPressed('r'))
 		{
-			if (GSTATE.TANKS == 1 && this.isPaused) { // WANNA RESTART
+			if (GSTATE.TANKS == 1 && this.isPaused) {
 				for (let a of GSTATE.ACTORS)
 				{
 					if (a instanceof Tank || a instanceof Ball || a instanceof Collectible)
@@ -196,6 +236,7 @@ export class	TankGame extends Game {
 	private	update(): void {
 
 		if (!this.map || !this.ctx || !this.canvas) return;
+
 		if (GSTATE.REDRAW) {
 			this.map.drawBackground(this.ctx);
 			for (let a of GSTATE.ACTORS) {
@@ -205,12 +246,27 @@ export class	TankGame extends Game {
 			GSTATE.REDRAW = false;
 
 			if (this.isPaused) {
-				this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        		this.ctx.fillStyle = 'white';
-        		this.ctx.font = '50px monospace';
-        		this.ctx.textAlign = 'center';
-        		if (GSTATE.TANKS != 1) this.ctx.fillText('PAUSED', this.canvas.width / 2, this.canvas.height / 2);
+				if (GSTATE.TANKS == 1){
+					this.ctx.fillStyle = 'rgba(0, 200, 0, 0.5)';
+					if (GSTATE.STATS1.win){
+						this.ctx.fillRect(0, 0, this.canvas.width / 2, this.canvas.height);
+						this.ctx.fillStyle = 'rgba(200, 0, 0, 0.5)';
+						this.ctx.fillRect(this.canvas.width / 2, 0, this.canvas.width, this.canvas.height);
+					}
+					else {
+						this.ctx.fillRect(this.canvas.width / 2, 0, this.canvas.width, this.canvas.height);
+						this.ctx.fillStyle = 'rgba(200, 0, 0, 0.5)';
+						this.ctx.fillRect(0, 0, this.canvas.width / 2, this.canvas.height);
+					}
+				}
+				else {
+					this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+					this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+				}
+				this.ctx.fillStyle = 'white';
+				this.ctx.font = '50px monospace';
+				this.ctx.textAlign = 'center';
+				if (GSTATE.TANKS != 1) this.ctx.fillText('PAUSED', this.canvas.width / 2, this.canvas.height / 2);
 				return ;
 			}
 		}
@@ -220,15 +276,15 @@ export class	TankGame extends Game {
 				a.update(this.input);
 			}
 			if (this.star1 || this.star2 || this.star3){
-    		  	const now = Date.now();
-    		  	if (now - this.lastCollectibleSpawn > (this.powerupFrequency * 1000)) {
+			  	const	now = Date.now();
+			  	if (now - this.lastCollectibleSpawn > (this.powerupFrequency * 1000)) {
 					this.spawn_collectible();
-	    	  		this.lastCollectibleSpawn = now;
-    		  	}
-    		}
+			  		this.lastCollectibleSpawn = now;
+			  	}
+			}
 		}
 		if (!this.isPaused && GSTATE.TANKS == 1) {
-			let winner: Tank;
+			let	winner: Tank;
 
 			this.showEndGameDashboard()
 			this.isPaused = true;
@@ -236,69 +292,67 @@ export class	TankGame extends Game {
 	}
   private showEndGameDashboard() {
 	this.updateNameDisplay()
-    const dashboard = document.getElementById('game-over-dashboard');
-    if (!dashboard) return;
+	const history: History | null = this.setHistory();
+	if (history) sendRequest("/api/game", "POST", history);
+	const	dashboard = document.getElementById('game-over-dashboard');
+	if (!dashboard) return;
 
-    const matchDurationSeconds = Math.floor((Date.now() - this.startTime) / 1000);
-    const minutes = Math.floor(matchDurationSeconds / 60);
-    const seconds = matchDurationSeconds % 60;
+	const	matchDurationSeconds: number = Math.floor((Date.now() - this.startTime) / 1000);
+	const	minutes: number = Math.floor(matchDurationSeconds / 60);
+	const	seconds: number = matchDurationSeconds % 60;
 
-    const winnerName = GSTATE.STATS1.win == 1 ? this.player1Name : this.player2Name;
-    const winnerDisplay = document.getElementById('winner-display');
+	const	winnerName: string = GSTATE.STATS1.win == 1 ? this.player1Name : this.player2Name;
+	const	winnerDisplay: HTMLElement | null = document.getElementById('winner-display');
 
 	if (winnerDisplay) winnerDisplay.innerText = `${winnerName} Wins!`;
 
-	const accuracy1: number = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit / GSTATE.STATS1.fire) * 100 : 0;
-	const accuracy2: number = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit / GSTATE.STATS2.fire) * 100 : 0;
+	const	accuracy1: number = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit) / GSTATE.STATS1.fire * 100 : 0;
+	const	accuracy2: number = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit) / GSTATE.STATS2.fire * 100 : 0;
 
-	document.getElementById('stat-duration')!.innerText = `${minutes}m ${seconds}s`;
-	document.getElementById('p1-stat-name')!.innerText = this.player1Name + "";
-	document.getElementById('stat-p1-accuracy')!.innerText = `${accuracy1.toFixed(1)}%`;
-	document.getElementById('stat-p1-fire')!.innerText = `${GSTATE.STATS1.fire}`;
-	document.getElementById('stat-p1-hit')!.innerText = `${GSTATE.STATS2.hit}`;
-	document.getElementById('stat-p1-bounce')!.innerText = `${GSTATE.STATS1.bounce}`;
+	let	e: HTMLElement | null;
 
-	document.getElementById('p2-stat-name')!.innerText = this.player2Name + "";
-	document.getElementById('stat-p2-accuracy')!.innerText = `${accuracy2.toFixed(1)}%`;
-	document.getElementById('stat-p2-fire')!.innerText = `${GSTATE.STATS2.fire}`;
-	document.getElementById('stat-p2-hit')!.innerText = `${GSTATE.STATS1.hit}`;
-	document.getElementById('stat-p2-bounce')!.innerText = `${GSTATE.STATS2.bounce}`;
+	e = document.getElementById('stat-duration'); 		if (e) e.innerText = `${minutes}m ${seconds}s`;
 
+	e = document.getElementById('p1-stat-name');		if (e) e.innerText = this.player1Name + "";
+	e = document.getElementById('stat-p1-accuracy');	if (e) e.innerText = `${accuracy1.toFixed(1)}%`;
+	e = document.getElementById('stat-p1-fire');		if (e) e.innerText = `${GSTATE.STATS1.fire}`;
+	e = document.getElementById('stat-p1-hit');			if (e) e.innerText = `${GSTATE.STATS1.hit}`;
+	e = document.getElementById('stat-p1-bounce');		if (e) e.innerText = `${GSTATE.STATS1.bounce}`;
 
-    const restartMsg = document.getElementById('restart-msg');
-    if (restartMsg) {
-        restartMsg.innerText = "Press 'R' to Restart or 'Esc' to Quit";
-    }
+	e = document.getElementById('p2-stat-name'); 		if (e) e.innerText = this.player2Name + "";
+	e = document.getElementById('stat-p2-accuracy'); 	if (e) e.innerText = `${accuracy2.toFixed(1)}%`;
+	e = document.getElementById('stat-p2-fire'); 		if (e) e.innerText = `${GSTATE.STATS2.fire}`;
+	e = document.getElementById('stat-p2-hit'); 		if (e) e.innerText = `${GSTATE.STATS2.hit}`;
+	e = document.getElementById('stat-p2-bounce'); 		if (e) e.innerText = `${GSTATE.STATS2.bounce}`;
 
-    dashboard.style.display = 'block';
+	e = document.getElementById('restart-msg');			if (e) e.innerText = "Press 'R' to Restart or 'Esc' to Quit";
+
+	dashboard.style.display = 'block';
   }
 
 	private hideEndGameDashboard() {
-		const dashboard = document.getElementById('game-over-dashboard');
-    	if (!dashboard) return;
-    	dashboard.style.display = 'none';
+		const	dashboard: HTMLElement | null = document.getElementById('game-over-dashboard');
+		if (dashboard) dashboard.style.display = 'none';
 	}
 
 	private updateNameDisplay() {
-    	const p1Span = document.getElementById('p1-name');
-    	const p2Span = document.getElementById('p2-name');
-    	if (p1Span) p1Span.innerText = this.player1Name + "";// + ": " + GSTATE.STATS1.win;
-    	if (p2Span) p2Span.innerText = this.player2Name + "";// + ": " + GSTATE.STATS2.win;
+		const	p1Span: HTMLElement | null = document.getElementById('p1-name');
+		const	p2Span: HTMLElement | null = document.getElementById('p2-name');
+		if (p1Span) p1Span.innerText = this.player1Name + "";
+		if (p2Span) p2Span.innerText = this.player2Name + "";
   	}
 
 	private generateLegend(): void {
-		const legendContainer = document.getElementById('powerup-legend');
+		const	legendContainer: HTMLElement | null = document.getElementById('powerup-legend');
 		if (!legendContainer) return;
 
-		legendContainer.innerHTML = '';
 		legendContainer.style.display = 'none';
-
 		if (this.star1 == false && this.star2 == false && this.star3 == false) return;
 
 		legendContainer.style.display = 'flex';
-		let html = '<div class="legend-title">Power-Ups</div>';
+		let	html: string = '<div class="legend-title">Power-Ups</div>';
 
-		const createRow = (text: string, fill: string, stroke: string) => {
+		const	createRow = (text: string, fill: string, stroke: string) => {
 			return `
 			<div class="legend-item">
 					<div class="legend-bubble" style="background-color: ${fill}; border-color: ${stroke};"></div>
@@ -307,15 +361,17 @@ export class	TankGame extends Game {
 		};
 
 		if (this.star1) {
-			html += createRow("Health", "#32AA28FF", "#0000FF");
+			html += createRow("Health", "rgb(50, 170, 40)", "rgb(0, 0, 255)");
 		}
 
 		if (this.star2) {
-			html += createRow("Speed", "#3296FFFF", "#0000FF");
+			html += createRow("Movement speed", "rgb(255, 255, 0)", "rgb(0, 0, 255)");
+			html += createRow("Ball speed", "rgb(0, 255, 255)", "rgb(0, 0, 255)");
 		}
 
 		if (this.star3) {
-			html += createRow("Haste", "#643296FF", "#0000FF");
+			html += createRow("Fire rate", "rgb(239, 19, 19)", "rgb(0, 0, 255)");
+			html += createRow("Cooldown reduction", "rgb(247, 0, 255)", "rgb(0, 0, 255)");
 		}
 		legendContainer.innerHTML = html;
 	}
@@ -333,15 +389,13 @@ export class	TankGame extends Game {
 			cancelAnimationFrame(this.animationFrameId);
 			this.input.stop();
 			this.animationFrameId = null;
-		for (let a of GSTATE.ACTORS)
-			GSTATE.ACTORS.splice(0,GSTATE.ACTORS.length)
-		console.log('TankGame Stopped');
+			for (let a of GSTATE.ACTORS)
+				GSTATE.ACTORS.splice(0,GSTATE.ACTORS.length)
 		}
 	}
 
 	private quitGame() {
 		this.stop();
-		// socket.emit('leave-game');
 		router.navigate('/games');
 	}
 
@@ -350,9 +404,27 @@ export class	TankGame extends Game {
 		GSTATE.STATS1.lose = 0;		GSTATE.STATS2.lose = 0;
 		GSTATE.STATS1.fire = 0;		GSTATE.STATS2.fire = 0;
 		GSTATE.STATS1.hit = 0;		GSTATE.STATS2.hit = 0;
-		GSTATE.STATS1.miss = 0;		GSTATE.STATS2.miss = 0;
+		GSTATE.STATS1.reflect = 0;		GSTATE.STATS2.reflect = 0;
 		GSTATE.STATS1.bounce = 0;	GSTATE.STATS2.bounce = 0;
+		this.startTime = Date.now();
 	}
 	private	draw(): void {}
 
+	private setHistory(): History | null {
+
+		if (!GSTATE.STATE.user.username) return null;
+		return {
+			idClient:1,
+			gameType:2,
+			winner:GSTATE.STATS1.win ? 1 : 0,
+			p1:this.player1Name,
+			p2:this.player2Name,
+			p1score:GSTATE.STATS1.win,
+			p2score:GSTATE.STATS2.win,
+			mode:"pvp",
+			powerup:(this.star1 || this.star2 || this.star3) ? 1 : 0,
+			start:this.startTime,
+			duration:Date.now() - this.startTime
+		};
+	}
 }

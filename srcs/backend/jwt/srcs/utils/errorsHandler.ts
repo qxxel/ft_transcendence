@@ -6,18 +6,20 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/08 17:28:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:54:32 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// HANDLE AND LOG ALL ERRORS FOR JWT SERVICE REQUESTS
 
 
 /* ====================== IMPORTS ====================== */
 
 import * as jose		from 'jose'
-import * as jwtError	from "./throwErrors.js"
 import axios			from 'axios'
+import * as jwtError	from "./throwErrors.js"
 
-import type { FastifyInstance, FastifyReply } from "fastify"
+import type { FastifyInstance, FastifyReply } from 'fastify'
 
 
 /* ====================== FUNCTION ====================== */
@@ -31,19 +33,28 @@ export function	errorsHandler(jwtFastify: FastifyInstance, reply: FastifyReply, 
 	if (axios.isAxiosError(err)) {
 		if (err.response?.data?.error) {
 			logError(jwtFastify, err.response.data.error);
-			return reply.code(418).send({ error: err.response.data.error });
+			return reply.code(err.response?.status || 400).send({ error: err.response.data.error });
 		}
 		logError(jwtFastify, err.message);
-		return reply.code(418).send({ error: err.message })
+		return reply.code(400).send({ error: err.message })
+	} else if (err instanceof jwtError.RequestEmptyError) {
+		logError(jwtFastify, err.message);
+		return reply.code(400).send({ errorType: err.name, error: err.message });
 	} else if (err instanceof jose.errors.JOSEError) {
 		logError(jwtFastify, err.message);
 		return reply.status(401).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof jwtError.MissingIdError) {
+	} else if (err instanceof jwtError.UnauthorizedTokenError) {
 		logError(jwtFastify, err.message);
-		return reply.code(418).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof Error) {
+		return reply.status(401).send({ errorType: err.name, error: err.message });
+	} else if (err instanceof jwtError.MissingTokenError) {
 		logError(jwtFastify, err.message);
-		return reply.code(418).send({ errorType: err.name, error: err.message });
+		return reply.code(401).send({ errorType: err.name, error: err.message });
+	}  else if (err instanceof jwtError.MissingIdError) {
+		logError(jwtFastify, err.message);
+		return reply.code(400).send({ errorType: err.name, error: err.message });
+	}else if (err instanceof Error) {
+		logError(jwtFastify, err.message);
+		return reply.code(400).send({ errorType: err.name, error: err.message });
 	}
 	jwtFastify.log.error(err);
 	console.log(err);

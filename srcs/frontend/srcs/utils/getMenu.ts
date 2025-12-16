@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getMenu.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:55:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 17:34:40 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:57:46 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ export function	getMenu(isAuth: boolean): string {
 		return `
 			<a href="/">Home</a>
 			<a href="/games">Play</a>
-			<a href="/tournament-setup">Tournament</a>
+			<a href="/tournament-menu">Tournament</a>
 			<a href="/user">Profile</a>
 			<a href="/friends">Friends</a>
 			<a onclick="onClickLogout();" id="logout">Logout</a>
@@ -31,7 +31,7 @@ export function	getMenu(isAuth: boolean): string {
 	return `
 		<a href="/">Home</a>
 		<a href="/games">Play</a>
-		<a href="/tournament-setup">Tournament</a>
+		<a href="/tournament-menu">Tournament</a>
 		<a href="/sign-in">Sign in</a>
 		<a href="/sign-up">Sign up</a
 	`;

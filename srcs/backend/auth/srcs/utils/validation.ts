@@ -6,11 +6,12 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:58:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/07 16:35:32 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/15 02:38:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // ADD UTILS FOR USER DTOs, ESPECIALLY FOR VALIDATION OF NAME AND PASSWORD
+
 
 /* ====================== interface	====================== */
 
@@ -28,7 +29,7 @@ interface	rule {
 /* ====================== FUNCTIONS ====================== */
 
 export function	isValidPassword(name: string): validationResult {
-	const rules: rule[] = [
+	const	rules: rule[] = [
 		{ test: v => typeof v === "string", message: "Password must be a valid string" },
 		{ test: v => v.length >= 8, message: "Password must be at least 8 characters long" },
 		{ test: v => v.length <= 64, message: "Password must not exceed 64 characters" },

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/10 15:42:14 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 10:04:36 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,22 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { verifyEmail }						from "../utils/verifyEmail.js"
-import { AppState, appStore, UserState }	from "../objects/store.js"
+import { appStore }					from "../objects/store.js"
 import { displayError, displayPop }	from "../utils/display.js"
-import { getAndRenderFriends }				from "../friends/getAndRenderFriends.js"
-import { getMenu }							from "../utils/getMenu.js"
-import { router }							from "../index.js"
-import { socket }							from "../socket/socket.js"
-import { sendRequest }						from "../utils/sendRequest.js"
-
+import { router }					from "../index.js"
+import { socket }					from "../socket/socket.js"
+import { getMenu }					from "../utils/getMenu.js"
+import { sendRequest }				from "../utils/sendRequest.js"
+import { verifyEmail }				from "../utils/verifyEmail.js"
+import { getAndRenderFriends }		from "../friends/getAndRenderFriends.js"
 
 
 /* ====================== FUNCTIONS ====================== */
 
 async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
-	console.log("Sign in");
-	const	identifier: string = (document.getElementById("sign-in-username") as HTMLInputElement).value;
-	const	password: string = (document.getElementById("sign-in-password") as HTMLInputElement).value;
+	const	identifier: string | undefined = (document.getElementById("sign-in-username") as HTMLInputElement)?.value;
+	const	password: string | undefined = (document.getElementById("sign-in-password") as HTMLInputElement)?.value;
+	if (!identifier || !password) return displayError("Identifier and password required!", "sign-in-msg-error");
 
 	const	signForm = document.getElementById("sign-in-form");
 	if (signForm)
@@ -51,7 +50,7 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 		signForm.classList.remove("darken");
 
 	if (!response.ok)
-			return displayError(response, "sign-in-msg-error");
+		return displayError(response, "sign-in-msg-error");
 
 	const	result: any = await response.json();
 
@@ -93,10 +92,7 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-	const	state: AppState = appStore.getState();
-	const	user: UserState = state.user;
-
-	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	const	menu: HTMLElement | null = document.getElementById("nav");
 	if (menu)
 		menu.innerHTML = getMenu(true);
 
@@ -104,11 +100,11 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 }
 
 async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
-	console.log("Sign up");
+	const	username: string | undefined = (document.getElementById("sign-up-username") as HTMLInputElement)?.value;
+	const	email: string | undefined = (document.getElementById("sign-up-email") as HTMLInputElement)?.value;
+	const	password: string | undefined = (document.getElementById("sign-up-password") as HTMLInputElement)?.value;
 
-	const	username: string = (document.getElementById("sign-up-username") as HTMLInputElement).value;
-	const	email: string = (document.getElementById("sign-up-email") as HTMLInputElement).value;
-	const	password: string = (document.getElementById("sign-up-password") as HTMLInputElement).value;
+	if (!username || !email || !password) return displayError("Username, email and password required!", "sign-up-msg-error");
 	form.reset();
 
 	const	response: Response = await fetch('/api/auth/sign-up', {
@@ -141,12 +137,22 @@ async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 }
 
 async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
-	console.log("VerifyEmail");
-
-	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
-	form.reset();
+	const	otp: string | undefined = (document.getElementById("digit-code") as HTMLInputElement)?.value;
+	if (!otp) return displayError("Digit-code required!", "verify-email-msg-error");
 	
-	const response: Response = await sendRequest('/api/auth/validateUser', 'post', { otp });
+	const	p = document.getElementById("verify-email-msg-error");
+	if (p)
+		p.textContent = null;
+	
+	const	signForm = document.getElementById("verify-email-form");
+	if (signForm)
+		signForm.classList.add("darken");
+
+	const	response: Response = await sendRequest('/api/auth/validateUser', 'post', { otp });
+	
+	form.reset();
+	if (signForm)
+		signForm.classList.remove("darken");
 
 	if (!response.ok)
 		return displayError(response, "verify-email-msg-error");
@@ -159,7 +165,7 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-	var	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	var	menu: HTMLElement | null = document.getElementById("nav");
 	if (menu)
 		menu.innerHTML = getMenu(true);
 
@@ -168,12 +174,22 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 }
 
 async function	handle2faForm(form: HTMLFormElement): Promise<void> {
-	console.log("2fa");
+	const	otp: string | undefined = (document.getElementById("digit-code") as HTMLInputElement)?.value;
+	if (!otp) return displayError("Digit-code required!", "2fa-msg-error");
 
-	const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
+	const	p = document.getElementById("2fa-msg-error");
+	if (p)
+		p.textContent = null;
+
+	const	signForm = document.getElementById("2fa-form");
+	if (signForm)
+		signForm.classList.add("darken");
+
+	const	response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
+	
 	form.reset();
-
-	const response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
+	if (signForm)
+		signForm.classList.remove("darken");
 
 	if (!response.ok)
 		return displayError(response, "2fa-msg-error");
@@ -186,10 +202,7 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-	const	state: AppState = appStore.getState();
-	const	user: UserState = state.user;
-
-	const	menu: HTMLElement = document.getElementById("nav") as HTMLElement;
+	const	menu: HTMLElement | null = document.getElementById("nav");
 	if (menu)
 		menu.innerHTML = getMenu(true);
 
@@ -205,32 +218,50 @@ interface	userUpdate {
 }
 
 async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Promise<boolean> {
-	return new Promise((resolve) => {
+	return new Promise((resolve, reject) => {
 		if (isChangeEmail) {
-			const twofaElements = document.querySelectorAll(".twofa");
+			const	twofaElements: HTMLElement | null = document.getElementById("div-verify-email");
+			const	digitCode: HTMLElement | null = document.getElementById("digit-code");
 	
-			twofaElements.forEach(e => {
-				(e as HTMLElement).hidden = false;
-			});
-			const	digitCode = (document.getElementById("digit-code") as HTMLInputElement);
-	
-			if (digitCode) {
+			if (twofaElements && digitCode instanceof HTMLInputElement) {
+				twofaElements.hidden = false;
 				digitCode.required = true;
+			} else {
+				displayPop("Missing HTMLElement!", "error");
+				reject(false);
 			}
 		}
 
-		const verifyForm = document.getElementById("confirm-setting-form") as HTMLFormElement;
+		const	verifyForm: HTMLElement | null = document.getElementById("confirm-setting-form")
+
+		if (!(verifyForm instanceof HTMLFormElement)) return displayPop("Missing form HTMLElement!", "error");
 
 		verifyForm.addEventListener("submit", async (event: Event) => {
 			event.preventDefault();
-			const	form = event.target as HTMLFormElement;
-			const	otp: string = (document.getElementById("digit-code") as HTMLInputElement).value;
-			const	password: string = (document.getElementById("confirm-setting-password") as HTMLInputElement).value;
-			form.reset();
+			const	form = event.target;
+			const	otp: string | undefined = (document.getElementById("digit-code") as HTMLInputElement)?.value;
+			const	password: string | undefined = (document.getElementById("confirm-setting-password") as HTMLInputElement)?.value;
+			
+			if (!password) return displayError("password required!", "confirm-setting-msg-error");
 
-			const response: Response = await sendRequest('/api/auth/updateUser', 'PATCH', { otp, password, user });
+			const	p = document.getElementById("confirm-setting-msg-error");
+			if (p)
+				p.textContent = null;
+
+			const	confirmSettingForm = document.getElementById("confirm-setting-form");
+			if (confirmSettingForm)
+				confirmSettingForm.classList.add("darken");
+
+			const	response: Response = await sendRequest('/api/auth/updateUser', 'PATCH', { otp, password, user });
+			
+			if (form instanceof HTMLFormElement)
+				form.reset();
+			if (confirmSettingForm)
+				confirmSettingForm.classList.remove("darken");
+
 			if (!response.ok) 
 				return displayError(response, "confirm-setting-msg-error");
+			
 			router.canLeave = true;
 			resolve(true);
 		});
@@ -238,30 +269,24 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 }
 
 async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
-	console.log("Save Settings");
-	
-	const	newUsername: string = (document.getElementById("edit-username") as HTMLInputElement).value;
-	const	newEmail: string = (document.getElementById("edit-email") as HTMLInputElement).value;
-	const	new2fa: boolean = (document.getElementById("edit-2fa") as HTMLInputElement).checked;
+	const	newUsername: string | undefined = (document.getElementById("edit-username") as HTMLInputElement)?.value;
+	const	newEmail: string | undefined = (document.getElementById("edit-email") as HTMLInputElement)?.value;
+	const	new2fa: boolean | undefined = (document.getElementById("edit-2fa") as HTMLInputElement)?.checked;
 
-	const	state: AppState = appStore.getState();
-	const	user: UserState = state.user;
-
-	console.log(newUsername, newEmail, new2fa);
+	if (!newUsername || !newEmail || new2fa === undefined) return displayError("Username, email et 2fa required!", "user-setting-msg-error");
 	
-	const getUser: Response = await sendRequest(`/api/user/me`, 'get', null)
+	const	getUser: Response = await sendRequest(`/api/user/me`, 'get', null)
 	if (!getUser.ok)
-		return displayError(getUser, "user-setting-msg-error");
+		return displayPop(getUser, "error");
 	
-	const	resultGetUser = await getUser.json();
+	const	resultGetUser = await getUser.json(); // /!\ try catch
 	
-	console.log(resultGetUser.username, resultGetUser.email, resultGetUser.is2faEnable);
 	if (resultGetUser.username == newUsername
 		&& resultGetUser.email == newEmail
 		&& resultGetUser.is2faEnable == new2fa
 	) return router.navigate("/user");
 	
-	const postUser: Response = await sendRequest(`/api/user/me/validate`, 'post', {
+	const	postUser: Response = await sendRequest(`/api/user/me/validate`, 'post', {
 		username: newUsername,
 		email: newEmail,
 		is2faEnable: new2fa
@@ -269,24 +294,26 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	if (!postUser.ok)
 		return displayError(postUser, "user-setting-msg-error");
 	
-	verifyEmail("user-profile", "confirm-setting", newEmail);
+	if (resultGetUser.email != newEmail)
+		verifyEmail("user-profile", "confirm-setting", newEmail);
+	else
+		verifyEmail("user-profile", "confirm-setting", null);
 
-	const userUpdate: userUpdate = {
+	const	userUpdate: userUpdate = {
 		username: newUsername,
 		email: newEmail,
 		is2faEnable: new2fa,
 	}
 
-	const verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail));
+	const	verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // /!\ try catch ???
 	if (!verified) 
-		return;
+		return; // /!\ faire quelque chose
 
 	appStore.setState((state) => ({
 		...state,
 		user: {
 			...state.user,
 			username: newUsername,
-			isAuth: new2fa
 		}
 	}));
 
@@ -294,7 +321,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 }
 
 async function	handleAddFriendForm(form: HTMLFormElement) {
-	const targetName: string = (document.getElementById("username-add-input") as HTMLInputElement).value;
+	const	targetName: string | undefined = (document.getElementById("username-add-input") as HTMLInputElement)?.value;
 	if (!targetName)
 		return ;
 	form.reset();
@@ -305,7 +332,7 @@ async function	handleAddFriendForm(form: HTMLFormElement) {
 		displayPop(respTargetId, "error")
 		return ;
 	}
-	const	targetId: number = (await respTargetId.json() as any).id;
+	const	targetId: number = (await respTargetId.json() as any).id; // try catch (json peut throw)
 
 	const	response: Response = await sendRequest(`/api/user/friends/request/${targetId}`, "post", {});
 	if (!response.ok)
@@ -328,7 +355,9 @@ export function	setupSubmitHandler(): void {
 	document.addEventListener('submit', async (event: SubmitEvent) => {
 		event.preventDefault();
 
-		const	form: HTMLFormElement = event.target as HTMLFormElement;
+		const	form: EventTarget | null = event.target;
+		if (!(form instanceof HTMLFormElement))
+			return displayPop("Missing form HTMLElement!", "error");
 
 		if (form.id === "sign-in-form")
 			await handleSignInForm(form);

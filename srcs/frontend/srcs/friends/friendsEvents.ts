@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/10 15:24:33 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 10:04:43 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ export function	attachDelegationListeners(requestsListDiv: HTMLDivElement, frien
 }
 
 async function	handleDelegatedFriendAction(event: Event): Promise<void> {
-	const	target = event.target as HTMLElement;
+	const	target: EventTarget | null = event.target;
+
+	if (!(target instanceof HTMLElement)) return ;
 
 	if (!target.classList.contains('neon-button') && !target.classList.contains('remove-button'))
 		return ;

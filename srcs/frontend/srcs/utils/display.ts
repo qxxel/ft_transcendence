@@ -6,22 +6,30 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/10 00:13:51 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 10:02:58 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-export async function displayError(response: Response, idMsgError: string) {
+// UTILITY FUNCTIONS TO DISPLAY ERRORS AND FORMATTED DATES ON THE FRONTEND
+
+
+/* ====================== FUNCTION ====================== */
+
+export async function displayError(response: Response | string, idMsgError: string) {
 	const	p = document.getElementById(idMsgError);
 	if (!p) {
-		console.error("No HTMLElement named \`msg-error\`.");
-		console.error(response.statusText);
+		displayPop("No HTMLElement named \`msg-error\`.", "error")
 	} else {
-		try {
-			const	result = await response.json();
-			p.textContent = result?.error || "An unexpected error has occurred";
-		} catch (error) {
-			console.error(error);
-			console.error(response.statusText);
+		if (typeof response === "string")
+			p.textContent = response;
+		else {
+			try {
+				const	result = await response.json();
+				p.textContent = result?.error || "An unexpected error has occurred";
+			} catch (error) {
+				console.error(error);
+				displayPop(response, "error")
+			}
 		}
 	}
 }
@@ -30,7 +38,7 @@ export async function	displayPop(response: Response | string | undefined, type: 
 	const	divNotifs = document.getElementById("div-notif");
 	if (!divNotifs)
 	{
-		console.error("No HTMLElement named \`msg-error\`.");
+		console.error("No HTMLElement named \`div-errors\`.");
 		if (response instanceof Response)
 			console.error(response.statusText);
 		else if (typeof response === "string")
@@ -74,13 +82,12 @@ export async function	displayPop(response: Response | string | undefined, type: 
 	divNotifs.appendChild(div);
 }
 
-export function displayDate(min: number) {
-	const localeClient = navigator.language;
+export function displayDate(date: number) {
+	const	localeClient = navigator.language;
 	
-	const	now = new Date();
-	now.setMinutes(now.getMinutes() + min);
+	const	exp = new Date(date);
 
-	const options: Intl.DateTimeFormatOptions = {
+	const	options: Intl.DateTimeFormatOptions = {
 		year: 'numeric',
 		month: '2-digit',
 		day: '2-digit',
@@ -89,7 +96,7 @@ export function displayDate(min: number) {
 		second: '2-digit'
 	};
 
-	const el = document.getElementById("date-with-offset");
+	const	el = document.getElementById("date-with-offset");
 	if (el)
-		el.textContent = now.toLocaleString(localeClient, options);
+		el.textContent = exp.toLocaleString(localeClient, options);
 }
