@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:02:59 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 19:47:21 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,7 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 			console.error("The request is empty");
 			return reply.code(400).send({ error: "The request is empty" });
 		}
+
 		try {
 			const	userId: number = extractUserId(request);
 
@@ -208,7 +209,6 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 			await pipeline(data.file, fs.createWriteStream(uploadPath));
 
 			await usersServ.updateAvatarById(userId, fileName);
-console.log("ok all");
 
 			return reply.code(200).send({ avatar: fileName });
 		}

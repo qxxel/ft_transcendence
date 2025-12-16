@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsController.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:26:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:03:06 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 19:47:56 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ import { errorsHandler }			from "../utils/errorsHandler.js"
 import { userStatsRespDto }			from "../dtos/userStatsRespDto.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
+import { extractUserId } from "../utils/extractHeaders.js";
 
 
 /* ====================== FUNCTION ====================== */
@@ -31,6 +32,18 @@ export async function	userStatsController(userFastify: FastifyInstance): Promise
 
 		try {
 			const	userStats: userStatsRespDto = await userStatsServ.getStatsByUserId(parseId);
+
+			return reply.code(200).send(userStats);
+		} catch (err: unknown) {
+			errorsHandler(userFastify, reply, err);
+		}
+	});
+
+	userFastify.get('/me', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	userId: number = extractUserId(request);
+
+			const	userStats: userStatsRespDto = await userStatsServ.getStatsByUserId(userId);
 
 			return reply.code(200).send(userStats);
 		} catch (err: unknown) {

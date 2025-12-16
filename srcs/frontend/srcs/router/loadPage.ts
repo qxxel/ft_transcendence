@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 16:03:58 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 20:22:04 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,16 @@ export async function loadUser() {
 	}
 
 	const	userRes: any = await response.json();
+
+	const	responseStats: Response = await sendRequest(`/api/user/stats/me`, 'get', null);
+	if (!responseStats.ok)
+	{
+		displayPop(responseStats, "error");
+		return ;
+	}
+
+	const	userStatsRes: any = await responseStats.json();
+	console.log(userStatsRes);
 
 	const	imgElement: HTMLImageElement = document.getElementById("user-avatar") as HTMLImageElement;
 	const	displayImgElement: HTMLImageElement = document.getElementById("display-user-avatar") as HTMLImageElement;
