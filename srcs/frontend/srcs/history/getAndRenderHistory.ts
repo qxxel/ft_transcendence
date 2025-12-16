@@ -154,123 +154,70 @@ function renderGames(
 	});
 }
 
+function buildElement<K extends keyof HTMLElementTagNameMap>(
+    tag: K, 
+    classes: string[] = [], 
+    text: string = "", 
+    children: HTMLElement[] = []
+): HTMLElementTagNameMap[K] {
+    const element = document.createElement(tag);
+    if (classes.length) element.classList.add(...classes.filter(Boolean));
+    if (text) element.textContent = text;
+    children.forEach(child => element.appendChild(child));
+    return element;
+}
+
 function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): void {
-	const	gameRow: HTMLDivElement = document.createElement("div");
-	gameRow.classList.add("game-row");
+    const isVictory = game.winner === game.id_client;
+    const isTank = game.game_type === 2;
+    const isAiMode = game.mode === "ai";
+    
+    let p2DisplayName = game.p2 || "Player 2";
+    let p2Classes = ["col-p2"];
+    let aiBotBadge: HTMLElement | null = null;
 
-	const	isVictory: boolean = game.winner === game.id_client;
-	gameRow.classList.add(isVictory ? "row-victory" : "row-defeat");
+    if (isAiMode) {
+        const rawName = (game.p2 || "").toLowerCase();
+        let difficultyClass = "diff-medium";
+        
+        if (rawName.includes("boris")) difficultyClass = "diff-boris";
+        else if (rawName.includes("hard")) difficultyClass = "diff-hard";
+        else if (rawName.includes("easy")) difficultyClass = "diff-easy";
 
-	const	resultSpan: HTMLSpanElement = document.createElement("span");
-	resultSpan.classList.add("col-result");
-	resultSpan.textContent = isVictory ? "VICTORY" : "DEFEAT";
-	resultSpan.classList.add(isVictory ? "text-victory" : "text-defeat");
+        p2DisplayName = (game.p2 || "AI")
+            .replace(/^AI\s*[-_]?\s*/i, '')
+            .replace(/[()]/g, '')
+            .trim()
+            .toUpperCase();
+            
+        p2Classes.push("is-ai", difficultyClass);
+        aiBotBadge = buildElement("span", ["bot-tag"], "BOT");
+    }
 
-	const	timeAgoSpan: HTMLSpanElement = document.createElement("span");
-	timeAgoSpan.classList.add("col-ago");
-	timeAgoSpan.textContent = formatTimeAgo(game.start);
+    const powerupIcon = game.powerup 
+        ? buildElement("span", ["powerup-icon"], "⚡") 
+        : null;
+    if (powerupIcon) powerupIcon.title = "Powerups Enabled";
 
-	const	gameTypeSpan: HTMLSpanElement = document.createElement("span");
-	gameTypeSpan.classList.add("col-game-type");
-	if (game.game_type === 2) {
-		gameTypeSpan.textContent = "TANK";
-		gameTypeSpan.classList.add("type-tank");
-	}
-	else {
-		gameTypeSpan.textContent = "PONG";
-		gameTypeSpan.classList.add("type-pong");
-	}
+    const p2Children: HTMLElement[] = [];
+    if (powerupIcon) p2Children.push(powerupIcon);
+    if (aiBotBadge) p2Children.push(aiBotBadge);
+    p2Children.push(buildElement("span", ["col-p2"], p2DisplayName));
 
-	const	durationSpan: HTMLSpanElement = document.createElement("span");
-	durationSpan.classList.add("col-duration");
-	
-	durationSpan.textContent = formatDuration(game.duration);
-	durationSpan.textContent = `Duration ${formatDuration(game.duration)}`;
+    const p2Container = buildElement("span", p2Classes, "", p2Children);
 
-	const	modeSpan: HTMLSpanElement = document.createElement("span");
-	if (game.mode == "tour")
-		modeSpan.classList.add("col-mode-tournament");
-	else
-		modeSpan.classList.add("col-mode");
-	modeSpan.textContent = game.mode;
+    const gameRow = buildElement("div", ["game-row", isVictory ? "row-victory" : "row-defeat"], "", [
+        buildElement("span", ["col-result", isVictory ? "text-victory" : "text-defeat"], isVictory ? "VICTORY" : "DEFEAT"),
+        buildElement("span", ["col-ago"], formatTimeAgo(game.start)),
+        buildElement("span", ["col-game-type", isTank ? "type-tank" : "type-pong"], isTank ? "TANK" : "PONG"),
+        buildElement("span", [game.mode === "tour" ? "col-mode-tournament" : "col-mode"], game.mode),
+        buildElement("span", ["col-p1"], game.p1),
+        buildElement("span", ["col-score"], `${game.p1score ?? 0} - ${game.p2score ?? 0}`),
+        p2Container,
+        buildElement("span", ["col-duration"], `Duration ${formatDuration(game.duration)}`)
+    ]);
 
-	const	p1NameSpan: HTMLSpanElement = document.createElement("span");
-	p1NameSpan.classList.add("col-p1");
-	p1NameSpan.textContent = game.p1;
-	
-	const	p2NameSpan: HTMLSpanElement = document.createElement("span");
-	p2NameSpan.classList.add("col-p2");
-
-	// const	powerupHtml: string = game.powerup ? '<span class="powerup-icon" title="">⚡</span>' : '';
-	const	powerupSpan: HTMLSpanElement = document.createElement("span");
-	if (game.powerup){
-		powerupSpan.classList.add("powerup-icon");
-		powerupSpan.title = "Powerups Enabled";
-		powerupSpan.textContent = "⚡";
-	}
-
-	if (game.mode === "ai") {
-		const	rawName: string = (game.p2 || "").toLowerCase();
-		
-		let	difficultyClass: string = "diff-medium";
-
-		if (rawName.includes("boris")) {
-			difficultyClass = "diff-boris";
-		} else if (rawName.includes("hard")) {
-			difficultyClass = "diff-hard";
-		} else if (rawName.includes("easy")) {
-			difficultyClass = "diff-easy";
-		}
-
-		let	displayName: string = (game.p2 || "AI")
-		.replace(/^AI\s*[-_]?\s*/i, '')
-		.replace(/[()]/g, '')
-		.trim()
-		.toUpperCase();
-		p2NameSpan.classList.add("is-ai");
-		p2NameSpan.classList.add(difficultyClass);
-
-		p2NameSpan.appendChild(powerupSpan);
-		
-		const	botSpan: HTMLSpanElement = document.createElement("span");
-		botSpan.classList.add("bot-tag");
-		botSpan.textContent = "BOT";
-		p2NameSpan.appendChild(botSpan);
-
-		const	nameSpan: HTMLSpanElement = document.createElement("span");
-		nameSpan.classList.add("col-p2");
-		nameSpan.textContent = displayName;
-		p2NameSpan.appendChild(nameSpan);
-		
-		// p2NameSpan.innerHTML = `<span class="bot-tag">BOT</span> ${powerupHtml}${displayName}`;	//	/!\	XSS ATTACKS
-		// p2NameSpan.textContent =  displayName;	//	/!\	XSS ATTACKS
-	} else {
-		p2NameSpan.appendChild(powerupSpan);
-		const	p2Name: string = game.p2 || "Player 2";
-		// p2NameSpan.innerHTML = `${powerupHtml}${p2Name}`;	//	/!\	XSS ATTACKS
-		// p2NameSpan.textContent = p2Name;	//	/!\	XSS ATTACKS
-		const	nameSpan: HTMLSpanElement = document.createElement("span");
-		nameSpan.classList.add("col-p2");
-		nameSpan.textContent = p2Name;
-		p2NameSpan.appendChild(nameSpan);
-	}
-
-	const	scoreSpan: HTMLSpanElement = document.createElement("span");
-	scoreSpan.classList.add("col-score");
-	const	p1Score: number = game.p1score ?? 0;
-	const	p2Score: number = game.p2score ?? 0;
-	scoreSpan.textContent = `${p1Score} - ${p2Score}`;
-
-	gameRow.appendChild(resultSpan);
-	gameRow.appendChild(timeAgoSpan);
-	gameRow.appendChild(gameTypeSpan);
-	gameRow.appendChild(modeSpan);
-	gameRow.appendChild(p1NameSpan);
-	gameRow.appendChild(scoreSpan);
-	gameRow.appendChild(p2NameSpan);
-	gameRow.appendChild(durationSpan);
-
-	historyListDiv.appendChild(gameRow);
+    historyListDiv.appendChild(gameRow);
 }
 
 function displayErrors(targetName: string | null): void {
