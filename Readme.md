@@ -154,6 +154,7 @@ This project validates several major and minor modules from the subject:
  ┃  ┣ 📂 backend                → backend files (all services)
  ┃  ┣ 📂 frontend               → frontend files
  ┃  ┗ docker-compose.yml        → global docker compose
+ ┣ .gitignore
  ┣ color.mk                     → colors setup for Makefile
  ┣ Makefile
  ┗ README.md
