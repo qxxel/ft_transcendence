@@ -71,20 +71,24 @@
 }
 
 .btn-exit-tournament {
-    display: block;
+	background-color: #FFFF00;
+	color: #000;
+	display: block;
     margin: 30px auto;
-    padding: 15px 30px;
-    font-size: 1.2rem;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: 'monospace', sans-serif;
-    font-weight: bold;
-    transition: background-color 0.3s;
+	font-family: 'monospace', sans-serif;
+	font-weight: bold;
+	font-size: 1.2em;
+	text-decoration: none;
+	padding: 12px 24px;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-align: center;
   }
 
   .btn-exit-tournament:hover {
-    background-color: #c82333;
+	background-color: #fff;
+	color: #000;
+	box-shadow: 0 0 10px #fff;
   }
