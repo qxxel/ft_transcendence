@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 23:47:16 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 23:59:49 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,10 +116,10 @@ export class	authRepository {
 			let	query: string;
 			let	elements: [string, number] | [number];
 			if (expires_at === null) {
-				query: string = "UPDATE auth SET expires_at = NULL WHERE id_client = ?";
+				query = "UPDATE auth SET expires_at = NULL WHERE id_client = ?";
 				elements = [userId];
 			} else {
-				query: string = "UPDATE auth SET expires_at = ? WHERE id_client = ?";
+				query = "UPDATE auth SET expires_at = ? WHERE id_client = ?";
 				elements = [expires_at, userId];
 			}
 			this.db.run(query, elements, (err: Error | null) => {

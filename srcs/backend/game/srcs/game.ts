@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 23:42:01 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 00:02:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ const	io: any = new Server(gameFastify.server, {
 	}
 });
 
-io.use(async (socket, next) => {
+io.use(async (socket: any, next: any) => {
 	try {
 		const	cookieHeader: string | undefined = socket.request.headers.cookie;
 		console.log("cookies: " + cookieHeader);
@@ -104,7 +104,7 @@ io.use(async (socket, next) => {
 	}
 });
 
-io.on('connection', (socket) => {
+io.on('connection', (socket: any) => {
 	console.log(`[Main] Nouvelle connexion Socket : ${socket.id}`);
 
 	setupPongSocket(io, socket, gamesServ);
