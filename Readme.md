@@ -2,8 +2,23 @@
 
 *This project has been created as part of the 42 curriculum by agerbaud, kiparis, mcurto, mreynaud*
 
+![42 Project](https://img.shields.io/badge/42-Project-black)
+![Language](https://img.shields.io/badge/TypeScript-gray?logo=typescript)
+![Language](https://img.shields.io/badge/CSS-gray?logo=css)
+![Language](https://img.shields.io/badge/HTML-gray?logo=htmx)
+
 ---
 
+## 📌 Summary
+- [Description](#description)
+- [Instructions](#instructions)
+- [Ressources](#ressources)
+- [Technical choices & Modules](#technical-choices)
+- [Directories structure](#directories-structure)
+
+---
+
+<a id="description"></a>
 ## 📝 Description
 
 **ft_transcendence** is the final project of the Common Core curriculum at 42 School. It involves building a robust, full-stack website centered around a real-time multiplayer Pong game.
@@ -27,6 +42,7 @@ This version of the project (Subject: v18.0) emphasizes adaptability and complex
 
 ---
 
+<a id="instructions"></a>
 ## 🛠️ Instructions
 
 ### Prerequisites
@@ -77,7 +93,8 @@ Before you begin, ensure you have the following installed on your machine:
 
 ---
 
-## 📚 Resources
+<a id="ressources"></a>
+## 📚 Ressources
 
 ### Documentation
 * [Fastify Documentation](https://www.fastify.io/docs/latest/)
@@ -97,6 +114,7 @@ Before you begin, ensure you have the following installed on your machine:
 
 ---
 
+<a id="technical-choices"></a>
 ## 🌟 Technical Choices & Modules
 
 This project validates several major and minor modules from the subject:
@@ -124,3 +142,19 @@ This project validates several major and minor modules from the subject:
     * *Major*: **Replace** basic Pong with **server-side Pong** and implement an **API**.
 
 *(Note: **Two Minor** modules count as **one Major** module. Total: **8.5 Major** modules / **7 Major** modules required)*
+
+---
+
+<a id="directories-structure"></a>
+## 📂 Directories structure
+
+```plaintext
+📂 ft_transcendence
+ ┣ srcs
+ ┃  ┣ 📂 backend                → backend files (all services)
+ ┃  ┣ 📂 frontend               → frontend files
+ ┃  ┗ docker-compose.yml        → global docker compose
+ ┣ color.mk                     → colors setup for Makefile
+ ┣ Makefile
+ ┗ README.md
+```
