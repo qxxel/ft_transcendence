@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:48:02 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/28 16:54:26 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 15:22:35 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,20 @@
 
 import { getAndRenderFriends }	from "./getAndRenderFriends.js";
 import { sendRequest }			from "../utils/sendRequest.js"
+import { displayPop } from "../utils/display.js";
 
 
 /* ====================== FUNCTION ====================== */
 
-export async function	handleFriendAction(url: string, method: string, body: Object | null, success: string) {
+export async function	handleFriendAction(url: string, method: string, body: Object | null): Promise<boolean> {
 	const response = await sendRequest(url, method, body);
 
 	if (!response.ok)
 	{
-		const errorData: any = await response.json();
-		console.error("Error: ", errorData.error);
-		return ;
+		displayPop(response, "error");
+		return false;
 	}
 
-	console.log(success);
 	await getAndRenderFriends();
+	return true;
 }

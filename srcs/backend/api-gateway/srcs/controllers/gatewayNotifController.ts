@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 20:15:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 23:48:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 15:25:20 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ export async function	gatewayNotifController(gatewayFastify: FastifyInstance) {
 
 			notifManager.addClient(userId, reply);
 
-			reply.raw.write(`data: {"type": "CONNECTED"}\n\n`);
+			reply.raw.write(`data: {"type": "CONNECTED"}\n\n`);			//	AXEL: MAYBE REMOVE
 
 			await new Promise(() => {});
 		} catch (err: unknown) {

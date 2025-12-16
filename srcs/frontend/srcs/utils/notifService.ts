@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/10 00:17:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 16:50:31 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ export class	NotificationService {
 		this.eventSource.onmessage = (event: MessageEvent) => {
 			const	data: any = JSON.parse(event.data);
 
-			if (data.type === 'FRIEND_REQUEST')
+			if (data.type === "FRIEND_REQUEST" || data.type === "FRIEND_ACCEPT")
 			{
 				this.showNotification(data);
 				if (router.Path === "/friends")

@@ -1,40 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   initFaviconSync.ts                                 :+:      :+:    :+:   */
+/*   initNotificationSync.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/09 15:51:37 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/10 18:24:10 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/12/10 18:23:25 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/12/10 18:26:02 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// FUNCTION THAT SETUP THE SUBSCRIBE TO STORE FOR CHANGE FAVICON WHEN CHANGING AVATAR
+// FUNCTION THAT SETUP THE SUBSCRIBE TO STORE FOR CONNECTION TO SSE WHEN USER IS CONNECTED
 
 
 /* ====================== IMPORTS ====================== */
 
 import { appStore, AppState }	from "../objects/store.js"
-import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
+import { notificationService }	from "../utils/notifService.js"
 
 
 /* ====================== FUNCTION ====================== */
 
-export function	initFaviconSync(): void {
-	let	lastAvatarUrl: string | null = null; 
+export function	initNotificationSync(): void {
+	let isConnected = false;
+
+	console.log("[NotificationSync] Initialized monitoring");
 
 	appStore.subscribe((state: AppState) => {
-		if (!state.user)
-			return ;
-
-		const	currentUrl: string | null = state.user.avatar;
-
-		if (currentUrl !== lastAvatarUrl)
+		if (state.user && !isConnected)
 		{
-			setDynamicFavicon(currentUrl);
+			notificationService.connect();
+			isConnected = true;
+			return ;
+		}
 
-			lastAvatarUrl = currentUrl;
+		if (!state.user && isConnected)
+		{
+			notificationService.disconnect();
+			isConnected = false;
 		}
 	});
 }

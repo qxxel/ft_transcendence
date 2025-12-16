@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 12:26:55 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 15:24:33 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 /* ====================== IMPORT ====================== */
 
+import { displayPop } from "../utils/display.js";
 import { handleFriendAction }	from "./handleFriendsActions.js"
 
 
@@ -37,15 +38,27 @@ async function	handleDelegatedFriendAction(event: Event): Promise<void> {
 		return ;
 
 	if (target.classList.contains('accept-button'))
-		return await handleFriendAction('/api/user/friends/accept/' + targetId, "PATCH", { status: "ACCEPTED" }, "You are now friend with " + targetUsername + ".");
+	{
+		if (await handleFriendAction('/api/user/friends/accept/' + targetId, "PATCH", { status: "ACCEPTED" }))
+			displayPop("You are now friend with " + targetUsername + ".", "success");
+		return ;
+	}	
 
 	if (target.classList.contains('ignore-button'))
-		return await handleFriendAction(`/api/user/friends/` + targetId, "DELETE", null, "You reject the request from " + targetUsername + ".");
+	{
+		if (await handleFriendAction(`/api/user/friends/` + targetId, "DELETE", null))
+			displayPop("You reject the request from " + targetUsername + ".", "success");
+		return ;
+	}
 
 	if (target.classList.contains('remove-button'))
 	{	
 		if (confirm(`Are you sure to remove ${targetUsername}?`))
-			return await handleFriendAction(`/api/user/friends/${targetId}`, "DELETE", null, "You are not friend with " + targetUsername + " anymore.");
+		{
+			if (await handleFriendAction(`/api/user/friends/${targetId}`, "DELETE", null))
+				displayPop("You are not friend with " + targetUsername + " anymore.", "success");
+			return ;
+		}
 	}
 
 	if (target.classList.contains('history-button'))

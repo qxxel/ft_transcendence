@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 23:45:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 15:42:14 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,9 +317,9 @@ async function	handleAddFriendForm(form: HTMLFormElement) {
 	const	friendship: any = await response.json();
 
 	if (friendship.status === "PENDING")
-		console.log(`Request sended to ${targetName}.`);				//	DISPLAY POP
+		displayPop(`Request sended to ${targetName}.`, "success");
 	if (friendship.status === "ACCEPTED")
-		console.log(`You are now friend with ${targetName}.`);			//	DISPLAY POP
+		displayPop(`You are now friend with ${targetName}.`, "success");
 
 	await getAndRenderFriends();
 }

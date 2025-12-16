@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/10 00:04:50 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/10 15:36:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { gatewayAxios, notifManager }	from "../api-gateway.js"
-import { getValidUserId }				from "../utils/validateJwt.js"
+import { getValidUserId, getValidUserPayload }				from "../utils/validateJwt.js"
 import { requestErrorsHandler }			from "../utils/requestErrors.js"
 
 import type { AxiosHeaderValue, AxiosResponse }  				from 'axios'
@@ -158,16 +158,16 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	{ targetId } = request.params as { targetId: string };
 			const	parseTargetId: number = parseInt(targetId, 10);
 
-			const	userId: AxiosHeaderValue = await getValidUserId(request);
+			const	user: any = await getValidUserPayload(request);
 
 			const	response: AxiosResponse = await gatewayAxios.post(`http://user:3000/friends/request/${parseTargetId}`, request.body,
-				{ headers: { 'user-id': userId } }
+				{ headers: { 'user-id': user.id } }
 			);
 
 			notifManager.sendToUser(parseTargetId, {
 				type: "FRIEND_REQUEST",
-				fromId: userId,
-				message: `You received a friend request from ${userId} !`
+				fromId: user.id,
+				message: `You received a friend request from ${user.username} !`
 			});
 
 			return reply.send(response.data);
@@ -196,12 +196,18 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	{ targetId } = request.params as { targetId: string };
 			const	parseTargetId: number = parseInt(targetId, 10);
 
-			const	userId: AxiosHeaderValue = await getValidUserId(request);
+			const	user: any = await getValidUserPayload(request);
 
 			const	response: AxiosResponse = await gatewayAxios.patch(`http://user:3000/friends/accept/${parseTargetId}`, request.body,
-				{ headers: { 'user-id': userId } }
+				{ headers: { 'user-id': user.id } }
 			);
 
+			notifManager.sendToUser(parseTargetId, {
+				type: "FRIEND_ACCEPT",
+				fromId: user.id,
+				message: `${user.username} accepted your request, you're now friend with him !`
+			});
+console.log("accept")
 			return reply.send(response.data);
 		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);
