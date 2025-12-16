@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsRepository.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:03:31 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 23:47:16 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ export class	friendshipsRepository {
 	// UPDATE STATS
 	async addFriendRequest(friendship: friendshipsAddDto): Promise<friendshipsRespDto> {
 		return new Promise((resolve, reject) => {
-			const	query = `INSERT INTO friendships (requester_id, receiver_id) 
+			const	query: string = `INSERT INTO friendships (requester_id, receiver_id) 
 					VALUES (?, ?)
 				RETURNING *;`;
 			const	elements: number[] = friendship.getTable();
@@ -79,7 +79,7 @@ export class	friendshipsRepository {
 
 	async addFriend(friendship: friendshipsAddDto): Promise<friendshipsRespDto> {
 		return new Promise((resolve, reject) => {
-			const	query = `INSERT INTO friendships (requester_id, receiver_id, status) 
+			const	query: string = `INSERT INTO friendships (requester_id, receiver_id, status) 
 					VALUES (?, ?, 'ACCEPT')
 				RETURNING *;`;
 			const	elements: number[] = friendship.getTable();
@@ -95,7 +95,7 @@ export class	friendshipsRepository {
 
 	async acceptFriendRequest(friendship: friendshipsUpdateDto): Promise<friendshipsRespDto> {
 		return new Promise((resolve, reject) => {
-			const	query = `UPDATE friendships
+			const	query: string = `UPDATE friendships
 					SET status = 'ACCEPTED'
 					WHERE requester_id = ? AND receiver_id = ? AND status = 'PENDING'
 				RETURNING *;`;
@@ -188,7 +188,7 @@ export class	friendshipsRepository {
 
 	async getFriendsList(userId: number): Promise<FriendUser[]> {
 		return new Promise((resolve, reject) => {
-			const	query = `SELECT u.id, u.username, u.avatar, u.email, f.status, f.receiver_id
+			const	query: string = `SELECT u.id, u.username, u.avatar, u.email, f.status, f.receiver_id
 				FROM friendships f
 				INNER JOIN users u ON u.id = CASE
 					WHEN f.requester_id = ? THEN f.receiver_id

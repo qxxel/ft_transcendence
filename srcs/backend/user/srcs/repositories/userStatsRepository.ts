@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsRepository.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:47:32 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:16:05 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 23:47:16 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ export class	userStatsRepository {
 		return new Promise((resolve, reject) => {
 			const	resultCol = userStatsUpdate.isWinner() ? "pong_wins" : "pong_losses";
 			
-			const	query = `UPDATE user_stats SET
+			const	query: string = `UPDATE user_stats SET
 					pong_elo = pong_elo + ?,
 					${resultCol} = ${resultCol} + 1,
 					pong_total_time = pong_total_time + ?,
@@ -81,7 +81,7 @@ export class	userStatsRepository {
 		return new Promise((resolve, reject) => {
 			const	resultCol = userStatsUpdate.isWinner() ? "tank_wins" : "tank_losses";
 
-			const	query = `UPDATE user_stats SET
+			const	query: string = `UPDATE user_stats SET
 					tank_elo = tank_elo + ?,
 					${resultCol} = ${resultCol} + 1,
 					tank_total_time = tank_total_time + ?,

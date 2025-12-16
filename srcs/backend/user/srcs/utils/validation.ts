@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:58:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:42:53 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 23:50:25 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ export function	isValidEmail(email: string): validationResult {
 }
 
 function	validate(value: string, rules: rule[]): validationResult {
-	const	errors = rules
+	const	errors: string = rules
 		.filter(rule => !rule.test(value))
 		.map(rule => rule.message)
 		.join("; ");

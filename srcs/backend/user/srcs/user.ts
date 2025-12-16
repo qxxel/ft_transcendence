@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:58:16 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 23:52:23 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ export const	userAxios = axios.create({
 
 /* ====================== DATABASE ====================== */
 
-const			{ Database } = sqlite3Pkg;
-const			dbname = '/app/dist/db/user.db';
-const	db = new Database(dbname, (err: Error | null) => {
+const	{ Database } = sqlite3Pkg;
+const	dbname: string = '/app/dist/db/user.db';
+const	db: sqlite3Pkg.Database = new Database(dbname, (err: Error | null) => {
 	if (err)
 		console.error(err);
 	else
@@ -57,14 +57,14 @@ const	db = new Database(dbname, (err: Error | null) => {
 	}
 });
 
-export const	usersServ = new usersService(new usersRepository(db));
-export const	userStatsServ = new userStatsService(new userStatsRepository(db));
-export const	friendshipsServ = new friendshipsService(new friendshipsRepository(db));
+export const	usersServ: usersService = new usersService(new usersRepository(db));
+export const	userStatsServ: userStatsService = new userStatsService(new userStatsRepository(db));
+export const	friendshipsServ: friendshipsService = new friendshipsService(new friendshipsRepository(db));
 
 
 /* ====================== SERVER ====================== */
 
-const	userFastify = Fastify({
+const	userFastify: any = Fastify({
 	logger: true,
 	trustProxy: true
 });

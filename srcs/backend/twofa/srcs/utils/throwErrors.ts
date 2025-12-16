@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:47:53 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/13 00:25:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 23:37:46 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,12 @@ export class	WrongCodeError extends Error {
 	constructor(message: string) {
 		super(message);
 		this.name = "WrongCodeError";
+	}
+}
+
+export class	MissingIdError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "MissingIdError";
 	}
 }

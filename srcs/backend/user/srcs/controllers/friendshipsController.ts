@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:38:43 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:01:03 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 23:44:37 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 
 		try {
 			const	{ targetId } = request.params as { targetId: string };
-			const	parseTargetId = parseInt(targetId, 10);
+			const	parseTargetId: number = parseInt(targetId, 10);
 
 			const	userId: number = extractUserId(request);
 
@@ -60,8 +60,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 
 		try {
 			const	{ idA, idB } = request.params as { idA: string, idB: string };
-			const	parseIdA = parseInt(idA, 10);
-			const	parseIdB = parseInt(idB, 10);
+			const	parseIdA: number = parseInt(idA, 10);
+			const	parseIdB: number = parseInt(idB, 10);
 			if (isNaN(parseIdA) || isNaN(parseIdB))
 				return reply.code(400).send({ error: "Invalid IDs provided." });						//	AXEL: A ENLEVER
 
@@ -83,7 +83,7 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 		
 		try {
 			const	{ targetId } = request.params as { targetId: string };
-			const	parseTargetId = parseInt(targetId, 10);
+			const	parseTargetId: number = parseInt(targetId, 10);
 
 			const	userId: number = extractUserId(request);
 
@@ -98,7 +98,7 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 	userFastify.delete('/:targetId', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	{ targetId } = request.params as { targetId: string };
-			const	parseTargetId = parseInt(targetId, 10);
+			const	parseTargetId: number = parseInt(targetId, 10);
 			if (isNaN(parseTargetId))
 				return reply.code(400).send({ error: "Invalid IDs provided." });
 
@@ -137,8 +137,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 	userFastify.get('/:idA/:idB', async (request: FastifyRequest, reply: FastifyReply) => {		
 		try {
 			const	{ idA, idB } = request.params as { idA: string, idB: string };
-			const	parseIdA = parseInt(idA, 10);
-			const	parseIdB = parseInt(idB, 10);
+			const	parseIdA: number = parseInt(idA, 10);
+			const	parseIdB: number = parseInt(idB, 10);
 			if (isNaN(parseIdA) || isNaN(parseIdB))
 				return reply.code(400).send({ error: "Invalid IDs provided." });
 
@@ -159,7 +159,7 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 
 		try {
 			const	{ targetId } = request.params as { targetId: string };
-			const	parseTargetId = parseInt(targetId, 10);
+			const	parseTargetId: number = parseInt(targetId, 10);
 
 			const	userId: number = extractUserId(request);
 
@@ -174,7 +174,7 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 	userFastify.delete('/unblock/:targetId', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	{ targetId } = request.params as { targetId: string };
-			const	parseTargetId = parseInt(targetId, 10);
+			const	parseTargetId: number = parseInt(targetId, 10);
 
 			const	userId: number = extractUserId(request);
 

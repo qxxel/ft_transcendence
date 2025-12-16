@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 00:12:48 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/16 23:42:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ export const	gameAxios: any = axios.create({
 const	{ Database } = sqlite3Pkg;
 const	dbname: string = '/app/dist/db/game.db';
 
-const	db = new Database(dbname, (err: Error | null) => {
+const	db: sqlite3Pkg.Database = new Database(dbname, (err: Error | null) => {
 	if (err)
 		console.error(err);
 

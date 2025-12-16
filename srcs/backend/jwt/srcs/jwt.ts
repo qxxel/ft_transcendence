@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwt.ts                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:58:36 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 23:42:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ export const	jwtSecret: Uint8Array<ArrayBuffer> = new TextEncoder().encode(proce
 const	{ Database } = sqlite3Pkg;
 const	dbname: string = '/app/dist/db/jwt.db';
 
-const	db = new Database(dbname, (err: Error | null) => {
+const	db: sqlite3Pkg.Database = new Database(dbname, (err: Error | null) => {
 	if (err)
 		console.error(err);
 

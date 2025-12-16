@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsService.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 14:02:53 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:04:37 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/16 23:48:44 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ export class	friendshipsService {
 		if (idA === idB)
 			return { status: "SELF" };
 		
-		const	params = [idA, idB, idB, idA];
+		const	params: number[] = [idA, idB, idB, idA];
 		
 		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus(params);
 		
