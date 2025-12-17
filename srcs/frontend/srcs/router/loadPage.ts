@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 20:22:04 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 04:42:56 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ export async function loadUser() {
 			imgElement.src = "/assets/default_avatar.png";
 			displayImgElement.src = "/assets/default_avatar.png";
 		}
-	}
+	} else
+		displayPop("Missing avatar HTMLElement!", "error");
 
 	if (userRes.is2faEnable == true) {
 		const	switchSpan: HTMLElement | null = document.getElementById("switch-span");
@@ -90,11 +91,14 @@ export async function loadUser() {
 			switchSpan.textContent = "Enabled";
 			switchSpan.classList.add('status-enabled');
 			switchSpan.classList.remove('status-disabled');
-		}
+		} else
+			displayPop("Missing 2fa HTMLElement!", "error");
 
 		const	checkbox2fa: HTMLElement | null = document.getElementById("edit-2fa");
 		if (checkbox2fa instanceof HTMLInputElement)
 			checkbox2fa.checked = true;
+		else
+			displayPop("Missing 2fa HTMLElement!", "error");
 	}
 
 	const	usernameEl: HTMLElement | null = document.getElementById("user-username");
@@ -103,5 +107,6 @@ export async function loadUser() {
 	if (usernameEl instanceof HTMLDivElement && emailEl instanceof HTMLDivElement) {
 		usernameEl.textContent = userRes.username ?? "";
 		emailEl.textContent = userRes.email ?? "";
-	}
+	} else
+		displayPop("Missing profile HTMLElement!", "error");
 }

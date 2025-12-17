@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 16:29:03 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 02:35:35 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== FUNCTION ====================== */
 
-export async function displayError(response: Response | string, idMsgError: string) {
-	const	p = document.getElementById(idMsgError);
+export async function displayError(response: Response | string, idMsgError: string): Promise<void> {
+	const	p: HTMLElement | null = document.getElementById(idMsgError);
 	if (!p) {
 		displayPop("No HTMLElement named \`msg-error\`.", "error")
 	} else {
@@ -36,8 +36,8 @@ export async function displayError(response: Response | string, idMsgError: stri
 	}
 }
 
-export async function	displayPop(response: Response | string | undefined, type: "notif" | "success" | "error") {
-	const	divNotifs = document.getElementById("div-notif");
+export async function	displayPop(response: Response | string | undefined, type: "notif" | "success" | "error"): Promise<void> {
+	const	divNotifs: HTMLElement | null = document.getElementById("div-notif");
 
 	if (!divNotifs)
 	{
@@ -50,15 +50,16 @@ export async function	displayPop(response: Response | string | undefined, type: 
 			console.error("An unexpected error has occurred");	// "
 		return;
 	}
-	const p = document.createElement("p");
-	const span = document.createElement("span");
+	const	p: HTMLParagraphElement = document.createElement("p");
+	const	span: HTMLSpanElement = document.createElement("span");
 	span.textContent = "✕";
-	const div = document.createElement("div");
+	const	div: HTMLDivElement = document.createElement("div");
 	div.classList = type;
 
 	div.addEventListener("click", (event) => {
-		const	target =  event.currentTarget as HTMLElement;
-		target.remove();
+		const	target: EventTarget | null =  event.currentTarget;
+		if (target instanceof HTMLElement)
+			target.remove();
 	})
 
 	if (response instanceof Response)
@@ -85,10 +86,10 @@ export async function	displayPop(response: Response | string | undefined, type: 
 	divNotifs.hidden = false;
 }
 
-export function displayDate(date: number) {
-	const	localeClient = navigator.language;
+export function displayDate(date: number): void {
+	const	localeClient: string = navigator.language;
 	
-	const	exp = new Date(date);
+	const	exp: Date = new Date(date);
 
 	const	options: Intl.DateTimeFormatOptions = {
 		year: 'numeric',
@@ -99,7 +100,7 @@ export function displayDate(date: number) {
 		second: '2-digit'
 	};
 
-	const	el = document.getElementById("date-with-offset");
+	const	el: HTMLElement | null = document.getElementById("date-with-offset");
 	if (el)
 		el.textContent = exp.toLocaleString(localeClient, options);
 }

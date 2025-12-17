@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   verifyEmail.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:11:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 16:05:07 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 03:26:34 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,12 @@ export async function	verifyEmail(idDivHidden: string, idDivVisible: string, ema
 	const	divHidden = document.getElementById(idDivHidden);
 	if (divHidden)
 		divHidden.hidden = true;
-
+	
 	const	divVerifyEmail = document.getElementById(idDivVisible);
 	if (divVerifyEmail)
 		divVerifyEmail.hidden = false;
+	else
+		displayPop("Missing HTMLElement!", "error");
 
 	router.canLeave = false;
 

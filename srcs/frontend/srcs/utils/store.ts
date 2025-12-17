@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:16:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:59:40 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 03:25:16 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ export class	Store<T> {
 	}
 
 	setState(newState: Partial<T> | ((currentState: T) => Partial<T>)) {
-		const	changes = typeof newState === 'function' ? newState(this.state) : newState;
+		const	changes: Partial<T> = typeof newState === 'function' ? newState(this.state) : newState;
 
 		this.state = { ...this.state, ...changes };
 

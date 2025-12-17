@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 16:04:22 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 04:04:26 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,7 @@ export async function	redirections(currentPath: string): Promise<void> {
 			}
 		}));
 
-		const	menu: HTMLElement | null = document.getElementById("nav");
-		if (menu)
-			menu.innerHTML = getMenu(true);
+		getMenu(true);
 
 		router.navigate('/');
 	}
