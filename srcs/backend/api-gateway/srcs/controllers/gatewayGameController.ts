@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayGameController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:05:35 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:40:09 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 09:57:19 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@ import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 export async function	gatewayGameController(gatewayFastify: FastifyInstance) {
 	gatewayFastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
-			const	response: AxiosResponse = await gatewayAxios.post('http://game:3000/', request.body);
+			const	userId: AxiosHeaderValue = await getValidUserId(request);
+		
+			const	response: AxiosResponse = await gatewayAxios.post('http://game:3000/', request.body,
+				{ headers: { 'user-id': userId } }
+			);
 			
 			return reply.send(response.data);
 		} catch (err: unknown) {
