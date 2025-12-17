@@ -52,7 +52,8 @@ div#div-notif {
     width: 20%;
     position: fixed;
     padding: 10px;
-	/* display: none; */
+	z-index: 2000; 
+    pointer-events: none;
 }
 
 .darken {
@@ -89,16 +90,19 @@ div.error, div.success, div.notif {
 div.error {
     background-color: rgba(255, 69, 69, 0.774);
     box-shadow: 0 0 5px rgba(255, 69, 69, 0.774);
+	pointer-events: auto;
 }
 
 div.success {
     background-color: rgba(69, 255, 69, 0.774);
     box-shadow: 0 0 5px rgba(69, 255, 69, 0.774);
+	pointer-events: auto;
 }
 
 div.notif {
     background-color: rgba(0, 174, 255, 0.774);
     box-shadow: 0 0 5px rgba(0, 174, 255, 0.774);
+	pointer-events: auto;
 }
 
 div.error > p, div.success > p, div.notif > p {
