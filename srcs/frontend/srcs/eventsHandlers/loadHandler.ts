@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/17 04:03:51 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 08:35:51 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 import { appStore }				from "../objects/store.js"
 import { getMenu }				from "../utils/getMenu.js"
-import { displayPop }			from "../utils/display.js"
 import { sendRequest }			from "../utils/sendRequest.js"
 import { addTabs, delTabs }		from "../utils/tabs.js"
 import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
