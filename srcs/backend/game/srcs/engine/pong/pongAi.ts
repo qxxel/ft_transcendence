@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongAi.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:59:46 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 00:05:29 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 09:05:45 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ export class AIController {
 					}
 				}
 			}
-
+			console.log("top =", topPowerUps, " bot = ", bottomPowerUps)
 			if (topPowerUps > bottomPowerUps) {
 				targetY = 0;
 			} else if (bottomPowerUps > topPowerUps) {

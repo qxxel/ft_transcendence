@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pong.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/15 06:33:46 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 09:03:37 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,7 +273,7 @@ export class PongGame extends Game {
 		if (this.isGameOver) {
 			if (this.isTournament)
 			{
-				if (e.key === ' ')
+				if (e.key === 'r')
 				{
 					this.stop();
 					router.navigate("/tournament-bracket")
@@ -282,7 +282,7 @@ export class PongGame extends Game {
 			}
 			else
 			{
-				if (e.key === ' ')
+				if (e.key === 'r')
 				{
 					this.stop();
 					this.isGameOver = false;
@@ -350,9 +350,9 @@ export class PongGame extends Game {
 		if (restartMsg)
 		{
 			if (this.isTournament)
-				restartMsg.innerText = "Press 'Space' to Continue";
+				restartMsg.innerText = "Press 'R' to Continue";
 			else
-				restartMsg.innerText = "Press 'Space' to Restart or 'Esc' to Quit";
+				restartMsg.innerText = "Press 'R' to Restart or 'Esc' to Quit";
 		}
 
 		dashboard.style.display = 'block';
