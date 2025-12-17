@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 11:03:16 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 13:41:24 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ import { socket }							from "../socket/socket.js"
 import { displayError, displayPop }			from "../utils/display.js"
 import { getMenu }							from "../utils/getMenu.js"
 import { AppState, appStore, UserState }	from "../objects/store.js"
-import { loadTwofa }						from "../router/loadPage.js"
+import { loadTwofa, loadUserStats }			from "../router/loadPage.js"
 import { TournamentController } 			from "../Pong/tournament.js"
 import { sendRequest }						from "../utils/sendRequest.js"
 import { verifyEmail }						from "../utils/verifyEmail.js"
@@ -104,13 +104,17 @@ async function	onClickEdit(): Promise<void> {
 }
 
 export async function	onClickHistory(targetId: number | null, targetName: string | null): Promise<void> {
-	//	MATHIS/AXEL/KILLIAN: SECURE IF NOT AUTH
-
-	router.navigate("/history");
-
-	setTimeout(() => {
-		initHistoryListeners(targetId, targetName);
-	}, 50);
+	if (appStore.getState().user.isAuth){
+		router.navigate("/history");
+		
+		setTimeout(() => {
+			initHistoryListeners(targetId, targetName);
+			if (targetId)
+				loadUserStats(targetId, targetName);
+		}, 50);
+	}
+	else
+		router.navigate("/");
 }
 
 function	onClickCancel(): void {

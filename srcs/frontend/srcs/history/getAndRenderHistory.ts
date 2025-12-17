@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 10:39:14 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 11:26:35 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,7 +263,7 @@ function displayNoGame(filter: boolean): void {
 	historyEntriesDiv.appendChild(historyEmptyParagraph);
 }
 
-export function initHistoryListeners(targetId: number | null, targetName: string | null = null, attempt: number = 0): void {
+export function initHistoryListeners(targetId: number | null, targetName: string | null = null): void {
 	const	aiCheckbox: HTMLElement | null = document.getElementById('filter-ai');
 	const	pvpCheckbox: HTMLElement | null = document.getElementById('filter-pvp');
 	const	pongCheckbox: HTMLElement | null = document.getElementById('filter-pong');
@@ -275,7 +275,7 @@ export function initHistoryListeners(targetId: number | null, targetName: string
 		!(pongCheckbox instanceof HTMLInputElement) ||
 		!(tankCheckbox instanceof HTMLInputElement)) {
 		setTimeout(() => {
-			requestAnimationFrame(() => initHistoryListeners(targetId, targetName, attempt + 1));
+			requestAnimationFrame(() => initHistoryListeners(targetId, targetName));
 		}, 200);
 		return;
 	}

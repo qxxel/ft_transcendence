@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/17 11:01:06 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 13:09:36 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,46 +59,6 @@ export async function loadUser() {
 	}
 
 	const	userRes: any = await response.json();
-
-	const	responseStats: Response = await sendRequest(`/api/user/stats/me`, 'get', null);
-	if (!responseStats.ok)
-	{
-		displayPop(responseStats, "error");
-		return ;
-	}
-
-	const	userStatsRes: any = await responseStats.json();
-	console.log(userStatsRes);
-
-	const statsContainer = document.getElementById("user-stats-container");
-	
-	if (statsContainer) {
-		statsContainer.innerHTML = '';
-
-		const pongData = {
-			elo: userStatsRes.pongElo,
-			wins: userStatsRes.pongWins,
-			losses: userStatsRes.pongLosses,
-			totalTime: userStatsRes.pongTotalTime,
-			specialLabel: "Points",
-			specialValue: userStatsRes.pongPointsMarked
-		};
-
-		const tankData = {
-			elo: userStatsRes.tankElo,
-			wins: userStatsRes.tankWins,
-			losses: userStatsRes.tankLosses,
-			totalTime: userStatsRes.tankTotalTime,
-			specialLabel: "Kills",
-			specialValue: userStatsRes.tankKills
-		};
-
-		const pongCard = createStatCard("Pong", "🏓", "#ffffff", pongData);
-		const tankCard = createStatCard("Tank", "🚀", "#ff8888", tankData);
-
-		statsContainer.appendChild(pongCard);
-		statsContainer.appendChild(tankCard);
-	}
 
 	const	imgElement: HTMLImageElement = document.getElementById("user-avatar") as HTMLImageElement;
 	const	displayImgElement: HTMLImageElement = document.getElementById("display-user-avatar") as HTMLImageElement;
@@ -154,10 +114,10 @@ function formatTime(seconds: number): string {
 function createStatCard(title: string, icon: string, colorClass: string, stats: any): HTMLElement {
 	const card = document.createElement('div');
 	card.className = "game-container stat-card";
-	card.classList.add("stat-card-user")
+	card.classList.add("stat-card-user");
 
 	const header = document.createElement('h3');
-	header.classList.add("stat-card-user-header")
+	header.classList.add("stat-card-user-header");
 	header.textContent = `${title} ${icon}`;
 	header.style.borderBottom = `2px solid ${colorClass}`;
 	card.appendChild(header);
@@ -176,7 +136,7 @@ function createStatCard(title: string, icon: string, colorClass: string, stats: 
 
 	items.forEach(item => {
 		const box = document.createElement('div');
-		box.classList.add("stat-box-data")
+		box.classList.add("stat-box-data");
 
 		const label = document.createElement('span');
 		label.textContent = item.label;
@@ -196,4 +156,63 @@ function createStatCard(title: string, icon: string, colorClass: string, stats: 
 
 	card.appendChild(grid);
 	return card;
+}
+
+export async function loadUserStats(targetId: number | null, targetName: string | null = null){
+	let	responseStats: Response;
+	if (!targetId)
+		responseStats = await sendRequest('/api/user/stats/me', "get", null);
+	else
+		responseStats = await sendRequest(`/api/user/stats/${targetId}`, "get", null);
+	if (!responseStats.ok)
+	{
+		displayPop(responseStats, "error");
+		return ;
+	}
+	
+	const	userStatsRes: any = await responseStats.json();
+
+	const statsContainer = document.getElementById("user-stats-container");
+	
+	if (targetName){
+		const nameContainer = document.getElementById("user-profile-container");
+		if (nameContainer){
+			nameContainer.innerHTML = '';
+			const box = document.createElement('div');
+			box.className = "game-container stat-card";
+			box.classList.add("stat-card-user");
+			const label = document.createElement('span');
+			label.textContent = "Profile of " + targetName;
+			box.appendChild(label);
+			nameContainer.appendChild(box);
+		}
+
+	}
+
+	if (statsContainer) {
+		statsContainer.innerHTML = '';
+		
+		const pongData = {
+			elo: userStatsRes.pongElo,
+			wins: userStatsRes.pongWins,
+			losses: userStatsRes.pongLosses,
+			totalTime: userStatsRes.pongTotalTime,
+			specialLabel: "Points",
+			specialValue: userStatsRes.pongPointsMarked
+		};
+		const tankData = {
+			elo: userStatsRes.tankElo,
+			wins: userStatsRes.tankWins,
+			losses: userStatsRes.tankLosses,
+			totalTime: userStatsRes.tankTotalTime,
+			specialLabel: "Kills",
+			specialValue: userStatsRes.tankKills
+		};
+
+		const pongCard = createStatCard("Pong", "🏓", "#ffffff", pongData);
+		const tankCard = createStatCard("Tank", "🚀", "#ff8888", tankData);
+		
+		statsContainer.appendChild(pongCard);
+		statsContainer.appendChild(tankCard);
+	}	
 }

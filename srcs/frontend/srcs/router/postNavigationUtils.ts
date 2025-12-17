@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 06:10:08 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 13:47:03 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { router }				from "../index.js"
-import { loadTwofa, loadUser }	from "./loadPage.js"
+import { loadTwofa, loadUser, loadUserStats }	from "./loadPage.js"
 import { loadTournamentMenu }	from "../tournament/tournamentMenu.js"
 import { PongGame }				from "../Pong/pong.js"
 import { appStore }				from "../objects/store.js"
@@ -67,8 +67,12 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			router.navigate("/pongmenu");
 	}
 
-	if (['/user'].includes(currentPath))
-		await loadUser();
+	if (['/user'].includes(currentPath)){
+		if (user.isAuth){
+			await loadUser();
+			await loadUserStats(null, null);
+		}
+	}
 
 	if (['/2fa'].includes(currentPath))
 		loadTwofa();
@@ -88,7 +92,9 @@ export async function  pathActions(currentPath: string): Promise<void> {
 
 	if (['/history'].includes(currentPath))
 	{
-		initHistoryListeners(null);
+		if (user.isAuth){
+			initHistoryListeners(null);
+		}
 	}
 
 	if (['/pongmenu'].includes(currentPath)) {
