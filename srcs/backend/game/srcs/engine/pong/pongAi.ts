@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:59:46 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 09:05:45 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 09:23:33 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ export class AIController {
 					}
 				}
 			}
-			console.log("top =", topPowerUps, " bot = ", bottomPowerUps)
 			if (topPowerUps > bottomPowerUps) {
 				targetY = 0;
 			} else if (bottomPowerUps > topPowerUps) {
@@ -157,7 +156,7 @@ export class AIController {
 	}
 
 	private calculateOptimalPaddlePosition(predictedY: number, state: PongState): number {
-		if (Math.random() > 0.3){
+		if (Math.random() > 0.7){
 			return this.hardBounce(predictedY, state);
 		}
 		else {
