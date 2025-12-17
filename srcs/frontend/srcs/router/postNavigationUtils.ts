@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 13:37:44 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 13:47:03 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ export async function  pathActions(currentPath: string): Promise<void> {
 	}
 
 	if (['/user'].includes(currentPath)){
-		await loadUser();
-		await loadUserStats(null, null);
+		if (user.isAuth){
+			await loadUser();
+			await loadUserStats(null, null);
+		}
 	}
 
 	if (['/2fa'].includes(currentPath))
