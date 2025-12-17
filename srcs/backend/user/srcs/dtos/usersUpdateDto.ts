@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersUpdateDto.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:51:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:03:22 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 04:55:19 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ export class	usersUpdateDto {
 		if (row.is2faEnable != oldUser.getIs2faEnable())
 			this.is2faEnable = row.is2faEnable;
 
-		var	validation: validationResult = this.isValid()
+		let	validation: validationResult = this.isValid()
 		if (!validation.result)
 			throw new ValidationError(validation.error);
 	}

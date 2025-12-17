@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 20:22:04 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 08:48:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,32 @@ import { btnCooldown }					from "../utils/buttonCooldown.js"
 
 /* ====================== FUNCTION ====================== */
 
-export async function loadTwofa() {
-	const	response: Response = await sendRequest(`/api/jwt/payload/twofa`, 'get', null);
-	
-	if (!response.ok)
-	{
-		displayPop(response.statusText, "error");
-		router.navigate("/sign-in");
-		return ;
-	}
-	
-	response.json()
-		.then((result) => {
+export function loadTwofa(): void {
+	sendRequest(
+		`/api/jwt/payload/twofa`, 'get', null
+	).then((response: Response) => {
+		if (!response.ok)
+		{
+			displayPop(response, "error");
+			router.navigate("/sign-in");
+			return ;
+		}
+		
+		response.json(
+		).then((result) => {
 			if (result.exp)
 				displayDate(result.exp * 1000);
 			else
 				displayPop("Unable to display the expiration date", "error");
-		}
-	).catch((err: unknown) => {
-		if (err instanceof Error)
-			displayPop(err.message, "error");
+		}).catch((e: unknown) => {
+			displayPop("" + e, "error");
+		});
+
+		router.canLeave = false;
+		btnCooldown();
+	}).catch((e: unknown) => {
+		displayPop("" + e, "error");
 	});
-	
-	router.canLeave = false;
-	btnCooldown();
 }
 
 export async function loadUser() {
@@ -82,11 +84,12 @@ export async function loadUser() {
 			imgElement.src = "/assets/default_avatar.png";
 			displayImgElement.src = "/assets/default_avatar.png";
 		}
-	}
+	} else
+		displayPop("Missing avatar HTMLElement!", "error");
 
 	if (userRes.is2faEnable == true) {
 		const	switchSpan: HTMLElement | null = document.getElementById("switch-span");
-		if (switchSpan instanceof HTMLInputElement) {
+		if (switchSpan instanceof HTMLSpanElement) {
 			switchSpan.textContent = "Enabled";
 			switchSpan.classList.add('status-enabled');
 			switchSpan.classList.remove('status-disabled');
@@ -95,6 +98,9 @@ export async function loadUser() {
 		const	checkbox2fa: HTMLElement | null = document.getElementById("edit-2fa");
 		if (checkbox2fa instanceof HTMLInputElement)
 			checkbox2fa.checked = true;
+		
+		if (!(switchSpan instanceof HTMLInputElement) && !(checkbox2fa instanceof HTMLInputElement))
+			displayPop("Missing 2fa HTMLElement!", "error");
 	}
 
 	const	usernameEl: HTMLElement | null = document.getElementById("user-username");
@@ -103,5 +109,6 @@ export async function loadUser() {
 	if (usernameEl instanceof HTMLDivElement && emailEl instanceof HTMLDivElement) {
 		usernameEl.textContent = userRes.username ?? "";
 		emailEl.textContent = userRes.email ?? "";
-	}
+	} else
+		displayPop("Missing profile HTMLElement!", "error");
 }

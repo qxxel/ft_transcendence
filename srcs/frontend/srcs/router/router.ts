@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:22:23 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 04:21:12 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 /* ====================== IMPORT ====================== */
 
-import { pathActions }			from "./postNavigationUtils.js"
+import { pathActions }	from "./postNavigationUtils.js"
+import { displayPop }	from "../utils/display.js"
 
 
 /* ====================== INTERFACE ====================== */
@@ -59,7 +60,8 @@ export class	Router {
 			{
 				const	html: string = await route.component();
 				contentDiv.innerHTML = html;
-			}
+			} else
+				displayPop("Missing HTMLElement!", "error");
 			this.currentPath = currentPath;
 			await pathActions(currentPath);
 		}

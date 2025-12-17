@@ -3,22 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   getMenu.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:55:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:57:46 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 04:26:07 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // FUNCTION THAT RETURNS RIGHT MENU (SIGNED IN OR NOT)
 
 
+/* ====================== IMPORTS ====================== */
+
+import { displayPop }	from "../utils/display.js"
+
+
+
 /* ====================== FUNCTION ====================== */
 
-export function	getMenu(isAuth: boolean): string {
+export function	getMenu(isAuth: boolean): void {
+	const	menu: HTMLElement | null = document.getElementById("nav");
+	if (!menu) {
+		displayPop("Missing navigation HTMLElement!", "error");
+		return;
+	}
+
 	if (isAuth)
 	{
-		return `
+		menu.innerHTML = `
 			<a href="/">Home</a>
 			<a href="/games">Play</a>
 			<a href="/tournament-menu">Tournament</a>
@@ -26,9 +38,10 @@ export function	getMenu(isAuth: boolean): string {
 			<a href="/friends">Friends</a>
 			<a onclick="onClickLogout();" id="logout">Logout</a>
 		`;
+		return;
 	}
 
-	return `
+	menu.innerHTML = `
 		<a href="/">Home</a>
 		<a href="/games">Play</a>
 		<a href="/tournament-menu">Tournament</a>

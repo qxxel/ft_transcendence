@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderHistory.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 16:24:31 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 04:44:22 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // FUNCTION THAT MAKE A GET REQUEST TO THE BACK WHEN WE ACCESS `/history` TO DISPLAY IT
 
 
-/* ====================== FUNCTIONS ====================== */
+/* ====================== IMPORTS ====================== */
 
-import { displayPop } from "../utils/display";
+import { displayPop }	from "../utils/display";
 import { sendRequest }	from "../utils/sendRequest"
 
 
@@ -129,7 +129,7 @@ function renderGames(
 		tankFilter: boolean
 	): void {
 	const	historyEntriesDiv: HTMLElement | null = document.getElementById("history-entries");
-	if (historyEntriesDiv instanceof HTMLDivElement) historyEntriesDiv.innerHTML = ""; 
+	if (historyEntriesDiv instanceof HTMLDivElement) historyEntriesDiv.textContent = ""; 
 
 	const	games: GameObject[] = gamesData.filter((game) => {
 		const	modeMatch: boolean = (aiFilter && game.mode === "ai") || (pvpFilter && game.mode === "pvp");
@@ -220,8 +220,14 @@ function createGameElement(historyListDiv: HTMLDivElement, game: GameObject): vo
 
 function displayErrors(targetName: string | null): void {
 	const	historyEntriesDiv: HTMLElement | null = document.getElementById("history-entries");
-	if (historyEntriesDiv instanceof HTMLDivElement)
-		historyEntriesDiv.innerHTML = ""; 
+	
+	if (!(historyEntriesDiv instanceof HTMLDivElement)) {
+		displayPop("Missing history HTMLElement!", "error");
+		displayPop("Error while getting history!", "error");
+		return;
+	}
+	
+	historyEntriesDiv.textContent = ""; 
 
 	const	historyErrorParagraph: HTMLParagraphElement = document.createElement("p");
 	historyErrorParagraph.classList.add("error-message");
@@ -232,14 +238,17 @@ function displayErrors(targetName: string | null): void {
 	else
 		historyErrorParagraph.textContent = `Error while getting your history.`;
 
-	if (historyEntriesDiv instanceof HTMLDivElement)
-		historyEntriesDiv.appendChild(historyErrorParagraph);
+	historyEntriesDiv.appendChild(historyErrorParagraph);
 }
 
 function displayNoGame(filter: boolean): void {
 	const	historyEntriesDiv: HTMLElement | null = document.getElementById("history-entries");
-	if (historyEntriesDiv instanceof HTMLDivElement)
-		historyEntriesDiv.innerHTML = "";
+	if (!(historyEntriesDiv instanceof HTMLDivElement)) {
+		displayPop("Missing history HTMLElement!", "error");
+		return;
+	}
+
+	historyEntriesDiv.innerHTML = "";
 
 	const	historyEmptyParagraph: HTMLParagraphElement = document.createElement("p");
 	historyEmptyParagraph.classList.add("empty-message");
@@ -251,8 +260,7 @@ function displayNoGame(filter: boolean): void {
 		historyEmptyParagraph.textContent = "Empty match history.";
 	}
 
-	if (historyEntriesDiv)
-		historyEntriesDiv.appendChild(historyEmptyParagraph);
+	historyEntriesDiv.appendChild(historyEmptyParagraph);
 }
 
 export function initHistoryListeners(targetId: number | null, targetName: string | null = null, attempt: number = 0): void {
@@ -299,6 +307,7 @@ export function initHistoryListeners(targetId: number | null, targetName: string
 			setTimeout(() => refreshBtn.style.transform = "none", 500);
 			refreshList();
 		};
-	}
+	} else
+		displayPop("Missing history HTMLElement!", "error");
 	refreshList();
 }

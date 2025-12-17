@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersAddDto.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:51:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:03:16 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 04:55:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ export class	usersAddDto {
 			this.avatar = row.avatar;
 		this.avatar = null;
 
-		var	validation: validationResult = this.isValid()
+		let	validation: validationResult = this.isValid()
 		if (!validation.result)
 			throw new ValidationError(validation.error);
 	}

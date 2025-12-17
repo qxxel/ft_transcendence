@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 10:04:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 08:16:39 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 	const	password: string | undefined = (document.getElementById("sign-in-password") as HTMLInputElement)?.value;
 	if (!identifier || !password) return displayError("Identifier and password required!", "sign-in-msg-error");
 
-	const	signForm = document.getElementById("sign-in-form");
-	if (signForm)
-		signForm.classList.add("darken");
+	document.getElementById("sign-in-form")?.classList.add("darken");
+
+	const	p: HTMLElement | null = document.getElementById("sign-in-msg-error");
+	if (p) p.textContent = null;
 	
 	const	response: Response = await fetch('/api/auth/sign-in', {
 		method: "post",
@@ -46,8 +47,7 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 	});
 	
 	form.reset();
-	if (signForm)
-		signForm.classList.remove("darken");
+	document.getElementById("sign-in-form")?.classList.remove("darken");
 
 	if (!response.ok)
 		return displayError(response, "sign-in-msg-error");
@@ -76,10 +76,12 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 				"Content-Type": "application/json"
 			},
 			body: JSON.stringify({ })
-		}).then((response) => {
-				if (!response.ok)
-					displayPop(response, "error");
-			});
+		}).then((response: Response) => {
+			if (!response.ok)
+				displayPop(response, "error");
+		}).catch((e: unknown) => {
+			displayPop("" + e, "error");
+		});
 		
 		return ;
 	}
@@ -92,9 +94,7 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-	const	menu: HTMLElement | null = document.getElementById("nav");
-	if (menu)
-		menu.innerHTML = getMenu(true);
+	getMenu(true);
 
 	router.navigate("/");
 }
@@ -140,19 +140,15 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 	const	otp: string | undefined = (document.getElementById("digit-code") as HTMLInputElement)?.value;
 	if (!otp) return displayError("Digit-code required!", "verify-email-msg-error");
 	
-	const	p = document.getElementById("verify-email-msg-error");
-	if (p)
-		p.textContent = null;
+	document.getElementById("verify-email-form")?.classList.add("darken");
 	
-	const	signForm = document.getElementById("verify-email-form");
-	if (signForm)
-		signForm.classList.add("darken");
+	const	p = document.getElementById("verify-email-msg-error");
+	if (p) p.textContent = null;
 
 	const	response: Response = await sendRequest('/api/auth/validateUser', 'post', { otp });
 	
 	form.reset();
-	if (signForm)
-		signForm.classList.remove("darken");
+	document.getElementById("verify-email-form")?.classList.remove("darken");
 
 	if (!response.ok)
 		return displayError(response, "verify-email-msg-error");
@@ -165,9 +161,7 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-	var	menu: HTMLElement | null = document.getElementById("nav");
-	if (menu)
-		menu.innerHTML = getMenu(true);
+	getMenu(true);
 
 	router.canLeave = true;
 	router.navigate("/");
@@ -177,19 +171,15 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 	const	otp: string | undefined = (document.getElementById("digit-code") as HTMLInputElement)?.value;
 	if (!otp) return displayError("Digit-code required!", "2fa-msg-error");
 
+	document.getElementById("2fa-form")?.classList.add("darken");
+	
 	const	p = document.getElementById("2fa-msg-error");
-	if (p)
-		p.textContent = null;
-
-	const	signForm = document.getElementById("2fa-form");
-	if (signForm)
-		signForm.classList.add("darken");
+	if (p) p.textContent = null;
 
 	const	response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
 	
 	form.reset();
-	if (signForm)
-		signForm.classList.remove("darken");
+	document.getElementById("2fa-form")?.classList.remove("darken");
 
 	if (!response.ok)
 		return displayError(response, "2fa-msg-error");
@@ -202,9 +192,7 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
-	const	menu: HTMLElement | null = document.getElementById("nav");
-	if (menu)
-		menu.innerHTML = getMenu(true);
+	getMenu(true);
 
 	router.canLeave = true;
 	router.navigate("/");
@@ -244,20 +232,16 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 			
 			if (!password) return displayError("password required!", "confirm-setting-msg-error");
 
+			document.getElementById("confirm-setting-form")?.classList.add("darken");
+			
 			const	p = document.getElementById("confirm-setting-msg-error");
-			if (p)
-				p.textContent = null;
-
-			const	confirmSettingForm = document.getElementById("confirm-setting-form");
-			if (confirmSettingForm)
-				confirmSettingForm.classList.add("darken");
+			if (p) p.textContent = null;
 
 			const	response: Response = await sendRequest('/api/auth/updateUser', 'PATCH', { otp, password, user });
 			
 			if (form instanceof HTMLFormElement)
 				form.reset();
-			if (confirmSettingForm)
-				confirmSettingForm.classList.remove("darken");
+			document.getElementById("confirm-setting-form")?.classList.remove("darken");
 
 			if (!response.ok) 
 				return displayError(response, "confirm-setting-msg-error");
@@ -320,26 +304,21 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	router.navigate("/user");
 }
 
-async function	handleAddFriendForm(form: HTMLFormElement) {
+async function	handleAddFriendForm(form: HTMLFormElement): Promise<void> {
 	const	targetName: string | undefined = (document.getElementById("username-add-input") as HTMLInputElement)?.value;
 	if (!targetName)
-		return ;
+		return displayPop("Missing HTMLElement!", "error");
 	form.reset();
 
 	const	respTargetId: Response = await sendRequest(`/api/user/lookup/${targetName}`, "get", null);
 	if (!respTargetId.ok)
-	{
-		displayPop(respTargetId, "error")
-		return ;
-	}
+		return displayPop(respTargetId, "error");
+
 	const	targetId: number = (await respTargetId.json() as any).id; // try catch (json peut throw)
 
 	const	response: Response = await sendRequest(`/api/user/friends/request/${targetId}`, "post", {});
 	if (!response.ok)
-	{
-		displayPop(response, "error")
-		return ;
-	}
+		return displayPop(response, "error")
 
 	const	friendship: any = await response.json();
 

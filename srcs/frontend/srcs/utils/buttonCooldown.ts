@@ -6,27 +6,30 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 17:39:14 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 03:24:04 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // FUNCTION THAT HANDLE THE COOLDOWN ON BUTTONS
 
+/* ====================== IMPORTS ====================== */
+
+import { displayPop }	from "../utils/display";
 
 /* ====================== FUNCTION ====================== */
 
-export async function btnCooldown() {
+export async function btnCooldown(): Promise<void> {
 	let	timeLeft = 5;
-	const	spanCooldown = document.getElementById("btnCooldown");
-	const	btnSend = document.getElementById("btnSend2faCode") as HTMLButtonElement;
-	const	locks = document.querySelectorAll(".lock");
+	const	spanCooldown: HTMLElement | null = document.getElementById("btnCooldown");
+	const	btnSend: HTMLElement | null = document.getElementById("btnSend2faCode");
+	const	locks: NodeListOf<Element> = document.querySelectorAll(".lock");
 
 	const	interval = setInterval(() => {
 		timeLeft--;
 
 		if (!spanCooldown) {
 			clearInterval(interval);
-			return;
+			return displayPop("Missing HTMLElement!", "error");
 		}
 
 		spanCooldown.textContent = `(${timeLeft}s)`;
@@ -35,11 +38,15 @@ export async function btnCooldown() {
 			clearInterval(interval);
 			
 			spanCooldown.textContent = "";
-			locks.forEach(e => (e as HTMLElement).hidden = true);
+			locks.forEach(e => {
+				if (e instanceof HTMLElement)
+					e.hidden = true
+			});
 			
-			if (btnSend) {
+			if (btnSend instanceof HTMLButtonElement) {
 				btnSend.disabled = false;
-			}
+			} else
+				displayPop("Missing HTMLElement!", "error");
 		}
 	}, 1000);
 }

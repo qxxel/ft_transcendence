@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendsEvents.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 10:04:43 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 04:06:15 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ export function	attachDelegationListeners(requestsListDiv: HTMLDivElement, frien
 async function	handleDelegatedFriendAction(event: Event): Promise<void> {
 	const	target: EventTarget | null = event.target;
 
-	if (!(target instanceof HTMLElement)) return ;
+	if (!(target instanceof HTMLElement)) return displayPop("Missing HTMLElement!", "error");
 
 	if (!target.classList.contains('neon-button') && !target.classList.contains('remove-button'))
 		return ;
@@ -37,7 +37,7 @@ async function	handleDelegatedFriendAction(event: Event): Promise<void> {
 	const	targetId: string | undefined = target.dataset.targetId;
 	const	targetUsername: string | undefined = target.dataset.targetUsername;
 	if (!targetId || !targetUsername)
-		return ;
+		return displayPop("Missing Id or Username!", "error");
 
 	if (target.classList.contains('accept-button'))
 	{

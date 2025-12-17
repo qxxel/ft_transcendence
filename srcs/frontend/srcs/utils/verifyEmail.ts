@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   verifyEmail.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:11:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 16:05:07 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 08:19:03 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,41 @@ import { displayDate, displayPop }	from "./display.js"
 
 /* ====================== FUNCTIONS ====================== */
 
-export async function	verifyEmail(idDivHidden: string, idDivVisible: string, email: string | null): Promise<void> {
+export function	verifyEmail(idDivHidden: string, idDivVisible: string, email: string | null): void {
 
-	const	response: Response = await fetch('/api/jwt/payload/twofa', {
+	fetch('/api/jwt/payload/twofa', {
 		method: "GET",
 		credentials: "include"
-	});
-
-	if (response.ok)
-	{
-		const	result = await response.json();
-
-		if (result.exp)
-			displayDate(result.exp * 1000);
+	}).then((response: Response) => {
+		if (response.ok)
+		{
+			response.json(
+			).then((result: any) => {
+				if (result.exp)
+					displayDate(result.exp * 1000);
+				else
+					displayPop("Unable to display the expiration date", "error");
+	
+			}).catch((e: unknown) => {
+				displayPop("" + e, "error");
+			});
+	
+		}
 		else
-			displayPop("Unable to display the expiration date", "error");
-	}
-	else
-		displayDate(Date.now() + 5 * 60 * 1000);
+			displayDate(Date.now() + 5 * 60 * 1000);
+	}).catch((e: unknown) => {
+		displayPop("" + e, "error");
+	});
 
 	const	divHidden = document.getElementById(idDivHidden);
 	if (divHidden)
 		divHidden.hidden = true;
-
+	
 	const	divVerifyEmail = document.getElementById(idDivVisible);
 	if (divVerifyEmail)
 		divVerifyEmail.hidden = false;
+	else
+		displayPop("Missing HTMLElement!", "error");
 
 	router.canLeave = false;
 
@@ -60,12 +69,11 @@ export async function	verifyEmail(idDivHidden: string, idDivVisible: string, ema
 			},
 			body: JSON.stringify({ email })
 		})
-		.then(async (res) => {
+		.then((res: Response) => {
 			if (!res.ok)
-			{
 				displayPop(res, "error")
-				return ;
-			}
+		}).catch((e: unknown) => {
+			displayPop("" + e, "error")
 		});
 	}
 }

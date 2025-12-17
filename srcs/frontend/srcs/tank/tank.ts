@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:30:06 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 09:07:05 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,17 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { GSTATE, History }								from "./global.js"
-import { router }										from "../index.js"
-import { Map }											from "./class_map.js"
-import { Tank, Uzi, Sniper, Shotgun, Classic } 			from "./class_tank.js"
-import { Ball, Collectible }							from "./class_ball.js"
-import { Rect2D } 										from "./class_rect.js"
-import { Input }										from "./class_input.js"
-import { AppState, appStore, UserState }				from "../objects/store.js"
-import { Game }											from "../Pong/gameClass.js"
-import { sendRequest }									from "../utils/sendRequest.js"
+import { GSTATE, History }						from "./global.js"
+import { router }								from "../index.js"
+import { Map }									from "./class_map.js"
+import { Tank, Uzi, Sniper, Shotgun, Classic } 	from "./class_tank.js"
+import { Ball, Collectible }					from "./class_ball.js"
+import { Rect2D } 								from "./class_rect.js"
+import { Input }								from "./class_input.js"
+import { AppState, appStore, UserState }		from "../objects/store.js"
+import { displayPop }							from "../utils/display.js"
+import { Game }									from "../Pong/gameClass.js"
+import { sendRequest }							from "../utils/sendRequest.js"
 
 import type { Color, Keys }	from "./interface.js"
 import type { Spawn }		from "./global.js"
@@ -295,7 +296,7 @@ export class	TankGame extends Game {
 	const history: History | null = this.setHistory();
 	if (history) sendRequest("/api/game", "POST", history);
 	const	dashboard = document.getElementById('game-over-dashboard');
-	if (!dashboard) return;
+	if (!dashboard) return displayPop("Missing tank HTMLElement!", "error");
 
 	const	matchDurationSeconds: number = Math.floor((Date.now() - this.startTime) / 1000);
 	const	minutes: number = Math.floor(matchDurationSeconds / 60);
@@ -305,6 +306,7 @@ export class	TankGame extends Game {
 	const	winnerDisplay: HTMLElement | null = document.getElementById('winner-display');
 
 	if (winnerDisplay) winnerDisplay.innerText = `${winnerName} Wins!`;
+	else displayPop("Missing tank HTMLElement!", "error");
 
 	const	accuracy1: number = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit) / GSTATE.STATS1.fire * 100 : 0;
 	const	accuracy2: number = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit) / GSTATE.STATS2.fire * 100 : 0;
@@ -333,18 +335,23 @@ export class	TankGame extends Game {
 	private hideEndGameDashboard() {
 		const	dashboard: HTMLElement | null = document.getElementById('game-over-dashboard');
 		if (dashboard) dashboard.style.display = 'none';
+		else displayPop("Missing tank HTMLElement!", "error");
 	}
 
 	private updateNameDisplay() {
 		const	p1Span: HTMLElement | null = document.getElementById('p1-name');
 		const	p2Span: HTMLElement | null = document.getElementById('p2-name');
+		if (!p1Span || !p2Span) displayPop("Missing tank HTMLElement!", "error");
 		if (p1Span) p1Span.innerText = this.player1Name + "";
 		if (p2Span) p2Span.innerText = this.player2Name + "";
   	}
 
 	private generateLegend(): void {
 		const	legendContainer: HTMLElement | null = document.getElementById('powerup-legend');
-		if (!legendContainer) return;
+		if (!legendContainer) {
+			displayPop("Missing tank HTMLElement!", "error");
+			return;
+		}
 
 		legendContainer.style.display = 'none';
 		if (this.star1 == false && this.star2 == false && this.star3 == false) return;

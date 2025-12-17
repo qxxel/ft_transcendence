@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   notifService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 11:31:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 03:49:59 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ import { displayPop } from "./display";
 export class	NotificationService {
 	private	eventSource: EventSource | null = null;
 
-	connect() {
+	connect(): void {
 		if (this.eventSource)
 			this.eventSource.close();
 
@@ -46,17 +46,20 @@ export class	NotificationService {
 		};
 	}
 
-	showNotification(data: any) {
+	showNotification(data: any): void {
 		displayPop(`${data.message}<button id="btn-accept-${data.fromId}">Show</button>`, "notif");
 
-		const	showButton: HTMLButtonElement = document.getElementById(`btn-accept-${data.fromId}`) as HTMLButtonElement;
-		showButton?.addEventListener('click', () => {
-			router.navigate("/friends");
-		});
+		const	showButton: HTMLElement | null = document.getElementById(`btn-accept-${data.fromId}`);
+		if (showButton instanceof HTMLButtonElement) {
+			showButton?.addEventListener('click', () => {
+				router.navigate("/friends");
+			});
+		} else
+			displayPop("Missing HTMLElement!", "error");
 	}
 
-	createContainer() {
-		const div = document.createElement('div');
+	createContainer(): HTMLDivElement {
+		const div: HTMLDivElement = document.createElement('div');
 		div.id = 'notification-container';
 		div.style.position = 'fixed';
 		div.style.top = '20px';

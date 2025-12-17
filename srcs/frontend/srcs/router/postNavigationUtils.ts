@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 23:20:46 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 06:10:08 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ import { router }				from "../index.js"
 import { loadTwofa, loadUser }	from "./loadPage.js"
 import { PongGame }				from "../Pong/pong.js"
 import { appStore }				from "../objects/store.js"
+import { displayPop }				from "../utils/display.js"
 import { Game }					from "../Pong/gameClass.js"
 import { TournamentController }	from "../Pong/tournament.js"
 import { initHistoryListeners } from "../history/getAndRenderHistory.js"
@@ -69,7 +70,7 @@ export async function  pathActions(currentPath: string): Promise<void> {
 		await loadUser();
 
 	if (['/2fa'].includes(currentPath))
-		await loadTwofa();
+		loadTwofa();
 
 	if (['/sign-in', '/sign-up'].includes(currentPath))
 	{
@@ -106,7 +107,8 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			slider.addEventListener('input', () => {
 				display.textContent = slider.value;
 			});
-		}
+		} else
+			displayPop("Missing navigation HTMLElement!", "error");
 	}
 
 	if (['/tournament-setup'].includes(currentPath)) {
@@ -118,7 +120,8 @@ export async function  pathActions(currentPath: string): Promise<void> {
 		  slider.addEventListener('input', () => {
 			display.textContent = slider.value;
 		  });
-		}
+		} else
+			displayPop("Missing navigation HTMLElement!", "error");
 	}
 
 	if (['/tournament-bracket'].includes(currentPath)) {
@@ -132,7 +135,8 @@ export async function  pathActions(currentPath: string): Promise<void> {
 		container.appendChild(currentTournament.renderBracket());
 		
 		currentTournament.fillBracket();
-	}
+	} else
+		displayPop("Missing navigation HTMLElement!", "error");
 }
 
 	if (['/tank'].includes(currentPath)) {
