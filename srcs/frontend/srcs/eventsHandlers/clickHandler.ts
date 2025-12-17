@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 11:44:04 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 13:40:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,17 @@ async function	onClickEdit(): Promise<void> {
 export async function	onClickHistory(targetId: number | null, targetName: string | null): Promise<void> {
 	//	MATHIS/AXEL/KILLIAN: SECURE IF NOT AUTH
 
-	router.navigate("/history");
-
-	setTimeout(() => {
-		initHistoryListeners(targetId, targetName);
-		loadUserStats(targetId, targetName);
-	}, 50);
+	if (appStore.getState().user.isAuth){
+		router.navigate("/history");
+		
+		setTimeout(() => {
+			initHistoryListeners(targetId, targetName);
+			if (targetId)
+				loadUserStats(targetId, targetName);
+		}, 50);
+	}
+	else
+		router.navigate("/");
 }
 
 function	onClickCancel(): void {

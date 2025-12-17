@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 11:47:33 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 13:37:44 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,9 @@ export async function  pathActions(currentPath: string): Promise<void> {
 
 	if (['/history'].includes(currentPath))
 	{
-		initHistoryListeners(null);
+		if (user.isAuth){
+			initHistoryListeners(null);
+		}
 	}
 
 	if (['/pongmenu'].includes(currentPath)) {
