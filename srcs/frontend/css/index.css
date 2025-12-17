@@ -87,35 +87,57 @@ div.error, div.success, div.notif {
     margin-top: 10px;
 }
 
-div.error {
-    background-color: rgba(255, 69, 69, 0.774);
-    box-shadow: 0 0 5px rgba(255, 69, 69, 0.774);
-	pointer-events: auto;
-}
-
 div.success {
-    background-color: rgba(69, 255, 69, 0.774);
-    box-shadow: 0 0 5px rgba(69, 255, 69, 0.774);
+	background-color: #000000;
+	border: 2px solid #45ff45c5;
+	box-shadow: 0 0 10px #45ff45c5, inset 0 0 5px #45ff45c5;
+	
+	font-family: 'Courier New', Courier, monospace;
+	color: #45ff45c5;
+	font-weight: bold;
+	text-transform: uppercase;
+
+	border-radius: 10px;
+	padding: 15px;
+	margin-top: 15px;
+	
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+
+	animation: slideIn 0.3s ease-out forwards;
+
 	pointer-events: auto;
+	justify-content: center;
 }
 
 div.notif {
-    background-color: rgba(0, 174, 255, 0.774);
-    box-shadow: 0 0 5px rgba(0, 174, 255, 0.774);
+	background-color: #000000;
+	border: 2px solid #00aeffc5;
+	box-shadow: 0 0 10px #00aeffc5, inset 0 0 5px #00aeffc5;
+	
+	font-family: 'Courier New', Courier, monospace;
+	color: #00aeffc5;
+	font-weight: bold;
+	text-transform: uppercase;
+
+	border-radius: 10px;
+	padding: 15px;
+	margin-top: 15px;
+	
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+
+	animation: slideIn 0.3s ease-out forwards;
+
 	pointer-events: auto;
+	justify-content: center;
 }
 
 div.error > p, div.success > p, div.notif > p {
-    max-height: 100%;
-    margin: 0;
-    color: black;
-}
-    
-div.error > span, div.success > span, div.notif > span {
-    vertical-align: middle;
-    margin-left: auto;
-    text-align: left;
-    color: black;
+	margin: 0;
+	font-size: 14px;
 }
 
 div.error {
@@ -139,6 +161,19 @@ div.error {
 	animation: slideIn 0.3s ease-out forwards;
 
 	pointer-events: auto;
+	justify-content: center;
+}
+
+div.error:hover {
+	box-shadow: 0 0 15px #ff3333;
+}
+
+div.success:hover {
+	box-shadow: 0 0 15px #45ff45c5;
+}
+
+div.notif:hover {
+	box-shadow: 0 0 15px #00aeffc5;
 }
 
 @keyframes slideIn {
@@ -147,16 +182,22 @@ div.error {
 }
 
 div.error > p {
-	margin: 0;
-	font-size: 14px;
 	text-shadow: 0 0 2px #ff3333;
 	color: #ff3333;
 }
 
-div.error > span {
-	margin-left: auto;
-	font-weight: bold;
-	color: #fff;
+div.success > p {
+	text-shadow: 0 0 2px #45ff45;
+	color: #45ff45;
+}
+
+div.notif > p {
+	text-shadow: 0 0 2px #00aeff;
+	color: #00aeff;
+}
+
+div.error > span, div.success > span, div.notif > span {
+	display: none;
 }
 
 p.msg-error {
