@@ -981,6 +981,29 @@ input[type=range]::-moz-range-thumb {
 	box-shadow: 0 0 10px #fff;
 }
 
+.stat-card-user {
+	padding: 20px;
+	border: 1px solid #444;
+	border-radius: 8px;
+	text-align: center;
+}
+
+.stat-card-user-header {
+	padding-bottom: 10px;
+	margin-top: 0px;
+	margin-bottom: 15px;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.stat-box-data {
+	background: #222;
+	padding: 10px;
+	border-radius: 4px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+}
+
 /* ==========================================================================
    10. HISTORY SPECIFIC (New Section)
    ========================================================================== */

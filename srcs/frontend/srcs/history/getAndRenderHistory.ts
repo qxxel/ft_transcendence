@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderHistory.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 04:44:22 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 10:39:14 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,11 +153,11 @@ function renderGames(
 }
 
 export function buildElement<K extends keyof HTMLElementTagNameMap>(
-	tag: K, 
-	classes: string[] = [], 
-	text: string = "", 
-	children: HTMLElement[] = []
-): HTMLElementTagNameMap[K] {
+		tag: K, 
+		classes: string[] = [], 
+		text: string = "", 
+		children: HTMLElement[] = []
+	): HTMLElementTagNameMap[K] {
 	const element = document.createElement(tag);
 	if (classes.length) element.classList.add(...classes.filter(Boolean));
 	if (text) element.textContent = text;

@@ -1,98 +1,104 @@
-<div id="user-profile" class="game-container">
+<div class="profile-wrapper" style="display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
 
-	<div class="profile-header" id="profile-header">
-		<div class="profile-header-header">
-			<h1>User Profile</h1>
-			<div class="profile-navigation">
-				<button type="button" onclick="onClickHistory();" id="profile-history" class="btn-history">
+	<div id="user-stats-container" class="stats-container" style="flex: 1; min-width: 300px; max-width: 400px; display: flex; flex-direction: column; gap: 20px;">
+	</div>
+	
+	<div id="user-profile" class="game-container">
+		
+		<div class="profile-header" id="profile-header">
+			<div class="profile-header-header">
+				<h1>User Profile</h1>
+				<div class="profile-navigation">
+					<button type="button" onclick="onClickHistory();" id="profile-history" class="btn-history">
 					History
 				</button>
 			</div>
 		</div>
-	
-	
+		
+		
 		<div id="avatar-container">
 			<img id="display-user-avatar" class="avatar-image view-mode user-avatar" src="/assets/default_avatar.png" alt="User avatar">
-
-			<label for="avatar-upload" class="avatar-wrapper edit-mode" title="Edit avatar" hidden>
-
-				<img id="user-avatar" class="avatar-image user-avatar" src="/assets/default_avatar.png" alt="User avatar">
-
-				<div class="avatar-overlay">
-					<span>Edit</span>
-				</div>
-
-				<input type="file" id="avatar-upload" accept="image/*">
-
-			</label>
-		</div>
-	</div>
-	
-
-	<div class="section-header">
-		<h3>User Info</h3>
-		<button type="button" onclick="onClickEdit();" id="edit-submit" class="btn-icon view-mode">
-			✎ Edit Profile
-		</button>
-	</div>
-
-	<form id="user-settings-form" class="user-settings-form">
-
-	<div class="form-grid">
-		<div class="form-group">
-			<label for="edit-username">Username</label>
-			<input type="text" id="edit-username" class="edit-mode styled-input" name="username" hidden>
-			<div id="user-username" class="view-mode data-display"></div>
-			</div>
-			
-			<div class="form-group">
-				<label for="edit-email">Email</label>
-				<input type="email" id="edit-email" class="edit-mode styled-input" name="email" hidden>
-				<div id="user-email" class="view-mode data-display"></div>
-			</div>
-		</div>
-
-		<p id="user-setting-msg-error" class="edit-mode" hidden style="color: #ff4444; text-align: center; margin-top: 10px;"></p>
-
-		<div class="section-header">
-			<h3>Security</h3>
-		</div>
-
-		<div class="form-group row-layout">
-			<label>Two-Factor Auth</label>
-			
-			<div class="security-controls">
-				<div class="view-mode">
-					<span id="switch-span" class="badge status-disabled">Disabled</span>
-				</div>
-
-				<div class="edit-mode" hidden>
-					<label class="custom-checkbox">
-						<input type="checkbox" id="edit-2fa">
-						<span>Enable 2FA</span>
-					</label>
-				</div>
-			</div>
-		</div>
-
-		<div class="danger-zone">
-			<p class="warning-text">Once you delete your account, there is no going back.</p>
-			
-			<div class="account-actions">
-				<button type="button" onclick="onClickDeleteAccountStep();" id="button-step1-delete-account" class="btn-danger">
-					Delete Account
-				</button>
 				
-				<div class="edit-mode button-row" hidden>
-					<button type="button" onclick="onClickCancel();" class="btn-ghost">Cancel</button>
-					<button type="submit" id="save-settings-submit" class="btn-primary">Save Changes</button>
-				</div>
+				<label for="avatar-upload" class="avatar-wrapper edit-mode" title="Edit avatar" hidden>
+					
+					<img id="user-avatar" class="avatar-image user-avatar" src="/assets/default_avatar.png" alt="User avatar">
+					
+					<div class="avatar-overlay">
+						<span>Edit</span>
+					</div>
+					
+					<input type="file" id="avatar-upload" accept="image/*">
+					
+				</label>
 			</div>
 		</div>
-
-	</form>
+		
+		
+		<div class="section-header">
+			<h3>User Info</h3>
+			<button type="button" onclick="onClickEdit();" id="edit-submit" class="btn-icon view-mode">
+				✎ Edit Profile
+			</button>
+		</div>
+		
+		<form id="user-settings-form" class="user-settings-form">
+			
+			<div class="form-grid">
+				<div class="form-group">
+					<label for="edit-username">Username</label>
+					<input type="text" id="edit-username" class="edit-mode styled-input" name="username" hidden>
+					<div id="user-username" class="view-mode data-display"></div>
+				</div>
+				
+				<div class="form-group">
+					<label for="edit-email">Email</label>
+					<input type="email" id="edit-email" class="edit-mode styled-input" name="email" hidden>
+					<div id="user-email" class="view-mode data-display"></div>
+				</div>
+			</div>
+			
+			<p id="user-setting-msg-error" class="edit-mode" hidden style="color: #ff4444; text-align: center; margin-top: 10px;"></p>
+			
+			<div class="section-header">
+				<h3>Security</h3>
+			</div>
+			
+			<div class="form-group row-layout">
+				<label>Two-Factor Auth</label>
+				
+				<div class="security-controls">
+					<div class="view-mode">
+						<span id="switch-span" class="badge status-disabled">Disabled</span>
+					</div>
+					
+					<div class="edit-mode" hidden>
+						<label class="custom-checkbox">
+							<input type="checkbox" id="edit-2fa">
+							<span>Enable 2FA</span>
+						</label>
+					</div>
+				</div>
+			</div>
+			
+			<div class="danger-zone">
+				<p class="warning-text">Once you delete your account, there is no going back.</p>
+				
+				<div class="account-actions">
+					<button type="button" onclick="onClickDeleteAccountStep();" id="button-step1-delete-account" class="btn-danger">
+						Delete Account
+					</button>
+					
+					<div class="edit-mode button-row" hidden>
+						<button type="button" onclick="onClickCancel();" class="btn-ghost">Cancel</button>
+						<button type="submit" id="save-settings-submit" class="btn-primary">Save Changes</button>
+					</div>
+				</div>
+			</div>
+			
+		</form>
+	</div>
 </div>
-
+		
 <div id="confirm-setting" class="game-container" hidden>
 	<form id="confirm-setting-form">
 		<h1>Verify your identity</h1>
