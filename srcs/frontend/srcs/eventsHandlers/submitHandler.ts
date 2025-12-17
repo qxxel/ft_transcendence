@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 08:16:39 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 14:31:39 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,9 +305,13 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 }
 
 async function	handleAddFriendForm(form: HTMLFormElement): Promise<void> {
-	const	targetName: string | undefined = (document.getElementById("username-add-input") as HTMLInputElement)?.value;
-	if (!targetName)
+	const	targetNameElement: HTMLInputElement | undefined = (document.getElementById("username-add-input") as HTMLInputElement);
+	if (!targetNameElement)
 		return displayPop("Missing HTMLElement!", "error");
+
+	const	targetName: string | undefined = targetNameElement.value;
+	if (!targetName)
+		return ;
 	form.reset();
 
 	const	respTargetId: Response = await sendRequest(`/api/user/lookup/${targetName}`, "get", null);
