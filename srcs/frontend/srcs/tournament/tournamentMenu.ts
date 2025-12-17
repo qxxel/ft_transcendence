@@ -16,6 +16,7 @@
 
 import { sendRequest }  from "../utils/sendRequest";
 import { displayPop }   from "../utils/display";
+import { appStore } from "../objects/store";
 
 /* ====================== FUNCTIONS ====================== */
 
@@ -25,7 +26,7 @@ export async function loadTournamentMenu() {
 	
 	if (response.ok)
 	{
-		let	ranked: HTMLElement | null = document.getElementById('menu-ranked');
+		const	ranked: HTMLElement | null = document.getElementById('menu-ranked');
 		if (ranked instanceof HTMLElement) {
 			ranked.style.display = 'block';
 		} else
@@ -34,12 +35,18 @@ export async function loadTournamentMenu() {
 }
 
 export async function loadTournamenSetupRanked() {
-
 	const	response: Response = await sendRequest(`/api/user/me`, 'get', null);
 	
-	if (!response.ok)
-	{
+	if (!response.ok) {
 		displayPop(response.statusText, "error");
 		return ;
 	}
+
+	const e: HTMLElement | null = document.getElementById('ranked-p1');
+	if (!(e instanceof HTMLInputElement)) {
+		displayPop("Missing navigation HTMLElement!", "error");
+		return;
+	}
+	const self = await response.json();
+	e.value = self.username;
 }

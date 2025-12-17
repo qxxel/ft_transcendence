@@ -17,7 +17,7 @@
 
 import { router }				from "../index.js"
 import { loadTwofa, loadUser, loadUserStats }	from "./loadPage.js"
-import { loadTournamentMenu }	from "../tournament/tournamentMenu.js"
+import { loadTournamenSetupRanked, loadTournamentMenu }	from "../tournament/tournamentMenu.js"
 import { PongGame }				from "../Pong/pong.js"
 import { appStore }				from "../objects/store.js"
 import { displayPop }				from "../utils/display.js"
@@ -141,6 +141,9 @@ export async function  pathActions(currentPath: string): Promise<void> {
 
 		if (!user.isAuth)
 			router.navigate("/");	
+
+
+		loadTournamenSetupRanked();
 
 		// if (slider instanceof HTMLInputElement && display instanceof HTMLSpanElement) {
 		//   display.textContent = slider.value;

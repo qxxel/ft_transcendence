@@ -1,13 +1,11 @@
 <div class="game-container">
   <h1>Ranked Tournament</h1>
   <p>Enter the usernames of the 3 other players.</p>
-  <p class="msg-error" style="font-size: 0.8rem;">All players must be registered.</p>
-  
   <div class="tournament-setup-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 600px; margin: 2rem auto;">
 	
 	<div class="input-group">
 	  <label style="display:block; text-align:left; font-size:0.8rem; margin-bottom:5px;">You</label>
-	  <input type="text" id="ranked-p1" class="player-name-input ranked-input" value="Me" disabled 
+	  <input type="text" id="ranked-p1" class="player-name-input ranked-input" disabled 
 			 style="background: rgba(255,255,255,0.1); cursor: not-allowed;">
 	</div>
 
@@ -35,7 +33,7 @@
           </div>
   </div>
 
-  <p id="ranked-msg-error" class="msg-error"></p>
+  <p id="msg-error" class="msg-error"></p>
   
   <div class="tournament-menu-content">
 	
