@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 04:31:14 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 08:16:39 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,12 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 				"Content-Type": "application/json"
 			},
 			body: JSON.stringify({ })
-		}).then((response) => {
-				if (!response.ok)
-					displayPop(response, "error");
-			});
+		}).then((response: Response) => {
+			if (!response.ok)
+				displayPop(response, "error");
+		}).catch((e: unknown) => {
+			displayPop("" + e, "error");
+		});
 		
 		return ;
 	}

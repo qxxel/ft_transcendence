@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 05:56:08 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 08:15:41 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,7 +272,7 @@ async function	onClickNewCode(): Promise<void> {
 			},
 			body: JSON.stringify({ })
 		}
-	).then(async (response) => {
+	).then((response: Response) => {
 			if (!response.ok)
 			{
 				if (btnSend instanceof HTMLButtonElement) btnSend.disabled = false;
@@ -284,10 +284,11 @@ async function	onClickNewCode(): Promise<void> {
 				displayPop(response, "error");
 				return;
 			}
+			loadTwofa();
 		}
-	);
-
-	loadTwofa();
+	).catch((e: unknown) => {
+		displayPop("" + e, "error");
+	});
 }
 
 /* ====================== UI TOGGLE HELPERS ====================== */

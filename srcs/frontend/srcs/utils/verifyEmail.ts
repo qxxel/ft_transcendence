@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:11:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/17 06:09:07 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 08:19:03 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,11 @@ export function	verifyEmail(idDivHidden: string, idDivVisible: string, email: st
 			},
 			body: JSON.stringify({ email })
 		})
-		.then(async (res: Response) => {
+		.then((res: Response) => {
 			if (!res.ok)
-			{
 				displayPop(res, "error")
-				return ;
-			}
+		}).catch((e: unknown) => {
+			displayPop("" + e, "error")
 		});
 	}
 }
