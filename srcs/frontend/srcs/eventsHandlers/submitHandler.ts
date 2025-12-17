@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 14:31:39 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 15:04:45 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,6 +282,9 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		verifyEmail("user-profile", "confirm-setting", newEmail);
 	else
 		verifyEmail("user-profile", "confirm-setting", null);
+
+	const statsContainer = document.getElementById("user-stats-container");
+	if (statsContainer) statsContainer.hidden = true;
 
 	const	userUpdate: userUpdate = {
 		username: newUsername,
