@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 09:06:50 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 09:09:56 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -727,8 +727,8 @@ export async function   setupClickHandlers(): Promise<void> {
 
 	document.addEventListener('input', (event) => {
 		const	target: EventTarget | null = event.target;
-		if (!(target instanceof HTMLSelectElement)) {
-			displayPop("Missing select HTMLElement!", "error");
+		if (!(target instanceof HTMLSelectElement) && !(target instanceof HTMLInputElement)) {
+			displayPop("Missing HTMLElement!", "error");
 			return;
 		}
 
