@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 02:09:24 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 08:11:42 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,9 @@ export function delTabs() {
 		appStore.setState((state) => ({
 			...state,
 			user: {
-				...state.user,
+				id: null,
+				username: null,
+				avatar: null,
 				isAuth: false
 			}
 		}));
