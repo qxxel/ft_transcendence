@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tabs.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 02:09:24 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/17 08:11:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 13:47:45 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ export function delTabs() {
 				id: null,
 				username: null,
 				avatar: null,
+				pendingAvatar: null,
 				isAuth: false
 			}
 		}));

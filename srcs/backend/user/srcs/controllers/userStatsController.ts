@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsController.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:26:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 19:47:56 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 16:17:39 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,18 @@ export async function	userStatsController(userFastify: FastifyInstance): Promise
 			const	userId: number = extractUserId(request);
 
 			const	userStats: userStatsRespDto = await userStatsServ.getStatsByUserId(userId);
+
+			return reply.code(200).send(userStats);
+		} catch (err: unknown) {
+			errorsHandler(userFastify, reply, err);
+		}
+	});
+
+	userFastify.patch('/me', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	userId: number = extractUserId(request);
+
+			const	userStats: userStatsRespDto = await userStatsServ.updateStats(request.body, userId);
 
 			return reply.code(200).send(userStats);
 		} catch (err: unknown) {

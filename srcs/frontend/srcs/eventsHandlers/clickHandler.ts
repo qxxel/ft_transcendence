@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 13:41:24 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 15:04:12 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ async function  onClickLogout(): Promise<void> {
 			id: null,
 			username: null,
 			avatar: null,
+			pendingAvatar: null,
 			isAuth: false
 		}
 	}));
@@ -151,6 +152,7 @@ async function onClickDeleteAccount(): Promise<void>{
 			id: null,
 			username: null,
 			avatar: null,
+			pendingAvatar: null,
 			isAuth: false
 		}
 	}));
@@ -201,6 +203,7 @@ async function	onClickDeleteTwofa(): Promise<void> {
 			id: null,
 			username: null,
 			avatar: null,
+			pendingAvatar: null,
 			isAuth: false
 		}
 	}));

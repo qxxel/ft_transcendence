@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 06:45:49 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 11:52:28 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ import { usersRespDto }						from "../dtos/usersRespDto.js"
 import { errorsHandler }					from "../utils/errorsHandler.js"
 import { usersUpdateDto }					from "../dtos/usersUpdateDto.js"
 import { extractUserId }					from "../utils/extractHeaders.js"
+import { privacyFilter }					from "../utils/privacyFilter.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 import type { AxiosResponse } 									from 'axios'
@@ -65,7 +66,8 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 			else
 				user = await usersServ.getUserByEmail(identifier);
 
-			return reply.code(200).send(user);
+			
+			return reply.code(200).send(privacyFilter(user));
 		}
 		catch (err: unknown) {
 			return errorsHandler(userFastify, reply, err);

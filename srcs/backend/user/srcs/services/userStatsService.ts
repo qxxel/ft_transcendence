@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsService.ts                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:23:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 04:55:32 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 16:17:50 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ export class	userStatsService {
 	constructor(userStatsRepo: userStatsRepository) {
 		this.userStatsRepo = userStatsRepo;
 	}
-	
+
 	async updateStats(body: any, userId: number): Promise<userStatsRespDto> {
 		const	query: string = "SELECT 1 FROM user_stats WHERE user_id = ? LIMIT 1";
 		if (!(await this.userStatsRepo.isTaken(query, [userId.toString()])))
@@ -48,10 +48,10 @@ export class	userStatsService {
 		if (body.gameType && body.gameType === "tank")
 		{
 			userStatsUpdate = new userStatsTankUpdateDto(body, userId);
-			
+
 			return await this.userStatsRepo.updateTankStats(userStatsUpdate);
 		}
-		
+
 		else
 			throw new GameNotFoundError("Game not found, try pong or tank");
 	}

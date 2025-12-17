@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tank.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 09:45:05 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 16:07:03 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ import { Game }									from "../Pong/gameClass.js"
 import { sendRequest }							from "../utils/sendRequest.js"
 
 import type { Color, Keys }	from "./interface.js"
-import type { Spawn }		from "./global.js"
+import type { ResumeStats, Spawn }		from "./global.js"
 
 
 
@@ -292,10 +292,16 @@ export class	TankGame extends Game {
 		}
 	}
   private showEndGameDashboard() {
-	this.updateNameDisplay()
+	this.updateNameDisplay();
+
 	const history: History | null = this.setHistory();
 	if (history)
 		sendRequest("/api/game", "POST", history);
+
+	const	resumeStats: ResumeStats | null = this.setStats();
+	if (resumeStats)
+		sendRequest("/api/user/stats/me", "PATCH", resumeStats);
+
 	const	dashboard = document.getElementById('game-over-dashboard');
 	if (!dashboard)
 		return displayPop("Missing tank HTMLElement!", "error");
@@ -434,6 +440,18 @@ export class	TankGame extends Game {
 			powerup:(this.star1 || this.star2 || this.star3) ? 1 : 0,
 			start:this.startTime,
 			duration:Date.now() - this.startTime
+		};
+	}
+
+	private setStats(): ResumeStats | null {
+
+		if (!GSTATE.STATE.user.username)
+			return null;
+		return {
+			gameType: "tank",
+			winner: GSTATE.STATS1.win ? true : false,
+			time: Date.now() - this.startTime,
+			kills: GSTATE.STATS1.win ? 1 : 0
 		};
 	}
 }

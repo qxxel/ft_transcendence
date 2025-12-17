@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 20:13:44 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 17:54:46 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 13:17:28 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ export class	userStatsPongUpdateDto {
 	private	userId: number;
 
 	private	winner: boolean;
-	private	eloAdd: number;
 	private	time: number;
 	private	pointsMarked: number;
 
@@ -32,7 +31,6 @@ export class	userStatsPongUpdateDto {
 		this.userId = userId;
 
 		this.winner = row.winner ? true : false;
-		this.eloAdd = row.eloAdd;
 		this.time = row.time;
 		this.pointsMarked = row.pointsMarked;
 	}
@@ -40,7 +38,6 @@ export class	userStatsPongUpdateDto {
 
 	getTable(): number[] {
 		return [
-			this.eloAdd,
 			this.time,
 			this.pointsMarked,
 			this.userId
@@ -62,7 +59,6 @@ export class	userStatsTankUpdateDto {
 	private	userId: number;
 	
 	private	winner: boolean;
-	private	eloAdd: number;
 	private	time: number;
 	private	kills: number;
 
@@ -72,7 +68,6 @@ export class	userStatsTankUpdateDto {
 		this.userId = userId;
 
 		this.winner = row.winner ? true : false;
-		this.eloAdd = row.eloAdd;
 		this.time = row.time;
 		this.kills = row.kills;
 	}
@@ -80,7 +75,6 @@ export class	userStatsTankUpdateDto {
 
 	getTable(): number[] {
 		return [
-			this.eloAdd,
 			this.time,
 			this.kills,
 			this.userId

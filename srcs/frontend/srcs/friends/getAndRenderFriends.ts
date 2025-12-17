@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderFriends.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 13:21:27 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 15:04:19 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ import { onClickHistory }					from "../eventsHandlers/clickHandler.js"
 /* ====================== INTERFACE ====================== */
 
 interface	UserObject {
-	id: number;
+	id: string;
 	username: string;
 	avatar: string | null;
-	email: string;
 	status: string;
 	receiver_id: string;
+	is_log: string;
 }
 
 
@@ -155,7 +155,7 @@ function	addFriendInList(friendsListDiv: HTMLDivElement, friend: UserObject): vo
 	historyButton.classList.add("history-button");
 	historyButton.dataset.targetId = friend.id.toString();
 	historyButton.dataset.targetUsername = friend.username;
-	historyButton.onclick = () => onClickHistory(friend.id, friend.username);
+	historyButton.onclick = () => onClickHistory(parseInt(friend.id, 10), friend.username);
 	historyButton.textContent = "History";
 
 	const	removeButton: HTMLButtonElement = document.createElement("button");
