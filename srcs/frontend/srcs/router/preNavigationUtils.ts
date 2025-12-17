@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 04:04:26 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 13:47:35 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,10 @@ export async function	redirections(currentPath: string): Promise<void> {
 		appStore.setState((state) => ({
 			...state,
 			user: {
-				...state.user,
 				id: result.id as number,
 				username: result.username,
+				avatar: result.avatar,
+				pendingAvatar: null,
 				isAuth: true
 			}
 		}));

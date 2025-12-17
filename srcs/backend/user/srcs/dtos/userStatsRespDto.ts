@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:54:53 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 18:54:56 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 13:17:09 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@
 export class	userStatsRespDto {
 	private	id: number;
 	private	userId: number;
-
-	private	pongElo: number;
-	private	tankElo: number;
 
 	private	pongWins: number;
 	private	pongLosses: number;
@@ -36,9 +33,6 @@ export class	userStatsRespDto {
 	constructor(row: any) {
 		this.id = row.id;
 		this.userId = row.user_id;
-
-		this.pongElo = row.pong_elo;
-		this.tankElo = row.tank_elo;
 
 		this.pongWins = row.pong_wins;
 		this.pongLosses = row.pong_losses;
@@ -56,8 +50,6 @@ export class	userStatsRespDto {
 		return [
 			this.id,
 			this.userId,
-			this.pongElo,
-			this.tankElo,
 			this.pongWins,
 			this.pongLosses,
 			this.pongTotalTime,

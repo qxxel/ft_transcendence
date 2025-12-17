@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 14:54:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/03 16:09:19 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 11:57:50 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ export interface	FriendUser {
 	id: number;
 	username: string;
 	avatar: string;
-	email: string;
 	status: string; 
 	receiver_id: number;
-	// status: string; //	A METTRE SI ON MET ONLINE OU OFFLINE EN DB
+	is_log: number;
 }

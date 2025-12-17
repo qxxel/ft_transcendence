@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   store.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:24:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:09:46 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 13:48:09 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ export interface	UserState {
 	id: number | null;
 	username: string | null;
 	avatar: string | null;
+	pendingAvatar: File | null;
 	isAuth: boolean;
 }
 
@@ -46,6 +47,7 @@ const	initialState: AppState = {
 		id: null,
 		username: null,
 		avatar: null,
+		pendingAvatar: null,
 		isAuth: false
 	},
 	game: {
