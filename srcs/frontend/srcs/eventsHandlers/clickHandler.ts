@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 04:43:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 05:56:08 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,8 +207,10 @@ async function	onClickDeleteTwofa(): Promise<void> {
 	if (socket && socket.connected)
 		socket.disconnect();
 
-	if (router.Path === "/2fa")
+	if (router.Path === "/2fa") {
 		router.navigate("/sign-in");
+		return;
+	}
 
 	router.navigate(router.Path);
 }
