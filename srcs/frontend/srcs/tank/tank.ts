@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 04:20:41 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 09:07:05 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,7 +341,7 @@ export class	TankGame extends Game {
 	private updateNameDisplay() {
 		const	p1Span: HTMLElement | null = document.getElementById('p1-name');
 		const	p2Span: HTMLElement | null = document.getElementById('p2-name');
-		if (!p1Span || p2Span) displayPop("Missing tank HTMLElement!", "error");
+		if (!p1Span || !p2Span) displayPop("Missing tank HTMLElement!", "error");
 		if (p1Span) p1Span.innerText = this.player1Name + "";
 		if (p2Span) p2Span.innerText = this.player2Name + "";
   	}

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/17 06:02:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 08:48:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ export async function loadUser() {
 
 	if (userRes.is2faEnable == true) {
 		const	switchSpan: HTMLElement | null = document.getElementById("switch-span");
-		if (switchSpan instanceof HTMLInputElement) {
+		if (switchSpan instanceof HTMLSpanElement) {
 			switchSpan.textContent = "Enabled";
 			switchSpan.classList.add('status-enabled');
 			switchSpan.classList.remove('status-disabled');
