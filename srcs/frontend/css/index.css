@@ -1004,6 +1004,17 @@ input[type=range]::-moz-range-thumb {
 	flex-direction: column;
 }
 
+.profile-container {
+	font-weight: bold;
+	font-size: 1.2em;
+	width: 100%;
+	min-width: 800px;
+	max-width: 800px;
+	display: flex;
+	flex-direction: row;
+	gap: 20px;
+}
+
 /* ==========================================================================
    10. HISTORY SPECIFIC (New Section)
    ========================================================================== */

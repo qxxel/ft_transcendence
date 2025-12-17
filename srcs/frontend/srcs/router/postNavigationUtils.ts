@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 06:10:08 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 11:47:33 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { router }				from "../index.js"
-import { loadTwofa, loadUser }	from "./loadPage.js"
+import { loadTwofa, loadUser, loadUserStats }	from "./loadPage.js"
 import { PongGame }				from "../Pong/pong.js"
 import { appStore }				from "../objects/store.js"
 import { displayPop }				from "../utils/display.js"
@@ -66,8 +66,10 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			router.navigate("/pongmenu");
 	}
 
-	if (['/user'].includes(currentPath))
+	if (['/user'].includes(currentPath)){
 		await loadUser();
+		await loadUserStats(null, null);
+	}
 
 	if (['/2fa'].includes(currentPath))
 		loadTwofa();
