@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gamesController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:36:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:54:47 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 09:52:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ export async function	gamesController(gameFastify: FastifyInstance) {
 		}
 
 		try {
-			const	newGame: gamesAddDto = new gamesAddDto(request.body);
+			const	userId: number = extractUserId(request);
+
+			const	newGame: gamesAddDto = new gamesAddDto(request.body, userId);
 			const	game: gamesRespDto = await gamesServ.addGame(newGame);
 
 			return reply.code(201).send(game);

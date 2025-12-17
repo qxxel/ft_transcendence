@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:04:52 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:38:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 09:51:35 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ export class	gamesAddDto {
 	private	start: number;
 	private	duration: number;
 
-	constructor(row: any) {
-		this.idClient = row.idClient;
+	constructor(row: any, userId: number | null = null) {
+		if (userId)
+			this.idClient = userId;
+		else
+			this.idClient = row.idClient;
 		this.gameType = row.gameType;
 		this.winner = row.winner;
 		this.p1 = row.p1;

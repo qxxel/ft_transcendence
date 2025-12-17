@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 09:16:30 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 09:53:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ async function  onClickLogout(): Promise<void> {
 	}));
 
 	getMenu(false);
-			
+
 	if (socket && socket.connected)
 		socket.disconnect();
 

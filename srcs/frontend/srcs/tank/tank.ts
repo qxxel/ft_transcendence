@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 09:07:05 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 09:45:05 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,9 +294,11 @@ export class	TankGame extends Game {
   private showEndGameDashboard() {
 	this.updateNameDisplay()
 	const history: History | null = this.setHistory();
-	if (history) sendRequest("/api/game", "POST", history);
+	if (history)
+		sendRequest("/api/game", "POST", history);
 	const	dashboard = document.getElementById('game-over-dashboard');
-	if (!dashboard) return displayPop("Missing tank HTMLElement!", "error");
+	if (!dashboard)
+		return displayPop("Missing tank HTMLElement!", "error");
 
 	const	matchDurationSeconds: number = Math.floor((Date.now() - this.startTime) / 1000);
 	const	minutes: number = Math.floor(matchDurationSeconds / 60);
@@ -419,10 +421,10 @@ export class	TankGame extends Game {
 
 	private setHistory(): History | null {
 
-		if (!GSTATE.STATE.user.username) return null;
+		if (!GSTATE.STATE.user.username)
+			return null;
 		return {
-			idClient:1,
-			gameType:2,
+			gameType: 2,
 			winner:GSTATE.STATS1.win ? 1 : 0,
 			p1:this.player1Name,
 			p2:this.player2Name,

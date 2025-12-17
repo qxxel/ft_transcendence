@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initNotificationSync.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 18:23:25 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 16:26:16 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 09:54:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ export function	initNotificationSync(): void {
 	let isConnected = false;
 
 	appStore.subscribe((state: AppState) => {
-		if ((state.user && state.user.isAuth) &&!isConnected)
+		if ((state.user && state.user.isAuth) && !isConnected)
 		{
 			notificationService.connect();
 			isConnected = true;
