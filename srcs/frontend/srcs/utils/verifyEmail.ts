@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:11:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/17 03:26:34 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 06:09:07 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,31 @@ import { displayDate, displayPop }	from "./display.js"
 
 /* ====================== FUNCTIONS ====================== */
 
-export async function	verifyEmail(idDivHidden: string, idDivVisible: string, email: string | null): Promise<void> {
+export function	verifyEmail(idDivHidden: string, idDivVisible: string, email: string | null): void {
 
-	const	response: Response = await fetch('/api/jwt/payload/twofa', {
+	fetch('/api/jwt/payload/twofa', {
 		method: "GET",
 		credentials: "include"
-	});
-
-	if (response.ok)
-	{
-		const	result = await response.json();
-
-		if (result.exp)
-			displayDate(result.exp * 1000);
+	}).then((response: Response) => {
+		if (response.ok)
+		{
+			response.json(
+			).then((result: any) => {
+				if (result.exp)
+					displayDate(result.exp * 1000);
+				else
+					displayPop("Unable to display the expiration date", "error");
+	
+			}).catch((e: unknown) => {
+				displayPop("" + e, "error");
+			});
+	
+		}
 		else
-			displayPop("Unable to display the expiration date", "error");
-	}
-	else
-		displayDate(Date.now() + 5 * 60 * 1000);
+			displayDate(Date.now() + 5 * 60 * 1000);
+	}).catch((e: unknown) => {
+		displayPop("" + e, "error");
+	});
 
 	const	divHidden = document.getElementById(idDivHidden);
 	if (divHidden)
@@ -62,7 +69,7 @@ export async function	verifyEmail(idDivHidden: string, idDivVisible: string, ema
 			},
 			body: JSON.stringify({ email })
 		})
-		.then(async (res) => {
+		.then(async (res: Response) => {
 			if (!res.ok)
 			{
 				displayPop(res, "error")

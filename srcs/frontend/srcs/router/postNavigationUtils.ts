@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 04:33:28 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 06:10:08 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ export async function  pathActions(currentPath: string): Promise<void> {
 		await loadUser();
 
 	if (['/2fa'].includes(currentPath))
-		await loadTwofa();
+		loadTwofa();
 
 	if (['/sign-in', '/sign-up'].includes(currentPath))
 	{
