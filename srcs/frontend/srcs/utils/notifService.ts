@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   notifService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 03:49:59 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 14:55:21 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,18 @@ export class	NotificationService {
 	}
 
 	showNotification(data: any): void {
-		displayPop(`${data.message}<button id="btn-accept-${data.fromId}">Show</button>`, "notif");
+		const clickId = `notif-click-${data.fromId}`;
+		displayPop(`<div id="${clickId}" style="cursor: pointer; width: 100%; height: 100%;">${data.message}</div>`, "notif");
 
-		const	showButton: HTMLElement | null = document.getElementById(`btn-accept-${data.fromId}`);
-		if (showButton instanceof HTMLButtonElement) {
-			showButton?.addEventListener('click', () => {
+		const notifElement: HTMLElement | null = document.getElementById(clickId);
+		
+		if (notifElement) {
+			notifElement.addEventListener('click', () => {
 				router.navigate("/friends");
 			});
-		} else
+		} else {
 			displayPop("Missing HTMLElement!", "error");
+		}
 	}
 
 	createContainer(): HTMLDivElement {
