@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:47:32 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 13:14:32 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 16:27:56 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ export class	userStatsRepository {
 				WHERE user_id = ? RETURNING *;`;
 			const	elements: number[] = userStatsUpdate.getTable();
 
-			this.db.run(query, elements, function (row: unknown, err: Error | null) {
+			this.db.get(query, elements, function (err: Error | null, row: unknown) {
 				if (err)
 					return reject(err);
 

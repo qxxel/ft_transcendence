@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:26:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 11:54:50 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 16:17:39 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,19 @@ export async function	userStatsController(userFastify: FastifyInstance): Promise
 		}
 	});
 
-	userFastify.patch('/:id', async (request: FastifyRequest, reply: FastifyReply) => {		//	AXEL: MAYBE /me
+	userFastify.patch('/me', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	userId: number = extractUserId(request);
+
+			const	userStats: userStatsRespDto = await userStatsServ.updateStats(request.body, userId);
+
+			return reply.code(200).send(userStats);
+		} catch (err: unknown) {
+			errorsHandler(userFastify, reply, err);
+		}
+	});
+
+	userFastify.patch('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
 		const	{ id } = request.params as { id: string };
 		const	parseId: number = parseInt(id, 10);
 

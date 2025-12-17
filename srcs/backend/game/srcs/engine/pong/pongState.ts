@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:58:03 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/04 17:27:41 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 15:51:08 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,11 @@ export interface	PongResume {
 	score2: number;
 	duration: number;
 	longestRally: number;
+}
+
+export interface	PongStats {
+	gameType: "pong" | "tank";
+	winner: boolean;
+	time: number;
+	pointsMarked: number;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongInstance.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 00:10:35 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 15:50:55 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { Server }		from 'socket.io'
-import { GamesService }	from "../gamesService.js"
-import { gamesAddDto }	from "../../dtos/gamesAddDto.js"
 import { AIController }	from "../../engine/pong/pongAi.js"
+import { gameAxios }	from '../../game.js'
+import { gamesAddDto }	from "../../dtos/gamesAddDto.js"
+import { GamesService }	from "../gamesService.js"
 import { PongPhysics }	from "../../engine/pong/pongPhysic.js"
+import { Server }		from 'socket.io'
 
-import type { PongOptions, Collectible, PongState, PowerUps, PongResume, Paddle }	from "../../engine/pong/pongState.js"
+import type { PongOptions, Collectible, PongState, PowerUps, PongResume, Paddle, PongStats }	from "../../engine/pong/pongState.js"
 
 
 /* ====================== CLASS ====================== */
@@ -305,9 +306,19 @@ export class	PongInstance {
 				};
 
 				const	pongGame: gamesAddDto = new gamesAddDto(gameDatabase);
-				this.pongService.addGame(pongGame)
-			} catch (e) {
-				console.error("Error while saving the match:", e);
+				this.pongService.addGame(pongGame);
+
+				const	gameStats: PongStats = {
+					gameType: "pong",
+					winner: this.gameState.score1 >= this.winningScore ? true : false,
+					time: gameResume.duration,
+					pointsMarked: this.gameState.score1
+				}
+
+				console.log(gameStats);console.log(gameAxios)
+				await gameAxios.patch(`http://user:3000/stats/${this.userId}`, gameStats);
+			} catch (err: unknown) {
+				console.error("Error while saving the match: ", err);
 			}
 		}
 	}

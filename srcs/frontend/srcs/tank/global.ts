@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   global.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:34:48 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 09:45:10 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 15:58:14 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ export interface	History {
 		powerup:number;
 		start:number;
 		duration:number;
+}
+
+export interface	ResumeStats {
+	gameType: "tank";
+	winner: boolean;
+	time: number;
+	kills: number;
 }
 
 export interface	Stats {
