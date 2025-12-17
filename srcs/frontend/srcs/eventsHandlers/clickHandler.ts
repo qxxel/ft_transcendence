@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 09:09:56 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 09:16:30 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,7 +320,7 @@ function switchGameMode(mode: 'default' | 'featured'): void {
 	const	inputDiv: HTMLElement | null = document.getElementById('default-mode-content-input');
 	const	featDiv: HTMLElement | null = document.getElementById('featured-mode-content');
 
-	if (!defDiv || !inputDiv || !featDiv)
+	if (!defDiv && !inputDiv && !featDiv)
 		displayPop("Missing menu game HTMLElement!", "error");
 	
 	if (mode === 'default') {
