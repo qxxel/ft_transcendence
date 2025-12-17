@@ -17,6 +17,7 @@
 
 import { router }				from "../index.js"
 import { loadTwofa, loadUser }	from "./loadPage.js"
+import { loadTournamentMenu }	from "../tournament/tournamentMenu.js"
 import { PongGame }				from "../Pong/pong.js"
 import { appStore }				from "../objects/store.js"
 import { displayPop }				from "../utils/display.js"
@@ -111,6 +112,10 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			displayPop("Missing navigation HTMLElement!", "error");
 	}
 
+	if (['/tournament-menu'].includes(currentPath)) {
+		loadTournamentMenu();
+	}
+
 	if (['/tournament-setup'].includes(currentPath)) {
 		const	slider: HTMLElement | null = document.getElementById('choosenMaxPoints');
 		const	display: HTMLElement | null = document.getElementById('points-display');
@@ -124,20 +129,37 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			displayPop("Missing navigation HTMLElement!", "error");
 	}
 
-	if (['/tournament-bracket'].includes(currentPath)) {
-	if (!currentTournament) {
-		router.navigate("/tournament-setup");
-		return;
+	if (['/tournament-setup-ranked'].includes(currentPath)) {
+		// const	slider: HTMLElement | null = document.getElementById('choosenMaxPoints');
+		// const	display: HTMLElement | null = document.getElementById('points-display');
+
+		if (!user.isAuth)
+			router.navigate("/");	
+
+		// if (slider instanceof HTMLInputElement && display instanceof HTMLSpanElement) {
+		//   display.textContent = slider.value;
+		//   slider.addEventListener('input', () => {
+			// display.textContent = slider.value;
+		//   });
+		// } else
+			// displayPop("Missing navigation HTMLElement!", "error");
 	}
 
-	const container: HTMLElement | null = document.getElementById('bracket-container');
-	if (container) {
-		container.appendChild(currentTournament.renderBracket());
-		
-		currentTournament.fillBracket();
-	} else
-		displayPop("Missing navigation HTMLElement!", "error");
-}
+
+	if (['/tournament-bracket'].includes(currentPath)) {
+		if (!currentTournament) {
+			router.navigate("/tournament-setup");
+			return;
+		}
+
+		const container: HTMLElement | null = document.getElementById('bracket-container');
+		if (container) {
+			container.appendChild(currentTournament.renderBracket());
+
+			currentTournament.fillBracket();
+		} else
+			displayPop("Missing navigation HTMLElement!", "error");
+	}
 
 	if (['/tank'].includes(currentPath)) {
 		if (currentGame) {
