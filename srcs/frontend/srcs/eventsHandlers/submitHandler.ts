@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 14:31:39 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 15:04:15 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { appStore }					from "../objects/store.js"
+import { AppState, appStore }		from "../objects/store.js"
 import { displayError, displayPop }	from "../utils/display.js"
 import { router }					from "../index.js"
 import { socket }					from "../socket/socket.js"
@@ -23,6 +23,7 @@ import { getMenu }					from "../utils/getMenu.js"
 import { sendRequest }				from "../utils/sendRequest.js"
 import { verifyEmail }				from "../utils/verifyEmail.js"
 import { getAndRenderFriends }		from "../friends/getAndRenderFriends.js"
+import { uploadAvatar }				from "../utils/uploadAvatar.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -257,18 +258,24 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	const	newEmail: string | undefined = (document.getElementById("edit-email") as HTMLInputElement)?.value;
 	const	new2fa: boolean | undefined = (document.getElementById("edit-2fa") as HTMLInputElement)?.checked;
 
-	if (!newUsername || !newEmail || new2fa === undefined) return displayError("Username, email et 2fa required!", "user-setting-msg-error");
-	
+	if (!newUsername || !newEmail || new2fa === undefined)
+		return displayError("Username, email et 2fa required!", "user-setting-msg-error");
+
+	const	state: AppState = appStore.getState();
+
 	const	getUser: Response = await sendRequest(`/api/user/me`, 'get', null)
 	if (!getUser.ok)
 		return displayPop(getUser, "error");
+
 	
 	const	resultGetUser = await getUser.json(); // /!\ try catch
 	
 	if (resultGetUser.username == newUsername
 		&& resultGetUser.email == newEmail
 		&& resultGetUser.is2faEnable == new2fa
+		&& state.user.pendingAvatar === null
 	) return router.navigate("/user");
+
 	
 	const	postUser: Response = await sendRequest(`/api/user/me/validate`, 'post', {
 		username: newUsername,
@@ -277,6 +284,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	});
 	if (!postUser.ok)
 		return displayError(postUser, "user-setting-msg-error");
+
 	
 	if (resultGetUser.email != newEmail)
 		verifyEmail("user-profile", "confirm-setting", newEmail);
@@ -287,6 +295,13 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		username: newUsername,
 		email: newEmail,
 		is2faEnable: new2fa,
+	}
+
+	if (state.user.pendingAvatar)
+	{
+		uploadAvatar();
+		if (resultGetUser.username == newUsername && resultGetUser.email == newEmail && resultGetUser.is2faEnable == new2fa)
+			return ;			//	MATHIS: NE PAS DEMANDER DE VERIF ICI
 	}
 
 	const	verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // /!\ try catch ???

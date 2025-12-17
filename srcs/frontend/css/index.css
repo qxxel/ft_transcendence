@@ -1447,6 +1447,11 @@ input[type=range]::-moz-range-thumb {
 	border-radius: 50%;
 	border: none;
 	display: block;
+
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
 }
 
 .avatar-overlay {

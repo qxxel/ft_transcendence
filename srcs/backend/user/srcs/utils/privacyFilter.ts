@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   userDto.ts                                         :+:      :+:    :+:   */
+/*   privacyFilter.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/17 17:16:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 13:16:58 by agerbaud         ###   ########.fr       */
+/*   Created: 2025/12/17 11:46:46 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/12/17 11:51:42 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// INTERFACE FOR THE STORAGE OF USER DATA
+// THE FUNCTION THAT REMOVE SENSITIVE INFORMATIONS OF THE RESPONSE
 
 
-/* ====================== interface	====================== */
 
-export interface	userDto {
-	id?: number;
-	username: string;
-	email: string;
-	password?: string;
-	is2faEnable?: boolean;
+import type { usersRespDto } from "../dtos/usersRespDto.js";
+
+
+
+export function	privacyFilter(user: usersRespDto): Object {
+	return {
+		id: user.getId(),
+		username: user.getUsername(),
+		avatar: user.getAvatar()
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsController.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:26:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 19:47:56 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/17 11:54:50 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ export async function	userStatsController(userFastify: FastifyInstance): Promise
 		}
 	});
 
-	userFastify.patch('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
+	userFastify.patch('/:id', async (request: FastifyRequest, reply: FastifyReply) => {		//	AXEL: MAYBE /me
 		const	{ id } = request.params as { id: string };
 		const	parseId: number = parseInt(id, 10);
 

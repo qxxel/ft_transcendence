@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/17 13:09:36 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/17 15:04:27 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,44 @@ export async function loadUser() {
 	}
 
 	const	userRes: any = await response.json();
+
+	const	responseStats: Response = await sendRequest(`/api/user/stats/me`, 'get', null);
+	if (!responseStats.ok)
+	{
+		displayPop(responseStats, "error");
+		return ;
+	}
+
+	const	userStatsRes: any = await responseStats.json();
+	console.log(userStatsRes);
+
+	const statsContainer = document.getElementById("user-stats-container");
+	
+	if (statsContainer) {
+		statsContainer.innerHTML = '';
+
+		const pongData = {
+			wins: userStatsRes.pongWins,
+			losses: userStatsRes.pongLosses,
+			totalTime: userStatsRes.pongTotalTime,
+			specialLabel: "Points",
+			specialValue: userStatsRes.pongPointsMarked
+		};
+
+		const tankData = {
+			wins: userStatsRes.tankWins,
+			losses: userStatsRes.tankLosses,
+			totalTime: userStatsRes.tankTotalTime,
+			specialLabel: "Kills",
+			specialValue: userStatsRes.tankKills
+		};
+
+		const pongCard = createStatCard("Pong", "🏓", "#ffffff", pongData);
+		const tankCard = createStatCard("Tank", "🚀", "#ff8888", tankData);
+
+		statsContainer.appendChild(pongCard);
+		statsContainer.appendChild(tankCard);
+	}
 
 	const	imgElement: HTMLImageElement = document.getElementById("user-avatar") as HTMLImageElement;
 	const	displayImgElement: HTMLImageElement = document.getElementById("display-user-avatar") as HTMLImageElement;
