@@ -44,16 +44,16 @@ p {
 }
 
 .hidden {
-    display: none !important;
+	display: none !important;
 }
 
 div#div-notif {
-    height: 100%;
-    width: 20%;
-    position: fixed;
-    padding: 10px;
+	height: 100%;
+	width: 20%;
+	position: fixed;
+	padding: 10px;
 	z-index: 2000; 
-    pointer-events: none;
+	pointer-events: none;
 }
 
 .darken {
@@ -78,13 +78,13 @@ div#div-errors {
 }
 
 div.error, div.success, div.notif {
-    max-height: 20%;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    border-radius: 12px;
-    padding: 10px;
-    margin-top: 10px;
+	max-height: 20%;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	border-radius: 12px;
+	padding: 10px;
+	margin-top: 10px;
 }
 
 div.success {
