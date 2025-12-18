@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 09:10:36 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 10:03:19 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,10 +397,15 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard'): void {
 			pendingOptions: options
 		}
 	}));
+	if (currentGame){
+		currentGame.setWinningScore(winningScore);
+		router.navigate('/pong');
+	}
+	else {
+		displayPop("Missing pong Element!", "error");
+		router.navigate('/');
+	}
 
-	currentGame!.setWinningScore(winningScore);	// SUR QUIL EXISTE (2 LIGNES AU DESSUS) ??
-
-	router.navigate('/pong');
 }
 
 function onClickPlayPVP(): void {
@@ -443,9 +448,14 @@ function onClickPlayPVP(): void {
 			}
 		}));
 
-		currentGame!.setWinningScore(winningScore);	// SUR QUIL EXISTE (2 LIGNES AU DESSUS) ??
-
-		router.navigate('/pong');
+		if (currentGame){
+			currentGame.setWinningScore(winningScore);
+			router.navigate('/pong');
+		}
+		else {
+			displayPop("Missing pong Element!", "error");
+			router.navigate('/');
+		}
 	}
 	else if (router.Path === '/tankmenu')
 	{
@@ -517,48 +527,7 @@ function	onStartTournament(): void {
 	router.navigate("/tournament-bracket");
 }
 
-async function onStartRankedTournament(): Promise<void> { // TODO, vieux copier-coller mais cest plus pour avoir le mecanisme:
-	
-	// console.log("RANKED TOURNAMENT")
-	// const inputs = document.querySelectorAll('.ranked-input');
-
-	// const players: Player[] = [];
-
-	// const	state: AppState = appStore.getState();
-	// const	user: UserState | null = state.user;
-	// const	currentGame: Game | null = state.game.currentGame;
-
-	// if (user.username === null || user.id === null || !user.isAuth) {
-	// 	// displayPop(response.statusText, "error");
-	// 	console.log("ERROR 1")
-	// 	return;
-	// }
-
-	// for (const input of inputs) {
-	// 	const	username: string | undefined = (input as HTMLInputElement)?.value;
-
-	// 	console.log("TSR: Scan", username);
-	// 	if (!username)  {
-	// 		console.log("ERROR 2")
-	// 		return;
-	// 	}
-
-	// 	if (username === 'Me') { // CURRENT SCOTCH, MIGHT FIX IT IN BEFORE IN -> loadTournamenSetupRanked()
-	// 		console.log("SCOTCH");
-	// 		players.push({ name: user.username, id: user.id, isRegistered: user.isAuth });
-	// 	} 
-	// 	else {
-	// 		const	userCheckResponse: Response = await sendRequest(`/api/user/lookup/${username}`, "get", null);
-	// 		if (!userCheckResponse.ok) {
-	// 			displayError("WE NEED GUD USER!", "msg-error"); //
-	// 			return;
-	// 		}
-
-	// 		const userCheck = await userCheckResponse.json();
-	// 		players.push({ name: username, id: userCheck.id, isRegistered: userCheck.isRegistered });
-	// 	}
-	// }
-
+async function onStartRankedTournament(): Promise<void> {
 	const	state: AppState = appStore.getState();
 	const	user: UserState | null = state.user;
 	const	inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll('.ranked-input');
@@ -571,7 +540,7 @@ async function onStartRankedTournament(): Promise<void> { // TODO, vieux copier-
 	
 	for (const input of inputs) {
 		const val = input.value.trim();
-		if (val !== '' && (val.length >= 3 && val.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(val))) { // + check if real account
+		if (val !== '' && (val.length >= 3 && val.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(val))) {
 			const	userCheckResponse: Response = await sendRequest(`/api/user/lookup/${val}`, "get", null);
 			if (!userCheckResponse.ok) {
 				displayError("User(s) not found.", "msg-error");
@@ -611,13 +580,7 @@ async function onStartRankedTournament(): Promise<void> { // TODO, vieux copier-
 		}
 	}));
 
-	console.log("RANKED TOURNAMENT END");
 	router.navigate("/tournament-bracket");
-	
-	// window.tournamentController = new TournamentController(players, 5, true);
-
-	// document.getElementById('app').innerHTML = window.tournamentController.renderBracket();
-	// et puis surement apres .fillBracket();
 }
 
 function startTournamentMatch(matchId: string, p1: string, p2: string): void {

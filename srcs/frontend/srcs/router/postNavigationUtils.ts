@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 09:52:07 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 09:54:02 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,22 +136,10 @@ export async function  pathActions(currentPath: string): Promise<void> {
 	}
 
 	if (['/tournament-setup-ranked'].includes(currentPath)) {
-		// const	slider: HTMLElement | null = document.getElementById('choosenMaxPoints');
-		// const	display: HTMLElement | null = document.getElementById('points-display');
-
 		if (!user.isAuth)
 			router.navigate("/");	
 
-
 		loadTournamenSetupRanked();
-
-		// if (slider instanceof HTMLInputElement && display instanceof HTMLSpanElement) {
-		//   display.textContent = slider.value;
-		//   slider.addEventListener('input', () => {
-			// display.textContent = slider.value;
-		//   });
-		// } else
-			// displayPop("Missing navigation HTMLElement!", "error");
 	}
 
 

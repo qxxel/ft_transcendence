@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsRepository.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 11:58:15 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 09:56:12 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,6 @@ import { friendshipsTableBuilder }	from "../tableBuilders/friendshipsTableBuilde
 
 import type { Database }	from 'sqlite3'
 import type { FriendUser }	from "../objects/friendUser.js"
-
-/* ====================== INTERFACE ====================== */
-
-// BECAUSE TYPESCRIPT DON'T ACCEPT `this.lastID` BUT IT APPEARS WITH THE COMPILATION
-// interface	StatementWithLastID {
-// 	lastID: number;
-// }
-
 
 /* ====================== CLASS ====================== */
 

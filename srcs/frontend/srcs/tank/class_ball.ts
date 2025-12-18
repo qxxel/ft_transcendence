@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   class_ball.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:24:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:10:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 10:05:16 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ export class	Ball extends Actor {
 						this.isReflected = true;
 						this.color = a.fire_color;
 						this.birth = Date.now();
-						if (this.bounce_count == 1) this.bounce_count++; // FORCE REBOUNCE IF BALL GONNA DIE IDK AYW.
+						if (this.bounce_count == 1) this.bounce_count++;
 					}
 					else if (this.author)
 					{
@@ -351,7 +351,7 @@ export class	Pearl extends Ball {
 				{
 					this.author = a;
 					this.color = a.fire_color;
-					if (this.bounce_count == 1) this.bounce_count++; // FORCE REBOUNCE IF BALL GONNA DIE IDK AYW.
+					if (this.bounce_count == 1) this.bounce_count++;
 					this.direction_impact = this.getBounce(a.getRect());
 					return true;
 				}

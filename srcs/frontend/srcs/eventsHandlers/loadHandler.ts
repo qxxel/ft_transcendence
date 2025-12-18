@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 07:54:49 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 10:04:01 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ async function	handleLoadPage(): Promise<void> {
 	return new Promise((resolve) => {
 		document.addEventListener("DOMContentLoaded", async (_event: Event) => {
 
-			// const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
+			// const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null); TODO
 			const	response: Response = await sendRequest('/api/user/me', "GET", null);
 
 			if (!response.ok)
