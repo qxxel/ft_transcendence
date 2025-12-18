@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 06:53:37 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 09:45:39 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,17 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		} catch (error) {
 			throw new authError.WrongCredentialsError("Wrong password or username!");
 		}
+		if (!user || !user.id)
+			throw new authError.WrongCredentialsError("Wrong password or username!");
+		try {
+			const	userRes: AxiosResponse = await authAxios.get(`http://user:3000/${user.id}`);
+			user = userRes.data;
+		} catch (error) {
+			throw new authError.WrongCredentialsError("Wrong password or username!");
+		}
 
+		console.log("user: ", user);
+		
 		if (!user || !user.id)
 			throw new authError.WrongCredentialsError("Wrong password or username!");
 

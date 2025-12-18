@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 11:52:28 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 09:43:24 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,20 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 			const	userId: number = extractUserId(request);
 
 			const	user: usersRespDto = await usersServ.getUserById(userId);
+
+			return reply.code(200).send(user);
+		}
+		catch (err: unknown) {
+			return errorsHandler(userFastify, reply, err);
+		}
+	});
+
+	// GET A USER WITH HIS ID
+	userFastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			const	{ id } = request.params as { id: number };
+
+			const	user: usersRespDto = await usersServ.getUserById(id);
 
 			return reply.code(200).send(user);
 		}
