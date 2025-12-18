@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 16:44:36 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:49:58 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ async function	deleteCodeOtp(request: FastifyRequest, reply: FastifyReply): Prom
 	}
 }
 
-export async function	twofaController(authFastify: FastifyInstance): Promise<void> {
+export function	twofaController(authFastify: FastifyInstance): void {
 	authFastify.post<{ Body: { email?: string } }>('/otp', generateMailCode);
 	authFastify.post<{ Body: { otp: string } }>('/validate', validateCodeOtp);
 	authFastify.delete('/:id', deleteCodeOtp);

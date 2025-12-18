@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 16:44:28 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:51:02 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 	}
 }
 
-export async function	pingController(pingFastify: FastifyInstance): Promise<void> {
+export function	pingController(pingFastify: FastifyInstance): void {
 	pingFastify.post('/', ping);
 	pingFastify.patch('/', ping);
 

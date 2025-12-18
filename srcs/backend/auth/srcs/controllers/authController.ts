@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 16:44:15 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:50:31 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,7 +307,7 @@ async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promis
 	}
 }
 
-export async function	authController(authFastify: FastifyInstance): Promise<void> {
+export function	authController(authFastify: FastifyInstance): void {
 	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
 	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
 	authFastify.post<{ Body: { otp: string } }>('/validateUser', validateUser);

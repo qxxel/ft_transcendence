@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 16:44:21 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:50:44 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,7 +292,7 @@ async function	deleteUserToken(request: FastifyRequest, reply: FastifyReply): Pr
 	}
 }
 
-export async function	jwtController(jwtFastify: FastifyInstance) {
+export function	jwtController(jwtFastify: FastifyInstance): void {
 	jwtFastify.get('/payload/access', getPayloadTokenAccess);
 	jwtFastify.get('/payload/twofa', getPayloadTokenTwofa);
 
