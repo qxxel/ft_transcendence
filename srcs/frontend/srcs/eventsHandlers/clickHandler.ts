@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 06:09:04 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 09:10:36 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -607,7 +607,7 @@ async function onStartRankedTournament(): Promise<void> { // TODO, vieux copier-
 		...state,
 		game: {
 			...state.game,
-			currentTournament: new TournamentController(playerNames, winningScore)
+			currentTournament: new TournamentController(playerNames, winningScore, true)
 		}
 	}));
 
