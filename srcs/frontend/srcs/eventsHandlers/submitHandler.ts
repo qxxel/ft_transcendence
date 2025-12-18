@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 06:05:58 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 14:25:30 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,17 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 	form.reset();
 	document.getElementById("sign-in-form")?.classList.remove("darken");
 
-	if (!response.ok)
+	if (!response.ok) {
+		console.log("a: ", response.status)
+		if (response.status === 409) {
+			console.log("b")
+			fetch('/api/jwt/refresh/logout', {
+				method: "post",
+				credentials: "include"
+			}).catch((e: unknown) => displayPop("" + e, "error"));
+		}
 		return displayError(response, "sign-in-msg-error");
+	}
 
 	const	result: any = await response.json();
 
@@ -120,8 +129,15 @@ async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 		body: JSON.stringify({ username, email, password })
 	});
 
-	if (!response.ok)
+	if (!response.ok) {
+		if (response.status === 409) {
+			fetch('/api/jwt/refresh/logout', {
+				method: "post",
+				credentials: "include"
+			}).catch((e: unknown) => displayPop("" + e, "error"));
+		}
 		return displayError(response, "sign-up-msg-error");
+	}
 	
 	const	result = await response.json();
 
@@ -282,7 +298,13 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		&& resultGetUser.is2faEnable == new2fa
 		&& state.user.pendingAvatar === null
 	) return router.navigate("/user");
-
+	
+	if (state.user.pendingAvatar)
+	{
+		await uploadAvatar();
+		if (resultGetUser.username == newUsername && resultGetUser.email == newEmail && resultGetUser.is2faEnable == new2fa)
+			return router.navigate("/user");
+	}
 	
 	const	postUser: Response = await sendRequest(`/api/user/me/validate`, 'post', {
 		username: newUsername,
@@ -307,12 +329,6 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		is2faEnable: new2fa,
 	}
 
-	if (state.user.pendingAvatar)
-	{
-		uploadAvatar();
-		if (resultGetUser.username == newUsername && resultGetUser.email == newEmail && resultGetUser.is2faEnable == new2fa)
-			return;			//	MATHIS: NE PAS DEMANDER DE VERIF ICI
-	}
 
 	const	verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // /!\ try catch ???
 	if (!verified) 

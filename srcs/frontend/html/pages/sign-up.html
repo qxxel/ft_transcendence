@@ -5,13 +5,13 @@
 
 		<div class="form-group">
 			<input type="text" id="sign-up-username" name="username" placeholder="Enter your username" required
-				autocomplete="username" minlength="3" maxlength="20" pattern="^[a-zA-Z0-9_-]+$.{3,20}$"
-				title="email must contain at least 3 characters, including uppercase, lowercase, number, '_' and '-' character.">
+				autocomplete="username" minlength="3" maxlength="20" pattern="^[a-zA-Z0-9_\-]{3,20}$"
+				title="username must contain at least 3 characters, including uppercase, lowercase, number, '_' and '-' character.">
 		</div>
 
 		<div class="form-group">
 			<input type="email" id="sign-up-email" name="email" placeholder="Enter your email" required
-				autocomplete="email" minlength="6" maxlength="320" pattern="^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$">
+				autocomplete="email" minlength="6" maxlength="320">
 		</div>
 
 		<div class="form-group">
