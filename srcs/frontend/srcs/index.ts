@@ -22,6 +22,7 @@ import { Router }				from "./router/router.js"
 import { setupLoadHandler }		from "./eventsHandlers/loadHandler.js"
 import { setupClickHandlers }	from "./eventsHandlers/clickHandler.js"
 import { setupSubmitHandler }	from "./eventsHandlers/submitHandler.js"
+import { displayPop } from "./utils/display.js"
 
 
 /* ====================== ROUTER ====================== */
@@ -31,18 +32,23 @@ export const	router: Router = new Router();
 
 /* ============================= SETUP EVENTS ============================= */
 
-await setupLoadHandler();
-initFaviconSync();
-initNotificationSync();
-setupClickHandlers();
-setupSubmitHandler();
+try {
+    await setupLoadHandler();
+    initFaviconSync();
+    initNotificationSync();
+    setupClickHandlers();
+    setupSubmitHandler();
 
 
 /* ============================= SETUP ROUTES ============================= */
 
-addRoutes();
+    addRoutes();
 
 
 /* ============================= FIRST RENDER ============================= */
 
-router.render();
+    router.render();
+
+} catch (err) {
+    displayPop("" + err, "error");
+}

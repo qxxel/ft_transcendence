@@ -391,7 +391,7 @@ async function	handleAddFriendForm(form: HTMLFormElement): Promise<void> {
 		respTargetId = await sendRequest(`/api/user/lookup/${targetName}`, "get", null);
 		if (!respTargetId.ok)
 			return displayPop(respTargetId, "error");
-		targetId = (await respTargetId.json() as any).id; // try catch (json peut throw)
+		targetId = (await respTargetId.json() as any).id;
 		response = await sendRequest(`/api/user/friends/request/${targetId}`, "post", {});
 		if (!response.ok)
 			return displayPop(response, "error")
