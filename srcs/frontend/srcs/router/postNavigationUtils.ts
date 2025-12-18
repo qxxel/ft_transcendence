@@ -3,10 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
 /*   Updated: 2025/12/18 15:39:13 by agerbaud         ###   ########.fr       */
+=======
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
+/*   Updated: 2025/12/18 15:08:09 by mreynaud         ###   ########.fr       */
+>>>>>>> eb6c20a3538ddedf56df0ccfbf23c77f4388c243
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +63,7 @@ export async function  postNavigationActions(currentPath: string): Promise<void>
 		}
 	}
 
-	if (!['/tournament-setup', '/tournament-setup-ranked', '/tournament-bracket', '/pong'].includes(currentPath))
-	{
+	if (!['/tournament-setup', '/tournament-setup-ranked', '/tournament-bracket', '/pong'].includes(currentPath)) {
 		appStore.setState((state) => ({
 			...state,
 			game: {
@@ -68,8 +74,7 @@ export async function  postNavigationActions(currentPath: string): Promise<void>
 		}));
 	}
 
-	if (['/pong'].includes(currentPath))
-	{
+	if (['/pong'].includes(currentPath)) {
 		if (currentGame)
 		{
 			currentGame.setCtx();
@@ -79,7 +84,7 @@ export async function  postNavigationActions(currentPath: string): Promise<void>
 			router.navigate("/pongmenu");
 	}
 
-	if (['/user'].includes(currentPath)){
+	if (['/user'].includes(currentPath)) {
 		if (user.isAuth){
 			await loadUser();
 			await loadUserStats(null, null);
@@ -89,21 +94,18 @@ export async function  postNavigationActions(currentPath: string): Promise<void>
 	if (['/2fa'].includes(currentPath))
 		loadTwofa();
 
-	if (['/sign-in', '/sign-up'].includes(currentPath))
-	{
+	if (['/sign-in', '/sign-up'].includes(currentPath)) {
 		if (user.isAuth)
 			router.navigate("/");
 	}
 
-	if (['/history', '/user'].includes(currentPath))
-	{
+	if (['/history', '/user'].includes(currentPath)) {
 		if (!user.isAuth){
 			router.navigate("/");
 		}
 	}
 
-	if (['/history'].includes(currentPath))
-	{
+	if (['/history'].includes(currentPath)) {
 		if (user.isAuth){
 			initHistoryListeners(null);
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayUserController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 16:23:49 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 18:54:41 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,6 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 	/* =========== DEFAULT USER ROUTE =========== */
 
 	// USERS MANAGEMENT
-	gatewayFastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {						//
-		try {																								//
-			const	response: AxiosResponse = await gatewayAxios.post('http://user:3000/', request.body);	//
-																											//
-			return reply.send(response.data);																//	A ENLEVER POUR LEXTERIEUR
-		} catch (err: unknown) {																			//
-			return requestErrorsHandler(gatewayFastify, reply, err);										//
-		}																									//
-	});																										//
-
 	gatewayFastify.post('/me/validate', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	userId: AxiosHeaderValue = await getValidUserId(request);
@@ -178,21 +168,6 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 		}
 	});
 
-
-	gatewayFastify.post('/friends/:idA/:idB', async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			const	{ idA, idB } = request.params as { idA: string, idB: string };
-			const	parseIdA: number = parseInt(idA, 10);
-			const	parseIdB: number = parseInt(idB, 10);
-
-			const	response: AxiosResponse = await gatewayAxios.post(`http://user:3000/friends/${parseIdA}/${parseIdB}`, request.body);	//	AXEL: A ENLEVER
-
-			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
-		}
-	});
-
 	gatewayFastify.patch('/friends/accept/:targetId', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	{ targetId } = request.params as { targetId: string };
@@ -309,17 +284,4 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			return requestErrorsHandler(gatewayFastify, reply, err);
 		}
 	});
-
-	gatewayFastify.patch('/user-stats/:id', async (request: FastifyRequest, reply: FastifyReply) => {								//
-		const	{ id } = request.params as { id: string };																			//
-		const	parseId: number = parseInt(id, 10);																					//
-																																	//
-		try {																														//
-			const	response: AxiosResponse = await gatewayAxios.patch(`http://user:3000/user-stats/${parseId}`, request.body);	// A ENLEVER
-																																	//
-			return reply.send(response.data);																						//
-		} catch (err: unknown) {																									//
-			return requestErrorsHandler(gatewayFastify, reply, err);																//
-		}																															//
-	});																																//
 }

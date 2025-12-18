@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:58:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 18:57:37 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,13 @@ export class PongPhysics {
 		}
 		if (ball.x + ball.radius < 0)
 		{
-			// SEND LONGEST RALLY
+			// AXEL SEND LONGEST RALLY
 			this.rally = 0;
 			return 2;
 		}
 		if (ball.x - ball.radius > this.width)
 		{
-			// SEND LONGEST RALLY
+			// AXEL SEND LONGEST RALLY
 			this.rally = 0;
 			return 1;
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 12:21:20 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 14:52:05 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,6 @@ function onClickPlay(): void {
 async function  onClickLogout(): Promise<void> {
 	const	response: Response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
 
-	if (!response.ok)
-		return displayPop(response, "error");
-
 	appStore.setState((state) => ({
 		...state,
 		user: {
@@ -66,11 +63,14 @@ async function  onClickLogout(): Promise<void> {
 	}));
 
 	getMenu(false);
-
+	
 	if (socket && socket.connected)
 		socket.disconnect();
-
+	
 	router.navigate("/");
+
+	if (!response.ok && response.status !== 401)
+		return displayPop(response, "error");
 }
 	
 async function	onClickEdit(): Promise<void> {
@@ -541,7 +541,12 @@ async function onStartRankedTournament(): Promise<void> {
 		return;
 	}
 	
+	let first: boolean = true;
 	for (const input of inputs) {
+		if (first) {
+			playerNames.push({ name: user.username, id: user.id, isRegistered: user.isAuth });
+			first = false; continue;
+		}
 		const val = input.value.trim();
 		if (val !== '' && (val.length >= 3 && val.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(val))) {
 			const	userCheckResponse: Response = await sendRequest(`/api/user/lookup/${val}`, "get", null);

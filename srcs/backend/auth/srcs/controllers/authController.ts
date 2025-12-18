@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 09:45:39 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:50:31 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 		const	hash: string = await argon2.hash(request.body.password);
 		
 		if (await isLoggedIn(request.headers.cookie))
-			throw new authError.AlreadyConnectedError("You are already connected!");
+			throw new authError.AlreadyConnectedError("You are already connected! Retry.");
 
 		const	userRes: AxiosResponse = await authAxios.post('http://user:3000', request.body);
 		
@@ -91,7 +91,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 			throw new authError.RequestEmptyError("The request is empty");
 
 		if (await isLoggedIn(request.headers.cookie))
-			throw new authError.AlreadyConnectedError("You are already connected!");
+			throw new authError.AlreadyConnectedError("You are already connected! Retry.");
 
 		let	user: usersRespDto;
 		try {
@@ -256,7 +256,7 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 
 		await authServ.deleteClient(payload.data.id);
 		
-		return reply.status(204).send(payload.data.id);
+		return reply.status(204).send();
 	} catch (err: unknown) {
 		return await errorsHandler(authFastify, reply , err);
 	}
@@ -284,7 +284,7 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
 		
-		return reply.status(204).send(payload.data.id);	
+		return reply.status(204).send();	
 	} catch (err: unknown) {
 		return await errorsHandler(authFastify, reply , err);
 	}
@@ -307,7 +307,7 @@ async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promis
 	}
 }
 
-export async function	authController(authFastify: FastifyInstance): Promise<void> {
+export function	authController(authFastify: FastifyInstance): void {
 	authFastify.post<{ Body: SignUpBody }>('/sign-up', signUp);
 	authFastify.post<{ Body: SignInBody }>('/sign-in', signIn);
 	authFastify.post<{ Body: { otp: string } }>('/validateUser', validateUser);

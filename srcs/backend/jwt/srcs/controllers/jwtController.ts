@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 06:53:41 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:50:44 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ async function	refreshTokenRefresh(request: FastifyRequest, reply: FastifyReply)
 	try {
 		const	cookies: Record<string, string> = getCookies(request.headers.cookie);
 		if (!cookies.jwtRefresh)
-			throw new jwtError.MissingTokenError("Token refresh missing!");
+			throw new jwtError.MissingTokenError("Token missing!");
 		
 		const	payload: jose.JWTPayload = (await jose.jwtVerify(cookies.jwtRefresh, jwtSecret)).payload;
 
@@ -255,10 +255,12 @@ async function	deleteSessionToken(request: FastifyRequest, reply: FastifyReply):
 		if (cookies.jwtRefresh)
 			await jwtServ.deleteToken(cookies.jwtRefresh);
 
-		if (user && user.id)
-			await jwtAxios.delete(`http://ping:3000/${user.id}`);
-
-		return reply.status(204).send({ result: "deleted." });
+		if (user && user.id) {
+			try {
+				await jwtAxios.delete(`http://ping:3000/${user.id}`);
+			} catch (_error: unknown) {}
+		}
+		return reply.status(204).send();
 	} catch (err: unknown) {
 		return errorsHandler(jwtFastify, reply, err);
 	}
@@ -284,13 +286,13 @@ async function	deleteUserToken(request: FastifyRequest, reply: FastifyReply): Pr
 
 		await jwtServ.deleteTokenById(user.id);
 
-		return reply.status(204).send({ result: "deleted." });
+		return reply.status(204).send();
 	} catch (err: unknown) {
 		return errorsHandler(jwtFastify, reply, err);
 	}
 }
 
-export async function	jwtController(jwtFastify: FastifyInstance) {
+export function	jwtController(jwtFastify: FastifyInstance): void {
 	jwtFastify.get('/payload/access', getPayloadTokenAccess);
 	jwtFastify.get('/payload/twofa', getPayloadTokenTwofa);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 09:34:10 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 18:51:08 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ export async function displayError(response: Response | string, idMsgError: stri
 				p.textContent = result?.error || "An unexpected error has occurred";
 			} catch (err) {
 				displayPop("" + err, "error");	//	AXEL/MATHIS: PAS BEAU A VOIR
-				// console.error(err);
-				// displayPop(response, "error")
 			}
 		}
 	}
@@ -76,7 +74,7 @@ export async function	displayPop(response: Response | string | undefined, type: 
 		}
 	}
 	else
-		p.innerHTML = response || "An unexpected error has occurred"		//	MATHIS/AXEL: VOIR POUR TEXTCONTENT
+		p.innerHTML = response || "An unexpected error has occurred"		//	KILLIAN/MATHIS/AXEL: VOIR POUR TEXTCONTENT
 
 	setTimeout(() => div.remove(), 10000);
 

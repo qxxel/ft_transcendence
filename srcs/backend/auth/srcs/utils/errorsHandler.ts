@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:53:23 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:01:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ export async function	errorsHandler(authFastify: FastifyInstance, reply: Fastify
 	} else if (err instanceof authError.RequestEmptyError) {
 		logError(authFastify, err.message);
 		return reply.code(400).send({ errorType: err.name, error: err.message });
+	} else if (err instanceof authError.AlreadyConnectedError) {
+		logError(authFastify, err.message);
+		return reply.code(409).send({ errorType: err.name, error: err.message });
 	} else if (err instanceof authError.WrongCredentialsError) {
 		await sleep(1000);
 		logError(authFastify, err.message);

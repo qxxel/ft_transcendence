@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 15:23:25 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 19:29:00 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,8 @@ export async function	redirections(currentPath: string): Promise<void> {
 	{
 		const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
 
-		if (!response.ok)
+		if (response.ok)
 			return;
-
-		const	result: any = await response.json();
-
-		appStore.setState((state) => ({
-			...state,
-			user: {
-				id: result.id as number,
-				username: result.username,
-				avatar: result.avatar,
-				pendingAvatar: null,
-				isAuth: true
-			}
-		}));
-
-		// /!\ MATHIS heartbeat();
-
-		getMenu(true);
 
 		router.navigate('/');
 	}

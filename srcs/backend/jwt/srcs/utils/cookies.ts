@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:06:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 15:48:29 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 19:28:22 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ import type { FastifyReply }	from 'fastify'
 
 /* ====================== FUNCTIONS ====================== */
 
-// hostOnly ???
 export function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string): void {
 	reply.header(
 		"Set-Cookie",

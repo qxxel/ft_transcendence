@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 15:45:56 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 19:28:19 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,18 @@ import  type { FastifyInstance }	from 'fastify'
 
 /* ====================== TOKENS VARIABLES ====================== */
 
-export const	expRefresh: string = "86400s"; // 86400s = 1day
-export const	expAccess: string = "900s"; // 900s = 15min
-export const	expTwofa: string = "300s"; // 300s = 5min
+
+/* =================== CONVERTIONS =================== /*
+
+	86400s	= 1day
+	900s	= 15min
+	300s	= 5min
+
+/* ====================================================== */
+
+export const	expRefresh: string = "86400s";
+export const	expAccess: string = "900s";
+export const	expTwofa: string = "300s";
 
 export const	jwtSecret: Uint8Array<ArrayBuffer> = new TextEncoder().encode(process.env.JWT_SECRET);
 
