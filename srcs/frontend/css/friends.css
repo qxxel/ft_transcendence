@@ -141,6 +141,10 @@
 	font-weight: bold;
 }
 
+.request-username {
+	margin-left: 3%
+}
+
 .empty-message {
 	flex-basis: 100%;
 	font-weight: bold;

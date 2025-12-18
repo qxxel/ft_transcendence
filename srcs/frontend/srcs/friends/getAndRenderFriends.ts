@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 13:03:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:11:34 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ function	addRequestInList(requestsListDiv: HTMLDivElement, friend: UserObject): 
 	avatarImg.alt = "User avatar";
 
 	const	usernameSpan: HTMLSpanElement = document.createElement("span");
-	usernameSpan.classList.add("username");
+	usernameSpan.classList.add("username", "request-username");
 	usernameSpan.textContent = friend.username;
 
 	const	acceptButton: HTMLSpanElement = document.createElement("button");
@@ -150,7 +150,7 @@ function	addFriendInList(friendsListDiv: HTMLDivElement, friend: UserObject): vo
 	avatarImg.classList.add("display-avatar", "friend-avatar", "avatar-image");
 	avatarImg.src = friend.avatar ?? "/assets/default_avatar.png";
 	avatarImg.alt = "User avatar";
-	
+
 	const	statusSpan: HTMLSpanElement = document.createElement("span");
 	statusSpan.classList.add("status-dot");
 	statusSpan.classList.add(friend.is_log ? "green-glow" : "red-glow");
