@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 12:21:10 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:44:36 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ async function	deleteCodeOtp(request: FastifyRequest, reply: FastifyReply): Prom
 
 		await twofaServ.deleteOtpByIdClient(parseId);
 		
-		return reply.status(204).send({ result: "deleted." });
+		return reply.status(204).send();
 	} catch (err: unknown) {
 		return await errorsHandler(twofaFastify, reply, err);
 	}

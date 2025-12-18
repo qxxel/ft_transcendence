@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 06:21:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:44:28 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 		await pingServ.deleteClient(id);
 		await pingAxios.post('http://user:3000/log', { isLog: false }, { headers: { 'user-id': id } } );
 		
-		return reply.status(204).send(id);
+		return reply.status(204).send();
 	} catch (err: unknown) {
 		return await errorsHandler(pingFastify, reply , err);
 	}

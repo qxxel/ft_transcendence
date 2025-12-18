@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 13:01:59 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:44:15 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,7 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 
 		await authServ.deleteClient(payload.data.id);
 		
-		return reply.status(204).send(payload.data.id);
+		return reply.status(204).send();
 	} catch (err: unknown) {
 		return await errorsHandler(authFastify, reply , err);
 	}
@@ -284,7 +284,7 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 		if (response.headers['set-cookie'])
 			reply.header('Set-Cookie', response.headers['set-cookie']);
 		
-		return reply.status(204).send(payload.data.id);	
+		return reply.status(204).send();	
 	} catch (err: unknown) {
 		return await errorsHandler(authFastify, reply , err);
 	}
