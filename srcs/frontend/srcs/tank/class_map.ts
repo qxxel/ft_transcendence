@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:32:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 19:09:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ export class	Map {
 	constructor(
 		public	map_width:number,
 		public	map_height:number,
-		public	wall_width: number, // TODO
+		public	wall_width: number,
 		public	name: string = "default",
 	) {
 		if (this.name == "desertfox") { this.generate_desertfox(); }
 		else if (this.name == "thehouse") { this.generate_thehouse(); }
-		else if (this.name == "davinco") { this.generate_davinco(); }
+		else if (this.name == "thevoid") { this.generate_thevoid(); }
 		else { this.generate_default(); }
 	}
 
@@ -59,7 +59,7 @@ export class	Map {
 
 	generate_desertfox(): void {
 
-		const	c_ext  = {r:0,g:0,b:0};//675645
+		const	c_ext  = {r:0,g:0,b:0};
 		const	c_blk1 = {r:110,g:110,b:110};
 		const	c_blk2 = {r:160,g:160,b:160};
 
@@ -71,11 +71,11 @@ export class	Map {
 		this.walls.push(new Wall(0, 0, this.map_width, ext_width, c_ext));                            // EXTERIOR TOP
 		this.walls.push(new Wall(0, this.map_height - ext_width, this.map_width, ext_width, c_ext));  // EXTERIOR BOT
 
-		this.walls.push(new Wall(cell*1.5, cell*1.5, cell  , cell  ,   c_blk1)); // 1
-		this.walls.push(new Wall(cell*7.5, cell*1.5, cell  , cell  ,   c_blk1)); // 3
-		this.walls.push(new Wall(cell*4, cell*4, cell*2, cell*2,   c_blk2)); // 5
-		this.walls.push(new Wall(cell*1.5, cell*7.5, cell  , cell  ,   c_blk1)); // 7
-		this.walls.push(new Wall(cell*7.5, cell*7.5, cell  , cell  ,   c_blk1)); // 9
+		this.walls.push(new Wall(cell*1.5, cell*1.5, cell  , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell*7.5, cell*1.5, cell  , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell*4, cell*4, cell*2, cell*2,   c_blk2));
+		this.walls.push(new Wall(cell*1.5, cell*7.5, cell  , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell*7.5, cell*7.5, cell  , cell  ,   c_blk1));
 
 		for(let w of this.walls) {
 			GSTATE.ACTORS.push(w);
@@ -108,9 +108,8 @@ export class	Map {
 
 	generate_thehouse(): void {
 
-		const	c_ext  = {r:0,g:0,b:0};//675645
+		const	c_ext  = {r:0,g:0,b:0};
 		const	c_blk1 = {r:110,g:110,b:110};
-		const	c_blk2 = {r:160,g:160,b:160};
 
 		const	ext_width = 1;
 		const	cell =  this.map_height/100;
@@ -214,11 +213,8 @@ export class	Map {
 
 	}
 
-	generate_davinco(): void {
-
-		const	c_ext  = {r:0,g:0,b:0};//675645
-		const	c_blk1 = {r:110,g:110,b:110};
-		const	c_blk2 = {r:160,g:160,b:160};
+	generate_thevoid(): void {
+		const	c_ext  = {r:0,g:0,b:0};
 
 		const	ext_width = 1;
 		const	cell =  this.map_height/100;
@@ -233,17 +229,26 @@ export class	Map {
 			GSTATE.ACTORS.push(w);
 		}
 
-			this.spawns_tank1.push({x:cell*30,y:cell*30}); // d
-			this.spawns_tank2.push({x:cell*60,y:cell*60}); // b
+			this.spawns_tank1.push({x:cell*30,y:cell*30});
+			this.spawns_tank2.push({x:cell*60,y:cell*60});
 
-			this.spawns_collectible.push({x:cell*5.0 - 16/2,y: cell*3.5- 16/2});   // i
-			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*5.0- 16/2});   // j
-			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*5.0- 16/2});   // k
-			this.spawns_collectible.push({x:cell*5.0 - 16/2,y: cell*6.5- 16/2});   // l
-			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*3.5- 16/2});   // w
-			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*3.5- 16/2});   // x
-			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*6.5- 16/2});   // y
-			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*6.5- 16/2});   // z
+			this.spawns_collectible.push({x:cell*50 - 16/2,y: cell*35- 16/2});
+			this.spawns_collectible.push({x:cell*35 - 16/2,y: cell*50- 16/2});
+			this.spawns_collectible.push({x:cell*65 - 16/2,y: cell*50- 16/2});
+			this.spawns_collectible.push({x:cell*50 - 16/2,y: cell*65- 16/2});
+			this.spawns_collectible.push({x:cell*35 - 16/2,y: cell*35- 16/2});
+			this.spawns_collectible.push({x:cell*65 - 16/2,y: cell*35- 16/2});
+			this.spawns_collectible.push({x:cell*35 - 16/2,y: cell*65- 16/2});
+			this.spawns_collectible.push({x:cell*65 - 16/2,y: cell*65- 16/2});
+
+			this.spawns_collectible.push({x:cell*50 - 16/2,y: cell*15- 16/2});
+			this.spawns_collectible.push({x:cell*15 - 16/2,y: cell*50- 16/2});
+			this.spawns_collectible.push({x:cell*85 - 16/2,y: cell*50- 16/2});
+			this.spawns_collectible.push({x:cell*50 - 16/2,y: cell*85- 16/2});
+			this.spawns_collectible.push({x:cell*15 - 16/2,y: cell*15- 16/2});
+			this.spawns_collectible.push({x:cell*85 - 16/2,y: cell*15- 16/2});
+			this.spawns_collectible.push({x:cell*15 - 16/2,y: cell*85- 16/2});
+			this.spawns_collectible.push({x:cell*85 - 16/2,y: cell*85- 16/2});
 
 	}
 

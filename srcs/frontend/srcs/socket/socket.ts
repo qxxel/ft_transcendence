@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 17:53:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 16:26:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:03:51 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,12 @@ export function	connectSocket() {
 		reconnection: true,
 	});
 
-	socket.on("connect", () => {
-		console.log(`✅ WEBSOCKET CONNECTED ! ID: ${socket.id}`);	// AXEL: DEBUG => A ENLEVER
-	});
+	socket.on("connect", () => { });
 
-	socket.on("disconnect", () => {
-		console.log("❌ DISCONNECTED");	// AXEL: DEBUG => A ENLEVER
-	});
+	socket.on("disconnect", () => { });
 
 	socket.on("connect_error", (err) => {
 		console.error("❌ Connection error WebSocket :", err.message);	// AXEL: DEBUG => A ENLEVER
 	});
-
 };
 

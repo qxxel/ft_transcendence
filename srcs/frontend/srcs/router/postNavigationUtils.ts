@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 09:54:02 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 19:29:40 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ import { attachAvatarUploadListener }	from "../eventsHandlers/changeListener.js"
 
 /* ====================== FUNCTION ====================== */
 
-export async function  pathActions(currentPath: string): Promise<void> {
+export async function  postNavigationActions(currentPath: string): Promise<void> {
 	const	state: AppState = appStore.getState();
 	const	user: UserState = state.user;
 	const	currentGame: Game | null = state.game.currentGame;
@@ -40,12 +40,23 @@ export async function  pathActions(currentPath: string): Promise<void> {
 
 	if (!['/pong', '/tank'].includes(currentPath))
 	{
-		if (currentGame) 
+		if (currentGame)
+		{
+			if (!['/pongmenu', "/tankmenu"].includes(currentPath))
+			{
+				appStore.setState((state: AppState) => ({
+					...state,
+					game: {
+						...state.game,
+						currentGame: null
+					}
+				}));
+			}
 			currentGame.stop();
+		}
 	}
 
-	if (!['/tournament-setup', '/tournament-setup-ranked', '/tournament-bracket', '/pong'].includes(currentPath))
-	{
+	if (!['/tournament-setup', '/tournament-setup-ranked', '/tournament-bracket', '/pong'].includes(currentPath)) {
 		appStore.setState((state) => ({
 			...state,
 			game: {
@@ -56,8 +67,7 @@ export async function  pathActions(currentPath: string): Promise<void> {
 		}));
 	}
 
-	if (['/pong'].includes(currentPath))
-	{
+	if (['/pong'].includes(currentPath)) {
 		if (currentGame)
 		{
 			currentGame.setCtx();
@@ -67,7 +77,7 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			router.navigate("/pongmenu");
 	}
 
-	if (['/user'].includes(currentPath)){
+	if (['/user'].includes(currentPath)) {
 		if (user.isAuth){
 			await loadUser();
 			await loadUserStats(null, null);
@@ -77,21 +87,18 @@ export async function  pathActions(currentPath: string): Promise<void> {
 	if (['/2fa'].includes(currentPath))
 		loadTwofa();
 
-	if (['/sign-in', '/sign-up'].includes(currentPath))
-	{
+	if (['/sign-in', '/sign-up'].includes(currentPath)) {
 		if (user.isAuth)
 			router.navigate("/");
 	}
 
-	if (['/history', '/user'].includes(currentPath))
-	{
+	if (['/history', '/user'].includes(currentPath)) {
 		if (!user.isAuth){
 			router.navigate("/");
 		}
 	}
 
-	if (['/history'].includes(currentPath))
-	{
+	if (['/history'].includes(currentPath)) {
 		if (user.isAuth){
 			initHistoryListeners(null);
 		}

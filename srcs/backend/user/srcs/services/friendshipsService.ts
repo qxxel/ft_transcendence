@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 14:02:53 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 23:48:44 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 18:38:49 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,29 +55,6 @@ export class	friendshipsService {
 		}
 
 		return await this.friendshipsRepo.addFriendRequest(friendship);
-	}
-
-	async addFriend(friendship: friendshipsAddDto): Promise<friendshipsRespDto> {
-		const	relation: { status: string, requester_id: number | string} | null = await this.friendshipsRepo.getRelationStatus(friendship.getCheckTable());
-
-		if (relation && relation.status)
-		{
-			if (relation.status === "BLOCKED")
-				throw new BlockedError("This user blocked you or you blocked him.");
-			if (relation.status === "ACCEPTED")
-				throw new AlreadyRelatedError("You are already friends.");
-
-			if (Number(relation.requester_id as unknown) !== friendship.getRequesterId())															//	AXEL: A ENLEVER
-			{
-				const	swapDto: friendshipsUpdateDto = new friendshipsUpdateDto(Number(relation.requester_id), friendship.getRequesterId());
-
-				return await this.friendshipsRepo.acceptFriendRequest(swapDto);
-			}
-
-			throw new Error("You already sent a friend request.");
-		}
-
-		return await this.friendshipsRepo.addFriend(friendship);
 	}
 
 	async acceptRequest(friendship: friendshipsUpdateDto): Promise<friendshipsRespDto> {

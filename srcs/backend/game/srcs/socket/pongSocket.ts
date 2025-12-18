@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongSocket.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:57:00 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 16:35:23 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,17 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { Server, Socket }	from 'socket.io'
-import { GamesService }		from "../services/gamesService.js"
-import { PongInstance }		from "../services/game/pongInstance.js"
+import { Server, Socket }			from 'socket.io'
+import { GamesService }				from "../services/gamesService.js"
+import { leaveGameAndDisconnect }	from '../utils/leaveGame.js'
+import { PongInstance }				from "../services/game/pongInstance.js"
 
 import type { PongOptions }	from "../engine/pong/pongState.js"
 
 
 /* ====================== CONST ACTIVE GAMES ====================== */
 
-const	activeGames = new Map<string, PongInstance>();
+export const	activeGames = new Map<string, PongInstance>();
 
 
 /* ====================== FUNCTION ====================== */
@@ -73,13 +74,11 @@ export function	setupPongSocket(io: Server, socket: Socket, pongService: GamesSe
 		}
 	});
 
-	socket.on('disconnect', () => {
-		if (activeGames.has(socket.id))
-		{
-			const	game: PongInstance | undefined = activeGames.get(socket.id);
+	socket.on('leave-game', () => {
+		leaveGameAndDisconnect(socket);
+	});
 
-			game?.stopGame();
-			activeGames.delete(socket.id);
-		}
+	socket.on('disconnect', () => {
+		leaveGameAndDisconnect(socket);
 	});
 }

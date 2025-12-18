@@ -11,7 +11,7 @@ services:
     environment:
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     ports:
-      - "5000:3000"
+      - "3000"
     networks:
       - web
       - backend
@@ -46,7 +46,6 @@ services:
     volumes:
       - "gameDB:/app/dist/db"
     networks:
-      - web # /!\ pourquoi ???
       - backend
 
   user:

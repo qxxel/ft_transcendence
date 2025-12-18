@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 23:52:00 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:57:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ export const	authServ = new authService(new authRepository(db));
 
 cron.schedule("0 * * * * *", () => {
 	console.log("Cron: Running cleanup...");
-	authServ.cleanup();
-	console.log("Cron: Cleanup done.");
+	authServ.cleanup()
+		.then(() => console.log("Cron: Cleanup done."))
+		.catch(() => console.error("Cron: Cleanup failed!"));
 });
 
 

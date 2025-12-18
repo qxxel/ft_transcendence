@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 20:17:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/09 20:33:09 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 15:06:27 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ export class	NotificationManager {
 		console.log(`User ${userId} connected to notifications`);
 
 		reply.raw.on('close', () => {
-			this.removeClient(userId);
+			if (this.clients.get(userId) === reply)
+				this.removeClient(userId);
 		});
 	}
 

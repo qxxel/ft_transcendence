@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 23:52:23 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 19:00:58 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ userFastify.register(cors, {
 
 
 userFastify.register(usersController);
-userFastify.register(userStatsController, { prefix: '/stats' } ); //	A VERIFIER SI C'EST A GARDER
-userFastify.register(friendshipsController, { prefix: '/friends' } ); //	A VERIFIER SI C'EST A GARDER
+userFastify.register(userStatsController, { prefix: '/stats' } );
+userFastify.register(friendshipsController, { prefix: '/friends' } );
 
 
 const	start = async () => {

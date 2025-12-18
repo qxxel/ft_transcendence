@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderHistory.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 09:20:24 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 18:44:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,7 @@ export async function	getAndRenderHistory(targetId: number | null,
 			response = await sendRequest(`/api/game/${targetId}`, "get", null);
 		if (!response.ok)
 		{
-			try {
-				displayPop(response, "error");
-			} catch (e) {
-				displayPop("Impossible to read JSON error", "error");	//	MATHIS/AXEL: A VOIR SI METTRE `e` DANS LE MESSAGE
-			}
-
+			displayPop(response, "error");
 			displayErrors(targetName);
 			return;
 		}
@@ -69,10 +64,7 @@ export async function	getAndRenderHistory(targetId: number | null,
 		const	gamesData: GameObject[] = await response.json();
 
 		if (!Array.isArray(gamesData))
-		{
-			displayPop(response, "error");
-			throw new Error("Invalid data format");	//	KILLIAN/AXEL: A VOIR SI ON THROW QUAND MEME (MESSAGE DEJA AFFICHE)
-		}
+			throw new Error("Invalid data format");
 
 		if (gamesData.length === 0)
 		{
