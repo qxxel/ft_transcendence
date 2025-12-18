@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 09:54:02 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 15:08:09 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,12 @@ export async function  pathActions(currentPath: string): Promise<void> {
 	const	currentGame: Game | null = state.game.currentGame;
 	const	currentTournament: TournamentController | null = state.game.currentTournament;
 
-	if (!['/pong', '/tank'].includes(currentPath))
-	{
+	if (!['/pong', '/tank'].includes(currentPath)) {
 		if (currentGame) 
 			currentGame.stop();
 	}
 
-	if (!['/tournament-setup', '/tournament-setup-ranked', '/tournament-bracket', '/pong'].includes(currentPath))
-	{
+	if (!['/tournament-setup', '/tournament-setup-ranked', '/tournament-bracket', '/pong'].includes(currentPath)) {
 		appStore.setState((state) => ({
 			...state,
 			game: {
@@ -56,8 +54,7 @@ export async function  pathActions(currentPath: string): Promise<void> {
 		}));
 	}
 
-	if (['/pong'].includes(currentPath))
-	{
+	if (['/pong'].includes(currentPath)) {
 		if (currentGame)
 		{
 			currentGame.setCtx();
@@ -67,7 +64,7 @@ export async function  pathActions(currentPath: string): Promise<void> {
 			router.navigate("/pongmenu");
 	}
 
-	if (['/user'].includes(currentPath)){
+	if (['/user'].includes(currentPath)) {
 		if (user.isAuth){
 			await loadUser();
 			await loadUserStats(null, null);
@@ -77,21 +74,18 @@ export async function  pathActions(currentPath: string): Promise<void> {
 	if (['/2fa'].includes(currentPath))
 		loadTwofa();
 
-	if (['/sign-in', '/sign-up'].includes(currentPath))
-	{
+	if (['/sign-in', '/sign-up'].includes(currentPath)) {
 		if (user.isAuth)
 			router.navigate("/");
 	}
 
-	if (['/history', '/user'].includes(currentPath))
-	{
+	if (['/history', '/user'].includes(currentPath)) {
 		if (!user.isAuth){
 			router.navigate("/");
 		}
 	}
 
-	if (['/history'].includes(currentPath))
-	{
+	if (['/history'].includes(currentPath)) {
 		if (user.isAuth){
 			initHistoryListeners(null);
 		}

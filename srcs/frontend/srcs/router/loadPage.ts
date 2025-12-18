@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 13:27:39 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 15:06:00 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ export async function loadUser() {
 	const statsContainer = document.getElementById("user-stats-container");
 	
 	if (statsContainer) {
-		statsContainer.innerHTML = '';
+		statsContainer.textContent = '';
 
 		const pongData = {
 			wins: userStatsRes.pongWins,

@@ -6,11 +6,9 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:23:51 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 05:34:52 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 15:07:23 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-import { displayPop } from "./display";
 
 // IT'S THE FUNCTION THAT HANDLE ALL THE REQUESTS TO THE BACKEND
 
