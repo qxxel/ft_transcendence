@@ -37,15 +37,22 @@ interface	UserObject {
 /* ====================== FUNCTIONS ====================== */
 
 export async function	getAndRenderFriends(): Promise<void> {
-	const	response: Response = await sendRequest('/api/user/friends/me', "get", null);
-	if (!response.ok)
-	{
+
+	let	friendsData: UserObject[];
+	let response: Response;
+	try {
+		response = await sendRequest('/api/user/friends/me', "get", null);
+		if (!response.ok)
+		{
+			displayErrors();
+			return;
+		}
+		friendsData = await response.json();
+	}
+	catch(err) {
 		displayErrors();
 		return;
 	}
-
-	const	friendsData: UserObject[] = await response.json();
-
 	renderFriends(friendsData);
 }
 

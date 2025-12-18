@@ -51,23 +51,32 @@ export function loadTwofa(): void {
 }
 
 export async function loadUser() {
-	const	response: Response = await sendRequest(`/api/user/me`, 'get', null);
-	if (!response.ok)
-	{
-		displayPop(response.statusText, "error");
-		return;
+
+	let	response: Response;
+	let	userRes: any;
+	let responseStats: Response;
+	let userStatsRes: any;
+	try {
+		response = await sendRequest(`/api/user/me`, 'get', null);
+		if (!response.ok)
+		{
+			displayPop(response.statusText, "error");
+			return;
+		}
+
+		userRes = await response.json();
+
+		responseStats = await sendRequest(`/api/user/stats/me`, 'get', null);
+		if (!responseStats.ok)
+		{
+			displayPop(responseStats, "error");
+			return;
+		}
+
+		userStatsRes = await responseStats.json();
+	} catch (err) {
+		displayPop("" + err, "error");
 	}
-
-	const	userRes: any = await response.json();
-
-	const	responseStats: Response = await sendRequest(`/api/user/stats/me`, 'get', null);
-	if (!responseStats.ok)
-	{
-		displayPop(responseStats, "error");
-		return;
-	}
-
-	const	userStatsRes: any = await responseStats.json();
 
 	const statsContainer = document.getElementById("user-stats-container");
 	
@@ -199,20 +208,24 @@ function createStatCard(title: string, icon: string, colorClass: string, stats: 
 
 export async function loadUserStats(targetId: number | null, targetName: string | null = null){
 	let	responseStats: Response;
-	if (!targetId)
-		responseStats = await sendRequest('/api/user/stats/me', "get", null);
-	else
-		responseStats = await sendRequest(`/api/user/stats/${targetId}`, "get", null);
-	if (!responseStats.ok)
-	{
-		displayPop(responseStats, "error");
-		return;
+	let	userStatsRes: any;
+	try {
+		if (!targetId)
+			responseStats = await sendRequest('/api/user/stats/me', "get", null);
+		else
+			responseStats = await sendRequest(`/api/user/stats/${targetId}`, "get", null);
+		if (!responseStats.ok)
+		{
+			displayPop(responseStats, "error");
+			return;
+		}
+		userStatsRes = await responseStats.json();
+	} catch (err) {
+		displayPop("" + err, "error");
 	}
-	
-	const	userStatsRes: any = await responseStats.json();
 
 	const statsContainer = document.getElementById("user-stats-container");
-	
+
 	if (targetName){
 		const nameContainer = document.getElementById("user-profile-container");
 		if (nameContainer){

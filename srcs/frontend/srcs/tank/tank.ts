@@ -295,12 +295,26 @@ export class	TankGame extends Game {
 	this.updateNameDisplay();
 
 	const history: History | null = this.setHistory();
-	if (history)
-		sendRequest("/api/game", "POST", history);
-
+	if (history) {
+		sendRequest( '/api/game', "POST", history).then((res: Response) => {
+			if (!res.ok)
+				displayPop(res, "error");
+		}
+		).catch((e: unknown) => {
+			displayPop("" + e, "error");
+		});
+	}
 	const	resumeStats: ResumeStats | null = this.setStats();
-	if (resumeStats)
-		sendRequest("/api/user/stats/me", "PATCH", resumeStats);
+	if (resumeStats) {
+		sendRequest( '/api/user/stats/me', "PATCH", resumeStats).then((res: Response) => {
+			if (!res.ok)
+				displayPop(res, "error");
+		}
+		).catch((e: unknown) => {
+			displayPop("" + e, "error");
+		});
+	}
+
 
 	const	dashboard = document.getElementById('game-over-dashboard');
 	if (!dashboard)

@@ -49,7 +49,16 @@ function onClickPlay(): void {
 }
 
 async function  onClickLogout(): Promise<void> {
-	const	response: Response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
+	
+	let response: Response;
+	try {
+		response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
+		if (!response.ok)
+			return displayPop(response, "error");
+	}
+	catch(err) {
+		return displayPop("" + err, "error");
+	}
 
 	appStore.setState((state) => ({
 		...state,
@@ -74,11 +83,18 @@ async function  onClickLogout(): Promise<void> {
 }
 	
 async function	onClickEdit(): Promise<void> {
-	const	response: Response = await sendRequest(`/api/user/me`, 'get', null);
-	if (!response.ok)
-		return displayPop(response, "error");
 
-	const	userRes: any = await response.json();
+	let	response: Response;
+	let userRes: any;
+	try {
+		response = await sendRequest(`/api/user/me`, 'get', null);
+		if (!response.ok)
+			return displayPop(response, "error");
+		userRes = await response.json();
+	}
+	catch(err) {
+		return displayPop("" + err, "error");
+	}
 
 	const	editElements: NodeListOf<Element> = document.querySelectorAll(".edit-mode");
 	const	viewElements: NodeListOf<Element> = document.querySelectorAll(".view-mode");
@@ -87,7 +103,7 @@ async function	onClickEdit(): Promise<void> {
 		if (e instanceof HTMLElement)
 			e.hidden = false;
 	});
-	
+
 	viewElements.forEach(e => {
 		if (e instanceof HTMLElement)
 			e.hidden = true;
@@ -140,13 +156,15 @@ async function onClickDeleteAccount(): Promise<void>{
 	const	p: HTMLElement | null = document.getElementById("confirm-setting-msg-error");
 	if (p) p.textContent = null;
 	
-	const	response: Response = await sendRequest(`/api/auth/delete/me`, 'POST', { password });
-
-	document.getElementById("confirm-setting-form")?.classList.remove("darken");
-	
-	if (!response.ok)
-		return displayError(response, "confirm-setting-msg-error");
-
+	try {
+		const	response: Response = await sendRequest(`/api/auth/delete/me`, 'POST', { password });
+		document.getElementById("confirm-setting-form")?.classList.remove("darken");
+		if (!response.ok)
+			return displayError(response, "confirm-setting-msg-error");
+	}
+	catch(err) {
+			return displayError("" + err, "confirm-setting-msg-error"); // MCURTO DISPLAYPOP ?
+	}
 	appStore.setState((state) => ({
 		...state,
 		user: {
@@ -194,10 +212,15 @@ async function	onClickDeleteTwofa(): Promise<void> {
 
 	router.canLeave = true;
 
-	const	response: Response = await sendRequest(`/api/auth/twofa/me`, 'delete', null);
-	if (!response.ok)
-		displayPop(response, "error");
-	
+	try {
+		const	response: Response = await sendRequest(`/api/auth/twofa/me`, 'delete', null);
+		if (!response.ok)
+			displayPop(response, "error");
+	}
+	catch(err) {
+		displayPop("" + err, "error");
+	}
+
 	appStore.setState((state) => ({
 		...state,
 		user: {
@@ -258,18 +281,23 @@ async function	onClickNewCode(): Promise<void> {
 			e.hidden = false;
 	});
 
-	const	res: Response = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
 
-	if (!res.ok)
-	{
-		if (btnSend instanceof HTMLButtonElement) btnSend.disabled = false;
-		if (spanCooldown) spanCooldown.textContent = "";
-		locks.forEach(e => {
-			if (e instanceof HTMLElement)
-				e.hidden = true;
-		});
-
-		displayPop(res, "error");
+	try {
+		const	res: Response = await sendRequest('/api/jwt/twofa/recreat', 'PATCH', {});
+		if (!res.ok)
+		{
+			if (btnSend instanceof HTMLButtonElement) btnSend.disabled = false;
+			if (spanCooldown) spanCooldown.textContent = "";
+			locks.forEach(e => {
+				if (e instanceof HTMLElement)
+					e.hidden = true;
+			});
+			displayPop(res, "error");
+			return;
+		}
+	}
+	catch(err) { // MCURTO GROS DOUTE, EST-CE QU'ON FERRAIT PAS LA MEME CHOSE QUE DANS LE TRY{} ?
+		displayPop("" + err, "error");
 		return;
 	}
 
@@ -369,7 +397,7 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard'): void {
 	const	winningScore: number = parseInt(maxPointsInput.value, 10);
 	
 	const	state: AppState = appStore.getState();
-	const	user: UserState | null = state.user;
+	const	user: UserState = state.user;
 	const	currentGame: Game | null = state.game.currentGame;
 
 	const	options: GameOptions = {
@@ -419,7 +447,7 @@ function onClickPlayPVP(): void {
 		const	winningScore: number = parseInt(maxPointsInput.value, 10);
 
 		const	state: AppState = appStore.getState();
-		const	user: UserState | null = state.user;
+		const	user: UserState = state.user;
 		const	currentGame: Game | null = state.game.currentGame;
 
 		const	options: GameOptions = {
@@ -533,14 +561,14 @@ function	onStartTournament(): void {
 
 async function onStartRankedTournament(): Promise<void> {
 	const	state: AppState = appStore.getState();
-	const	user: UserState | null = state.user;
+	const	user: UserState = state.user;
 	const	inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll('.ranked-input');
 	const	playerNames: Player[] = [];
-	
+
 	if (user.username === null || user.id === null || !user.isAuth) {
 		return;
 	}
-	
+
 	let first: boolean = true;
 	for (const input of inputs) {
 		if (first) {
@@ -549,32 +577,33 @@ async function onStartRankedTournament(): Promise<void> {
 		}
 		const val = input.value.trim();
 		if (val !== '' && (val.length >= 3 && val.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(val))) {
-			const	userCheckResponse: Response = await sendRequest(`/api/user/lookup/${val}`, "get", null);
-			if (!userCheckResponse.ok) {
-				displayError("User(s) not found.", "msg-error");
-				return;
+
+			try {
+				const	userCheckResponse: Response = await sendRequest(`/api/user/lookup/${val}`, "get", null);
+				if (!userCheckResponse.ok) {
+					return displayError("User(s) not found.", "msg-error");
+				}
+				const	userCheck = await userCheckResponse.json();
+				playerNames.push({ name: val, id: userCheck.id, isRegistered: userCheck.isRegistered });
 			}
-			const userCheck = await userCheckResponse.json();
-			playerNames.push({ name: val, id: userCheck.id, isRegistered: userCheck.isRegistered });
+			catch(err) {
+				return displayError("User(s) not found.", "msg-error");
+			}
 		} else {
-			displayError("Player names must be 3-20 characters long and assume only letters, numbers, '-' or '_'.", "msg-error");
-			return;
+			return displayError("Player names must be 3-20 characters long and assume only letters, numbers, '-' or '_'.", "msg-error");
 		}
 	}
 	if (playerNames.length != 4) {
-		displayError("You need 4 players to start a ranked tournament.", "msg-error");
-		return;
+		return displayError("You need 4 players to start a ranked tournament.", "msg-error");
 	}
-	const namesLower = playerNames.map(p => p.name.toLowerCase());
+	const	namesLower = playerNames.map(p => p.name.toLowerCase());
 	if (new Set(namesLower).size !== playerNames.length) {
-		displayError("Player names must be unique.", "msg-error");
-		return;
+		return displayError("Player names must be unique.", "msg-error");
 	}
 
 	const	scoreInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
 	if (!(scoreInput instanceof HTMLInputElement)) {
-		displayPop("Missing menu game HTMLElement!", "error");
-		return;
+		return displayPop("Missing menu game HTMLElement!", "error");
 	}
 	const	winningScore: number = parseInt(scoreInput.value, 10);
 
@@ -635,7 +664,7 @@ function onClickStartFeatured(mode: 'ai' | 'pvp'): void {
 	}
 
 	const	state: AppState = appStore.getState();
-	const	user: UserState | null = state.user;
+	const	user: UserState = state.user;
 
 	if (router.Path === '/pongmenu')
 	{

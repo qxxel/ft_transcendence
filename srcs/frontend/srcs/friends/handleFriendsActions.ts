@@ -23,14 +23,18 @@ import { getAndRenderFriends }	from "./getAndRenderFriends.js"
 /* ====================== FUNCTION ====================== */
 
 export async function	handleFriendAction(url: string, method: string, body: Object | null): Promise<boolean> {
-	const	response: Response = await sendRequest(url, method, body);
 
-	if (!response.ok)
-	{
-		displayPop(response, "error");
+	try {
+		const	response: Response = await sendRequest(url, method, body);
+		if (!response.ok)
+		{
+			displayPop(response, "error");
+			return false;
+		}
+	} catch(err) {
+		displayPop("" + err, "error");
 		return false;
 	}
-
 	await getAndRenderFriends();
 	return true;
 }

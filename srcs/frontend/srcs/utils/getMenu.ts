@@ -17,8 +17,6 @@
 
 import { displayPop }	from "../utils/display.js"
 
-
-
 /* ====================== FUNCTION ====================== */
 
 export function	getMenu(isAuth: boolean): void {

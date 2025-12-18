@@ -27,7 +27,6 @@ async function	handleLoadPage(): Promise<void> {
 	return new Promise((resolve) => {
 		document.addEventListener("DOMContentLoaded", async (_event: Event) => {
 			const	response: Response = await sendRequest('/api/user/me', "GET", null);
-
 			if (!response.ok)
 			{
 				setDynamicFavicon(null);
