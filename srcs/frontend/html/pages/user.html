@@ -45,13 +45,13 @@
 			<div class="form-grid">
 				<div class="form-group">
 					<label for="edit-username">Username</label>
-					<input type="text" id="edit-username" class="edit-mode styled-input" name="username" hidden>
+					<input type="text" id="edit-username" class="edit-mode styled-input" name="edit-username" hidden>
 					<div id="user-username" class="view-mode data-display"></div>
 				</div>
 				
 				<div class="form-group">
 					<label for="edit-email">Email</label>
-					<input type="email" id="edit-email" class="edit-mode styled-input" name="email" hidden>
+					<input type="email" id="edit-email" class="edit-mode styled-input" name="edit-email" hidden>
 					<div id="user-email" class="view-mode data-display"></div>
 				</div>
 			</div>
@@ -63,7 +63,7 @@
 			</div>
 			
 			<div class="form-group row-layout">
-				<label>Two-Factor Auth</label>
+				<span>Two-Factor Auth</span>
 				
 				<div class="security-controls">
 					<div class="view-mode">
@@ -71,7 +71,7 @@
 					</div>
 					
 					<div class="edit-mode" hidden>
-						<label class="custom-checkbox">
+						<label for="edit-2fa" class="custom-checkbox">
 							<input type="checkbox" id="edit-2fa">
 							<span>Enable 2FA</span>
 						</label>
@@ -103,7 +103,7 @@
 		<h1>Verify your identity</h1>
 
 		<div class="form-group">
-			<label for="sign-up-password">Password:</label>
+			<label for="confirm-setting-password">Password:</label>
 			<input type="password" id="confirm-setting-password" name="password"
 				placeholder="Enter your password" required minlength="8" maxlength="64"
 				pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]).{8,64}$"
@@ -112,7 +112,7 @@
 		</div>
 		
 		<div id="div-verify-email" class="form-group" hidden>
-			<label for="sign-up-password" class="twofa">Verification Code:</label>
+			<label for="digit-code" class="twofa">Verification Code:</label>
 			<input type="text" id="digit-code" class="twofa" name="digit-code" maxlength="4" placeholder="Enter 4 digit code" pattern="^[0-9]{4}$">
 			
 			<p>Open your email and enter the code.</p>
