@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 00:07:20 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 15:44:38 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,12 +112,10 @@ io.on('connection', (socket: any) => {
 
 const	start = async () => {
 	try {
-		// Listen
 		await gameFastify.listen({ port: 3000, host: '0.0.0.0' });
 		gameFastify.log.info("Server started on http://game:3000");
 		console.log("Server started on http://game:3000");
 
-		// SIGTERM
 		process.on('SIGTERM', () => {
 			console.log('SIGTERM received, server shutdown...');
 			gameFastify.server.close(() => {

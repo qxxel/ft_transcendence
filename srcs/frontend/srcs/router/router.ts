@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   router.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 14:23:59 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORT ====================== */
 
-import { pathActions }	from "./postNavigationUtils.js"
+import { postNavigationActions }	from "./postNavigationUtils.js"
 import { displayPop }	from "../utils/display.js"
 
 
@@ -63,7 +63,7 @@ export class	Router {
 			} else
 				displayPop("Missing HTMLElement!", "error");
 			this.currentPath = currentPath;
-			await pathActions(currentPath);
+			await postNavigationActions(currentPath);
 		}
 		else
 			this.navigate("/");

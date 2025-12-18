@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 13:32:29 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 15:56:13 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ function	renderFriends(friendsData: UserObject[]): void {
 function	createFriendElement(requestsListDiv: HTMLDivElement, friendsListDiv: HTMLDivElement, friend: UserObject): void {
 	const	state: AppState = appStore.getState();
 	const	user: UserState = state.user;
-console.log(friend.is_log)
+
 	if (user.id === parseInt(friend.receiver_id, 10) && friend.status === "PENDING")
 	{
 		addRequestInList(requestsListDiv, friend);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 06:06:47 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 15:23:25 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jwt.ts                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 23:42:01 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 15:45:56 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 import axios				from 'axios'
 import Fastify				from 'fastify'
 import sqlite3Pkg			from 'sqlite3'
-import cron					from "node-cron";
+import cron					from "node-cron"
 import cors					from '@fastify/cors'
 import formBody				from '@fastify/formbody'
 import { jwtService }		from "./services/jwtService.js"

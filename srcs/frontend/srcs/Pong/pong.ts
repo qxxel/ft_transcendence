@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pong.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/17 09:08:46 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 16:06:01 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,8 +195,8 @@ export class PongGame extends Game {
 
 	private quitGame() {
 		this.stop();
-		this.isGameOver = false; 
-		socket.emit('leave-game');
+		this.isGameOver = false;
+		socket?.emit('leave-game');
 		router.navigate('/games');
 	}
 
@@ -216,17 +216,27 @@ export class PongGame extends Game {
 			this.animationFrameId = null;
 		}
 
+		this.isGameOver = false;
+		
 		window.removeEventListener('keydown', this.handleKeyDown);
 		window.removeEventListener('keyup', this.handleKeyUp);
-
+		
 		if (socket)
 		{
+			socket.emit('leave-game');
 			socket.off('game-update');
 			socket.off('game-over');
 		}
 	}
 
 	private renderLoop() {
+		if (!socket.active)
+		{
+			displayPop("You have been deconnected !", "error");
+			router.navigate('/');
+			return ;
+		}
+
 		this.syncServerDisplay();
 		this.draw();
 		this.animationFrameId = requestAnimationFrame(() => this.renderLoop());
