@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:51:00 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 04:55:11 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 19:01:18 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ export class	usersAddDto {
 			.filter(error => error && error.length > 0)
 			.join("; ");
 
-		return { result: errors.length === 0, error: errors } // maybe change to send error by error
+		return { result: errors.length === 0, error: errors }
 	}
 
 

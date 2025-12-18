@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 16:49:58 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 18:20:07 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ async function	generateMailCode(request: FastifyRequest<{ Body: { email?: string
 		const	dataMail = MailCodeMessage(payload.data.username, otp, request.body.email || payload.data.email);
 		await sendMailMessage(dataMail);
 
-		return reply.status(201).send();	//	MATHIS: LE OTP TES UN FOU
+		return reply.status(201).send();
 	} catch (err: unknown) {
 		return await errorsHandler(twofaFastify, reply, err);
 	}

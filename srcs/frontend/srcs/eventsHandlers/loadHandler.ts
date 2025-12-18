@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 10:04:01 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 18:18:59 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
 async function	handleLoadPage(): Promise<void> {
 	return new Promise((resolve) => {
 		document.addEventListener("DOMContentLoaded", async (_event: Event) => {
-
-			// const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null); TODO
 			const	response: Response = await sendRequest('/api/user/me', "GET", null);
 
 			if (!response.ok)

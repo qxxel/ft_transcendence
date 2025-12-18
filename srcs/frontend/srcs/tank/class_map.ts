@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   class_map.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 16:13:12 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 19:09:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ export class	Map {
 	constructor(
 		public	map_width:number,
 		public	map_height:number,
-		public	wall_width: number, // TODO
+		public	wall_width: number,
 		public	name: string = "default",
 	) {
 		if (this.name == "desertfox") { this.generate_desertfox(); }
@@ -59,7 +59,7 @@ export class	Map {
 
 	generate_desertfox(): void {
 
-		const	c_ext  = {r:0,g:0,b:0};//675645
+		const	c_ext  = {r:0,g:0,b:0};
 		const	c_blk1 = {r:110,g:110,b:110};
 		const	c_blk2 = {r:160,g:160,b:160};
 
@@ -71,11 +71,11 @@ export class	Map {
 		this.walls.push(new Wall(0, 0, this.map_width, ext_width, c_ext));                            // EXTERIOR TOP
 		this.walls.push(new Wall(0, this.map_height - ext_width, this.map_width, ext_width, c_ext));  // EXTERIOR BOT
 
-		this.walls.push(new Wall(cell*1.5, cell*1.5, cell  , cell  ,   c_blk1)); // 1
-		this.walls.push(new Wall(cell*7.5, cell*1.5, cell  , cell  ,   c_blk1)); // 3
-		this.walls.push(new Wall(cell*4, cell*4, cell*2, cell*2,   c_blk2)); // 5
-		this.walls.push(new Wall(cell*1.5, cell*7.5, cell  , cell  ,   c_blk1)); // 7
-		this.walls.push(new Wall(cell*7.5, cell*7.5, cell  , cell  ,   c_blk1)); // 9
+		this.walls.push(new Wall(cell*1.5, cell*1.5, cell  , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell*7.5, cell*1.5, cell  , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell*4, cell*4, cell*2, cell*2,   c_blk2));
+		this.walls.push(new Wall(cell*1.5, cell*7.5, cell  , cell  ,   c_blk1));
+		this.walls.push(new Wall(cell*7.5, cell*7.5, cell  , cell  ,   c_blk1));
 
 		for(let w of this.walls) {
 			GSTATE.ACTORS.push(w);
@@ -108,9 +108,8 @@ export class	Map {
 
 	generate_thehouse(): void {
 
-		const	c_ext  = {r:0,g:0,b:0};//675645
+		const	c_ext  = {r:0,g:0,b:0};
 		const	c_blk1 = {r:110,g:110,b:110};
-		const	c_blk2 = {r:160,g:160,b:160};
 
 		const	ext_width = 1;
 		const	cell =  this.map_height/100;
@@ -215,7 +214,7 @@ export class	Map {
 	}
 
 	generate_thevoid(): void {
-		const	c_ext  = {r:0,g:0,b:0};//675645
+		const	c_ext  = {r:0,g:0,b:0};
 
 		const	ext_width = 1;
 		const	cell =  this.map_height/100;

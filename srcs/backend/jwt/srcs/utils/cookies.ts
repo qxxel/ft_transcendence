@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cookies.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 17:06:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 03:59:09 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 19:00:14 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ import type { FastifyReply }	from 'fastify'
 
 /* ====================== FUNCTIONS ====================== */
 
-// hostOnly ???
 export function	setCookiesAccessToken(reply: FastifyReply, jwtAccess: string): void {
 	reply.header(
 		"Set-Cookie",

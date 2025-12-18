@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsRepository.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 13:32:25 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 18:39:10 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,22 +60,6 @@ export class	friendshipsRepository {
 				RETURNING *;`;
 			const	elements: number[] = friendship.getTable();
 
-			this.db.get(query, elements, (err: Error | null, row: any) => {
-				if (err)
-					return reject(err);
-
-				resolve(new friendshipsRespDto(row));
-			});
-		});
-	}
-
-	async addFriend(friendship: friendshipsAddDto): Promise<friendshipsRespDto> {
-		return new Promise((resolve, reject) => {
-			const	query: string = `INSERT INTO friendships (requester_id, receiver_id, status) 
-					VALUES (?, ?, 'ACCEPT')
-				RETURNING *;`;
-			const	elements: number[] = friendship.getTable();
-																								//	AXEL: A ENLEVER
 			this.db.get(query, elements, (err: Error | null, row: any) => {
 				if (err)
 					return reject(err);

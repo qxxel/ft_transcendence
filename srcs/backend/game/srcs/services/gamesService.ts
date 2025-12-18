@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:48:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 18:35:35 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ export class	GamesService {
 	async deleteGame(gameId: number): Promise<void> {
 		const	query: string = "SELECT 1 FROM games WHERE id = ? LIMIT 1";
 		if (!(await this.gamesRepo.isTaken(query, [gameId.toString()])))
-			return;	//	AXEL verify si j'ai bien fait
+			return;
 
 		return await this.gamesRepo.deleteGame(gameId);
 	}
@@ -60,7 +60,7 @@ export class	GamesService {
 	async deleteClientGames(userId: number): Promise<void> {
 		const	query: string = "SELECT 1 FROM games WHERE id_client = ? LIMIT 1";
 		if (!(await this.gamesRepo.isTaken(query, [userId.toString()])))
-			return;	//	AXEL verify si j'ai pas tout casser
+			return;
 
 		return await this.gamesRepo.deleteClientGames(userId);
 	}

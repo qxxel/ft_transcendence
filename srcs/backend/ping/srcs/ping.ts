@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 16:58:31 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 19:11:59 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ const	db: sqlite3Pkg.Database = new Database(dbname, (err: Error | null) => {
 
 export const	pingServ = new pingService(new pingRepository(db));
 
-cron.schedule("0 * * * * *", () => { // 1m
+cron.schedule("0 * * * * *", () => { // 1min
 	console.log("Cron: Running cleanup...");
 	pingServ.logoutInactiveClient()
 		.then(() => console.log("Cron: Cleanup done."))
