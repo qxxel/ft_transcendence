@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:58 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 11:58:15 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 12:43:24 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ export class	friendshipsRepository {
 
 	async getFriendsList(userId: number): Promise<FriendUser[]> {
 		return new Promise((resolve, reject) => {
-			const	query: string = `SELECT u.id, u.username, u.avatar, f.status, f.receiver_id
+			const	query: string = `SELECT u.id, u.username, u.avatar, u.is_log, f.status, f.receiver_id
 				FROM friendships f
 				INNER JOIN users u ON u.id = CASE
 					WHEN f.requester_id = ? THEN f.receiver_id

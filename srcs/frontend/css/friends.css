@@ -116,18 +116,24 @@
 	width: 8px;
 	height: 8px;
 	border-radius: 50%;
-	margin-right: 15px;
+	margin-left: 15px;
+	margin-right: 5px;
 	background: gray;
 }
 
-.online .status-dot {
+.online .green-glow {
 	background: #0F0;
 	box-shadow: 0 0 5px #0F0;
 }
 
-.playing .status-dot {
-	background: #FF0;
-	box-shadow: 0 0 5px #FF0;
+.offline .red-glow {
+	background: #F00;
+	box-shadow: 0 0 5px #F00;
+}
+
+.friend-avatar {
+	width: 30px;
+	height: 30px;
 }
 
 .username {

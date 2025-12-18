@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 15:04:19 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:03:12 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ function	renderFriends(friendsData: UserObject[]): void {
 function	createFriendElement(requestsListDiv: HTMLDivElement, friendsListDiv: HTMLDivElement, friend: UserObject): void {
 	const	state: AppState = appStore.getState();
 	const	user: UserState = state.user;
-
+console.log(friend.is_log)
 	if (user.id === parseInt(friend.receiver_id, 10) && friend.status === "PENDING")
 	{
 		addRequestInList(requestsListDiv, friend);
@@ -106,20 +106,23 @@ function	addRequestInList(requestsListDiv: HTMLDivElement, friend: UserObject): 
 	const	newActionDiv: HTMLDivElement = document.createElement("div");
 	newActionDiv.classList.add("actions");
 
+	const	avatarImg: HTMLImageElement = document.createElement("img");
+	avatarImg.classList.add("display-avatar", "friend-avatar", "avatar-image");
+	avatarImg.src = friend.avatar ?? "/assets/default_avatar.png";
+	avatarImg.alt = "User avatar";
+
 	const	usernameSpan: HTMLSpanElement = document.createElement("span");
 	usernameSpan.classList.add("username");
 	usernameSpan.textContent = friend.username;
 
 	const	acceptButton: HTMLSpanElement = document.createElement("button");
-	acceptButton.classList.add("neon-button");
-	acceptButton.classList.add("accept-button");
+	acceptButton.classList.add("neon-button", "accept-button");
 	acceptButton.textContent = "ACCEPT";
 	acceptButton.dataset.targetId = friend.id.toString();
 	acceptButton.dataset.targetUsername = friend.username;
 
 	const	ignoreButton: HTMLSpanElement = document.createElement("button");
-	ignoreButton.classList.add("neon-button");
-	ignoreButton.classList.add("ignore-button");
+	ignoreButton.classList.add("neon-button", "ignore-button");
 	ignoreButton.textContent = "IGNORE";
 	ignoreButton.dataset.targetId = friend.id.toString();
 	ignoreButton.dataset.targetUsername = friend.username;
@@ -128,6 +131,7 @@ function	addRequestInList(requestsListDiv: HTMLDivElement, friend: UserObject): 
 	newActionDiv.appendChild(acceptButton);
 	newActionDiv.appendChild(ignoreButton);
 
+	newDiv.appendChild(avatarImg);
 	newDiv.appendChild(usernameSpan);
 	newDiv.appendChild(newActionDiv);
 
@@ -137,14 +141,19 @@ function	addRequestInList(requestsListDiv: HTMLDivElement, friend: UserObject): 
 function	addFriendInList(friendsListDiv: HTMLDivElement, friend: UserObject): void {
 	const	newDiv: HTMLDivElement = document.createElement("div");
 	newDiv.classList.add("friend-entry");
-	newDiv.classList.add("online");
+	newDiv.classList.add(friend.is_log ? "online" : "offline");
 
 	const	newActionDiv: HTMLDivElement = document.createElement("div");
 	newActionDiv.classList.add("actions");
 
+	const	avatarImg: HTMLImageElement = document.createElement("img");
+	avatarImg.classList.add("display-avatar", "friend-avatar", "avatar-image");
+	avatarImg.src = friend.avatar ?? "/assets/default_avatar.png";
+	avatarImg.alt = "User avatar";
+	
 	const	statusSpan: HTMLSpanElement = document.createElement("span");
 	statusSpan.classList.add("status-dot");
-	statusSpan.classList.add("green-glow");
+	statusSpan.classList.add(friend.is_log ? "green-glow" : "red-glow");
 
 	const	usernameSpan: HTMLSpanElement = document.createElement("span");
 	usernameSpan.classList.add("username");
@@ -168,6 +177,7 @@ function	addFriendInList(friendsListDiv: HTMLDivElement, friend: UserObject): vo
 	newActionDiv.appendChild(historyButton);
 	newActionDiv.appendChild(removeButton);
 
+	newDiv.appendChild(avatarImg);
 	newDiv.appendChild(statusSpan);
 	newDiv.appendChild(usernameSpan);
 	newDiv.appendChild(newActionDiv);
