@@ -37,7 +37,6 @@ export async function loadTournamenSetupRanked() {
 	const	response: Response = await sendRequest(`/api/user/me`, 'get', null);
 	
 	if (!response.ok) {
-		displayPop(response.statusText, "error");
 		return;
 	}
 
