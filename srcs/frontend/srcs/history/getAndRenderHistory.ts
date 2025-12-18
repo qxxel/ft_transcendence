@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderHistory.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 09:20:24 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ export async function	getAndRenderHistory(targetId: number | null,
 		targetName: string | null,
 		aiFilter: boolean = true,
 		pvpFilter: boolean = true,
+		tourFilter: boolean = true,
 		pongFilter: boolean = true,
 		tankFilter: boolean = true
 	): Promise<void> {
@@ -79,7 +80,7 @@ export async function	getAndRenderHistory(targetId: number | null,
 			return;
 		}
 
-		renderGames(gamesData, aiFilter, pvpFilter, pongFilter, tankFilter);
+		renderGames(gamesData, aiFilter, pvpFilter, tourFilter, pongFilter, tankFilter);
 	} catch (err: unknown) {
 		displayPop("Critical error while charging history: " + err, "error")
 		displayErrors(targetName);
@@ -125,6 +126,7 @@ function renderGames(
 		gamesData: GameObject[], 
 		aiFilter: boolean, 
 		pvpFilter: boolean,
+		tourFilter: boolean,
 		pongFilter: boolean,
 		tankFilter: boolean
 	): void {
@@ -132,7 +134,7 @@ function renderGames(
 	if (historyEntriesDiv instanceof HTMLDivElement) historyEntriesDiv.textContent = ""; 
 
 	const	games: GameObject[] = gamesData.filter((game) => {
-		const	modeMatch: boolean = (aiFilter && game.mode === "ai") || (pvpFilter && game.mode === "pvp");
+		const	modeMatch: boolean = (aiFilter && game.mode === "ai") || (pvpFilter && game.mode === "pvp") || (tourFilter && game.mode === "tour");
 		
 		const	typeMatch: boolean = (pongFilter && (game.game_type === 1 || game.game_type === 0)) || 
 						  (tankFilter && game.game_type === 2);
@@ -266,12 +268,14 @@ function displayNoGame(filter: boolean): void {
 export function initHistoryListeners(targetId: number | null, targetName: string | null = null): void {
 	const	aiCheckbox: HTMLElement | null = document.getElementById('filter-ai');
 	const	pvpCheckbox: HTMLElement | null = document.getElementById('filter-pvp');
+	const	tourCheckbox: HTMLElement | null = document.getElementById('filter-tour');
 	const	pongCheckbox: HTMLElement | null = document.getElementById('filter-pong');
 	const	tankCheckbox: HTMLElement | null = document.getElementById('filter-tank');
 	const	refreshBtn: HTMLElement | null = document.getElementById('refresh-history');
 
 	if (!(aiCheckbox instanceof HTMLInputElement) ||
 		!(pvpCheckbox instanceof HTMLInputElement) ||
+		!(tourCheckbox instanceof HTMLInputElement) ||
 		!(pongCheckbox instanceof HTMLInputElement) ||
 		!(tankCheckbox instanceof HTMLInputElement)) {
 		setTimeout(() => {
@@ -289,6 +293,7 @@ export function initHistoryListeners(targetId: number | null, targetName: string
 			targetName, 
 			aiCheckbox.checked, 
 			pvpCheckbox.checked, 
+			tourCheckbox.checked,
 			pongCheckbox.checked, 
 			tankCheckbox.checked
 		).then(() => {
@@ -298,6 +303,7 @@ export function initHistoryListeners(targetId: number | null, targetName: string
 
 	aiCheckbox.onchange = refreshList;
 	pvpCheckbox.onchange = refreshList;
+	tourCheckbox.onchange = refreshList;
 	pongCheckbox.onchange = refreshList;
 	tankCheckbox.onchange = refreshList;
 
