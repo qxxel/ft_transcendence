@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 15:43:41 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 16:13:12 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ export class	Map {
 	) {
 		if (this.name == "desertfox") { this.generate_desertfox(); }
 		else if (this.name == "thehouse") { this.generate_thehouse(); }
-		else if (this.name == "theVoid") { this.generate_theVoid(); }
+		else if (this.name == "thevoid") { this.generate_thevoid(); }
 		else { this.generate_default(); }
 	}
 
@@ -214,11 +214,8 @@ export class	Map {
 
 	}
 
-	generate_theVoid(): void {
-
+	generate_thevoid(): void {
 		const	c_ext  = {r:0,g:0,b:0};//675645
-		const	c_blk1 = {r:110,g:110,b:110};
-		const	c_blk2 = {r:160,g:160,b:160};
 
 		const	ext_width = 1;
 		const	cell =  this.map_height/100;
@@ -233,17 +230,26 @@ export class	Map {
 			GSTATE.ACTORS.push(w);
 		}
 
-			this.spawns_tank1.push({x:cell*30,y:cell*30}); // d
-			this.spawns_tank2.push({x:cell*60,y:cell*60}); // b
+			this.spawns_tank1.push({x:cell*30,y:cell*30});
+			this.spawns_tank2.push({x:cell*60,y:cell*60});
 
-			this.spawns_collectible.push({x:cell*5.0 - 16/2,y: cell*3.5- 16/2});   // i
-			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*5.0- 16/2});   // j
-			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*5.0- 16/2});   // k
-			this.spawns_collectible.push({x:cell*5.0 - 16/2,y: cell*6.5- 16/2});   // l
-			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*3.5- 16/2});   // w
-			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*3.5- 16/2});   // x
-			this.spawns_collectible.push({x:cell*3.5 - 16/2,y: cell*6.5- 16/2});   // y
-			this.spawns_collectible.push({x:cell*6.5 - 16/2,y: cell*6.5- 16/2});   // z
+			this.spawns_collectible.push({x:cell*50 - 16/2,y: cell*35- 16/2});
+			this.spawns_collectible.push({x:cell*35 - 16/2,y: cell*50- 16/2});
+			this.spawns_collectible.push({x:cell*65 - 16/2,y: cell*50- 16/2});
+			this.spawns_collectible.push({x:cell*50 - 16/2,y: cell*65- 16/2});
+			this.spawns_collectible.push({x:cell*35 - 16/2,y: cell*35- 16/2});
+			this.spawns_collectible.push({x:cell*65 - 16/2,y: cell*35- 16/2});
+			this.spawns_collectible.push({x:cell*35 - 16/2,y: cell*65- 16/2});
+			this.spawns_collectible.push({x:cell*65 - 16/2,y: cell*65- 16/2});
+
+			this.spawns_collectible.push({x:cell*50 - 16/2,y: cell*15- 16/2});
+			this.spawns_collectible.push({x:cell*15 - 16/2,y: cell*50- 16/2});
+			this.spawns_collectible.push({x:cell*85 - 16/2,y: cell*50- 16/2});
+			this.spawns_collectible.push({x:cell*50 - 16/2,y: cell*85- 16/2});
+			this.spawns_collectible.push({x:cell*15 - 16/2,y: cell*15- 16/2});
+			this.spawns_collectible.push({x:cell*85 - 16/2,y: cell*15- 16/2});
+			this.spawns_collectible.push({x:cell*15 - 16/2,y: cell*85- 16/2});
+			this.spawns_collectible.push({x:cell*85 - 16/2,y: cell*85- 16/2});
 
 	}
 
