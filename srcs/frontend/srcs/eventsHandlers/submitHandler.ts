@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 06:05:58 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ import { sendRequest }				from "../utils/sendRequest.js"
 import { verifyEmail }				from "../utils/verifyEmail.js"
 import { getAndRenderFriends }		from "../friends/getAndRenderFriends.js"
 import { uploadAvatar }				from "../utils/uploadAvatar.js"
+import { heartbeat }				from "../utils/heartbeat.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -95,6 +96,8 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
+	heartbeat();
+
 	getMenu(true);
 
 	router.navigate("/");
@@ -162,6 +165,8 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 		}
 	}));
 
+	heartbeat();
+
 	getMenu(true);
 
 	router.canLeave = true;
@@ -192,6 +197,8 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 			isAuth: true
 		}
 	}));
+
+	heartbeat();
 
 	getMenu(true);
 

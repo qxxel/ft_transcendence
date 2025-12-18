@@ -6,7 +6,7 @@
 #    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/12/01 13:03:35 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/12/18 08:04:17 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,8 @@ GAME_DB		= $(DB_BASE_DIR)/game/db
 USER_DB		= $(DB_BASE_DIR)/user/db
 JWT_DB		= $(DB_BASE_DIR)/jwt/db
 TWOFA_DB	= $(DB_BASE_DIR)/twofa/db
-DB_DIR		= $(AUTH_DB) $(GAME_DB) $(USER_DB) $(JWT_DB) $(TWOFA_DB)
+PING_DB		= $(DB_BASE_DIR)/ping/db
+DB_DIR		= $(AUTH_DB) $(GAME_DB) $(USER_DB) $(JWT_DB) $(TWOFA_DB) $(PING_DB)
 
 # ----------------------------    key and cert    ---------------------------- #
 
@@ -228,13 +229,14 @@ ls		:
 
 .PHONY	: logs
 logs	:
-	-$(call RUN_CMD,docker logs nginx,$(GREEN))
 	-$(call RUN_CMD,docker logs frontend,$(YELLOW))
-	-$(call RUN_CMD,docker logs gateway,$(BLUE))
-	-$(call RUN_CMD,docker logs auth,$(BLUE))
-	-$(call RUN_CMD,docker logs game,$(BLUE))
-	-$(call RUN_CMD,docker logs user,$(BLUE))
-	-$(call RUN_CMD,docker logs jwt,$(BLUE))
+	-$(call RUN_CMD,docker logs gateway,$(MAGENTA))
+	-$(call RUN_CMD,docker logs auth,$(CYAN))
+	-$(call RUN_CMD,docker logs game,$(GREEN))
+	-$(call RUN_CMD,docker logs jwt,$(YELLOW))
+	-$(call RUN_CMD,docker logs twofa,$(MAGENTA))
+	-$(call RUN_CMD,docker logs ping,$(CYAN))
+	-$(call RUN_CMD,docker logs user,$(GREEN))
 
 
 # --------------------------------   clean   -------------------------------- #

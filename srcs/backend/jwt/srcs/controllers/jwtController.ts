@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 23:34:20 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 06:53:41 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ async function	createdToken(request: FastifyRequest, reply: FastifyReply): Promi
 		const	refreshToken: string = await addJWT(reply, user);
 
 		const	lastId: number = await jwtServ.addToken(refreshToken, user.id);
-
-		await jwtAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': user.id } } );
 		
 		return reply.status(201).send(lastId);
 	} catch (err: unknown) {
@@ -121,8 +119,6 @@ async function	validateTwofaCreatedToken(request: FastifyRequest, reply: Fastify
 		removeCookies(reply, "jwtTwofa", "/api");
 
 		const	refreshToken: string = await addJWT(reply, user);
-
-		await jwtAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': user.id } } );
 
 		await jwtServ.addToken(refreshToken, user.id)
 		return reply.status(201).send(payload);
@@ -259,8 +255,8 @@ async function	deleteSessionToken(request: FastifyRequest, reply: FastifyReply):
 		if (cookies.jwtRefresh)
 			await jwtServ.deleteToken(cookies.jwtRefresh);
 
-		if (payload && payload.id)
-			await jwtAxios.post('http://user:3000/log', { isLog: false }, { headers: { 'user-id': user.id } } );
+		if (user && user.id)
+			await jwtAxios.delete(`http://ping:3000/${user.id}`);
 
 		return reply.status(204).send({ result: "deleted." });
 	} catch (err: unknown) {

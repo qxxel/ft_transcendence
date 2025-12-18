@@ -46,7 +46,7 @@ services:
     volumes:
       - "gameDB:/app/dist/db"
     networks:
-      - web
+      - web # /!\ pourquoi ???
       - backend
 
   user:
@@ -82,6 +82,22 @@ services:
     networks:
       - backend
     env_file: ../.env
+
+  ping:
+    container_name: ping
+    image: ping
+    build:
+      context: ./ping
+      dockerfile: Dockerfile.ping
+    secrets:
+      - ssl_key_back
+      - ssl_crt_back
+    ports:
+      - "3000"
+    volumes:
+      - "pingDB:/app/dist/db"
+    networks:
+      - backend
 
   twofa:
     container_name: twofa

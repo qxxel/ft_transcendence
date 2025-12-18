@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 06:09:04 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ import { loadTwofa, loadUserStats }			from "../router/loadPage.js"
 import { TournamentController } 			from "../Pong/tournament.js"
 import { sendRequest }						from "../utils/sendRequest.js"
 import { verifyEmail }						from "../utils/verifyEmail.js"
+import { heartbeat }						from "../utils/heartbeat.js"
 import { GameOptions }						from "../Pong/objects/gameOptions.js"
 import { initHistoryListeners } 			from "../history/getAndRenderHistory.js"
 
@@ -234,6 +235,8 @@ async function	onClickSkipeVerifyEmailDev(): Promise<void> { // delete this
 			isAuth: true
 		}
 	}));
+
+	heartbeat();
 	
 	getMenu(true);
 

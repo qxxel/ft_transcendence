@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 13:47:35 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 06:06:47 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ export async function	redirections(currentPath: string): Promise<void> {
 				isAuth: true
 			}
 		}));
+
+		// /!\ MATHIS heartbeat();
 
 		getMenu(true);
 
