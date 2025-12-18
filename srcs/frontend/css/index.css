@@ -538,6 +538,71 @@ button:disabled {
   margin-bottom: 20px;
 }
 
+.bracket-container {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  padding: 20px;
+  overflow-x: auto;
+  color: #fff;
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.match {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid #FFFF00;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.player {
+  padding: 5px;
+  min-width: 150px;
+  background-color: #333;
+  margin: 2px 0;
+  border-radius: 4px;
+}
+
+.player.winner {
+  font-weight: bold;
+  color: #FFFF00;
+}
+
+.player.empty {
+  color: #777;
+  font-style: italic;
+}
+
+.btn-play-match {
+  background-color: #FFFF00;
+  color: #000;
+  font-family: 'monospace', sans-serif;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 5px 10px;
+  margin-top: 5px;
+}
+
+.btn-play-match:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.ranked-tournament-player {
+  display:block;
+  text-align:left;
+  font-size:0.8rem;
+  margin-bottom:5px;
+}
+
 /* ==========================================================================
    7. UI COMPONENTS: INPUTS & SLIDERS
    ========================================================================== */
@@ -1215,6 +1280,36 @@ input[type=range]::-moz-range-thumb {
 	letter-spacing: 1px;
 }
 
+.tank-map-choice {
+	width: 100%;
+	padding: 8px;
+	margin-top: 5px;
+	background: #222;
+	color: white;
+	border: 1px solid #666;
+	border-radius: 4px;
+}
+
+.tank-class-choice-p1 {
+	width: 100%;
+	padding: 5px;
+	margin-top: 5px;
+	background: #222;
+	color: #88ccff;
+	border: 1px solid #4488ff;
+	border-radius: 4px;
+}
+
+.tank-class-choice-p2 {
+	width: 100%;
+	padding: 5px;
+	margin-top: 5px;
+	background: #222;
+	color: #ff8888;
+	border: 1px solid #ff4444;
+	border-radius: 4px;
+}
+
 .type-pong {
 	color: #00ffff;
 	border: 1px solid rgba(0, 255, 255, 0.3);
@@ -1449,9 +1544,9 @@ input[type=range]::-moz-range-thumb {
 	display: block;
 
 	display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #000;
+	justify-content: center;
+	align-items: center;
+	background-color: #000;
 }
 
 .avatar-overlay {
