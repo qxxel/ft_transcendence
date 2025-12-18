@@ -50,8 +50,9 @@ function onClickPlay(): void {
 
 async function  onClickLogout(): Promise<void> {
 	
+	let response: Response;
 	try {
-		const response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
+		response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
 		if (!response.ok)
 			return displayPop(response, "error");
 	}
