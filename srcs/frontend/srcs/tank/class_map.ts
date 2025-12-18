@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   class_map.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:32:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 15:43:41 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ export class	Map {
 	) {
 		if (this.name == "desertfox") { this.generate_desertfox(); }
 		else if (this.name == "thehouse") { this.generate_thehouse(); }
-		else if (this.name == "davinco") { this.generate_davinco(); }
+		else if (this.name == "theVoid") { this.generate_theVoid(); }
 		else { this.generate_default(); }
 	}
 
@@ -214,7 +214,7 @@ export class	Map {
 
 	}
 
-	generate_davinco(): void {
+	generate_theVoid(): void {
 
 		const	c_ext  = {r:0,g:0,b:0};//675645
 		const	c_blk1 = {r:110,g:110,b:110};

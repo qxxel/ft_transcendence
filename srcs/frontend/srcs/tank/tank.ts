@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tank.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 15:43:41 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ export class	TankGame extends Game {
 		const	p2colorFire:Color = {r:255,g:0,b:255};
 		const	p1Keys:Keys = {up:'w', down:'s', left:'a', right:'d', rot_left:'b', rot_right:'n', fire:'b', ability:'n'};
 		const	p2Keys:Keys = {up:'arrowup', down:'arrowdown', left:'arrowleft', right:'arrowright', rot_left:'2', rot_right:'3', fire:'1', ability:'2'};
-		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'davinco')
+		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'theVoid')
 		{
 			const	s1: Spawn = this.map.spawns_tank1[Math.floor(Math.random() * this.map.spawns_tank1.length)];
 			const	s2: Spawn = this.map.spawns_tank2[Math.floor(Math.random() * this.map.spawns_tank2.length)];
@@ -160,7 +160,7 @@ export class	TankGame extends Game {
 			effects.push("cdr");
 		}
 
-		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'davinco')
+		if (this.map.name == 'desertfox' || this.map.name == 'thehouse' || this.map.name == 'theVoid')
 		{
 			while (attempt++ < 2000)
 			{
