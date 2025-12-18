@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   twofaController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/17 12:10:09 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 12:21:10 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ function MailCodeMessage(user: string, otp: string, email: string) {
 		subject: "Verification code",
 		text: `Your ft_transcendence verification code is: ${otp}`,
 		html: `<p>Hello ${user},</p>
-			   <p>Your ft_transcendence verification code is:</p>
-			   <h2>${otp}</h2>
-			   <p>This code expires in 5 minutes.</p>
-			   <p>Thanks, Transcendence Team.</p>`
+				<p>Your ft_transcendence verification code is:</p>
+				<h2>${otp}</h2>
+				<p>This code expires in 5 minutes.</p>
+				<p>Thanks, Transcendence Team.</p>`
 	};
 }
 

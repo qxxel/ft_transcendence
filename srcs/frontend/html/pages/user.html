@@ -1,10 +1,12 @@
-<div class="profile-wrapper" style="display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
+<div class="profile-wrapper"
+	style="display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
 
-	<div id="user-stats-container" class="stats-container" style="flex: 1; min-width: 300px; max-width: 400px; display: flex; flex-direction: column; gap: 20px;">
+	<div id="user-stats-container" class="stats-container"
+		style="flex: 1; min-width: 300px; max-width: 400px; display: flex; flex-direction: column; gap: 20px;">
 	</div>
-	
+
 	<div id="user-profile" class="game-container">
-		
+
 		<div class="profile-header" id="profile-header">
 			<div class="profile-header-header">
 				<h1>User Profile</h1>
@@ -16,60 +18,63 @@
 			</div>
 
 			<div id="avatar-container">
-				<img id="display-user-avatar" class="avatar-image view-mode user-avatar" src="/assets/default_avatar.png" alt="User avatar">
-				
+				<img id="display-user-avatar" class="avatar-image view-mode user-avatar"
+					src="/assets/default_avatar.png" alt="User avatar">
+
 				<label for="avatar-upload" class="avatar-wrapper edit-mode" title="Edit avatar" hidden>
-					
-					<img id="user-avatar" class="avatar-image user-avatar" src="/assets/default_avatar.png" alt="User avatar">
-					
+
+					<img id="user-avatar" class="avatar-image user-avatar" src="/assets/default_avatar.png"
+						alt="User avatar">
+
 					<div class="avatar-overlay">
 						<span>Edit</span>
 					</div>
 
 					<input type="file" id="avatar-upload" accept="image/*">
-					
+
 				</label>
 			</div>
 		</div>
-		
-		
+
+
 		<div class="section-header">
 			<h3>User Info</h3>
 			<button type="button" onclick="onClickEdit();" id="edit-submit" class="btn-icon view-mode">
 				✎ Edit Profile
 			</button>
 		</div>
-		
+
 		<form id="user-settings-form" class="user-settings-form">
-			
+
 			<div class="form-grid">
 				<div class="form-group">
 					<label for="edit-username">Username</label>
 					<input type="text" id="edit-username" class="edit-mode styled-input" name="edit-username" hidden>
 					<div id="user-username" class="view-mode data-display"></div>
 				</div>
-				
+
 				<div class="form-group">
 					<label for="edit-email">Email</label>
 					<input type="email" id="edit-email" class="edit-mode styled-input" name="edit-email" hidden>
 					<div id="user-email" class="view-mode data-display"></div>
 				</div>
 			</div>
-			
-			<p id="user-setting-msg-error" class="edit-mode" hidden style="color: #ff4444; text-align: center; margin-top: 10px;"></p>
-			
+
+			<p id="user-setting-msg-error" class="edit-mode" hidden
+				style="color: #ff4444; text-align: center; margin-top: 10px;"></p>
+
 			<div class="section-header">
 				<h3>Security</h3>
 			</div>
-			
+
 			<div class="form-group row-layout">
 				<span>Two-Factor Auth</span>
-				
+
 				<div class="security-controls">
 					<div class="view-mode">
 						<span id="switch-span" class="badge status-disabled">Disabled</span>
 					</div>
-					
+
 					<div class="edit-mode" hidden>
 						<label for="edit-2fa" class="custom-checkbox">
 							<input type="checkbox" id="edit-2fa">
@@ -78,43 +83,44 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="danger-zone">
 				<p class="warning-text">Once you delete your account, there is no going back.</p>
-				
+
 				<div class="account-actions">
-					<button type="button" onclick="onClickDeleteAccountStep();" id="button-step1-delete-account" class="btn-danger">
+					<button type="button" onclick="onClickDeleteAccountStep();" id="button-step1-delete-account"
+						class="btn-danger">
 						Delete Account
 					</button>
-					
+
 					<div class="edit-mode button-row" hidden>
 						<button type="button" onclick="onClickCancel();" class="btn-ghost">Cancel</button>
 						<button type="submit" id="save-settings-submit" class="btn-primary">Save Changes</button>
 					</div>
 				</div>
 			</div>
-			
+
 		</form>
 	</div>
 </div>
-		
+
 <div id="confirm-setting" class="game-container" hidden>
 	<form id="confirm-setting-form">
 		<h1>Verify your identity</h1>
 
 		<div class="form-group">
 			<label for="confirm-setting-password">Password:</label>
-			<input type="password" id="confirm-setting-password" name="password"
-				placeholder="Enter your password" required minlength="8" maxlength="64"
+			<input type="password" id="confirm-setting-password" name="password" placeholder="Enter your password"
+				required minlength="8" maxlength="64"
 				pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]).{8,64}$"
-				title="Password must contain at least 8 characters, including uppercase, lowercase, number and special character."
-			>
+				title="Password must contain at least 8 characters, including uppercase, lowercase, number and special character.">
 		</div>
-		
+
 		<div id="div-verify-email" class="form-group" hidden>
 			<label for="digit-code" class="twofa">Verification Code:</label>
-			<input type="text" id="digit-code" class="twofa" name="digit-code" maxlength="4" placeholder="Enter 4 digit code" pattern="^[0-9]{4}$">
-			
+			<input type="text" id="digit-code" class="twofa" name="digit-code" maxlength="4"
+				placeholder="Enter 4 digit code" pattern="^[0-9]{4}$">
+
 			<p>Open your email and enter the code.</p>
 			<p>The verification code is valid until : <span id="date-with-offset">loading...</span></p>
 		</div>
@@ -122,7 +128,8 @@
 		<p id="confirm-setting-msg-error" class="msg-error"></p>
 
 		<div id="div-button-profile" class="button-row">
-			<button type="button" onclick="onClickCancel()" id="button-cancel" class="cancel-button-form">Cancel</button>
+			<button type="button" onclick="onClickCancel()" id="button-cancel"
+				class="cancel-button-form">Cancel</button>
 			<button type="submit" id="verify-email-submit" class="verify-button-form">Verify</button>
 		</div>
 	</form>

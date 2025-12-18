@@ -1,182 +1,186 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-	<meta charset="UTF-8"/>
+	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Menu du jeu</title>
 </head>
+
 <body>
 	<div class="game-container">
 		<div class="menu-content">
-			
+
 			<h1>Tank 🚀</h1>
 
-			<div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; width: 90%; margin-bottom: 20px; border: 1px solid #444;">
-				
+			<div
+				style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; width: 90%; margin-bottom: 20px; border: 1px solid #444;">
+
 				<div style="margin-bottom: 15px; text-align: left;">
-						<label for="mapSelect" style="color: #ccc; font-size: 0.9em;">Battle Map:</label>
-						<select id="mapSelect" name="mapSelect" class="tank-map-choice">
-								<option value="desertfox">🌵 Desert Fox</option>
-								<option value="thehouse">🏠 The House</option>
-								<option value="davinco">🌊 Da Vinco</option>
-						</select>
+					<label for="mapSelect" style="color: #ccc; font-size: 0.9em;">Battle Map:</label>
+					<select id="mapSelect" name="mapSelect" class="tank-map-choice">
+						<option value="desertfox">🌵 Desert Fox</option>
+						<option value="thehouse">🏠 The House</option>
+						<option value="davinco">🌊 Da Vinco</option>
+					</select>
 				</div>
 
 				<div style="display: flex; gap: 10px;">
-						<div style="flex: 1; text-align: left;">
-								<label for="p1TankSelect" style="color: #88ccff; font-size: 0.9em;">Player 1:</label>
-								<select id="p1TankSelect" name="p1TankSelect" class="tank-class-choice-p1">
-										<option value="classic">Classic</option>
-										<option value="uzi">Uzi</option>
-										<option value="sniper">Sniper</option>
-										<option value="shotgun">Shotgun</option>
-								</select>
-						</div>
-						<div style="flex: 1; text-align: left;">
-								<label for="p2TankSelect" style="color: #ff8888; font-size: 0.9em;">Player 2:</label>
-								<select id="p2TankSelect" name="p2TankSelect" class="tank-class-choice-p2">
-										<option value="classic">Classic</option>
-										<option value="uzi">Uzi</option>
-										<option value="sniper">Sniper</option>
-										<option value="shotgun">Shotgun</option>
-								</select>
-						</div>
+					<div style="flex: 1; text-align: left;">
+						<label for="p1TankSelect" style="color: #88ccff; font-size: 0.9em;">Player 1:</label>
+						<select id="p1TankSelect" name="p1TankSelect" class="tank-class-choice-p1">
+							<option value="classic">Classic</option>
+							<option value="uzi">Uzi</option>
+							<option value="sniper">Sniper</option>
+							<option value="shotgun">Shotgun</option>
+						</select>
+					</div>
+					<div style="flex: 1; text-align: left;">
+						<label for="p2TankSelect" style="color: #ff8888; font-size: 0.9em;">Player 2:</label>
+						<select id="p2TankSelect" name="p2TankSelect" class="tank-class-choice-p2">
+							<option value="classic">Classic</option>
+							<option value="uzi">Uzi</option>
+							<option value="sniper">Sniper</option>
+							<option value="shotgun">Shotgun</option>
+						</select>
+					</div>
 				</div>
 			</div>
 
 			<div id="default-mode-content-input" class="legend-controls-container-menu" style="top: 8 b0px;">
-			<div class="legend-title">Player 1</div>
-			<div class="legend-item"><span>Move :</span> W / S </div>
-			<div class="legend-item"><span>Rotate Cannon :</span> A / D</div>
-			<div class="legend-item"><span>Fire :</span> B</div>
-			<div class="legend-item"><span>Ability :</span> N</div>
-			<div class="legend-title">Player 2</div>
-			<div class="legend-item"><span>Move :</span> ⬆️ / ⬇️ </div>
-			<div class="legend-item"><span>Rotate Cannon :</span> ⬅️ / ➡️ </div>
-			<div class="legend-item"><span>Fire :</span> 1 </div>
-			<div class="legend-item"><span>Ability :</span> 2 </div>
+				<div class="legend-title">Player 1</div>
+				<div class="legend-item"><span>Move :</span> W / S </div>
+				<div class="legend-item"><span>Rotate Cannon :</span> A / D</div>
+				<div class="legend-item"><span>Fire :</span> B</div>
+				<div class="legend-item"><span>Ability :</span> N</div>
+				<div class="legend-title">Player 2</div>
+				<div class="legend-item"><span>Move :</span> ⬆️ / ⬇️ </div>
+				<div class="legend-item"><span>Rotate Cannon :</span> ⬅️ / ➡️ </div>
+				<div class="legend-item"><span>Fire :</span> 1 </div>
+				<div class="legend-item"><span>Ability :</span> 2 </div>
 			</div>
 
-			<div class="tank-legend-container" style="top: 20px;"> <div class="legend-title">Tank Models</div>
-					<div class="tank-legend-subtitle">CLASSIC<span class="ability-name">REFLECT</span></div>
-						<div class="stats-grid-tank-menu">
-							<div class="stat-box">
-								<span class="stat-label">Speed</span>
-								<span class="stat-value">■■■□</span>
-							</div>
-							<div class="stat-box">
-								<span class="stat-label">Health</span>
-								<span class="stat-value">■■■□</span>
-							</div>
-							<div class="stat-box">
-								<span class="stat-label">Damage</span>
-								<span class="stat-value">■■□□</span>
-							</div>
-							<div class="stat-box">
-								<span class="stat-label">Fire Rate</span>
-								<span class="stat-value">■■□□</span>
-							</div>
-						</div>
-					
-					<div class="tank-legend-subtitle">UZI<span class="ability-name">BURST</span></div>
-						<div class="stats-grid-tank-menu">
-							<div class="stat-box">
-								<span class="stat-label">Speed</span>
-								<span class="stat-value">■■■■</span>
-							</div>
-							<div class="stat-box">
-								<span class="stat-label">Health</span>
-								<span class="stat-value">■□□□</span>
-							</div>
-							<div class="stat-box">
-								<span class="stat-label">Damage</span>
-								<span class="stat-value">■□□□</span>
-							</div>
-							<div class="stat-box">
-								<span class="stat-label">Fire Rate</span>
-								<span class="stat-value">■■■■</span>
-							</div>
-						</div>
-					
-					<div class="tank-legend-subtitle">SHOTGUN<span class="ability-name">DASH</span></div>
-						<div class="stats-grid-tank-menu">
-							<div class="stat-box">
-								<span class="stat-label">Speed</span>
-								<span class="stat-value">■■□□</span>
-							</div>
-							<div class="stat-box">
-								<span class="stat-label">Health</span>
-								<span class="stat-value">■■■■</span>
-							</div>
-							<div class="stat-box">
-								<span class="stat-label">Damage</span>
-								<span class="stat-value">■■■■</span>
-							</div>
-							<div class="stat-box">
-								<span class="stat-label">Fire Rate</span>
-								<span class="stat-value">■□□□</span>
-							</div>
-						</div>
-
-					<div class="tank-legend-subtitle">SNIPER<span class="ability-name">TELEPORT</span></div>
-						<div class="stats-grid-tank-menu">
-							<div class="stat-box">
-								<span class="stat-label">Speed</span>
-								<span class="stat-value">■□□□</span>
-							</div>
-							<div class="stat-box">
-								<span class="stat-label">Health</span>
-								<span class="stat-value">■■■□</span>
-							</div>
-							<div class="stat-box">
-								<span class="stat-label">Damage</span>
-								<span class="stat-value">■■■■</span>
-							</div>
-							<div class="stat-box">
-								<span class="stat-label">Fire Rate</span>
-								<span class="stat-value">□□□□</span>
-							</div>
-						</div>
-
+			<div class="tank-legend-container" style="top: 20px;">
+				<div class="legend-title">Tank Models</div>
+				<div class="tank-legend-subtitle">CLASSIC<span class="ability-name">REFLECT</span></div>
+				<div class="stats-grid-tank-menu">
+					<div class="stat-box">
+						<span class="stat-label">Speed</span>
+						<span class="stat-value">■■■□</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-label">Health</span>
+						<span class="stat-value">■■■□</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-label">Damage</span>
+						<span class="stat-value">■■□□</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-label">Fire Rate</span>
+						<span class="stat-value">■■□□</span>
+					</div>
 				</div>
+
+				<div class="tank-legend-subtitle">UZI<span class="ability-name">BURST</span></div>
+				<div class="stats-grid-tank-menu">
+					<div class="stat-box">
+						<span class="stat-label">Speed</span>
+						<span class="stat-value">■■■■</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-label">Health</span>
+						<span class="stat-value">■□□□</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-label">Damage</span>
+						<span class="stat-value">■□□□</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-label">Fire Rate</span>
+						<span class="stat-value">■■■■</span>
+					</div>
+				</div>
+
+				<div class="tank-legend-subtitle">SHOTGUN<span class="ability-name">DASH</span></div>
+				<div class="stats-grid-tank-menu">
+					<div class="stat-box">
+						<span class="stat-label">Speed</span>
+						<span class="stat-value">■■□□</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-label">Health</span>
+						<span class="stat-value">■■■■</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-label">Damage</span>
+						<span class="stat-value">■■■■</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-label">Fire Rate</span>
+						<span class="stat-value">■□□□</span>
+					</div>
+				</div>
+
+				<div class="tank-legend-subtitle">SNIPER<span class="ability-name">TELEPORT</span></div>
+				<div class="stats-grid-tank-menu">
+					<div class="stat-box">
+						<span class="stat-label">Speed</span>
+						<span class="stat-value">■□□□</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-label">Health</span>
+						<span class="stat-value">■■■□</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-label">Damage</span>
+						<span class="stat-value">■■■■</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-label">Fire Rate</span>
+						<span class="stat-value">□□□□</span>
+					</div>
+				</div>
+
+			</div>
 			<div id="default-mode-content" style="width: 80%;">
 				<div id="main-menu-btns" class="button-group" style="width: 100%; gap: 15px; margin-bottom: 15px;">
-						<button onclick="onClickPlayPVP();" class="btn-yellow" style="flex: 1;">
-							Play 1v1
-						</button>
-					</div>
-
-					<button onclick="switchGameMode('featured')" class="btn-purple" style="width: 100%;">
-						✨ Featured Mode
+					<button onclick="onClickPlayPVP();" class="btn-yellow" style="flex: 1;">
+						Play 1v1
 					</button>
+				</div>
+
+				<button onclick="switchGameMode('featured')" class="btn-purple" style="width: 100%;">
+					✨ Featured Mode
+				</button>
 			</div>
 			<div id="featured-mode-content" class="menu-content hidden" style="width: 100%;">
-					<div class="control-group" style="width: 100%;">
-							<label for="powerupFreq">
-									Power-up Frequency:
-									<span id="powerup-freq-display" style="color: #FFFF00;">6 sec</span>
-							</label>
-							<input type="range" id="powerupFreq" min="3" max="9" value="6" step="1"/>
-					</div>
+				<div class="control-group" style="width: 100%;">
+					<label for="powerupFreq">
+						Power-up Frequency:
+						<span id="powerup-freq-display" style="color: #FFFF00;">6 sec</span>
+					</label>
+					<input type="range" id="powerupFreq" min="3" max="9" value="6" step="1" />
+				</div>
 
-					<p class="diff-title" style="width: 90%;">ALLOWED POWER-UPS</p>
-					
-					<div class="checkbox-group">
-							<label class="checkbox-btn"><input type="checkbox" id="chk-1star" checked><span>★</span></label>
-							<label class="checkbox-btn"><input type="checkbox" id="chk-2star" checked><span>★★</span></label>
-							<label class="checkbox-btn"><input type="checkbox" id="chk-3star" checked><span>★★★</span></label>
-					</div>
+				<p class="diff-title" style="width: 90%;">ALLOWED POWER-UPS</p>
 
-					<div style="width: 90%; margin-top: 25px; display: flex; flex-direction: column; gap: 10px;">
-						<button onclick="onClickStartFeatured('pvp');" class="btn-yellow" style="flex: 1;">
-							Play 1v1
-						</button>
-						<button onclick="switchGameMode('default')" class="btn-cancel" style="width: 100%;">
-							Back to Default
-						</button>
-					</div>
+				<div class="checkbox-group">
+					<label class="checkbox-btn"><input type="checkbox" id="chk-1star" checked><span>★</span></label>
+					<label class="checkbox-btn"><input type="checkbox" id="chk-2star" checked><span>★★</span></label>
+					<label class="checkbox-btn"><input type="checkbox" id="chk-3star" checked><span>★★★</span></label>
+				</div>
 
-					<div class="legend-controls-container-menu-featured" style="top: 8 b0px;">
+				<div style="width: 90%; margin-top: 25px; display: flex; flex-direction: column; gap: 10px;">
+					<button onclick="onClickStartFeatured('pvp');" class="btn-yellow" style="flex: 1;">
+						Play 1v1
+					</button>
+					<button onclick="switchGameMode('default')" class="btn-cancel" style="width: 100%;">
+						Back to Default
+					</button>
+				</div>
+
+				<div class="legend-controls-container-menu-featured" style="top: 8 b0px;">
 					<div class="legend-title">Player 1</div>
 					<div class="legend-item"><span>Move :</span> W / S </div>
 					<div class="legend-item"><span>Rotate Cannon :</span> A / D</div>
@@ -187,36 +191,43 @@
 					<div class="legend-item"><span>Rotate Cannon :</span> ⬅️ / ➡️ </div>
 					<div class="legend-item"><span>Fire :</span> 1 </div>
 					<div class="legend-item"><span>Ability :</span> 2 </div>
-					</div>
+				</div>
 
-					<div class="legend-container" style="top: 20px;"> <div class="legend-title">Power-Up Guide</div>
-					
+				<div class="legend-container" style="top: 20px;">
+					<div class="legend-title">Power-Up Guide</div>
+
 					<div class="legend-subtitle">★ HEALTH</div>
 					<div class="legend-item">
-						<div class="legend-bubble" style="background-color: rgb(50, 170, 40); border-color: rgb(0, 0, 255);"></div>
+						<div class="legend-bubble"
+							style="background-color: rgb(50, 170, 40); border-color: rgb(0, 0, 255);"></div>
 						<span>Heals you when picked up</span>
 					</div>
 					<div class="legend-subtitle">★★ SPEED</div>
 					<div class="legend-item">
-						<div class="legend-bubble" style="background-color: rgb(255, 255, 0); border-color: rgb(0, 0, 255);"></div>
+						<div class="legend-bubble"
+							style="background-color: rgb(255, 255, 0); border-color: rgb(0, 0, 255);"></div>
 						<span>Increases your movement speed on pickup</span>
 					</div>
 					<div class="legend-item">
-						<div class="legend-bubble" style="background-color: rgb(0, 255, 255); border-color: rgb(0, 0, 255);"></div>
+						<div class="legend-bubble"
+							style="background-color: rgb(0, 255, 255); border-color: rgb(0, 0, 255);"></div>
 						<span>Increases your ball speed on pickup</span>
 					</div>
 					<div class="legend-subtitle">★★★ HASTE</div>
 					<div class="legend-item">
-						<div class="legend-bubble" style="background-color: rgb(239, 19, 19); border-color: rgb(0, 0, 255);"></div>
+						<div class="legend-bubble"
+							style="background-color: rgb(239, 19, 19); border-color: rgb(0, 0, 255);"></div>
 						<span>Increases your fire rate for faster shooting</span>
 					</div>
 					<div class="legend-item">
-						<div class="legend-bubble" style="background-color: rgb(247, 0, 255); border-color: rgb(0, 0, 255);"></div>
+						<div class="legend-bubble"
+							style="background-color: rgb(247, 0, 255); border-color: rgb(0, 0, 255);"></div>
 						<span>Reduces your ability cooldown</span>
-						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </body>
+
 </html>
