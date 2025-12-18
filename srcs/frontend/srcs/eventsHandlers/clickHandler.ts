@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 10:03:19 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 12:21:20 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -504,6 +504,10 @@ function	onStartTournament(): void {
 		displayError("You need at least 4 players to start a tournament.", "msg-error");
 		return;
 	}
+	if (playerNames.length > 16) {
+		displayError("You need a maximum of 16 players to start a tournament.", "msg-error");
+		return;
+	}
 	const namesLower = playerNames.map(p => p.name.toLowerCase());
 	if (new Set(namesLower).size !== playerNames.length) {
 		displayError("Player names must be unique.", "msg-error");
@@ -534,7 +538,6 @@ async function onStartRankedTournament(): Promise<void> {
 	const	playerNames: Player[] = [];
 	
 	if (user.username === null || user.id === null || !user.isAuth) {
-		displayPop("UNAUTHORIZED", "error");
 		return;
 	}
 	
@@ -553,21 +556,19 @@ async function onStartRankedTournament(): Promise<void> {
 			return;
 		}
 	}
-	if (playerNames.length < 4) {
-		displayError("You need at least 4 players to start a tournament.", "msg-error");
+	if (playerNames.length != 4) {
+		displayError("You need 4 players to start a ranked tournament.", "msg-error");
 		return;
 	}
 	const namesLower = playerNames.map(p => p.name.toLowerCase());
 	if (new Set(namesLower).size !== playerNames.length) {
 		displayError("Player names must be unique.", "msg-error");
-		console.log("ERROR 5");
 		return;
 	}
 
 	const	scoreInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
 	if (!(scoreInput instanceof HTMLInputElement)) {
 		displayPop("Missing menu game HTMLElement!", "error");
-		console.log("ERROR 6");
 		return;
 	}
 	const	winningScore: number = parseInt(scoreInput.value, 10);
