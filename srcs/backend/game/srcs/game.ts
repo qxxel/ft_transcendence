@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 15:44:38 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 23:24:07 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,23 +82,18 @@ const	io: any = new Server(gameFastify.server, {
 io.use(async (socket: any, next: any) => {
 	try {
 		const	cookieHeader: string | undefined = socket.request.headers.cookie;
-		console.log("cookies: " + cookieHeader);
 		if (!cookieHeader)
-			throw new Error();
-
+			throw new Error("No cookies provided");
 
 		const	response: AxiosResponse = await gameAxios.get('http://jwt:3000/payload/access', 
 			{ withCredentials: true, headers: { Cookie: cookieHeader || "" } }
 		);
 
-		console.log("resp: " + response.data);
-
 		socket.data.user = response.data;
-
-		console.log("user: " + socket.data.user);
-
 		return next();
 	} catch (err: unknown) {
+		console.error("Authentication failed for socket:", socket.id, err);
+
 		socket.data.user = null;
 		return next();
 	}

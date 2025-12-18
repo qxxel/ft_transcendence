@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 17:53:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 16:03:51 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 23:21:47 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ import { io, Socket }	from 'socket.io-client'
 export let	socket: Socket;
 
 export function	connectSocket() {
+	if (socket)
+	{
+		socket.removeAllListeners();
+		socket.disconnect();
+	}
+
 	socket = io('/', {
 		path: '/socket.io',
 		transports: ["websocket"],
