@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 12:45:17 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,8 +145,10 @@ function formatTime(seconds: number): string {
 	if (!seconds) return "0m";
 	const h = Math.floor(seconds / 3600);
 	const m = Math.floor((seconds % 3600) / 60);
-	if (h > 0) return `${h}h ${m}m`;
-	return `${m}m`;
+	const s = Math.floor(seconds % 60);
+	if (h > 0) return `${h}h ${m}m ${s}s`;
+	if (m > 0) return `${m}m ${s}s`;
+	return `${s}s`;
 }
 
 function createStatCard(title: string, icon: string, colorClass: string, stats: any): HTMLElement {
@@ -166,7 +168,7 @@ function createStatCard(title: string, icon: string, colorClass: string, stats: 
 	grid.style.gap = "10px";
 
 	const items = [
-		{ label: "Time", value: formatTime(stats.totalTime), color: "#aaa" },
+		{ label: "Time", value: formatTime(stats.totalTime / 1000), color: "#aaa" },
 		{ label: "Wins", value: stats.wins, color: "#4CAF50" },
 		{ label: "Losses", value: stats.losses, color: "#F44336" },
 		{ label: stats.specialLabel, value: stats.specialValue, color: "#2196F3" }
