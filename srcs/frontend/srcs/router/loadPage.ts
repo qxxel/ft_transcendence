@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 12:45:17 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 13:27:39 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ export async function loadUser() {
 	}
 
 	const	userStatsRes: any = await responseStats.json();
-	console.log(userStatsRes);
 
 	const statsContainer = document.getElementById("user-stats-container");
 	
