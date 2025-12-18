@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 12:16:31 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 22:42:36 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ try {
     await setupLoadHandler();
     initFaviconSync();
     initNotificationSync();
-    setupClickHandlers();
+    await setupClickHandlers();
     setupSubmitHandler();
 
 

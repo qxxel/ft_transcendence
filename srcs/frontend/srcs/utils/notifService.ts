@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 21:40:41 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 23:05:18 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ export class	NotificationService {
 				if (router.Path === "/friends")
 					getAndRenderFriends();
 			}
-			if (data.type === "SET_ONLINE" || data.type === "SET_OFFLINE")
+			if (data.type === "SET_ONLINE" || data.type === "SET_OFFLINE" ||
+				data.type === "USERNAME_CHANGED" || data.type === "AVATAR_CHANGED")
 			{
 				if (router.Path === "/friends")
 					getAndRenderFriends();

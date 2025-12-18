@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 09:43:24 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 22:48:28 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ import { privacyFilter }					from "../utils/privacyFilter.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
 import type { AxiosResponse } 									from 'axios'
+import type { FriendshipIdsObject } from '../utils/friendObject.js'
 
 
 interface	userUpdate {
@@ -165,6 +166,29 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 
 			await usersServ.updateUserById(userId, userUpdate);
 
+			if (oldUser.getUsername() !== userUpdate.getUsername())
+			{
+				try {
+					const	ids: FriendshipIdsObject[] = (await userAxios.get(`http://user:3000/friends/${userId}`)).data;
+					for (let i: number = 0; i < ids.length; i++)
+					{
+						const	value = ids[i];
+						if (!value)
+							continue ;
+
+						const	targetId: string = parseInt(value.receiver_id, 10) === userId ? value.requester_id : value.receiver_id;
+						const	parseTargetId: number = parseInt(targetId, 10);
+
+						const	notifBody: Object = { type: "USERNAME_CHANGED" };
+						await userAxios.post(`http://notif:3000/send/${parseTargetId}`, notifBody,
+							{ headers: { 'user-id': userId } }
+						);
+					}
+				} catch (err: unknown) {
+					console.error("Failed to send notification. => " + err);
+				}
+			}
+
 			return reply.code(201).send(userId);
 		}
 		catch (err: unknown) {
@@ -210,6 +234,26 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 			await pipeline(data.file, fs.createWriteStream(uploadPath));
 
 			await usersServ.updateAvatarById(userId, fileName);
+
+			try {
+				const	ids: FriendshipIdsObject[] = (await userAxios.get(`http://user:3000/friends/${userId}`)).data;
+				for (let i: number = 0; i < ids.length; i++)
+				{
+					const	value = ids[i];
+					if (!value)
+						continue ;
+
+					const	targetId: string = parseInt(value.receiver_id, 10) === userId ? value.requester_id : value.receiver_id;
+					const	parseTargetId: number = parseInt(targetId, 10);
+
+					const	notifBody: Object = { type: "AVATAR_CHANGED" };
+					await userAxios.post(`http://notif:3000/send/${parseTargetId}`, notifBody,
+						{ headers: { 'user-id': userId } }
+					);
+				}
+			} catch (err: unknown) {
+				console.error("Failed to send notification. => " + err);
+			}
 
 			return reply.code(200).send({ avatar: fileName });
 		}

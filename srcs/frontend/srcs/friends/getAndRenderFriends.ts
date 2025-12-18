@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 15:56:13 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 23:02:20 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ function	addFriendInList(friendsListDiv: HTMLDivElement, friend: UserObject): vo
 
 	const	avatarImg: HTMLImageElement = document.createElement("img");
 	avatarImg.classList.add("display-avatar", "friend-avatar", "avatar-image");
-	avatarImg.src = friend.avatar ?? "/assets/default_avatar.png";
+	avatarImg.src = friend.avatar ? "/uploads/" + friend.avatar : "/assets/default_avatar.png";
 	avatarImg.alt = "User avatar";
 
 	const	statusSpan: HTMLSpanElement = document.createElement("span");
