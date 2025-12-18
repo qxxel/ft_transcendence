@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/17 15:05:31 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ export function loadTwofa(): void {
 		{
 			displayPop(response, "error");
 			router.navigate("/sign-in");
-			return ;
+			return;
 		}
 		
 		response.json(
@@ -55,7 +55,7 @@ export async function loadUser() {
 	if (!response.ok)
 	{
 		displayPop(response.statusText, "error");
-		return ;
+		return;
 	}
 
 	const	userRes: any = await response.json();
@@ -64,7 +64,7 @@ export async function loadUser() {
 	if (!responseStats.ok)
 	{
 		displayPop(responseStats, "error");
-		return ;
+		return;
 	}
 
 	const	userStatsRes: any = await responseStats.json();
@@ -205,7 +205,7 @@ export async function loadUserStats(targetId: number | null, targetName: string 
 	if (!responseStats.ok)
 	{
 		displayPop(responseStats, "error");
-		return ;
+		return;
 	}
 	
 	const	userStatsRes: any = await responseStats.json();

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 18:23:25 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 09:54:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ export function	initNotificationSync(): void {
 		{
 			notificationService.connect();
 			isConnected = true;
-			return ;
+			return;
 		}
 
 		if ((!state.user || !state.user.isAuth) && isConnected)

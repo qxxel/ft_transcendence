@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   friendsEvents.ts                                   :+:      :+:    :+:   */
+/*   tournamentMenu.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 04:06:15 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ export async function loadTournamenSetupRanked() {
 	
 	if (!response.ok) {
 		displayPop(response.statusText, "error");
-		return ;
+		return;
 	}
 
 	const e: HTMLElement | null = document.getElementById('ranked-p1');

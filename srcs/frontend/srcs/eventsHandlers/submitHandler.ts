@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 15:06:40 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 			displayPop("" + e, "error");
 		});
 		
-		return ;
+		return;
 	}
 
 	appStore.setState((state) => ({
@@ -304,7 +304,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	{
 		uploadAvatar();
 		if (resultGetUser.username == newUsername && resultGetUser.email == newEmail && resultGetUser.is2faEnable == new2fa)
-			return ;			//	MATHIS: NE PAS DEMANDER DE VERIF ICI
+			return;			//	MATHIS: NE PAS DEMANDER DE VERIF ICI
 	}
 
 	const	verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // /!\ try catch ???
@@ -329,7 +329,7 @@ async function	handleAddFriendForm(form: HTMLFormElement): Promise<void> {
 
 	const	targetName: string | undefined = targetNameElement.value;
 	if (!targetName)
-		return ;
+		return;
 	form.reset();
 
 	const	respTargetId: Response = await sendRequest(`/api/user/lookup/${targetName}`, "get", null);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderFriends.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 15:04:19 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ export async function	getAndRenderFriends(): Promise<void> {
 	if (!response.ok)
 	{
 		displayErrors();
-		return ;
+		return;
 	}
 
 	const	friendsData: UserObject[] = await response.json();
@@ -88,13 +88,13 @@ function	createFriendElement(requestsListDiv: HTMLDivElement, friendsListDiv: HT
 	if (user.id === parseInt(friend.receiver_id, 10) && friend.status === "PENDING")
 	{
 		addRequestInList(requestsListDiv, friend);
-		return ;
+		return;
 	}
 
 	if (friend.status === "ACCEPTED")
 	{
 		addFriendInList(friendsListDiv, friend);
-		return ;
+		return;
 	}
 }
 

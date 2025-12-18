@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initFaviconSync.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:51:37 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 10:05:47 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ export function	initFaviconSync(): void {
 
 	appStore.subscribe((state: AppState) => {
 		if (!state.user)
-			return ;
+			return;
 
 		const	currentUrl: string | null = state.user.avatar;
 

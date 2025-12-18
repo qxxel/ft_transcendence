@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderHistory.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 11:26:35 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ export async function	getAndRenderHistory(targetId: number | null,
 			}
 
 			displayErrors(targetName);
-			return ;
+			return;
 		}
 
 		const	gamesData: GameObject[] = await response.json();
@@ -76,7 +76,7 @@ export async function	getAndRenderHistory(targetId: number | null,
 		if (gamesData.length === 0)
 		{
 			displayNoGame(false);
-			return ;
+			return;
 		}
 
 		renderGames(gamesData, aiFilter, pvpFilter, pongFilter, tankFilter);

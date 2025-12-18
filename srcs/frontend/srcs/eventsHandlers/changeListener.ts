@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   changeListener.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 21:46:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 14:59:28 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ export function attachAvatarUploadListener(userId: number): void {
 	if (!(fileInput instanceof HTMLInputElement))
 	{
 		displayPop("Missing avatar HTMLElement!", "error");
-		return ;
+		return;
 	}
 	const	imgElement: HTMLElement | null = document.getElementById('user-avatar');
 	if (!(imgElement instanceof HTMLImageElement))
 		{
 			displayPop("Missing avatar HTMLElement!", "error");
-			return ;
+			return;
 		}
 		
 		fileInput.addEventListener('change', async (event) => {
@@ -51,7 +51,7 @@ export function attachAvatarUploadListener(userId: number): void {
 							pendingAvatar: null
 						}
 					}));
-					return ;
+					return;
 				}
 
 				appStore.setState((state) => ({

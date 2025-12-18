@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 15:04:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ async function onClickDeleteAccount(): Promise<void>{
 	if (!password) return displayError("password required!", "confirm-setting-msg-error");
 
 	if (!confirm("Are you sure you want to delete your account?"))
-		return ;
+		return;
 
 	document.getElementById("confirm-setting-form")?.classList.add("darken");
 
@@ -189,7 +189,7 @@ async function	onClickDeleteAccountStep(): Promise<void> {
 
 async function	onClickDeleteTwofa(): Promise<void> {
 	if (!confirm("Are you sure you want to go back?"))
-		return ;
+		return;
 
 	router.canLeave = true;
 
@@ -829,7 +829,7 @@ export async function   setupClickHandlers(): Promise<void> {
 		if (!router.canLeave) {
 			if (!confirm("This page is asking you to confirm that you want to leave — information you’ve entered may not be saved.")) {
 				history.pushState({}, "", router.Path);
-				return ;
+				return;
 			}
 			router.canLeave = true;
 		}
