@@ -25,23 +25,30 @@ import { sendRequest }	from "../utils/sendRequest.js"
 /* ====================== FUNCTION ====================== */
 
 export async function	preNavigation(currentPath: string): Promise<void> {
-	const	respToken: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
-	if (!respToken.ok)
-		displayPop(respToken, "error");
 
+	try {
+		const	respToken: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
+		if (!respToken.ok)
+			displayPop(respToken, "error");
+	} catch (err) {
+		displayPop("" + err, "error");
+	}
 	redirections(currentPath);
 }
 
 export async function	redirections(currentPath: string): Promise<void> {
 	if (['/friends', '/user', '/history'].includes(currentPath))
 	{
-		const	response: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
-
-		if (!response.ok)
+		let	response: Response;
+		let	result: any;
+		try {
+			response = await sendRequest('/api/jwt/payload/access', 'GET', null);
+			if (!response.ok)
+				return;
+			result = await response.json();
+		} catch(err) {
 			return;
-
-		const	result: any = await response.json();
-
+		}
 		appStore.setState((state) => ({
 			...state,
 			user: {

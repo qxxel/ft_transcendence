@@ -149,13 +149,18 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 	const	p = document.getElementById("verify-email-msg-error");
 	if (p) p.textContent = null;
 
-	const	response: Response = await sendRequest('/api/auth/validateUser', 'post', { otp });
-	
-	form.reset();
-	document.getElementById("verify-email-form")?.classList.remove("darken");
-
-	if (!response.ok)
-		return displayError(response, "verify-email-msg-error");
+	try { 
+		const	response: Response = await sendRequest('/api/auth/validateUser', 'post', { otp });
+		form.reset();
+		document.getElementById("verify-email-form")?.classList.remove("darken");
+		if (!response.ok)
+			return displayError(response, "verify-email-msg-error");
+	}
+	catch(err) {
+		form.reset();
+		document.getElementById("verify-email-form")?.classList.remove("darken");
+		return displayError("" + err, "verify-email-msg-error");
+	}
 
 	appStore.setState((state) => ({
 		...state,
@@ -182,13 +187,18 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 	const	p = document.getElementById("2fa-msg-error");
 	if (p) p.textContent = null;
 
-	const	response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
-	
-	form.reset();
-	document.getElementById("2fa-form")?.classList.remove("darken");
-
-	if (!response.ok)
-		return displayError(response, "2fa-msg-error");
+	try {
+		const	response: Response = await sendRequest('/api/twofa/validate', 'post', { otp });
+		form.reset();
+		document.getElementById("2fa-form")?.classList.remove("darken");
+		if (!response.ok)
+			return displayError(response, "2fa-msg-error");
+	}
+	catch (err) {
+		form.reset();
+		document.getElementById("2fa-form")?.classList.remove("darken");
+		return displayError("" + err, "2fa-msg-error");
+	}
 
 	appStore.setState((state) => ({
 		...state,
@@ -245,15 +255,21 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 			const	p = document.getElementById("confirm-setting-msg-error");
 			if (p) p.textContent = null;
 
-			const	response: Response = await sendRequest('/api/auth/updateUser', 'PATCH', { otp, password, user });
-			
-			if (form instanceof HTMLFormElement)
-				form.reset();
-			document.getElementById("confirm-setting-form")?.classList.remove("darken");
+			try {
+				const	response: Response = await sendRequest('/api/auth/updateUser', 'PATCH', { otp, password, user });
+				
+				if (form instanceof HTMLFormElement)
+					form.reset();
+				document.getElementById("confirm-setting-form")?.classList.remove("darken");
 
-			if (!response.ok) 
-				return displayError(response, "confirm-setting-msg-error");
-			
+				if (!response.ok) 
+					return displayError(response, "confirm-setting-msg-error");
+			} catch (err) {
+				if (form instanceof HTMLFormElement)
+					form.reset();
+				document.getElementById("confirm-setting-form")?.classList.remove("darken");
+				return displayPop("" + err, "error");
+			}
 			router.canLeave = true;
 			resolve(true);
 		});
@@ -269,29 +285,36 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		return displayError("Username, email et 2fa required!", "user-setting-msg-error");
 
 	const	state: AppState = appStore.getState();
+	let	resultGetUser:any;
+	let	getUser: Response;
+	let	postUser: Response;
 
-	const	getUser: Response = await sendRequest(`/api/user/me`, 'get', null)
-	if (!getUser.ok)
-		return displayPop(getUser, "error");
+	try {
+		getUser = await sendRequest(`/api/user/me`, 'get', null)
+		resultGetUser = await getUser.json();
+		if (!getUser.ok)
+			return displayPop(getUser, "error");
+	} catch(err) {
+		return displayPop("" + err, "error");
+	}
 
-	
-	const	resultGetUser = await getUser.json(); // /!\ try catch
-	
 	if (resultGetUser.username == newUsername
 		&& resultGetUser.email == newEmail
 		&& resultGetUser.is2faEnable == new2fa
 		&& state.user.pendingAvatar === null
 	) return router.navigate("/user");
-
 	
-	const	postUser: Response = await sendRequest(`/api/user/me/validate`, 'post', {
-		username: newUsername,
-		email: newEmail,
-		is2faEnable: new2fa
-	});
-	if (!postUser.ok)
-		return displayError(postUser, "user-setting-msg-error");
-
+	try {
+		postUser = await sendRequest(`/api/user/me/validate`, 'post', {
+			username: newUsername,
+			email: newEmail,
+			is2faEnable: new2fa
+		});
+		if (!postUser.ok)
+			return displayError(postUser, "user-setting-msg-error");
+	} catch(err) {
+		return displayPop("" + err, "error");
+	}
 	
 	if (resultGetUser.email != newEmail)
 		verifyEmail("user-profile", "confirm-setting", newEmail);
@@ -314,10 +337,14 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 			return;			//	MATHIS: NE PAS DEMANDER DE VERIF ICI
 	}
 
-	const	verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // /!\ try catch ???
-	if (!verified) 
-		return; // /!\ faire quelque chose
-
+	let	verified: boolean;
+	try {
+		verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // /!\ try catch ???
+		if (!verified) 
+			return; // /!\ faire quelque chose
+	} catch(err) {
+		return; // MCURTO aled faut rien faire la ?
+	}
 	appStore.setState((state) => ({
 		...state,
 		user: {
@@ -339,18 +366,22 @@ async function	handleAddFriendForm(form: HTMLFormElement): Promise<void> {
 		return;
 	form.reset();
 
-	const	respTargetId: Response = await sendRequest(`/api/user/lookup/${targetName}`, "get", null);
-	if (!respTargetId.ok)
-		return displayPop(respTargetId, "error");
-
-	const	targetId: number = (await respTargetId.json() as any).id; // try catch (json peut throw)
-
-	const	response: Response = await sendRequest(`/api/user/friends/request/${targetId}`, "post", {});
-	if (!response.ok)
-		return displayPop(response, "error")
-
-	const	friendship: any = await response.json();
-
+	let	respTargetId: Response;
+	let response: Response;
+	let	targetId: number;
+	let	friendship: any;
+	try {
+		respTargetId = await sendRequest(`/api/user/lookup/${targetName}`, "get", null);
+		if (!respTargetId.ok)
+			return displayPop(respTargetId, "error");
+		targetId = (await respTargetId.json() as any).id; // try catch (json peut throw)
+		response = await sendRequest(`/api/user/friends/request/${targetId}`, "post", {});
+		if (!response.ok)
+			return displayPop(response, "error")
+		friendship = await response.json();
+	} catch(err) {
+		return displayPop("" + err, "error");
+	}
 	if (friendship.status === "PENDING")
 		displayPop(`Request sended to ${targetName}.`, "success");
 	if (friendship.status === "ACCEPTED")
