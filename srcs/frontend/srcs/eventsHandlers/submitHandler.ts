@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 14:25:30 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 14:37:00 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,9 +316,9 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 
 	
 	if (resultGetUser.email != newEmail)
-		verifyEmail("user-profile", "confirm-setting", newEmail);
+		verifyEmail("user-profile", "confirm-setting", newEmail, false);
 	else
-		verifyEmail("user-profile", "confirm-setting", null);
+		verifyEmail("user-profile", "confirm-setting", null, false);
 
 	const statsContainer = document.getElementById("user-stats-container");
 	if (statsContainer) statsContainer.hidden = true;
