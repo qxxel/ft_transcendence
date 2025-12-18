@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/12/18 08:04:17 by mreynaud         ###   ########.fr        #
+#    Updated: 2025/12/18 21:50:24 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -237,6 +237,7 @@ logs	:
 	-$(call RUN_CMD,docker logs twofa,$(MAGENTA))
 	-$(call RUN_CMD,docker logs ping,$(CYAN))
 	-$(call RUN_CMD,docker logs user,$(GREEN))
+	-$(call RUN_CMD,docker logs notif,$(YELLOW))
 
 
 # --------------------------------   clean   -------------------------------- #
