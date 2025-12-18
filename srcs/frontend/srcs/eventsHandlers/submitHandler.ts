@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 14:37:00 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 22:38:05 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ import { verifyEmail }				from "../utils/verifyEmail.js"
 import { getAndRenderFriends }		from "../friends/getAndRenderFriends.js"
 import { uploadAvatar }				from "../utils/uploadAvatar.js"
 import { heartbeat }				from "../utils/heartbeat.js"
+import { setDynamicFavicon } from "../utils/setDynamicFavicon.js"
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -52,7 +53,7 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 	document.getElementById("sign-in-form")?.classList.remove("darken");
 
 	if (!response.ok) {
-		console.log("a: ", response.status)
+		console.log("a: ", response.status);
 		if (response.status === 409) {
 			console.log("b")
 			fetch('/api/jwt/refresh/logout', {
@@ -73,7 +74,8 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 		user: {
 			...state.user,
 			id: result.id as number,
-			username: result.username
+			username: result.username,
+			avatar: result.avatar
 		}
 	}));
 
@@ -149,7 +151,8 @@ async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 		user: {
 			...state.user,
 			id: result.id as number,
-			username: username
+			username: username,
+			avatar: result.avatar
 		}
 	}));
 
