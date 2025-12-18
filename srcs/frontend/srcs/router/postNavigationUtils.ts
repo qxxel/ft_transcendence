@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 15:39:13 by agerbaud         ###   ########.fr       */
-=======
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 15:08:09 by mreynaud         ###   ########.fr       */
->>>>>>> eb6c20a3538ddedf56df0ccfbf23c77f4388c243
+/*   Updated: 2025/12/18 19:29:40 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
