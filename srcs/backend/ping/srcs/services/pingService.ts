@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 21:45:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 22:17:22 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,13 @@ export class	pingService {
 		await pingAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': idClient } } );
 
 		try {
-			const	ids: FriendshipIdsObject[] = await pingAxios.get(`https://user:3000/friends/${idClient}`);
-			ids.forEach(async (value: FriendshipIdsObject) => {
+			const	ids: FriendshipIdsObject[] = (await pingAxios.get(`http://user:3000/friends/${idClient}`)).data;
+			for (let i: number = 0; i < ids.length; i++)
+			{
+				const	value = ids[i];
+				if (!value)
+					continue ;
+
 				const	targetId: string = parseInt(value.receiver_id, 10) === idClient ? value.requester_id : value.receiver_id;
 				const	parseTargetId: number = parseInt(targetId, 10);
 
@@ -56,7 +61,7 @@ export class	pingService {
 				await pingAxios.post(`http://notif:3000/send/${parseTargetId}`, notifBody,
 					{ headers: { 'user-id': idClient } }
 				);
-			});
+			}
 		} catch (err: unknown) {
 			console.error("Failed to send notification.");
 		}

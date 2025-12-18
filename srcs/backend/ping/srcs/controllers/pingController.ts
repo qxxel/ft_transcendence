@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 21:46:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 22:20:24 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,13 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 		await pingAxios.post('http://user:3000/log', { isLog: false }, { headers: { 'user-id': id } } );
 
 		try {
-			const	ids: FriendshipIdsObject[] = await pingAxios.get(`https://user:3000/friends/${id}`);
-			ids.forEach(async (value: FriendshipIdsObject) => {
+			const	ids: FriendshipIdsObject[] = (await pingAxios.get(`http://user:3000/friends/${id}`)).data;
+			for (let i: number = 0; i < ids.length; i++)
+			{
+				const	value = ids[i];
+				if (!value)
+					continue ;
+
 				const	targetId: string = parseInt(value.receiver_id, 10) === id ? value.requester_id : value.receiver_id;
 				const	parseTargetId: number = parseInt(targetId, 10);
 
@@ -55,9 +60,9 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 				await pingAxios.post(`http://notif:3000/send/${parseTargetId}`, notifBody,
 					{ headers: { 'user-id': id } }
 				);
-			});
+			}
 		} catch (err: unknown) {
-			console.error("Failed to send notification.");
+			console.error("Failed to send notification. => " + err);
 		}
 
 		return reply.status(204).send();
