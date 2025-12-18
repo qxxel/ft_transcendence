@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/18 16:06:01 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 23:39:29 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ import type { GameOptions, PowerUps }	from "./objects/gameOptions.js"
 export class PongGame extends Game {
 	private canvas: HTMLCanvasElement | null = null;
 	private animationFrameId: number | null = null;
+
+	private connectionTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	private renderer: PongRenderer | null = null;
 
@@ -137,6 +139,31 @@ export class PongGame extends Game {
 		if (!socket || !socket.connected)
 			connectSocket();
 
+		if (this.connectionTimeout)
+		{
+			clearTimeout(this.connectionTimeout);
+			this.connectionTimeout = null;
+		}
+
+		if (socket && !socket.connected) {
+			this.connectionTimeout = setTimeout(() => {
+				if (!socket.connected)
+				{
+					displayPop("Connection to game failed", "error");
+					this.stop();
+					router.navigate('/');
+				}
+			}, 3000);
+
+			socket.once('connect', () => {
+				if (this.connectionTimeout)
+				{
+					clearTimeout(this.connectionTimeout);
+					this.connectionTimeout = null;
+				}
+			});
+		}
+
 		socket.off('game-update');
 		socket.off('game-over');
 
@@ -220,12 +247,19 @@ export class PongGame extends Game {
 		
 		window.removeEventListener('keydown', this.handleKeyDown);
 		window.removeEventListener('keyup', this.handleKeyUp);
-		
+
+		if (this.connectionTimeout)
+		{
+			clearTimeout(this.connectionTimeout);
+			this.connectionTimeout = null;
+		}
+
 		if (socket)
 		{
 			socket.emit('leave-game');
 			socket.off('game-update');
 			socket.off('game-over');
+			socket.off('connect');
 		}
 	}
 
