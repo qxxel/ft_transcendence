@@ -26,37 +26,44 @@ include:
 
 volumes:
   shared_uploads:
+    name: shared_uploads
   authDB:
+    name: authDB
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
       device: './backend/auth/db'
   gameDB:
+    name: gameDB
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
       device: './backend/game/db'
   userDB:
+    name: userDB
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
       device: './backend/user/db'
   jwtDB:
+    name: jwtDB
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
       device: './backend/jwt/db'
   pingDB:
+    name: pingDB
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
       device: './backend/ping/db'
   twofaDB:
+    name: twofaDB
     driver: local
     driver_opts:
       type: 'none'

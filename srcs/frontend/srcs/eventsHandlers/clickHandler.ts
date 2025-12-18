@@ -541,7 +541,12 @@ async function onStartRankedTournament(): Promise<void> {
 		return;
 	}
 	
+	let first: boolean = true;
 	for (const input of inputs) {
+		if (first) {
+			playerNames.push({ name: user.username, id: user.id, isRegistered: user.isAuth });
+			first = false; continue;
+		}
 		const val = input.value.trim();
 		if (val !== '' && (val.length >= 3 && val.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(val))) {
 			const	userCheckResponse: Response = await sendRequest(`/api/user/lookup/${val}`, "get", null);
