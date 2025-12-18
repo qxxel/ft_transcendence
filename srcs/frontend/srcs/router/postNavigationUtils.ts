@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 14:03:58 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/18 09:54:02 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 import { router }				from "../index.js"
 import { loadTwofa, loadUser, loadUserStats }	from "./loadPage.js"
-import { loadTournamentMenu }	from "../tournament/tournamentMenu.js"
+import { loadTournamenSetupRanked, loadTournamentMenu }	from "../tournament/tournamentMenu.js"
 import { PongGame }				from "../Pong/pong.js"
 import { appStore }				from "../objects/store.js"
 import { displayPop }				from "../utils/display.js"
@@ -136,25 +136,16 @@ export async function  pathActions(currentPath: string): Promise<void> {
 	}
 
 	if (['/tournament-setup-ranked'].includes(currentPath)) {
-		// const	slider: HTMLElement | null = document.getElementById('choosenMaxPoints');
-		// const	display: HTMLElement | null = document.getElementById('points-display');
-
 		if (!user.isAuth)
 			router.navigate("/");	
 
-		// if (slider instanceof HTMLInputElement && display instanceof HTMLSpanElement) {
-		//   display.textContent = slider.value;
-		//   slider.addEventListener('input', () => {
-			// display.textContent = slider.value;
-		//   });
-		// } else
-			// displayPop("Missing navigation HTMLElement!", "error");
+		loadTournamenSetupRanked();
 	}
 
 
 	if (['/tournament-bracket'].includes(currentPath)) {
 		if (!currentTournament) {
-			router.navigate("/tournament-setup");
+			router.navigate("/tournament-menu");
 			return;
 		}
 

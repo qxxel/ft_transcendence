@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongInstance.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 15:50:55 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ export class	PongInstance {
 
 	public handleInput(player: 1 | 2, key: string, isPressed: boolean) {		
 		if (player === 2 && this.ai)
-			return ;
+			return;
 
 		const	keys = player === 1 ? this.keyState.p1 : this.keyState.p2;
 
@@ -287,7 +287,7 @@ export class	PongInstance {
 			console.log("isTournament = " + this.isTournament);
 
 			if (this.userId === undefined || this.isTournament)
-				return ;
+				return;
 
 			console.log("here");
 			try {
@@ -325,7 +325,7 @@ export class	PongInstance {
 
 	private handleCollectiblesSpawn() {
 		if (!this.powerUpFrequency)
-			return ;
+			return;
 
 		const	now = Date.now();
 		if (now - this.lastCollectibleSpawn > this.powerUpFrequency) {

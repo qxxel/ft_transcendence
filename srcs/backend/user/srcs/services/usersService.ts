@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:19:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 23:49:09 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ export class	usersService {
 		if (user.getIs2faEnable() !== undefined)
 			await this.update2faById(userId, user.getIs2faEnable()!);
 
-		return ;
+		return;
 	}
 
 	async updateUsernameById(userId: number, username: string): Promise<void> {

@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 13:11:34 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:32:29 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ export async function	getAndRenderFriends(): Promise<void> {
 	if (!response.ok)
 	{
 		displayErrors();
-		return ;
+		return;
 	}
 
 	const	friendsData: UserObject[] = await response.json();
@@ -88,13 +88,13 @@ console.log(friend.is_log)
 	if (user.id === parseInt(friend.receiver_id, 10) && friend.status === "PENDING")
 	{
 		addRequestInList(requestsListDiv, friend);
-		return ;
+		return;
 	}
 
 	if (friend.status === "ACCEPTED")
 	{
 		addFriendInList(friendsListDiv, friend);
-		return ;
+		return;
 	}
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/17 15:05:31 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:27:39 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ export function loadTwofa(): void {
 		{
 			displayPop(response, "error");
 			router.navigate("/sign-in");
-			return ;
+			return;
 		}
 		
 		response.json(
@@ -55,7 +55,7 @@ export async function loadUser() {
 	if (!response.ok)
 	{
 		displayPop(response.statusText, "error");
-		return ;
+		return;
 	}
 
 	const	userRes: any = await response.json();
@@ -64,11 +64,10 @@ export async function loadUser() {
 	if (!responseStats.ok)
 	{
 		displayPop(responseStats, "error");
-		return ;
+		return;
 	}
 
 	const	userStatsRes: any = await responseStats.json();
-	console.log(userStatsRes);
 
 	const statsContainer = document.getElementById("user-stats-container");
 	
@@ -145,8 +144,10 @@ function formatTime(seconds: number): string {
 	if (!seconds) return "0m";
 	const h = Math.floor(seconds / 3600);
 	const m = Math.floor((seconds % 3600) / 60);
-	if (h > 0) return `${h}h ${m}m`;
-	return `${m}m`;
+	const s = Math.floor(seconds % 60);
+	if (h > 0) return `${h}h ${m}m ${s}s`;
+	if (m > 0) return `${m}m ${s}s`;
+	return `${s}s`;
 }
 
 function createStatCard(title: string, icon: string, colorClass: string, stats: any): HTMLElement {
@@ -166,7 +167,7 @@ function createStatCard(title: string, icon: string, colorClass: string, stats: 
 	grid.style.gap = "10px";
 
 	const items = [
-		{ label: "Time", value: formatTime(stats.totalTime), color: "#aaa" },
+		{ label: "Time", value: formatTime(stats.totalTime / 1000), color: "#aaa" },
 		{ label: "Wins", value: stats.wins, color: "#4CAF50" },
 		{ label: "Losses", value: stats.losses, color: "#F44336" },
 		{ label: stats.specialLabel, value: stats.specialValue, color: "#2196F3" }
@@ -205,7 +206,7 @@ export async function loadUserStats(targetId: number | null, targetName: string 
 	if (!responseStats.ok)
 	{
 		displayPop(responseStats, "error");
-		return ;
+		return;
 	}
 	
 	const	userStatsRes: any = await responseStats.json();

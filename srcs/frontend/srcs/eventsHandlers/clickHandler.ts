@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 15:04:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 12:21:20 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ import { loadTwofa, loadUserStats }			from "../router/loadPage.js"
 import { TournamentController } 			from "../Pong/tournament.js"
 import { sendRequest }						from "../utils/sendRequest.js"
 import { verifyEmail }						from "../utils/verifyEmail.js"
+import { heartbeat }						from "../utils/heartbeat.js"
 import { GameOptions }						from "../Pong/objects/gameOptions.js"
 import { initHistoryListeners } 			from "../history/getAndRenderHistory.js"
-import { Player }							 from "../Pong/objects/tournamentObjects.js"
 
-
-import { Game }	from "../Pong/gameClass.js"
+import type { Game }	from "../Pong/gameClass.js"
+import type { Player }	from "../Pong/objects/tournamentObjects.js"
 
 /* ====================== FUNCTIONS ====================== */
 
@@ -133,7 +133,7 @@ async function onClickDeleteAccount(): Promise<void>{
 	if (!password) return displayError("password required!", "confirm-setting-msg-error");
 
 	if (!confirm("Are you sure you want to delete your account?"))
-		return ;
+		return;
 
 	document.getElementById("confirm-setting-form")?.classList.add("darken");
 
@@ -190,7 +190,7 @@ async function	onClickDeleteAccountStep(): Promise<void> {
 
 async function	onClickDeleteTwofa(): Promise<void> {
 	if (!confirm("Are you sure you want to go back?"))
-		return ;
+		return;
 
 	router.canLeave = true;
 
@@ -235,6 +235,8 @@ async function	onClickSkipeVerifyEmailDev(): Promise<void> { // delete this
 			isAuth: true
 		}
 	}));
+
+	heartbeat();
 	
 	getMenu(true);
 
@@ -395,10 +397,15 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard'): void {
 			pendingOptions: options
 		}
 	}));
+	if (currentGame){
+		currentGame.setWinningScore(winningScore);
+		router.navigate('/pong');
+	}
+	else {
+		displayPop("Missing pong Element!", "error");
+		router.navigate('/');
+	}
 
-	currentGame!.setWinningScore(winningScore);	// SUR QUIL EXISTE (2 LIGNES AU DESSUS) ??
-
-	router.navigate('/pong');
 }
 
 function onClickPlayPVP(): void {
@@ -441,9 +448,14 @@ function onClickPlayPVP(): void {
 			}
 		}));
 
-		currentGame!.setWinningScore(winningScore);	// SUR QUIL EXISTE (2 LIGNES AU DESSUS) ??
-
-		router.navigate('/pong');
+		if (currentGame){
+			currentGame.setWinningScore(winningScore);
+			router.navigate('/pong');
+		}
+		else {
+			displayPop("Missing pong Element!", "error");
+			router.navigate('/');
+		}
 	}
 	else if (router.Path === '/tankmenu')
 	{
@@ -478,24 +490,28 @@ function	onStartTournament(): void {
 	const	playerNames: Player[] = [];
 	
 	for (const input of inputs) {
-    	const val = input.value.trim();
-    	if (val !== '') {
-    	    if (val.length >= 3 && val.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(val)) {
-    	        playerNames.push({ name: val });
-    	    } else {
-				displayError("Player names must be 3-20 characters long and assume only letters, numbers, '-' or '_'.", "tournament-msg-error");
-    	        return;
-    	    }
-    	}
+		const val = input.value.trim();
+		if (val !== '') {
+			if (val.length >= 3 && val.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(val)) {
+				playerNames.push({ name: val });
+			} else {
+				displayError("Player names must be 3-20 characters long and assume only letters, numbers, '-' or '_'.", "msg-error");
+				return;
+			}
+		}
 	}
 	if (playerNames.length < 4) {
-		displayError("You need at least 4 players to start a tournament.", "tournament-msg-error");
+		displayError("You need at least 4 players to start a tournament.", "msg-error");
+		return;
+	}
+	if (playerNames.length > 16) {
+		displayError("You need a maximum of 16 players to start a tournament.", "msg-error");
 		return;
 	}
 	const namesLower = playerNames.map(p => p.name.toLowerCase());
 	if (new Set(namesLower).size !== playerNames.length) {
-	    displayError("Player names must be unique.", "tournament-msg-error");
-	    return;
+		displayError("Player names must be unique.", "msg-error");
+		return;
 	}
 	const	scoreInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
 	if (!(scoreInput instanceof HTMLInputElement)) {
@@ -515,45 +531,57 @@ function	onStartTournament(): void {
 	router.navigate("/tournament-bracket");
 }
 
-async function onStartRankedTournament(): Promise<void> { // TODO, vieux copier-coller mais cest plus pour avoir le mecanisme:
-    
-	console.log("RANKED TOURNAMENT")
-	// const inputs = document.querySelectorAll('.ranked-player-input'); // Tes inputs
-    // const players: Player[] = [];
+async function onStartRankedTournament(): Promise<void> {
+	const	state: AppState = appStore.getState();
+	const	user: UserState | null = state.user;
+	const	inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll('.ranked-input');
+	const	playerNames: Player[] = [];
+	
+	if (user.username === null || user.id === null || !user.isAuth) {
+		return;
+	}
+	
+	for (const input of inputs) {
+		const val = input.value.trim();
+		if (val !== '' && (val.length >= 3 && val.length <= 20 && /^[a-zA-Z0-9_-]+$/.test(val))) {
+			const	userCheckResponse: Response = await sendRequest(`/api/user/lookup/${val}`, "get", null);
+			if (!userCheckResponse.ok) {
+				displayError("User(s) not found.", "msg-error");
+				return;
+			}
+			const userCheck = await userCheckResponse.json();
+			playerNames.push({ name: val, id: userCheck.id, isRegistered: userCheck.isRegistered });
+		} else {
+			displayError("Player names must be 3-20 characters long and assume only letters, numbers, '-' or '_'.", "msg-error");
+			return;
+		}
+	}
+	if (playerNames.length != 4) {
+		displayError("You need 4 players to start a ranked tournament.", "msg-error");
+		return;
+	}
+	const namesLower = playerNames.map(p => p.name.toLowerCase());
+	if (new Set(namesLower).size !== playerNames.length) {
+		displayError("Player names must be unique.", "msg-error");
+		return;
+	}
 
-    // // 1. Récupérer le user courant (déjà connecté)
-    // const currentUser = Store.getUser(); // Ton store frontend
-    // players.push({ name: currentUser.username, id: currentUser.id, isRegistered: true });
+	const	scoreInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
+	if (!(scoreInput instanceof HTMLInputElement)) {
+		displayPop("Missing menu game HTMLElement!", "error");
+		return;
+	}
+	const	winningScore: number = parseInt(scoreInput.value, 10);
 
-    // // 2. Vérifier les autres pseudos entrés
-    // for (const input of inputs) {
-    //     const username = input.value;
-    //     if (!username) continue;
+	appStore.setState((state) => ({
+		...state,
+		game: {
+			...state.game,
+			currentTournament: new TournamentController(playerNames, winningScore, true)
+		}
+	}));
 
-    //     // Appel API pour vérifier si le user existe et récupérer son ID
-    //     // Tu dois sûrement avoir une route GET /users/:username ou GET /users?name=X
-    //     const userCheck = await sendRequest('GET', `/api/users/find?username=${username}`);
-        
-    //     if (userCheck && userCheck.id) {
-    //         players.push({ name: userCheck.username, id: userCheck.id, isRegistered: true });
-    //     } else {
-    //         alert(`L'utilisateur ${username} n'existe pas !`);
-    //         return;
-    //     }
-    // }
-
-    // if (players.length < 2) {
-    //     alert("Il faut au moins 2 joueurs enregistrés.");
-    //     return;
-    // }
-
-    // // 3. Lancer le tournoi
-    // // On instancie la classe avec le flag isRanked à TRUE
-    // window.tournamentController = new TournamentController(players, 5, true);
-    
-    // // Remplacer le HTML par le bracket (comme tu fais déjà)
-    // document.getElementById('app').innerHTML = window.tournamentController.renderBracket();
-    // et puis surement apres .fillBracket();
+	router.navigate("/tournament-bracket");
 }
 
 function startTournamentMatch(matchId: string, p1: string, p2: string): void {
@@ -768,7 +796,7 @@ export async function   setupClickHandlers(): Promise<void> {
 		if (!router.canLeave) {
 			if (!confirm("This page is asking you to confirm that you want to leave — information you’ve entered may not be saved.")) {
 				history.pushState({}, "", router.Path);
-				return ;
+				return;
 			}
 			router.canLeave = true;
 		}

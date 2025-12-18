@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 04:21:12 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ export class	Router {
 		if (!this.canLeave)
 		{
 			if (!confirm("This page is asking you to confirm that you want to leave — information you’ve entered may not be saved."))
-				return ;
+				return;
 			this.canLeave = true;
 		}
 		history.pushState({}, '', path);

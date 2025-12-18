@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 06:09:26 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 05:36:41 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ async function deleteClient(authServ: authService, id: number) {
 		await authAxios.delete(`http://user:3000/${id}`);
 		await authAxios.delete(`http://twofa:3000/${id}`);
 		await authServ.deleteClient(id);
-	} catch (error) {
+	} catch (error: unknown) {
 		console.error(error);
 	}
 }

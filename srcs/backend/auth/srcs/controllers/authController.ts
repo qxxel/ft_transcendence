@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 23:29:08 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 09:45:39 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,17 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		} catch (error) {
 			throw new authError.WrongCredentialsError("Wrong password or username!");
 		}
+		if (!user || !user.id)
+			throw new authError.WrongCredentialsError("Wrong password or username!");
+		try {
+			const	userRes: AxiosResponse = await authAxios.get(`http://user:3000/${user.id}`);
+			user = userRes.data;
+		} catch (error) {
+			throw new authError.WrongCredentialsError("Wrong password or username!");
+		}
 
+		console.log("user: ", user);
+		
 		if (!user || !user.id)
 			throw new authError.WrongCredentialsError("Wrong password or username!");
 
@@ -146,7 +156,6 @@ async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, 
 			throw new authError.MissingIdError("Id of the user is missing!");
 
 		await authServ.updateExpiresByIdClient(id, null);
-		await authAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': id } } );
 
 		return reply.status(201).send(id);
 	} catch (err: unknown) {
@@ -238,6 +247,7 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 
 		await authAxios.delete(`http://user:3000/${payload.data.id}`);
 		await authAxios.delete(`http://game:3000/user/${payload.data.id}`);
+		await authAxios.delete(`http://ping:3000/${payload.data.id}`);
 
 		const	response: AxiosResponse = await authAxios.delete("http://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 
@@ -290,7 +300,6 @@ async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promis
 		const	{ id } = jwtRes.data;
 
 		await authServ.updateExpiresByIdClient(id, null);
-		await authAxios.post('http://user:3000/log', { isLog: true }, { headers: { 'user-id': id } } );
 
 		return reply.status(201).send(id);
 	} catch (err: unknown) {

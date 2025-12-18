@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tournament.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:48:42 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 16:25:36 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 10:04:35 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,8 +249,8 @@ export class    TournamentController {
 				gameType:1,
 				winner:winner.id,
 				p1:p1.name,
-				p2:p2.name,
 				p1score:resume.score1,
+				p2:p2.name,
 				p2score:resume.score2,
 				mode:"tour",
 				powerup:0,
@@ -263,8 +263,8 @@ export class    TournamentController {
 				gameType:1,
 				winner:winner.id,
 				p1:p2.name,
-				p2:p1.name,
 				p1score:resume.score2,
+				p2:p1.name,
 				p2score:resume.score1,
 				mode:"tour",
 				powerup:0,
@@ -272,11 +272,10 @@ export class    TournamentController {
 				duration:resume.duration
 			};
 
-			await sendRequest('POST', '/', p1payload); 
-			await sendRequest('POST', '/', p2payload); 
+			await sendRequest('/api/game', 'POST', p1payload); 
+			await sendRequest('/api/game', 'POST', p2payload); 
 		} catch (err) {
 			displayPop("Error while saving tournament match" + err, "error");
-			// console.error("Error while saving tournamente match", err);
 		}
 	}
 }

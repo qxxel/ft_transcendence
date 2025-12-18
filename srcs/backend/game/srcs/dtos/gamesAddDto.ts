@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gamesAddDto.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:04:52 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 09:51:35 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 09:09:12 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ export class	gamesAddDto {
 	private	duration: number;
 
 	constructor(row: any, userId: number | null = null) {
-		if (userId)
+		if (userId && row.mode !== "tour")
 			this.idClient = userId;
 		else
 			this.idClient = row.idClient;

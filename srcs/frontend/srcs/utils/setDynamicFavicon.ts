@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setDynamicFavicon.ts                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 14:30:39 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 12:21:32 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 10:05:59 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,6 @@
 
 
 /* ====================== FUNCTION ====================== */
-
-// export function	seDynamicFavicon(path: string | null): void {
-// 	let	link: HTMLLinkElement | null = document.querySelector("link[rel~='icon']");
-
-// 	if (!link)
-// 	{
-// 		link = document.createElement('link');
-// 		link.rel = 'icon';
-// 		document.getElementsByTagName('head')[0].appendChild(link);
-// 	}
-
-// 	if (path)
-// 		link.href = "/uploads/" + path;
-// 	else
-// 		link.href = "/uploads/default_avatar.png";
-
-// 	// document.getElementsByTagName('head')[0].removeChild(link);
-// 	// document.getElementsByTagName('head')[0].appendChild(link);
-// }
 
 export function	setDynamicFavicon(path: string | null): void {
 	const	canvas: HTMLCanvasElement = document.createElement('canvas');

@@ -1,52 +1,54 @@
 <div class="game-container">
-  <h1>Ranked Tournament</h1>
-  <p>Enter the usernames of the 3 other players.</p>
-  <p class="msg-error" style="font-size: 0.8rem;">All players must be registered.</p>
-  
-  <div class="tournament-setup-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 600px; margin: 2rem auto;">
-	
-	<div class="input-group">
-	  <label style="display:block; text-align:left; font-size:0.8rem; margin-bottom:5px;">You</label>
-	  <input type="text" id="ranked-p1" class="player-name-input ranked-input" value="Me" disabled 
-			 style="background: rgba(255,255,255,0.1); cursor: not-allowed;">
+	<h1>Ranked Tournament</h1>
+	<p>Enter the usernames of the 3 other players.</p>
+	<div class="tournament-setup-grid"
+		style="grid-template-columns: repeat(2, 1fr); max-width: 600px; margin: 2rem auto;">
+
+		<div class="input-group">
+			<label for="ranked-p1" class="ranked-tournament-player">You</label>
+			<input type="text" id="ranked-p1" name="ranked-p1" class="player-name-input ranked-input" disabled
+				style="background: rgba(255,255,255,0.1); cursor: not-allowed;">
+		</div>
+
+		<div class="input-group">
+			<label for="ranked-p2" class="ranked-tournament-player">Player 2</label>
+			<input type="text" id="ranked-p2" name="ranked-p2" class="player-name-input ranked-input"
+				placeholder="Username">
+		</div>
+
+		<div class="input-group">
+			<label for="ranked-p3" class="ranked-tournament-player">Player 3</label>
+			<input type="text" id="ranked-p3" name="ranked-p3" class="player-name-input ranked-input"
+				placeholder="Username">
+		</div>
+
+		<div class="input-group">
+			<label for="ranked-p4" class="ranked-tournament-player">Player 4</label>
+			<input type="text" id="ranked-p4" name="ranked-p4" class="player-name-input ranked-input"
+				placeholder="Username">
+		</div>
+
 	</div>
 
-	<div class="input-group">
-	  <label style="display:block; text-align:left; font-size:0.8rem; margin-bottom:5px;">Player 2</label>
-	  <input type="text" id="ranked-p2" class="player-name-input ranked-input" placeholder="Username">
+	<div class="menu-content">
+		<div class="control-group" style="width: 100%;">
+			<label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
+			<input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1" />
+		</div>
 	</div>
 
-	<div class="input-group">
-	  <label style="display:block; text-align:left; font-size:0.8rem; margin-bottom:5px;">Player 3</label>
-	  <input type="text" id="ranked-p3" class="player-name-input ranked-input" placeholder="Username">
+	<p id="msg-error" class="msg-error"></p>
+
+	<div class="tournament-menu-content">
+
+		<button id="start-ranked-btn" class="btn-yellow-create-bracket" onclick="onStartRankedTournament()">
+			Verify & Start
+		</button>
 	</div>
-
-	<div class="input-group">
-	  <label style="display:block; text-align:left; font-size:0.8rem; margin-bottom:5px;">Player 4</label>
-	  <input type="text" id="ranked-p4" class="player-name-input ranked-input" placeholder="Username">
+	<div class="cancel-row-tournament">
+		<a href="/tournament-menu" class="btn-cancel-tournament">
+			Back
+		</a>
 	</div>
-
-  </div>
-
-  <div class="menu-content">
-          <div class="control-group" style="width: 100%;">
-            <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
-            <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
-          </div>
-  </div>
-
-  <p id="ranked-msg-error" class="msg-error"></p>
-  
-  <div class="tournament-menu-content">
-	
-	<button id="start-ranked-btn" class="btn-yellow-create-bracket" onclick="onStartRankedTournament()">
-	  Verify & Start
-	</button>
-  </div>
-  <div class="cancel-row-tournament">
-	<a href="/tournament-menu" class="btn-cancel-tournament">
-		Back
-	</a>
-  </div>
 
 </div>

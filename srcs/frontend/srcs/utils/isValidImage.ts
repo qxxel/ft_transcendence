@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   isValidImage.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:47:29 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 14:51:29 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ export function	isValidImage(file: File): Promise<boolean> {
 		{
 			displayPop("Invalid file type. Only JPG, PNG, WEBP allowed.", "error");
 			resolve(false);
-			return ;
+			return;
 		}
 
 		const url = URL.createObjectURL(file);

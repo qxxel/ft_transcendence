@@ -1,8 +1,10 @@
 <div class="user-settings-form history-layout">
-	<div class="profile-wrapper" style="display: flex; flex-direction: column; gap: 20px; align-items: center; width: 100%;">
+	<div class="profile-wrapper"
+		style="display: flex; flex-direction: column; gap: 20px; align-items: center; width: 100%;">
 		<div id="user-profile-container" class="profile-container">
 		</div>
-		<div id="user-stats-container" class="stats-container" style="width: 100%; max-width: 800px; display: flex; flex-direction: row; gap: 20px;">
+		<div id="user-stats-container" class="stats-container"
+			style="width: 100%; max-width: 800px; display: flex; flex-direction: row; gap: 20px;">
 		</div>
 		<div class="history-container">
 
@@ -14,12 +16,12 @@
 						<input type="checkbox" id="filter-pong" checked>
 						<span class="toggle-btn">PONG</span>
 					</label>
-				
+
 					<label class="filter-toggle">
 						<input type="checkbox" id="filter-tank" checked>
 						<span class="toggle-btn">TANK</span>
 					</label>
-				
+
 					<div style="width: 1px; height: 20px; background: #555; margin: 0 10px;"></div>
 
 					<label class="filter-toggle">
@@ -30,6 +32,11 @@
 					<label class="filter-toggle">
 						<input type="checkbox" id="filter-pvp" checked>
 						<span class="toggle-btn">PVP</span>
+					</label>
+
+					<label class="filter-toggle">
+						<input type="checkbox" id="filter-tour" checked>
+						<span class="toggle-btn">TOURNAMENT</span>
 					</label>
 
 					<button id="refresh-history" class="btn-refresh-inline" title="Reload">

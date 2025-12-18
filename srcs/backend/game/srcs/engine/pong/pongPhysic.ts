@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:58:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 00:07:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ export class PongPhysics {
 
 	public movePaddle(paddle: Paddle, ball: Ball, direction: "up" | "down" | "none") {
 		if (direction === "none")
-			return ;
+			return;
 
 		const	isHorizontalOverlap: boolean = 
 			ball.x + ball.radius > paddle.x && 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   uploadAvatar.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:03:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 14:50:25 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ export async function	uploadAvatar(): Promise<void> {
 	if (!state.user.pendingAvatar)
 	{
 		displayPop("No file uploaded to change avatar.", "error");
-		return ;
+		return;
 	}
 
 	const	formData: FormData = new FormData();
@@ -38,7 +38,7 @@ export async function	uploadAvatar(): Promise<void> {
 		if (!response.ok)
 		{
 			displayPop(response, "error");
-			return ;
+			return;
 		}
 
 		const	data: any = await response.json();

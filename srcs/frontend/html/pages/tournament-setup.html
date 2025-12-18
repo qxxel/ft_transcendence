@@ -1,37 +1,19 @@
 <div class="game-container">
-  <h1>Create Tournament</h1>
-  <p>Enter 4 to 16 player names. Leave fields blank to have fewer players.</p>
-  
-  <div class="tournament-setup-grid">
-    <input type="text" class="player-name-input" placeholder="Player 1">
-    <input type="text" class="player-name-input" placeholder="Player 2">
-    <input type="text" class="player-name-input" placeholder="Player 3">
-    <input type="text" class="player-name-input" placeholder="Player 4">
-    <input type="text" class="player-name-input" placeholder="Player 5">
-    <input type="text" class="player-name-input" placeholder="Player 6">
-    <input type="text" class="player-name-input" placeholder="Player 7">
-    <input type="text" class="player-name-input" placeholder="Player 8">
-    <input type="text" class="player-name-input" placeholder="Player 9">
-    <input type="text" class="player-name-input" placeholder="Player 10">
-    <input type="text" class="player-name-input" placeholder="Player 11">
-    <input type="text" class="player-name-input" placeholder="Player 12">
-    <input type="text" class="player-name-input" placeholder="Player 13">
-    <input type="text" class="player-name-input" placeholder="Player 14">
-    <input type="text" class="player-name-input" placeholder="Player 15">
-    <input type="text" class="player-name-input" placeholder="Player 16">
-  </div>
+	<h1>Create Tournament</h1>
+	<p>Enter 4 to 16 player names. Leave fields blank to have fewer players.</p>
 
-  <div class="menu-content">
-    <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
-    <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
-  </div>
-  <p id="tournament-msg-error" class="msg-error"></p>
-  <div class="tournament-menu-content">
-    <button id="start-tournament-btn" class="btn-yellow-create-bracket" onclick="onStartTournament()">Create Bracket</button>
-  </div>
-  <div class="cancel-row-tournament">
-	  <a href="/tournament-menu" class="btn-cancel-tournament">
-	  	Back
-	  </a>
-  </div>
+	<div class="menu-content">
+		<label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
+		<input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1" />
+	</div>
+	<p id="msg-error" class="msg-error"></p>
+	<div class="tournament-menu-content">
+		<button id="start-tournament-btn" class="btn-yellow-create-bracket" onclick="onStartTournament()">Create
+			Bracket</button>
+	</div>
+	<div class="cancel-row-tournament">
+		<a href="/tournament-menu" class="btn-cancel-tournament">
+			Back
+		</a>
+	</div>
 </div>
