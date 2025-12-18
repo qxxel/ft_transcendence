@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 17:40:02 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 21:02:40 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 20:12:52 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,4 @@ export function	extractUserId(request: FastifyRequest): number {
 	const	userId: number = parseInt(userIdHeader as string, 10);
 
 	return userId;
-}
-
-export function	extractUserName(request: FastifyRequest): string {
-	const	userNameHeader: string | string[] | undefined = request.headers['user-username'];
-	if (!userNameHeader)
-		throw new MissingHeaderError("Missing User ID header (Unauthorized)");
-
-	const	userName: string = userNameHeader as string;
-
-	return userName;
 }

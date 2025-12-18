@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 18:51:08 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 20:27:18 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ export async function	displayPop(response: Response | string | undefined, type: 
 		} catch (error) {
 			console.error(error);							// MATHIS: A VOIR COMMENT AFFICHER LES ERREURS ICI
 			console.error(response.statusText);				// "
+			return ;
 		}
 	}
 	else

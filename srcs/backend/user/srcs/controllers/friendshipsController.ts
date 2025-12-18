@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:38:43 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 18:37:29 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:16:37 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { friendshipsServ } 		from "../user.js"
-import { errorsHandler }		from "../utils/errorsHandler.js"
-import { extractUserId }		from "../utils/extractHeaders.js"
-import { friendshipsAddDto }	from "../dtos/friendshipsAddDto.js"
-import { friendshipsUpdateDto }	from "../dtos/friendshipsUpdateDto.js"
+import { friendshipsServ, userAxios } 		from "../user.js"
+import { errorsHandler }					from "../utils/errorsHandler.js"
+import { extractUserId, extractUserName }	from "../utils/extractHeaders.js"
+import { friendshipsAddDto }				from "../dtos/friendshipsAddDto.js"
+import { friendshipsUpdateDto }				from "../dtos/friendshipsUpdateDto.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
+import type { friendshipsRespDto }								from "../dtos/friendshipsRespDto.js"
 
 
 /* ====================== FUNCTION ====================== */
@@ -41,10 +42,27 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 			const	parseTargetId: number = parseInt(targetId, 10);
 
 			const	userId: number = extractUserId(request);
+			const	userName: string = extractUserName(request);
 
 			const	friendship: friendshipsAddDto = new friendshipsAddDto(userId, parseTargetId);
 
-			return reply.code(201).send(await friendshipsServ.addFriendRequest(friendship));
+			const	sendData: friendshipsRespDto = await friendshipsServ.addFriendRequest(friendship)
+
+			try {
+				const	notifBody: Object = {
+					type: "FRIEND_REQUEST",
+					fromId: userId,
+					message: `You received a friend request from ${userName} !`
+				};
+	
+				await userAxios.post(`http://notif:3000/send/${parseTargetId}`, notifBody,
+					{ headers: { 'user-id': userId } }
+				);
+			} catch (err: unknown) {
+				console.error("Failed to send notification.");
+			}
+
+			return reply.code(201).send(sendData);
 		} catch (err: unknown) {
 			errorsHandler(userFastify, reply, err);
 		}
@@ -63,10 +81,22 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 			const	parseTargetId: number = parseInt(targetId, 10);
 
 			const	userId: number = extractUserId(request);
+			const	userName: string = extractUserName(request);
 
 			const	friendship: friendshipsUpdateDto = new friendshipsUpdateDto(userId, parseTargetId);
-			
-			return reply.code(200).send(await friendshipsServ.acceptRequest(friendship));
+
+			const	sendData: friendshipsRespDto = await friendshipsServ.acceptRequest(friendship)
+
+			const	notifBody: Object = {
+				type: "FRIEND_ACCEPT",
+				fromId: userId,
+				message: `${userName} accepted your request, you're now friend with him !`
+			};
+			await userAxios.post(`http://notif:3000/send/${parseTargetId}`, notifBody,
+				{ headers: { 'user-id': userId } }
+			);
+
+			return reply.code(200).send(sendData);
 		} catch (err: unknown) {
 			errorsHandler(userFastify, reply, err);
 		}

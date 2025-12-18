@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   api-gateway.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 19:22:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 05:46:00 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 20:32:16 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ import { gatewayNotifController }	from "./controllers/gatewayNotifController.js"
 import { gatewaytwofaController }	from "./controllers/gatewaytwofaController.js"
 import { gatewayUserController }	from "./controllers/gatewayUserController.js"
 import { gatewayPingController }	from "./controllers/gatewayPingController.js"
-import { NotificationManager }		from './utils/notificationManager.js'
 import proxy						from '@fastify/http-proxy'
 
 import type { AxiosInstance }	from 'axios'
@@ -37,11 +36,6 @@ import type { FastifyInstance }	from 'fastify'
 export const	gatewayAxios: AxiosInstance = axios.create({
 	timeout: 15000
 });
-
-
-/* ====================== NOTIFS VARIABLE ====================== */
-
-export const	notifManager: NotificationManager = new NotificationManager();
 
 
 /* ====================== SERVER ====================== */

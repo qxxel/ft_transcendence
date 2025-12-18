@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayUserController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 18:54:41 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:03:44 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { gatewayAxios, notifManager }	from "../api-gateway.js"
-import { getValidUserId, getValidUserPayload }				from "../utils/validateJwt.js"
-import { requestErrorsHandler }			from "../utils/requestErrors.js"
+import { gatewayAxios }							from "../api-gateway.js"
+import { getValidUserId, getValidUserPayload }	from "../utils/validateJwt.js"
+import { requestErrorsHandler }					from "../utils/requestErrors.js"
 
 import type { AxiosHeaderValue, AxiosResponse }  				from 'axios'
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
@@ -153,14 +153,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	user: any = await getValidUserPayload(request);
 
 			const	response: AxiosResponse = await gatewayAxios.post(`http://user:3000/friends/request/${parseTargetId}`, request.body,
-				{ headers: { 'user-id': user.id } }
+				{ headers: { 'user-id': user.id, 'user-username': user.username } }
 			);
-
-			notifManager.sendToUser(parseTargetId, {
-				type: "FRIEND_REQUEST",
-				fromId: user.id,
-				message: `You received a friend request from ${user.username} !`
-			});
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
@@ -176,14 +170,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	user: any = await getValidUserPayload(request);
 
 			const	response: AxiosResponse = await gatewayAxios.patch(`http://user:3000/friends/accept/${parseTargetId}`, request.body,
-				{ headers: { 'user-id': user.id } }
+				{ headers: { 'user-id': user.id, 'user-username': user.username } }
 			);
-
-			notifManager.sendToUser(parseTargetId, {
-				type: "FRIEND_ACCEPT",
-				fromId: user.id,
-				message: `${user.username} accepted your request, you're now friend with him !`
-			});
 
 			return reply.send(response.data);
 		} catch (err: unknown) {
@@ -201,7 +189,7 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	response: AxiosResponse = await gatewayAxios.delete(`http://user:3000/friends/${parseTargetId}`,
 				{ headers: { 'user-id': userId } }
 			);
-			
+
 			return reply.send(response.data);
 		} catch (err: unknown) {
 			return requestErrorsHandler(gatewayFastify, reply, err);

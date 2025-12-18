@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 15:30:15 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:40:41 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ export class	NotificationService {
 			if (data.type === "FRIEND_REQUEST" || data.type === "FRIEND_ACCEPT")
 			{
 				this.showNotification(data);
+				if (router.Path === "/friends")
+					getAndRenderFriends();
+			}
+			if (data.type === "SET_ONLINE" || data.type === "SET_OFFLINE")
+			{
 				if (router.Path === "/friends")
 					getAndRenderFriends();
 			}

@@ -82,6 +82,20 @@ services:
       - backend
     env_file: ../.env
 
+  notif:
+    container_name: notif
+    image: notif
+    build:
+      context: ./notif
+      dockerfile: Dockerfile.notif
+    secrets:
+      - ssl_key_back
+      - ssl_crt_back
+    ports:
+      - "3000"
+    networks:
+      - backend
+
   ping:
     container_name: ping
     image: ping
