@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 06:53:41 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:57:09 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,9 +255,11 @@ async function	deleteSessionToken(request: FastifyRequest, reply: FastifyReply):
 		if (cookies.jwtRefresh)
 			await jwtServ.deleteToken(cookies.jwtRefresh);
 
-		if (user && user.id)
-			await jwtAxios.delete(`http://ping:3000/${user.id}`);
-
+		if (user && user.id) {
+			try {
+				await jwtAxios.delete(`http://ping:3000/${user.id}`);
+			} catch (_error: unknown) {}
+		}
 		return reply.status(204).send({ result: "deleted." });
 	} catch (err: unknown) {
 		return errorsHandler(jwtFastify, reply, err);

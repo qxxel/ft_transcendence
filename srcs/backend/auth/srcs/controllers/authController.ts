@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 09:45:39 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:01:59 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 		const	hash: string = await argon2.hash(request.body.password);
 		
 		if (await isLoggedIn(request.headers.cookie))
-			throw new authError.AlreadyConnectedError("You are already connected!");
+			throw new authError.AlreadyConnectedError("You are already connected! Retry.");
 
 		const	userRes: AxiosResponse = await authAxios.post('http://user:3000', request.body);
 		
@@ -91,7 +91,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 			throw new authError.RequestEmptyError("The request is empty");
 
 		if (await isLoggedIn(request.headers.cookie))
-			throw new authError.AlreadyConnectedError("You are already connected!");
+			throw new authError.AlreadyConnectedError("You are already connected! Retry.");
 
 		let	user: usersRespDto;
 		try {
