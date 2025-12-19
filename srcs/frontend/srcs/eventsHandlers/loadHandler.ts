@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:19:35 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:23:32 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,39 +20,42 @@ import { appStore }				from "../objects/store.js"
 import { heartbeat }			from "../utils/heartbeat.js"
 import { sendRequest }			from "../utils/sendRequest.js"
 import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
+import { displayPop } from "../utils/display.js"
 
 /* ====================== FUNCTIONS ====================== */
 
 async function	handleLoadPage(): Promise<void> {
 	return new Promise((resolve) => {
 		document.addEventListener("DOMContentLoaded", async (_event: Event) => {
-			const	response: Response = await sendRequest('/api/user/me', "GET", null);
-			if (!response.ok)
-			{
-				setDynamicFavicon(null);
-				return resolve();
-			}
-
-			const	result: any = await response.json();
-
-			appStore.setState((state) => ({
-				...state,
-				user: {
-					id: result.id as number,
-					username: result.username,
-					avatar: result.avatar,
-					pendingAvatar: null,
-					isAuth: true
+			try {
+				const	response: Response = await sendRequest('/api/user/me', "GET", null);
+				if (!response.ok) {
+					setDynamicFavicon(null);
+					return resolve();
 				}
-			}));
-
-			heartbeat();
-
-			setDynamicFavicon(result.avatar ?? null);
-
-			getMenu(true);
-
-			resolve();
+	
+				const	result: any = await response.json();
+	
+				appStore.setState((state) => ({
+					...state,
+					user: {
+						id: result.id as number,
+						username: result.username,
+						avatar: result.avatar,
+						pendingAvatar: null,
+						isAuth: true
+					}
+				}));
+	
+				heartbeat();
+	
+				setDynamicFavicon(result.avatar ?? null);
+	
+				getMenu(true);
+			} catch (error: unknown) {
+				displayPop("error", "id-error", error);
+			}
+			return resolve();
 		});
 	});
 }

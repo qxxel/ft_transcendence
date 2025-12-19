@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:25:53 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 09:45:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ export function loadTwofa(): void {
 	});
 }
 
-export async function loadUser() {
+export async function loadUser(): Promise<void> {
 
 	let	response: Response;
 	let	userRes: any;
@@ -58,8 +58,7 @@ export async function loadUser() {
 	let userStatsRes: any;
 	try {
 		response = await sendRequest(`/api/user/me`, 'get', null);
-		if (!response.ok)
-		{
+		if (!response.ok) {
 			displayPop("error", "id-error", response.statusText); // MATHIS /!\ ??? pourquoi statusText
 			return;
 		}
@@ -67,15 +66,14 @@ export async function loadUser() {
 		userRes = await response.json();
 
 		responseStats = await sendRequest(`/api/user/stats/me`, 'get', null);
-		if (!responseStats.ok)
-		{
+		if (!responseStats.ok) {
 			displayPop("error", "id-error", responseStats);
 			return;
 		}
 
 		userStatsRes = await responseStats.json();
 	} catch (error: unknown) {
-		displayPop("error", "id-error", error);
+		return displayPop("error", "id-error", error);
 	}
 
 	const statsContainer = document.getElementById("user-stats-container");
@@ -221,7 +219,7 @@ export async function loadUserStats(targetId: number | null, targetName: string 
 		}
 		userStatsRes = await responseStats.json();
 	} catch (error: unknown) {
-		displayPop("error", "id-error", error);
+		return displayPop("error", "id-error", error);
 	}
 
 	const statsContainer = document.getElementById("user-stats-container");

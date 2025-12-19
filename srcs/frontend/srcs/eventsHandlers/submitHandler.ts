@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:08:05 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 10:14:41 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,22 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 
 	const	p: HTMLElement | null = document.getElementById("sign-in-msg-error");
 	if (p) p.textContent = null;
-	
-	const	response: Response = await fetch('/api/auth/sign-in', {
-		method: "post",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ identifier, password })
-	});
-	
+
+	let	response: Response;
+	try {
+		response = await fetch('/api/auth/sign-in', {
+			method: "post",
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ identifier, password })
+		});
+	} catch (error: unknown) {
+		document.getElementById("sign-in-form")?.classList.remove("darken");
+		return 	displayPop("error", "id-error", error);
+	}
+
 	form.reset();
 	document.getElementById("sign-in-form")?.classList.remove("darken");
 
@@ -60,7 +66,12 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 		return displayError(response, "sign-in-msg-error");
 	}
 
-	const	result: any = await response.json();
+	let	result: any;
+	try {
+		result = await response.json();
+	} catch (error: unknown) {
+		return 	displayPop("error", "id-error", error);
+	}
 
 	if (socket && socket.connected)
 		socket.disconnect();
@@ -172,9 +183,8 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 			return displayError(response, "verify-email-msg-error");
 	}
 	catch (error: unknown) {
-		form.reset();
 		document.getElementById("verify-email-form")?.classList.remove("darken");
-		return displayError("" + err, "verify-email-msg-error");
+		return displayPop("error", "id-error", error);
 	}
 
 	appStore.setState((state) => ({
@@ -210,9 +220,8 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 			return displayError(response, "2fa-msg-error");
 	}
 	catch (error: unknown) {
-		form.reset();
 		document.getElementById("2fa-form")?.classList.remove("darken");
-		return displayError("" + err, "2fa-msg-error");
+		return displayPop("error", "id-error", error);
 	}
 
 	appStore.setState((state) => ({
@@ -280,8 +289,6 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 				if (!response.ok) 
 					return displayError(response, "confirm-setting-msg-error");
 			} catch (error: unknown) {
-				if (form instanceof HTMLFormElement)
-					form.reset();
 				document.getElementById("confirm-setting-form")?.classList.remove("darken");
 				return displayPop("error", "id-error", error);
 			}
@@ -416,22 +423,26 @@ export function	setupSubmitHandler(): void {
 		if (!(form instanceof HTMLFormElement))
 			return displayPop("error", "id-error", "Missing form HTMLElement!");
 
-		if (form.id === "sign-in-form")
-			await handleSignInForm(form);
-
-		if (form.id === "sign-up-form")
-			await handleSignUpForm(form);
-
-		if (form.id === "verify-email-form")
-			await handleVerifyEmailForm(form);
-
-		if (form.id === "2fa-form")
-			await handle2faForm(form);
-
-		if (form.id === "user-settings-form")
-			await handleUserSettingsForm(form);
-
-		if (form.id === "add-friend-form")
-			await handleAddFriendForm(form);
+		try {
+			if (form.id === "sign-in-form")
+				await handleSignInForm(form);
+	
+			if (form.id === "sign-up-form")
+				await handleSignUpForm(form);
+	
+			if (form.id === "verify-email-form")
+				await handleVerifyEmailForm(form);
+	
+			if (form.id === "2fa-form")
+				await handle2faForm(form);
+	
+			if (form.id === "user-settings-form")
+				await handleUserSettingsForm(form);
+	
+			if (form.id === "add-friend-form")
+				await handleAddFriendForm(form);
+		} catch (error: unknown) {
+			displayPop("error", "id-error", error);
+		}
 	});
 }

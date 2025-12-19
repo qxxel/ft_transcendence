@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tournamentMenu.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:52:38 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 10:14:48 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ import { sendRequest }  from "../utils/sendRequest"
 
 /* ====================== FUNCTIONS ====================== */
 
-export async function loadTournamentMenu() {
+export async function loadTournamentMenu() { // MATHIS on est sur de cette fonction ???
 
 	try {
 		const	response: Response = await sendRequest(`/api/user/me`, 'get', null);
@@ -48,7 +48,7 @@ export async function loadTournamenSetupRanked() {
 			return;
 		}
 		self = await response.json();
-	} catch (error: unknown) { return; }
+	} catch (error: unknown) { return; } // MATHIS pas de message d'erreur ?
 
 	const element: HTMLElement | null = document.getElementById('ranked-p1');
 	if (!(element instanceof HTMLInputElement)) {
