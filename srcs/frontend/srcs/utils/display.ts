@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:46:33 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:56:34 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ export async function displayError(response: Response | string, idMsgError: stri
 				const	result = await response.json();
 				p.textContent = result?.error || "An unexpected error has occurred";
 			} catch (error: unknown) {
-				displayPop("error", "id-error", error);	//	MATHIS
+				displayPop("error", "id-error", error);
 			}
 		}
 	}
@@ -66,7 +66,6 @@ async function toString(str: Response | string | unknown): Promise<string | null
 	return null;
 }
 
-//	KILLIAN/MATHIS/AXEL: VOIR POUR TEXTCONTENT
 export async function	displayPop(type: "notif" | "success" | "error", divId: string | null, ...responses: Array<Response | string | unknown>): Promise<void> {
 	const	divNotifs: HTMLElement | null = document.getElementById("div-notif");
 	if (!divNotifs) return console.error("No HTMLElement named \`div-notif\`.");
