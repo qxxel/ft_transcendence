@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:58:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:48:13 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 11:39:52 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ export class PongPhysics {
 	private width: number;
 	private height: number;
 	private	rally: number = 0;
+	private longestRally: number = 0;
 	private readonly maxBallSpeed: number = 12;
 	private readonly ballSpeedIncrease: number = 0.5;
 
@@ -96,13 +97,17 @@ export class PongPhysics {
 		}
 		if (ball.x + ball.radius < 0)
 		{
-			// AXEL SEND LONGEST RALLY /!\
+			if (this.rally > this.longestRally) {
+				this.longestRally = this.rally;
+			}
 			this.rally = 0;
 			return 2;
 		}
 		if (ball.x - ball.radius > this.width)
 		{
-			// AXEL SEND LONGEST RALLY /!\
+			if (this.rally > this.longestRally) {
+				this.longestRally = this.rally;
+			}
 			this.rally = 0;
 			return 1;
 		}
@@ -200,5 +205,9 @@ export class PongPhysics {
 			}
 		}
 		return -1;
+	}
+
+	public getLongestRally(): number {
+		return Math.max(this.longestRally, this.rally);
 	}
 }

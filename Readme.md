@@ -26,7 +26,7 @@
 This version of the project (Subject: v18.0) emphasizes adaptability and complex architectural choices. We have designed a Single Page Application (SPA) backed by a **Microservices Architecture**.
 
 ### Key Features
-* **Microservices Backend**: Built with **Node.js** and **Fastify**, split into specialized services (API Gateway, Auth, Game, User, JWT, 2FA) for scalability and maintainability.
+* **Microservices Backend**: Built with **Node.js** and **Fastify**, split into specialized services (API Gateway, Auth, Game, User, JWT, 2FA, etc.) for scalability and maintainability.
 * **Modern Frontend**: Developed using **TypeScript** and **Vite**, offering a responsive and seamless user experience.
 * **Server-Side Pong**: The Pong game logic is entirely calculated on the server-side and exposed via an API to prevent cheating and ensure consistency.
 * **Second Game**: Includes a **"Tank" battle game**, featuring custom physics and mechanics.
@@ -38,6 +38,7 @@ This version of the project (Subject: v18.0) emphasizes adaptability and complex
     * **2FA** (Two-Factor Authentication) implementation.
     * **HTTPS** support with self-signed certificates generated automatically.
     * **Password hashing** and input validation.
+    * **XSS**, **SQL** and **email header injection** proof.
 * **DevOps**: Fully containerized using **Docker** and **Docker Compose** for consistent deployment.
 
 ---
@@ -108,6 +109,7 @@ Before you begin, ensure you have the following installed on your machine:
 * **Debugging**: Used AI to debug specific CSS flexbox issues and responsive design glitches.
 * **Research**: Used AI to clarify specific tool documentation and compare libraries.
 * **Content & Naming**: Used AI to draft documentation text, suggest consistent function names, and refine error messages for clarity in English.
+* **Feedback**: Used AI provide feedback on certain functions and to suggest alternative implementations.
 * **TODO**: TODO fill it
 
 *(Note: AI was used as a supportive tool for debugging and styling inspiration. All logic was reviewed and integrated manually.)*
@@ -138,10 +140,13 @@ This project validates several major and minor modules from the subject:
 5.  **DevOps**:
     * *Major*: Backend designed as **Microservices** (Gateway, Auth, User, Game, etc.).
 
-6.  **Server-Side Pong**:
+6.  **DevOps**:
+    * *Minor*: Expanding **browser compatibility** (Firefox, Chrome, Edge, etc.).
+
+7.  **Server-Side Pong**:
     * *Major*: **Replace** basic Pong with **server-side Pong** and implement an **API**.
 
-*(Note: **Two Minor** modules count as **one Major** module. Total: **8.5 Major** modules / **7 Major** modules required)*
+*(Note: **Two Minor** modules count as **one Major** module. Total: **9 Majors** modules / **7 Majors** modules required)*
 
 ---
 
