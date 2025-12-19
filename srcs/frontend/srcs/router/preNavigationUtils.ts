@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:11:40 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { router }		from "../index.js"
-import { appStore }		from "../objects/store.js"
 import { displayPop } from "../utils/display.js";
-import { getMenu }		from "../utils/getMenu.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 
 
