@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+         #
+#    By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:27:59 by agerbaud          #+#    #+#              #
-#    Updated: 2025/12/19 08:47:24 by kiparis          ###   ########.fr        #
+#    Updated: 2025/12/19 13:02:54 by mreynaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,7 +86,7 @@ include color.mk
 LST_RULE_DC		= all up build down start stop restart
 LST_RULE_INFO	= help info ls logs
 LST_RULE_CLEAN	= vdown clean vclean fclean
-LST_RULE_OTHER	= re fullre refresh dev
+LST_RULE_OTHER	= re fullre refresh
 
 
 # -------------------------------   message   ------------------------------- #
@@ -264,8 +264,3 @@ vclean	: clean
 fclean	: vclean
 	-$(call RUN_CMD,docker system prune -a -f,$(MAGENTA))
 
-
-# ---------------------------------   dev   --------------------------------- #
-
-.PHONY	: dev
-dev	: vdown refresh
