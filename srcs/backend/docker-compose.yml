@@ -2,6 +2,7 @@ services:
   gateway:
     container_name: gateway
     image: gateway
+    restart: on-failure
     build:
       context: ./api-gateway
       dockerfile: Dockerfile.gateway
@@ -19,6 +20,7 @@ services:
   auth:
     container_name: auth
     image: auth
+    restart: on-failure
     build:
       context: ./auth
       dockerfile: Dockerfile.auth
@@ -35,6 +37,7 @@ services:
   game:
     container_name: game
     image: game
+    restart: on-failure
     build:
       context: ./game
       dockerfile: Dockerfile.game
@@ -51,6 +54,7 @@ services:
   user:
     container_name: user
     image: user
+    restart: on-failure
     build:
       context: ./user
       dockerfile: Dockerfile.user
@@ -68,6 +72,7 @@ services:
   jwt:
     container_name: jwt
     image: jwt
+    restart: on-failure
     build:
       context: ./jwt
       dockerfile: Dockerfile.jwt
@@ -85,6 +90,7 @@ services:
   notif:
     container_name: notif
     image: notif
+    restart: on-failure
     build:
       context: ./notif
       dockerfile: Dockerfile.notif
@@ -99,6 +105,7 @@ services:
   ping:
     container_name: ping
     image: ping
+    restart: on-failure
     build:
       context: ./ping
       dockerfile: Dockerfile.ping
@@ -115,6 +122,7 @@ services:
   twofa:
     container_name: twofa
     image: twofa
+    restart: on-failure
     build:
       context: ./twofa
       dockerfile: Dockerfile.twofa
