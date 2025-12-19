@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   router.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:03:54 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:42:39 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ export class	Router {
 		if (route)
 		{
 			const	contentDiv: HTMLElement | null = document.getElementById('page-content');
-			if (contentDiv)
-			{
+			if (contentDiv) {
 				const	html: string = await route.component();
 				contentDiv.innerHTML = html;
 			} else

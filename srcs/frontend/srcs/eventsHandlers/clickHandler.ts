@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:03:33 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:56:27 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,8 @@ async function onClickDeleteAccount(): Promise<void>{
 			return displayError(response, "confirm-setting-msg-error");
 	}
 	catch (error: unknown) {
-			return displayError("" + err, "confirm-setting-msg-error"); // MCURTO DISPLAYPOP ?
+		document.getElementById("confirm-setting-form")?.classList.remove("darken");
+		return displayPop("error", "id-error", error);
 	}
 	appStore.setState((state) => ({
 		...state,
@@ -187,6 +188,9 @@ async function onClickDeleteAccount(): Promise<void>{
 }
 
 async function	onClickDeleteAccountStep(): Promise<void> {
+	const statsContainer = document.getElementById("user-stats-container");
+	if (statsContainer) statsContainer.hidden = true;
+
 	verifyEmail("user-profile", "confirm-setting", null);
 	
 	document.getElementById("verify-email-submit")?.remove();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tank.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:03:56 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:28:52 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,7 +298,7 @@ export class	TankGame extends Game {
 
 	const history: History | null = this.setHistory();
 	if (history) {
-		sendRequest( '/api/game', "POST", history).then((res: Response) => {
+		sendRequest('/api/game', "POST", history).then((res: Response) => {
 			if (!res.ok)
 				displayPop("error", "id-error", res);
 		}
@@ -308,7 +308,7 @@ export class	TankGame extends Game {
 	}
 	const	resumeStats: ResumeStats | null = this.setStats();
 	if (resumeStats) {
-		sendRequest( '/api/user/stats/me', "PATCH", resumeStats).then((res: Response) => {
+		sendRequest('/api/user/stats/me', "PATCH", resumeStats).then((res: Response) => {
 			if (!res.ok)
 				displayPop("error", "id-error", res);
 		}

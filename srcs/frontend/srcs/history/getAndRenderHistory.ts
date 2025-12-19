@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderHistory.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:03:46 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:36:11 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ export async function	getAndRenderHistory(targetId: number | null,
 
 		renderGames(gamesData, aiFilter, pvpFilter, tourFilter, pongFilter, tankFilter);
 	} catch (error: unknown) {
-		displayPop("error", "id-error", "Critical error while charging history: " + error)
+		displayPop("error", "id-error", "Critical error while charging history: ", error)
 		displayErrors(targetName);
 	}
 }
