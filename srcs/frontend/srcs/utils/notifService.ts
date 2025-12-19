@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 13:06:15 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 13:18:21 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,28 @@ import { getAndRenderFriends }	from "../friends/getAndRenderFriends"
 export class	NotificationService {
 	private	eventSource: EventSource | null = null;
 	private	isActive: boolean = false;
+	private	retryCount: number = 0;
+	private	retryTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	constructor() {
 		window.addEventListener('online', () => {
+			this.retryCount = 0;
+
 			if (this.isActive)
 				this.connect();
 		});
 
 		window.addEventListener('offline', () => {
-			if (this.eventSource) {
+			if (this.eventSource)
+			{
 				this.eventSource.close();
 				this.eventSource = null;
+			}
+
+			if (this.retryTimeout)
+			{
+				clearTimeout(this.retryTimeout);
+				this.retryTimeout = null;
 			}
 		});
 	}
@@ -45,8 +56,14 @@ export class	NotificationService {
 
 		if (this.eventSource)
 			this.eventSource.close();
+		if (this.retryTimeout)
+			clearTimeout(this.retryTimeout);
 
 		this.eventSource = new EventSource('/api/notifications/sse');
+
+		this.eventSource.onopen = () => {
+			this.retryCount = 0;
+		};
 
 		this.eventSource.onmessage = (event: MessageEvent) => {
 			const	data: any = JSON.parse(event.data);
@@ -67,12 +84,18 @@ export class	NotificationService {
 
 		this.eventSource.onerror = () => {
 			this.eventSource?.close();
+			this.eventSource = null;
 
-			if (navigator.onLine && this.isActive) {
-				setTimeout(() => {
+			if (navigator.onLine && this.isActive)
+			{
+				this.retryCount++;
+
+				const	delay: number = Math.min(1000 * (2 ** (this.retryCount - 1)), 30000);
+
+				this.retryTimeout = setTimeout(() => {
 					if (navigator.onLine && this.isActive)
 						this.connect();
-				}, 5000);
+				}, delay);
 			}
 		}
 	}
@@ -105,6 +128,13 @@ export class	NotificationService {
 
 	disconnect(): void {
 		this.isActive = false;
+		this.retryCount = 0;
+		
+		if (this.retryTimeout)
+		{
+			clearTimeout(this.retryTimeout);
+			this.retryTimeout = null;
+		}
 
 		if (this.eventSource)
 		{
