@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 18:20:07 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:50:05 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,28 @@ function verifyOtp(secret: string, otp: string): boolean {
 	});
 }
 
+function escapeHtml(str: string): string {
+	return str
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&apos;");
+}
+
 function MailCodeMessage(user: string, otp: string, email: string) {
+	const safeEmail = escapeHtml(email.replace(/[\x00-\x1F\x7F]/g, ""));
+	const safeUser = escapeHtml(user.replace(/[\x00-\x1F\x7F]/g, ""));
+	const safeOtp = escapeHtml(otp);
+
 	return {
 		from: `ft_transcendence <${emailName}>`,
-		to: `${user} <${email}>`,
+		to: `${safeUser} <${safeEmail}>`,
 		subject: "Verification code",
-		text: `Your ft_transcendence verification code is: ${otp}`,
-		html: `<p>Hello ${user},</p>
+		text: `Your ft_transcendence verification code is: ${safeOtp}`,
+		html: `<p>Hello ${safeUser},</p>
 				<p>Your ft_transcendence verification code is:</p>
-				<h2>${otp}</h2>
+				<h2>${safeOtp}</h2>
 				<p>This code expires in 5 minutes.</p>
 				<p>Thanks, Transcendence Team.</p>`
 	};

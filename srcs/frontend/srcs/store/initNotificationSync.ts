@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initNotificationSync.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 18:23:25 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 15:31:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:31:56 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ export function	initNotificationSync(): void {
 			connectTimeout = window.setTimeout(() => {
                 notificationService.connect();
             }, 300);
-			// notificationService.connect();
+			// notificationService.connect(); MATHIS ???
 			isConnected = true;
 			return;
 		}
