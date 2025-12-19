@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:04:02 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 11:28:49 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,11 @@ export async function	displayPop(type: "notif" | "success" | "error", divId: str
 	if (type === "error")
 		msg += "error: ";
 
-	for (const response of responses) {
-		msg += await toString(response) || "";
+	for (const [index, response] of responses.entries()) {
+		if (index < responses.length - 1)
+			msg += await toString(response) || "";
+		else
+			msg += await toString(response) || "An unexpected error has occurred";
 	}
 
 	p.textContent = msg;

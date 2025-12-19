@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 10:14:35 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:21:52 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ function onClickPlay(): void {
 
 	const	state: AppState = appStore.getState();
 	const	currentGame: Game | null = state.game.currentGame;
-	currentGame?.setWinningScore(parseInt(maxPointsInput.value, 10));
+	let	sliderValue:number = parseInt(maxPointsInput.value, 10); 
+	if (isNaN(sliderValue) || sliderValue < 1 || sliderValue > 10) sliderValue = 5;
+	currentGame?.setWinningScore(sliderValue);
 
 	router.navigate("/pong");
 }
@@ -53,8 +55,6 @@ async function  onClickLogout(): Promise<void> {
 	let response: Response;
 	try {
 		response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
-		if (!response.ok)
-			return displayPop("error", "id-error", response);
 	}
 	catch (error: unknown) {
 		return displayPop("error", "id-error", error);
@@ -398,7 +398,9 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard'): void {
 		displayPop("error", "id-error", "Missing menu game HTMLElement!");
 		return;
 	}
-	const	winningScore: number = parseInt(maxPointsInput.value, 10);
+	let sliderValue = parseInt(maxPointsInput.value, 10);
+	if (isNaN(sliderValue) || sliderValue < 1 || sliderValue > 10) sliderValue = 5;
+	const	winningScore: number = sliderValue;
 	
 	const	state: AppState = appStore.getState();
 	const	user: UserState = state.user;
@@ -412,7 +414,7 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard'): void {
 		p2name: difficulty,
 		mode: 'ai',
 		difficulty: difficulty || 'medium',
-		winningScore: parseInt(maxPointsInput.value, 10) || 5,
+		winningScore: sliderValue || 5,
 		powerUpFreq: 0,
 		activePowerUps: {
 			star1: false,
@@ -448,7 +450,9 @@ function onClickPlayPVP(): void {
 			displayPop("error", "id-error", "Missing pong HTMLElement!");
 			return;
 		}
-		const	winningScore: number = parseInt(maxPointsInput.value, 10);
+		let	sliderValue:number = parseInt(maxPointsInput.value, 10);
+		if (isNaN(sliderValue) || sliderValue < 1 || sliderValue > 10) sliderValue = 5;
+		const	winningScore: number = sliderValue;
 
 		const	state: AppState = appStore.getState();
 		const	user: UserState = state.user;
@@ -462,7 +466,7 @@ function onClickPlayPVP(): void {
 			p2name: "Player 2",
 			mode: 'pvp',
 			difficulty: "medium",
-			winningScore: parseInt(maxPointsInput.value, 10) || 5,
+			winningScore: sliderValue || 5,
 			powerUpFreq: 0,
 			activePowerUps: {
 				star1: false,
@@ -550,7 +554,10 @@ function	onStartTournament(): void {
 		displayPop("error", "id-error", "Missing menu game HTMLElement!");
 		return;
 	}
-	const	winningScore: number = parseInt(scoreInput.value, 10);
+	let	sliderValue:number = parseInt(scoreInput.value, 10);
+	if (isNaN(sliderValue) || sliderValue < 1 || sliderValue > 10) sliderValue = 5;
+	
+	const	winningScore: number = sliderValue;
 
 	appStore.setState((state) => ({
 		...state,
@@ -609,7 +616,9 @@ async function onStartRankedTournament(): Promise<void> {
 	if (!(scoreInput instanceof HTMLInputElement)) {
 		return displayPop("error", "id-error", "Missing menu game HTMLElement!");
 	}
-	const	winningScore: number = parseInt(scoreInput.value, 10);
+	let	sliderValue:number = parseInt(scoreInput.value, 10);
+	if (isNaN(sliderValue) || sliderValue < 1 || sliderValue > 10) sliderValue = 5;
+	const	winningScore: number = sliderValue;
 
 	appStore.setState((state) => ({
 		...state,
@@ -689,8 +698,8 @@ function onClickStartFeatured(mode: 'ai' | 'pvp'): void {
 		if (aiVal === 4)
 			difficulty = "boris";
 
-		const	powerUpFrequency: number = parseInt(freqInput.value, 10) * 1000;
-
+		let	powerUpFrequency: number = parseInt(freqInput.value, 10) * 1000;
+		if (isNaN(powerUpFrequency) || powerUpFrequency < 1000 || powerUpFrequency > 10000) powerUpFrequency = 5000;
 		const	options: GameOptions = {
 			width: 800,
 			height: 600,
@@ -808,7 +817,7 @@ export async function   setupClickHandlers(): Promise<void> {
 		if (target.id === 'choosenMaxPoints') {
 			const	display: HTMLElement | null = document.getElementById('points-display');
 			if (display) {
-				display.innerText = target.value;
+				display.textContent = target.value;
 			} else
 				displayPop("error", "id-error", "Missing display HTMLElement!");
 		}
@@ -816,7 +825,7 @@ export async function   setupClickHandlers(): Promise<void> {
 		if (target.id === 'powerupFreq') {
 			const	display: HTMLElement | null = document.getElementById('powerup-freq-display');
 			if (display) {
-				display.innerText = target.value + " sec";
+				display.textContent = target.value + " sec";
 			} else
 				displayPop("error", "id-error", "Missing display HTMLElement!");
 		}
@@ -824,7 +833,7 @@ export async function   setupClickHandlers(): Promise<void> {
 		if (target.id === 'featuredMaxPoints') {
 			const	display: HTMLElement | null = document.getElementById('featured-points-display');
 			if (display) {
-				display.innerText = target.value;
+				display.textContent = target.value;
 			} else
 				displayPop("error", "id-error", "Missing display HTMLElement!");
 		}

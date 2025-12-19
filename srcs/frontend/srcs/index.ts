@@ -47,7 +47,6 @@ try {
 /* ============================= FIRST RENDER ============================= */
 
 	router.render();
-
 } catch (error: unknown) {
-    displayPop("error", "id-error", error);
+    displayPop("error", "id-error", "Fatal error: ", error);
 }

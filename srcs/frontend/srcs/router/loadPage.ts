@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 11:19:47 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:37:21 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 
 import { router }						from "../index.js"
 import { displayDate, displayPop }		from "../utils/display.js"
+import { getMenu }						from "../utils/getMenu.js"
+import { appStore }						from "../objects/store.js"
 import { sendRequest }					from "../utils/sendRequest.js"
 import { btnCooldown }					from "../utils/buttonCooldown.js"
 
@@ -60,6 +62,20 @@ export async function loadUser(): Promise<void> {
 		response = await sendRequest(`/api/user/me`, 'get', null);
 		if (!response.ok) {
 			displayPop("error", "id-error", response);
+			if (response.status === 401) {
+				getMenu(false);
+				appStore.setState((state) => ({
+					...state,
+					user: {
+						id: null,
+						username: null,
+						avatar: null,
+						pendingAvatar: null,
+						isAuth: false
+					}
+				}));
+				router.navigate("/");
+			}
 			return;
 		}
 
@@ -68,6 +84,20 @@ export async function loadUser(): Promise<void> {
 		responseStats = await sendRequest(`/api/user/stats/me`, 'get', null);
 		if (!responseStats.ok) {
 			displayPop("error", "id-error", responseStats);
+			if (responseStats.status === 401) {
+				getMenu(false);
+				appStore.setState((state) => ({
+					...state,
+					user: {
+						id: null,
+						username: null,
+						avatar: null,
+						pendingAvatar: null,
+						isAuth: false
+					}
+				}));
+				router.navigate("/");
+			}
 			return;
 		}
 
@@ -215,6 +245,10 @@ export async function loadUserStats(targetId: number | null, targetName: string 
 		if (!responseStats.ok)
 		{
 			displayPop("error", "id-error", responseStats);
+			if (responseStats.status === 401) {
+				getMenu(false);
+				router.navigate("/");
+			}
 			return;
 		}
 		userStatsRes = await responseStats.json();

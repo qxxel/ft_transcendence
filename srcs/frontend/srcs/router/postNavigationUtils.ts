@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 11:40:00 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:37:18 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ import { loadUserStats }				from "./loadPage.js"
 import { PongGame }						from "../Pong/pong.js"
 import { appStore }						from "../objects/store.js"
 import { displayPop }					from "../utils/display.js"
+import { getMenu }						from "../utils/getMenu.js"
 import { Game }							from "../Pong/gameClass.js"
 import { TournamentController }			from "../Pong/tournament.js"
 import { loadTournamentMenu }			from "../tournament/tournamentMenu.js"
@@ -95,7 +96,18 @@ export async function  postNavigationActions(currentPath: string): Promise<void>
 	}
 
 	if (['/history', '/user'].includes(currentPath)) {
-		if (!user.isAuth){
+		if (!user.isAuth) {
+			getMenu(false);
+			appStore.setState((state) => ({
+				...state,
+				user: {
+					id: null,
+					username: null,
+					avatar: null,
+					pendingAvatar: null,
+					isAuth: false
+				}
+			}));
 			router.navigate("/");
 		}
 	}
