@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:04:08 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:08:23 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ export class	NotificationService {
 		} else {
 			displayPop("error", "id-error", "Missing HTMLElement!");
 		}
-		console.log(notifElement);
 	}
 
 	createContainer(): HTMLDivElement {

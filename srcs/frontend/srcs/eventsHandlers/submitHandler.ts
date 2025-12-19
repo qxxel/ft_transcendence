@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:03:37 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:08:05 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 	document.getElementById("sign-in-form")?.classList.remove("darken");
 
 	if (!response.ok) {
-		console.log("a: ", response.status);
 		if (response.status === 409) {
-			console.log("b")
 			fetch('/api/jwt/refresh/logout', {
 				method: "post",
 				credentials: "include"

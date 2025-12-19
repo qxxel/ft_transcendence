@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setDynamicFavicon.ts                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 14:30:39 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 22:52:15 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 09:07:29 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,4 @@ export function	setDynamicFavicon(path: string | null): void {
 	};
 
 	img.src = path ? "/uploads/" + path : "/assets/default_avatar.png";
-	console.log(img.src);
 }
