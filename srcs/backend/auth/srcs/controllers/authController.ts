@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:48:10 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 13:46:35 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,9 +246,9 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 		if (!payload.data.id)
 			throw new Error("invalide id");
 
+		await authAxios.delete(`http://ping:3000/${payload.data.id}`);
 		await authAxios.delete(`http://user:3000/${payload.data.id}`);
 		await authAxios.delete(`http://game:3000/user/${payload.data.id}`);
-		await authAxios.delete(`http://ping:3000/${payload.data.id}`);
 
 		const	response: AxiosResponse = await authAxios.delete("http://jwt:3000/me", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   socket.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 17:53:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 10:24:36 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 13:52:26 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ export function	connectSocket() {
 
 	socket.on("disconnect", () => { });
 
-	socket.on("connect_error", (error) => {
-		console.error("❌ Connection error WebSocket :", error.message);	// AXEL: DEBUG => A ENLEVER  /!\
-	});
+	socket.on("connect_error", () => { });
 };
 
