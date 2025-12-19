@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/19 08:25:53 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 10:30:52 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,7 +263,7 @@ export class PongGame extends Game {
 		}
 	}
 
-	private renderLoop() {
+	private renderLoop() { socket.active // MATHIS /!\ Uncaught (in promise) TypeError: can't access property "active", y is undefined
 		if (!socket.active)
 		{
 			displayPop("error", "id-error", "You have been deconnected !");
