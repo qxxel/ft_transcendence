@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 11:44:38 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 11:56:10 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ export class	PongInstance {
 	private	gameStart: number = Date.now();
 	private	pauseStart: number = 0;
 	private	pauseDuration: number = 0;
-
-	// private	longestRally: number = 0;
 
 	private	keyState = {
 		p1: { up: false, down: false },
@@ -233,9 +231,6 @@ export class	PongInstance {
 	private resetRound(firstServe: boolean = false) {
 		const	width: number = this.gameState.width;
 		const	height: number = this.gameState.height;
-
-
-		// this.longestRally = 0;
 
 		this.gameState.ball.x = width / 2;
 		this.gameState.ball.y = height / 2;
