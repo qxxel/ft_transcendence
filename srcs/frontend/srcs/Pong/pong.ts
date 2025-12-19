@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/19 12:33:02 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:49:13 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,7 +242,8 @@ export class PongGame extends Game {
 	}
 
 	public stop() {
-		if (this.animationFrameId) {
+		if (this.animationFrameId)
+		{
 			cancelAnimationFrame(this.animationFrameId);
 			this.animationFrameId = null;
 		}
@@ -265,6 +266,8 @@ export class PongGame extends Game {
 			socket.off('game-over');
 			socket.off('connect');
 			socket.off('disconnect', this.handleDisconnect);
+
+			socket.disconnect();
 		}
 	}
 
