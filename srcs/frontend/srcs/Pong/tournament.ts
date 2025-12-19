@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:48:42 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:07:25 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,7 @@ export class    TournamentController {
 
 			await sendRequest('/api/game', 'POST', p1payload); 
 			await sendRequest('/api/game', 'POST', p2payload); 
-		} catch (err) {
+		} catch (error: unknown) {
 			displayPop("error", "Error while saving tournament match" + err);
 		}
 	}

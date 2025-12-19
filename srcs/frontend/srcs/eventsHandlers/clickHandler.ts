@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:02:18 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ async function  onClickLogout(): Promise<void> {
 		if (!response.ok)
 			return displayPop("error", response);
 	}
-	catch(err) {
+	catch (error: unknown) {
 		return displayPop("error", err);
 	}
 
@@ -92,7 +92,7 @@ async function	onClickEdit(): Promise<void> {
 			return displayPop("error", response);
 		userRes = await response.json();
 	}
-	catch(err) {
+	catch (error: unknown) {
 		return displayPop("error", err);
 	}
 
@@ -162,7 +162,7 @@ async function onClickDeleteAccount(): Promise<void>{
 		if (!response.ok)
 			return displayError(response, "confirm-setting-msg-error");
 	}
-	catch(err) {
+	catch (error: unknown) {
 			return displayError("" + err, "confirm-setting-msg-error"); // MCURTO DISPLAYPOP ?
 	}
 	appStore.setState((state) => ({
@@ -217,7 +217,7 @@ async function	onClickDeleteTwofa(): Promise<void> {
 		if (!response.ok)
 			displayPop("error", response);
 	}
-	catch(err) {
+	catch (error: unknown) {
 		displayPop("error", err);
 	}
 
@@ -296,7 +296,7 @@ async function	onClickNewCode(): Promise<void> {
 			return;
 		}
 	}
-	catch(err) { // MCURTO GROS DOUTE, EST-CE QU'ON FERRAIT PAS LA MEME CHOSE QUE DANS LE TRY{} ?
+	catch (error: unknown) { // MCURTO GROS DOUTE, EST-CE QU'ON FERRAIT PAS LA MEME CHOSE QUE DANS LE TRY{} ?
 		displayPop("error", err);
 		return;
 	}
@@ -586,7 +586,7 @@ async function onStartRankedTournament(): Promise<void> {
 				const	userCheck = await userCheckResponse.json();
 				playerNames.push({ name: val, id: userCheck.id, isRegistered: userCheck.isRegistered });
 			}
-			catch(err) {
+			catch (error: unknown) {
 				return displayError("User(s) not found.", "msg-error");
 			}
 		} else {

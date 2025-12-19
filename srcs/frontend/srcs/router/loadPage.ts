@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:10:28 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ export async function loadUser() {
 		}
 
 		userStatsRes = await responseStats.json();
-	} catch (err) {
+	} catch (error: unknown) {
 		displayPop("error", err);
 	}
 
@@ -220,7 +220,7 @@ export async function loadUserStats(targetId: number | null, targetName: string 
 			return;
 		}
 		userStatsRes = await responseStats.json();
-	} catch (err) {
+	} catch (error: unknown) {
 		displayPop("error", err);
 	}
 

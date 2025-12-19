@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:48:02 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:06:06 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ export async function	handleFriendAction(url: string, method: string, body: Obje
 			displayPop("error", response);
 			return false;
 		}
-	} catch(err) {
+	} catch (error: unknown) {
 		displayPop("error", err);
 		return false;
 	}

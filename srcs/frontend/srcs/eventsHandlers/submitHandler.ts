@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:04:50 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ async function	handleVerifyEmailForm(form: HTMLFormElement): Promise<void> {
 		if (!response.ok)
 			return displayError(response, "verify-email-msg-error");
 	}
-	catch(err) {
+	catch (error: unknown) {
 		form.reset();
 		document.getElementById("verify-email-form")?.classList.remove("darken");
 		return displayError("" + err, "verify-email-msg-error");
@@ -213,7 +213,7 @@ async function	handle2faForm(form: HTMLFormElement): Promise<void> {
 		if (!response.ok)
 			return displayError(response, "2fa-msg-error");
 	}
-	catch (err) {
+	catch (error: unknown) {
 		form.reset();
 		document.getElementById("2fa-form")?.classList.remove("darken");
 		return displayError("" + err, "2fa-msg-error");
@@ -283,7 +283,7 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 
 				if (!response.ok) 
 					return displayError(response, "confirm-setting-msg-error");
-			} catch (err) {
+			} catch (error: unknown) {
 				if (form instanceof HTMLFormElement)
 					form.reset();
 				document.getElementById("confirm-setting-form")?.classList.remove("darken");
@@ -313,7 +313,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		resultGetUser = await getUser.json();
 		if (!getUser.ok)
 			return displayPop("error", getUser);
-	} catch(err) {
+	} catch (error: unknown) {
 		return displayPop("error", err);
 	}
 
@@ -338,7 +338,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		});
 		if (!postUser.ok)
 			return displayError(postUser, "user-setting-msg-error");
-	} catch(err) {
+	} catch (error: unknown) {
 		return displayPop("error", err);
 	}
 	
@@ -362,7 +362,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // /!\ try catch ???
 		if (!verified) 
 			return; // /!\ faire quelque chose ???
-	} catch(err) {
+	} catch (error: unknown) {
 		return; // MCURTO aled faut rien faire la ?
 	}
 	appStore.setState((state) => ({
@@ -399,7 +399,7 @@ async function	handleAddFriendForm(form: HTMLFormElement): Promise<void> {
 		if (!response.ok)
 			return displayPop("error", response)
 		friendship = await response.json();
-	} catch(err) {
+	} catch (error: unknown) {
 		return displayPop("error", err);
 	}
 	if (friendship.status === "PENDING")

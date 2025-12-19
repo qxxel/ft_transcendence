@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:03:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:14:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ export async function	uploadAvatar(): Promise<void> {
 		}));
 
 		displayPop("error", "Avatar changed.", "success");
-	} catch (err) {
+	} catch (error: unknown) {
 		displayPop("error", "Network error: " + err);
 	}
 }

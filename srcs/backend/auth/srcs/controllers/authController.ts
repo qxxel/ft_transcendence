@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authController.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 22:37:42 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:01:07 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		try {
 			const	userRes: AxiosResponse = await authAxios.get(`http://user:3000/lookup/${identifier}`);
 			user = userRes.data;
-		} catch (error) {
+		} catch (error: unknown) {
 			throw new authError.WrongCredentialsError("Wrong password or username!");
 		}
 		if (!user || !user.id)
@@ -105,7 +105,7 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 		try {
 			const	userRes: AxiosResponse = await authAxios.get(`http://user:3000/${user.id}`);
 			user = userRes.data;
-		} catch (error) {
+		} catch (error: unknown) {
 			throw new authError.WrongCredentialsError("Wrong password or username!");
 		}
 

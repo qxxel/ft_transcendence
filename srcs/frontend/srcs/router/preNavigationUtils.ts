@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:11:09 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ export async function	preNavigation(currentPath: string): Promise<void> {
 		const	respToken: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
 		if (!respToken.ok)
 			displayPop("error", respToken);
-	} catch (err) {
+	} catch (error: unknown) {
 		displayPop("error", err);
 	}
 	redirections(currentPath);
@@ -44,7 +44,7 @@ export async function	redirections(currentPath: string): Promise<void> {
 			response = await sendRequest('/api/jwt/payload/access', 'GET', null);
 			if (response.ok)
 				return;
-		} catch(err) {
+		} catch (error: unknown) {
 			displayPop("error", err);
 		}
 

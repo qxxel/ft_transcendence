@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:13:05 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ export async function displayError(response: Response | string, idMsgError: stri
 			try {
 				const	result = await response.json();
 				p.textContent = result?.error || "An unexpected error has occurred";
-			} catch (err) {
+			} catch (error: unknown) {
 				displayPop("error", err);	//	MATHIS
 			}
 		}
@@ -59,7 +59,7 @@ async function toString(str: Response | string | unknown): Promise<string | null
 	} else if (typeof str === "object") {
 		try {
 			return JSON.stringify(str);
-		} catch (error) {
+		} catch (error: unknown) {
 			console.error("Failed to serialize JSON.");
 		}
 	}

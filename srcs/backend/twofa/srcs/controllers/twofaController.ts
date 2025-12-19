@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:50:05 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:01:07 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ async function	generateMailCode(request: FastifyRequest<{ Body: { email?: string
 		let	payload: AxiosResponse;
 		try {
 			payload = await twofaAxios.get("http://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
-		} catch (error) {
+		} catch (error: unknown) {
 			payload = await twofaAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 		}
 		const	otpSecretKey: string = generateOtpSecretKey();
@@ -130,7 +130,7 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 		try {
 			payload = await twofaAxios.get("http://jwt:3000/payload/twofa", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 			isJwtTwofa = true;
-		} catch (error) {
+		} catch (error: unknown) {
 			payload = await twofaAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: request.headers.cookie || "" } });
 			isJwtTwofa = false;
 		}

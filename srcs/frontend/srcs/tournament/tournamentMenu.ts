@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:12:20 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ export async function loadTournamentMenu() {
 			} else
 				displayPop("error", "Missing navigation HTMLElement!");
 		}
-	} catch(err) {
+	} catch (error: unknown) {
 		displayPop("error", err); // MCURTO ON EST SUR DE CA ?? AU PIRE RIEN HEIN
 	}
 }
@@ -48,7 +48,7 @@ export async function loadTournamenSetupRanked() {
 			return;
 		}
 		self = await response.json();
-	} catch (err) { return; }
+	} catch (error: unknown) { return; }
 
 	const element: HTMLElement | null = document.getElementById('ranked-p1');
 	if (!(element instanceof HTMLInputElement)) {
