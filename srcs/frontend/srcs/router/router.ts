@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:11:18 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:25:53 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ export class	Router {
 				const	html: string = await route.component();
 				contentDiv.innerHTML = html;
 			} else
-				displayPop("error", "Missing HTMLElement!");
+				displayPop("error", "id-error", "Missing HTMLElement!");
 			this.currentPath = currentPath;
 			await postNavigationActions(currentPath);
 		}

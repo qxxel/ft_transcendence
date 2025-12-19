@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:25:53 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ export function loadTwofa(): void {
 	).then((response: Response) => {
 		if (!response.ok)
 		{
-			displayPop("error", response);
+			displayPop("error", "id-error", response);
 			router.navigate("/sign-in");
 			return;
 		}
@@ -38,15 +38,15 @@ export function loadTwofa(): void {
 			if (result.exp)
 				displayDate(result.exp * 1000);
 			else
-				displayPop("error", "Unable to display the expiration date");
+				displayPop("error", "id-error", "Unable to display the expiration date");
 		}).catch((e: unknown) => {
-			displayPop("error", e);
+			displayPop("error", "id-error", e);
 		});
 
 		router.canLeave = false;
 		btnCooldown();
 	}).catch((e: unknown) => {
-		displayPop("error", e);
+		displayPop("error", "id-error", e);
 	});
 }
 
@@ -60,7 +60,7 @@ export async function loadUser() {
 		response = await sendRequest(`/api/user/me`, 'get', null);
 		if (!response.ok)
 		{
-			displayPop("error", response.statusText); // MATHIS /!\ ??? pourquoi statusText
+			displayPop("error", "id-error", response.statusText); // MATHIS /!\ ??? pourquoi statusText
 			return;
 		}
 
@@ -69,13 +69,13 @@ export async function loadUser() {
 		responseStats = await sendRequest(`/api/user/stats/me`, 'get', null);
 		if (!responseStats.ok)
 		{
-			displayPop("error", responseStats);
+			displayPop("error", "id-error", responseStats);
 			return;
 		}
 
 		userStatsRes = await responseStats.json();
 	} catch (error: unknown) {
-		displayPop("error", error);
+		displayPop("error", "id-error", error);
 	}
 
 	const statsContainer = document.getElementById("user-stats-container");
@@ -121,7 +121,7 @@ export async function loadUser() {
 			displayImgElement.src = "/assets/default_avatar.png";
 		}
 	} else
-		displayPop("error", "Missing avatar HTMLElement!");
+		displayPop("error", "id-error", "Missing avatar HTMLElement!");
 
 	if (userRes.is2faEnable == true) {
 		const	switchSpan: HTMLElement | null = document.getElementById("switch-span");
@@ -136,7 +136,7 @@ export async function loadUser() {
 			checkbox2fa.checked = true;
 		
 		if (!(switchSpan instanceof HTMLInputElement) && !(checkbox2fa instanceof HTMLInputElement))
-			displayPop("error", "Missing 2fa HTMLElement!");
+			displayPop("error", "id-error", "Missing 2fa HTMLElement!");
 	}
 
 	const	usernameEl: HTMLElement | null = document.getElementById("user-username");
@@ -146,7 +146,7 @@ export async function loadUser() {
 		usernameEl.textContent = userRes.username ?? "";
 		emailEl.textContent = userRes.email ?? "";
 	} else
-		displayPop("error", "Missing profile HTMLElement!");
+		displayPop("error", "id-error", "Missing profile HTMLElement!");
 }
 
 function formatTime(seconds: number): string {
@@ -216,12 +216,12 @@ export async function loadUserStats(targetId: number | null, targetName: string 
 			responseStats = await sendRequest(`/api/user/stats/${targetId}`, "get", null);
 		if (!responseStats.ok)
 		{
-			displayPop("error", responseStats);
+			displayPop("error", "id-error", responseStats);
 			return;
 		}
 		userStatsRes = await responseStats.json();
 	} catch (error: unknown) {
-		displayPop("error", error);
+		displayPop("error", "id-error", error);
 	}
 
 	const statsContainer = document.getElementById("user-stats-container");

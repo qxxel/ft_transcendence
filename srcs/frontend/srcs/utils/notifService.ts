@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:18:54 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:25:53 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ export class	NotificationService {
 	}
 
 	showNotification(data: any): void {
-		const clickId = `notif-click-${data.fromId}`;
-		displayPop("notif", `<div id="${clickId}" style="cursor: pointer; width: 100%; height: 100%;">${data.message}</div>`); // MATHIS/KILLIAN /!\ displayPop NO html 
-
+		const clickId: string = `notif-click-${data.fromId}`;
+		displayPop("notif", clickId, data.message); // MATHIS/KILLIAN /!\ displayPop NO html 
+// <div id="${clickId}" style="cursor: pointer; width: 100%; height: 100%;">${data.message}</div>
 		const notifElement: HTMLElement | null = document.getElementById(clickId);
 		
 		if (notifElement) {
@@ -63,7 +63,7 @@ export class	NotificationService {
 				router.navigate("/friends");
 			});
 		} else {
-			displayPop("error", "Missing HTMLElement!");
+			displayPop("error", "id-error", "Missing HTMLElement!");
 		}
 	}
 

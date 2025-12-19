@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:03:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:25:53 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ export async function	uploadAvatar(): Promise<void> {
 	const	state: AppState = appStore.getState();
 	if (!state.user.pendingAvatar)
 	{
-		displayPop("error", "No file uploaded to change avatar.");
+		displayPop("error", "id-error", "No file uploaded to change avatar.");
 		return;
 	}
 
@@ -37,7 +37,7 @@ export async function	uploadAvatar(): Promise<void> {
 		const	response: Response = await sendRequest(`/api/user/avatar`, "POST", formData);
 		if (!response.ok)
 		{
-			displayPop("error", response);
+			displayPop("error", "id-error", response);
 			return;
 		}
 
@@ -47,7 +47,7 @@ export async function	uploadAvatar(): Promise<void> {
 		if (imgElement instanceof HTMLImageElement)
 			imgElement.src = `/uploads/${data.avatar}?t=${new Date().getTime()}`;
 		else
-			displayPop("error", "Missing avatar HTMLElement!");
+			displayPop("error", "id-error", "Missing avatar HTMLElement!");
 
 		appStore.setState((state) => ({
 			...state,
@@ -58,8 +58,8 @@ export async function	uploadAvatar(): Promise<void> {
 			}
 		}));
 
-		displayPop("error", "Avatar changed.", "success");
+		displayPop("error", "id-error", "Avatar changed.", "success");
 	} catch (error: unknown) {
-		displayPop("error", "Network error: " + error);
+		displayPop("error", "id-error", "Network error: " + error);
 	}
 }

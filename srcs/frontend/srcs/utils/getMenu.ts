@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:55:18 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:13:16 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:25:53 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ import { displayPop }	from "../utils/display.js"
 export function	getMenu(isAuth: boolean): void {
 	const	menu: HTMLElement | null = document.getElementById("nav");
 	if (!menu) {
-		displayPop("error", "Missing navigation HTMLElement!");
+		displayPop("error", "id-error", "Missing navigation HTMLElement!");
 		return;
 	}
 

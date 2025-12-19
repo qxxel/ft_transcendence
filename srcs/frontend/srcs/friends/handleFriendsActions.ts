@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:48:02 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:25:53 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ export async function	handleFriendAction(url: string, method: string, body: Obje
 		const	response: Response = await sendRequest(url, method, body);
 		if (!response.ok)
 		{
-			displayPop("error", response);
+			displayPop("error", "id-error", response);
 			return false;
 		}
 	} catch (error: unknown) {
-		displayPop("error", error);
+		displayPop("error", "id-error", error);
 		return false;
 	}
 	await getAndRenderFriends();
