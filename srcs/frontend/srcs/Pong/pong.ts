@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pong.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/19 10:30:52 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 11:18:11 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,8 +263,8 @@ export class PongGame extends Game {
 		}
 	}
 
-	private renderLoop() { socket.active // MATHIS /!\ Uncaught (in promise) TypeError: can't access property "active", y is undefined
-		if (!socket.active)
+	private renderLoop() {
+		if (!socket || !socket.active)
 		{
 			displayPop("error", "id-error", "You have been deconnected !");
 			router.navigate('/');
