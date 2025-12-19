@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   notifService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:08:23 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 13:01:26 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,28 @@ import { getAndRenderFriends }	from "../friends/getAndRenderFriends"
 
 export class	NotificationService {
 	private	eventSource: EventSource | null = null;
+	private	isActive: boolean = false;
+
+	constructor() {
+		window.addEventListener('online', () => {
+			if (this.isActive)
+				this.connect();
+		});
+
+		window.addEventListener('offline', () => {
+			if (this.eventSource) {
+				this.eventSource.close();
+				this.eventSource = null;
+			}
+		});
+	}
 
 	connect(): void {
+		this.isActive = true;
+
+		if (!navigator.onLine)
+			return ;
+
 		if (this.eventSource)
 			this.eventSource.close();
 
@@ -45,11 +65,12 @@ export class	NotificationService {
 			}
 		};
 
-		this.eventSource.onerror = () => {
-			this.eventSource?.close();
-
-			setTimeout(() => this.connect(), 5000);
-		};
+		if (navigator.onLine && this.isActive) {
+			setTimeout(() => {
+				if (navigator.onLine && this.isActive)
+					this.connect();
+			}, 5000);
+		}
 	}
 
 	async showNotification(data: any): Promise<void> {
@@ -78,6 +99,8 @@ export class	NotificationService {
 	}
 
 	disconnect(): void {
+		this.isActive = false;
+
 		if (this.eventSource)
 		{
 			this.eventSource.close();
