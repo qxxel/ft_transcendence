@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongSocket.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:48:44 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 /* ====================== IMPORTS ====================== */
 
 import { Server, Socket }			from 'socket.io'
-import { GamesService }				from "../services/gamesService.js"
 import { leaveGameAndDisconnect }	from '../utils/leaveGame.js'
+import { GamesService }				from "../services/gamesService.js"
 import { PongInstance }				from "../services/game/pongInstance.js"
 
 import type { PongOptions }	from "../engine/pong/pongState.js"

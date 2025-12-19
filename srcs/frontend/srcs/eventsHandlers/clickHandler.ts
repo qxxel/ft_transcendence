@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clickHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:56:15 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@ import { router }							from "../index.js"
 import { PongGame }							from "../Pong/pong.js"
 import { TankGame } 						from "../tank/tank.js"
 import { socket }							from "../socket/socket.js"
-import { displayError, displayPop }			from "../utils/display.js"
 import { getMenu }							from "../utils/getMenu.js"
+import { displayError, displayPop }			from "../utils/display.js"
 import { AppState, appStore, UserState }	from "../objects/store.js"
-import { loadTwofa, loadUserStats }			from "../router/loadPage.js"
+import { heartbeat }						from "../utils/heartbeat.js"
 import { TournamentController } 			from "../Pong/tournament.js"
+import { loadTwofa, loadUserStats }			from "../router/loadPage.js"
 import { sendRequest }						from "../utils/sendRequest.js"
 import { verifyEmail }						from "../utils/verifyEmail.js"
-import { heartbeat }						from "../utils/heartbeat.js"
 import { GameOptions }						from "../Pong/objects/gameOptions.js"
 import { initHistoryListeners } 			from "../history/getAndRenderHistory.js"
 

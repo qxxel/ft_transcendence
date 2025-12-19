@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   buttonCooldown.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 17:39:14 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:12:28 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:25:44 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { displayPop }	from "../utils/display";
+import { displayPop }	from "../utils/display"
 
 /* ====================== FUNCTION ====================== */
 

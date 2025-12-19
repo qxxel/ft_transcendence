@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authService.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 05:36:41 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:48:27 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== IMPORT ====================== */
 
-import { authRepository }	from "../repositories/authRepository.js"
 import { authAxios }	 	from "../auth.js"
+import { authRepository }	from "../repositories/authRepository.js"
 
 /* ====================== FUNCTION ====================== */
 

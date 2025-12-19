@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:10:55 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:23:16 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,21 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { router }				from "../index.js"
-import { loadTwofa, loadUser, loadUserStats }	from "./loadPage.js"
-import { loadTournamenSetupRanked, loadTournamentMenu }	from "../tournament/tournamentMenu.js"
-import { PongGame }				from "../Pong/pong.js"
-import { appStore }				from "../objects/store.js"
-import { displayPop }				from "../utils/display.js"
-import { Game }					from "../Pong/gameClass.js"
-import { TournamentController }	from "../Pong/tournament.js"
-import { initHistoryListeners } from "../history/getAndRenderHistory.js"
-import { getAndRenderFriends } 	from  "../friends/getAndRenderFriends.js"
+import { router }						from "../index.js"
+import { loadTwofa, loadUser }			from "./loadPage.js"
+import { loadUserStats }				from "./loadPage.js"
+import { PongGame }						from "../Pong/pong.js"
+import { appStore }						from "../objects/store.js"
+import { displayPop }					from "../utils/display.js"
+import { Game }							from "../Pong/gameClass.js"
+import { TournamentController }			from "../Pong/tournament.js"
+import { loadTournamentMenu }			from "../tournament/tournamentMenu.js"
+import { loadTournamenSetupRanked }		from "../tournament/tournamentMenu.js"
+import { initHistoryListeners } 		from "../history/getAndRenderHistory.js"
+import { getAndRenderFriends } 			from  "../friends/getAndRenderFriends.js"
+import { attachAvatarUploadListener }	from "../eventsHandlers/changeListener.js"
 
 import type { AppState, UserState }		from "../objects/store.js"
-import { attachAvatarUploadListener }	from "../eventsHandlers/changeListener.js"
 
 
 /* ====================== FUNCTION ====================== */

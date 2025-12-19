@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   renderer.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:06:22 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/18 19:06:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:20:51 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORTS ====================== */
 
-import type { Ball, Paddle, Collectible } from "./objects/pongState.js";
+import type { Ball, Paddle, Collectible } from "./objects/pongState.js"
 
 
 /* ====================== CLASS ====================== */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongInstance.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:48:40 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,16 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { AIController }	from "../../engine/pong/pongAi.js"
-import { gameAxios }	from '../../game.js'
-import { gamesAddDto }	from "../../dtos/gamesAddDto.js"
-import { GamesService }	from "../gamesService.js"
-import { PongPhysics }	from "../../engine/pong/pongPhysic.js"
 import { Server }		from 'socket.io'
+import { gameAxios }	from '../../game.js'
+import { GamesService }	from "../gamesService.js"
+import { gamesAddDto }	from "../../dtos/gamesAddDto.js"
+import { AIController }	from "../../engine/pong/pongAi.js"
+import { PongPhysics }	from "../../engine/pong/pongPhysic.js"
 
-import type { PongOptions, Collectible, PongState, PowerUps, PongResume, Paddle, PongStats }	from "../../engine/pong/pongState.js"
+import type { PongState, PowerUps }				from "../../engine/pong/pongState.js"
+import type { PongOptions, Collectible }		from "../../engine/pong/pongState.js"
+import type { PongResume, Paddle, PongStats }	from "../../engine/pong/pongState.js"
 
 
 /* ====================== CLASS ====================== */

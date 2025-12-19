@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderHistory.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:20:32 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { displayPop }	from "../utils/display";
+import { displayPop }	from "../utils/display"
 import { sendRequest }	from "../utils/sendRequest"
-
 
 /* ====================== INTERFACE ====================== */
 

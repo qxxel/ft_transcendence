@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayNotifController.ts                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 20:15:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:30:52 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:48:03 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { getValidUserId }		from "../utils/validateJwt.js"
 import { gatewayAxios }			from "../api-gateway.js"
+import { getValidUserId }		from "../utils/validateJwt.js"
 import { requestErrorsHandler }	from "../utils/requestErrors.js"
 
 import type { AxiosHeaderValue }								from 'axios'

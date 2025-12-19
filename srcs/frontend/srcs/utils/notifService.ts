@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   notifService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:18:54 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:26:37 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { router } from "..";
-import { getAndRenderFriends } from "../friends/getAndRenderFriends";
-import { displayPop } from "./display";
+import { router }				from ".."
+import { displayPop }			from "./display"
+import { getAndRenderFriends }	from "../friends/getAndRenderFriends"
 
 // THE CLASS THAT HANDLE ALL THE NOFICATIONS AND CONNECTION TO SSE
 

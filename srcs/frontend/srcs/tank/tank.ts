@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tank.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:11:51 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:25:28 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,22 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { GSTATE, History }						from "./global.js"
-import { router }								from "../index.js"
-import { Map }									from "./class_map.js"
-import { Tank, Uzi, Sniper, Shotgun, Classic } 	from "./class_tank.js"
-import { Ball, Collectible }					from "./class_ball.js"
-import { Rect2D } 								from "./class_rect.js"
-import { Input }								from "./class_input.js"
-import { AppState, appStore, UserState }		from "../objects/store.js"
-import { displayPop }							from "../utils/display.js"
-import { Game }									from "../Pong/gameClass.js"
-import { sendRequest }							from "../utils/sendRequest.js"
+import { GSTATE, History }		from "./global.js"
+import { router }				from "../index.js"
+import { Map }					from "./class_map.js"
+import { Tank, Uzi, Sniper } 	from "./class_tank.js"
+import { Shotgun, Classic } 	from "./class_tank.js"
+import { Ball, Collectible }	from "./class_ball.js"
+import { Rect2D } 				from "./class_rect.js"
+import { Input }				from "./class_input.js"
+import { AppState, appStore }	from "../objects/store.js"
+import { UserState }			from "../objects/store.js"
+import { displayPop }			from "../utils/display.js"
+import { Game }					from "../Pong/gameClass.js"
+import { sendRequest }			from "../utils/sendRequest.js"
 
-import type { Color, Keys }	from "./interface.js"
-import type { ResumeStats, Spawn }		from "./global.js"
+import type { Color, Keys }			from "./interface.js"
+import type { ResumeStats, Spawn }	from "./global.js"
 
 
 

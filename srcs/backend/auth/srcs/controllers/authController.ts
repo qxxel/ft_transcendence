@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authController.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:38:08 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:48:10 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ import { isValidPassword }					from "../utils/validation.js"
 import * as authError						from "../utils/throwErrors.js"
 import { errorsHandler }					from "../utils/errorsHandler.js"
 
-import type	{ AxiosResponse }								from 'axios'
-import type { FastifyInstance, FastifyRequest }				from 'fastify'
-import type { FastifyReply }								from 'fastify'
-import type { SignUpBody, SignInBody, user }				from "../dtos/interface.js"
-import type { updateUserBody, usersRespDto }				from "../dtos/interface.js"
-import type { validationResult }							from "../utils/validation.js"
+import type	{ AxiosResponse }							from 'axios'
+import type { FastifyInstance, FastifyRequest }			from 'fastify'
+import type { FastifyReply }							from 'fastify'
+import type { SignUpBody, SignInBody, user }			from "../dtos/interface.js"
+import type { updateUserBody, usersRespDto }			from "../dtos/interface.js"
+import type { validationResult }						from "../utils/validation.js"
 
 
 /* ====================== FUNCTIONS ====================== */

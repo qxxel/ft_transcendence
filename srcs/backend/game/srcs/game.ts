@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:40:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:48:35 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ import sqlite3Pkg			from 'sqlite3'
 import { Server }			from 'socket.io'
 import cors					from '@fastify/cors'
 import formBody				from '@fastify/formbody'
-import { gamesController }	from "./controllers/gamesController.js"
-import { GamesService }		from "./services/gamesService.js"
-import { gamesRepository }	from "./repositories/gamesRepository.js"
 import { setupPongSocket }	from "./socket/pongSocket.js"
+import { GamesService }		from "./services/gamesService.js"
+import { gamesController }	from "./controllers/gamesController.js"
+import { gamesRepository }	from "./repositories/gamesRepository.js"
 
 import type { AxiosResponse }	from 'axios'
 import type { FastifyInstance }	from 'fastify'

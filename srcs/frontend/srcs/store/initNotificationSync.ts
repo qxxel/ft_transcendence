@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initNotificationSync.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 18:23:25 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:31:56 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:57:03 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ export function	initNotificationSync(): void {
 		if ((state.user && state.user.isAuth) && !isConnected)
 		{
 			connectTimeout = window.setTimeout(() => {
-                notificationService.connect();
-            }, 300);
+				notificationService.connect();
+			}, 300);
 			// notificationService.connect(); MATHIS ???
 			isConnected = true;
 			return;

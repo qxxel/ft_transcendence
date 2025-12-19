@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tournamentMenu.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:25:40 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 /* ====================== IMPORT ====================== */
 
-import { sendRequest }  from "../utils/sendRequest";
-import { displayPop }   from "../utils/display";
+import { displayPop }   from "../utils/display"
+import { sendRequest }  from "../utils/sendRequest"
 
 /* ====================== FUNCTIONS ====================== */
 

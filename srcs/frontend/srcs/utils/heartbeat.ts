@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   heartbeat.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 05:56:35 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:13:35 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:25:56 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { sendRequest } from "./sendRequest.js";
-import { displayPop } from "./display.js";
+import { displayPop } from "./display.js"
+import { sendRequest } from "./sendRequest.js"
 
 /* ====================== FUNCTION ====================== */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   class_actor.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:22:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:27:20 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:23:48 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 /* ============================= IMPORTS ============================= */
 
-import { GSTATE } from "./global.js"
-import { Rect2D } from "./class_rect.js"
-import { Input } from "./class_input.js"
+import { GSTATE }	from "./global.js"
+import { Rect2D }	from "./class_rect.js"
+import { Input }	from "./class_input.js"
 
 /* ============================= CLASS ============================= */
 

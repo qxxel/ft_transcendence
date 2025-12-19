@@ -3,20 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   isValidImage.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:47:29 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:13:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:26:04 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // FUNCTION TO SEE IF AN IMAGE IS VALID
 
-
 /* ====================== IMPORT ====================== */
 
 import { displayPop }	from "./display.js"
-
 
 /* ====================== FUNCTION ====================== */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleFriendsActions.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:48:02 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:20:22 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { displayPop }			from "../utils/display.js"
 import { sendRequest }			from "../utils/sendRequest.js"
-import { displayPop }			from "../utils/display.js";
 import { getAndRenderFriends }	from "./getAndRenderFriends.js"
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsController.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:26:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:53:36 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 
 import { userStatsServ } 			from "../user.js"
 import { errorsHandler }			from "../utils/errorsHandler.js"
+import { extractUserId } 			from "../utils/extractHeaders.js"
 import { userStatsRespDto }			from "../dtos/userStatsRespDto.js"
 
 import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
-import { extractUserId } from "../utils/extractHeaders.js";
 
 
 /* ====================== FUNCTION ====================== */

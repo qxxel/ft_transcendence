@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:24:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 10:05:16 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 08:57:17 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ export class	Ball extends Actor {
 	move(): void {
 		const	future: Rect2D = new Rect2D(this.x + this.dx * this.speed, this.y + this.dy * this.speed, this.w, this.h);
 		if (this.collide(future)) {
-			if      (this.direction_impact == "vertical") this.dy = -this.dy;
+			if (this.direction_impact == "vertical") this.dy = -this.dy;
 			else if (this.direction_impact == "horizontal") this.dx = -this.dx;
 		}
 		this.x += this.dx * this.speed;

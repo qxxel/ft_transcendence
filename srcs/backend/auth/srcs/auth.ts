@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   auth.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:40:15 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:48:06 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ import Fastify				from 'fastify'
 import cron					from 'node-cron'
 import cors					from '@fastify/cors'
 import formBody				from '@fastify/formbody'
-import { authService }		from './services/authService.js'
-import { authController }	from './controllers/authController.js'
+import { authService }		from "./services/authService.js"
+import { authController }	from "./controllers/authController.js"
 import { authRepository }	from "./repositories/authRepository.js"
 
 import type { FastifyInstance }	from 'fastify'

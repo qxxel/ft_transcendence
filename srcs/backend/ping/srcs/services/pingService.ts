@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pingService.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:29 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:50:23 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== IMPORT ====================== */
 
-import { pingRepository }	from "../repositories/pingRepository.js"
 import { pingAxios }	 	from "../ping.js"
+import { pingRepository }	from "../repositories/pingRepository.js"
 
 import type { FriendshipIdsObject }	from "../utils/friendObject.js"
 

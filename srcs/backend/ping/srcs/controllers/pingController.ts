@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pingController.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:50:15 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 import { pingAxios, pingServ, pingFastify }	from "../ping.js"
 import { errorsHandler }					from "../utils/errorsHandler.js"
 
-import type	{ AxiosResponse }								from 'axios'
-import type { FastifyInstance, FastifyRequest }				from 'fastify'
-import type { FastifyReply }								from 'fastify'
-import type { FriendshipIdsObject } from "../utils/friendObject.js"
+import type	{ AxiosResponse }						from 'axios'
+import type { FastifyInstance, FastifyRequest }		from 'fastify'
+import type { FastifyReply }						from 'fastify'
+import type { FriendshipIdsObject } 				from "../utils/friendObject.js"
 
 
 /* ====================== FUNCTIONS ====================== */

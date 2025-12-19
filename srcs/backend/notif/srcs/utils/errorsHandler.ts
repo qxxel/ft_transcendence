@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorsHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 18:49:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:33:41 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:49:49 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 import { MissingHeaderError }	from "./throwErrors.js"
 
-import type { FastifyInstance, FastifyReply } from "fastify"
+import type { FastifyInstance, FastifyReply } from 'fastify'
 
 
 /* ====================== FUNCTION ====================== */

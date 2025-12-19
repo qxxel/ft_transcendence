@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:23:24 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { router }		from "../index.js"
-import { displayPop } from "../utils/display.js";
+import { displayPop } 	from "../utils/display.js"
 import { sendRequest }	from "../utils/sendRequest.js"
 
 

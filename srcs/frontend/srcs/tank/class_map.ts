@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   class_map.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:29:31 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 19:09:43 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:57:26 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 /* ============================= IMPORTS ============================= */
 
 import { GSTATE }		from "./global.js"
-import { Actor }		from "./class_actor.js"
 import { Wall }			from "./class_wall.js"
+import { Actor }		from "./class_actor.js"
 
 import type { Spawn }	from "./global.js"
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:42:08 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:53:28 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,12 @@
 
 /* ====================== IMPORT ====================== */
 
-import axios		from 'axios'
-import Fastify		from 'fastify'
-import sqlite3Pkg	from 'sqlite3'
-import cors			from '@fastify/cors'
-import formBody		from '@fastify/formbody'
-import multipart	from '@fastify/multipart'
-
+import axios						from 'axios'
+import Fastify						from 'fastify'
+import sqlite3Pkg					from 'sqlite3'
+import cors							from '@fastify/cors'
+import formBody						from '@fastify/formbody'
+import multipart					from '@fastify/multipart'
 import { usersService }				from "./services/usersService.js"
 import { userStatsService }			from "./services/userStatsService.js"
 import { friendshipsService }		from "./services/friendshipsService.js"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   router.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:11:18 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:23:31 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== IMPORT ====================== */
 
+import { displayPop }				from "../utils/display.js"
 import { postNavigationActions }	from "./postNavigationUtils.js"
-import { displayPop }	from "../utils/display.js"
 
 
 /* ====================== INTERFACE ====================== */

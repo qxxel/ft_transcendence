@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   verifyEmail.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:11:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:14:55 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:46:56 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ====================== IMPORTS ====================== */
 
 import { router }						from "../index.js"
-import { displayDate, displayPop }	from "./display.js"
+import { displayDate, displayPop }		from "./display.js"
 
 
 /* ====================== FUNCTIONS ====================== */

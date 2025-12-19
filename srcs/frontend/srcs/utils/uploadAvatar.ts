@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   uploadAvatar.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:03:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:46:48 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { AppState, appStore } 	from "../objects/store"
 import { displayPop }			from "../utils/display"
+import { AppState, appStore } 	from "../objects/store"
 import { sendRequest }			from "../utils/sendRequest"
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersController.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:53:32 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@ import { usersAddDto }						from "../dtos/usersAddDto.js"
 import { InvalidFileError, NoFileError }	from "../utils/throwErrors.js"
 import { usersRespDto }						from "../dtos/usersRespDto.js"
 import { errorsHandler }					from "../utils/errorsHandler.js"
+import { privacyFilter }					from "../utils/privacyFilter.js"
 import { usersUpdateDto }					from "../dtos/usersUpdateDto.js"
 import { extractUserId }					from "../utils/extractHeaders.js"
-import { privacyFilter }					from "../utils/privacyFilter.js"
 
-import type { FastifyInstance, FastifyRequest, FastifyReply }	from 'fastify'
-import type { AxiosResponse } 									from 'axios'
-import type { FriendshipIdsObject } from '../utils/friendObject.js'
+import type { AxiosResponse } 					from 'axios'
+import type { FastifyInstance }					from 'fastify'
+import type { FastifyRequest, FastifyReply }	from 'fastify'
+import type { FriendshipIdsObject } 			from '../utils/friendObject.js'
 
 
 interface	userUpdate {

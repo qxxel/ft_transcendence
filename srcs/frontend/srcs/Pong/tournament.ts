@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tournament.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:48:42 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 09:00:02 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 
 /* ====================== IMPORT ====================== */
 
+import { router }			from "../index.ts"
+import { displayPop }		from "../utils/display.ts"
+import { sendRequest }		from "../utils/sendRequest"
+import { PongResume }		from "./objects/pongResume"
 import { Player, Match }	from "./objects/tournamentObjects"
-import { sendRequest } from	"../utils/sendRequest"
-import { PongResume } from "./objects/pongResume";
-import { buildElement } from "../history/getAndRenderHistory.ts"
-import { router } from "../index.ts";
-import { displayPop } from "../utils/display.ts";
+import { buildElement }		from "../history/getAndRenderHistory.ts"
 
 /* ====================== CLASS ====================== */
 
-export class    TournamentController {
+export class TournamentController {
 	public players: Player[] = [];
 	public matches: Match[] = [];
 	public currentMatch: { id: string; p1: string; p2: string } | null = null;

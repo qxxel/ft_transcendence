@@ -1,37 +1,37 @@
 <div class="game-container">
-  <h1>Create Tournament</h1>
-  <p>Enter 4 to 16 player names. Leave fields blank to have fewer players.</p>
-  
-  <div class="tournament-setup-grid">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 1" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 2" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 3" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 4" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 5" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 6" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 7" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 8" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 9" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 10" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 11" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 12" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 13" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 14" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 15" autocomplete="off">
-    <input type="text" class="player-name-input" name="players[]" placeholder="Player 16" autocomplete="off">
-  </div>
+	<h1>Create Tournament</h1>
+	<p>Enter 4 to 16 player names. Leave fields blank to have fewer players.</p>
+	
+	<div class="tournament-setup-grid">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 1" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 2" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 3" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 4" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 5" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 6" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 7" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 8" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 9" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 10" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 11" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 12" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 13" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 14" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 15" autocomplete="off">
+		<input type="text" class="player-name-input" name="players[]" placeholder="Player 16" autocomplete="off">
+	</div>
 
-  <div class="menu-content">
-    <label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
-    <input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
-  </div>
-  <p id="msg-error" class="msg-error"></p>
-  <div class="tournament-menu-content">
-    <button id="start-tournament-btn" class="btn-yellow-create-bracket" onclick="onStartTournament()">Create Bracket</button>
-  </div>
-  <div class="cancel-row-tournament">
-	  <a href="/tournament-menu" class="btn-cancel-tournament">
-	  	Back
-	  </a>
-  </div>
+	<div class="menu-content">
+		<label for="choosenMaxPoints">Points to Win: <span id="points-display">5</span></label>
+		<input type="range" id="choosenMaxPoints" min="1" max="10" value="5" step="1"/>
+	</div>
+	<p id="msg-error" class="msg-error"></p>
+	<div class="tournament-menu-content">
+		<button id="start-tournament-btn" class="btn-yellow-create-bracket" onclick="onStartTournament()">Create Bracket</button>
+	</div>
+	<div class="cancel-row-tournament">
+		<a href="/tournament-menu" class="btn-cancel-tournament">
+			Back
+		</a>
+	</div>
 </div>

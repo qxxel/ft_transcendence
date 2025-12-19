@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendsEvents.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:05:34 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:20:03 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORT ====================== */
 
-import { displayPop } from "../utils/display.js";
+import { displayPop }			from "../utils/display.js"
 import { handleFriendAction }	from "./handleFriendsActions.js"
 
 

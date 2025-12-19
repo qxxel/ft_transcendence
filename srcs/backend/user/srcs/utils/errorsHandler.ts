@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorsHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 18:49:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:36:28 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:54:10 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { IsTakenError, NotExistError, NoFileError }		from "./throwErrors.js"
-import { GameNotFoundError, AlreadyRelatedError }		from "./throwErrors.js"
 import { MissingHeaderError, InvalidFileError }			from "./throwErrors.js"
-import { AlreadyAcceptedError, NoRelationError }		from "./throwErrors.js"
 import { BlockedError, SelfFriendRequestError }			from "./throwErrors.js"
+import { AlreadyAcceptedError, NoRelationError }		from "./throwErrors.js"
+import { GameNotFoundError, AlreadyRelatedError }		from "./throwErrors.js"
+import { IsTakenError, NotExistError, NoFileError }		from "./throwErrors.js"
 
-import type { FastifyInstance, FastifyReply } from "fastify"
+import type { FastifyInstance, FastifyReply } from 'fastify'
 
 
 /* ====================== FUNCTION ====================== */

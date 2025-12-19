@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsTableBuilder.ts                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:42:10 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/22 13:58:01 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:54:04 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

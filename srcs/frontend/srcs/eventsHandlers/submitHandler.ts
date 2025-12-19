@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:19:53 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,16 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { router }					from "../index.js"
 import { AppState, appStore }		from "../objects/store.js"
 import { displayError, displayPop }	from "../utils/display.js"
-import { router }					from "../index.js"
 import { socket }					from "../socket/socket.js"
 import { getMenu }					from "../utils/getMenu.js"
+import { heartbeat }				from "../utils/heartbeat.js"
 import { sendRequest }				from "../utils/sendRequest.js"
 import { verifyEmail }				from "../utils/verifyEmail.js"
-import { getAndRenderFriends }		from "../friends/getAndRenderFriends.js"
 import { uploadAvatar }				from "../utils/uploadAvatar.js"
-import { heartbeat }				from "../utils/heartbeat.js"
-import { setDynamicFavicon } from "../utils/setDynamicFavicon.js"
-
+import { getAndRenderFriends }		from "../friends/getAndRenderFriends.js"
 
 /* ====================== FUNCTIONS ====================== */
 

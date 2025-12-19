@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsService.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 14:02:53 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 18:38:49 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:53:51 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 
 /* ====================== IMPORTS ====================== */
 
+import { BlockedError }				from "../utils/throwErrors.js"
+import { NoRelationError }			from "../utils/throwErrors.js"
+import { AlreadyRelatedError }		from "../utils/throwErrors.js"
 import { friendshipsAddDto }		from "../dtos/friendshipsAddDto.js"
 import { friendshipsRespDto }		from "../dtos/friendshipsRespDto.js"
 import { friendshipsUpdateDto }		from "../dtos/friendshipsUpdateDto.js";
 import { friendshipsRepository }	from "../repositories/friendshipsRepository.js"
 
-import { AlreadyRelatedError, BlockedError, NoRelationError }	from "../utils/throwErrors.js"
-import type { FriendUser } from "../objects/friendUser.js";
+import type { FriendUser } 	from "../objects/friendUser.js"
 
 
 /* ====================== CLASS ====================== */

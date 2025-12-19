@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 13:32:52 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 18:18:59 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:19:35 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 /* ====================== IMPORTS ====================== */
 
-import { appStore }				from "../objects/store.js"
 import { getMenu }				from "../utils/getMenu.js"
+import { appStore }				from "../objects/store.js"
 import { heartbeat }			from "../utils/heartbeat.js"
 import { sendRequest }			from "../utils/sendRequest.js"
 import { setDynamicFavicon }	from "../utils/setDynamicFavicon.js"
