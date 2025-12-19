@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:03:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:04:10 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:39:37 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ export async function	uploadAvatar(): Promise<void> {
 			}
 		}));
 
-		displayPop("error", "id-error", "Avatar changed.", "success");
+		displayPop("success", "id-success", "Avatar changed.");
 	} catch (error: unknown) {
 		displayPop("error", "id-error", "Network error: " + error);
 	}

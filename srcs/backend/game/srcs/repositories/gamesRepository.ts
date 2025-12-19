@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gamesRepository.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:54:55 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:41:03 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 09:49:21 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ import type { GameUser }	from "../objects/gameUser.js"
 
 /* ====================== interface	====================== */
 
-// BECAUSE TYPESCRIPT DON'T ACCEPT `this.lastID` BUT IT APPEARS WITH THE COMPILATION
+// BECAUSE TYPESCRIPT DON'T ACCEPT `this.lastID` BUT IT APPEARS WITH THE COMPILATION /!\
 interface	StatementWithLastID {
     lastID: number;
 }

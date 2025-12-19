@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:03:57 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:52:38 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ export async function loadTournamentMenu() {
 				displayPop("error", "id-error", "Missing navigation HTMLElement!");
 		}
 	} catch (error: unknown) {
-		displayPop("error", "id-error", error); // MCURTO ON EST SUR DE CA ?? AU PIRE RIEN HEIN
+		displayPop("error", "id-error", error); // MCURTO ON EST SUR DE CA ?? AU PIRE RIEN HEIN  /!\
 	}
 }
 

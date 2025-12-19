@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 18:23:25 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:57:03 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:52:02 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ export function	initNotificationSync(): void {
 			connectTimeout = window.setTimeout(() => {
 				notificationService.connect();
 			}, 300);
-			// notificationService.connect(); MATHIS ???
+			// notificationService.connect(); MATHIS ???  /!\
 			isConnected = true;
 			return;
 		}

@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:34:51 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:50:59 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ async function onClickDeleteAccount(): Promise<void>{
 			return displayError(response, "confirm-setting-msg-error");
 	}
 	catch (error: unknown) {
-			return displayError("" + err, "confirm-setting-msg-error"); // MCURTO DISPLAYPOP ?
+			return displayError("" + err, "confirm-setting-msg-error"); // MCURTO DISPLAYPOP ? /!\
 	}
 	appStore.setState((state) => ({
 		...state,
@@ -245,7 +245,7 @@ async function	onClickDeleteTwofa(): Promise<void> {
 	router.navigate(router.Path);
 }
 
-async function	onClickSkipeVerifyEmailDev(): Promise<void> { // MATHIS delete this
+async function	onClickSkipeVerifyEmailDev(): Promise<void> { // MATHIS delete this  /!\
 	const	response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
 
 	if (!response.ok)
@@ -296,7 +296,7 @@ async function	onClickNewCode(): Promise<void> {
 			return;
 		}
 	}
-	catch (error: unknown) { // MCURTO GROS DOUTE, EST-CE QU'ON FERRAIT PAS LA MEME CHOSE QUE DANS LE TRY{} ?
+	catch (error: unknown) { // MCURTO GROS DOUTE, EST-CE QU'ON FERRAIT PAS LA MEME CHOSE QUE DANS LE TRY{} ?  /!\
 		displayPop("error", "id-error", error);
 		return;
 	}
@@ -764,7 +764,7 @@ export async function   setupClickHandlers(): Promise<void> {
 	(window as any).onClickDeleteAccountStep = () => onClickDeleteAccountStep();
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa();
 	(window as any).onClickNewCode = () => onClickNewCode();
-	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(); // MATHIS /!\ detete this
+	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(); // MATHIS /!\ detete this 
 	
 	(window as any).showDifficultyMenu = showDifficultyMenu;
 	(window as any).hideDifficultyMenu = hideDifficultyMenu;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongPhysic.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:58:47 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 18:57:37 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 09:48:13 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,13 @@ export class PongPhysics {
 		}
 		if (ball.x + ball.radius < 0)
 		{
-			// AXEL SEND LONGEST RALLY
+			// AXEL SEND LONGEST RALLY /!\
 			this.rally = 0;
 			return 2;
 		}
 		if (ball.x - ball.radius > this.width)
 		{
-			// AXEL SEND LONGEST RALLY
+			// AXEL SEND LONGEST RALLY /!\
 			this.rally = 0;
 			return 1;
 		}
