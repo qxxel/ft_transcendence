@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:03:33 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:34:51 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -581,7 +581,7 @@ async function onStartRankedTournament(): Promise<void> {
 			try {
 				const	userCheckResponse: Response = await sendRequest(`/api/user/lookup/${val}`, "get", null);
 				if (!userCheckResponse.ok) {
-					return displayError("User(s) not found.", "msg-error");
+					return displayError("User " + val + " not found.", "msg-error");
 				}
 				const	userCheck = await userCheckResponse.json();
 				playerNames.push({ name: val, id: userCheck.id, isRegistered: userCheck.isRegistered });
