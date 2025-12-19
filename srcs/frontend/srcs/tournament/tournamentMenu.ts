@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 10:14:48 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:53:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ import { sendRequest }  from "../utils/sendRequest"
 
 /* ====================== FUNCTIONS ====================== */
 
-export async function loadTournamentMenu() { // MATHIS on est sur de cette fonction ???
+export async function loadTournamentMenu() {
 
 	try {
 		const	response: Response = await sendRequest(`/api/user/me`, 'get', null);
@@ -33,7 +33,7 @@ export async function loadTournamentMenu() { // MATHIS on est sur de cette fonct
 				displayPop("error", "id-error", "Missing navigation HTMLElement!");
 		}
 	} catch (error: unknown) {
-		displayPop("error", "id-error", error); // MCURTO ON EST SUR DE CA ?? AU PIRE RIEN HEIN  /!\
+		displayPop("error", "id-error", error);
 	}
 }
 
@@ -48,7 +48,10 @@ export async function loadTournamenSetupRanked() {
 			return;
 		}
 		self = await response.json();
-	} catch (error: unknown) { return; } // MATHIS pas de message d'erreur ?
+	} catch (error: unknown) {
+		displayPop("error", "id-error", error);
+		return;
+	}
 
 	const element: HTMLElement | null = document.getElementById('ranked-p1');
 	if (!(element instanceof HTMLInputElement)) {

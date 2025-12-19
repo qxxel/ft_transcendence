@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 12:21:52 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:58:56 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,28 +249,6 @@ async function	onClickDeleteTwofa(): Promise<void> {
 	router.navigate(router.Path);
 }
 
-async function	onClickSkipeVerifyEmailDev(): Promise<void> { // MATHIS delete this  /!\
-	const	response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
-
-	if (!response.ok)
-		return displayError(response, "verify-email-msg-error");
-
-	appStore.setState((state) => ({
-		...state,
-		user: {
-			...state.user,
-			isAuth: true
-		}
-	}));
-
-	heartbeat();
-	
-	getMenu(true);
-
-	router.canLeave = true;
-	router.navigate("/");
-}
-
 async function	onClickNewCode(): Promise<void> {
 	const	btnSend: HTMLElement | null = document.getElementById("btnSend2faCode");
 	const	spanCooldown: HTMLElement | null = document.getElementById("btnCooldown");
@@ -300,7 +278,13 @@ async function	onClickNewCode(): Promise<void> {
 			return;
 		}
 	}
-	catch (error: unknown) { // MCURTO GROS DOUTE, EST-CE QU'ON FERRAIT PAS LA MEME CHOSE QUE DANS LE TRY{} ?  /!\
+	catch (error: unknown) {
+		if (btnSend instanceof HTMLButtonElement) btnSend.disabled = false;
+		if (spanCooldown) spanCooldown.textContent = "";
+		locks.forEach(e => {
+			if (e instanceof HTMLElement)
+				e.hidden = true;
+		});
 		displayPop("error", "id-error", error);
 		return;
 	}
@@ -777,7 +761,6 @@ export async function   setupClickHandlers(): Promise<void> {
 	(window as any).onClickDeleteAccountStep = () => onClickDeleteAccountStep();
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa();
 	(window as any).onClickNewCode = () => onClickNewCode();
-	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(); // MATHIS /!\ detete this 
 	
 	(window as any).showDifficultyMenu = showDifficultyMenu;
 	(window as any).hideDifficultyMenu = hideDifficultyMenu;
