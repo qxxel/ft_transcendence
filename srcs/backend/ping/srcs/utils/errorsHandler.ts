@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 06:24:24 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:36:34 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,24 @@ import type { FastifyInstance, FastifyReply } from 'fastify'
 
 /* ====================== FUNCTION ====================== */
 
-function	logError(pingFastify: FastifyInstance, err: string): void {
-	pingFastify.log.error(err);
-	console.error(err);
+function	logError(pingFastify: FastifyInstance, error: string): void {
+	pingFastify.log.error(error);
+	console.error(error);
 }
 
-export async function	errorsHandler(pingFastify: FastifyInstance, reply: FastifyReply, err: unknown): Promise<FastifyReply> {
-	if (axios.isAxiosError(err)) {
-		if (err.response?.data?.error) {
-			logError(pingFastify, err.response.data.error);
-			return reply.code(err.response?.status || 400).send({ error: err.response.data.error });
+export async function	errorsHandler(pingFastify: FastifyInstance, reply: FastifyReply, error: unknown): Promise<FastifyReply> {
+	if (axios.isAxiosError(error)) {
+		if (error.response?.data?.error) {
+			logError(pingFastify, error.response.data.error);
+			return reply.code(error.response?.status || 400).send({ error: error.response.data.error });
 		}
-		logError(pingFastify, err.message);
-		return reply.code(400).send({ error: err.message })
-	} else if (err instanceof Error) {
-		logError(pingFastify, err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
+		logError(pingFastify, error.message);
+		return reply.code(400).send({ error: error.message })
+	} else if (error instanceof Error) {
+		logError(pingFastify, error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
 	}
-	pingFastify.log.error(err);
-	console.log(err);
-	return reply.code(400).send({ error: err });
+	pingFastify.log.error(error);
+	console.log(error);
+	return reply.code(400).send({ error: error });
 }

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:07 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,8 +317,8 @@ export class	PongInstance {
 
 				console.log(gameStats);console.log(gameAxios)
 				await gameAxios.patch(`http://user:3000/stats/${this.userId}`, gameStats);
-			} catch (err: unknown) {
-				console.error("Error while saving the match: ", err);
+			} catch (error: unknown) {
+				console.error("Error while saving the match: ", error);
 			}
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:04:23 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,7 +287,7 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 				if (form instanceof HTMLFormElement)
 					form.reset();
 				document.getElementById("confirm-setting-form")?.classList.remove("darken");
-				return displayPop("error", err);
+				return displayPop("error", error);
 			}
 			router.canLeave = true;
 			resolve(true);
@@ -314,7 +314,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		if (!getUser.ok)
 			return displayPop("error", getUser);
 	} catch (error: unknown) {
-		return displayPop("error", err);
+		return displayPop("error", error);
 	}
 
 	if (resultGetUser.username == newUsername
@@ -339,7 +339,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		if (!postUser.ok)
 			return displayError(postUser, "user-setting-msg-error");
 	} catch (error: unknown) {
-		return displayPop("error", err);
+		return displayPop("error", error);
 	}
 	
 	if (resultGetUser.email != newEmail)
@@ -359,12 +359,14 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 
 	let	verified: boolean;
 	try {
-		verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // MATHIS /!\ try catch ???
+		verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail));
 		if (!verified) 
-			return; // MATHIS /!\ faire quelque chose ???
+			return;
 	} catch (error: unknown) {
-		return; // MCURTO aled faut rien faire la ?
+		displayPop("error", error)
+		return;
 	}
+
 	appStore.setState((state) => ({
 		...state,
 		user: {
@@ -400,7 +402,7 @@ async function	handleAddFriendForm(form: HTMLFormElement): Promise<void> {
 			return displayPop("error", response)
 		friendship = await response.json();
 	} catch (error: unknown) {
-		return displayPop("error", err);
+		return displayPop("error", error);
 	}
 	if (friendship.status === "PENDING")
 		displayPop("success", `Request sended to ${targetName}.`);

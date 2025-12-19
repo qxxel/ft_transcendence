@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 23:25:22 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:42:03 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ export class	twofaRepository {
 			this.db = db;
 			twofaTableBuilder(db);
 		}
-		catch (err: unknown) {
-			console.error(err);
+		catch (error: unknown) {
+			console.error(error);
 			process.exit(1);
 		}
 	}

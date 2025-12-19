@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ export async function displayError(response: Response | string, idMsgError: stri
 				const	result = await response.json();
 				p.textContent = result?.error || "An unexpected error has occurred";
 			} catch (error: unknown) {
-				displayPop("error", err);	//	MATHIS
+				displayPop("error", error);	//	MATHIS
 			}
 		}
 	}

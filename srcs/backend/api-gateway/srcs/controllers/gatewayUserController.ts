@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayUserController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 14:24:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 21:03:44 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -49,8 +49,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	response: AxiosResponse = await gatewayAxios.get('http://user:3000/');
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -63,8 +63,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -76,8 +76,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/lookup/${identifier}`);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -91,8 +91,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 	
@@ -108,8 +108,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/stats/${parseId}`);
 			
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -122,8 +122,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -136,8 +136,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});	
 	
@@ -157,8 +157,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -174,8 +174,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -191,8 +191,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -206,8 +206,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -219,8 +219,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/friends/${parseId}`);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -233,8 +233,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			const	response: AxiosResponse = await gatewayAxios.get(`http://user:3000/friends/${parseIdA}/${parseIdB}`);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -251,8 +251,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -268,8 +268,8 @@ export async function	gatewayUserController(gatewayFastify: FastifyInstance): Pr
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 }

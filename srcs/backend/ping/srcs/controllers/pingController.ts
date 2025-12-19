@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pingController.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 22:20:24 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ async function	ping(request: FastifyRequest, reply: FastifyReply): Promise<Fasti
 
 		await pingServ.ping(payload.data.id);
 		return reply.status(201).send(payload.data.id);
-	} catch (err: unknown) {
-		return await errorsHandler(pingFastify, reply , err);
+	} catch (error: unknown) {
+		return await errorsHandler(pingFastify, reply , error);
 	}
 }
 
@@ -61,13 +61,13 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 					{ headers: { 'user-id': id } }
 				);
 			}
-		} catch (err: unknown) {
-			console.error("Failed to send notification. => " + err);
+		} catch (error: unknown) {
+			console.error("Failed to send notification. => " + error);
 		}
 
 		return reply.status(204).send();
-	} catch (err: unknown) {
-		return await errorsHandler(pingFastify, reply , err);
+	} catch (error: unknown) {
+		return await errorsHandler(pingFastify, reply , error);
 	}
 }
 

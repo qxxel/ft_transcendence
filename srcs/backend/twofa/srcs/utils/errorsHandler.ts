@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 23:38:06 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:36:30 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,34 +27,34 @@ async function sleep(ms: number): Promise<void> {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function	logError(twofaFastify: FastifyInstance, err: string): void {
-	twofaFastify.log.error(err);
-	console.error(err);
+function	logError(twofaFastify: FastifyInstance, error: string): void {
+	twofaFastify.log.error(error);
+	console.error(error);
 }
 
-export async function	errorsHandler(twofaFastify: FastifyInstance, reply: FastifyReply, err: unknown): Promise<FastifyReply> {
-	if (axios.isAxiosError(err)) {
-		if (err.response?.data?.error) {
-			logError(twofaFastify, err.response.data.error);
-			return reply.code(err.response?.status || 400).send({ error: err.response.data.error });
+export async function	errorsHandler(twofaFastify: FastifyInstance, reply: FastifyReply, error: unknown): Promise<FastifyReply> {
+	if (axios.isAxiosError(error)) {
+		if (error.response?.data?.error) {
+			logError(twofaFastify, error.response.data.error);
+			return reply.code(error.response?.status || 400).send({ error: error.response.data.error });
 		}
-		logError(twofaFastify, err.message);
-		return reply.code(400).send({ error: err.message })
-	} else if (err instanceof twofaError.RequestEmptyError) {
-		logError(twofaFastify, err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof twofaError.WrongCodeError) {
+		logError(twofaFastify, error.message);
+		return reply.code(400).send({ error: error.message })
+	} else if (error instanceof twofaError.RequestEmptyError) {
+		logError(twofaFastify, error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
+	} else if (error instanceof twofaError.WrongCodeError) {
 		await sleep(1000);
-		logError(twofaFastify, err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof twofaError.MissingIdError) {
-		logError(twofaFastify, err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof Error) {
-		logError(twofaFastify, err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
+		logError(twofaFastify, error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
+	} else if (error instanceof twofaError.MissingIdError) {
+		logError(twofaFastify, error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
+	} else if (error instanceof Error) {
+		logError(twofaFastify, error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
 	}
-	twofaFastify.log.error(err);
-	console.log(err);
-	return reply.code(400).send({ error: err });
+	twofaFastify.log.error(error);
+	console.log(error);
+	return reply.code(400).send({ error: error });
 }

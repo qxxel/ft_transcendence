@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 19:34:09 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:42:08 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ const	db: sqlite3Pkg.Database = new Database(dbname, (err: Error | null) => {
 		console.error(err);
 	else
 	{
-		db.run('PRAGMA foreign_keys = ON;', (pragmaErr) => {
-			if (pragmaErr)
-				console.error("Impossible to turn on Foreign Keys", pragmaErr);
+		db.run('PRAGMA foreign_keys = ON;', (pragmaerror) => {
+			if (pragmaerror)
+				console.error("Impossible to turn on Foreign Keys", pragmaerror);
 		});
 		console.log(`Database started on ${dbname}`);
 	}
@@ -102,7 +102,7 @@ const	start = async () => {
 			});
 		});
 	} catch (error: unknown) {
-		userFastify.log.error(err);
+		userFastify.log.error(error);
 		process.exit(1);
 	}
 };

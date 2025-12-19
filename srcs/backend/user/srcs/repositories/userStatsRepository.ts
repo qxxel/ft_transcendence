@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsRepository.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:47:32 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 16:27:56 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:44:20 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ export class	userStatsRepository {
 			userStatsTrigger(db);
 
 		}
-		catch (err: unknown) {
-			console.error(err);
+		catch (error: unknown) {
+			console.error(error);
 			process.exit(1);
 		}
 	}

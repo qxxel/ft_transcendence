@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorsHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 18:49:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 20:12:46 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:33:41 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,22 @@ import type { FastifyInstance, FastifyReply } from "fastify"
 
 /* ====================== FUNCTION ====================== */
 
-export function	errorsHandler(userFastify: FastifyInstance, reply: FastifyReply, err: unknown): FastifyReply {
-	if (err instanceof MissingHeaderError)
+export function	errorsHandler(userFastify: FastifyInstance, reply: FastifyReply, error: unknown): FastifyReply {
+	if (error instanceof MissingHeaderError)
 	{
-		userFastify.log.error(err.message);
-		console.error(err.message);
-		return reply.code(401).send({ errorType: err.name, error: err.message });
+		userFastify.log.error(error.message);
+		console.error(error.message);
+		return reply.code(401).send({ errorType: error.name, error: error.message });
 	}
 
-	if (err instanceof Error)
+	if (error instanceof Error)
 	{
-		userFastify.log.error(err.message);
-		console.error(err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
+		userFastify.log.error(error.message);
+		console.error(error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
 	}
 
-	userFastify.log.error(err);
-	console.log(err);
-	return reply.code(400).send({ error: err });
+	userFastify.log.error(error);
+	console.log(error);
+	return reply.code(400).send({ error: error });
 }

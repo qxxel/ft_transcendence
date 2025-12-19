@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 23:29:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:53:40 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:37:52 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ export async function isLoggedIn(cookie: string | undefined): Promise<boolean> {
         const	res: AxiosResponse = await authAxios.get("http://jwt:3000/payload/access", { withCredentials: true, headers: { Cookie: cookie || "" } });
 
         return (res.status === 200);
-    } catch (err: unknown) {
-        if (axios.isAxiosError(err)) {
-            if (err.response?.status === 401)
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            if (error.response?.status === 401)
                 return false;
         }
 
-        throw err;
+        throw error;
     }
 }

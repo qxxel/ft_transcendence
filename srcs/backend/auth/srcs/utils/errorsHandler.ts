@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 13:01:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:35:13 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,40 +28,40 @@ async function sleep(ms: number): Promise<void> {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function	logError(authFastify: FastifyInstance, err: string): void {
-	authFastify.log.error(err);
-	console.error(err);
+function	logError(authFastify: FastifyInstance, error: string): void {
+	authFastify.log.error(error);
+	console.error(error);
 }
 
-export async function	errorsHandler(authFastify: FastifyInstance, reply: FastifyReply, err: unknown): Promise<FastifyReply> {
-	if (axios.isAxiosError(err)) {
-		if (err.response?.data?.error) {
-			logError(authFastify, err.response.data.error);
-			return reply.code(err.response?.status || 400).send({ error: err.response.data.error });
+export async function	errorsHandler(authFastify: FastifyInstance, reply: FastifyReply, error: unknown): Promise<FastifyReply> {
+	if (axios.isAxiosError(error)) {
+		if (error.response?.data?.error) {
+			logError(authFastify, error.response.data.error);
+			return reply.code(error.response?.status || 400).send({ error: error.response.data.error });
 		}
-		logError(authFastify, err.message);
-		return reply.code(400).send({ error: err.message })
-	} else if (err instanceof authError.RequestEmptyError) {
-		logError(authFastify, err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof authError.AlreadyConnectedError) {
-		logError(authFastify, err.message);
-		return reply.code(409).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof authError.WrongCredentialsError) {
+		logError(authFastify, error.message);
+		return reply.code(400).send({ error: error.message })
+	} else if (error instanceof authError.RequestEmptyError) {
+		logError(authFastify, error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
+	} else if (error instanceof authError.AlreadyConnectedError) {
+		logError(authFastify, error.message);
+		return reply.code(409).send({ errorType: error.name, error: error.message });
+	} else if (error instanceof authError.WrongCredentialsError) {
 		await sleep(1000);
-		logError(authFastify, err.message);
-		return reply.code(401).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof authError.InvalidSyntaxError) {
-		logError(authFastify, err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof authError.MissingIdError) {
-		logError(authFastify, err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof Error) {
-		logError(authFastify, err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
+		logError(authFastify, error.message);
+		return reply.code(401).send({ errorType: error.name, error: error.message });
+	} else if (error instanceof authError.InvalidSyntaxError) {
+		logError(authFastify, error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
+	} else if (error instanceof authError.MissingIdError) {
+		logError(authFastify, error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
+	} else if (error instanceof Error) {
+		logError(authFastify, error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
 	}
-	authFastify.log.error(err);
-	console.log(err);
-	return reply.code(400).send({ error: err });
+	authFastify.log.error(error);
+	console.log(error);
+	return reply.code(400).send({ error: error });
 }

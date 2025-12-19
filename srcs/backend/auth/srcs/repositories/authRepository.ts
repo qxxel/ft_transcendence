@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 23:59:49 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:40:39 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ export class	authRepository {
 			this.db = db;
 			authTableBuilder(db);
 		}
-		catch (err: unknown) {
-			console.error(err);
+		catch (error: unknown) {
+			console.error(error);
 			process.exit(1);
 		}
 	}

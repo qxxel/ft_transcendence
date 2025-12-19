@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:00:05 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/10 02:54:01 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -47,8 +47,8 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 	
@@ -62,8 +62,8 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -75,8 +75,8 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -91,8 +91,8 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);	
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}	
 	});	
 
@@ -107,8 +107,8 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -123,8 +123,8 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -138,8 +138,8 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -153,8 +153,8 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -168,8 +168,8 @@ export async function	gatewayJwtController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 

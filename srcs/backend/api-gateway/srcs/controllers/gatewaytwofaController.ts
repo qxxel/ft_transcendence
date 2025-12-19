@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewaytwofaController.ts                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 23:09:42 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/17 12:06:57 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ export async function	gatewaytwofaController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -55,8 +55,8 @@ export async function	gatewaytwofaController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 }

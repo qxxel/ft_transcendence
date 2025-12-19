@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 18:37:41 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/11/29 11:34:04 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:37:29 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@ import type { FastifyInstance, FastifyReply }	from 'fastify'
 
 /* ====================== FUNCTION ====================== */
 
-export function	requestErrorsHandler(gatewayFastify: FastifyInstance, reply: FastifyReply, err: unknown): FastifyReply {
-	gatewayFastify.log.error(err);
+export function	requestErrorsHandler(gatewayFastify: FastifyInstance, reply: FastifyReply, error: unknown): FastifyReply {
+	gatewayFastify.log.error(error);
 
-	if (axios.isAxiosError(err))
+	if (axios.isAxiosError(error))
 	{
-		if (err.response)
+		if (error.response)
 		{
-			console.error("Error from a service :", err.response.data);
-			return reply.status(err.response.status).send(err.response.data);
+			console.error("Error from a service :", error.response.data);
+			return reply.status(error.response.status).send(error.response.data);
 		}
 
 		console.error("Error: service unavailable");

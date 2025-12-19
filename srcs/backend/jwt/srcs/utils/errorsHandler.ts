@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 18:48:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/15 02:54:32 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:36:01 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,39 +24,39 @@ import type { FastifyInstance, FastifyReply } from 'fastify'
 
 /* ====================== FUNCTION ====================== */
 
-function	logError(jwtFastify: FastifyInstance, err: string): void {
-	jwtFastify.log.error(err);
-	console.error(err);
+function	logError(jwtFastify: FastifyInstance, error: string): void {
+	jwtFastify.log.error(error);
+	console.error(error);
 }
 
-export function	errorsHandler(jwtFastify: FastifyInstance, reply: FastifyReply, err: unknown): FastifyReply {
-	if (axios.isAxiosError(err)) {
-		if (err.response?.data?.error) {
-			logError(jwtFastify, err.response.data.error);
-			return reply.code(err.response?.status || 400).send({ error: err.response.data.error });
+export function	errorsHandler(jwtFastify: FastifyInstance, reply: FastifyReply, error: unknown): FastifyReply {
+	if (axios.isAxiosError(error)) {
+		if (error.response?.data?.error) {
+			logError(jwtFastify, error.response.data.error);
+			return reply.code(error.response?.status || 400).send({ error: error.response.data.error });
 		}
-		logError(jwtFastify, err.message);
-		return reply.code(400).send({ error: err.message })
-	} else if (err instanceof jwtError.RequestEmptyError) {
-		logError(jwtFastify, err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof jose.errors.JOSEError) {
-		logError(jwtFastify, err.message);
-		return reply.status(401).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof jwtError.UnauthorizedTokenError) {
-		logError(jwtFastify, err.message);
-		return reply.status(401).send({ errorType: err.name, error: err.message });
-	} else if (err instanceof jwtError.MissingTokenError) {
-		logError(jwtFastify, err.message);
-		return reply.code(401).send({ errorType: err.name, error: err.message });
-	}  else if (err instanceof jwtError.MissingIdError) {
-		logError(jwtFastify, err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
-	}else if (err instanceof Error) {
-		logError(jwtFastify, err.message);
-		return reply.code(400).send({ errorType: err.name, error: err.message });
+		logError(jwtFastify, error.message);
+		return reply.code(400).send({ error: error.message })
+	} else if (error instanceof jwtError.RequestEmptyError) {
+		logError(jwtFastify, error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
+	} else if (error instanceof jose.errors.JOSEError) {
+		logError(jwtFastify, error.message);
+		return reply.status(401).send({ errorType: error.name, error: error.message });
+	} else if (error instanceof jwtError.UnauthorizedTokenError) {
+		logError(jwtFastify, error.message);
+		return reply.status(401).send({ errorType: error.name, error: error.message });
+	} else if (error instanceof jwtError.MissingTokenError) {
+		logError(jwtFastify, error.message);
+		return reply.code(401).send({ errorType: error.name, error: error.message });
+	}  else if (error instanceof jwtError.MissingIdError) {
+		logError(jwtFastify, error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
+	}else if (error instanceof Error) {
+		logError(jwtFastify, error.message);
+		return reply.code(400).send({ errorType: error.name, error: error.message });
 	}
-	jwtFastify.log.error(err);
-	console.log(err);
-	return reply.code(400).send({ error: err });
+	jwtFastify.log.error(error);
+	console.log(error);
+	return reply.code(400).send({ error: error });
 }

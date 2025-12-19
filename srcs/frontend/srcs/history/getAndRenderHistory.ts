@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 05:06:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ export async function	getAndRenderHistory(targetId: number | null,
 		}
 
 		renderGames(gamesData, aiFilter, pvpFilter, tourFilter, pongFilter, tankFilter);
-	} catch (err: unknown) {
-		displayPop("error", "Critical error while charging history: " + err)
+	} catch (error: unknown) {
+		displayPop("error", "Critical error while charging history: " + error)
 		displayErrors(targetName);
 	}
 }

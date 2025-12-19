@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   usersRepository.ts                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:20:14 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/14 04:16:09 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 06:44:07 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ export class	usersRepository {
 			this.db = db;
 			usersTableBuilder(db);
 		}
-		catch (err: unknown) {
-			console.error(err);
+		catch (error: unknown) {
+			console.error(error);
 			process.exit(1);
 		}
 	}
@@ -134,7 +134,7 @@ export class	usersRepository {
 			const	query: string = "UPDATE users SET is_log = ? WHERE id = ?";
 			const	elements: [boolean, number] = [isLog, userId];
 
-			this.db.run(query, elements, (err: Error) => {
+			this.db.run(query, elements, (err: Error | null) => {
 				if (err)
 					return reject(err);
 
@@ -148,7 +148,7 @@ export class	usersRepository {
 			const	query: string = "UPDATE users SET username = ? WHERE id = ?";
 			const	elements: [string, number] = [username, userId];
 
-			this.db.run(query, elements, (err: Error) => {
+			this.db.run(query, elements, (err: Error | null) => {
 				if (err)
 					return reject(err);
 
@@ -162,7 +162,7 @@ export class	usersRepository {
 			const	query: string = "UPDATE users SET email = ? WHERE id = ?";
 			const	elements: [string, number] = [email, userId];
 
-			this.db.run(query, elements, (err: Error) => {
+			this.db.run(query, elements, (err: Error | null) => {
 				if (err)
 					return reject(err);
 
@@ -176,7 +176,7 @@ export class	usersRepository {
 			const	query: string = "UPDATE users SET avatar = ? WHERE id = ?";
 			const	elements: [string, number] = [avatar, userId];
 
-			this.db.run(query, elements, (err: Error) => {
+			this.db.run(query, elements, (err: Error | null) => {
 				if (err)
 					return reject(err);
 
@@ -190,7 +190,7 @@ export class	usersRepository {
 			const	query: string = "UPDATE users SET is_2fa_Enable = ? WHERE id = ?";
 			const	elements: [boolean, number] = [is2faEnable, userId];
 
-			this.db.run(query, elements, (err: Error) => {
+			this.db.run(query, elements, (err: Error | null) => {
 				if (err)
 					return reject(err);
 

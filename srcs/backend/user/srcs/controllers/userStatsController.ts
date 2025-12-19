@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   userStatsController.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:26:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 16:17:39 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ export async function	userStatsController(userFastify: FastifyInstance): Promise
 			const	userStats: userStatsRespDto = await userStatsServ.getStatsByUserId(parseId);
 
 			return reply.code(200).send(userStats);
-		} catch (err: unknown) {
-			errorsHandler(userFastify, reply, err);
+		} catch (error: unknown) {
+			errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -46,8 +46,8 @@ export async function	userStatsController(userFastify: FastifyInstance): Promise
 			const	userStats: userStatsRespDto = await userStatsServ.getStatsByUserId(userId);
 
 			return reply.code(200).send(userStats);
-		} catch (err: unknown) {
-			errorsHandler(userFastify, reply, err);
+		} catch (error: unknown) {
+			errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -58,8 +58,8 @@ export async function	userStatsController(userFastify: FastifyInstance): Promise
 			const	userStats: userStatsRespDto = await userStatsServ.updateStats(request.body, userId);
 
 			return reply.code(200).send(userStats);
-		} catch (err: unknown) {
-			errorsHandler(userFastify, reply, err);
+		} catch (error: unknown) {
+			errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -71,8 +71,8 @@ export async function	userStatsController(userFastify: FastifyInstance): Promise
 			const	userStats: userStatsRespDto = await userStatsServ.updateStats(request.body, parseId);
 
 			return reply.code(200).send(userStats);
-		} catch (err: unknown) {
-			errorsHandler(userFastify, reply, err);
+		} catch (error: unknown) {
+			errorsHandler(userFastify, reply, error);
 		}
 	});
 }

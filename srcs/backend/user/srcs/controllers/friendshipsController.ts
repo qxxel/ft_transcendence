@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   friendshipsController.ts                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:38:43 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 21:16:37 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 				await userAxios.post(`http://notif:3000/send/${parseTargetId}`, notifBody,
 					{ headers: { 'user-id': userId } }
 				);
-			} catch (err: unknown) {
+			} catch (error: unknown) {
 				console.error("Failed to send notification.");
 			}
 
 			return reply.code(201).send(sendData);
-		} catch (err: unknown) {
-			errorsHandler(userFastify, reply, err);
+		} catch (error: unknown) {
+			errorsHandler(userFastify, reply, error);
 		}
 	});
 	
@@ -97,8 +97,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 			);
 
 			return reply.code(200).send(sendData);
-		} catch (err: unknown) {
-			errorsHandler(userFastify, reply, err);
+		} catch (error: unknown) {
+			errorsHandler(userFastify, reply, error);
 		}
 	});
 		
@@ -115,8 +115,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 
 			return reply.code(204).send();
 		}
-		catch (err: unknown) {
-			return errorsHandler(userFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -125,8 +125,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 		try {
 			const	userId: number = extractUserId(request);
 			return reply.code(201).send(await friendshipsServ.getFriendsList(userId));
-		} catch (err: unknown) {
-			errorsHandler(userFastify, reply, err);
+		} catch (error: unknown) {
+			errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -136,8 +136,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 			const	parseId: number = parseInt(id, 10);
 
 			return reply.code(201).send(await friendshipsServ.getFriendsList(parseId));
-		} catch (err: unknown) {
-			errorsHandler(userFastify, reply, err);
+		} catch (error: unknown) {
+			errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -150,8 +150,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 				return reply.code(400).send({ error: "Invalid IDs provided." });
 
 			return reply.code(201).send(await friendshipsServ.getRelationStatus(parseIdA, parseIdB));
-		} catch (err: unknown) {
-			errorsHandler(userFastify, reply, err);
+		} catch (error: unknown) {
+			errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -173,8 +173,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 			const	friendship: friendshipsAddDto = new friendshipsAddDto(userId, parseTargetId);
 
 			return reply.code(201).send(await friendshipsServ.blockUser(friendship));
-		} catch (err: unknown) {
-			errorsHandler(userFastify, reply, err);
+		} catch (error: unknown) {
+			errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -189,8 +189,8 @@ export async function	friendshipsController(userFastify: FastifyInstance): Promi
 
 			return reply.code(204).send();
 		}
-		catch (err: unknown) {
-			return errorsHandler(userFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(userFastify, reply, error);
 		}
 	});
 }

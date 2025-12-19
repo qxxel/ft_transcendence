@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   notif.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 19:53:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 20:15:20 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ const	start = async () => {
 				process.exit(0);
 			});
 		});
-	} catch (err: unknown) {
-		notifFastify.log.error(err);
+	} catch (error: unknown) {
+		notifFastify.log.error(error);
 		process.exit(1);
 	}
 };

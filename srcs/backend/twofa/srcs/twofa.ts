@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:21 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/16 23:42:42 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:41:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ const	start = async () => {
 				process.exit(0);
 			});
 		});
-	} catch (err: unknown) {
-		twofaFastify.log.error(err);
+	} catch (error: unknown) {
+		twofaFastify.log.error(error);
 		process.exit(1);
 	}
 };

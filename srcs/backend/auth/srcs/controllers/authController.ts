@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:45:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:01:07 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:38:08 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ async function	signUp(request: FastifyRequest<{ Body: SignUpBody }>, reply: Fast
 				id: user.id,
 				username: user.username
 			});
-		} catch (err: unknown) {
+		} catch (error: unknown) {
 			await authAxios.delete(`http://user:3000/${user.id}`);
 
-			throw err;
+			throw error;
 		}
-	} catch (err: unknown) {
-		return await errorsHandler(authFastify, reply , err);
+	} catch (error: unknown) {
+		return await errorsHandler(authFastify, reply , error);
 	}
 }
 
@@ -135,8 +135,8 @@ async function	signIn(request: FastifyRequest<{ Body: SignInBody }>, reply: Fast
 			avatar: user.avatar,
 			is2faEnable: user.is2faEnable
 		});
-	} catch (err: unknown) {
-		return await errorsHandler(authFastify, reply , err);
+	} catch (error: unknown) {
+		return await errorsHandler(authFastify, reply , error);
 	}
 }
 
@@ -159,8 +159,8 @@ async function	validateUser(request: FastifyRequest<{ Body: { otp: string } }>, 
 		await authServ.updateExpiresByIdClient(id, null);
 
 		return reply.status(201).send(id);
-	} catch (err: unknown) {
-		return await errorsHandler(authFastify, reply , err);
+	} catch (error: unknown) {
+		return await errorsHandler(authFastify, reply , error);
 	}
 }
 
@@ -188,8 +188,8 @@ async function	validateAndDeleteClient(request: FastifyRequest<{ Body: { passwor
 		await deleteClient(request, reply);
 
 		return reply.status(201).send(payload.data.id);
-	} catch (err: unknown) {
-		return await errorsHandler(authFastify, reply , err);
+	} catch (error: unknown) {
+		return await errorsHandler(authFastify, reply , error);
 	}
 }
 
@@ -230,8 +230,8 @@ async function	updateUser(request: FastifyRequest<{ Body: updateUserBody}>, repl
 			reply.header('Set-Cookie', jwtRes.headers['set-cookie']);
 		
 		return reply.status(201).send(userRes.data);
-	} catch (err: unknown) {
-		return await errorsHandler(authFastify, reply , err);
+	} catch (error: unknown) {
+		return await errorsHandler(authFastify, reply , error);
 	}
 }
 
@@ -258,8 +258,8 @@ async function	deleteClient(request: FastifyRequest, reply: FastifyReply): Promi
 		await authServ.deleteClient(payload.data.id);
 		
 		return reply.status(204).send();
-	} catch (err: unknown) {
-		return await errorsHandler(authFastify, reply , err);
+	} catch (error: unknown) {
+		return await errorsHandler(authFastify, reply , error);
 	}
 }
 
@@ -286,8 +286,8 @@ async function	deleteTwofaClient(request: FastifyRequest, reply: FastifyReply): 
 			reply.header('Set-Cookie', response.headers['set-cookie']);
 		
 		return reply.status(204).send();	
-	} catch (err: unknown) {
-		return await errorsHandler(authFastify, reply , err);
+	} catch (error: unknown) {
+		return await errorsHandler(authFastify, reply , error);
 	}
 }
 
@@ -303,8 +303,8 @@ async function	devValidate(request: FastifyRequest, reply: FastifyReply): Promis
 		await authServ.updateExpiresByIdClient(id, null);
 
 		return reply.status(201).send(id);
-	} catch (err: unknown) {
-		return await errorsHandler(authFastify, reply , err);
+	} catch (error: unknown) {
+		return await errorsHandler(authFastify, reply , error);
 	}
 }
 

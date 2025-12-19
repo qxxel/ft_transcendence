@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 22:35:16 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:01:07 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,8 @@ async function	generateMailCode(request: FastifyRequest<{ Body: { email?: string
 		await sendMailMessage(dataMail);
 
 		return reply.status(201).send();
-	} catch (err: unknown) {
-		return await errorsHandler(twofaFastify, reply, err);
+	} catch (error: unknown) {
+		return await errorsHandler(twofaFastify, reply, error);
 	}
 }
 
@@ -158,8 +158,8 @@ async function	validateCodeOtp(request: FastifyRequest<{ Body: { otp: string } }
 		await twofaServ.deleteOtpByIdClient(payload.data.id);
 		
 		return reply.status(200).send(payload.data.id);
-	} catch (err: unknown) {
-		return await errorsHandler(twofaFastify, reply, err);
+	} catch (error: unknown) {
+		return await errorsHandler(twofaFastify, reply, error);
 	}
 }
 
@@ -171,8 +171,8 @@ async function	deleteCodeOtp(request: FastifyRequest, reply: FastifyReply): Prom
 		await twofaServ.deleteOtpByIdClient(parseId);
 		
 		return reply.status(204).send();
-	} catch (err: unknown) {
-		return await errorsHandler(twofaFastify, reply, err);
+	} catch (error: unknown) {
+		return await errorsHandler(twofaFastify, reply, error);
 	}
 }
 

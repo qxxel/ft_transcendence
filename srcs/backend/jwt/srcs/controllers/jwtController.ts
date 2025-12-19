@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 16:50:44 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ async function	getPayloadTokenAccess(request: FastifyRequest, reply: FastifyRepl
 		const	payload: jose.JWTPayload = (await jose.jwtVerify(cookies.jwtAccess, jwtSecret)).payload;
 
 		return reply.status(200).send(payload);
-	} catch (err: unknown) {
-		return errorsHandler(jwtFastify, reply, err);
+	} catch (error: unknown) {
+		return errorsHandler(jwtFastify, reply, error);
 	}
 }
 
@@ -52,8 +52,8 @@ async function	getPayloadTokenTwofa(request: FastifyRequest, reply: FastifyReply
 		const	payload: jose.JWTPayload = (await jose.jwtVerify(cookies.jwtTwofa, jwtSecret)).payload;
 
 		return reply.status(200).send(payload);
-	} catch (err: unknown) {
-		return errorsHandler(jwtFastify, reply, err);
+	} catch (error: unknown) {
+		return errorsHandler(jwtFastify, reply, error);
 	}
 }
 
@@ -78,9 +78,9 @@ async function	createdToken(request: FastifyRequest, reply: FastifyReply): Promi
 		const	lastId: number = await jwtServ.addToken(refreshToken, user.id);
 		
 		return reply.status(201).send(lastId);
-	} catch (err: unknown) {
+	} catch (error: unknown) {
 		removeJWT(reply);
-		return errorsHandler(jwtFastify, reply, err);
+		return errorsHandler(jwtFastify, reply, error);
 	}
 }
 
@@ -97,9 +97,9 @@ async function	createdTokenTwofa(request: FastifyRequest, reply: FastifyReply): 
 		await addTwofaJWT(reply, user);
 			
 		return reply.status(201).send(user.id);
-	} catch (err: unknown) {
+	} catch (error: unknown) {
 		removeJWT(reply);
-		return errorsHandler(jwtFastify, reply, err);
+		return errorsHandler(jwtFastify, reply, error);
 	}
 }
 
@@ -122,9 +122,9 @@ async function	validateTwofaCreatedToken(request: FastifyRequest, reply: Fastify
 
 		await jwtServ.addToken(refreshToken, user.id)
 		return reply.status(201).send(payload);
-	} catch (err: unknown) {
+	} catch (error: unknown) {
 		removeJWT(reply);
-		return errorsHandler(jwtFastify, reply, err);
+		return errorsHandler(jwtFastify, reply, error);
 	}
 }
 
@@ -151,9 +151,9 @@ async function	recreatedToken(request: FastifyRequest, reply: FastifyReply): Pro
 
 		const	lastId: number = await jwtServ.addToken(refreshToken, newUser.id)
 		return reply.status(200).send(lastId);
-	} catch (err: unknown) {
+	} catch (error: unknown) {
 		removeJWT(reply);
-		return errorsHandler(jwtFastify, reply, err);
+		return errorsHandler(jwtFastify, reply, error);
 	}
 }
 
@@ -173,9 +173,9 @@ async function	recreatedTokenTwofa(request: FastifyRequest, reply: FastifyReply)
 		await addTwofaJWT(reply, user);
 		
 		return reply.status(200).send(user.id);
-	} catch (err: unknown) {
+	} catch (error: unknown) {
 		removeJWT(reply);
-		return errorsHandler(jwtFastify, reply, err);
+		return errorsHandler(jwtFastify, reply, error);
 	}
 }
 
@@ -200,8 +200,8 @@ async function	refreshTokenAccess(request: FastifyRequest, reply: FastifyReply):
 		setCookiesAccessToken(reply, jwtAccess);
 
 		return reply.status(200).send({ result: "ok" });
-	} catch (err: unknown) {
-		return errorsHandler(jwtFastify, reply, err);
+	} catch (error: unknown) {
+		return errorsHandler(jwtFastify, reply, error);
 	}
 }
 
@@ -225,8 +225,8 @@ async function	refreshTokenRefresh(request: FastifyRequest, reply: FastifyReply)
 		await jwtServ.addToken(refreshToken, user.id);
 
 		return reply.status(200).send({ result: "ok" });
-	} catch (err: unknown) {
-		return errorsHandler(jwtFastify, reply, err);
+	} catch (error: unknown) {
+		return errorsHandler(jwtFastify, reply, error);
 	}
 }
 
@@ -261,8 +261,8 @@ async function	deleteSessionToken(request: FastifyRequest, reply: FastifyReply):
 			} catch (_error: unknown) {}
 		}
 		return reply.status(204).send();
-	} catch (err: unknown) {
-		return errorsHandler(jwtFastify, reply, err);
+	} catch (error: unknown) {
+		return errorsHandler(jwtFastify, reply, error);
 	}
 }
 
@@ -287,8 +287,8 @@ async function	deleteUserToken(request: FastifyRequest, reply: FastifyReply): Pr
 		await jwtServ.deleteTokenById(user.id);
 
 		return reply.status(204).send();
-	} catch (err: unknown) {
-		return errorsHandler(jwtFastify, reply, err);
+	} catch (error: unknown) {
+		return errorsHandler(jwtFastify, reply, error);
 	}
 }
 

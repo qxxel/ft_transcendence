@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:05:48 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ async function  onClickLogout(): Promise<void> {
 			return displayPop("error", response);
 	}
 	catch (error: unknown) {
-		return displayPop("error", err);
+		return displayPop("error", error);
 	}
 
 	appStore.setState((state) => ({
@@ -93,7 +93,7 @@ async function	onClickEdit(): Promise<void> {
 		userRes = await response.json();
 	}
 	catch (error: unknown) {
-		return displayPop("error", err);
+		return displayPop("error", error);
 	}
 
 	const	editElements: NodeListOf<Element> = document.querySelectorAll(".edit-mode");
@@ -218,7 +218,7 @@ async function	onClickDeleteTwofa(): Promise<void> {
 			displayPop("error", response);
 	}
 	catch (error: unknown) {
-		displayPop("error", err);
+		displayPop("error", error);
 	}
 
 	appStore.setState((state) => ({
@@ -297,7 +297,7 @@ async function	onClickNewCode(): Promise<void> {
 		}
 	}
 	catch (error: unknown) { // MCURTO GROS DOUTE, EST-CE QU'ON FERRAIT PAS LA MEME CHOSE QUE DANS LE TRY{} ?
-		displayPop("error", err);
+		displayPop("error", error);
 		return;
 	}
 

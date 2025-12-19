@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:11:40 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ export async function	preNavigation(currentPath: string): Promise<void> {
 		if (!respToken.ok)
 			displayPop("error", respToken);
 	} catch (error: unknown) {
-		displayPop("error", err);
+		displayPop("error", error);
 	}
 	redirections(currentPath);
 }
@@ -43,7 +43,7 @@ export async function	redirections(currentPath: string): Promise<void> {
 			if (response.ok)
 				return;
 		} catch (error: unknown) {
-			displayPop("error", err);
+			displayPop("error", error);
 		}
 
 		router.navigate('/');

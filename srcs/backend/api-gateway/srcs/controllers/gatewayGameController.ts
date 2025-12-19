@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:05:35 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 09:57:19 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ export async function	gatewayGameController(gatewayFastify: FastifyInstance) {
 			);
 			
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -45,8 +45,8 @@ export async function	gatewayGameController(gatewayFastify: FastifyInstance) {
 			const	response: AxiosResponse = await gatewayAxios.post('http://game:3000/tank', request.body);
 			
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -58,8 +58,8 @@ export async function	gatewayGameController(gatewayFastify: FastifyInstance) {
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -77,8 +77,8 @@ export async function	gatewayGameController(gatewayFastify: FastifyInstance) {
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -92,8 +92,8 @@ export async function	gatewayGameController(gatewayFastify: FastifyInstance) {
 			);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 }

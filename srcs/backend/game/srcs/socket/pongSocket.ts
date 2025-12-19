@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pongSocket.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 23:56:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 16:35:23 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ export function	setupPongSocket(io: Server, socket: Socket, pongService: GamesSe
 			activeGames.set(socket.id, game);
 	
 			game.startGame();
-		} catch (err: unknown) {
-			console.error("Error while game creation: ", err);
+		} catch (error: unknown) {
+			console.error("Error while game creation: ", error);
 		}
 	});
 

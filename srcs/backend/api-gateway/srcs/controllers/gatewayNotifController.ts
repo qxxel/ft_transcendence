@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gatewayNotifController.ts                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 20:15:13 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 21:13:51 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:30:52 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ export async function	gatewayNotifController(gatewayFastify: FastifyInstance) {
 					resolve(null);
 				});
 			});
-		} catch (err: unknown) {
-			requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	})
 }

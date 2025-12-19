@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 18:40:16 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 
 			return reply.code(200).send(user);
 		}
-		catch (err: unknown) {
-			return errorsHandler(userFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -65,8 +65,8 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 
 			return reply.code(200).send(user);
 		}
-		catch (err: unknown) {
-			return errorsHandler(userFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -84,8 +84,8 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 			
 			return reply.code(200).send(privacyFilter(user));
 		}
-		catch (err: unknown) {
-			return errorsHandler(userFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -104,8 +104,8 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 
 			return reply.code(201).send(user);
 		}
-		catch (err: unknown) {
-			return errorsHandler(userFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -123,8 +123,8 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 
 			return reply.code(201).send();
 		}
-		catch (err: unknown) {
-			return errorsHandler(userFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -145,8 +145,8 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 
 			return reply.code(201).send({ valid: true });
 		}
-		catch (err: unknown) {
-			return errorsHandler(userFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -184,15 +184,15 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 							{ headers: { 'user-id': userId } }
 						);
 					}
-				} catch (err: unknown) {
-					console.error("Failed to send notification. => " + err);
+				} catch (error: unknown) {
+					console.error("Failed to send notification. => " + error);
 				}
 			}
 
 			return reply.code(201).send(userId);
 		}
-		catch (err: unknown) {
-			return errorsHandler(userFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -224,7 +224,7 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 					await unlink(oldPath);
 				}
 			} catch (error: unknown) {
-				console.error("Error retrieving user for avatar deletion", err);
+				console.error("Error retrieving user for avatar deletion", error);
 			}
 
 			const	extension: any = data.filename.split('.').pop();
@@ -251,14 +251,14 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 						{ headers: { 'user-id': userId } }
 					);
 				}
-			} catch (err: unknown) {
-				console.error("Failed to send notification. => " + err);
+			} catch (error: unknown) {
+				console.error("Failed to send notification. => " + error);
 			}
 
 			return reply.code(200).send({ avatar: fileName });
 		}
-		catch (err: unknown) {
-			return errorsHandler(userFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(userFastify, reply, error);
 		}
 	});
 
@@ -272,8 +272,8 @@ export async function	usersController(userFastify: FastifyInstance): Promise<voi
 
 			return reply.code(204).send();
 		}
-		catch (err: unknown) {
-			return errorsHandler(userFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(userFastify, reply, error);
 		}
 	});
 }

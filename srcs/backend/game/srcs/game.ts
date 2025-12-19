@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:52:50 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 23:24:07 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:40:43 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ io.use(async (socket: any, next: any) => {
 
 		socket.data.user = response.data;
 		return next();
-	} catch (err: unknown) {
-		console.error("Authentication failed for socket:", socket.id, err);
+	} catch (error: unknown) {
+		console.error("Authentication failed for socket:", socket.id, error);
 
 		socket.data.user = null;
 		return next();
@@ -117,8 +117,8 @@ const	start = async () => {
 				process.exit(0);
 			});
 		});
-	} catch (err: unknown) {
-		gameFastify.log.error(err);
+	} catch (error: unknown) {
+		gameFastify.log.error(error);
 		process.exit(1);
 	}
 };

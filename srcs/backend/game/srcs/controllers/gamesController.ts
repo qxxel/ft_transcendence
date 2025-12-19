@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:36:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/17 09:52:13 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ export async function	gamesController(gameFastify: FastifyInstance) {
 
 			return reply.code(201).send(game);
 		}
-		catch (err: unknown) {
-			return errorsHandler(gameFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(gameFastify, reply, error);
 		}
 	});
 
@@ -60,8 +60,8 @@ export async function	gamesController(gameFastify: FastifyInstance) {
 
 			return reply.code(200).send(game);
 		}
-		catch (err: unknown) {
-			return errorsHandler(gameFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(gameFastify, reply, error);
 		}
 	});
 
@@ -75,8 +75,8 @@ export async function	gamesController(gameFastify: FastifyInstance) {
 
 			return reply.code(200).send(game);
 		}
-		catch (err: unknown) {
-			return errorsHandler(gameFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(gameFastify, reply, error);
 		}
 	});
 
@@ -90,8 +90,8 @@ export async function	gamesController(gameFastify: FastifyInstance) {
 
 			return reply.code(204).send();
 		}
-		catch (err: unknown) {
-			return errorsHandler(gameFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(gameFastify, reply, error);
 		}
 	});
 
@@ -105,8 +105,8 @@ export async function	gamesController(gameFastify: FastifyInstance) {
 
 			return reply.code(204).send();
 		}
-		catch (err: unknown) {
-			return errorsHandler(gameFastify, reply, err);
+		catch (error: unknown) {
+			return errorsHandler(gameFastify, reply, error);
 		}
 	});
 }

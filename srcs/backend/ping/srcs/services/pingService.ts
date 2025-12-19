@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pingService.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:43:33 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 22:17:22 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:29 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ export class	pingService {
 					{ headers: { 'user-id': idClient } }
 				);
 			}
-		} catch (err: unknown) {
+		} catch (error: unknown) {
 			console.error("Failed to send notification.");
 		}
 

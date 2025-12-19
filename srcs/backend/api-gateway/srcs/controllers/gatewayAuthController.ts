@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:04:00 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -54,8 +54,8 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -71,8 +71,8 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -88,8 +88,8 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -105,8 +105,8 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -121,8 +121,8 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -137,8 +137,8 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 
@@ -156,8 +156,8 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 				reply.header('Set-Cookie', response.headers['set-cookie']);
 
 			return reply.send(response.data);
-		} catch (err: unknown) {
-			return requestErrorsHandler(gatewayFastify, reply, err);
+		} catch (error: unknown) {
+			return requestErrorsHandler(gatewayFastify, reply, error);
 		}
 	});
 }

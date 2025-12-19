@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:11:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 06:33:36 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:41:50 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ export class	pingRepository {
 			this.db = db;
 			pingTableBuilder(db);
 		}
-		catch (err: unknown) {
-			console.error(err);
+		catch (error: unknown) {
+			console.error(error);
 			process.exit(1);
 		}
 	}

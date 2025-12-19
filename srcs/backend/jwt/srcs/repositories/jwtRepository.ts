@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 23:50:30 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/13 23:27:48 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:41:26 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ export class	jwtRepository {
 			this.db = db;
 			jwtTableBuilder(db);
 		}
-		catch (err: unknown) {
-			console.error(err);
+		catch (error: unknown) {
+			console.error(error);
 			process.exit(1);
 		}
 	}
@@ -115,7 +115,7 @@ export class	jwtRepository {
 
 			this.db.run(query, elements, (err: Error | null) => {
 				if (err)
-					return reject(err);
+					return reject(error);
 
 				resolve();
 			});
