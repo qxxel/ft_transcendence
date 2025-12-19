@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 10:14:35 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:21:52 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ async function  onClickLogout(): Promise<void> {
 	let response: Response;
 	try {
 		response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
-		if (!response.ok)
-			return displayPop("error", "id-error", response);
 	}
 	catch (error: unknown) {
 		return displayPop("error", "id-error", error);
