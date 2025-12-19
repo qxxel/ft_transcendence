@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 05:56:35 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:25:56 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:04:04 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ export function heartbeat(): void {
 		'/api/ping', "POST", { }
 	).then((res: Response) => {
 		if (!res.ok) {
-			displayPop("error", res);
+			displayPop("error", "id-error", res);
 			return;
 		}
 		pingIsLeader = setInterval(checkLeader, 500);
 	}).catch((e: unknown) => {
-		displayPop("error", e);
+		displayPop("error", "id-error", e);
 	});
 }
 
@@ -54,11 +54,11 @@ function becomeLeader() {
 						clearInterval(pingLeader);
 						return;
 					}
-					displayPop("error", res);
+					displayPop("error", "id-error", res);
 				} 
 			})
 			.catch((e: unknown) => {
-				displayPop("error", e);
+				displayPop("error", "id-error", e);
 			});
 		}, 15000);
 	}, 15000);

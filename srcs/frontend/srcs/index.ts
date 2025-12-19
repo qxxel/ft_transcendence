@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:39:34 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:55:17 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:03:17 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,5 @@ try {
 	router.render();
 
 } catch (error: unknown) {
-	displayPop("error", error);
+    displayPop("error", "id-error", error);
 }

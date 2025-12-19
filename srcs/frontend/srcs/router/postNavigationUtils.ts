@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:23:16 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:03:50 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ export async function  postNavigationActions(currentPath: string): Promise<void>
 				display.textContent = slider.value;
 			});
 		} else
-			displayPop("error", "Missing navigation HTMLElement!");
+			displayPop("error", "id-error", "Missing navigation HTMLElement!");
 	}
 
 	if (['/tournament-menu'].includes(currentPath)) {
@@ -141,7 +141,7 @@ export async function  postNavigationActions(currentPath: string): Promise<void>
 			display.textContent = slider.value;
 		  });
 		} else
-			displayPop("error", "Missing navigation HTMLElement!");
+			displayPop("error", "id-error", "Missing navigation HTMLElement!");
 	}
 
 	if (['/tournament-setup-ranked'].includes(currentPath)) {
@@ -164,7 +164,7 @@ export async function  postNavigationActions(currentPath: string): Promise<void>
 
 			currentTournament.fillBracket();
 		} else
-			displayPop("error", "Missing navigation HTMLElement!");
+			displayPop("error", "id-error", "Missing navigation HTMLElement!");
 	}
 
 	if (['/tank'].includes(currentPath)) {

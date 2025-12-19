@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:25:47 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:04:02 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ import { safeCreateElement }	from "./safeFunction.js"
 export async function displayError(response: Response | string, idMsgError: string): Promise<void> {
 	const	p: HTMLElement | null = document.getElementById(idMsgError);
 	if (!p) {
-		displayPop("error", "No HTMLElement named \`msg-error\`.");
+		displayPop("error", "id-error", "No HTMLElement named \`msg-error\`.");
 	} else {
 		if (typeof response === "string")
 			p.textContent = response;
@@ -32,7 +32,7 @@ export async function displayError(response: Response | string, idMsgError: stri
 				const	result = await response.json();
 				p.textContent = result?.error || "An unexpected error has occurred";
 			} catch (error: unknown) {
-				displayPop("error", error);	//	MATHIS
+				displayPop("error", "id-error", error);
 			}
 		}
 	}
@@ -65,8 +65,7 @@ async function toString(str: Response | string | unknown): Promise<string | null
 	return null;
 }
 
-//	KILLIAN/MATHIS/AXEL: VOIR POUR TEXTCONTENT
-export async function	displayPop(type: "notif" | "success" | "error", ...responses: Array<Response | string | unknown>): Promise<void> {
+export async function	displayPop(type: "notif" | "success" | "error", divId: string | null, ...responses: Array<Response | string | unknown>): Promise<void> {
 	const	divNotifs: HTMLElement | null = document.getElementById("div-notif");
 	if (!divNotifs) return console.error("No HTMLElement named \`div-notif\`.");
 
@@ -78,7 +77,9 @@ export async function	displayPop(type: "notif" | "success" | "error", ...respons
 
 	span.textContent = "✕";
 	div.classList = type;
-	
+	if (divId)
+		div.id = divId;
+
 	try {
 		div.addEventListener("click", () => {
 			if (div instanceof HTMLDivElement) div.remove();

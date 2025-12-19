@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:20:03 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:03:42 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ export function	attachDelegationListeners(requestsListDiv: HTMLDivElement, frien
 async function	handleDelegatedFriendAction(event: Event): Promise<void> {
 	const	target: EventTarget | null = event.target;
 
-	if (!(target instanceof HTMLElement)) return displayPop("error", "Missing HTMLElement!");
+	if (!(target instanceof HTMLElement)) return displayPop("error", "id-error", "Missing HTMLElement!");
 
 	if (!target.classList.contains('neon-button') && !target.classList.contains('remove-button'))
 		return;
@@ -37,19 +37,19 @@ async function	handleDelegatedFriendAction(event: Event): Promise<void> {
 	const	targetId: string | undefined = target.dataset.targetId;
 	const	targetUsername: string | undefined = target.dataset.targetUsername;
 	if (!targetId || !targetUsername)
-		return displayPop("error", "Missing Id or Username!");
+		return displayPop("error", "id-error", "Missing Id or Username!");
 
 	if (target.classList.contains('accept-button'))
 	{
 		if (await handleFriendAction('/api/user/friends/accept/' + targetId, "PATCH", { status: "ACCEPTED" }))
-			displayPop("success", "You are now friend with " + targetUsername + ".");
+			displayPop("success", "id-success", "You are now friend with " + targetUsername + ".");
 		return;
 	}	
 
 	if (target.classList.contains('ignore-button'))
 	{
 		if (await handleFriendAction(`/api/user/friends/` + targetId, "DELETE", null))
-			displayPop("success", "You reject the request from " + targetUsername + ".");
+			displayPop("success", "id-success", "You reject the request from " + targetUsername + ".");
 		return;
 	}
 
@@ -58,7 +58,7 @@ async function	handleDelegatedFriendAction(event: Event): Promise<void> {
 		if (confirm(`Are you sure to remove ${targetUsername}?`))
 		{
 			if (await handleFriendAction(`/api/user/friends/${targetId}`, "DELETE", null))
-				displayPop("success", "You are not friend with " + targetUsername + " anymore.");
+				displayPop("success", "id-success", "You are not friend with " + targetUsername + " anymore.");
 			return;
 		}
 	}

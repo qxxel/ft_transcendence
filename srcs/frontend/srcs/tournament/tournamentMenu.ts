@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 16:18:04 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:25:40 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:03:57 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ export async function loadTournamentMenu() {
 			if (ranked instanceof HTMLElement) {
 				ranked.style.display = 'block';
 			} else
-				displayPop("error", "Missing navigation HTMLElement!");
+				displayPop("error", "id-error", "Missing navigation HTMLElement!");
 		}
 	} catch (error: unknown) {
-		displayPop("error", error); // MCURTO ON EST SUR DE CA ?? AU PIRE RIEN HEIN
+		displayPop("error", "id-error", error); // MCURTO ON EST SUR DE CA ?? AU PIRE RIEN HEIN
 	}
 }
 
@@ -52,7 +52,7 @@ export async function loadTournamenSetupRanked() {
 
 	const element: HTMLElement | null = document.getElementById('ranked-p1');
 	if (!(element instanceof HTMLInputElement)) {
-		displayPop("error", "Missing navigation HTMLElement!");
+		displayPop("error", "id-error", "Missing navigation HTMLElement!");
 		return;
 	}
 	element.value = self.username;

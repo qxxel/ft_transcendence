@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 17:39:14 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:25:44 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:03:59 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ export async function btnCooldown(): Promise<void> {
 
 		if (!spanCooldown) {
 			clearInterval(interval);
-			return displayPop("error", "Missing HTMLElement!");
+			return displayPop("error", "id-error", "Missing HTMLElement!");
 		}
 
 		spanCooldown.textContent = `(${timeLeft}s)`;
@@ -46,7 +46,7 @@ export async function btnCooldown(): Promise<void> {
 			if (btnSend instanceof HTMLButtonElement) {
 				btnSend.disabled = false;
 			} else
-				displayPop("error", "Missing HTMLElement!");
+				displayPop("error", "id-error", "Missing HTMLElement!");
 		}
 	}, 1000);
 }

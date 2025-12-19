@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:48:42 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:00:02 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:03:48 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,7 +275,7 @@ export class TournamentController {
 			await sendRequest('/api/game', 'POST', p1payload); 
 			await sendRequest('/api/game', 'POST', p2payload); 
 		} catch (error: unknown) {
-			displayPop("error", "Error while saving tournament match" + error);
+			displayPop("error", "id-error", "Error while saving tournament match" + error);
 		}
 	}
 }

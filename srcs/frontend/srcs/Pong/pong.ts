@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/19 05:07:15 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 08:25:53 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ export class PongGame extends Game {
 
 	public setCtx() {
 		this.canvas = document.getElementById(this.ids.canvas) as HTMLCanvasElement;
-		if (!this.canvas) return displayPop("error", "Missing pong HTMLElement!");
+		if (!this.canvas) return displayPop("error", "id-error", "Missing pong HTMLElement!");
 		this.renderer = new PongRenderer(this.canvas);
 
 		this.scoreElements = {
@@ -70,7 +70,7 @@ export class PongGame extends Game {
 			p1: document.getElementById(this.ids.score1)!,
 			p2: document.getElementById(this.ids.score2)!
 		};
-		if (!this.scoreElements.p1 || !this.scoreElements.p2 || !this.scoreElements.winScore) return displayPop("error", "Missing pong HTMLElement!");
+		if (!this.scoreElements.p1 || !this.scoreElements.p2 || !this.scoreElements.winScore) return displayPop("error", "id-error", "Missing pong HTMLElement!");
 
 		let	state: AppState = appStore.getState();
 		let	pendingOptions: GameOptions | null = state.game.pendingOptions;
@@ -149,7 +149,7 @@ export class PongGame extends Game {
 			this.connectionTimeout = setTimeout(() => {
 				if (!socket.connected)
 				{
-					displayPop("error", "Connection to game failed");
+					displayPop("error", "id-error", "Connection to game failed");
 					this.stop();
 					router.navigate('/');
 				}
@@ -170,7 +170,7 @@ export class PongGame extends Game {
 		this.isGameOver = false;
 		this.serverState = null;
 		const	dashboard: HTMLElement | null = document.getElementById('game-over-dashboard');
-		if (!dashboard) return displayPop("error", "Missing pong HTMLElement!");
+		if (!dashboard) return displayPop("error", "id-error", "Missing pong HTMLElement!");
 		dashboard.style.display = "none";
 
 		socket.on('game-update', (newState: PongState) => {
@@ -266,7 +266,7 @@ export class PongGame extends Game {
 	private renderLoop() {
 		if (!socket.active)
 		{
-			displayPop("error", "You have been deconnected !");
+			displayPop("error", "id-error", "You have been deconnected !");
 			router.navigate('/');
 			return ;
 		}
@@ -366,11 +366,11 @@ export class PongGame extends Game {
 		}
 
 		const	dashboard: HTMLElement | null = document.getElementById('game-over-dashboard');
-		if (!dashboard) return displayPop("error", "Missing pong HTMLElement!");
+		if (!dashboard) return displayPop("error", "id-error", "Missing pong HTMLElement!");
 
 		const	winnerName: string = pongResume.winner === 1 ? this.player1Name : this.player2Name;
 		const	winnerDisplay: HTMLElement | null = document.getElementById('winner-display');
-		if (!winnerDisplay) return displayPop("error", "Missing pong HTMLElement!");
+		if (!winnerDisplay) return displayPop("error", "id-error", "Missing pong HTMLElement!");
 		winnerDisplay.innerText = `${winnerName} Wins!`;
 
 		const	state: AppState = appStore.getState();
@@ -405,15 +405,15 @@ export class PongGame extends Game {
 	private updateNameDisplay() {
 		const	p1Span: HTMLElement | null = document.getElementById('p1-name');
 		const	p2Span: HTMLElement | null = document.getElementById('p2-name');
-		if (!p1Span) return displayPop("error", "Missing pong HTMLElement!"); 
+		if (!p1Span) return displayPop("error", "id-error", "Missing pong HTMLElement!"); 
 		p1Span.innerText = this.player1Name + ": ";
-		if (!p2Span) return displayPop("error", "Missing pong HTMLElement!"); 
+		if (!p2Span) return displayPop("error", "id-error", "Missing pong HTMLElement!"); 
 		p2Span.innerText = this.player2Name + ": ";
 	}
 
 	private generateLegend(activePowerUps: PowerUps) {
 		const	legendContainer: HTMLElement | null = document.getElementById('powerup-legend');
-		if (!legendContainer) return displayPop("error", "Missing pong HTMLElement!");
+		if (!legendContainer) return displayPop("error", "id-error", "Missing pong HTMLElement!");
 
 		legendContainer.innerHTML = '';
 		legendContainer.style.display = 'none';

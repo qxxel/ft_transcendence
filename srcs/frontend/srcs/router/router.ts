@@ -6,7 +6,7 @@
 /*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 08:23:31 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 09:03:54 by kiparis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ export class	Router {
 				const	html: string = await route.component();
 				contentDiv.innerHTML = html;
 			} else
-				displayPop("error", "Missing HTMLElement!");
+				displayPop("error", "id-error", "Missing HTMLElement!");
 			this.currentPath = currentPath;
 			await postNavigationActions(currentPath);
 		}
