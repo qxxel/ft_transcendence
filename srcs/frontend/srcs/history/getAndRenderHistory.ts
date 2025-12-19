@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 21:38:59 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 18:44:55 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:06:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ export async function	getAndRenderHistory(targetId: number | null,
 			response = await sendRequest(`/api/game/${targetId}`, "get", null);
 		if (!response.ok)
 		{
-			displayPop(response, "error");
+			displayPop("error", response);
 			displayErrors(targetName);
 			return;
 		}
@@ -74,7 +74,7 @@ export async function	getAndRenderHistory(targetId: number | null,
 
 		renderGames(gamesData, aiFilter, pvpFilter, tourFilter, pongFilter, tankFilter);
 	} catch (err: unknown) {
-		displayPop("Critical error while charging history: " + err, "error")
+		displayPop("error", "Critical error while charging history: " + err)
 		displayErrors(targetName);
 	}
 }
@@ -216,8 +216,8 @@ function displayErrors(targetName: string | null): void {
 	const	historyEntriesDiv: HTMLElement | null = document.getElementById("history-entries");
 	
 	if (!(historyEntriesDiv instanceof HTMLDivElement)) {
-		displayPop("Missing history HTMLElement!", "error");
-		displayPop("Error while getting history!", "error");
+		displayPop("error", "Missing history HTMLElement!");
+		displayPop("error", "Error while getting history!");
 		return;
 	}
 	
@@ -238,7 +238,7 @@ function displayErrors(targetName: string | null): void {
 function displayNoGame(filter: boolean): void {
 	const	historyEntriesDiv: HTMLElement | null = document.getElementById("history-entries");
 	if (!(historyEntriesDiv instanceof HTMLDivElement)) {
-		displayPop("Missing history HTMLElement!", "error");
+		displayPop("error", "Missing history HTMLElement!");
 		return;
 	}
 
@@ -306,6 +306,6 @@ export function initHistoryListeners(targetId: number | null, targetName: string
 			refreshList();
 		};
 	} else
-		displayPop("Missing history HTMLElement!", "error");
+		displayPop("error", "Missing history HTMLElement!");
 	refreshList();
 }

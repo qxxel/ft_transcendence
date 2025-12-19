@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   submitHandler.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 22:38:05 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:04:50 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 			fetch('/api/jwt/refresh/logout', {
 				method: "post",
 				credentials: "include"
-			}).catch((e: unknown) => displayPop("" + e, "error"));
+			}).catch((e: unknown) => displayPop("error", e));
 		}
 		return displayError(response, "sign-in-msg-error");
 	}
@@ -91,9 +91,9 @@ async function	handleSignInForm(form: HTMLFormElement): Promise<void> {
 			body: JSON.stringify({ })
 		}).then((response: Response) => {
 			if (!response.ok)
-				displayPop(response, "error");
+				displayPop("error", response);
 		}).catch((e: unknown) => {
-			displayPop("" + e, "error");
+			displayPop("error", e);
 		});
 		
 		return;
@@ -136,7 +136,7 @@ async function	handleSignUpForm(form: HTMLFormElement): Promise<void> {
 			fetch('/api/jwt/refresh/logout', {
 				method: "post",
 				credentials: "include"
-			}).catch((e: unknown) => displayPop("" + e, "error"));
+			}).catch((e: unknown) => displayPop("error", e));
 		}
 		return displayError(response, "sign-up-msg-error");
 	}
@@ -252,14 +252,14 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 				twofaElements.hidden = false;
 				digitCode.required = true;
 			} else {
-				displayPop("Missing HTMLElement!", "error");
+				displayPop("error", "Missing HTMLElement!");
 				reject(false);
 			}
 		}
 
 		const	verifyForm: HTMLElement | null = document.getElementById("confirm-setting-form")
 
-		if (!(verifyForm instanceof HTMLFormElement)) return displayPop("Missing form HTMLElement!", "error");
+		if (!(verifyForm instanceof HTMLFormElement)) return displayPop("error", "Missing form HTMLElement!");
 
 		verifyForm.addEventListener("submit", async (event: Event) => {
 			event.preventDefault();
@@ -287,7 +287,7 @@ async function verifyProfileStep(user: userUpdate, isChangeEmail: boolean): Prom
 				if (form instanceof HTMLFormElement)
 					form.reset();
 				document.getElementById("confirm-setting-form")?.classList.remove("darken");
-				return displayPop("" + err, "error");
+				return displayPop("error", err);
 			}
 			router.canLeave = true;
 			resolve(true);
@@ -312,9 +312,9 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		getUser = await sendRequest(`/api/user/me`, 'get', null)
 		resultGetUser = await getUser.json();
 		if (!getUser.ok)
-			return displayPop(getUser, "error");
+			return displayPop("error", getUser);
 	} catch(err) {
-		return displayPop("" + err, "error");
+		return displayPop("error", err);
 	}
 
 	if (resultGetUser.username == newUsername
@@ -339,7 +339,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 		if (!postUser.ok)
 			return displayError(postUser, "user-setting-msg-error");
 	} catch(err) {
-		return displayPop("" + err, "error");
+		return displayPop("error", err);
 	}
 	
 	if (resultGetUser.email != newEmail)
@@ -361,7 +361,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 	try {
 		verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // /!\ try catch ???
 		if (!verified) 
-			return; // /!\ faire quelque chose
+			return; // /!\ faire quelque chose ???
 	} catch(err) {
 		return; // MCURTO aled faut rien faire la ?
 	}
@@ -379,7 +379,7 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 async function	handleAddFriendForm(form: HTMLFormElement): Promise<void> {
 	const	targetNameElement: HTMLInputElement | undefined = (document.getElementById("username-add-input") as HTMLInputElement);
 	if (!targetNameElement)
-		return displayPop("Missing HTMLElement!", "error");
+		return displayPop("error", "Missing HTMLElement!");
 
 	const	targetName: string | undefined = targetNameElement.value;
 	if (!targetName)
@@ -393,19 +393,19 @@ async function	handleAddFriendForm(form: HTMLFormElement): Promise<void> {
 	try {
 		respTargetId = await sendRequest(`/api/user/lookup/${targetName}`, "get", null);
 		if (!respTargetId.ok)
-			return displayPop(respTargetId, "error");
+			return displayPop("error", respTargetId);
 		targetId = (await respTargetId.json() as any).id;
 		response = await sendRequest(`/api/user/friends/request/${targetId}`, "post", {});
 		if (!response.ok)
-			return displayPop(response, "error")
+			return displayPop("error", response)
 		friendship = await response.json();
 	} catch(err) {
-		return displayPop("" + err, "error");
+		return displayPop("error", err);
 	}
 	if (friendship.status === "PENDING")
-		displayPop(`Request sended to ${targetName}.`, "success");
+		displayPop("success", `Request sended to ${targetName}.`);
 	if (friendship.status === "ACCEPTED")
-		displayPop(`You are now friend with ${targetName}.`, "success");
+		displayPop("success", `You are now friend with ${targetName}.`);
 
 	await getAndRenderFriends();
 }
@@ -416,7 +416,7 @@ export function	setupSubmitHandler(): void {
 
 		const	form: EventTarget | null = event.target;
 		if (!(form instanceof HTMLFormElement))
-			return displayPop("Missing form HTMLElement!", "error");
+			return displayPop("error", "Missing form HTMLElement!");
 
 		if (form.id === "sign-in-form")
 			await handleSignInForm(form);

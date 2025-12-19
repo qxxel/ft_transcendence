@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   display.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 20:27:18 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:13:05 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // UTILITY FUNCTIONS TO DISPLAY ERRORS AND FORMATTED DATES ON THE FRONTEND
+
+
+/* ====================== IMPORT ====================== */
+
+import { safeCreateElement }	from "./safeFunction.js"
 
 
 /* ====================== FUNCTION ====================== */
@@ -18,7 +23,7 @@
 export async function displayError(response: Response | string, idMsgError: string): Promise<void> {
 	const	p: HTMLElement | null = document.getElementById(idMsgError);
 	if (!p) {
-		displayPop("No HTMLElement named \`msg-error\`.", "error")
+		displayPop("error", "No HTMLElement named \`msg-error\`.");
 	} else {
 		if (typeof response === "string")
 			p.textContent = response;
@@ -28,61 +33,82 @@ export async function displayError(response: Response | string, idMsgError: stri
 				const	result = await response.json();
 				p.textContent = result?.error || "An unexpected error has occurred";
 			} catch (err) {
-				displayPop("" + err, "error");	//	AXEL/MATHIS: PAS BEAU A VOIR
+				displayPop("error", err);	//	MATHIS
 			}
 		}
 	}
 }
 
-export async function	displayPop(response: Response | string | undefined, type: "notif" | "success" | "error"): Promise<void> {
-	const	divNotifs: HTMLElement | null = document.getElementById("div-notif");
-
-	if (!divNotifs)
-	{
-		console.error("No HTMLElement named \`div-notif\`.");	// MATHIS: A VOIR COMMENT AFFICHER LES ERREURS ICI
-		if (response instanceof Response)
-			console.error(response.statusText);					// "
-		else if (typeof response === "string")
-			console.error(response);							// "
-		else
-			console.error("An unexpected error has occurred");	// "
-		return;
-	}
-	const	p: HTMLParagraphElement = document.createElement("p");
-	const	span: HTMLSpanElement = document.createElement("span");
-	span.textContent = "✕";
-	const	div: HTMLDivElement = document.createElement("div");
-	div.classList = type;
-
-	div.addEventListener("click", (event) => {
-		const	target: EventTarget | null =  event.currentTarget;
-		if (target instanceof HTMLElement)
-			target.remove();
-	})
-
-	if (response instanceof Response)
-	{
+async function toString(str: Response | string | unknown): Promise<string | null> {
+	if (typeof str === "string") {
+		return str;
+	} else if (str instanceof Response) {
 		try {
-			const	result = await response.json();
-			if (type === "error")
-				p.textContent = result?.error || "An unexpected error has occurred";
-			else
-				p.textContent = result?.data || "An unexpected error has occurred";
+			const	result = await str.json();
+			if (!str.ok) {
+				if (typeof result.error === "string") return result.error;
+			} else {
+				if (typeof result.data === "string") return result.data;
+				else if (typeof result.data === "object") return JSON.stringify(result.data);
+			}
+		} catch (error: unknown) {
+			console.error("Failed to parse or serialize JSON.");
+		}
+	} else if (str instanceof Error) {
+		return str.message
+	} else if (typeof str === "object") {
+		try {
+			return JSON.stringify(str);
 		} catch (error) {
-			console.error(error);							// MATHIS: A VOIR COMMENT AFFICHER LES ERREURS ICI
-			console.error(response.statusText);				// "
-			return ;
+			console.error("Failed to serialize JSON.");
 		}
 	}
-	else
-		p.innerHTML = response || "An unexpected error has occurred"		//	KILLIAN/MATHIS/AXEL: VOIR POUR TEXTCONTENT
+	return null;
+}
 
-	setTimeout(() => div.remove(), 10000);
+//	KILLIAN/MATHIS/AXEL: VOIR POUR TEXTCONTENT
+export async function	displayPop(type: "notif" | "success" | "error", ...responses: Array<Response | string | unknown>): Promise<void> {
+	const	divNotifs: HTMLElement | null = document.getElementById("div-notif");
+	if (!divNotifs) return console.error("No HTMLElement named \`div-notif\`.");
 
-	div.appendChild(p);
-	div.appendChild(span);
-	divNotifs.appendChild(div);
-	divNotifs.hidden = false;
+	const	p: HTMLElement | unknown = safeCreateElement("p");
+	const	span: HTMLElement | unknown = safeCreateElement("span");
+	const	div: HTMLElement | unknown = safeCreateElement("div");
+	if (!(p instanceof HTMLParagraphElement) || !(span instanceof HTMLSpanElement) || !(div instanceof HTMLDivElement))
+		return console.error(typeof p === "string" ? p :"Failed to create DOM elements.");
+
+	span.textContent = "✕";
+	div.classList = type;
+	
+	try {
+		div.addEventListener("click", () => {
+			if (div instanceof HTMLDivElement) div.remove();
+		});
+	} catch (error: unknown) {
+		console.error("Failed to attach click event listener to element.");
+	}
+	
+	let msg: string = "";
+	if (type === "error")
+		msg += "error: ";
+
+	for (const response of responses) {
+		msg += toString(response) || "";
+	}
+
+	p.textContent = msg;
+
+	setTimeout(() => {
+		if (div instanceof HTMLDivElement) div.remove();
+	}, 10000);
+
+	try {
+		div.appendChild(p);
+		div.appendChild(span);
+		divNotifs.appendChild(div);
+	} catch (error: unknown) {
+		console.error("Failed to append elements to the DOM.");
+	}
 }
 
 export function displayDate(date: number): void {

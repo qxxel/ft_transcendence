@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heartbeat.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 05:56:35 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 21:44:31 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:13:35 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ export function heartbeat(): void {
 		'/api/ping', "POST", { }
 	).then((res: Response) => {
 		if (!res.ok) {
-			displayPop(res, "error");
+			displayPop("error", res);
 			return;
 		}
 		pingIsLeader = setInterval(checkLeader, 500);
 	}).catch((e: unknown) => {
-		displayPop("" + e, "error");
+		displayPop("error", e);
 	});
 }
 
@@ -54,11 +54,11 @@ function becomeLeader() {
 						clearInterval(pingLeader);
 						return;
 					}
-					displayPop(res, "error");
+					displayPop("error", res);
 				} 
 			})
 			.catch((e: unknown) => {
-				displayPop("" + e, "error");
+				displayPop("error", e);
 			});
 		}, 15000);
 	}, 15000);

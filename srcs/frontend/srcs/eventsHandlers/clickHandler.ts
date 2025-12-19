@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 14:52:05 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:02:18 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ import type { Player }	from "../Pong/objects/tournamentObjects.js"
 function onClickPlay(): void {
 	const	maxPointsInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
 	if (!(maxPointsInput instanceof HTMLFormElement)){
-		displayPop("Missing game menu HTMLElement!", "error");
+		displayPop("error", "Missing game menu HTMLElement!");
 		return;
 	}
 
@@ -54,10 +54,10 @@ async function  onClickLogout(): Promise<void> {
 	try {
 		response = await sendRequest('/api/jwt/refresh/logout', 'DELETE', null);
 		if (!response.ok)
-			return displayPop(response, "error");
+			return displayPop("error", response);
 	}
 	catch(err) {
-		return displayPop("" + err, "error");
+		return displayPop("error", err);
 	}
 
 	appStore.setState((state) => ({
@@ -79,7 +79,7 @@ async function  onClickLogout(): Promise<void> {
 	router.navigate("/");
 
 	if (!response.ok && response.status !== 401)
-		return displayPop(response, "error");
+		return displayPop("error", response);
 }
 	
 async function	onClickEdit(): Promise<void> {
@@ -89,11 +89,11 @@ async function	onClickEdit(): Promise<void> {
 	try {
 		response = await sendRequest(`/api/user/me`, 'get', null);
 		if (!response.ok)
-			return displayPop(response, "error");
+			return displayPop("error", response);
 		userRes = await response.json();
 	}
 	catch(err) {
-		return displayPop("" + err, "error");
+		return displayPop("error", err);
 	}
 
 	const	editElements: NodeListOf<Element> = document.querySelectorAll(".edit-mode");
@@ -111,12 +111,12 @@ async function	onClickEdit(): Promise<void> {
 
 	const	username: HTMLElement | null = document.getElementById("edit-username");
 	if (!(username instanceof HTMLInputElement))
-		return displayPop("Missing profile HTMLElement!", "error");
+		return displayPop("error", "Missing profile HTMLElement!");
 	username.value = userRes.username ?? "";
 
 	const	mail: HTMLElement | null = document.getElementById("edit-email");
 	if (!(mail instanceof HTMLInputElement))
-		return displayPop("Missing profile HTMLElement!", "error");
+		return displayPop("error", "Missing profile HTMLElement!");
 	mail.value = userRes.email ?? "";
 }
 
@@ -203,7 +203,7 @@ async function	onClickDeleteAccountStep(): Promise<void> {
 		buttonDeleteAccount.addEventListener("click", onClickDeleteAccount);
 		divButtonProfile.appendChild(buttonDeleteAccount);
 	} else 
-		displayPop("Missing profile HTMLElement!", "error");
+		displayPop("error", "Missing profile HTMLElement!");
 }
 
 async function	onClickDeleteTwofa(): Promise<void> {
@@ -215,10 +215,10 @@ async function	onClickDeleteTwofa(): Promise<void> {
 	try {
 		const	response: Response = await sendRequest(`/api/auth/twofa/me`, 'delete', null);
 		if (!response.ok)
-			displayPop(response, "error");
+			displayPop("error", response);
 	}
 	catch(err) {
-		displayPop("" + err, "error");
+		displayPop("error", err);
 	}
 
 	appStore.setState((state) => ({
@@ -273,9 +273,9 @@ async function	onClickNewCode(): Promise<void> {
 	const	locks: NodeListOf<Element> = document.querySelectorAll(".lock");
 
 	if (btnSend instanceof HTMLButtonElement) btnSend.disabled = true;
-	else displayPop("Missing HTMLElement!", "error");
+	else displayPop("error", "Missing HTMLElement!");
 	if (spanCooldown) spanCooldown.textContent = "(5s)";
-	else displayPop("Missing HTMLElement!", "error");
+	else displayPop("error", "Missing HTMLElement!");
 	locks.forEach(e => {
 		if (e instanceof HTMLElement)
 			e.hidden = false;
@@ -292,12 +292,12 @@ async function	onClickNewCode(): Promise<void> {
 				if (e instanceof HTMLElement)
 					e.hidden = true;
 			});
-			displayPop(res, "error");
+			displayPop("error", res);
 			return;
 		}
 	}
 	catch(err) { // MCURTO GROS DOUTE, EST-CE QU'ON FERRAIT PAS LA MEME CHOSE QUE DANS LE TRY{} ?
-		displayPop("" + err, "error");
+		displayPop("error", err);
 		return;
 	}
 
@@ -318,13 +318,13 @@ async function	onClickNewCode(): Promise<void> {
 					if (e instanceof HTMLElement)
 						e.hidden = true;
 				});
-				displayPop(response, "error");
+				displayPop("error", response);
 				return;
 			}
 			loadTwofa();
 		}
 	).catch((e: unknown) => {
-		displayPop("" + e, "error");
+		displayPop("error", e);
 	});
 }
 
@@ -338,7 +338,7 @@ function showDifficultyMenu(): void {
 		mainBtns.classList.add('hidden');
 		diffBtns.classList.remove('hidden');
 	} else
-		displayPop("Missing menu game HTMLElement!", "error");
+		displayPop("error", "Missing menu game HTMLElement!");
 }
 
 function hideDifficultyMenu(): void {
@@ -349,7 +349,7 @@ function hideDifficultyMenu(): void {
 		mainBtns.classList.remove('hidden');
 		diffBtns.classList.add('hidden');
 	} else
-		displayPop("Missing menu game HTMLElement!", "error");
+		displayPop("error", "Missing menu game HTMLElement!");
 }
 
 function switchGameMode(mode: 'default' | 'featured'): void {
@@ -358,7 +358,7 @@ function switchGameMode(mode: 'default' | 'featured'): void {
 	const	featDiv: HTMLElement | null = document.getElementById('featured-mode-content');
 
 	if (!defDiv && !inputDiv && !featDiv)
-		displayPop("Missing menu game HTMLElement!", "error");
+		displayPop("error", "Missing menu game HTMLElement!");
 	
 	if (mode === 'default') {
 		defDiv?.classList.remove('hidden');
@@ -374,7 +374,7 @@ function switchGameMode(mode: 'default' | 'featured'): void {
 function selectFeaturedDifficulty(level: number): void {
 	const	input: HTMLElement | null = document.getElementById('aiHardcore');
 	if (!(input instanceof HTMLInputElement)) {
-		displayPop("Missing menu game HTMLElement!", "error");
+		displayPop("error", "Missing menu game HTMLElement!");
 		return;
 	}
 	input.value = level.toString();
@@ -391,7 +391,7 @@ function selectFeaturedDifficulty(level: number): void {
 function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard'): void {
 	const	maxPointsInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
 	if (!(maxPointsInput instanceof HTMLInputElement)) {
-		displayPop("Missing menu game HTMLElement!", "error");
+		displayPop("error", "Missing menu game HTMLElement!");
 		return;
 	}
 	const	winningScore: number = parseInt(maxPointsInput.value, 10);
@@ -430,7 +430,7 @@ function onClickPlayAI(difficulty: 'easy' | 'medium' | 'hard'): void {
 		router.navigate('/pong');
 	}
 	else {
-		displayPop("Missing pong Element!", "error");
+		displayPop("error", "Missing pong Element!");
 		router.navigate('/');
 	}
 
@@ -441,7 +441,7 @@ function onClickPlayPVP(): void {
 	if (router.Path === '/pongmenu') {
 		const	maxPointsInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
 		if (!(maxPointsInput instanceof HTMLInputElement)){
-			displayPop("Missing pong HTMLElement!", "error");
+			displayPop("error", "Missing pong HTMLElement!");
 			return;
 		}
 		const	winningScore: number = parseInt(maxPointsInput.value, 10);
@@ -481,7 +481,7 @@ function onClickPlayPVP(): void {
 			router.navigate('/pong');
 		}
 		else {
-			displayPop("Missing pong Element!", "error");
+			displayPop("error", "Missing pong Element!");
 			router.navigate('/');
 		}
 	}
@@ -494,7 +494,7 @@ function onClickPlayPVP(): void {
 			!(p1Select instanceof HTMLSelectElement) || 
 			!(p2Select instanceof HTMLSelectElement))
 		{
-			displayPop("Missing tank HTMLElement!", "error");
+			displayPop("error", "Missing tank HTMLElement!");
 			return;
 		}
 		
@@ -543,7 +543,7 @@ function	onStartTournament(): void {
 	}
 	const	scoreInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
 	if (!(scoreInput instanceof HTMLInputElement)) {
-		displayPop("Missing menu game HTMLElement!", "error");
+		displayPop("error", "Missing menu game HTMLElement!");
 		return;
 	}
 	const	winningScore: number = parseInt(scoreInput.value, 10);
@@ -603,7 +603,7 @@ async function onStartRankedTournament(): Promise<void> {
 
 	const	scoreInput: HTMLElement | null = document.getElementById("choosenMaxPoints");
 	if (!(scoreInput instanceof HTMLInputElement)) {
-		return displayPop("Missing menu game HTMLElement!", "error");
+		return displayPop("error", "Missing menu game HTMLElement!");
 	}
 	const	winningScore: number = parseInt(scoreInput.value, 10);
 
@@ -659,7 +659,7 @@ function onClickStartFeatured(mode: 'ai' | 'pvp'): void {
 	const	star3: boolean | undefined = (document.getElementById("chk-3star") as HTMLInputElement)?.checked;
 
 	if (!(freqInput instanceof HTMLInputElement) || star1 === undefined || star2 === undefined || star3 === undefined) {
-		displayPop("Missing input HTMLElement!", "error");
+		displayPop("error", "Missing input HTMLElement!");
 		return;
 	}
 
@@ -671,7 +671,7 @@ function onClickStartFeatured(mode: 'ai' | 'pvp'): void {
 		const	aiInput: HTMLElement | null = document.getElementById("aiHardcore");
 		const	pointsInput: HTMLElement | null = document.getElementById("featuredMaxPoints");
 		if (!(aiInput instanceof HTMLInputElement) || !(pointsInput instanceof HTMLInputElement)) {
-			displayPop("Missing pong HTMLElement!", "error");
+			displayPop("error", "Missing pong HTMLElement!");
 			return;
 		}
 		const	winningScore = parseInt(pointsInput.value, 10);
@@ -726,7 +726,7 @@ function onClickStartFeatured(mode: 'ai' | 'pvp'): void {
 			!(p1Select instanceof HTMLSelectElement) || 
 			!(p2Select instanceof HTMLSelectElement) ) 
 		{
-			displayPop("Missing tank HTMLElement!", "error");
+			displayPop("error", "Missing tank HTMLElement!");
 			return;
 		}
 		
@@ -797,7 +797,7 @@ export async function   setupClickHandlers(): Promise<void> {
 	document.addEventListener('input', (event) => {
 		const	target: EventTarget | null = event.target;
 		if (!(target instanceof HTMLSelectElement) && !(target instanceof HTMLInputElement)) {
-			displayPop("Missing HTMLElement!", "error");
+			displayPop("error", "Missing HTMLElement!");
 			return;
 		}
 
@@ -806,7 +806,7 @@ export async function   setupClickHandlers(): Promise<void> {
 			if (display) {
 				display.innerText = target.value;
 			} else
-				displayPop("Missing display HTMLElement!", "error");
+				displayPop("error", "Missing display HTMLElement!");
 		}
 		
 		if (target.id === 'powerupFreq') {
@@ -814,7 +814,7 @@ export async function   setupClickHandlers(): Promise<void> {
 			if (display) {
 				display.innerText = target.value + " sec";
 			} else
-				displayPop("Missing display HTMLElement!", "error");
+				displayPop("error", "Missing display HTMLElement!");
 		}
 
 		if (target.id === 'featuredMaxPoints') {
@@ -822,7 +822,7 @@ export async function   setupClickHandlers(): Promise<void> {
 			if (display) {
 				display.innerText = target.value;
 			} else
-				displayPop("Missing display HTMLElement!", "error");
+				displayPop("error", "Missing display HTMLElement!");
 		}
 	});
 

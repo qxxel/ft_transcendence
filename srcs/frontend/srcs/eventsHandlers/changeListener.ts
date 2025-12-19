@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 21:46:24 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 04:56:32 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ export function attachAvatarUploadListener(userId: number): void {
 	const	fileInput: HTMLElement | null = document.getElementById('avatar-upload');
 	if (!(fileInput instanceof HTMLInputElement))
 	{
-		displayPop("Missing avatar HTMLElement!", "error");
+		displayPop("error", "Missing avatar HTMLElement!");
 		return;
 	}
 	const	imgElement: HTMLElement | null = document.getElementById('user-avatar');
 	if (!(imgElement instanceof HTMLImageElement))
 		{
-			displayPop("Missing avatar HTMLElement!", "error");
+			displayPop("error", "Missing avatar HTMLElement!");
 			return;
 		}
 		

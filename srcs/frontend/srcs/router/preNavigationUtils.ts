@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 19:29:00 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:11:09 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ export async function	preNavigation(currentPath: string): Promise<void> {
 	try {
 		const	respToken: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
 		if (!respToken.ok)
-			displayPop(respToken, "error");
+			displayPop("error", respToken);
 	} catch (err) {
-		displayPop("" + err, "error");
+		displayPop("error", err);
 	}
 	redirections(currentPath);
 }
@@ -45,7 +45,7 @@ export async function	redirections(currentPath: string): Promise<void> {
 			if (response.ok)
 				return;
 		} catch(err) {
-			displayPop("" + err, "error");			// MATHIS: PAS BO
+			displayPop("error", err);
 		}
 
 		router.navigate('/');

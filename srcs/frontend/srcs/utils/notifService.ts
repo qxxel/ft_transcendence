@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   notifService.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 23:05:18 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:18:54 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ export class	NotificationService {
 
 	showNotification(data: any): void {
 		const clickId = `notif-click-${data.fromId}`;
-		displayPop(`<div id="${clickId}" style="cursor: pointer; width: 100%; height: 100%;">${data.message}</div>`, "notif");
+		displayPop("notif", `<div id="${clickId}" style="cursor: pointer; width: 100%; height: 100%;">${data.message}</div>`); // MATHIS/KILLIAN /!\ displayPop NO html 
 
 		const notifElement: HTMLElement | null = document.getElementById(clickId);
 		
@@ -63,7 +63,7 @@ export class	NotificationService {
 				router.navigate("/friends");
 			});
 		} else {
-			displayPop("Missing HTMLElement!", "error");
+			displayPop("error", "Missing HTMLElement!");
 		}
 	}
 

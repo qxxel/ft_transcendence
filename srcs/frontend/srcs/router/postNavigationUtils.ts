@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 19:29:40 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:10:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ export async function  postNavigationActions(currentPath: string): Promise<void>
 				display.textContent = slider.value;
 			});
 		} else
-			displayPop("Missing navigation HTMLElement!", "error");
+			displayPop("error", "Missing navigation HTMLElement!");
 	}
 
 	if (['/tournament-menu'].includes(currentPath)) {
@@ -139,7 +139,7 @@ export async function  postNavigationActions(currentPath: string): Promise<void>
 			display.textContent = slider.value;
 		  });
 		} else
-			displayPop("Missing navigation HTMLElement!", "error");
+			displayPop("error", "Missing navigation HTMLElement!");
 	}
 
 	if (['/tournament-setup-ranked'].includes(currentPath)) {
@@ -162,7 +162,7 @@ export async function  postNavigationActions(currentPath: string): Promise<void>
 
 			currentTournament.fillBracket();
 		} else
-			displayPop("Missing navigation HTMLElement!", "error");
+			displayPop("error", "Missing navigation HTMLElement!");
 	}
 
 	if (['/tank'].includes(currentPath)) {

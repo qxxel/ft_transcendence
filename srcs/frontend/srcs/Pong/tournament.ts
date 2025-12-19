@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tournament.ts                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:48:42 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 10:04:35 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 05:07:25 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,7 +275,7 @@ export class    TournamentController {
 			await sendRequest('/api/game', 'POST', p1payload); 
 			await sendRequest('/api/game', 'POST', p2payload); 
 		} catch (err) {
-			displayPop("Error while saving tournament match" + err, "error");
+			displayPop("error", "Error while saving tournament match" + err);
 		}
 	}
 }

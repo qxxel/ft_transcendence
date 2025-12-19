@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:11:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/18 14:36:10 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:14:55 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,17 @@ export function	verifyEmail(idDivHidden: string, idDivVisible: string, email: st
 					if (result.exp)
 						displayDate(result.exp * 1000);
 					else
-						displayPop("Unable to display the expiration date", "error");
+						displayPop("error", "Unable to display the expiration date");
 		
 				}).catch((e: unknown) => {
-					displayPop("" + e, "error");
+					displayPop("error", e);
 				});
 		
 			}
 			else
 				displayDate(Date.now() + 5 * 60 * 1000);
 		}).catch((e: unknown) => {
-			displayPop("" + e, "error");
+			displayPop("error", e);
 		});
 	}
 
@@ -57,7 +57,7 @@ export function	verifyEmail(idDivHidden: string, idDivVisible: string, email: st
 	if (divVerifyEmail)
 		divVerifyEmail.hidden = false;
 	else
-		displayPop("Missing HTMLElement!", "error");
+		displayPop("error", "Missing HTMLElement!");
 
 	router.canLeave = false;
 
@@ -73,9 +73,9 @@ export function	verifyEmail(idDivHidden: string, idDivVisible: string, email: st
 		})
 		.then((res: Response) => {
 			if (!res.ok)
-				displayPop(res, "error")
+				displayPop("error", res);
 		}).catch((e: unknown) => {
-			displayPop("" + e, "error")
+			displayPop("error", e);
 		});
 	}
 }

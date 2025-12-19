@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tank.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:37:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 16:07:36 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 05:11:51 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,27 +298,27 @@ export class	TankGame extends Game {
 	if (history) {
 		sendRequest( '/api/game', "POST", history).then((res: Response) => {
 			if (!res.ok)
-				displayPop(res, "error");
+				displayPop("error", res);
 		}
 		).catch((e: unknown) => {
-			displayPop("" + e, "error");
+			displayPop("error", e);
 		});
 	}
 	const	resumeStats: ResumeStats | null = this.setStats();
 	if (resumeStats) {
 		sendRequest( '/api/user/stats/me', "PATCH", resumeStats).then((res: Response) => {
 			if (!res.ok)
-				displayPop(res, "error");
+				displayPop("error", res);
 		}
 		).catch((e: unknown) => {
-			displayPop("" + e, "error");
+			displayPop("error", e);
 		});
 	}
 
 
 	const	dashboard = document.getElementById('game-over-dashboard');
 	if (!dashboard)
-		return displayPop("Missing tank HTMLElement!", "error");
+		return displayPop("error", "Missing tank HTMLElement!");
 
 	const	matchDurationSeconds: number = Math.floor((Date.now() - this.startTime) / 1000);
 	const	minutes: number = Math.floor(matchDurationSeconds / 60);
@@ -328,7 +328,7 @@ export class	TankGame extends Game {
 	const	winnerDisplay: HTMLElement | null = document.getElementById('winner-display');
 
 	if (winnerDisplay) winnerDisplay.innerText = `${winnerName} Wins!`;
-	else displayPop("Missing tank HTMLElement!", "error");
+	else displayPop("error", "Missing tank HTMLElement!");
 
 	const	accuracy1: number = GSTATE.STATS1.fire > 0 ? (GSTATE.STATS1.hit) / GSTATE.STATS1.fire * 100 : 0;
 	const	accuracy2: number = GSTATE.STATS2.fire > 0 ? (GSTATE.STATS2.hit) / GSTATE.STATS2.fire * 100 : 0;
@@ -357,13 +357,13 @@ export class	TankGame extends Game {
 	private hideEndGameDashboard() {
 		const	dashboard: HTMLElement | null = document.getElementById('game-over-dashboard');
 		if (dashboard) dashboard.style.display = 'none';
-		else displayPop("Missing tank HTMLElement!", "error");
+		else displayPop("error", "Missing tank HTMLElement!");
 	}
 
 	private updateNameDisplay() {
 		const	p1Span: HTMLElement | null = document.getElementById('p1-name');
 		const	p2Span: HTMLElement | null = document.getElementById('p2-name');
-		if (!p1Span || !p2Span) displayPop("Missing tank HTMLElement!", "error");
+		if (!p1Span || !p2Span) displayPop("error", "Missing tank HTMLElement!");
 		if (p1Span) p1Span.innerText = this.player1Name + "";
 		if (p2Span) p2Span.innerText = this.player2Name + "";
   	}
@@ -371,7 +371,7 @@ export class	TankGame extends Game {
 	private generateLegend(): void {
 		const	legendContainer: HTMLElement | null = document.getElementById('powerup-legend');
 		if (!legendContainer) {
-			displayPop("Missing tank HTMLElement!", "error");
+			displayPop("error", "Missing tank HTMLElement!");
 			return;
 		}
 

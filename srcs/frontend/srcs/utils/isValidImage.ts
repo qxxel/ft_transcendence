@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:47:29 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 03:45:38 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:13:45 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* ====================== IMPORT ====================== */
 
-import { displayPop }	from "./display"
+import { displayPop }	from "./display.js"
 
 
 /* ====================== FUNCTION ====================== */
@@ -25,7 +25,7 @@ export function	isValidImage(file: File): Promise<boolean> {
 		const	validMimeTypes: string[] = ['image/jpeg', 'image/png', 'image/webp'];
 		if (!validMimeTypes.includes(file.type))
 		{
-			displayPop("Invalid file type. Only JPG, PNG, WEBP allowed.", "error");
+			displayPop("error", "Invalid file type. Only JPG, PNG, WEBP allowed.");
 			resolve(false);
 			return;
 		}
@@ -40,7 +40,7 @@ export function	isValidImage(file: File): Promise<boolean> {
 
 		img.onerror = () => {
 			URL.revokeObjectURL(url);
-			displayPop("Invalid file type. Only valid images allowed.", "error");
+			displayPop("error", "Invalid file type. Only valid images allowed.");
 			resolve(false);
 		};
 

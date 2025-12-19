@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleFriendsActions.ts                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:48:02 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/16 10:05:33 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:06:06 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ export async function	handleFriendAction(url: string, method: string, body: Obje
 		const	response: Response = await sendRequest(url, method, body);
 		if (!response.ok)
 		{
-			displayPop(response, "error");
+			displayPop("error", response);
 			return false;
 		}
 	} catch(err) {
-		displayPop("" + err, "error");
+		displayPop("error", err);
 		return false;
 	}
 	await getAndRenderFriends();

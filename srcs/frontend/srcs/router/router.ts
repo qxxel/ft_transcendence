@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   router.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 14:23:59 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:11:18 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ export class	Router {
 				const	html: string = await route.component();
 				contentDiv.innerHTML = html;
 			} else
-				displayPop("Missing HTMLElement!", "error");
+				displayPop("error", "Missing HTMLElement!");
 			this.currentPath = currentPath;
 			await postNavigationActions(currentPath);
 		}

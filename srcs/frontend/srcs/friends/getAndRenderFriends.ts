@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getAndRenderFriends.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 16:02:22 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/18 23:02:20 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:05:57 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ export async function	getAndRenderFriends(): Promise<void> {
 function	renderFriends(friendsData: UserObject[]): void {
 	const	requestsListDiv: HTMLDivElement = document.getElementById("requests-list") as HTMLDivElement;
 	if (!requestsListDiv) {
-		displayPop("Missing friend HTMLElement!", "error");
+		displayPop("error", "Missing friend HTMLElement!");
 		return;
 	}
 	requestsListDiv.innerHTML = "<h2>PENDING REQUEST</h2>";
 
 	const	friendsListDiv: HTMLDivElement = document.getElementById("friends-list") as HTMLDivElement;
 	if (!friendsListDiv) {
-		displayPop("Missing friend HTMLElement!", "error");
+		displayPop("error", "Missing friend HTMLElement!");
 		return;
 	}
 	friendsListDiv.innerHTML = "<h1>FRIENDS LIST</h1>";
@@ -215,7 +215,7 @@ function	displayNoFriends(friendsListDiv: HTMLDivElement): void {
 function	displayErrors(): void {
 	const	requestsListDiv: HTMLElement | null = document.getElementById("requests-list");
 	if (!(requestsListDiv instanceof HTMLDivElement)) {
-		displayPop("Missing friend HTMLElement!", "error");
+		displayPop("error", "Missing friend HTMLElement!");
 		return;
 	}
 
@@ -223,7 +223,7 @@ function	displayErrors(): void {
 
 	const	friendsListDiv: HTMLElement | null = document.getElementById("friends-list");
 	if (!(friendsListDiv instanceof HTMLDivElement)) {
-		displayPop("Missing friend HTMLElement!", "error");
+		displayPop("error", "Missing friend HTMLElement!");
 		return;
 	}
 	
