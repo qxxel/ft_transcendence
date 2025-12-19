@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 21:43:21 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 13:01:26 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 13:06:15 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,15 @@ export class	NotificationService {
 			}
 		};
 
-		if (navigator.onLine && this.isActive) {
-			setTimeout(() => {
-				if (navigator.onLine && this.isActive)
-					this.connect();
-			}, 5000);
+		this.eventSource.onerror = () => {
+			this.eventSource?.close();
+
+			if (navigator.onLine && this.isActive) {
+				setTimeout(() => {
+					if (navigator.onLine && this.isActive)
+						this.connect();
+				}, 5000);
+			}
 		}
 	}
 
@@ -78,13 +82,14 @@ export class	NotificationService {
 		await displayPop("notif", clickId, data.message);
 
 		const notifElement: HTMLElement | null = document.getElementById(clickId);
-		if (notifElement) {
+		if (notifElement)
+		{
 			notifElement.addEventListener('click', () => {
 				router.navigate("/friends");
 			});
-		} else {
-			displayPop("error", "id-error", "Missing HTMLElement!");
 		}
+		else
+			displayPop("error", "id-error", "Missing HTMLElement!");
 	}
 
 	createContainer(): HTMLDivElement {
