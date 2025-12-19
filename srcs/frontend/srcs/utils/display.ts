@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 10:47:11 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:31:45 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 07:43:36 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ export async function	displayPop(type: "notif" | "success" | "error", ...respons
 		msg += "error: ";
 
 	for (const response of responses) {
-		msg += toString(response) || "";
+		msg += await toString(response) || "";
 	}
 
 	p.textContent = msg;
