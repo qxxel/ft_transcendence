@@ -64,10 +64,14 @@ Before you begin, ensure you have the following installed on your machine:
     Create a `.env` file at the root of `srcs/`. You can use the example below as a template:
     ```bash
     # .env configuration
-    JWT_SECRET=
-    EMAIL=
-    APP_PASS_EMAIL=
-    # TODO mreynaud
+
+    # JWT secret key
+    # You can generate with command : "openssl rand -base64 32"
+    JWT_SECRET=your_jwt_secret_here
+
+    # Email configuration (used for sending emails)
+    EMAIL=your_email@gmail.com
+    APP_PASS_EMAIL=your_app_password
     ```
 
 3.  **Build and Run:**
@@ -110,7 +114,6 @@ Before you begin, ensure you have the following installed on your machine:
 * **Research**: Used AI to clarify specific tool documentation and compare libraries.
 * **Content & Naming**: Used AI to draft documentation text, suggest consistent function names, and refine error messages for clarity in English.
 * **Feedback**: Used AI provide feedback on certain functions and to suggest alternative implementations.
-* **TODO**: TODO fill it
 
 *(Note: AI was used as a supportive tool for debugging and styling inspiration. All logic was reviewed and integrated manually.)*
 
