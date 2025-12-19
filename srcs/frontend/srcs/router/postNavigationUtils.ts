@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   postNavigationUtils.ts                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:55:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:03:50 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 11:40:00 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ export async function  postNavigationActions(currentPath: string): Promise<void>
 	if (['/pong'].includes(currentPath)) {
 		if (currentGame)
 		{
-			currentGame.setCtx();
+			await currentGame.setCtx();
 			currentGame.start();
 		}
 		else

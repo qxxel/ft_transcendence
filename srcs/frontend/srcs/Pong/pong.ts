@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 23:02:06 by kiparis           #+#    #+#             */
-/*   Updated: 2025/12/19 11:18:11 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:33:02 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ export class PongGame extends Game {
 		(window as any).quitGame = () => this.quitGame();
 	}
 
-	public setCtx() {
+	public async	setCtx() {
 		this.canvas = document.getElementById(this.ids.canvas) as HTMLCanvasElement;
 		if (!this.canvas) return displayPop("error", "id-error", "Missing pong HTMLElement!");
 		this.renderer = new PongRenderer(this.canvas);
@@ -129,7 +129,7 @@ export class PongGame extends Game {
 			this.generateLegend(pendingOptions.activePowerUps);
 		}
 
-		this.connectToServer();
+		await this.connectToServer();
 
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
@@ -139,30 +139,34 @@ export class PongGame extends Game {
 		if (!socket || !socket.connected)
 			connectSocket();
 
+		socket.off('disconnect', this.handleDisconnect);
+		socket.on('disconnect', this.handleDisconnect);
+
+		// TO HAVE 3 ATTEMPTS MAX
+		let attempts = 0;
+		const maxAttempts = 3;
+		const checkConnection = () => {
+			if (socket.connected)
+				return;
+
+			attempts++;
+			if (attempts >= maxAttempts)
+			{
+				displayPop("error", "id-error", "Failed to connect to game server (3 attempts).");
+				this.stop();
+				router.navigate('/');
+			}
+			else
+				this.connectionTimeout = setTimeout(checkConnection, 1000);
+		};
+
 		if (this.connectionTimeout)
 		{
 			clearTimeout(this.connectionTimeout);
 			this.connectionTimeout = null;
 		}
 
-		if (socket && !socket.connected) {
-			this.connectionTimeout = setTimeout(() => {
-				if (!socket.connected)
-				{
-					displayPop("error", "id-error", "Connection to game failed");
-					this.stop();
-					router.navigate('/');
-				}
-			}, 3000);
-
-			socket.once('connect', () => {
-				if (this.connectionTimeout)
-				{
-					clearTimeout(this.connectionTimeout);
-					this.connectionTimeout = null;
-				}
-			});
-		}
+		checkConnection();
 
 		socket.off('game-update');
 		socket.off('game-over');
@@ -260,17 +264,11 @@ export class PongGame extends Game {
 			socket.off('game-update');
 			socket.off('game-over');
 			socket.off('connect');
+			socket.off('disconnect', this.handleDisconnect);
 		}
 	}
 
 	private renderLoop() {
-		if (!socket || !socket.active)
-		{
-			displayPop("error", "id-error", "You have been deconnected !");
-			router.navigate('/');
-			return ;
-		}
-
 		this.syncServerDisplay();
 		this.draw();
 		this.animationFrameId = requestAnimationFrame(() => this.renderLoop());
@@ -349,6 +347,15 @@ export class PongGame extends Game {
 
 	private handleKeyUp(e: KeyboardEvent) {
 		socket.emit('input', { key: e.key, isPressed: false });
+	}
+
+	private	handleDisconnect = () => {
+		if (!this.animationFrameId && !this.isGameOver)
+			return;
+
+		this.stop();
+		displayPop("error", "id-error", "You have been deconnected !");
+		router.navigate('/');
 	}
 
 	private updateScoresUI() {

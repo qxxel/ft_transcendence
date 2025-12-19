@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadPage.ts                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 03:21:00 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:45:54 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 11:19:47 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ export async function loadUser(): Promise<void> {
 	try {
 		response = await sendRequest(`/api/user/me`, 'get', null);
 		if (!response.ok) {
-			displayPop("error", "id-error", response.statusText); // MATHIS /!\ ??? pourquoi statusText
+			displayPop("error", "id-error", response);
 			return;
 		}
 

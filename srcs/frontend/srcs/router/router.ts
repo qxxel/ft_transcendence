@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   router.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:37:56 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:42:39 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:03:37 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 import { displayPop }				from "../utils/display.js"
 import { postNavigationActions }	from "./postNavigationUtils.js"
+import { preNavigationActions } from "./preNavigationUtils.js";
 
 
 /* ====================== INTERFACE ====================== */
@@ -55,6 +56,7 @@ export class	Router {
 
 		if (route)
 		{
+			await preNavigationActions(currentPath)
 			const	contentDiv: HTMLElement | null = document.getElementById('page-content');
 			if (contentDiv) {
 				const	html: string = await route.component();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preNavigationUtils.ts                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kiparis <kiparis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 17:53:54 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 09:03:52 by kiparis          ###   ########.fr       */
+/*   Updated: 2025/12/19 12:06:10 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,7 @@ import { sendRequest }	from "../utils/sendRequest.js"
 
 /* ====================== FUNCTION ====================== */
 
-export async function	preNavigation(currentPath: string): Promise<void> {
-
-	try {
-		const	respToken: Response = await sendRequest('/api/jwt/payload/access', 'GET', null);
-		if (!respToken.ok)
-			displayPop("error", "id-error", respToken);
-	} catch (error: unknown) {
-		displayPop("error", "id-error", error);
-	}
+export async function	preNavigationActions(currentPath: string): Promise<void> {
 	redirections(currentPath);
 }
 
