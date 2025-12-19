@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:08:12 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:04:23 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,9 +359,9 @@ async function	handleUserSettingsForm(form: HTMLFormElement): Promise<void> {
 
 	let	verified: boolean;
 	try {
-		verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // /!\ try catch ???
+		verified = await verifyProfileStep(userUpdate, !(resultGetUser.email == newEmail)); // MATHIS /!\ try catch ???
 		if (!verified) 
-			return; // /!\ faire quelque chose ???
+			return; // MATHIS /!\ faire quelque chose ???
 	} catch (error: unknown) {
 		return; // MCURTO aled faut rien faire la ?
 	}

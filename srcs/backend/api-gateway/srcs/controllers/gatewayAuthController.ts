@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:50:40 by mreynaud          #+#    #+#             */
-/*   Updated: 2025/12/14 22:59:54 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:04:00 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ export async function	gatewayAuthController(gatewayFastify: FastifyInstance) {
 	});
 
 
-	/// /!\ dev
+	// MATHIS /!\ dev
 	gatewayFastify.post('/dev/validate', async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const	response: AxiosResponse = await gatewayAxios.post(

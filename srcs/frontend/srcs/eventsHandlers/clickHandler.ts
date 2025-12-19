@@ -6,7 +6,7 @@
 /*   By: mreynaud <mreynaud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 10:40:38 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/12/19 06:01:21 by mreynaud         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:05:48 by mreynaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ async function	onClickDeleteTwofa(): Promise<void> {
 	router.navigate(router.Path);
 }
 
-async function	onClickSkipeVerifyEmailDev(): Promise<void> { // delete this
+async function	onClickSkipeVerifyEmailDev(): Promise<void> { // MATHIS delete this
 	const	response: Response = await sendRequest('/api/auth/dev/validate', 'post', {});
 
 	if (!response.ok)
@@ -764,7 +764,7 @@ export async function   setupClickHandlers(): Promise<void> {
 	(window as any).onClickDeleteAccountStep = () => onClickDeleteAccountStep();
 	(window as any).onClickDeleteTwofa = () => onClickDeleteTwofa();
 	(window as any).onClickNewCode = () => onClickNewCode();
-	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(); // /!\ detete this
+	(window as any).onClickSkipeVerifyEmailDev = () => onClickSkipeVerifyEmailDev(); // MATHIS /!\ detete this
 	
 	(window as any).showDifficultyMenu = showDifficultyMenu;
 	(window as any).hideDifficultyMenu = hideDifficultyMenu;
